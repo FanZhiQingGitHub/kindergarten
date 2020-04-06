@@ -5,7 +5,7 @@
   Time: 14:13
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
@@ -186,7 +186,7 @@
                 </div>
 
                 <div id="codediv">
-                    <img src="${pageContext.request.contextPath}/parent/loginCode" id="code">
+                    <img src="${pageContext.request.contextPath}/security/loginCode" id="code">
                     <input type="button" id="bu1" value="看不清？换一张"></td>
                 </div>
             </div>
@@ -270,18 +270,18 @@
             $("#code").click(function () {
                 var path = $("#path").val();
                 var code = document.getElementById("code");
-                code.src = path + "/parent/loginCode?"+Math.random();
+                code.src = path + "/security/loginCode?"+Math.random();
 
             }),$("#bu1").click(function () {
                 var path = $("#path").val();
                 var code = document.getElementById("code");
-                code.src = path + "/parent/loginCode?"+Math.random();
+                code.src = path + "/security/loginCode?"+Math.random();
 
             }),$("#bu3").click(function () {
                 layer.alert("该功能尚未开放！", {icon: 6});
             }),$("#bu4").click(function () {
                 var path = $("#path").val();
-                location.href = path + "/parent/parentReg";
+                location.href = path + "/parent/toUrl/parentReg";
             });
         })
     });
