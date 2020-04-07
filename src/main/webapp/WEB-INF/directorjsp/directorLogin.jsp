@@ -186,7 +186,7 @@
                 </div>
 
                 <div id="codediv">
-                    <img src="${pageContext.request.contextPath}/rector/loginCode" id="code">
+                    <img src="${pageContext.request.contextPath}/director/loginCode" id="code">
                     <input type="button" id="bu1" value="看不清？换一张"></td>
                 </div>
             </div>
@@ -239,27 +239,28 @@
         form.on('submit(formDemo)', function (data) {
             var path = $("#path").val();
             $.ajax({
-                url: path + "/director/rectorLogin",
+                url: path + "/director/directorLogin",
                 async: true,
                 type: "post",
                 data: data.field,
                 datatype: "text",
                 success: function (msg) {
-                    if (msg == "success") {
+                    if (msg === "success") {
                         layer.alert("登录成功！", {icon: 6}, function () {
                             location.href = path + "/director/rectorMain";
                         });
-                    } else if(msg == "error"){
+                    } else if(msg === "error"){
                         layer.alert("登录失败！", {icon: 2}, function () {
                             window.location.reload();
                         });
-                    }else if(msg == "codeerror") {
+                    }else if(msg === "codeerror") {
                         layer.alert("验证码错误！", {icon: 2});
-                    }else if(msg == "notmen"){
-                        layer.alert("该用户已被禁用或者不存在！", {icon: 2},function () {
-                            window.location.reload();
-                        });
                     }
+                    // else if(msg == "notmen"){
+                    //     layer.alert("该用户已被禁用或者不存在！", {icon: 2},function () {
+                    //         window.location.reload();
+                    //     });
+                    // }
                 }, error: function (msg) {
                     layer.alert("网络繁忙！", {icon: 2});
                 }
@@ -268,14 +269,16 @@
 
         $(function () {
             $("#code").click(function () {
+                var time = new Date();
                 var path = $("#path").val();
                 var code = document.getElementById("code");
-                code.src = path + "/director/loginCode?"+Math.random();
+                code.src = path + "/director/loginCode?"+time;
 
             }),$("#bu1").click(function () {
+                var time = new Date();
                 var path = $("#path").val();
                 var code = document.getElementById("code");
-                code.src = path + "/director/loginCode?"+Math.random();
+                code.src = path + "/director/loginCode?"+time;
 
             }),$("#bu3").click(function () {
                 layer.alert("该功能尚未开放！", {icon: 6});
