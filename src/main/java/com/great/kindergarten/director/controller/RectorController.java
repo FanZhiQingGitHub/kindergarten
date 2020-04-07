@@ -1,6 +1,9 @@
 package com.great.kindergarten.director.controller;
 
+import com.great.kindergarten.director.javabean.TblRector;
 import com.great.kindergarten.director.service.RectorService;
+import com.great.kindergarten.util.MD5Utils;
+import com.great.kindergarten.util.ResponseUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
 
 /**
  * @author JK
@@ -23,8 +27,10 @@ public class RectorController {
     private String vcode;
     @Resource
     private RectorService rectorService;
+    @Resource
+    TblRector tblRector;
 
-    //	管理路径跳转的问题--前台的界面(路径/front/*)
+    //	管理路径跳转的问题--前台的界面(路径/toUrl/*)
     @RequestMapping("/toUrl/{id}")
     public String matchUrl(@PathVariable("id") String id)
     {
@@ -34,51 +40,84 @@ public class RectorController {
 
     //验证码的登录过程
     @RequestMapping("/loginCode")
-    public void cherkCode(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            int width = 60;
-            int height = 30;
-            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
-            Random random = new Random();//随机类
-            //1 创建图片数据缓存区域（核心类）
-            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);//创建一个彩色的图片
-            //2 获得画板(图片，ps图层)，绘画对象。
-            Graphics g = image.getGraphics();
-            //3 选择颜色，画矩形3，4步是画一个有内外边框的效果
-            g.setColor(Color.BLACK);
-            g.fillRect(0, 0, width, height);
-            //4白色矩形
-            g.setColor(Color.WHITE);
-            g.fillRect(1, 1, width - 2, height - 2);
-            /**1 提供缓存区域，为了存放4个随机字符，以便存入session */
-            StringBuilder builder = new StringBuilder();
-            //5 随机生成4个字符
-            //设置字体颜色
-            g.setFont(new Font("宋体", Font.BOLD & Font.ITALIC, 20));
-            for (int i = 0; i < 4; i++) {
-                //随机颜色
-                g.setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
-                //随机字符
-                int index = random.nextInt(data.length());
-                String str = data.substring(index, index + 1);
-                /**2 缓存*/
-                builder.append(str);
-                //写入
-                g.drawString(str, (width / 6) * (i + 1), 20);
+    public void cherkCode(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+        System.out.println("进来这个方法里面=========================");
+        //BufferedImage将图片存入缓存中，有三个构造方法，此处的三个参数为图片的宽，高，以及创建的图像类型。
+        BufferedImage bi = new BufferedImage(68, 22, BufferedImage.TYPE_INT_RGB);
+        //为bi创建图形上下文
+        Graphics g = bi.getGraphics();
+        //设置颜色，此处调用的构造方法是基于RGB数值作为参数的
+        Color c = new Color(200, 150, 255);
+        //设置颜色
+        g.setColor(c);
+        //该方法用于填充指定的矩形，参数是坐标和宽高
+        g.fillRect(0, 0, 68, 22);
+
+        //编写随机获取验证码的部分
+
+        //将字符串转换为字符数组
+        char[] ch = "abcdefghjklmnopqrstuvwxyz023456789".toCharArray();
+        //随机类，在本程序中只使用了 int nextInt(int n) 方法，作用是生成一个0-n的伪随机int值
+        Random r = new Random();
+
+        int len = ch.length, index;
+
+        //用于存储随机生成的四位验证码
+        StringBuffer sb = new StringBuffer();
+
+        for (int i = 0; i < 4; i++)
+        {
+            //从0-len随机获取一个作为下标
+            index = r.nextInt(len);
+            //随机获取颜色
+            g.setColor(new Color(r.nextInt(200), r.nextInt(150), r.nextInt(255)));
+
+            //在图形中绘制指定的String，参数对应要绘制的String以及坐标
+            g.drawString(ch[index] + " ", (i * 15) + 3, 18);
+
+            //将内容添加到StringBuffer
+            sb.append(ch[index]);
+        }
+
+        //将验证码信息放入session中用于验证
+        request.getSession().setAttribute("PicCode", sb.toString());
+        //将文件流输出，参数要写入的RenderedImage，输出的文件格式，输出到的ImageOutputStream
+        ImageIO.write(bi, "JPG", response.getOutputStream());
+    }
+
+    //登录判断的过程
+    @RequestMapping("/directorLogin")
+    public void loginCode(String username, String userpwd, String code,HttpServletRequest request, HttpServletResponse response)
+    {
+//        request.getSession().setAttribute("username", username);
+        tblRector.setRectorname(username);
+        String md5pwd = MD5Utils.md5(userpwd);
+        System.out.println("密码是：" + md5pwd);
+        tblRector.setRectorpwd(md5pwd);
+
+        TblRector tblRectors = rectorService.findRector(tblRector);
+        System.out.println(tblRectors);
+        if (null != tblRectors)
+        {
+            request.getSession().setAttribute("loginUser", tblRectors);
+            String PicCode = (String) request.getSession().getAttribute("PicCode");
+            code = code.toLowerCase();
+            if (code.equals(PicCode))
+            {
+                System.out.println("前台验证码成功！");
+                ResponseUtils.outHtml(response, "success");
+            } else
+            {
+                System.out.println("前台验证码失败！");
+                ResponseUtils.outHtml(response, "codeerror");
             }
-            //给图中绘制噪音点，让图片不那么好辨别
-            for (int j = 0, n = random.nextInt(100); j < n; j++) {
-                g.setColor(Color.RED);
-                g.fillRect(random.nextInt(width), random.nextInt(height), 1, 1);//随机噪音点
-            }
-            /**3 获得随机数据，并保存session*/
-            vcode = builder.toString();
-            request.getSession().setAttribute("vcode", vcode);
-            //.. 生成图片发送到浏览器 --相当于下载
-            ImageIO.write(image, "jpg", response.getOutputStream());
-            response.getOutputStream().flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else
+        {
+            ResponseUtils.outHtml(response, "error");
         }
     }
+
+
+
 }
