@@ -21,9 +21,7 @@
 
     <!--用户状态查询-->
     <select id="findRector" resultMap="rectorMap" parameterType="TblRector">
-		select * from tbl_rector
-		where rectorname=#{rectorname}
-		and rectorpwd = #{rectorpwd};
+		select * from tbl_rector where rectorname=#{rectorname} and rectorpwd = #{rectorpwd};
 	</select>
 
     <!---->

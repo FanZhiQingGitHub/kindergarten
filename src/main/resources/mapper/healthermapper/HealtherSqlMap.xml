@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.kindergarten.healther.mapper.HealtherMapper">
+
+    <resultMap id="HealtherMap" type="com.great.kindergarten.healther.javabean.TblHealther">
+        <result column="healtherid" property="healtherid"></result>
+        <result column="healthername" property="healthername"></result>
+        <result column="healtherpwd" property="healtherpwd"></result>
+        <result column="healthersex" property="healthersex"></result>
+        <result column="healtherage" property="healtherage"></result>
+        <result column="healtheradd" property="healtheradd"></result>
+        <result column="healtherphone" property="healtherphone"></result>
+        <result column="healtherregtime" property="healtherregtime"></result>
+        <result column="healtherstatus" property="healtherstatus"></result>
+        <result column="rid" property="rid"></result>
+    </resultMap>
+
+    <!--    用户状态查询-->
+    <select id="findHealtherStatus" resultType="java.lang.String" parameterType="java.util.Map">
+        select healtherstatus from tbl_healther
+        <where>
+            <if test="healthername != '' and healthername != null ">
+                and healthername = #{healthername}
+            </if>
+        </where>
+    </select>
+
+    <!--    用户登录-->
+    <select id="healtherLogin" resultMap="HealtherMap" parameterType="java.util.Map">
+        select * from tbl_healther
+        <where>
+            <if test="healthername != '' and healthername != null ">
+                and healthername = #{healthername}
+            </if>
+            <if test="healtherpwd != '' and healtherpwd != null ">
+                and healtherpwd = #{healtherpwd}
+            </if>
+        </where>
+    </select>
+
+    <!--    用户ID查询-->
+    <select id="findHealtherId" resultType="com.great.kindergarten.healther.javabean.TblHealther" parameterType="java.util.Map">
+        select * from tbl_healther
+        <where>
+            <if test="healthername != '' and healthername != null ">
+                and healthername = #{healthername}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateHealtherPwd" parameterType="java.util.Map">
+        UPDATE tbl_healther SET healtherpwd = #{healtherpwd} where healtherid = #{healtherid};
+    </update>
+
+</mapper>

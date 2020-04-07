@@ -10,7 +10,7 @@
         <!--这是给javabean包下所有类取别名，在用完全限定命名的情况下可以通过类名直接调用 -->
         <package name="com.great.kindergarten.admin.javabean" />
         <package name="com.great.kindergarten.healther.javabean" />
-        <package name="com.great.kindergarten.parent.javabean" />
+        <package name="com.great.kindergarten.parent.entity" />
         <package name="com.great.kindergarten.director.javabean" />
         <package name="com.great.kindergarten.security.javabean" />
         <package name="com.great.kindergarten.teacher.javabean" />

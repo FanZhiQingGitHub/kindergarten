@@ -95,7 +95,7 @@
         #bu3 {
             width: 30%;
             height: 8%;
-            margin-left: 18%;
+            margin-left: 1%;
             font-size: 13px;
             background-color: transparent;
             color: black;
@@ -109,10 +109,24 @@
             background-color: transparent;
             color: black;
         }
+
+        #bu5 {
+            position: absolute;
+            width: 30%;
+            height: 8%;
+            font-size: 13px;
+            margin-left: 32%;
+            background-color: transparent;
+            color: black;
+        }
+
         #bu3:hover{
             color: #09ff3d;
         }
         #bu4:hover{
+            color: #09ff3d;
+        }
+        #bu5:hover{
             color: #09ff3d;
         }
 
@@ -158,13 +172,13 @@
     <input type="hidden" id="path" value="<%=path%>">
     <div id="alldiv">
         <div class="container">
-            <h1 id="hh1">智慧幼儿园用户登录界面</h1>
+            <h1 id="hh1">智慧幼儿园家长登录界面</h1>
             <hr style="color: white">
             <div class="layui-form-item">
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-block">
                     <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
-                    <input type="text" name="username" lay-verify="required" placeholder="请输入用户名" value=""
+                    <input type="text" name="parentName" lay-verify="required" placeholder="请输入用户名" value=""
                            autocomplete="off" class="layui-input" id="te1">
                 </div>
             </div>
@@ -172,7 +186,7 @@
                 <label class="layui-form-label">密 &nbsp;&nbsp;码</label>
                 <div class="layui-input-inline">
                     <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
-                    <input type="password" name="userpwd" required lay-verify="pass" placeholder="请输入6-12位密码"
+                    <input type="password" name="parentPwd"   required lay-verify="pass" placeholder="请输入6-12位密码"
                            value=""
                            autocomplete="off" class="layui-input" id="te2">
                 </div>
@@ -202,6 +216,7 @@
             <div id="butdiv">
                 <button type="button" class="layui-btn" id="bu3">忘记密码？</button>
                 <button type="button" class="layui-btn" id="bu4">还没账号？立即注册</button>
+                <button type="button" class="layui-btn" id="bu5">点击此处返回首页</button>
             </div>
         </div>
     </div>
@@ -239,28 +254,29 @@
         form.on('submit(formDemo)', function (data) {
             var path = $("#path").val();
             $.ajax({
-                url: path + "/parent/parentLogin",
+                url: path + "/parent/Login",
                 async: true,
                 type: "post",
                 data: data.field,
-                datatype: "text",
-                success: function (msg) {
-                    if (msg == "success") {
+                success: function (result) {
+                    if (result.msg=="codeError"){
+                    //验证码错误
+                        layer.alert("啊哦，验证码输入错误", {icon: 2});
+                        var code = document.getElementById("code");
+                        code.src = path + "/security/loginCode?"+Math.random();
+                    }else if (result.msg=="loginFailed") {
+                    //登陆失败
+                        layer.alert("登陆失败，请检查您输入的账号密码！多次登陆失败请联系园长", {icon: 2});
+                        var code = document.getElementById("code");
+                        code.src = path + "/security/loginCode?"+Math.random();
+                    }
+                    else if(result.success){
+                    //    登陆成功
                         layer.alert("登录成功！", {icon: 6}, function () {
-                            location.href = path + "/parent/parentMain";
-                        });
-                    } else if(msg == "error"){
-                        layer.alert("登录失败！", {icon: 2}, function () {
-                            window.location.reload();
-                        });
-                    }else if(msg == "codeerror") {
-                        layer.alert("验证码错误！", {icon: 2});
-                    }else if(msg == "notmen"){
-                        layer.alert("该用户已被禁用或者不存在！", {icon: 2},function () {
-                            window.location.reload();
+                            location.href=path+result.data;
                         });
                     }
-                }, error: function (msg) {
+                }, error: function () {
                     layer.alert("网络繁忙！", {icon: 2});
                 }
             });
@@ -271,17 +287,18 @@
                 var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/security/loginCode?"+Math.random();
-
             }),$("#bu1").click(function () {
                 var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/security/loginCode?"+Math.random();
-
             }),$("#bu3").click(function () {
                 layer.alert("该功能尚未开放！", {icon: 6});
             }),$("#bu4").click(function () {
                 var path = $("#path").val();
                 location.href = path + "/parent/toUrl/parentReg";
+            }),$("#bu5").click(function () {
+                var path = $("#path").val();
+                location.href = path + "/parent/main";
             });
         })
     });
