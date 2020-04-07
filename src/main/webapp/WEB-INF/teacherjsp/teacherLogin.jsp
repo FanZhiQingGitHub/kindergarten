@@ -164,7 +164,7 @@
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-block">
                     <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
-                    <input type="text" name="username" lay-verify="required" placeholder="请输入用户名" value=""
+                    <input type="text" name="teachername" lay-verify="required" placeholder="请输入用户名" value=""
                            autocomplete="off" class="layui-input" id="te1">
                 </div>
             </div>
@@ -172,7 +172,7 @@
                 <label class="layui-form-label">密 &nbsp;&nbsp;码</label>
                 <div class="layui-input-inline">
                     <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
-                    <input type="password" name="userpwd" required lay-verify="pass" placeholder="请输入6-12位密码"
+                    <input type="password" name="teacherpwd" required lay-verify="pass" placeholder="请输入6-12位密码"
                            value=""
                            autocomplete="off" class="layui-input" id="te2">
                 </div>
@@ -247,7 +247,7 @@
                 success: function (msg) {
                     if (msg == "success") {
                         layer.alert("登录成功！", {icon: 6}, function () {
-                            location.href = path + "/teacher/teacherMain";
+                            location.href = path + "/teacher/toUrl/teacherMain";
                         });
                     } else if(msg == "error"){
                         layer.alert("登录失败！", {icon: 2}, function () {

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--TeacherMapper的位置-->
+<mapper namespace="com.great.kindergarten.teacher.mapper.TeacherMapper">
+
+    <!--    com.great.kindergarten.director.javabean.-->
+    <!--resultType先是传入的，parameterType是传-一样的话，其实是可以不用写的-->
+    <resultMap id="teacherMap" type="TblTeacher">
+        <result column="teacherid" property="teacherid"></result>
+        <result column="teachername" property="teachername"></result>
+        <result column="teacherpwd" property="teacherpwd"></result>
+        <result column="teachersex" property="teachersex"></result>
+        <result column="teacherage" property="teacherage"></result>
+        <result column="teacheradd" property="teacheradd"></result>
+        <result column="teacherphone" property="teacherphone"></result>
+        <result column="teacherjob" property="teacherjob"></result>
+        <result column="teacherretime" property="teacherretime"></result>
+        <result column="teacherstatus" property="teacherstatus"></result>
+        <result column="cid" property="cid"></result>
+        <result column="rid" property="rid"></result>
+    </resultMap>
+
+    <!--用户状态查询-->
+    <select id="findTeacherStatus" resultType="java.lang.String" parameterType="java.util.Map">
+        select teacherstatus from tbl_teacher where teachername=#{teachername}
+    </select>
+
+    <!--用户登录查询-->
+    <select id="findTeacher" resultMap="teacherMap" parameterType="TblTeacher">
+		select * from tbl_teacher
+        <where>
+            <if test="teachername!='' and teachername!=null">
+                and teachername = #{teachername}
+            </if>
+            <if test=" teacherpwd !='' and teacherpwd!=null">
+                and teacherpwd = #{teacherpwd}
+            </if>
+        </where>
+	</select>
+
+    <!---->
+</mapper>
