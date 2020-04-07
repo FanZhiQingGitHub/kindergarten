@@ -33,6 +33,11 @@ public class AdminController {
     @Resource
     private AdminService adminService;
 
+    @RequestMapping("/main")
+    public String showMainView(){
+        return "mainjsp/main";
+    }
+
 	@RequestMapping("/toUrl/{url}")
 	public String matchUrl(@PathVariable("url") String url)
 	{

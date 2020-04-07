@@ -51,4 +51,9 @@ public class MainController {
         return "adminjsp/adminLogin";
     }
 
+    @RequestMapping("/error")
+    public String Error() {
+        return "errorjsp/error";
+    }
+
 }

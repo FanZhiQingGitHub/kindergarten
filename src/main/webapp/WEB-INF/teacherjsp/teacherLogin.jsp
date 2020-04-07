@@ -201,7 +201,7 @@
 
             <div id="butdiv">
                 <button type="button" class="layui-btn" id="bu3">忘记密码？</button>
-                <button type="button" class="layui-btn" id="bu4">还没账号？立即注册</button>
+                <button type="button" class="layui-btn" id="bu4">点击此处返回首页</button>
             </div>
         </div>
     </div>
@@ -281,7 +281,7 @@
                 layer.alert("该功能尚未开放！", {icon: 6});
             }),$("#bu4").click(function () {
                 var path = $("#path").val();
-                location.href = path + "/teacher/teacherReg";
+                location.href = path + "/teacher/main";
             });
         })
     });

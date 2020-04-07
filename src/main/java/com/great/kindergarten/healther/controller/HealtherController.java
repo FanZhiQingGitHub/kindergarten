@@ -35,7 +35,6 @@ public class HealtherController {
 
     @RequestMapping("/path/{url}")
     public String showView(@PathVariable(value = "url") String path) {
-        System.out.println("path="+path);
         return "healtherjsp/" + path;
     }
 

@@ -19,6 +19,11 @@ public class SecurityController {
     @Resource
     private SecurityService securityService;
 
+    @RequestMapping("/main")
+    public String showMainView(){
+        return "mainjsp/main";
+    }
+
     @RequestMapping("/loginCode")
     public void cherkCode(HttpServletRequest request, HttpServletResponse response) {
         try {

@@ -23,14 +23,10 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();//拿到拦截的页面
         System.out.println("uri="+uri);
+//        String username = (String) request.getSession().getAttribute("username");
+//        response.sendRedirect(request.getContextPath()+"/main/error");
 
-        String username = (String) request.getSession().getAttribute("username");
-        if(!"".equals(username)){
-            return true;
-        }
-        response.sendRedirect(request.getContextPath()+"/user/main");
-
-        return false;
+        return true;
     }
 
     /**
