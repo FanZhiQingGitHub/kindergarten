@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.kindergarten.parent.mapper.ParentMapper">
+
+    <resultMap id="Parent" type="com.great.kindergarten.parent.entity.Parent">
+        <result column="parentId" property="parentId"/>
+        <result column="parentName" property="parentName"/>
+        <result column="parentPwd" property="parentPwd"/>
+        <result column="parentSex" property="parentSex"/>
+        <result column="parentAge" property="parentAge"/>
+        <result column="parentAdd" property="parentAdd"/>
+        <result column="parentPhone" property="parentPhone"/>
+        <result column="parentSon" property="parentSon"/>
+        <result column="parentJob" property="parentJob"/>
+        <result column="parentRegTime" property="parentRegTime"/>
+        <result column="parentStatus" property="parentStatus"/>
+        <result column="rid" property="rid"/>
+    </resultMap>
+
+    <!--   家长端登陆-->
+    <select id="parentLogin" resultMap="Parent" >
+
+    select * from tbl_parent
+    where parentname=#{parentName} and parentPwd=#{parentPwd} and parentstatus='启用'
+
+    </select>
+
+
+
+
+
+</mapper>
