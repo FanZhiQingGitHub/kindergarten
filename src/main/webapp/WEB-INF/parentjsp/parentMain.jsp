@@ -43,7 +43,7 @@
 
             </dl>
         </li>
-        <li class="layui-nav-item"><a href="javascript:logout(); " style="color: black;font-size: 18px">退出登陆</a></li>
+        <li class="layui-nav-item"><a href="javascript:void(0); "  id="exit" style="color: black;font-size: 18px">退出登陆</a></li>
     </ul>
 
 
@@ -141,9 +141,6 @@
             $('.imgH').css('height', imgH + 'px')
         };
 
-
-
-
         $(function () {
             $("#a1").click(function () {
                 layer.open({
@@ -159,30 +156,16 @@
                     content: path + '/parent/toUrl/parentInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                     , success: function (layero, index) {
 
-
-
                     }
+                });
+            }),$("#exit").click(function () {
+                layer.confirm('您确定要退出到登录界面吗?', {icon: 3, title:'温馨提示'},function(index){
+                    layer.close(index);
+                    location.href=path+'/parent/logout';
                 });
             })
         });
-
-
-
-
-
-
-
-
-
     });
-
-    function logout() {
-        if (confirm('您确定要退出吗')) {
-            window.location.href=path+'/parent/logout';
-        }
-    }
-
-
 
 </script>
 

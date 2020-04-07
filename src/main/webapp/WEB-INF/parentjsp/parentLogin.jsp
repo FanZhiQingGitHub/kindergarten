@@ -95,7 +95,7 @@
         #bu3 {
             width: 30%;
             height: 8%;
-            margin-left: 18%;
+            margin-left: 1%;
             font-size: 13px;
             background-color: transparent;
             color: black;
@@ -109,10 +109,24 @@
             background-color: transparent;
             color: black;
         }
+
+        #bu5 {
+            position: absolute;
+            width: 30%;
+            height: 8%;
+            font-size: 13px;
+            margin-left: 32%;
+            background-color: transparent;
+            color: black;
+        }
+
         #bu3:hover{
             color: #09ff3d;
         }
         #bu4:hover{
+            color: #09ff3d;
+        }
+        #bu5:hover{
             color: #09ff3d;
         }
 
@@ -201,7 +215,8 @@
 
             <div id="butdiv">
                 <button type="button" class="layui-btn" id="bu3">忘记密码？</button>
-<%--                <button type="button" class="layui-btn" id="bu4">还没账号？立即注册</button>--%>
+                <button type="button" class="layui-btn" id="bu4">还没账号？立即注册</button>
+                <button type="button" class="layui-btn" id="bu5">点击此处返回首页</button>
             </div>
         </div>
     </div>
@@ -257,9 +272,10 @@
                     }
                     else if(result.success){
                     //    登陆成功
-                        window.location.href=path+result.data;
+                        layer.alert("登录成功！", {icon: 6}, function () {
+                            location.href=path+result.data;
+                        });
                     }
-
                 }, error: function () {
                     layer.alert("网络繁忙！", {icon: 2});
                 }
@@ -271,17 +287,18 @@
                 var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/security/loginCode?"+Math.random();
-
             }),$("#bu1").click(function () {
                 var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/security/loginCode?"+Math.random();
-
             }),$("#bu3").click(function () {
                 layer.alert("该功能尚未开放！", {icon: 6});
             }),$("#bu4").click(function () {
                 var path = $("#path").val();
                 location.href = path + "/parent/toUrl/parentReg";
+            }),$("#bu5").click(function () {
+                var path = $("#path").val();
+                location.href = path + "/parent/main";
             });
         })
     });

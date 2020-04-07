@@ -23,19 +23,21 @@ public class ParentController {
     @Resource
     private ParentService parentService;
 
-    @RequestMapping("/toUrl/{url}")
-    public String toUrl(@PathVariable  String url) {
-
-        return "parentJsp/"+url;
+    @RequestMapping("/main")
+    public String showMainView() {
+        return "mainjsp/main";
     }
 
-
+    @RequestMapping("/toUrl/{url}")
+    public String toUrl(@PathVariable  String url) {
+        return "parentjsp/"+url;
+    }
 
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request) {
         //移除当前在线的家长
         request.getSession().removeAttribute("onlineParent");
-        return "parentJsp/parentLogin";
+        return "parentjsp/parentLogin";
     }
 
 

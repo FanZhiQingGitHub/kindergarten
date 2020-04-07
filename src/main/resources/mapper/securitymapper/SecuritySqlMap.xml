@@ -28,7 +28,7 @@
     </select>
 
     <!--    用户登录-->
-    <select id="securityLogin" resultMap="HealtherMap" parameterType="java.util.Map">
+    <select id="securityLogin" resultMap="SecurityMap" parameterType="java.util.Map">
         select * from tbl_security
         <where>
             <if test="securityname != '' and securityname != null ">
