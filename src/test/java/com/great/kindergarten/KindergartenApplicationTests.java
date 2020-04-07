@@ -8,6 +8,8 @@ class KindergartenApplicationTests {
 
     @Test
     void contextLoads() {
+
+
     }
 
 }
