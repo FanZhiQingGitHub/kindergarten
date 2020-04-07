@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.kindergarten.healther.mapper.SecurityMapper">
+
+    <resultMap id="SecurityMap" type="com.great.kindergarten.security.javabean.TblSecurity">
+        <result column="securityid" property="securityid"></result>
+        <result column="securityname" property="securityname"></result>
+        <result column="securitypwd" property="securitypwd"></result>
+        <result column="securitysex" property="securitysex"></result>
+        <result column="securityage" property="securityage"></result>
+        <result column="securityadd" property="securityadd"></result>
+        <result column="securityphone" property="securityphone"></result>
+        <result column="securityregtime" property="securityregtime"></result>
+        <result column="securitystatus" property="securitystatus"></result>
+        <result column="rid" property="rid"></result>
+    </resultMap>
+
+    <!--    用户状态查询-->
+    <select id="findSecurityStatus" resultType="java.lang.String" parameterType="java.util.Map">
+        select securitystatus from tbl_security
+        <where>
+            <if test="securityname != '' and securityname != null ">
+                and securityname = #{securityname}
+            </if>
+        </where>
+    </select>
+
+    <!--    用户登录-->
+    <select id="securityLogin" resultMap="HealtherMap" parameterType="java.util.Map">
+        select * from tbl_security
+        <where>
+            <if test="securityname != '' and securityname != null ">
+                and securityname = #{securityname}
+            </if>
+            <if test="securitypwd != '' and securitypwd != null ">
+                and securitypwd = #{securitypwd}
+            </if>
+        </where>
+    </select>
+
+    <!--    用户ID查询-->
+    <select id="findSecurityId" resultType="com.great.kindergarten.security.javabean.TblSecurity" parameterType="java.util.Map">
+        select * from tbl_security
+        <where>
+            <if test="securityname != '' and securityname != null ">
+                and securityname = #{securityname}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateSecurityPwd" parameterType="java.util.Map">
+        UPDATE tbl_security SET securitypwd = #{securitypwd} where securityid = #{securityid};
+    </update>
+
+</mapper>
