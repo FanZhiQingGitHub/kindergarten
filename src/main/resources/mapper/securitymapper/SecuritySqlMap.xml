@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.great.kindergarten.healther.mapper.SecurityMapper">
+<mapper namespace="com.great.kindergarten.security.mapper.SecurityMapper">
 
     <resultMap id="SecurityMap" type="com.great.kindergarten.security.javabean.TblSecurity">
         <result column="securityid" property="securityid"></result>
