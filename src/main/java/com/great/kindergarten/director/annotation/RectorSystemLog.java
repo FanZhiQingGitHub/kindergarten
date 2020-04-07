@@ -1,4 +1,4 @@
-package com.great.kindergarten.rector.annotation;
+package com.great.kindergarten.director.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

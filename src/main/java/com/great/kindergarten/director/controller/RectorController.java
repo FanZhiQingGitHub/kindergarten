@@ -1,7 +1,8 @@
-package com.great.kindergarten.rector.controller;
+package com.great.kindergarten.director.controller;
 
-import com.great.kindergarten.rector.service.RectorService;
+import com.great.kindergarten.director.service.RectorService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
@@ -13,13 +14,25 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
 
+/**
+ * @author JK
+ */
 @Controller
-@RequestMapping("/rector")
+@RequestMapping("/director")
 public class RectorController {
     private String vcode;
     @Resource
     private RectorService rectorService;
 
+    //	管理路径跳转的问题--前台的界面(路径/front/*)
+    @RequestMapping("/toUrl/{id}")
+    public String matchUrl(@PathVariable("id") String id)
+    {
+        System.out.println("id=" + id);
+        return "/directorjsp/" + id;
+    }
+
+    //验证码的登录过程
     @RequestMapping("/loginCode")
     public void cherkCode(HttpServletRequest request, HttpServletResponse response) {
         try {

@@ -1,4 +1,4 @@
-package com.great.kindergarten.rector.mapper;
+package com.great.kindergarten.director.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 

@@ -1,4 +1,4 @@
-package com.great.kindergarten.rector.annotation;
+package com.great.kindergarten.director.annotation;
 
 
 import org.aspectj.lang.JoinPoint;
@@ -30,7 +30,7 @@ public class RectorSystemLogAspect {
 
     //Controller层切点
     //匹配当前包下所有类中所有方法（不包括子包）&& 只匹配带PmLog注解的方法
-    @Pointcut("within(com.great.kindergarten.rector.controller.*) && @annotation(com.great.kindergarten.rector.annotation.RectorSystemLog)")
+    @Pointcut("within(com.great.kindergarten.director.controller.*) && @annotation(com.great.kindergarten.director.annotation.RectorSystemLog)")
     public void controllerAspect() {
 
     }

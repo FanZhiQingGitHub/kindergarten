@@ -40,9 +40,9 @@ public class MainController {
         return "securityjsp/securityLogin";
     }
 
-    @RequestMapping("/rector")
+    @RequestMapping("/director")
     public String Rector() {
-        return "rectorjsp/rectorLogin";
+        return "directorjsp/directorLogin";
     }
 
     @RequestMapping("/admin")

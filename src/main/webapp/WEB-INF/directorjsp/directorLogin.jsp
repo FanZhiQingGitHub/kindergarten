@@ -239,7 +239,7 @@
         form.on('submit(formDemo)', function (data) {
             var path = $("#path").val();
             $.ajax({
-                url: path + "/rector/rectorLogin",
+                url: path + "/director/rectorLogin",
                 async: true,
                 type: "post",
                 data: data.field,
@@ -247,7 +247,7 @@
                 success: function (msg) {
                     if (msg == "success") {
                         layer.alert("登录成功！", {icon: 6}, function () {
-                            location.href = path + "/rector/rectorMain";
+                            location.href = path + "/director/rectorMain";
                         });
                     } else if(msg == "error"){
                         layer.alert("登录失败！", {icon: 2}, function () {
@@ -270,18 +270,18 @@
             $("#code").click(function () {
                 var path = $("#path").val();
                 var code = document.getElementById("code");
-                code.src = path + "/rector/loginCode?"+Math.random();
+                code.src = path + "/director/loginCode?"+Math.random();
 
             }),$("#bu1").click(function () {
                 var path = $("#path").val();
                 var code = document.getElementById("code");
-                code.src = path + "/rector/loginCode?"+Math.random();
+                code.src = path + "/director/loginCode?"+Math.random();
 
             }),$("#bu3").click(function () {
                 layer.alert("该功能尚未开放！", {icon: 6});
             }),$("#bu4").click(function () {
                 var path = $("#path").val();
-                location.href = path + "/rector/rectorReg";
+                location.href = path + "/director/rectorReg";
             });
         })
     });

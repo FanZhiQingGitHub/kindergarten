@@ -11,7 +11,7 @@
         <package name="com.great.kindergarten.admin.javabean" />
         <package name="com.great.kindergarten.healther.javabean" />
         <package name="com.great.kindergarten.parent.javabean" />
-        <package name="com.great.kindergarten.rector.javabean" />
+        <package name="com.great.kindergarten.director.javabean" />
         <package name="com.great.kindergarten.security.javabean" />
         <package name="com.great.kindergarten.teacher.javabean" />
     </typeAliases>

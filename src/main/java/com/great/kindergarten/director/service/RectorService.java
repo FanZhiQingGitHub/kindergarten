@@ -1,7 +1,6 @@
-package com.great.kindergarten.rector.service;
+package com.great.kindergarten.director.service;
 
-import com.great.kindergarten.admin.mapper.AdminMapper;
-import com.great.kindergarten.rector.mapper.RectorMapper;
+import com.great.kindergarten.director.mapper.RectorMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
