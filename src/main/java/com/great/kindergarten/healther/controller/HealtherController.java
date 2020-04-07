@@ -1,7 +1,11 @@
 package com.great.kindergarten.healther.controller;
 
+import com.great.kindergarten.healther.javabean.TblHealther;
 import com.great.kindergarten.healther.service.HealtherService;
+import com.great.kindergarten.util.MD5Utils;
+import com.great.kindergarten.util.ResponseUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
@@ -11,15 +15,29 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Controller
 @RequestMapping("/healther")
 public class HealtherController {
-    private String vcode;
+    private String healthercode;
+    private String healthername;
 
     @Resource
     private HealtherService healtherService;
+
+    @RequestMapping("/main")
+    public String showMainView() {
+        return "mainjsp/main";
+    }
+
+    @RequestMapping("/path/{url}")
+    public String showView(@PathVariable(value = "url") String path) {
+        System.out.println("path="+path);
+        return "healtherjsp/" + path;
+    }
 
     @RequestMapping("/loginCode")
     public void cherkCode(HttpServletRequest request, HttpServletResponse response) {
@@ -60,13 +78,58 @@ public class HealtherController {
                 g.fillRect(random.nextInt(width), random.nextInt(height), 1, 1);//随机噪音点
             }
             /**3 获得随机数据，并保存session*/
-            vcode = builder.toString();
-            request.getSession().setAttribute("vcode", vcode);
+            healthercode = builder.toString();
+            request.getSession().setAttribute("healthercode", healthercode);
             //.. 生成图片发送到浏览器 --相当于下载
             ImageIO.write(image, "jpg", response.getOutputStream());
             response.getOutputStream().flush();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("/healtherLogin")
+    public void userLogin(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
+        healthername = tblHealther.getHealthername();
+        String healtherpwd = MD5Utils.md5(tblHealther.getHealtherpwd());
+        String code = tblHealther.getCode();
+        Boolean confirm = code.equalsIgnoreCase(healthercode);
+        if (confirm) {
+            String healtherstatus = healtherService.findHealtherStatus(healthername);
+            if (healtherstatus.equals("启用")) {
+                TblHealther Healther = healtherService.healtherLogin(healthername, healtherpwd);
+                if (null != Healther) {
+                    List<TblHealther> tblHealtherList = new ArrayList<>();
+                    tblHealtherList.add(Healther);
+                    request.getSession().setAttribute("healthername", healthername);
+                    request.getSession().setAttribute("tblHealtherList", tblHealtherList);
+                    ResponseUtils.outHtml(response, "success");
+                }
+            } else {
+                ResponseUtils.outHtml(response, "notmen");
+            }
+        } else {
+            ResponseUtils.outHtml(response, "codeerror");
+        }
+    }
+
+    @RequestMapping("/updateHealtherpwd")
+    public void updateHealtherpwd(HttpServletRequest request, HttpServletResponse response){
+        String oldpwd = request.getParameter("oldhealtherpwd");
+        String oldhealtherpwd = MD5Utils.md5(oldpwd);
+        TblHealther tblHealther = healtherService.findHealtherId(healthername);
+
+        if(oldhealtherpwd.equals(tblHealther.getHealtherpwd())){
+            String confrimpwd = request.getParameter("confrimHealtherpwd");
+            String healtherpwd = MD5Utils.md5(confrimpwd);
+            Boolean flag = healtherService.updateHealtherPwd(healtherpwd,tblHealther.getHealtherid().toString());
+            if(flag){
+                ResponseUtils.outHtml(response,"success");
+            }else {
+                ResponseUtils.outHtml(response,"error");
+            }
+        }else {
+            ResponseUtils.outHtml(response,"pwderror");
         }
     }
 }

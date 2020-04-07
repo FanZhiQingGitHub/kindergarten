@@ -57,13 +57,12 @@
             <img style="width: 100%;" src="${pageContext.request.contextPath}/image/logo/logo.png">
         </h1>
         <div class="nav" style="visibility: visible">
-            <a href="${pageContext.request.contextPath}/main/main" class="active"
-               style="font-size: 18px">首页</a>
+            <a href="${pageContext.request.contextPath}/main/main" class="active" style="font-size: 18px">首页</a>
             <a href="${pageContext.request.contextPath}/main/parent" class="active" style="font-size: 18px">家长端</a>
             <a href="${pageContext.request.contextPath}/main/teacher" class="active" style="font-size: 18px">教师端</a>
             <a href="${pageContext.request.contextPath}/main/healther" class="active" style="font-size: 18px">保健员端</a>
             <a href="${pageContext.request.contextPath}/main/security" class="active" style="font-size: 18px">安防员端</a>
-            <a href="${pageContext.request.contextPath}/main/rector" class="active" style="font-size: 18px">园长端</a>
+            <a href="${pageContext.request.contextPath}/main/director" class="active" style="font-size: 18px">园长端</a>
             <a href="${pageContext.request.contextPath}/main/admin" class="active" style="font-size: 18px">平台端</a>
             <a href="${pageContext.request.contextPath}/main/about" class="active" style="font-size: 18px">关于</a>
         </div>
@@ -75,7 +74,7 @@
 <!-- content -->
 <div class="content">
     <div class="title">
-        <h5>欢迎您的到来</h5>
+<%--        <h5>欢迎您的到来</h5>--%>
         <h3>用心呵护孩子的点点滴滴</h3>
         <h4>Take care of your kids.</h4>
     </div>
@@ -96,28 +95,28 @@
                     <div class="img-txt">
                         <img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-1.jpg"
                              alt="">
-                        <h3>成长档案</h3>
+                        <h3>温馨的学习空间</h3>
                     </div>
                 </div>
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
                     <div class="img-txt">
                         <img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-2.jpg"
                              alt="">
-                        <h3>成长档案</h3>
+                        <h3>培养动手能力</h3>
                     </div>
                 </div>
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
                     <div class="img-txt">
                         <img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-3.jpg"
                              alt="">
-                        <h3>成长档案</h3>
+                        <h3>记录孩子成长</h3>
                     </div>
                 </div>
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
                     <div class="img-txt">
                         <img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-4.png"
                              alt="">
-                        <h3>成长档案</h3>
+                        <h3>爱心呵护孩子</h3>
                     </div>
                 </div>
             </div>

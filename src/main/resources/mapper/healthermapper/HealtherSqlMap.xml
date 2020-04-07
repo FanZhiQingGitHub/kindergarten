@@ -2,270 +2,56 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.papersmagboot.mapper.UserMapper">
+<mapper namespace="com.great.kindergarten.healther.mapper.HealtherMapper">
 
-    <resultMap id="UserMap" type="com.example.papersmagboot.javabean.UserTable">
-        <result column="userid" property="userid"></result>
-        <result column="username" property="username"></result>
-        <result column="userpwd" property="userpwd"></result>
-        <result column="usersex" property="usersex"></result>
-        <result column="useredu" property="useredu"></result>
-        <result column="userjob" property="userjob"></result>
-        <result column="userphone" property="userphone"></result>
-        <result column="useremail" property="useremail"></result>
-        <result column="userregtime" property="userregtime"></result>
-        <result column="userstatus" property="userstatus"></result>
-        <result column="roleid" property="roleid"></result>
+    <resultMap id="HealtherMap" type="com.great.kindergarten.healther.javabean.TblHealther">
+        <result column="healtherid" property="healtherid"></result>
+        <result column="healthername" property="healthername"></result>
+        <result column="healtherpwd" property="healtherpwd"></result>
+        <result column="healthersex" property="healthersex"></result>
+        <result column="healtherage" property="healtherage"></result>
+        <result column="healtheradd" property="healtheradd"></result>
+        <result column="healtherphone" property="healtherphone"></result>
+        <result column="healtherregtime" property="healtherregtime"></result>
+        <result column="healtherstatus" property="healtherstatus"></result>
+        <result column="rid" property="rid"></result>
     </resultMap>
 
     <!--    用户状态查询-->
-    <select id="findUserStatus" resultType="java.lang.String" parameterType="java.util.Map">
-        select USERSTATUS from usertable
+    <select id="findHealtherStatus" resultType="java.lang.String" parameterType="java.util.Map">
+        select healtherstatus from tbl_healther
         <where>
-            <if test="username != '' and username != null ">
-                and username = #{username}
+            <if test="healthername != '' and healthername != null ">
+                and healthername = #{healthername}
             </if>
         </where>
     </select>
 
     <!--    用户登录-->
-    <select id="userLogin" resultMap="UserMap" parameterType="java.util.Map">
-        select * from usertable
+    <select id="healtherLogin" resultMap="HealtherMap" parameterType="java.util.Map">
+        select * from tbl_healther
         <where>
-            <if test="username != '' and username != null ">
-                and username = #{username}
+            <if test="healthername != '' and healthername != null ">
+                and healthername = #{healthername}
             </if>
-            <if test="userpwd != '' and userpwd != null ">
-                and userpwd = #{userpwd}
+            <if test="healtherpwd != '' and healtherpwd != null ">
+                and healtherpwd = #{healtherpwd}
             </if>
         </where>
     </select>
 
-    <!--    查找用户类型-->
-    <select id="findUserType" parameterType="java.lang.String" resultMap="userMap">
-                select r.roleid,r.rolename from usertable u join roletable r on(u.roleid = r.roleid)
-                where u.username = #{username}
-            </select>
-
-    <!--    这边这个type是你需要查询返回的对象，id就是select语句的 resultMap-->
-    <resultMap id="userMap" type="RoleTable">
-        <!--   这边填写的是你需要查询的的结果-->
-        <result property="roleid" column="roleid"/>
-        <result property="rolename" column="rolename"/>
-        <!--    需要的条件，即where 后面的条件（属于那个实体对象，下面的property就填哪个，column就是实体对象对应数据库表的字段名，
-        javaType就是查询条件的实体类）-->
-        <association property="userTable" column="roleid" javaType="UserTable">
-            <!--    根据哪个字段去查-->
-            <result property="username" column="username"/>
-        </association>
-    </resultMap>
-
-    <!--select * from menutable where menuid in (select r2.mid from roletable r1, rolemenutable r2 where r1.roleid = r2.rid and r1.roleid = #{roleid}) and menusonid = 0-->
-
-    <!--    查找用户对应的父菜单-->
-    <select id="findMenuIDByName" parameterType="java.lang.Integer" resultType="MenuTable">
-        select m.menuid,m.menuname,m.menuurl,m.menusonid,r2.roleid from menutable m,rolemenutable r1,roletable r2 where m.menuid = r1.mid and r1.rid = r2.roleid and r2.roleid = #{roleid} and menusonid = 0;
-    </select>
-
-    <!--    查找用户对应的子菜单-->
-    <select id="findMenuNameByID" parameterType="com.example.papersmagboot.javabean.MenuTable" resultType="MenuTable">
-        select * from menutable m,rolemenutable r  where  m.menuid = r.mid and   m.menusonid = #{menuid} and r.rid = #{roleid} order by menuid
-    </select>
-
-    <!--    查找角色信息-->
-    <select id="findRoleInfo" resultType="com.example.papersmagboot.javabean.RoleTable"
-            parameterType="com.example.papersmagboot.javabean.MenuPage">
-        select * from roletable
+    <!--    用户ID查询-->
+    <select id="findHealtherId" resultType="com.great.kindergarten.healther.javabean.TblHealther" parameterType="java.util.Map">
+        select * from tbl_healther
         <where>
-            <if test="roleName != '' and roleName != null ">
-                and rolename like CONCAT('%',#{roleName},'%')
+            <if test="healthername != '' and healthername != null ">
+                and healthername = #{healthername}
             </if>
         </where>
     </select>
 
-    <!--    查找角色信息总条数-->
-    <select id="findRoleInfoCount" resultType="java.lang.Long"
-            parameterType="com.example.papersmagboot.javabean.MenuPage">
-        select count(*) from roletable
-        <where>
-            <if test="roleName != '' and roleName != null ">
-                and rolename like CONCAT('%',#{roleName},'%')
-            </if>
-        </where>
-    </select>
-
-
-    <!--    用户管理信息表-->
-    <select id="findALLUser" resultMap="UserMap" parameterType="com.example.papersmagboot.javabean.UserPage">
-        select * from usertable
-        <where>
-            <if test="uName != '' and uName != null ">
-                and username like CONCAT('%',#{uName},'%')
-            </if>
-            <if test="uSex != '' and uSex != null ">
-                and usersex = #{uSex}
-            </if>
-            <if test="uStatus != '' and uStatus != null ">
-                and userstatus = #{uStatus}
-            </if>
-            <if test="uTime1 != '' and uTime1 != null and uTime2 != '' and uTime2 != null ">
-                and userregtime between #{uTime1} and #{uTime2}
-            </if>
-        </where>
-        limit #{page},#{limit}
-    </select>
-
-    <!--    用户管理信息表,查询记录条数-->
-    <select id="findUserInfoCount" resultType="java.lang.Long"
-            parameterType="com.example.papersmagboot.javabean.UserPage">
-        select count(*) from usertable
-        <where>
-            <if test="uName != '' and uName != null ">
-                and username like CONCAT('%',#{uName},'%')
-            </if>
-            <if test="uSex != '' and uSex != null ">
-                and usersex = #{uSex}
-            </if>
-            <if test="uStatus != '' and uStatus != null ">
-                and userstatus = #{uStatus}
-            </if>
-            <if test="uTime1 != '' and uTime1 != null and uTime2 != '' and uTime2 != null ">
-                and userregtime between #{uTime1} and #{uTime2}
-            </if>
-
-        </where>
-    </select>
-
-    <update id="updateUserStatus" parameterType="com.example.papersmagboot.javabean.UserTable">
-        update usertable
-        <trim prefix="set" suffixOverrides=",">
-            <if test="userstatus != null ">userstatus = #{userstatus},</if>
-        </trim>
-        <where>
-            userid = #{userid}
-        </where>
+    <update id="updateHealtherPwd" parameterType="java.util.Map">
+        UPDATE tbl_healther SET healtherpwd = #{healtherpwd} where healtherid = #{healtherid};
     </update>
-
-    <update id="updateUserInfo" parameterType="com.example.papersmagboot.javabean.UserTable">
-        update usertable
-        <trim prefix="set" suffixOverrides=",">
-            <if test="username != null ">username = #{username},</if>
-            <if test="userphone != null ">userphone = #{userphone},</if>
-            <if test="useremail != null ">useremail = #{useremail},</if>
-        </trim>
-        <where>
-            userid = #{userid}
-        </where>
-    </update>
-
-    <update id="deleteUser" parameterType="java.lang.String">
-        UPDATE usertable SET userstatus = '已删除' where userid = #{userid};
-    </update>
-
-
-    <!--    查找用户信息-->
-    <select id="findAllUserInfo" resultType="com.example.papersmagboot.javabean.UserTable" parameterType="java.lang.Integer">
-                select * from usertable where userid = #{userid}
-            </select>
-
-    <!--    查找用户积分信息-->
-    <select id="findUserScore" resultType="java.lang.Integer" parameterType="java.lang.Integer">
-                select userscore from usertable where userid = #{userid}
-            </select>
-
-    <update id="updateUserScore" parameterType="com.example.papersmagboot.javabean.UserTable">
-        update usertable
-        <trim prefix="set" suffixOverrides=",">
-            <if test="userscore != null ">userscore = #{userscore},</if>
-        </trim>
-        <where>
-            userid = #{userid}
-        </where>
-    </update>
-
-<!--    用户文档查询-->
-
-    <select id="findUserFile" resultMap="FileMap" parameterType="com.example.papersmagboot.javabean.UserFilePage">
-        select f1.fileid,f1.filename,f1.filesize,f1.filetime,f1.fileintegral,f1.fileuploadnum,f2.typename,f1.filestatus from filetable f1 left join filetypetable f2 on f1.ftid = f2.typeid
-        <where>
-            <if test="fileopname != '' and fileopname != null ">
-                and f1.fileopname = #{fileopname}
-            </if>
-
-            <if test="fileType != '' and fileType != null ">
-                and f1.ftid = #{fileType}
-            </if>
-
-            <if test="filestatus != '' and filestatus != null ">
-                and f1.filestatus = #{filestatus}
-            </if>
-
-            <if test="fileTime1 != '' and fileTime1 != null and fileTime2 != '' and fileTime2 != null ">
-                and f1.filetime between #{fileTime1} and #{fileTime2}
-            </if>
-
-        </where>
-        limit #{page},#{limit}
-    </select>
-
-
-    <!--    用户文档查询,查询记录条数-->
-    <select id="findUserFileInfoCount" resultType="java.lang.Long" parameterType="com.example.papersmagboot.javabean.UserFilePage">
-        select count(*) from filetable f1 left join filetypetable f2 on f1.ftid = f2.typeid
-        <where>
-
-            <if test="fileopname != '' and fileopname != null ">
-                and f1.fileopname = #{fileopname}
-            </if>
-
-
-            <if test="fileType != '' and fileType != null ">
-                and f1.ftid = #{fileType}
-            </if>
-
-            <if test="filestatus != '' and filestatus != null ">
-                and f1.filestatus = #{filestatus}
-            </if>
-
-            <if test="fileTime1 != '' and fileTime1 != null and fileTime2 != '' and fileTime2 != null ">
-                and f1.filetime between #{fileTime1} and #{fileTime2}
-            </if>
-        </where>
-    </select>
-
-    <!--    积分表收入支出表添加-->
-    <insert id="addIntegral" parameterType="java.util.List">
-        insert into
-        integraltable(integraltype,integralnum,integraltime,uid)
-        values
-        <foreach collection="list" item="i" index="index" separator=",">
-            (#{i.integraltype},#{i.integralnum},#{i.integraltime},#{i.uid})
-        </foreach>
-    </insert>
-
-<!--    用户积分收支记录查询-->
-    <resultMap id="IntegralMap" type="com.example.papersmagboot.javabean.UserIntegral">
-        <result column="integralid" property="integralid"></result>
-        <result column="integraltype" property="integraltype"></result>
-        <result column="integralnum" property="integralnum"></result>
-        <result column="integraltime" property="integraltime"></result>
-        <result column="username" property="username"></result>
-        <association property="userTable" javaType="com.example.papersmagboot.javabean.UserTable">
-            <id property="userid" column="userid"/>
-            <result property="username" column="username"/>
-        </association>
-    </resultMap>
-
-    <select id="showUserIntegralInfo" resultMap="IntegralMap" parameterType="com.example.papersmagboot.javabean.UserIntegralPage">
-        select in1.integralid,in1.integraltype,in1.integralnum,in1.integraltime,u.username from integraltable in1 left join usertable u on in1.uid = u.userid limit #{page},#{limit}
-    </select>
-
-    <!--    用户积分收支记录查询记录条数-->
-    <select id="showUserIntegralInfoCount" resultType="java.lang.Long" parameterType="com.example.papersmagboot.javabean.UserIntegralPage">
-        select count(*) from integraltable in1 left join usertable u on in1.uid = u.userid
-    </select>
-
-
-
 
 </mapper>

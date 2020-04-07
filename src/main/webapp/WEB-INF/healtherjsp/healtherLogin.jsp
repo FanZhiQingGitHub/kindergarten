@@ -164,7 +164,7 @@
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-block">
                     <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
-                    <input type="text" name="healthername" lay-verify="required" placeholder="请输入用户名" value=""
+                    <input type="text" name="healthername" lay-verify="required" placeholder="请输入用户名" value="李四"
                            autocomplete="off" class="layui-input" id="te1">
                 </div>
             </div>
@@ -173,7 +173,7 @@
                 <div class="layui-input-inline">
                     <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
                     <input type="password" name="healtherpwd" required lay-verify="pass" placeholder="请输入6-12位密码"
-                           value=""
+                           value="123456"
                            autocomplete="off" class="layui-input" id="te2">
                 </div>
             </div>
@@ -201,7 +201,7 @@
 
             <div id="butdiv">
                 <button type="button" class="layui-btn" id="bu3">忘记密码？</button>
-                <button type="button" class="layui-btn" id="bu4">还没账号？立即注册</button>
+                <button type="button" class="layui-btn" id="bu4">点击此处返回主页</button>
             </div>
         </div>
     </div>
@@ -216,6 +216,7 @@
             , layedit = layui.layedit
             , laydate = layui.laydate;
         $ = layui.jquery;
+        var path = $("#path").val();
         form.verify({
             required: function (value) {
                 if (value.length < 2) {
@@ -237,7 +238,6 @@
 
         });
         form.on('submit(formDemo)', function (data) {
-            var path = $("#path").val();
             $.ajax({
                 url: path + "/healther/healtherLogin",
                 async: true,
@@ -247,18 +247,14 @@
                 success: function (msg) {
                     if (msg == "success") {
                         layer.alert("登录成功！", {icon: 6}, function () {
-                            location.href = path + "/healther/healtherMain";
+                            location.href = path + "/healther/path/healtherMain";
                         });
                     } else if(msg == "error"){
-                        layer.alert("登录失败！", {icon: 2}, function () {
-                            window.location.reload();
-                        });
+                        layer.alert("登录失败！", {icon: 2});
                     }else if(msg == "codeerror") {
                         layer.alert("验证码错误！", {icon: 2});
                     }else if(msg == "notmen"){
-                        layer.alert("该用户已被禁用或者不存在！", {icon: 2},function () {
-                            window.location.reload();
-                        });
+                        layer.alert("该用户已被禁用或者不存在！", {icon: 2});
                     }
                 }, error: function (msg) {
                     layer.alert("网络繁忙！", {icon: 2});
@@ -268,20 +264,16 @@
 
         $(function () {
             $("#code").click(function () {
-                var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/healther/loginCode?"+Math.random();
 
             }),$("#bu1").click(function () {
-                var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/healther/loginCode?"+Math.random();
-
             }),$("#bu3").click(function () {
                 layer.alert("该功能尚未开放！", {icon: 6});
             }),$("#bu4").click(function () {
-                var path = $("#path").val();
-                location.href = path + "/healther/healtherReg";
+                location.href = path + "/healther/main";
             });
         })
     });

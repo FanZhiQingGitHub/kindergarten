@@ -35,6 +35,7 @@ public class MainController {
     public String Healther() {
         return "healtherjsp/healtherLogin";
     }
+
     @RequestMapping("/security")
     public String Security() {
         return "securityjsp/securityLogin";
