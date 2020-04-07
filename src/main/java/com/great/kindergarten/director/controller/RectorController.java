@@ -12,9 +12,11 @@ import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class RectorController {
         return "/directorjsp/" + id;
     }
 
-    //验证码的登录过程
+    //验证码的登录
     @RequestMapping("/loginCode")
     public void cherkCode(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
@@ -48,7 +50,7 @@ public class RectorController {
         //为bi创建图形上下文
         Graphics g = bi.getGraphics();
         //设置颜色，此处调用的构造方法是基于RGB数值作为参数的
-        Color c = new Color(200, 150, 255);
+        Color c = new Color(237, 230, 194);
         //设置颜色
         g.setColor(c);
         //该方法用于填充指定的矩形，参数是坐标和宽高
@@ -63,6 +65,11 @@ public class RectorController {
 
         int len = ch.length, index;
 
+        //给图中绘制噪音点，让图片不那么好辨别
+        for (int j = 0, n = r.nextInt(100); j < n; j++) {
+            g.setColor(Color.RED);
+            g.fillRect(r.nextInt(68), r.nextInt(22), 1, 1);//随机噪音点
+        }
         //用于存储随机生成的四位验证码
         StringBuffer sb = new StringBuffer();
 
@@ -86,7 +93,7 @@ public class RectorController {
         ImageIO.write(bi, "JPG", response.getOutputStream());
     }
 
-    //登录判断的过程
+    //登录判断
     @RequestMapping("/directorLogin")
     public void loginCode(String username, String userpwd, String code,HttpServletRequest request, HttpServletResponse response)
     {
@@ -100,7 +107,7 @@ public class RectorController {
         System.out.println(tblRectors);
         if (null != tblRectors)
         {
-            request.getSession().setAttribute("loginUser", tblRectors);
+            request.getSession().setAttribute("logintblRector", tblRectors);
             String PicCode = (String) request.getSession().getAttribute("PicCode");
             code = code.toLowerCase();
             if (code.equals(PicCode))
@@ -118,6 +125,29 @@ public class RectorController {
         }
     }
 
+
+    //退出对应的主页--园长端退出:
+    @RequestMapping("/exit")
+    public void userexit(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+        System.out.println("进入到对应的退出方法里面!");
+        try
+        {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("charset='UTF-8'");
+
+        //获取session对象
+        HttpSession hs = request.getSession();
+        //强制销毁session
+        hs.invalidate();
+        //重定向到登录页面
+        response.sendRedirect(request.getContextPath() + "/director/toUrl/directorLogin");
+    }
 
 
 }

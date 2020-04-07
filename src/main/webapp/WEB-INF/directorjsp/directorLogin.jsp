@@ -39,12 +39,18 @@
         }
 
         #hh1 {
+            /*color: black;*/
+            /*font-weight: bold;*/
+            /*font-size: 30px;*/
+            /*margin-left: 16%;*/
+            /*margin-top: 3%;*/
+            /*font-family: 楷体;*/
             color: black;
             font-weight: bold;
-            font-size: 30px;
-            margin-left: 16%;
+            font-size: 24px;
             margin-top: 3%;
             font-family: 楷体;
+            text-align: center;
         }
 
         .container {
@@ -63,21 +69,21 @@
             border-radius: 10px;
             background-color: rgba(240, 255, 255, 0.2);
             box-shadow: 0 3px 18px rgba(240, 255, 255, 0.2);
-            font-size: 16px;
+            /*font-size: 16px;*/
         }
 
         .layui-input {
             border-radius: 5px;
-            width: 260px;
-            height: 50px;
-            font-size: 18px;
+            width: 240px;
+            height: 40px;
+            /*font-size: 18px;*/
         }
 
         .layui-form-item {
-            margin-left: 7%;
-            margin-top: 3%;
-            font-size: 20px;
-            color: black;
+            /*margin-left: -7%;*/
+            /*margin-top: 3%;*/
+            /*font-size: 20px;*/
+            color: #3a3a3a;
         }
 
         .layui-btn {
@@ -89,7 +95,7 @@
         }
 
         .verity {
-            width: 150px;
+            width: 100px;
         }
 
         #bu3 {
@@ -120,15 +126,16 @@
         #codediv {
             position: absolute;
             background-color: transparent;
-            margin-left: 47%;
-            width: 35%;
+            margin-left: 52%;
+            width: 45%;
             height: 12.5%;
         }
 
         #code {
-            width: 45%;
-            height: 100%;
-            border-radius: 10px;
+            width: 40%;
+            height: 75%;
+            border-radius: 3px;
+            margin-top: 4%;
         }
 
         #bu1 {
@@ -136,7 +143,7 @@
             width: 55%;
             height: 50%;
             margin-left: 1%;
-            margin-top: 13%;
+            margin-top: 6%;
             border: none;
             font-size: 13px;
             background-color: transparent;
@@ -144,10 +151,15 @@
         }
         .admin-icon {
             position: absolute;
-            margin-left: 280px;
+            margin-left: 250px;
             margin-top: 10px;
-            font-size: 30px;
-            color: black;
+            /*font-size: 30px;*/
+            /*color: black;*/
+        }
+        .btn{
+            /*margin-left: 7%;*/
+            text-align: center;
+            /*margin-left: 20%;*/
         }
 
     </style>
@@ -191,7 +203,7 @@
                 </div>
             </div>
 
-            <div class="layui-form-item">
+            <div class="layui-form-item btn">
                 <div class="layui-input-block">
                     <button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="formDemo">
                         立即登录
@@ -201,7 +213,8 @@
 
             <div id="butdiv">
                 <button type="button" class="layui-btn" id="bu3">忘记密码？</button>
-                <button type="button" class="layui-btn" id="bu4">还没账号？立即注册</button>
+                <button type="button" class="layui-btn" id="bu4">点击此处返回首页</button>
+<%--	            <button type="button" class="layui-btn" id="bu5"></button>--%>
             </div>
         </div>
     </div>
@@ -247,7 +260,7 @@
                 success: function (msg) {
                     if (msg === "success") {
                         layer.alert("登录成功！", {icon: 6}, function () {
-                            location.href = path + "/director/rectorMain";
+                            location.href = path + "/director/toUrl/directorMain";
                         });
                     } else if(msg === "error"){
                         layer.alert("登录失败！", {icon: 2}, function () {
@@ -273,19 +286,26 @@
                 var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/director/loginCode?"+time;
-
-            }),$("#bu1").click(function () {
+            });
+            $("#bu1").click(function () {
                 var time = new Date();
                 var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/director/loginCode?"+time;
 
-            }),$("#bu3").click(function () {
-                layer.alert("该功能尚未开放！", {icon: 6});
-            }),$("#bu4").click(function () {
-                var path = $("#path").val();
-                location.href = path + "/director/rectorReg";
             });
+            $("#bu3").click(function () {
+                layer.alert("该功能尚未开放！", {icon: 6});
+            });
+            $("#bu4").click(function () {
+                var path = $("#path").val();
+                // location.href = path + "/director/rectorReg";
+	            location.href = path + "/main/main";
+            });
+	        // $("#bu5").click(function () {
+		    //     var path = $("#path").val();
+		    //     location.href = path + "/main/main";
+	        // });
         })
     });
 </script>
