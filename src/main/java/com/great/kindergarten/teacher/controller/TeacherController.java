@@ -1,8 +1,12 @@
 package com.great.kindergarten.teacher.controller;
 
+import com.great.kindergarten.teacher.javabean.TblTeacher;
 import com.great.kindergarten.teacher.service.TeacherService;
+import com.great.kindergarten.util.MD5Utils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -11,18 +15,23 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Controller
 @RequestMapping("/teacher")
 public class TeacherController {
     private String vcode;
+
     @Resource
     private TeacherService teacherService;
 
-    @RequestMapping("/main")
-    public String showMainView(){
-        return "mainjsp/main";
+    //跳转路径
+    @RequestMapping("/toUrl/{url}")
+    public String getUrl(@PathVariable(value = "url") String path)
+    {
+        return "teacherjsp/" + path;
     }
 
     @RequestMapping("/loginCode")
@@ -73,4 +82,50 @@ public class TeacherController {
             e.printStackTrace();
         }
     }
+
+
+    @RequestMapping("/teacherLogin")
+    @ResponseBody
+    public  String teacherMain(TblTeacher tblTeacher,HttpServletRequest request){
+        System.out.println("tblTeacher="+tblTeacher);
+        String str=null;
+//        密码加密
+        String teacherpwd = MD5Utils.md5(tblTeacher.getTeacherpwd());
+        System.out.println("teacherpwd="+teacherpwd);
+//        获取验证码
+        String code = tblTeacher.getCode();
+//        验证码判定是否一致
+        Boolean confirm = code.equalsIgnoreCase(vcode);
+        if (confirm) {
+//            获取名字查询状态
+            String teacherStatus = teacherService.findTeacherStatus(tblTeacher.getTeachername());
+           System.out.println("状态teacherStatus="+teacherStatus);
+            if (teacherStatus.equals("启用")){
+                System.out.println("登录="+teacherStatus);
+//                登录 获取全部信息
+                TblTeacher tblTeacher1 = teacherService.findTeacher(tblTeacher);
+                List<TblTeacher> tblTeacherList=new ArrayList<>();
+
+                if (null!=tblTeacher1){
+
+                    request.getSession().setAttribute("teachername",tblTeacher1.getTeachername());
+//                    存信息到页面显示
+                    tblTeacherList.add(tblTeacher1);
+                    System.out.println("tblTeacherList个人信息="+tblTeacherList);
+                    request.getSession().setAttribute("tblTeacherList",tblTeacherList);
+                    str="success";
+                }else {
+                    str="error";
+                }
+
+            }else {
+                str="notmen";
+            }
+
+        }else {
+            str="codeerror";
+        }
+        return str;
+    }
+
 }

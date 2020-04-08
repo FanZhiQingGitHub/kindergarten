@@ -6,6 +6,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://114.215.147.151/kindergarten?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+    #114.215.147.151
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
