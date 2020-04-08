@@ -21,7 +21,7 @@ public class TblParent
 	private String parentPhone;
 	private String parentSon;
 	private String parentJob;
-	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd ")
 	@DateTimeFormat(pattern ="yyyy-MM-dd")
 	private Date parentRegTime;
 	private String parentStatus;

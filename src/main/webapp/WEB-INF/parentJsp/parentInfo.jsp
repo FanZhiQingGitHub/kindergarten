@@ -49,7 +49,7 @@
                                 <li >地址：${sessionScope.onlineParent.parentAdd}</li><br/>
                                 <li >电话：${sessionScope.onlineParent.parentPhone}</li><br/>
                                 <li >工作：${sessionScope.onlineParent.parentJob}</li><br/>
-                                <li >注册时间：${sessionScope.onlineParent.parentRegTime}</li><br/>
+                                <li >注册时间： <fmt:formatDate  value="${sessionScope.onlineParent.parentRegTime}" type="both" pattern="yyyy-MM-dd "/></li><br/>
                         </c:if>
                     </ul>
                 </div>
@@ -79,18 +79,21 @@
 <div id="type-content" style="display: none;">
     <div class="layui-form-item">
         <div class="layui-inline">
+            旧密码：
             <input type="password" id="oldParentPwd" placeholder="请输入6-12位旧密码" value=""
                    autocomplete="off" class="layui-input" style="width: 300px">
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
+            新密码：
             <input type="password" id="NewParentPwd" placeholder="请输入6-12位密码" value=""
                    autocomplete="off" class="layui-input" style="width: 300px">
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
+            二次输入新密码：
             <input type="password" id="confirmParentPwd" placeholder="请确认密码" value=""
                    autocomplete="off" class="layui-input" style="width: 300px">
         </div>
@@ -146,6 +149,7 @@
                                     layer.alert("旧密码输入错误", {icon: 2});
                                 } else if (result.success) {
                                     layer.alert("修改成功，下次登陆将使用刚刚更改的密码", {icon: 6});
+
                                 }else {
                                     layer.alert("遇到外星人攻击", {icon: 2});
                                 }

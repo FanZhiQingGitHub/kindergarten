@@ -80,25 +80,94 @@
     </div>
 
     <div class="prod-show">
+
         <div class="layui-fluid">
             <div class="row layui-col-space12 layui-clear">
-                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
+
+
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
-                        <img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-1.jpg"
-                             alt="">
-                        <h3>体检管理</h3>
+                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">幼儿中心</button></h3>
+                    </div>
+
+
+
+                </div>
+
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
+                    <div class="img-txt">
+                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-warm" style="width: 100%;height: 100%;font-size: 20px">作业中心</button></h3>
                     </div>
                 </div>
-                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
+
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
-                        <img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-2.jpg"
-                             alt="">
-                        <h3>膳食管理</h3>
+                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">安全教育</button></h3>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+            <div class="row layui-col-space12 layui-clear">
+
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
+                    <div class="img-txt">
+                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">资源中心</button></h3>
+                    </div>
+                </div>
+
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
+                    <div class="img-txt">
+                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">消息中心</button></h3>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="prod-show">
+        <div class="layui-fluid">
+            <div class="row layui-col-space12 layui-clear">
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
+                    <div class="img-txt">
+                        <h3 style="text-align: left">园所动态News</h3>
+                        <div  style=" overflow:auto;" >
+
+                            <a href="javascript:;">新闻一</a><br>
+                            <a href="javascript:;">新闻二</a><br>
+                            <a href="javascript:;">新闻三</a><br>
+                            <a href="javascript:;">新闻四</a><br>
+                            <a href="javascript:;">新闻五</a>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
+                    <div class="img-txt">
+                        <h3 style="text-align: left">园所视频Videos</h3>
+                        <div style=" overflow:auto;">
+
+                            <a href="javascript:;">视频一</a><br>
+                            <a href="javascript:;">视频二</a><br>
+                            <a href="javascript:;">视频三</a><br>
+                            <a href="javascript:;">视频四</a><br>
+                            <a href="javascript:;">视频五</a>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 
 
