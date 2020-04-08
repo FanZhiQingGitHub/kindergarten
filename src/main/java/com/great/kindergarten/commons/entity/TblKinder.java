@@ -14,7 +14,7 @@ public class TblKinder {
     private String kinderlp;
     private String kinderlpid;
     private String kinderlpadd;
-    private Integer kinderlpphone;
+    private String kinderlpphone;
     private String schoolpermit;
     private String healthpermit;
     private String firepermit;
@@ -33,7 +33,7 @@ public class TblKinder {
     public TblKinder() {
     }
 
-    public TblKinder(Integer kinderid, String kindername, String kinderlp, String kinderlpid, String kinderlpadd, Integer kinderlpphone, String schoolpermit, String healthpermit, String firepermit, String grouppermit, String registrationpermit, Date kinderapptime, Date kinderregtime, String kinderstatus) {
+    public TblKinder(Integer kinderid, String kindername, String kinderlp, String kinderlpid, String kinderlpadd, String kinderlpphone, String schoolpermit, String healthpermit, String firepermit, String grouppermit, String registrationpermit, Date kinderapptime, Date kinderregtime, String kinderstatus) {
         this.kinderid = kinderid;
         this.kindername = kindername;
         this.kinderlp = kinderlp;
@@ -90,11 +90,11 @@ public class TblKinder {
         this.kinderlpadd = kinderlpadd;
     }
 
-    public Integer getKinderlpphone() {
+    public String getKinderlpphone() {
         return kinderlpphone;
     }
 
-    public void setKinderlpphone(Integer kinderlpphone) {
+    public void setKinderlpphone(String kinderlpphone) {
         this.kinderlpphone = kinderlpphone;
     }
 
@@ -186,7 +186,7 @@ public class TblKinder {
                 ", kinderlp='" + kinderlp + '\'' +
                 ", kinderlpid='" + kinderlpid + '\'' +
                 ", kinderlpadd='" + kinderlpadd + '\'' +
-                ", kinderlpphone=" + kinderlpphone +
+                ", kinderlpphone='" + kinderlpphone + '\'' +
                 ", schoolpermit='" + schoolpermit + '\'' +
                 ", healthpermit='" + healthpermit + '\'' +
                 ", firepermit='" + firepermit + '\'' +

@@ -1,10 +1,14 @@
 package com.great.kindergarten.healther.service;
 
+import com.great.kindergarten.commons.entity.TblClass;
+import com.great.kindergarten.commons.entity.TblExamination;
 import com.great.kindergarten.commons.entity.TblHealther;
 import com.great.kindergarten.healther.mapper.HealtherMapper;
+import com.great.kindergarten.healther.resultbean.ExaminationPage;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -40,5 +44,16 @@ public class HealtherService {
         return healtherMapper.updateHealtherPwd(healthermap);
     }
 
+    public List<TblExamination> findALLExamination(ExaminationPage examinationPage){
+        return healtherMapper.findALLExamination(examinationPage);
+    }
+
+    public Long findALLExaminationCount(ExaminationPage examinationPage){
+        return healtherMapper.findALLExaminationCount(examinationPage);
+    }
+
+    public List<TblClass> findAllClass(){
+        return healtherMapper.findAllClass();
+    }
 
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.kindergarten.healther.mapper.HealtherMapper">
+
+    <resultMap id="ExaminationMap" type="com.great.kindergarten.commons.entity.TblExamination">
+        <result column="examinationid" property="examinationid"></result>
+        <result column="examinationtime" property="examinationtime"></result>
+        <result column="skin" property="skin"></result>
+        <result column="height" property="height"></result>
+        <result column="weight" property="weight"></result>
+        <result column="vision" property="vision"></result>
+        <result column="temperature" property="temperature"></result>
+        <result column="healthstatus" property="healthstatus"></result>
+        <result column="studentid" property="studentid"></result>
+        <result column="studentname" property="studentname"></result>
+        <result column="sid" property="sid"></result>
+        <association property="tblStudent" javaType="com.great.kindergarten.commons.entity.TblStudent">
+            <id property="studentid" column="studentid"/>
+            <result property="studentid" column="studentid"/>
+            <result property="studentname" column="studentname"/>
+        </association>
+    </resultMap>
+
+    <!--    查找宝宝体检信息表-->
+    <select id="findALLExamination" resultMap="ExaminationMap" parameterType="com.great.kindergarten.healther.resultbean.ExaminationPage">
+        select s.studentid,s.studentname,e.height,e.weight,e.vision,e.temperature,e.healthstatus,e.examinationtime
+        from tbl_examination e,tbl_student s ,tbl_class c
+        <where>
+            e.sid = s.studentid and s.cid = c.classid
+            <if test="cName != '' and cName != null ">
+                and c.classname = #{cName}
+            </if>
+        </where>
+        limit #{page},#{limit}
+    </select>
+
+    <!--    查找宝宝体检信息表,查询记录条数-->
+    <select id="findALLExaminationCount" resultType="java.lang.Long" parameterType="com.great.kindergarten.healther.resultbean.ExaminationPage">
+        select count(*) from tbl_examination e,tbl_student s ,tbl_class c
+        <where>
+            e.sid = s.studentid and s.cid = c.classid
+            <if test="cName != '' and cName != null ">
+                and c.classname = #{cName}
+            </if>
+        </where>
+    </select>
+
+    <!--    查找班级信息，不带分页，作为搜索条件-->
+    <select id="findAllClass" resultType="com.great.kindergarten.commons.entity.TblClass">
+        select * from tbl_class
+    </select>
+
+
+
+</mapper>

@@ -1,6 +1,10 @@
 package com.great.kindergarten.healther.controller;
 
+import com.great.kindergarten.commons.entity.TblClass;
+import com.great.kindergarten.commons.entity.TblExamination;
 import com.great.kindergarten.commons.entity.TblHealther;
+import com.great.kindergarten.healther.resultbean.DateWrite;
+import com.great.kindergarten.healther.resultbean.ExaminationPage;
 import com.great.kindergarten.healther.service.HealtherService;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
@@ -15,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -100,6 +105,8 @@ public class HealtherController {
                 if (null != Healther) {
                     List<TblHealther> tblHealtherList = new ArrayList<>();
                     tblHealtherList.add(Healther);
+                    List<TblClass> tblClassList = healtherService.findAllClass();
+                    request.getSession().setAttribute("tblClassList",tblClassList);
                     request.getSession().setAttribute("healthername", healthername);
                     request.getSession().setAttribute("tblHealtherList", tblHealtherList);
                     ResponseUtils.outHtml(response, "success");
@@ -134,6 +141,36 @@ public class HealtherController {
             ResponseUtils.outHtml(response, "success");
         } else {
             ResponseUtils.outHtml(response, "error");
+        }
+    }
+
+    @RequestMapping("/showALLExamination")
+    public void showALLExamination(HttpServletRequest request, HttpServletResponse response, DateWrite dateWrite) throws UnsupportedEncodingException {
+        String likeName = request.getParameter("key");
+        System.out.println("likeName="+likeName);
+
+        Integer page = Integer.valueOf(request.getParameter("page"));
+        Integer limit = Integer.valueOf(request.getParameter("limit"));
+        String cName = null;
+        if (null != likeName && !"".equals(likeName.trim())) {
+            cName = likeName;
+        }
+        Integer minpage = (page - 1) * limit;
+        Integer maxpage = limit;
+        ExaminationPage examinationPage = new ExaminationPage(cName, minpage, maxpage);
+        List<TblExamination> tblExaminationList = healtherService.findALLExamination(examinationPage);
+        System.out.println("tblExaminationList="+tblExaminationList);
+        if (0 != tblExaminationList.size()) {
+            Integer count = healtherService.findALLExaminationCount(examinationPage).intValue();
+            dateWrite.setCode(0);
+            dateWrite.setMsg(" ");
+            dateWrite.setCount(count);
+            dateWrite.setData(tblExaminationList);
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            request.getSession().setAttribute("cName", cName);
+            ResponseUtils.outJson(response, dateWrite);
         }
     }
 }

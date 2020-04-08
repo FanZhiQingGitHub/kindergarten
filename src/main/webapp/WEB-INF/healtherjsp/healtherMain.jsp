@@ -86,12 +86,12 @@
             <div class="row layui-col-space12 layui-clear">
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
-                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">体检管理</button></h3>
+                        <h3><button type="button" id="bu1" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">体检管理</button></h3>
                     </div>
                 </div>
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
-                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-warm" style="width: 100%;height: 100%;font-size: 20px">膳食管理</button></h3>
+                        <h3><button type="button" id="bu2" class="layui-btn layui-btn-lg layui-btn-warm" style="width: 100%;height: 100%;font-size: 20px">膳食管理</button></h3>
                     </div>
                 </div>
             </div>
@@ -173,8 +173,9 @@
             $('.imgH').css('height', imgH + 'px')
         };
 
+
         $(function () {
-            $("#a1").click(function () {
+            $("#a1").click(function () { //修改密码
                 layer.open({
                     type: 2,
                     area: ['95%', '80%'],
@@ -194,10 +195,24 @@
                     layer.close(index);
                     location.href = path + "/healther/path/healtherLogin";
                 });
+            }),$("#bu1").click(function () { //体检管理
+                layer.open({
+                    type: 2,
+                    area: ['95%', '80%'],
+                    offset: ['10%', '3%'],
+                    title:'智慧幼儿园-宝宝体检信息页',
+                    btn1: function (index, layero) {
+                        //layer.getChildFrame("form", index)获取iframe的表单
+                        //serializeArray jquery方法，将表单对象序列化为数组
+                        layer.close(index);
+                    },
+                    content: path + '/healther/path/examinationInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                    }
+                });
             });
         })
     });
-
 
 </script>
 

@@ -21,8 +21,9 @@ public class TblExamination {
     private String healthstatus;
     private Integer sid;
 
-    private TblClass tblClass;
     private TblStudent tblStudent;
+    private Integer studentid;
+    private String studentname;
 
     public TblExamination() {
     }
@@ -111,13 +112,6 @@ public class TblExamination {
         this.sid = sid;
     }
 
-    public TblClass getTblClass() {
-        return tblClass;
-    }
-
-    public void setTblClass(TblClass tblClass) {
-        this.tblClass = tblClass;
-    }
 
     public TblStudent getTblStudent() {
         return tblStudent;
@@ -125,6 +119,22 @@ public class TblExamination {
 
     public void setTblStudent(TblStudent tblStudent) {
         this.tblStudent = tblStudent;
+    }
+
+    public Integer getStudentid() {
+        return studentid;
+    }
+
+    public void setStudentid(Integer studentid) {
+        this.studentid = studentid;
+    }
+
+    public String getStudentname() {
+        return studentname;
+    }
+
+    public void setStudentname(String studentname) {
+        this.studentname = studentname;
     }
 
     @Override
@@ -139,8 +149,9 @@ public class TblExamination {
                 ", temperature='" + temperature + '\'' +
                 ", healthstatus='" + healthstatus + '\'' +
                 ", sid=" + sid +
-                ", tblClass=" + tblClass +
                 ", tblStudent=" + tblStudent +
+                ", studentid=" + studentid +
+                ", studentname='" + studentname + '\'' +
                 '}';
     }
 }
