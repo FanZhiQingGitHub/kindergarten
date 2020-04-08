@@ -1,6 +1,6 @@
 package com.great.kindergarten.director.controller;
 
-import com.great.kindergarten.director.javabean.TblRector;
+import com.great.kindergarten.commons.entity.TblRector;
 import com.great.kindergarten.director.service.RectorService;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
@@ -18,7 +18,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
-import java.util.List;
 
 /**
  * @author JK

@@ -1,6 +1,6 @@
 package com.great.kindergarten.healther.service;
 
-import com.great.kindergarten.healther.javabean.TblHealther;
+import com.great.kindergarten.commons.entity.TblHealther;
 import com.great.kindergarten.healther.mapper.HealtherMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;

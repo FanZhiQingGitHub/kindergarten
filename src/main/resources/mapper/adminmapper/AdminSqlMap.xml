@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.great.kindergarten.admin.mapper.AdminMapper">
 
-    <resultMap id="AdminMap" type="com.great.kindergarten.admin.javabean.TblAdmin">
+    <resultMap id="AdminMap" type="com.great.kindergarten.commons.entity.TblAdmin">
         <result column="adminid" property="adminid"/>
         <result column="adminname" property="adminname"/>
         <result column="adminpwd" property="adminpwd"/>
@@ -36,7 +36,7 @@
         </where>
     </select>
 
-    <select id="findMenuByName" resultType="com.great.kindergarten.admin.javabean.TblMenu" parameterType="string">
+    <select id="findMenuByName" resultType="com.great.kindergarten.commons.entity.TblMenu" parameterType="string">
 		select *
 		from tbl_menu
 		where menuid in (
@@ -50,14 +50,14 @@
 		)
 	</select>
 
-    <select id="findMenuBySid" resultType="com.great.kindergarten.admin.javabean.TblMenu" parameterType="java.lang.Integer">
+    <select id="findMenuBySid" resultType="com.great.kindergarten.commons.entity.TblMenu" parameterType="java.lang.Integer">
         select * from tbl_menu a, tbl_rolemenu b where a.menusonid = #{menusonid} and a.menuid = b.mid
     </select>
 
     <select id="findRoleByRid" resultType="java.lang.String">
         select rolename from tbl_role where roleid = #{roleid}
     </select>
-    <select id="findAdminByName" resultType="com.great.kindergarten.admin.javabean.TblAdmin">
+    <select id="findAdminByName" resultType="com.great.kindergarten.commons.entity.TblAdmin">
         select * from tbl_admin where adminname = #{adminname}
     </select>
 

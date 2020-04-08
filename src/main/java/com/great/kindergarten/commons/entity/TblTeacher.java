@@ -1,4 +1,4 @@
-package com.great.kindergarten.teacher.javabean;
+package com.great.kindergarten.commons.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.context.annotation.Scope;

@@ -278,6 +278,8 @@
                     }
                 }, error: function () {
                     layer.alert("网络繁忙！", {icon: 2});
+                    var code = document.getElementById("code");
+                    code.src = path + "/security/loginCode?"+Math.random();
                 }
             });
         });

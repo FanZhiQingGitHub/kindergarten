@@ -1,13 +1,12 @@
 package com.great.kindergarten.parent.controller;
 
-import com.great.kindergarten.parent.entity.Parent;
-import com.great.kindergarten.parent.entity.Result;
+import com.great.kindergarten.commons.entity.Parent;
+import com.great.kindergarten.commons.entity.Result;
 import com.great.kindergarten.parent.service.ParentService;
 import com.great.kindergarten.util.MD5Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -39,7 +38,6 @@ public class ParentController {
         request.getSession().removeAttribute("onlineParent");
         return "parentjsp/parentLogin";
     }
-
 
     @RequestMapping("/Login")
     @ResponseBody
@@ -78,8 +76,6 @@ public class ParentController {
         }
         return loginResult;
     }
-
-
 
 
 }

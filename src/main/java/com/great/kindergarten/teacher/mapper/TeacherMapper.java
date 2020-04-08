@@ -1,6 +1,6 @@
 package com.great.kindergarten.teacher.mapper;
 
-import com.great.kindergarten.teacher.javabean.TblTeacher;
+import com.great.kindergarten.commons.entity.TblTeacher;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Map;

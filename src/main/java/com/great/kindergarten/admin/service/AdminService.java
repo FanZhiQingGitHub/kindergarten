@@ -1,7 +1,7 @@
 package com.great.kindergarten.admin.service;
 
-import com.great.kindergarten.admin.javabean.TblAdmin;
-import com.great.kindergarten.admin.javabean.TblMenu;
+import com.great.kindergarten.commons.entity.TblAdmin;
+import com.great.kindergarten.commons.entity.TblMenu;
 import com.great.kindergarten.admin.mapper.AdminMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
