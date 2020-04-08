@@ -41,13 +41,14 @@ public class ParentController {
     }
 
     @RequestMapping("/updateParentPwd")
-    public Result updateParentPwd(HttpServletRequest request,String parentOldPwd,String parentNewPwd) {
+    @ResponseBody
+    public Result updateParentPwd(HttpServletRequest request) {
         //取得是谁要执行修改密码操作
         Parent parent = (Parent) request.getSession().getAttribute("onlineParent");
         //数据的获取与转化
-        String md5oldPwd= MD5Utils.md5(parentOldPwd);
-        String md5newPwd=  MD5Utils.md5(parentNewPwd);
-        //调用service处理数据
+        String md5oldPwd= MD5Utils.md5( request.getParameter("parentOldPwd"));
+        String md5newPwd=  MD5Utils.md5( request.getParameter("parentNewPwd"));
+        //调用service处理数据返回
         return parentService.updateParentPwd(parent.getParentId(),md5oldPwd, md5newPwd);
     }
 

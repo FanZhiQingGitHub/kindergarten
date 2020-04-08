@@ -137,7 +137,7 @@
                             async: true,
                             type: 'post',
                             data: {"parentOldPwd": oldParentPwd, "parentNewPwd": NewParentPwd},
-                            datatype: 'text',
+                            datatype: 'json',
                             success: function (result) {
 
                                 if (result.msg == "error") {
@@ -145,8 +145,7 @@
                                 } else if(result.msg == "oldPwdError") {
                                     layer.alert("旧密码输入错误", {icon: 2});
                                 } else if (result.success) {
-                                    layer.alert("修改成功，请重新登陆", {icon: 6});
-                                    window.location.href=path +result.data;
+                                    layer.alert("修改成功，下次登陆将使用刚刚更改的密码", {icon: 6});
                                 }else {
                                     layer.alert("遇到外星人攻击", {icon: 2});
                                 }

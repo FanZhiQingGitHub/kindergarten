@@ -38,8 +38,6 @@ public class ParentService {
                 if(parentMapper.updateParentPwd(parentNewPwd,parentId)>0){
                     //修改成功
                     updateResult.setSuccess(true);
-                    //返回跳转的数据
-                    updateResult.setData("/parent/toUlr/parentLogin");
                 }
             }else {
                 updateResult.setMsg("oldPwdError");

@@ -23,7 +23,7 @@ public class MainController {
 
     @RequestMapping("/parent")
     public String Parent() {
-        return "parentjsp/parentLogin";
+        return "parentJsp/parentLogin";
     }
 
     @RequestMapping("/teacher")
