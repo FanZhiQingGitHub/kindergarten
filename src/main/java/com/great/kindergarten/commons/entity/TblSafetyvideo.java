@@ -1,5 +1,8 @@
 package com.great.kindergarten.commons.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -8,6 +11,8 @@ import java.util.Date;
 public class TblSafetyvideo {
     private Integer safetyvideoid;
     private String safetyvideoname;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date safetyvideotime;
     private String safetyvideoplace;
     private Integer mid;

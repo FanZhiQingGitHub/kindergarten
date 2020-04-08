@@ -1,5 +1,8 @@
 package com.great.kindergarten.commons.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -7,7 +10,11 @@ import java.util.Date;
  */
 public class TblStutime {
     private Integer stutimeid;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date stutimes;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date stutimedate;
     private String stutimeperiod;
     private Integer sid;

@@ -1,6 +1,7 @@
 package com.great.kindergarten.admin.controller;
 
 import com.google.gson.Gson;
+import com.great.kindergarten.admin.annotation.AdminSystemLog;
 import com.great.kindergarten.commons.entity.TblAdmin;
 import com.great.kindergarten.commons.entity.TblMenu;
 import com.great.kindergarten.admin.service.AdminService;
@@ -103,8 +104,8 @@ public class AdminController {
         }
     }
 
+    @AdminSystemLog(operationType = "登录",operationName = "管理员登录")
     @RequestMapping("/checkLogin")
-    //	@Log(operationType = "登录",operationName = "管理员登录")
     public void login(TblAdmin tblAdmin, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
         System.out.println(tblAdmin);

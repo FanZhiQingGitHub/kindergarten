@@ -6,7 +6,7 @@
 <mapper namespace="com.great.kindergarten.admin.mapper.SystemLogMapper">
 
 	<!--日志记录-->
-	<insert id="addLog" parameterType="com.great.kindergarten.admin.javabean.TblSysLog">
+	<insert id="addLog" parameterType="com.great.kindergarten.commons.entity.TblSyslog">
 		insert into tbl_syslog(
 			 operateor,
 			 operatetype,
@@ -25,7 +25,7 @@
 			)
 	</insert>
 
-	<select id="findAllLog" resultType="com.great.kindergarten.admin.javabean.TblSysLog">
+	<select id="findAllLog" resultType="com.great.kindergarten.commons.entity.TblSyslog">
 		select * from tbl_syslog
 		<where>
 			<if test="time1!= '' and time1 != null">

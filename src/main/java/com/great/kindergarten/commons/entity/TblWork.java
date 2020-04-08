@@ -1,5 +1,8 @@
 package com.great.kindergarten.commons.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -9,6 +12,8 @@ public class TblWork {
     private Integer workid;
     private String workname;
     private String workdetail;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date worktime;
     private String workresult;
     private String workeva;

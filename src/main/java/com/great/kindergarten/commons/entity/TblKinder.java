@@ -1,5 +1,8 @@
 package com.great.kindergarten.commons.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -17,9 +20,15 @@ public class TblKinder {
     private String firepermit;
     private String grouppermit;
     private String registrationpermit;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date kinderapptime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date kinderregtime;
     private String kinderstatus;
+    private String time1;
+    private String time2;
 
     public TblKinder() {
     }
@@ -153,6 +162,22 @@ public class TblKinder {
         this.kinderstatus = kinderstatus;
     }
 
+    public String getTime1() {
+        return time1;
+    }
+
+    public void setTime1(String time1) {
+        this.time1 = time1;
+    }
+
+    public String getTime2() {
+        return time2;
+    }
+
+    public void setTime2(String time2) {
+        this.time2 = time2;
+    }
+
     @Override
     public String toString() {
         return "TblKinder{" +
@@ -170,6 +195,8 @@ public class TblKinder {
                 ", kinderapptime=" + kinderapptime +
                 ", kinderregtime=" + kinderregtime +
                 ", kinderstatus='" + kinderstatus + '\'' +
+                ", time1='" + time1 + '\'' +
+                ", time2='" + time2 + '\'' +
                 '}';
     }
 }

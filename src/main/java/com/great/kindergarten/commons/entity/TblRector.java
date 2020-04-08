@@ -2,6 +2,7 @@ package com.great.kindergarten.commons.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.context.annotation.Scope;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -21,7 +22,8 @@ public class TblRector
 	private Integer rectorage;
 	private String rectoradd;
 	private String rectorphone;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern ="yyyy-MM-dd")
 	private Date rectorregtime;
 	private String rectorstatus;
 	private Integer rid;

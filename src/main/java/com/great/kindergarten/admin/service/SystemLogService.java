@@ -1,7 +1,8 @@
 package com.great.kindergarten.admin.service;
 
-import com.great.kindergarten.admin.javabean.TblSysLog;
+
 import com.great.kindergarten.admin.mapper.SystemLogMapper;
+import com.great.kindergarten.commons.entity.TblSyslog;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +16,12 @@ public class SystemLogService
 	@Resource
 	private SystemLogMapper systemLogMapper;
 
-	public int addLog(TblSysLog log)
+	public int addLog(TblSyslog log)
 	{
 		return systemLogMapper.addLog(log);
 	}
 
-	public List<TblSysLog> findAllDoc(HashMap<String, Object> condition, RowBounds rowBounds)
+	public List<TblSyslog> findAllDoc(HashMap<String, Object> condition, RowBounds rowBounds)
 	{
 		return systemLogMapper.findAllLog(condition,rowBounds);
 	}

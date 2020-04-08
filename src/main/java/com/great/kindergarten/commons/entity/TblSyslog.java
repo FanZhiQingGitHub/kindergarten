@@ -1,5 +1,8 @@
 package com.great.kindergarten.commons.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -7,20 +10,22 @@ import java.util.Date;
  */
 public class TblSyslog {
     private Integer syslogid;
-    private String uuid;
     private String operateor;
     private String operatetype;
     private String operatedetail;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date operatetime;
     private String operateresult;
     private String operateip;
+    private String time1;
+    private String time2;
 
     public TblSyslog() {
     }
 
-    public TblSyslog(Integer syslogid, String uuid, String operateor, String operatetype, String operatedetail, Date operatetime, String operateresult, String operateip) {
+    public TblSyslog(Integer syslogid, String operateor, String operatetype, String operatedetail, Date operatetime, String operateresult, String operateip) {
         this.syslogid = syslogid;
-        this.uuid = uuid;
         this.operateor = operateor;
         this.operatetype = operatetype;
         this.operatedetail = operatedetail;
@@ -35,14 +40,6 @@ public class TblSyslog {
 
     public void setSyslogid(Integer syslogid) {
         this.syslogid = syslogid;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 
     public String getOperateor() {
@@ -93,17 +90,34 @@ public class TblSyslog {
         this.operateip = operateip;
     }
 
+    public String getTime1() {
+        return time1;
+    }
+
+    public void setTime1(String time1) {
+        this.time1 = time1;
+    }
+
+    public String getTime2() {
+        return time2;
+    }
+
+    public void setTime2(String time2) {
+        this.time2 = time2;
+    }
+
     @Override
     public String toString() {
         return "TblSyslog{" +
                 "syslogid=" + syslogid +
-                ", uuid='" + uuid + '\'' +
                 ", operateor='" + operateor + '\'' +
                 ", operatetype='" + operatetype + '\'' +
                 ", operatedetail='" + operatedetail + '\'' +
                 ", operatetime=" + operatetime +
                 ", operateresult='" + operateresult + '\'' +
                 ", operateip='" + operateip + '\'' +
+                ", time1='" + time1 + '\'' +
+                ", time2='" + time2 + '\'' +
                 '}';
     }
 }
