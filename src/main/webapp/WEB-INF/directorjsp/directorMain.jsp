@@ -19,7 +19,30 @@
         html, body {
             margin: 0;
             padding: 0;
+            margin: 0 auto;
         }
+        .contentimg{
+            width: 33%;
+            padding: 0 50px;
+        }
+        .nav_btn{
+            padding: 30px 0;
+            max-width: 80%;
+            margin: 0 auto;
+        }
+        .getbtn{
+            height: 240px;
+            width: 75px;
+            font-weight: bold;
+            font-size: 18px;
+            background: #FF5722;
+        }
+        .footer{
+            margin: 0 auto;
+            width: 80%;
+            padding: 0;
+        }
+
     </style>
     <!--加载meta IE兼容文件-->
     <!--[if lt IE 9]>
@@ -32,7 +55,6 @@
 
 <!-- header -->
 <div class="header_box">
-
     <ul class="layui-nav layui-layout-right" style="background-color: white;">
         <li class="layui-nav-item" >
             <a href="javascript:;" style="color: black;font-size: 18px">
@@ -53,21 +75,14 @@
                 <i class="layui-icon layui-icon-more-vertical"></i>
             </li>
         </ul>
-        <h1 class="logo">
-            <img style="width: 100%;" src="${pageContext.request.contextPath}/image/logo/logo.png">
-        </h1>
-        <h1 style="margin-left: 17%;font-size: 40px;color: coral">园长首页</h1>
+        <h1 style="margin-left: 38%;font-size: 40px;color: coral">园长首页</h1>
     </div>
 </div>
 <!-- end-header -->
 
 <!-- content -->
 <div class="content">
-    <div class="title">
-        <h3>好营养我们造,为孩子健康护航</h3>
-        <h4>We make good nutrition, escort the health of children.</h4>
-    </div>
-    <div class="layui-carousel imgbox" id="test1">
+    <div class="layui-carousel imgbox" id="test1" style="margin: 0 auto">
         <div carousel-item class="imgH">
             <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-1.jpg"></div>
             <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-2.jpg"></div>
@@ -77,28 +92,73 @@
         </div>
     </div>
 
-    <div class="prod-show">
+    <div class="prod-show" style="padding: 50px 0;">
         <div class="layui-fluid">
             <div class="row layui-col-space12 layui-clear">
-                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3 contentimg">
                     <div class="img-txt">
                         <img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-1.jpg"
                              alt="">
                         <h3>资格审批</h3>
                     </div>
                 </div>
-                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3 contentimg">
                     <div class="img-txt">
                         <img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-2.jpg"
                              alt="">
                         <h3>班级中心</h3>
                     </div>
                 </div>
-                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3 contentimg">
                     <div class="img-txt">
                         <img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-3.jpg"
                              alt="">
                         <h3>消息中心</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav_btn">
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="approvalGarden">园<br/>所<br/>审<br/>批</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="teachersManagement">教<br/>师<br/>管<br/>理</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="teachersExamAffection">教<br/>师<br/>考<br/>勤</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">幼<br/>儿<br/>管<br/>理</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">家<br/>长<br/>管<br/>理</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">班<br/>级<br/>管<br/>理</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">班<br/>级<br/>成<br/>员<br/>管<br/>理</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">课<br/>程<br/>管<br/>理</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">消<br/>息<br/>通<br/>知</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">校<br/>园<br/>公<br/>告</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">联<br/>系<br/>老<br/>师</button>
+    </div>
+    <div class="prod-show" style="max-width: 80%;">
+        <div class="layui-fluid">
+            <div class="row layui-col-space12 layui-clear">
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
+                    <div class="img-txt">
+                        <h3 style="text-align: left">园所动态News</h3>
+                        <div  style=" overflow:auto;" >
+                            <a href="javascript:;">新闻一</a><br>
+                            <a href="javascript:;">新闻二</a><br>
+                            <a href="javascript:;">新闻三</a><br>
+                            <a href="javascript:;">新闻四</a><br>
+                            <a href="javascript:;">新闻五</a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
+                    <div class="img-txt">
+                        <h3 style="text-align: left">园所视频Videos</h3>
+                        <div style=" overflow:auto;">
+                            <a href="javascript:;">视频一</a><br>
+                            <a href="javascript:;">视频二</a><br>
+                            <a href="javascript:;">视频三</a><br>
+                            <a href="javascript:;">视频四</a><br>
+                            <a href="javascript:;">视频五</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -128,9 +188,10 @@
         //建造实例
         carousel.render({
             elem: '#test1'
-            , width: '100%' //设置容器宽度
+            , width: '80%' //设置容器宽度
             , arrow: 'always'
             , height: 'auto'
+
             //,anim: 'updown' //切换动画方式
         });
         $('.app-header-menuicon').on('click', function () {
@@ -222,6 +283,16 @@
             });
             return obj;
         }
+
+        //园所界面的跳转
+        $("#approvalGarden").on('click',function () {
+            layer.confirm('您确定要进入到园长审批界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
+                layer.close(index);
+                window.location.href = src+"/director/toUrl/";
+                return true;
+            });
+            return false;
+        });
     });
 </script>
 
