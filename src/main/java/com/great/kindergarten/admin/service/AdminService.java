@@ -1,12 +1,13 @@
 package com.great.kindergarten.admin.service;
 
 import com.great.kindergarten.commons.entity.TblAdmin;
+import com.great.kindergarten.commons.entity.TblKinder;
 import com.great.kindergarten.commons.entity.TblMenu;
 import com.great.kindergarten.admin.mapper.AdminMapper;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AdminService {
@@ -46,4 +47,34 @@ public class AdminService {
     {
         return adminMapper.findRoleByRid(rid);
     }
+    public TblAdmin findTblAdminByName(String name)
+    {
+        return adminMapper.findTblAdminByName(name);
+    }
+
+    //修改管理员密码
+    public int updateAdminPwd(String adminpwd,String adminid)
+    {
+        Map<String,String> adminMap = new LinkedHashMap<>();
+        adminMap.put("adminpwd",adminpwd);
+        adminMap.put("adminid",adminid);
+        return adminMapper.updateAdminPwd(adminMap);
+    }
+
+    //园所管理
+    public List<TblKinder> findAllKinder(HashMap<String, Object> condition, RowBounds rowBounds)
+    {
+        return adminMapper.findAllKinder(condition,rowBounds);
+    }
+
+    public int findAllCount(HashMap<String, Object> condition)
+    {
+        return adminMapper.findAllCount(condition);
+    }
+
+    public int checkQualify(String kinderstatus,Integer kinderid, Date kinderapptime)
+    {
+        return adminMapper.checkQualify(kinderstatus,kinderid, kinderapptime);
+    }
+
 }

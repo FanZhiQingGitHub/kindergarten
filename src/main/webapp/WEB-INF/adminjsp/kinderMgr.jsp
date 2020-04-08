@@ -28,15 +28,15 @@
 				<div class="layui-form-item">
 					<div class="layui-block">查询条件：</div>
 					<div class="layui-inline">
-						<span class="layui-form-label">日志时间：</span>
+						<span class="layui-form-label">申请时间：</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time1" id="time1" value="2020-04-07" placeholder="请选择上传开始时间" style="width: 82%;margin-top: 6% ">
+							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" style="width: 82%;margin-top: 6% ">
 						</div>
 					</div>
 					<div class="layui-inline">
 						<span class="layui-form-label" style="margin-left: -28%">至</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time2" id="time2" value="2020-04-08" placeholder="请选择上传结束时间" style="width: 82%;margin: 7% 0 0 30%">
+							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 7% 0 0 30%">
 						</div>
 					</div>
 					<div class="layui-inline" >
@@ -118,27 +118,26 @@
 							formType: 0,
 							id: "remarksPrompt",
 							title: '资质审核-温馨提示(0:未审核,1:通过,2：未通过)',
-							success:function (layero,index) {
+							success: function (layero, index) {
 							}
 						},
-						function () {
-							$("#remarksPrompt").blur(function () {
-								var reg = /^[1-2]*$/;
-								if (!($('#oldadminpwd').val().match(reg))) {
-									layer.msg("请输入数字(1或2)！", {icon: 2, title: '温馨提示'})
-								} else {
-									layer.msg("输入合法", {icon: 5, title: '温馨提示'})
-								}
-							});
-						},
+						// function () {
+						// 	$("#remarksPrompt").blur(function () {
+						// 		var reg = /^[1-2]*$/;
+						// 		if (!($('#remarksPrompt').val().match(reg))) {
+						// 			layer.msg("请输入数字(1或2)！", {icon: 2, title: '温馨提示'})
+						// 		} else {
+						// 			layer.msg("输入合法", {icon: 5, title: '温馨提示'})
+						// 		}
+						// 	});
+						// },
 						function (value, index, elem) {
 							layer.close(index);
+							var reg = /^[1-2]*$/;
 							//向服务端发送审核通过指令
-							if(value == 0)
-							{
-								layer.msg("请输入数字(1或2)！",{icon:2,title:'温馨提示'})
-							}
-							else if (isNaN(value)) {
+							if (value == 0) {
+								layer.msg("请输入数字(1或2)！", {icon: 2, title: '温馨提示'})
+							} else if (value == 1 || value == 2) {
 								$.ajax({
 									url: path + "/admin/checkQualify",
 									type: "post",
@@ -155,9 +154,8 @@
 										tableIns.reload();    //审核之后,刷新表格
 									}
 								});
-							}
-							else {
-								layer.msg("请输入数字(1或2)！",{icon:2,title:'温馨提示'});
+							} else {
+								layer.msg("请输入数字(1或2)！", {icon: 2, title: '温馨提示'});
 							}
 						});
 				}
@@ -177,6 +175,8 @@
 					where: {
 						time1: $('#time1').val()
 						,time2: $('#time2').val()
+						,kinderstatus: $('#sel').val()
+						,kindername: $('#kindername').val()
 					}
 					,page:{
 						curr:1
@@ -189,7 +189,6 @@
 		$('#btn-refresh').on('click', function () {
 			tableIns.reload();
 		});
-
 
 	});
 </script>

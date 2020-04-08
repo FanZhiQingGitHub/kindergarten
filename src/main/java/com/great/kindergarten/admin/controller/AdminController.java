@@ -1,16 +1,21 @@
 package com.great.kindergarten.admin.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.great.kindergarten.admin.annotation.AdminSystemLog;
+import com.great.kindergarten.admin.javabean.DataResult;
+import com.great.kindergarten.admin.service.SystemLogService;
 import com.great.kindergarten.commons.entity.TblAdmin;
+import com.great.kindergarten.commons.entity.TblKinder;
 import com.great.kindergarten.commons.entity.TblMenu;
 import com.great.kindergarten.admin.service.AdminService;
+import com.great.kindergarten.commons.entity.TblSyslog;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -19,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author LXC
@@ -33,6 +38,9 @@ public class AdminController {
 
     @Resource
     private AdminService adminService;
+
+    @Resource
+    private SystemLogService systemLogService;
 
     @RequestMapping("/main")
     public String showMainView(){
@@ -153,4 +161,146 @@ public class AdminController {
 		response.getWriter().flush();
 		response.getWriter().close();
 	}
+
+    @RequestMapping("/checkOldPwd")
+    public void checkOldPwd(HttpServletRequest request, HttpServletResponse response)
+    {
+        String oldadminpwd = MD5Utils.md5(request.getParameter("oldadminpwd"));
+        String adminname = (String) request.getSession().getAttribute("adminname");
+        TblAdmin tblAdmin = adminService.findTblAdminByName(adminname);
+        if(tblAdmin.getAdminpwd().equals(oldadminpwd))
+        {
+            ResponseUtils.outHtml(response,"success");
+        }else{
+            ResponseUtils.outHtml(response,"error");
+        }
+    }
+
+    @RequestMapping("/updateAdminpwd")
+//    @Log(operationType = "修改",operationName = "修改管理员密码")
+    public void updateAdminpwd(HttpServletRequest request, HttpServletResponse response)
+    {
+        String oldadminpwd = MD5Utils.md5(request.getParameter("oldadminpwd"));
+        String adminname = (String) request.getSession().getAttribute("adminname");
+        TblAdmin tblAdmin = adminService.findTblAdminByName(adminname);
+        if(tblAdmin.getAdminpwd().equals(oldadminpwd))
+        {
+            String adminpwd = MD5Utils.md5(request.getParameter("adminpwd"));
+            int num = adminService.updateAdminPwd(adminpwd,tblAdmin.getAdminid().toString());
+            if(num > 0)
+            {
+                ResponseUtils.outHtml(response,"success");
+            }else{
+                ResponseUtils.outHtml(response,"error");
+            }
+        }else{
+            ResponseUtils.outHtml(response,"pwderror");
+        }
+    }
+
+    @RequestMapping("/logMgrInfo")
+    public void findLogByPage(String page, String limit, TblSyslog tblSysLog, DataResult dataResult, HttpServletRequest req, HttpServletResponse res) throws IOException
+    {
+        HashMap<String,Object> condition = new HashMap<>();
+
+        System.out.println("当前页"+page+","+"条数"+limit+","+tblSysLog);
+
+        if(null != tblSysLog.getTime1() && !"".equals(tblSysLog.getTime1().trim())) {
+            condition.put("time1",tblSysLog.getTime1());
+        }
+
+        if(null != tblSysLog.getTime2() && !"".equals(tblSysLog.getTime2().trim())) {
+            condition.put("time2",tblSysLog.getTime2());
+        }
+
+        int num = systemLogService.findAllCount(condition);
+
+        RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+
+        List<TblSyslog> list = new ArrayList<>();
+        list = systemLogService.findAllDoc(condition,rowBounds);
+        if(list != null)
+        {
+            Gson gson = new GsonBuilder().serializeNulls().create();
+            dataResult.setCode(0);
+            dataResult.setCount(num);
+            dataResult.setMsg("");
+            dataResult.setData(list);
+            res.setContentType("application/json; charset=utf-8");
+            res.getWriter().write(gson.toJson(dataResult));
+            res.getWriter().flush();
+            res.getWriter().close();
+        }
+    }
+
+    @RequestMapping("/kinderMgrInfo")
+    public void findKinderByPage(String page, String limit, TblKinder tblKinder, DataResult dataResult, HttpServletRequest req, HttpServletResponse res) throws IOException
+    {
+        HashMap<String,Object> condition = new HashMap<>();
+
+        System.out.println("当前页"+page+","+"条数"+limit+","+tblKinder);
+
+        if(null != tblKinder.getTime1() && !"".equals(tblKinder.getTime1().trim())) {
+            condition.put("time1",tblKinder.getTime1());
+        }
+
+        if(null != tblKinder.getTime2() && !"".equals(tblKinder.getTime2().trim())) {
+            condition.put("time2",tblKinder.getTime2());
+        }
+
+        if(null != tblKinder.getKinderstatus() && !"".equals(tblKinder.getKinderstatus().trim())) {
+            condition.put("kinderstatus",tblKinder.getKinderstatus());
+        }
+
+        if(null != tblKinder.getKindername() && !"".equals(tblKinder.getKindername().trim())) {
+            condition.put("kindername",tblKinder.getKindername());
+        }
+
+        int num = adminService.findAllCount(condition);
+
+        RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+
+        List<TblKinder> list = new ArrayList<>();
+        list = adminService.findAllKinder(condition,rowBounds);
+        if(list != null)
+        {
+            Gson gson = new GsonBuilder().serializeNulls().create();
+            dataResult.setCode(0);
+            dataResult.setCount(num);
+            dataResult.setMsg("");
+            dataResult.setData(list);
+            res.setContentType("application/json; charset=utf-8");
+            res.getWriter().write(gson.toJson(dataResult));
+            res.getWriter().flush();
+            res.getWriter().close();
+        }
+    }
+
+    @RequestMapping("/checkQualify")
+    public void checkQualify(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
+    {
+        String kinderstatus = null;
+        int num = 0;
+        String status = request.getParameter("kinderstatus");
+        int kinderid = Integer.valueOf(request.getParameter("kinderid"));
+        if(status != null && !"".equals(status.trim()))
+        {
+            if("1".equals(status))
+            {
+                kinderstatus = "通过";
+                num = adminService.checkQualify(kinderstatus,kinderid,new Date());
+            }else if ("2".equals(status)){
+                kinderstatus = "未通过";
+                num = adminService.checkQualify(kinderstatus,kinderid,new Date());
+            }
+            if(num > 0)
+            {
+                ResponseUtils.outJson(response,"success");
+            }else{
+                ResponseUtils.outJson(response,"error");
+            }
+        }else{
+            ResponseUtils.outJson(response,"codeerror");
+        }
+    }
 }

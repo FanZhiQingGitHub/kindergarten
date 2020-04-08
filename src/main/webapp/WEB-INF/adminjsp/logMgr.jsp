@@ -40,13 +40,13 @@
 					<div class="layui-inline">
 						<span class="layui-form-label">日志时间：</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time1" id="time1" value="2020-04-07" placeholder="请选择上传开始时间" style="width: 82%;margin-top: 6% ">
+							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" style="width: 82%;margin-top: 6% ">
 						</div>
 					</div>
 					<div class="layui-inline">
 						<span class="layui-form-label" style="margin-left: -28%">至</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time2" id="time2" value="2020-04-08" placeholder="请选择上传结束时间" style="width: 82%;margin: 7% 0 0 30%">
+							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 7% 0 0 30%">
 						</div>
 					</div>
 					<button class="layui-btn" data-type="reload" ><i class="layui-icon">&#xe615;查询</i></button>

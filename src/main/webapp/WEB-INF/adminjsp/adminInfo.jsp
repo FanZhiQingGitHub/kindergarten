@@ -14,23 +14,24 @@
     <link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
     <script src=<%=path + "/layui/layui.js"%>></script>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/mainres/css/main.css">
-<%--    <link rel="stylesheet" type="text/css" href=<%=path+"/image/adminimg/css/main.css"%>>--%>
+    <link rel="stylesheet" type="text/css" href=<%=path+"/image/adminimg/css/main.css"%>>
 
 </head>
 <body>
 <input type="hidden" id="path" value="<%=path%>">
+<input type="hidden" id="adminid" name="adminid">
 <div class="header">
     <h1 class="logo">
         <a>
             <span>个人信息</span>
-            <img src="${pageContext.request.contextPath}/image/adminimg/img/logo.jpg">
+            <img src="${pageContext.request.contextPath}/image/adminimg/img/logo.png">
         </a>
     </h1>
     <div class="nav">
         <a style="font-size: 18px">welcome to <span class="name" style="color: darkorchid">&nbsp;${adminname}&nbsp;</span> home !!!</a>
     </div>
     <p class="welcome-text">
-        <button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal addUserScore" style="margin-top: 48%">
+        <button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal updateAdminpwd" style="margin-top: 48%" >
             修改密码
         </button>
     </p>
@@ -76,52 +77,118 @@
     </div>
 </div>
 
+<div id="type-content" style="display: none;">
+	<div class="layui-form-item">
+		<label class="layui-form-label">旧   密   码</label>
+		<div class="layui-inline">
+			<input type="text" id="oldadminpwd" placeholder="请输入6-12位旧密码"
+			       autocomplete="off" class="layui-input" style="width: 270px" >
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">新   密   码</label>
+		<div class="layui-inline">
+			<input type="password" id="adminpwd" placeholder="请输入6-12位密码" value=""
+			       autocomplete="off" class="layui-input" style="width: 270px">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">确认密码</label>
+		<div class="layui-inline">
+			<input type="password" id="confrimAdminpwd" placeholder="请确认密码" value=""
+			       autocomplete="off" class="layui-input" style="width: 270px">
+		</div>
+	</div>
+</div>
+
 <script>
-    var path = $("#path").val();
-
     layui.use(['jquery','layer'], function () {
-        var jquery = layui.jquery;
-        var layer = layui.layer;
+        var $ = layui.jquery,
+	        layer = layui.layer;
+	    var path = $("#path").val();
+        $('body').on('click', '.updateAdminpwd', function () {
+	        layer.confirm("确定修改密码？",{icon:3,title:'温馨提示'},function (index) {
+		        layer.close(index);
+	        	layer.open({
+			        type: 1,
+			        area: ['35%', '55%'],
+			        content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+			        title: '修改管理员密码',
+			        btn: ['确定', '取消'],
+			        offset: '100px',
+			        btnAlign: 'c',
+			        btn1: function (index) {
+				        var oldadminpwd = $("#oldadminpwd").val();
+				        var adminpwd = $("#adminpwd").val();
+				        var confrimAdminpwd = $("#confrimAdminpwd").val();
 
-        $('body').on('click', '.addUserScore', function () {
-            var userid = $("#userid").val();
-            layer.open({
-                type: 1,
-                content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-                title: '请输入充值积分',
-                btn: ['确定', '取消'],
-                offset: '100px',
-                btnAlign: 'c',
-                btn1: function (index) {
-                    var num = /^[0-9]+.?[0-9]*/;
-                    var userscore = $("#userscore").val();
-                    if(!num.test(userscore)){
-                        layer.alert("请输入数字",{icon:2});
-                    }else {
-                        $.ajax({
-                            url: path + '/user/addUserScore',
-                            async: true,
-                            type: 'post',
-                            data: {"userid": userid,"userscore":userscore},
-                            datatype: 'text',
-                            success: function (data) {
-                                if (data == "error") {
-                                    layer.alert("充值失败！", {icon: 2});
-                                } else {
-                                    layer.close(index);
-                                    layer.alert("充值成功", {icon: 6}, function (index) {
-                                        $("#score").text("积分："+data);
-                                        layer.close(index);
-                                    });
-                                }
-                            }, error: function (data) {
-                                layer.alert("网络繁忙！", {icon: 2});
-                            }
-                        });
-                    }
-                },
-            });
+				        if (oldadminpwd.length == 0) {
+					        layer.alert("请输入旧密码", {icon: 2});
+				        } else if (adminpwd.length < 6) {
+					        layer.alert("新密码长度低于6位", {icon: 2});
+				        } else if (adminpwd.length > 12) {
+					        layer.alert("新密码长度大于12位", {icon: 2});
+				        } else if (adminpwd.length == 0) {
+					        layer.alert("新密码不能为空", {icon: 2});
+				        } else if (confrimAdminpwd.length == 0) {
+					        layer.alert("请确认密码", {icon: 2});
+				        } else if (adminpwd != confrimAdminpwd) {
+					        layer.alert("密码输入不一致", {icon: 2});
+				        } else {
+					        $.ajax({
+						        url: path + '/admin/updateAdminpwd',
+						        async: true,
+						        type: 'post',
+						        data: {
+						        	"adminid":$("#adminid").val(),
+							        "oldadminpwd": oldadminpwd,
+							        "adminpwd": adminpwd,
+							        "confrimAdminpwd": confrimAdminpwd
+						        },
+						        datatype: 'text',
+						        success: function (data) {
+							        if (data == "error") {
+								        layer.alert("修改失败！", {icon: 2});
+							        } else if (data == "pwderror") {
+								        layer.alert("旧密码输入错误", {icon: 2});
+							        } else {
+								        layer.alert("修改成功", {icon: 6});
+								        layer.close(index);
+							        }
+						        }, error: function (data) {
+							        layer.alert("网络繁忙！", {icon: 2});
+						        }
+					        });
+				        }
+			        },
+		        });
+	        });
         });
+
+	    $(function () {
+		    $("#oldadminpwd").blur(function () {
+			    var reg = /^[\w]{6,12}$/;
+			    var oldadminpwd = $(this).val();
+			    $.ajax({
+				    url:path+"/admin/checkOldPwd",
+				    type:'post',
+				    dataType:'text',
+				    data:{"oldadminpwd": oldadminpwd},
+				    //验证旧密码是否输入正确
+				    success:function(msg){
+					    if (msg == "success" && oldadminpwd != 0 && ($('#oldadminpwd').val().match(reg))) {
+						    layer.msg('输入旧密码正确',{icon:1});
+					    } else if(oldadminpwd == 0 || !($('#oldadminpwd').val().match(reg)))
+					    {
+						    layer.msg('请输入6-12位字符! ')
+					    }
+					    else {
+						    layer.msg('输入旧密码错误! ')
+					    }
+				    }
+			    });
+		    });
+	    })
     })
 </script>
 </body>

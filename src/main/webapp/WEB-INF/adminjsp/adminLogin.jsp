@@ -298,7 +298,7 @@
                 layer.alert("该功能尚未开放！", {icon: 6});
             }),$("#bu4").click(function () {
                 var path = $("#path").val();
-                location.href = path + "/admin/main";
+                // location.href = path + "/admin/main";
             });
         })
     });

@@ -61,6 +61,63 @@
         select * from tbl_admin where adminname = #{adminname}
     </select>
 
+    <select id="findTblAdminByName" resultType="com.great.kindergarten.commons.entity.TblAdmin">
+        select * from tbl_admin where adminname = #{adminname}
+    </select>
+
+    <update id="updateAdminPwd" parameterType="java.util.Map">
+        update tbl_admin set adminpwd = #{adminpwd} where adminid = #{adminid};
+    </update>
+    <update id="checkQualify">
+        update tbl_kinder
+        <set>
+            <if test="kinderstatus != '' and kinderstatus != null">
+                kinderstatus = #{kinderstatus},
+            </if>
+            <if test="kinderapptime != '' and kinderapptime != null">
+                kinderapptime = #{kinderapptime},
+            </if>
+        </set>
+        where kinderid = #{kinderid}
+    </update>
+
+    <select id="findAllKinder" resultType="com.great.kindergarten.commons.entity.TblKinder">
+        select * from tbl_kinder
+        <where>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(kinderregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(kinderregtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" kindername != '' and kindername != null">
+                and kindername like concat('%',#{kindername},'%')
+            </if>
+            <if test=" kinderstatus != '' and kinderstatus != null and kinderstatus !='请选择'">
+                and kinderstatus = #{kinderstatus}
+            </if>
+        </where>
+        order by kinderregtime desc
+    </select>
+
+    <select id="findAllCount" resultType="java.lang.Integer">
+        select count(*) from tbl_kinder
+        <where>
+            <if test="time1!= '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(kinderregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test="time2!= '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(kinderregtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" kindername != '' and kindername != null">
+                and kindername like concat('%',#{kindername},'%')
+            </if>
+            <if test=" kinderstatus != '' and  kinderstatus != null and kinderstatus !='请选择'">
+                and kinderstatus = #{kinderstatus}
+            </if>
+        </where>
+    </select>
+
     <!--    &lt;!&ndash;    查找用户类型&ndash;&gt;-->
 <!--    <select id="findUserType" parameterType="java.lang.String" resultMap="userMap">-->
 <!--                select r.roleid,r.rolename from usertable u join roletable r on(u.roleid = r.roleid)-->
