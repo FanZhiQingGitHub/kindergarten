@@ -234,7 +234,17 @@
                 if (value.length < 2) {
                     return '您好，用户名至少得2个字符！';
                 }
+	            if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+		            return '用户名不能有特殊字符';
+	            }
+	            if(/(^\_)|(\__)|(\_+$)/.test(value)){
+		            return '用户名首尾不能出现下划线\'_\'';
+	            }
+	            if(/^\d+\d+\d$/.test(value)){
+		            return '用户名不能全为数字';
+	            }
             },
+	        //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
             pass: [
                 /^[\S]{6,12}$/
                 , '您好，密码必须6~12位，且不能出现空格！'
@@ -269,11 +279,11 @@
                     }else if(msg === "codeerror") {
                         layer.alert("验证码错误！", {icon: 2});
                     }
-                    // else if(msg == "notmen"){
-                    //     layer.alert("该用户已被禁用或者不存在！", {icon: 2},function () {
-                    //         window.location.reload();
-                    //     });
-                    // }
+                    else if(msg === "notmen"){
+                        layer.alert("该用户已被禁用或者不存在！", {icon: 2},function () {
+                            window.location.reload();
+                        });
+                    }
                 }, error: function (msg) {
                     layer.alert("网络繁忙！", {icon: 2});
                 }

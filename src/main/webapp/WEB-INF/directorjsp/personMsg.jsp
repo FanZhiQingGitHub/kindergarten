@@ -50,11 +50,6 @@
 			home
 			!!!</a>
 	</div>
-	<p class="welcome-text">
-		<button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal addUserScore">
-			修改密码
-		</button>
-	</p>
 </div>
 <div class="cont">
 	<img src="${pageContext.request.contextPath}/image/logo/headDirector.jpg">

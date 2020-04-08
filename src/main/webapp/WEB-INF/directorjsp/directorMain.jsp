@@ -41,11 +41,11 @@
             </a>
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0);"  class="personMsg">个人信息</a></dd>
+                <dd><a href="javascript:void(0);"  class="updatePwd">修改密码</a></dd>
             </dl>
         </li>
         <li class="layui-nav-item"><a  href="javascript:void(0); "  id="exit" style="color: black;font-size: 18px">注销</a></li>
     </ul>
-
 
     <div class="header" style="max-width: 80%">
         <ul class="app-header">
@@ -57,11 +57,9 @@
             <img style="width: 100%;" src="${pageContext.request.contextPath}/image/logo/logo.png">
         </h1>
         <h1 style="margin-left: 17%;font-size: 40px;color: coral">园长首页</h1>
-
     </div>
 </div>
 <!-- end-header -->
-
 
 <!-- content -->
 <div class="content">
@@ -137,7 +135,7 @@
         });
         $('.app-header-menuicon').on('click', function () {
             $('.header-down-nav').toggleClass('down-nav')
-        })
+        });
         var imgH = $('.imgbox div.layui-this').outerHeight();
         $('.imgH').css('height', imgH + 'px')
         window.onresize = function () {
@@ -145,8 +143,8 @@
             $('.imgH').css('height', imgH + 'px')
         };
 
+        //个人信息的显示
         $('.personMsg').on('click',function () {
-
             layer.open({
                 type: 2,
                 title: '园长个人信息',
@@ -158,6 +156,53 @@
 	            }
             });
         });
+        //修改密码
+        $('.updatePwd').on('click',function () {
+            layer.open({
+                type: 2,
+                // offset: '100px',
+                title: '修改密码',
+                moveType: 1,//拖拽模式，0或者1
+                area: ['500px', '400px'],
+                btn: ['确认', '取消'],
+                btn1: function (index, layero) {
+                    // var src = $("#srcAddress").val();
+                    //layer.getChildFrame("form", index)获取iframe的表单
+                    //serializeArray jquery方法，将表单对象序列化为数组
+                    var formData = serializeObject($, layer.getChildFrame("form", index).serializeArray());
+
+                    console.log("修改密码："+formData.password);
+                    if (formData.oldpwd.length == 0 ) {
+                        layer.alert("请输入旧密码", {icon: 2});
+                    }else if (formData.password.length == 0) {
+                        layer.alert("新密码不能为空", {icon: 2});
+                    } else if (formData.repassword.length == 0) {
+                        layer.alert("请确认密码", {icon: 2});
+                    } else if (formData.password != formData.repassword) {
+                        layer.alert("确认密码输入不一致", {icon: 2});
+                    }else{
+                        $.ajax({
+                            url: src + '/director/updatePwd',
+                            type: 'post',
+                            data: formData,
+                            success: function (data) {
+                                layer.alert(data);
+                                layer.close(index);
+                                // window.location.href = src + "/servlet/pback/userManage";
+                            }, error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+                },
+                content: src + '/director/toUrl/updatePwd' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                , success: function (layero, index) {
+                    console.log(layero, index);
+                }
+            });
+        });
+
+        //退出到首页
 	    $("#exit").on('click',function () {
 		    layer.confirm('您确定退出到园长端登录界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
 			    layer.close(index);
@@ -166,9 +211,18 @@
 		    });
 		    return false;
 	    });
-    });
 
-    // personMsg
+        //将表单转为js对象数据
+        function serializeObject($, array) {
+            var obj = new Object();
+            $.each(array, function (index, param) {
+                if (!(param.name in obj)) {
+                    obj[param.name] = param.value;
+                }
+            });
+            return obj;
+        }
+    });
 </script>
 
 
