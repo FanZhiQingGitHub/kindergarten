@@ -45,7 +45,7 @@
 				<dd><a href="javascript:void(0);" id="a1" >个人信息</a></dd>
 			</dl>
 		</li>
-		<li class="layui-nav-item"><a href="" style="color: black;font-size: 18px">注销</a></li>
+		<li class="layui-nav-item"><a href="javascript:void(0);" id="exit" style="color: black;font-size: 18px">注销</a></li>
 	</ul>
 
 
@@ -160,7 +160,12 @@
 					, success: function (layero, index) {
 					}
 				});
-			})
+			}),$("#exit").click(function () {
+				layer.confirm('您确定要退出到登录界面吗?', {icon: 3, title:'温馨提示'},function(index){
+					layer.close(index);
+					location.href = path + "/teacher/toUrl/teacherLogin";
+				});
+			});
 		})
 	});
 

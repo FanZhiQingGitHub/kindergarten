@@ -27,6 +27,11 @@ public class TeacherController {
     @Resource
     private TeacherService teacherService;
 
+    @RequestMapping("/main")
+    public String showMainView(){
+        return "mainjsp/main";
+    }
+
     //跳转路径
     @RequestMapping("/toUrl/{url}")
     public String getUrl(@PathVariable(value = "url") String path)
@@ -82,7 +87,6 @@ public class TeacherController {
             e.printStackTrace();
         }
     }
-
 
     @RequestMapping("/teacherLogin")
     @ResponseBody
