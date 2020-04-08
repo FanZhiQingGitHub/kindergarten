@@ -9,7 +9,7 @@ import java.util.Date;
  * @author Administrator
  * 家长实体信息类
  */
-public class Parent
+public class TblParent
 {
 
 	private Integer parentId;
@@ -27,11 +27,11 @@ public class Parent
 	private String parentStatus;
 	private Integer rid;
 
-	public Parent()
+	public TblParent()
 	{
 	}
 
-	public Parent(Integer parentId, String parentName, String parentPwd, String parentSex, Integer parentAge, String parentAdd, String parentPhone, String parentSon, String parentJob, Date parentRegTime, String parentStatus, Integer rid)
+	public TblParent(Integer parentId, String parentName, String parentPwd, String parentSex, Integer parentAge, String parentAdd, String parentPhone, String parentSon, String parentJob, Date parentRegTime, String parentStatus, Integer rid)
 	{
 		this.parentId = parentId;
 		this.parentName = parentName;
@@ -170,6 +170,6 @@ public class Parent
 	@Override
 	public String toString()
 	{
-		return "Parent{" + "parentId=" + parentId + ", parentName='" + parentName + '\'' + ", parentPwd='" + parentPwd + '\'' + ", parentSex='" + parentSex + '\'' + ", parentAge=" + parentAge + ", parentAdd='" + parentAdd + '\'' + ", parentPhone='" + parentPhone + '\'' + ", parentSon='" + parentSon + '\'' + ", parentJob='" + parentJob + '\'' + ", parentRegTime=" + parentRegTime + ", parentStatus='" + parentStatus + '\'' + ", rid=" + rid + '}';
+		return "TblParent{" + "parentId=" + parentId + ", parentName='" + parentName + '\'' + ", parentPwd='" + parentPwd + '\'' + ", parentSex='" + parentSex + '\'' + ", parentAge=" + parentAge + ", parentAdd='" + parentAdd + '\'' + ", parentPhone='" + parentPhone + '\'' + ", parentSon='" + parentSon + '\'' + ", parentJob='" + parentJob + '\'' + ", parentRegTime=" + parentRegTime + ", parentStatus='" + parentStatus + '\'' + ", rid=" + rid + '}';
 	}
 }

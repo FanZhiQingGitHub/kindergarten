@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.great.kindergarten.parent.mapper.ParentMapper">
 
-    <resultMap id="reParent" type="com.great.kindergarten.commons.entity.Parent">
+    <resultMap id="reParent" type="com.great.kindergarten.commons.entity.TblParent">
         <result column="parentId" property="parentId"/>
         <result column="parentName" property="parentName"/>
         <result column="parentPwd" property="parentPwd"/>

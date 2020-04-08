@@ -1,6 +1,6 @@
 package com.great.kindergarten.parent.mapper;
 
-import com.great.kindergarten.commons.entity.Parent;
+import com.great.kindergarten.commons.entity.TblParent;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,7 +15,7 @@ public interface ParentMapper {
 	 * @param parentPwd
 	 * @return
 	 */
-	 Parent parentLogin(String parentName,String parentPwd);
+	 TblParent parentLogin(String parentName, String parentPwd);
 
 	/**
 	 * 根据家长id和旧密码判断旧密码是否输入正确

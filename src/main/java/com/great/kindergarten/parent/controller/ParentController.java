@@ -1,13 +1,12 @@
 package com.great.kindergarten.parent.controller;
 
-import com.great.kindergarten.commons.entity.Parent;
+import com.great.kindergarten.commons.entity.TblParent;
 import com.great.kindergarten.commons.entity.Result;
 import com.great.kindergarten.parent.service.ParentService;
 import com.great.kindergarten.util.MD5Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -44,7 +43,7 @@ public class ParentController {
     @ResponseBody
     public Result updateParentPwd(HttpServletRequest request) {
         //取得是谁要执行修改密码操作
-        Parent parent = (Parent) request.getSession().getAttribute("onlineParent");
+        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
         //数据的获取与转化
         String md5oldPwd= MD5Utils.md5( request.getParameter("parentOldPwd"));
         String md5newPwd=  MD5Utils.md5( request.getParameter("parentNewPwd"));
@@ -68,7 +67,7 @@ public class ParentController {
 
             if (parentName!=null&&parentPwd!=null){
                 String loginPwd = MD5Utils.md5(parentPwd);
-                Parent loginParent = parentService.parentLogin(parentName, loginPwd);
+                TblParent loginParent = parentService.parentLogin(parentName, loginPwd);
                 if (loginParent!=null){
                     //返回ajax数据跳转到家长端首页
                     loginResult.setData("/parent/toUrl/parentMain");
