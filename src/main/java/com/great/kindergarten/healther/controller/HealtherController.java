@@ -194,9 +194,8 @@ public class HealtherController {
         }else {
             tblExamination.setSid(studentid);
 
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-            String time = df.format(new Date());//获取当前时间
-            tblExamination.setExaminationtime(df.parse(time));
+
+            tblExamination.setExaminationtime(new Date());
 
             System.out.println("tblExamination="+tblExamination);
             List<TblExamination> tblExaminationList = new ArrayList<>();

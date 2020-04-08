@@ -97,7 +97,7 @@
                 , {field: 'temperature', title: '体温', width: 160, sort: true, align: 'center'}
                 , {field: 'skin', title: '皮肤状况', width: 160, sort: true, align: 'center'}
                 , {field: 'healthstatus', title: '健康状况', width: 180, sort: true, align: 'center'}
-                , {field: 'examinationtime', title: '体检时间', width: 180, sort: true, align: 'center',templet:"<div>{{layui.util.toDateString(d.kinderregtime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
+                , {field: 'examinationtime', title: '体检时间', width: 180, sort: true, align: 'center',templet:"<div>{{layui.util.toDateString(d.examinationtime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
                 , {field: '', title: '操作', toolbar: "#butdiv", width: 200, align: 'center'}
             ]]
         });
