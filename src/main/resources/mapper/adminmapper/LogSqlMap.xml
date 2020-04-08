@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.great.kindergarten.admin.mapper.SystemLogMapper">
+
+	<!--日志记录-->
+	<insert id="addLog" parameterType="com.great.kindergarten.admin.javabean.TblSysLog">
+		insert into tbl_syslog(
+			 operateor,
+			 operatetype,
+			 operatedetail,
+			 operatetime,
+			 operateresult,
+			 operateip
+		)values
+			(
+				#{operateor}
+				,#{operatetype}
+				,#{operatedetail}
+				,#{operatetime}
+				,#{operateresult}
+				,#{operateip}
+			)
+	</insert>
+
+	<select id="findAllLog" resultType="com.great.kindergarten.admin.javabean.TblSysLog">
+		select * from tbl_syslog
+		<where>
+			<if test="time1!= '' and time1 != null">
+				<![CDATA[   and DATE_FORMAT(operatetime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+			</if>
+			<if test="time2!= '' and time2 != null">
+				<![CDATA[   and DATE_FORMAT(operatetime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+			</if>
+		</where>
+		order by operatetime desc
+	</select>
+
+	<select id="findAllCount" resultType="java.lang.Integer">
+		select count(*) from tbl_syslog
+		<where>
+			<if test="time1!= '' and time1 != null">
+				<![CDATA[   and DATE_FORMAT(operatetime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+			</if>
+			<if test="time2!= '' and time2 != null">
+				<![CDATA[   and DATE_FORMAT(operatetime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+			</if>
+		</where>
+	</select>
+
+</mapper>
