@@ -1,4 +1,4 @@
-package com.great.kindergarten.security.javabean;
+package com.great.kindergarten.commons.entity;
 
 /**
  * 安保员信息实体类

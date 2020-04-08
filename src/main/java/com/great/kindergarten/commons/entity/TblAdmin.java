@@ -1,4 +1,4 @@
-package com.great.kindergarten.admin.javabean;
+package com.great.kindergarten.commons.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;

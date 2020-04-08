@@ -112,6 +112,30 @@
         var form = layui.form;
         var path = $("#path").val();
 
+        $("#oldhealtherpwd").blur(function () {
+            var oldhealtherpwd = $("#oldhealtherpwd").val();
+            if (oldhealtherpwd.length == 0) {
+                layer.alert("请输入旧密码", {icon: 2});
+            } else {
+                $.ajax({
+                    url: path + '/healther/checkOldPwd',
+                    async: true,
+                    type: 'post',
+                    data: {"oldhealtherpwd": oldhealtherpwd},
+                    datatype: 'text',
+                    success: function (data) {
+                        if (data == "error") {
+                            layer.alert("亲，密码与原密码不匹配", {icon: 2});
+                        } else {
+                            layer.alert("亲，密码与原密码匹配", {icon: 6});
+                        }
+                    }, error: function (data) {
+                        layer.alert("网络繁忙！", {icon: 2});
+                    }
+                });
+            }
+        });
+
         $('body').on('click', '.updateHealtherpwd', function () {
             layer.open({
                 type: 1,
@@ -121,13 +145,9 @@
                 offset: '130px',
                 btnAlign: 'c',
                 btn1: function (index) {
-                    var oldhealtherpwd = $("#oldhealtherpwd").val();
                     var healtherpwd = $("#healtherpwd").val();
                     var confrimHealtherpwd = $("#confrimHealtherpwd").val();
-
-                    if (oldhealtherpwd.length == 0 ) {
-                        layer.alert("请输入旧密码", {icon: 2});
-                    }else if (healtherpwd.length < 6) {
+                    if (healtherpwd.length < 6) {
                         layer.alert("新密码长度低于6位", {icon: 2});
                     } else if (healtherpwd.length > 12) {
                         layer.alert("新密码长度大于12位", {icon: 2});
@@ -142,13 +162,14 @@
                             url: path + '/healther/updateHealtherpwd',
                             async: true,
                             type: 'post',
-                            data: {"oldhealtherpwd": oldhealtherpwd, "healtherpwd": healtherpwd,"confrimHealtherpwd":confrimHealtherpwd},
+                            data: {
+                                "healtherpwd": healtherpwd,
+                                "confrimHealtherpwd": confrimHealtherpwd
+                            },
                             datatype: 'text',
                             success: function (data) {
                                 if (data == "error") {
                                     layer.alert("修改失败！", {icon: 2});
-                                } else if(data == "pwderror") {
-                                    layer.alert("旧密码输入错误", {icon: 2});
                                 } else {
                                     layer.alert("修改成功", {icon: 6});
                                 }

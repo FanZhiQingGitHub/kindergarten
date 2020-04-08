@@ -1,7 +1,7 @@
 package com.great.kindergarten.parent.service;
 
-import com.great.kindergarten.parent.entity.Parent;
-import com.great.kindergarten.parent.entity.Result;
+import com.great.kindergarten.commons.entity.Parent;
+import com.great.kindergarten.commons.entity.Result;
 import com.great.kindergarten.parent.mapper.ParentMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -60,7 +60,7 @@ public class ParentService {
      * @param parentPwd
      * @return
      */
-    public Parent parentLogin(String parentName,String parentPwd){
+    public Parent parentLogin(String parentName, String parentPwd){
         return parentMapper.parentLogin(parentName,parentPwd);
     }
 

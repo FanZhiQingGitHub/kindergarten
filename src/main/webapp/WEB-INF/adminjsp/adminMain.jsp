@@ -1,4 +1,4 @@
-<%@ page import="com.great.kindergarten.admin.javabean.TblAdmin" %><%--
+<%@ page import="com.great.kindergarten.commons.entity.TblAdmin" %><%--
   Created by IntelliJ IDEA.
   User: LXC
   Date: 2020-4-7
@@ -43,7 +43,7 @@
 						</dl>
 					</li>
 <%--					<li class="layui-nav-item"><a href="" id="exit">退出</a></li>--%>
-					<button type="button" class="layui-btn layui-btn-normal" id="exit" lay-submit lay-filter="logout">
+					<button type="button" class="layui-btn layui-btn-normal" style="background-color: transparent" id="exit" lay-submit lay-filter="logout">
 						退出
 					</button>
 				</ul>

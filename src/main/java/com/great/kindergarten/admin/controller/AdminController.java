@@ -1,8 +1,8 @@
 package com.great.kindergarten.admin.controller;
 
 import com.google.gson.Gson;
-import com.great.kindergarten.admin.javabean.TblAdmin;
-import com.great.kindergarten.admin.javabean.TblMenu;
+import com.great.kindergarten.commons.entity.TblAdmin;
+import com.great.kindergarten.commons.entity.TblMenu;
 import com.great.kindergarten.admin.service.AdminService;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
@@ -28,8 +28,8 @@ import java.util.Random;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
     private String admincode;
+
     @Resource
     private AdminService adminService;
 

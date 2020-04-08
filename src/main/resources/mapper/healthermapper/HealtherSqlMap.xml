@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.great.kindergarten.healther.mapper.HealtherMapper">
 
-    <resultMap id="HealtherMap" type="com.great.kindergarten.healther.javabean.TblHealther">
+    <resultMap id="HealtherMap" type="com.great.kindergarten.commons.entity.TblHealther">
         <result column="healtherid" property="healtherid"></result>
         <result column="healthername" property="healthername"></result>
         <result column="healtherpwd" property="healtherpwd"></result>
@@ -41,7 +41,7 @@
     </select>
 
     <!--    用户ID查询-->
-    <select id="findHealtherId" resultType="com.great.kindergarten.healther.javabean.TblHealther" parameterType="java.util.Map">
+    <select id="findHealtherId" resultType="com.great.kindergarten.commons.entity.TblHealther" parameterType="java.util.Map">
         select * from tbl_healther
         <where>
             <if test="healthername != '' and healthername != null ">

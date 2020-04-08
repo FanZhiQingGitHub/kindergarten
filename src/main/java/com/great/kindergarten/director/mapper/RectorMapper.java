@@ -1,6 +1,6 @@
 package com.great.kindergarten.director.mapper;
 
-import com.great.kindergarten.director.javabean.TblRector;
+import com.great.kindergarten.commons.entity.TblRector;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

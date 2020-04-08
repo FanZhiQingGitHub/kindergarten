@@ -1,4 +1,4 @@
-package com.great.kindergarten.admin.javabean;
+package com.great.kindergarten.commons.entity;
 
 import java.util.List;
 

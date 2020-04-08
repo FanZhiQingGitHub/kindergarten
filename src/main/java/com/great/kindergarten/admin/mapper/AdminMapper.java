@@ -1,7 +1,7 @@
 package com.great.kindergarten.admin.mapper;
 
-import com.great.kindergarten.admin.javabean.TblAdmin;
-import com.great.kindergarten.admin.javabean.TblMenu;
+import com.great.kindergarten.commons.entity.TblAdmin;
+import com.great.kindergarten.commons.entity.TblMenu;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

@@ -1,4 +1,4 @@
-package com.great.kindergarten.parent.entity;
+package com.great.kindergarten.commons.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -7,6 +7,7 @@ import java.util.Date;
 
 /**
  * @author Administrator
+ * 家长实体信息类
  */
 public class Parent
 {

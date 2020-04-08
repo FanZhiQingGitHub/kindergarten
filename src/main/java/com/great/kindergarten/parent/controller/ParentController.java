@@ -1,7 +1,7 @@
 package com.great.kindergarten.parent.controller;
 
-import com.great.kindergarten.parent.entity.Parent;
-import com.great.kindergarten.parent.entity.Result;
+import com.great.kindergarten.commons.entity.Parent;
+import com.great.kindergarten.commons.entity.Result;
 import com.great.kindergarten.parent.service.ParentService;
 import com.great.kindergarten.util.MD5Utils;
 import org.springframework.stereotype.Controller;

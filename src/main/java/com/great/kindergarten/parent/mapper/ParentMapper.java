@@ -1,6 +1,6 @@
 package com.great.kindergarten.parent.mapper;
 
-import com.great.kindergarten.parent.entity.Parent;
+import com.great.kindergarten.commons.entity.Parent;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

@@ -1,6 +1,6 @@
 package com.great.kindergarten.teacher.controller;
 
-import com.great.kindergarten.teacher.javabean.TblTeacher;
+import com.great.kindergarten.commons.entity.TblTeacher;
 import com.great.kindergarten.teacher.service.TeacherService;
 import com.great.kindergarten.util.MD5Utils;
 import org.springframework.stereotype.Controller;

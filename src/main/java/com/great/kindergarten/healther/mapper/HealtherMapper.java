@@ -1,6 +1,6 @@
 package com.great.kindergarten.healther.mapper;
 
-import com.great.kindergarten.healther.javabean.TblHealther;
+import com.great.kindergarten.commons.entity.TblHealther;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Map;

@@ -1,6 +1,6 @@
 package com.great.kindergarten.healther.controller;
 
-import com.great.kindergarten.healther.javabean.TblHealther;
+import com.great.kindergarten.commons.entity.TblHealther;
 import com.great.kindergarten.healther.service.HealtherService;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
@@ -88,7 +88,7 @@ public class HealtherController {
     }
 
     @RequestMapping("/healtherLogin")
-    public void userLogin(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
+    public void healtherLogin(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
         healthername = tblHealther.getHealthername();
         String healtherpwd = MD5Utils.md5(tblHealther.getHealtherpwd());
         String code = tblHealther.getCode();
@@ -112,23 +112,28 @@ public class HealtherController {
         }
     }
 
-    @RequestMapping("/updateHealtherpwd")
-    public void updateHealtherpwd(HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping("/checkOldPwd")
+    public void checkOldPwd(HttpServletRequest request, HttpServletResponse response) {
         String oldpwd = request.getParameter("oldhealtherpwd");
-        String oldhealtherpwd = MD5Utils.md5(oldpwd);
+        String oldhealtherpwd = MD5Utils.md5(oldpwd);//旧密码
         TblHealther tblHealther = healtherService.findHealtherId(healthername);
+        if (oldhealtherpwd.equals(tblHealther.getHealtherpwd())) {
+            ResponseUtils.outHtml(response, "success");
+        } else {
+            ResponseUtils.outHtml(response, "error");
+        }
+    }
 
-        if(oldhealtherpwd.equals(tblHealther.getHealtherpwd())){
-            String confrimpwd = request.getParameter("confrimHealtherpwd");
-            String healtherpwd = MD5Utils.md5(confrimpwd);
-            Boolean flag = healtherService.updateHealtherPwd(healtherpwd,tblHealther.getHealtherid().toString());
-            if(flag){
-                ResponseUtils.outHtml(response,"success");
-            }else {
-                ResponseUtils.outHtml(response,"error");
-            }
-        }else {
-            ResponseUtils.outHtml(response,"pwderror");
+    @RequestMapping("/updateHealtherpwd")
+    public void updateHealtherpwd(HttpServletRequest request, HttpServletResponse response) {
+        TblHealther tblHealther = healtherService.findHealtherId(healthername);
+        String confrimpwd = request.getParameter("confrimHealtherpwd");
+        String healtherpwd = MD5Utils.md5(confrimpwd);
+        Boolean flag = healtherService.updateHealtherPwd(healtherpwd, tblHealther.getHealtherid().toString());
+        if (flag) {
+            ResponseUtils.outHtml(response, "success");
+        } else {
+            ResponseUtils.outHtml(response, "error");
         }
     }
 }
