@@ -20,7 +20,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -147,7 +150,6 @@ public class HealtherController {
     @RequestMapping("/showALLExamination")
     public void showALLExamination(HttpServletRequest request, HttpServletResponse response, DateWrite dateWrite) throws UnsupportedEncodingException {
         String likeName = request.getParameter("key");
-        System.out.println("likeName="+likeName);
 
         Integer page = Integer.valueOf(request.getParameter("page"));
         Integer limit = Integer.valueOf(request.getParameter("limit"));
@@ -173,4 +175,39 @@ public class HealtherController {
             ResponseUtils.outJson(response, dateWrite);
         }
     }
+
+    @RequestMapping("/updateExaminationInfo")
+    public void updateExaminationInfo(TblExamination tblExamination,HttpServletResponse response){
+        Boolean flag = healtherService.updateExaminationInfo(tblExamination);
+        if(flag){
+            ResponseUtils.outHtml(response,"success");
+        }else {
+            ResponseUtils.outHtml(response,"error");
+        }
+    }
+
+    @RequestMapping("/addExaminationInfo")
+    public void addExaminationInfo(TblExamination tblExamination,HttpServletResponse response) throws ParseException {
+        Integer studentid = healtherService.findStudentId(tblExamination.getStudentname());
+        if(studentid == null){
+            ResponseUtils.outHtml(response,"notname");
+        }else {
+            tblExamination.setSid(studentid);
+
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            String time = df.format(new Date());//获取当前时间
+            tblExamination.setExaminationtime(df.parse(time));
+
+            System.out.println("tblExamination="+tblExamination);
+            List<TblExamination> tblExaminationList = new ArrayList<>();
+            tblExaminationList.add(tblExamination);
+            Boolean flag = healtherService.addExaminationInfo(tblExaminationList);
+            if(flag){
+                ResponseUtils.outHtml(response,"success");
+            }else {
+                ResponseUtils.outHtml(response,"error");
+            }
+        }
+    }
+
 }

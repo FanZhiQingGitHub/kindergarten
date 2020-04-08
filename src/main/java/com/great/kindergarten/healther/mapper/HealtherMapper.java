@@ -25,4 +25,10 @@ public interface HealtherMapper {
     public Long findALLExaminationCount(ExaminationPage examinationPage);
 
     public List<TblClass> findAllClass();
+
+    public Boolean updateExaminationInfo(TblExamination tblExamination);
+
+    public Integer findStudentId(Map<String, String> studentmap);
+
+    public Boolean addExaminationInfo(List<TblExamination> tblExaminationList);
 }

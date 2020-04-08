@@ -6,13 +6,13 @@
 
     <resultMap id="ExaminationMap" type="com.great.kindergarten.commons.entity.TblExamination">
         <result column="examinationid" property="examinationid"></result>
-        <result column="examinationtime" property="examinationtime"></result>
-        <result column="skin" property="skin"></result>
         <result column="height" property="height"></result>
         <result column="weight" property="weight"></result>
         <result column="vision" property="vision"></result>
         <result column="temperature" property="temperature"></result>
+        <result column="skin" property="skin"></result>
         <result column="healthstatus" property="healthstatus"></result>
+        <result column="examinationtime" property="examinationtime"></result>
         <result column="studentid" property="studentid"></result>
         <result column="studentname" property="studentname"></result>
         <result column="sid" property="sid"></result>
@@ -25,15 +25,15 @@
 
     <!--    查找宝宝体检信息表-->
     <select id="findALLExamination" resultMap="ExaminationMap" parameterType="com.great.kindergarten.healther.resultbean.ExaminationPage">
-        select s.studentid,s.studentname,e.height,e.weight,e.vision,e.temperature,e.healthstatus,e.examinationtime
+        select s.studentid,s.studentname,e.*
         from tbl_examination e,tbl_student s ,tbl_class c
         <where>
             e.sid = s.studentid and s.cid = c.classid
-            <if test="cName != '' and cName != null ">
+            <if test="cName != '' and cName != null and cName != '请选择' ">
                 and c.classname = #{cName}
             </if>
         </where>
-        limit #{page},#{limit}
+        order by e.examinationtime desc limit #{page},#{limit}
     </select>
 
     <!--    查找宝宝体检信息表,查询记录条数-->
@@ -41,7 +41,7 @@
         select count(*) from tbl_examination e,tbl_student s ,tbl_class c
         <where>
             e.sid = s.studentid and s.cid = c.classid
-            <if test="cName != '' and cName != null ">
+            <if test="cName != '' and cName != null and cName != '请选择' ">
                 and c.classname = #{cName}
             </if>
         </where>
@@ -52,6 +52,42 @@
         select * from tbl_class
     </select>
 
+<!--    更新宝宝体检信息-->
+    <update id="updateExaminationInfo" parameterType="com.great.kindergarten.commons.entity.TblExamination">
+        update tbl_examination
+        <trim prefix="set" suffixOverrides=",">
+            <if test="skin != null ">skin = #{skin},</if>
+            <if test="height != null ">height = #{height},</if>
+            <if test="weight != null ">weight = #{weight},</if>
+            <if test="vision != null ">vision = #{vision},</if>
+            <if test="temperature != null ">temperature = #{temperature},</if>
+            <if test="healthstatus != null ">healthstatus = #{healthstatus},</if>
+        </trim>
+        <where>
+            examinationid = #{examinationid}
+        </where>
+    </update>
+
+
+    <!--    宝宝ID查询-->
+    <select id="findStudentId" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select studentid from tbl_student
+        <where>
+            <if test="studentname != '' and studentname != null ">
+                and studentname = #{studentname}
+            </if>
+        </where>
+    </select>
+
+    <!--    新增宝宝体检信息-->
+    <insert id="addExaminationInfo" parameterType="java.util.List">
+        insert into
+        tbl_examination(height,weight,vision,temperature,skin,healthstatus,examinationtime,sid)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.height},#{i.weight},#{i.vision},#{i.temperature},#{i.skin},#{i.healthstatus},#{i.examinationtime},#{i.sid})
+        </foreach>
+    </insert>
 
 
 </mapper>

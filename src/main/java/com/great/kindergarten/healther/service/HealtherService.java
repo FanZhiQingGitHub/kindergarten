@@ -56,4 +56,18 @@ public class HealtherService {
         return healtherMapper.findAllClass();
     }
 
+    public Boolean updateExaminationInfo(TblExamination tblExamination){
+        return healtherMapper.updateExaminationInfo(tblExamination);
+    }
+
+    public Integer findStudentId(String studentname){
+        Map<String, String> studentmap = new LinkedHashMap<>();
+        studentmap.put("studentname",studentname);
+        return healtherMapper.findStudentId(studentmap);
+    }
+
+    public Boolean addExaminationInfo(List<TblExamination> tblExaminationList){
+        return healtherMapper.addExaminationInfo(tblExaminationList);
+    }
+
 }
