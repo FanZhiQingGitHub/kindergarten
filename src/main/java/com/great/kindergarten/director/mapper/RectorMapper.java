@@ -1,11 +1,12 @@
 package com.great.kindergarten.director.mapper;
 
+import com.great.kindergarten.commons.entity.TblKinder;
 import com.great.kindergarten.commons.entity.TblRector;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface RectorMapper {
-
+public interface RectorMapper
+{
 	//登录查询对应的内容
 	public TblRector findRector(TblRector tblRector);
 
@@ -14,4 +15,6 @@ public interface RectorMapper {
 
 	//更新密码
 	public int updateByIdPwd(TblRector tblRector);
+
+
 }

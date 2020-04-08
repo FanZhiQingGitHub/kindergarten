@@ -32,4 +32,35 @@
         update tbl_rector set rectorpwd = #{rectorpwd} where rectorid = #{rectorid}
     </update>
 
+<!--    &lt;!&ndash;申请园所&ndash;&gt;-->
+<!--    <insert id="addKinderMsg" parameterType="TblKinder">-->
+<!--insert into tbl_kinder(-->
+<!--			 kindername-->
+<!--			,kinderlp-->
+<!--			,kinderlpid-->
+<!--			,kinderlpadd-->
+<!--			,kinderlpphone-->
+<!--			,schoolpermit-->
+<!--			,healthpermit-->
+<!--            ,firepermit-->
+<!--            ,grouppermit-->
+<!--            ,registrationpermit-->
+<!--            ,kinderregtime-->
+<!--            ,kinderstatus-->
+<!--		)values(-->
+<!--			 #{kindername}-->
+<!--			,#{kinderlp}-->
+<!--			,#{kinderlpid}-->
+<!--			,#{kinderlpadd}-->
+<!--			,#{kinderlpphone}-->
+<!--			,#{schoolpermit}-->
+<!--			,#{healthpermit}-->
+<!--			,#{firepermit}-->
+<!--			,#{grouppermit}-->
+<!--			,#{registrationpermit}-->
+<!--			,#{kinderregtime}-->
+<!--			,#{kinderstatus}-->
+<!--		)-->
+<!--    </insert>-->
+
 </mapper>

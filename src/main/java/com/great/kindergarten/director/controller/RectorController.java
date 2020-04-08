@@ -1,13 +1,14 @@
 package com.great.kindergarten.director.controller;
 
+import com.great.kindergarten.commons.entity.TblKinder;
 import com.great.kindergarten.commons.entity.TblRector;
+import com.great.kindergarten.director.service.KinderService;
 import com.great.kindergarten.director.service.RectorService;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -29,8 +32,15 @@ public class RectorController
 	private String vcode;
 	@Resource
 	private RectorService rectorService;
+
+	@Resource
+	private KinderService kinderService;
+
 	@Resource
 	TblRector tblRector;
+
+	@Resource
+	TblKinder tblKinder;
 
 	//	管理路径跳转的问题--前台的界面(路径/toUrl/*)
 	@RequestMapping("/toUrl/{id}")
@@ -191,5 +201,25 @@ public class RectorController
 		response.sendRedirect(request.getContextPath() + "/director/toUrl/directorLogin");
 	}
 
+	//园所申请审批
+	@RequestMapping("/directorReg")
+	public void directorReg(TblKinder tblKinder,HttpServletRequest request, HttpServletResponse response) throws ParseException
+	{
+		tblKinder.setKinderstatus("未审批");
+//		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+//		String logtime = df.format(new Date());//获取当前时间
+//		Date newDate = df.parse(logtime);
+
+		tblKinder.setKinderregtime(new Date());
+		System.out.println("园所申请审批："+tblKinder);
+		int result = kinderService.addKinderMsg(tblKinder);
+		if (result > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
 
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.kindergarten.director.mapper.KinderMapper">
+    <!--    com.great.kindergarten.director.javabean.-->
+    <!--resultType先是传入的，parameterType是传-一样的话，其实是可以不用写的-->
+<!--    <resultMap id="rectorMap" type="TblRector">-->
+<!--        <result column="rectorid" property="rectorid"></result>-->
+<!--        <result column="rectorname" property="rectorname"></result>-->
+<!--        <result column="rectorpwd" property="rectorpwd"></result>-->
+<!--        <result column="rectorsex" property="rectorsex"></result>-->
+<!--        <result column="rectorage" property="rectorage"></result>-->
+<!--        <result column="rectoradd" property="rectoradd"></result>-->
+<!--        <result column="rectorphone" property="rectorphone"></result>-->
+<!--        <result column="rectorregtime" property="rectorregtime"></result>-->
+<!--        <result column="rectorstatus" property="rectorstatus"></result>-->
+<!--        <result column="rid" property="rid"></result>-->
+<!--    </resultMap>-->
+
+    <!--申请园所-->
+    <insert id="addKinderMsg" parameterType="TblKinder">
+insert into tbl_kinder(
+			 kindername
+			,kinderlp
+			,kinderlpid
+			,kinderlpadd
+			,kinderlpphone
+			,schoolpermit
+			,healthpermit
+            ,firepermit
+            ,grouppermit
+            ,registrationpermit
+            ,kinderregtime
+            ,kinderstatus
+		)values(
+			 #{kindername}
+			,#{kinderlp}
+			,#{kinderlpid}
+			,#{kinderlpadd}
+			,#{kinderlpphone}
+			,#{schoolpermit}
+			,#{healthpermit}
+			,#{firepermit}
+			,#{grouppermit}
+			,#{registrationpermit}
+			,#{kinderregtime}
+			,#{kinderstatus}
+		)
+    </insert>
+
+</mapper>

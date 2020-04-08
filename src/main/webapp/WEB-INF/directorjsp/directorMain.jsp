@@ -32,7 +32,8 @@
         }
         .getbtn{
             height: 240px;
-            width: 75px;
+            /*width: 75px;*/
+            width: 8%;
             font-weight: bold;
             font-size: 18px;
             background: #FF5722;
@@ -288,7 +289,7 @@
         $("#approvalGarden").on('click',function () {
             layer.confirm('您确定要进入到园长审批界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
                 layer.close(index);
-                window.location.href = src+"/director/toUrl/";
+                window.location.href = src+"/director/toUrl/directorReg";
                 return true;
             });
             return false;
