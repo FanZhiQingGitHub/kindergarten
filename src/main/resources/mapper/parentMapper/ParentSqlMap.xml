@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.great.kindergarten.parent.mapper.ParentMapper">
 
-    <resultMap id="Parent" type="com.great.kindergarten.parent.entity.Parent">
+    <resultMap id="reParent" type="com.great.kindergarten.parent.entity.Parent">
         <result column="parentId" property="parentId"/>
         <result column="parentName" property="parentName"/>
         <result column="parentPwd" property="parentPwd"/>
@@ -20,13 +20,25 @@
     </resultMap>
 
     <!--   家长端登陆-->
-    <select id="parentLogin" resultMap="Parent" >
+    <select id="parentLogin" resultMap="reParent" >
 
     select * from tbl_parent
     where parentname=#{parentName} and parentPwd=#{parentPwd} and parentstatus='启用'
 
     </select>
 
+    <select id="countOldParentPwd" resultType="integer">
+
+    select count(*) from tbl_parent where parentpwd =#{oldParentPwd} and parentid =#{parentId}
+
+    </select>
+
+
+    <update id="updateParentPwd"  >
+
+    update tbl_parent set parentpwd =#{parentPwd} where parentid=#{parentId}
+
+    </update>
 
 
 

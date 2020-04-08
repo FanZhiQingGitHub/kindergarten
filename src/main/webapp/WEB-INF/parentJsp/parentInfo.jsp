@@ -26,7 +26,7 @@
         <a style="font-size: 18px">welcome to <span class="name" style="color: darkorchid">&nbsp;${sessionScope.onlineParent.parentName}&nbsp;</span> home !!!</a>
     </div>
     <p class="welcome-text">
-        <button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal addUserScore" style="margin-top: 48%">
+        <button class="layui-btn layui-btn-radius layui-btn-normal updateParentPwd" style="margin-top: 48%">
             修改密码
         </button>
     </p>
@@ -58,6 +58,10 @@
     </div>
 </div>
 
+
+
+
+
 <!-- footer -->
 <div class="footer">
     <div class="line"></div>
@@ -72,43 +76,82 @@
     </div>
 </div>
 
+<div id="type-content" style="display: none;">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <input type="password" id="oldParentPwd" placeholder="请输入6-12位旧密码" value=""
+                   autocomplete="off" class="layui-input" style="width: 300px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <input type="password" id="NewParentPwd" placeholder="请输入6-12位密码" value=""
+                   autocomplete="off" class="layui-input" style="width: 300px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <input type="password" id="confirmParentPwd" placeholder="请确认密码" value=""
+                   autocomplete="off" class="layui-input" style="width: 300px">
+        </div>
+    </div>
+</div>
+
+
+
 <script>
 
-    layui.use(['jquery','layer'], function () {
-        var jquery = layui.jquery;
+    layui.use(['jquery', 'layer', 'form'], function () {
+        $ = layui.jquery;
         var layer = layui.layer;
+        var form = layui.form;
 
-        $('body').on('click', '.addUserScore', function () {
-            var userid = $("#userid").val();
+        $('body').on('click', '.updateParentPwd', function () {
             layer.open({
                 type: 1,
                 content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-                title: '请输入充值积分',
+                title: '个人密码修改',
                 btn: ['确定', '取消'],
-                offset: '100px',
+                offset: '130px',
                 btnAlign: 'c',
                 btn1: function (index) {
-                    var num = /^[0-9]+.?[0-9]*/;
-                    var userscore = $("#userscore").val();
-                    if(!num.test(userscore)){
-                        layer.alert("请输入数字",{icon:2});
-                    }else {
+                    var oldParentPwd = $("#oldParentPwd").val();
+                    var NewParentPwd = $("#NewParentPwd").val();
+                    var confirmParentPwd = $("#confirmParentPwd").val();
+
+                    if (oldParentPwd.length == 0 ) {
+                        layer.alert("请输入旧密码", {icon: 2});
+                    }else if (NewParentPwd.length < 6) {
+                        layer.alert("新密码长度低于6位", {icon: 2});
+                    } else if (NewParentPwd.length > 12) {
+                        layer.alert("新密码长度大于12位", {icon: 2});
+                    } else if (NewParentPwd.length == 0) {
+                        layer.alert("新密码不能为空", {icon: 2});
+                    } else if (confirmParentPwd.length == 0) {
+                        layer.alert("请确认密码", {icon: 2});
+                    } else if (NewParentPwd != confirmParentPwd) {
+                        layer.alert("密码输入不一致", {icon: 2});
+                    } else {
                         $.ajax({
-                            url: path + '/user/addUserScore',
+                            url: path + '/parent/updateParentPwd',
                             async: true,
                             type: 'post',
-                            data: {"userid": userid,"userscore":userscore},
+                            data: {"parentOldPwd": oldParentPwd, "parentNewPwd": NewParentPwd},
                             datatype: 'text',
-                            success: function (data) {
-                                if (data == "error") {
-                                    layer.alert("充值失败！", {icon: 2});
-                                } else {
-                                    layer.close(index);
-                                    layer.alert("充值成功", {icon: 6}, function (index) {
-                                        $("#score").text("积分："+data);
-                                        layer.close(index);
-                                    });
+                            success: function (result) {
+
+                                if (result.msg == "error") {
+                                    layer.alert("修改失败！", {icon: 2});
+                                } else if(result.msg == "oldPwdError") {
+                                    layer.alert("旧密码输入错误", {icon: 2});
+                                } else if (result.success) {
+                                    layer.alert("修改成功，请重新登陆", {icon: 6});
+                                    window.location.href=path +result.data;
+                                }else {
+                                    layer.alert("遇到外星人攻击", {icon: 2});
                                 }
+
+
                             }, error: function (data) {
                                 layer.alert("网络繁忙！", {icon: 2});
                             }

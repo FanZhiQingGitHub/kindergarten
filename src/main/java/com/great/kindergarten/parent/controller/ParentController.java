@@ -30,15 +30,29 @@ public class ParentController {
 
     @RequestMapping("/toUrl/{url}")
     public String toUrl(@PathVariable  String url) {
-        return "parentjsp/"+url;
+        return "parentJsp/"+url;
     }
 
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request) {
         //移除当前在线的家长
         request.getSession().removeAttribute("onlineParent");
-        return "parentjsp/parentLogin";
+        return "parentJsp/parentLogin";
     }
+
+    @RequestMapping("/updateParentPwd")
+    public Result updateParentPwd(HttpServletRequest request,String parentOldPwd,String parentNewPwd) {
+        //取得是谁要执行修改密码操作
+        Parent parent = (Parent) request.getSession().getAttribute("onlineParent");
+        //数据的获取与转化
+        String md5oldPwd= MD5Utils.md5(parentOldPwd);
+        String md5newPwd=  MD5Utils.md5(parentNewPwd);
+        //调用service处理数据
+        return parentService.updateParentPwd(parent.getParentId(),md5oldPwd, md5newPwd);
+    }
+
+
+
 
 
     @RequestMapping("/Login")
