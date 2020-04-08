@@ -18,6 +18,21 @@
         <result column="rid" property="rid"></result>
     </resultMap>
 
+    <resultMap id="reTeacher" type="com.great.kindergarten.commons.entity.TblTeacher">
+        <result column="teacherid" property="teacherid"/>
+        <result column="teachername" property="teachername"/>
+        <result column="teacherpwd" property="teacherpwd"/>
+        <result column="teachersex" property="teachersex"/>
+        <result column="teacherage" property="teacherage"/>
+        <result column="teacheradd" property="teacheradd"/>
+        <result column="teacherphone" property="teacherphone"/>
+        <result column="teacherjob" property="teacherjob"/>
+        <result column="teacherregtime" property="teacherregtime"/>
+        <result column="teacherstatus" property="teacherstatus"/>
+        <result column="cid" property="cid"/>
+        <result column="rid" property="rid"/>
+    </resultMap>
+
     <!--园长登录查询-->
     <select id="findRector" resultMap="rectorMap" parameterType="TblRector">
 		select * from tbl_rector where rectorname=#{rectorname} and rectorpwd = #{rectorpwd};
@@ -32,35 +47,49 @@
         update tbl_rector set rectorpwd = #{rectorpwd} where rectorid = #{rectorid}
     </update>
 
-<!--    &lt;!&ndash;申请园所&ndash;&gt;-->
-<!--    <insert id="addKinderMsg" parameterType="TblKinder">-->
-<!--insert into tbl_kinder(-->
-<!--			 kindername-->
-<!--			,kinderlp-->
-<!--			,kinderlpid-->
-<!--			,kinderlpadd-->
-<!--			,kinderlpphone-->
-<!--			,schoolpermit-->
-<!--			,healthpermit-->
-<!--            ,firepermit-->
-<!--            ,grouppermit-->
-<!--            ,registrationpermit-->
-<!--            ,kinderregtime-->
-<!--            ,kinderstatus-->
-<!--		)values(-->
-<!--			 #{kindername}-->
-<!--			,#{kinderlp}-->
-<!--			,#{kinderlpid}-->
-<!--			,#{kinderlpadd}-->
-<!--			,#{kinderlpphone}-->
-<!--			,#{schoolpermit}-->
-<!--			,#{healthpermit}-->
-<!--			,#{firepermit}-->
-<!--			,#{grouppermit}-->
-<!--			,#{registrationpermit}-->
-<!--			,#{kinderregtime}-->
-<!--			,#{kinderstatus}-->
-<!--		)-->
-<!--    </insert>-->
+    <!--    教师模块设计-->
+    <select id="findTeacherAll" resultMap="reTeacher" parameterType="java.util.HashMap">
+        select * from tbl_teacher
+        <where>1=1
+            <if test="teachername != null and teachername != ''">
+                and teachername like "%"#{teachername}"%"
+            </if>
+        </where>
+        order by teacherid limit #{pageInt},#{limitInt}
+    </select>
+    <!--    教师搜索界面的设计,查询记录条数-->
+    <select id="findTeacherAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(*) from tbl_teacher
+        <where>1=1
+            <if test="teachername != null and teachername != ''">
+                and teachername like "%"#{teachername}"%"
+            </if>
+        </where>
+    </select>
+
+    <!--    对应的教师表格信息的删除-->
+    <delete id="delTeacherTable" parameterType="int">
+        delete from tbl_teacher
+        where teacherid = #{teacherid}
+    </delete>
+
+    <!--对应的教师表格信息....更新语句信息-->
+    <update id="updateTeacherById" parameterType="TblTeacher">
+        update tbl_teacher
+        set  teachername = #{teachername}
+            ,teacherjob = #{teacherjob}
+        where teacherid = #{teacherid}
+    </update>
+
+    <!--对应的进行教师的新增-->
+    <insert id="addTeacherForm" parameterType="TblTeacher">
+		insert into tbl_teacher(
+			 teachername
+			,teacherjob
+		)values(
+			 #{teachername}
+			,#{teacherjob}
+		)
+	</insert>
 
 </mapper>

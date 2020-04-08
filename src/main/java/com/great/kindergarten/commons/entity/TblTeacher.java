@@ -24,9 +24,9 @@ public class TblTeacher
 	private String teacheradd;
 	private String teacherphone;
 	private String teacherjob;
-	@JsonFormat( timezone = "GMT+ 8",pattern="yyyy -MM-dd HH: mm")
-	@DateTimeFormat( pattern = " yyy-MM-dd" )
-	private Date teacherretime;
+	@JsonFormat( timezone = "GMT+ 8",pattern="yyyy-MM-dd HH:mm")
+	@DateTimeFormat( pattern = "yyy-MM-dd" )
+	private Date teacherregtime;
 	private String teacherstatus;
 	private Integer cid;
 	private Integer rid;
@@ -122,14 +122,14 @@ public class TblTeacher
 		this.teacherjob = teacherjob;
 	}
 
-	public Date getTeacherretime()
+	public Date getTeacherregtime()
 	{
-		return teacherretime;
+		return teacherregtime;
 	}
 
-	public void setTeacherretime(Date teacherretime)
+	public void setTeacherregtime(Date teacherregtime)
 	{
-		this.teacherretime = teacherretime;
+		this.teacherregtime = teacherregtime;
 	}
 
 	public String getTeacherstatus()
@@ -165,6 +165,6 @@ public class TblTeacher
 	@Override
 	public String toString()
 	{
-		return "TblTeacher{" + "teacherid=" + teacherid + ", teachername='" + teachername + '\'' + ", teacherpwd='" + teacherpwd + '\'' + ", teachersex='" + teachersex + '\'' + ", teacherage=" + teacherage + ", teacheradd='" + teacheradd + '\'' + ", teacherphone=" + teacherphone + ", teacherjob='" + teacherjob + '\'' + ", teacherretime=" + teacherretime + ", teacherstatus='" + teacherstatus + '\'' + ", cid=" + cid + ", rid=" + rid + ", code='" + code + '\'' + '}';
+		return "TblTeacher{" + "teacherid=" + teacherid + ", teachername='" + teachername + '\'' + ", teacherpwd='" + teacherpwd + '\'' + ", teachersex='" + teachersex + '\'' + ", teacherage=" + teacherage + ", teacheradd='" + teacheradd + '\'' + ", teacherphone='" + teacherphone + '\'' + ", teacherjob='" + teacherjob + '\'' + ", teacherregtime=" + teacherregtime + ", teacherstatus='" + teacherstatus + '\'' + ", cid=" + cid + ", rid=" + rid + ", code='" + code + '\'' + '}';
 	}
 }

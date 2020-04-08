@@ -2,15 +2,20 @@ package com.great.kindergarten.director.controller;
 
 import com.great.kindergarten.commons.entity.TblKinder;
 import com.great.kindergarten.commons.entity.TblRector;
+import com.great.kindergarten.commons.entity.TblTeacher;
+import com.great.kindergarten.director.resultbean.DateTable;
 import com.great.kindergarten.director.service.KinderService;
 import com.great.kindergarten.director.service.RectorService;
+import com.great.kindergarten.healther.resultbean.DateWrite;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,8 +24,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 /**
  * @author JK
@@ -41,6 +46,11 @@ public class RectorController
 
 	@Resource
 	TblKinder tblKinder;
+	//	@Resource
+	//	TblTeacher tblTeacher;
+	//结果集的处理
+	@Resource
+	DateTable dateTable;
 
 	//	管理路径跳转的问题--前台的界面(路径/toUrl/*)
 	@RequestMapping("/toUrl/{id}")
@@ -167,7 +177,7 @@ public class RectorController
 		String md5pwd = MD5Utils.md5(password);
 		System.out.println("密码是：" + password);
 		tblRector.setRectorpwd(md5pwd);
-		System.out.println(tblRector + "内容是"+repassword);
+		System.out.println(tblRector + "内容是" + repassword);
 		int result = rectorService.updateByIdPwd(tblRector);
 		if (result > 0)
 		{
@@ -203,15 +213,11 @@ public class RectorController
 
 	//园所申请审批
 	@RequestMapping("/directorReg")
-	public void directorReg(TblKinder tblKinder,HttpServletRequest request, HttpServletResponse response) throws ParseException
+	public void directorReg(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response) throws ParseException
 	{
 		tblKinder.setKinderstatus("未审批");
-//		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-//		String logtime = df.format(new Date());//获取当前时间
-//		Date newDate = df.parse(logtime);
-
 		tblKinder.setKinderregtime(new Date());
-		System.out.println("园所申请审批："+tblKinder);
+		System.out.println("园所申请审批：" + tblKinder);
 		int result = kinderService.addKinderMsg(tblKinder);
 		if (result > 0)
 		{
@@ -222,4 +228,106 @@ public class RectorController
 		}
 	}
 
+	//对应的是园所教师信息查询和显示selectTeacherManage
+	@RequestMapping("/selectTeacherManage")
+	public void selectTeacherManage(HttpServletRequest request, HttpServletResponse response) throws ParseException, UnsupportedEncodingException
+	{
+		//前端传过来的值通过-json里面去查看
+		String page = request.getParameter("page");
+		String limit = request.getParameter("limit");
+		String teachername = request.getParameter("teachername");
+		int pageInt = Integer.valueOf(page);
+		int limitInt = Integer.valueOf(limit);
+
+		System.out.println("教师名是=" + teachername);
+		//		获取对应的id值
+		Map<String, Object> map = new HashMap<>();
+		if (null != teachername && "" != teachername)
+		{
+			map.put("teachername", teachername);
+		}
+		int pages = (pageInt - 1) * limitInt;
+		int limits = limitInt;
+		map.put("pageInt", pages);
+		map.put("limitInt", limits);
+
+		System.out.println("用户信息=" + map);
+		List<TblTeacher> tblTeachers = rectorService.findTeacherAll(map);
+		System.out.println("输出成功" + tblTeachers.toString());
+
+		if (0 != tblTeachers.size())
+		{
+			Integer count = rectorService.findTeacherAllCount(map).intValue();
+			System.out.println("输出次数：" + count);
+			dateTable.setCode(0);
+			dateTable.setMsg(" ");
+			dateTable.setCount(count);
+			dateTable.setData(tblTeachers);
+			request.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+			//			request.getSession().setAttribute("cName", cName);
+			ResponseUtils.outJson(response, dateTable);
+		}
+	}
+
+	//园所-----教师信息进行对应的删除操作delTeacherTable
+	//删除对应表格的内容的值
+	@RequestMapping("/delTeacherTable")
+	public void delTable(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String id = request.getParameter("teacherid");
+		System.out.println("删除servlet" + id);
+		int teacherid = Integer.valueOf(id);
+
+		int result = rectorService.delTeacherTable(teacherid);
+		if (result > 0)
+		{
+			ResponseUtils.outHtml(response, "删除成功");
+		} else
+		{
+			ResponseUtils.outHtml(response, "删除失败");
+		}
+	}
+
+	//园所-----教师信息----更新对应表格的内容的值
+	@RequestMapping("/updateTeacherTable")
+	public void updateTeacherTable(TblTeacher tblTeacher, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String teacherid = request.getParameter("teacherid");
+		System.out.println("内容是=" + teacherid);
+		int teacherids = Integer.valueOf(teacherid);
+		System.out.println("servlet=" + teacherids);
+		String teachername = request.getParameter("teachername");
+		String teacherjob = request.getParameter("teacherjob");
+
+		tblTeacher.setTeacherid(teacherids);
+		tblTeacher.setTeachername(teachername);
+		tblTeacher.setTeacherjob(teacherjob);
+
+		System.out.println("内容是=" + tblTeacher);
+		int result = rectorService.updateTeacherById(tblTeacher);
+		if (result > 0)
+		{
+			ResponseUtils.outHtml(response, "更新成功");
+		} else
+		{
+			ResponseUtils.outHtml(response, "更新失败");
+		}
+	}
+
+
+	//添加对应的表格的信息
+	@RequestMapping("/addTeacherForm")
+	protected void addTeacherForm(TblTeacher tblTeacher, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		int result = rectorService.addTeacherForm(tblTeacher);
+		if (result > 0)
+		{
+			ResponseUtils.outHtml(response, "新增教师成功");
+		} else
+		{
+			ResponseUtils.outHtml(response, "新增教师失败");
+		}
+	}
 }

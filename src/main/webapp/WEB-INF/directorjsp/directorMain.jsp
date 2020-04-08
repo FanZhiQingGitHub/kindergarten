@@ -294,6 +294,16 @@
             });
             return false;
         });
+
+        //教师管理
+        $("#teachersManagement").on('click',function () {
+            layer.confirm('您确定要进入到教师管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
+                layer.close(index);
+                window.location.href = src+"/director/toUrl/director_TeacherManage";
+                return true;
+            });
+            return false;
+        });
     });
 </script>
 
