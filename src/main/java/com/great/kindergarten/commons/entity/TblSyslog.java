@@ -13,8 +13,8 @@ public class TblSyslog {
     private String operateor;
     private String operatetype;
     private String operatedetail;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date operatetime;
     private String operateresult;
     private String operateip;

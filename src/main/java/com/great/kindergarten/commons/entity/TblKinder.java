@@ -24,13 +24,15 @@ public class TblKinder {
     private String firepermit;
     private String grouppermit;
     private String registrationpermit;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date kinderapptime;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date kinderregtime;
     private String kinderstatus;
+    private String kinderacount;
+    private Integer kindercode;
     private String time1;
     private String time2;
 
@@ -166,6 +168,26 @@ public class TblKinder {
         this.kinderstatus = kinderstatus;
     }
 
+    public String getKinderacount()
+    {
+        return kinderacount;
+    }
+
+    public void setKinderacount(String kinderacount)
+    {
+        this.kinderacount = kinderacount;
+    }
+
+    public Integer getKindercode()
+    {
+        return kindercode;
+    }
+
+    public void setKindercode(Integer kindercode)
+    {
+        this.kindercode = kindercode;
+    }
+
     public String getTime1() {
         return time1;
     }
@@ -183,24 +205,8 @@ public class TblKinder {
     }
 
     @Override
-    public String toString() {
-        return "TblKinder{" +
-                "kinderid=" + kinderid +
-                ", kindername='" + kindername + '\'' +
-                ", kinderlp='" + kinderlp + '\'' +
-                ", kinderlpid='" + kinderlpid + '\'' +
-                ", kinderlpadd='" + kinderlpadd + '\'' +
-                ", kinderlpphone='" + kinderlpphone + '\'' +
-                ", schoolpermit='" + schoolpermit + '\'' +
-                ", healthpermit='" + healthpermit + '\'' +
-                ", firepermit='" + firepermit + '\'' +
-                ", grouppermit='" + grouppermit + '\'' +
-                ", registrationpermit='" + registrationpermit + '\'' +
-                ", kinderapptime=" + kinderapptime +
-                ", kinderregtime=" + kinderregtime +
-                ", kinderstatus='" + kinderstatus + '\'' +
-                ", time1='" + time1 + '\'' +
-                ", time2='" + time2 + '\'' +
-                '}';
+    public String toString()
+    {
+        return "TblKinder{" + "kinderid=" + kinderid + ", kindername='" + kindername + '\'' + ", kinderlp='" + kinderlp + '\'' + ", kinderlpid='" + kinderlpid + '\'' + ", kinderlpadd='" + kinderlpadd + '\'' + ", kinderlpphone='" + kinderlpphone + '\'' + ", schoolpermit='" + schoolpermit + '\'' + ", healthpermit='" + healthpermit + '\'' + ", firepermit='" + firepermit + '\'' + ", grouppermit='" + grouppermit + '\'' + ", registrationpermit='" + registrationpermit + '\'' + ", kinderapptime=" + kinderapptime + ", kinderregtime=" + kinderregtime + ", kinderstatus='" + kinderstatus + '\'' + ", kinderacount='" + kinderacount + '\'' + ", kindercode=" + kindercode + '}';
     }
 }

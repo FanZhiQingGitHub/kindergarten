@@ -15,9 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * @author
@@ -126,6 +124,7 @@ public class AdminSystemLogAspect {
             }else{
                 log.setOperateor("无");
             }
+		    System.out.println("日志记录时间"+new Date());
             log.setOperatetime(new Date());
             //保存数据库
             systemLogService.addLog(log);

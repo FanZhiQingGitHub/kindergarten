@@ -48,6 +48,7 @@ public interface AdminMapper {
 
 	public int findAllCount(HashMap<String, Object> condition);
 
-	public int checkQualify(String kinderstatus, Integer kinderid, Date kinderapptime);
+	public int checkQualify(String kinderstatus, Integer kinderid, String kinderapptime);
 
+	public TblKinder findTblKinderById(Integer kinderid);
 }

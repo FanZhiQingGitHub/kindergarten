@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -112,7 +113,7 @@ public class AdminController {
         }
     }
 
-    @AdminSystemLog(operationType = "登录",operationName = "管理员登录")
+//    @AdminSystemLog(operationType = "登录",operationName = "管理员登录")
     @RequestMapping("/checkLogin")
     public void login(TblAdmin tblAdmin, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
@@ -138,6 +139,8 @@ public class AdminController {
                         req.getSession().setAttribute("tblAdmin",tblAdmin);
                         req.getSession().setAttribute("adminname",tblAdmin.getAdminname());
                         ResponseUtils.outHtml(res,"success");
+                    }else{
+	                    ResponseUtils.outHtml(res,"pwderror");
                     }
                 }else{
                     ResponseUtils.outHtml(res,"error");
@@ -177,7 +180,7 @@ public class AdminController {
     }
 
     @RequestMapping("/updateAdminpwd")
-//    @Log(operationType = "修改",operationName = "修改管理员密码")
+    @AdminSystemLog(operationType = "修改",operationName = "修改管理员密码")
     public void updateAdminpwd(HttpServletRequest request, HttpServletResponse response)
     {
         String oldadminpwd = MD5Utils.md5(request.getParameter("oldadminpwd"));
@@ -233,7 +236,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping("/kinderMgrInfo")
+    @RequestMapping("/qualifyAppInfo")
     public void findKinderByPage(String page, String limit, TblKinder tblKinder, DataResult dataResult, HttpServletRequest req, HttpServletResponse res) throws IOException
     {
         HashMap<String,Object> condition = new HashMap<>();
@@ -260,15 +263,15 @@ public class AdminController {
 
         RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
 
-        List<TblKinder> list = new ArrayList<>();
-        list = adminService.findAllKinder(condition,rowBounds);
-        if(list != null)
+        List<TblKinder> tblKinderList = new ArrayList<>();
+	    tblKinderList = adminService.findAllKinder(condition,rowBounds);
+        if(tblKinderList != null)
         {
             Gson gson = new GsonBuilder().serializeNulls().create();
             dataResult.setCode(0);
             dataResult.setCount(num);
             dataResult.setMsg("");
-            dataResult.setData(list);
+            dataResult.setData(tblKinderList);
             res.setContentType("application/json; charset=utf-8");
             res.getWriter().write(gson.toJson(dataResult));
             res.getWriter().flush();
@@ -276,31 +279,59 @@ public class AdminController {
         }
     }
 
+    @RequestMapping("/findTblKinderById")
+    public void findTblKinderById(TblKinder tblKinder,HttpServletRequest request,HttpServletResponse response)
+    {
+    	tblKinder = adminService.findTblKinderById(tblKinder.getKinderid());
+    	if(tblKinder != null)
+	    {
+		    request.getSession().setAttribute("tblKinder",tblKinder);
+	    }
+    }
+
+    //园所资质申请通过
     @RequestMapping("/checkQualify")
     public void checkQualify(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
     {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
         String kinderstatus = null;
-        int num = 0;
-        String status = request.getParameter("kinderstatus");
         int kinderid = Integer.valueOf(request.getParameter("kinderid"));
-        if(status != null && !"".equals(status.trim()))
+	    if(tblKinder != null)
+	    {
+		    kinderstatus = "通过";
+		    int num = adminService.checkQualify(kinderstatus,kinderid,sf.format(new Date()));
+		    System.out.println("num1="+num+","+sf.format(new Date()));
+		    if(num > 0)
+		    {
+			    ResponseUtils.outHtml(response,"success");
+		    }else{
+			    ResponseUtils.outHtml(response,"error");
+		    }
+	    }else{
+		    ResponseUtils.outHtml(response,"codeerror");
+	    }
+    }
+
+	//园所资质申请未通过
+    @RequestMapping("/reject")
+    public void reject(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
+    {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        String kinderstatus = null;
+        int kinderid = Integer.valueOf(request.getParameter("kinderid"));
+        if(tblKinder != null)
         {
-            if("1".equals(status))
-            {
-                kinderstatus = "通过";
-                num = adminService.checkQualify(kinderstatus,kinderid,new Date());
-            }else if ("2".equals(status)){
-                kinderstatus = "未通过";
-                num = adminService.checkQualify(kinderstatus,kinderid,new Date());
-            }
+            kinderstatus = "未通过";
+            int num = adminService.checkQualify(kinderstatus,kinderid,sf.format(new Date()));
+            System.out.println("num1="+num+","+sf.format(new Date()));
             if(num > 0)
             {
-                ResponseUtils.outJson(response,"success");
+                ResponseUtils.outHtml(response,"success");
             }else{
-                ResponseUtils.outJson(response,"error");
+                ResponseUtils.outHtml(response,"error");
             }
         }else{
-            ResponseUtils.outJson(response,"codeerror");
+            ResponseUtils.outHtml(response,"codeerror");
         }
     }
 }

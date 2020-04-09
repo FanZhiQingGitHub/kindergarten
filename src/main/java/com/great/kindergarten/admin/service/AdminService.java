@@ -72,9 +72,13 @@ public class AdminService {
         return adminMapper.findAllCount(condition);
     }
 
-    public int checkQualify(String kinderstatus,Integer kinderid, Date kinderapptime)
+    public int checkQualify(String kinderstatus,Integer kinderid, String kinderapptime)
     {
         return adminMapper.checkQualify(kinderstatus,kinderid, kinderapptime);
     }
 
+    public TblKinder findTblKinderById(Integer kinderid)
+    {
+        return adminMapper.findTblKinderById(kinderid);
+    }
 }

@@ -6,11 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%String path = request.getContextPath();%>
 <html>
 <head>
-	<title>智慧幼儿园平台端-园所管理</title>
+	<title>智慧幼儿园平台端-园所资质审批</title>
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
@@ -22,10 +21,10 @@
 </head>
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
-	<h2 >园 所 管 理</h2>
+	<h2 >资 质 审 批</h2>
 	<div class="layui-row" >
 		<form class="layui-form" action="" onsubmit="return false;" >
-			<div class="kinderTable">
+			<div class="qualifyTable">
 				<div class="layui-form-item">
 					<div class="layui-block">查询条件：</div>
 					<div class="layui-inline">
@@ -41,16 +40,16 @@
 						</div>
 					</div>
 					<div class="layui-inline" >
-						<span class="layui-form-label" style="margin-left: -20%">状态：</span>
+						<span class="layui-form-label" style="margin-left: -15%">状态：</span>
 						<div class="layui-input-inline">
 							<select name="sel" id="sel" lay-filter="mySelect" lay-verify="" >
 								<option value="请选择">请选择</option>
-								<option value="禁用">禁用</option>
-								<option value="启用">启用</option>
+								<option value="未审核">未审核</option>
+								<option value="通过">通过</option>
+								<option value="未通过">未通过</option>
 							</select>
 						</div>
 					</div>
-					<button class="layui-btn" data-type="reload" ><i class="layui-icon">&#xe615;查询</i></button>
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
@@ -59,23 +58,14 @@
 							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" style="width: 82%;margin-top: 3% ">
 						</div>
 					</div>
-					<button class="layui-btn btn-add btn-default" id="btn-add" style="margin-left: 56%"><i class="layui-icon">&#xe624;新增</i></button>
+					<button class="layui-btn" data-type="reload" ><i class="layui-icon">&#xe615;查询</i></button>
 				</div>
 			</div>
 		</form>
 	</div>
-	<table id="kinder" lay-filter="test">
-	</table>
+	<table id="qualify" lay-filter="test"></table>
 	<script type="text/html" id="barOption">
-		{{#  if(d.kinderstatus == '通过'){ }}
-		<a  class="layui-btn layui-btn-danger layui-btn-xs" lay-event="forbidden" style="width: 15%;height: 75%">禁用</a>
-		{{#  } }}
-		{{#  if(d.kinderstatus == '未审批'){ }}
-		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="open" style="width: 15%;height: 75%">启用</a>
-		{{#  } }}
-		<a type="button" class="layui-btn layui-btn-xs" lay-event="restpwd" style="width: 25%;height: 75%">重置密码</a>
-		<a type="button" class="layui-btn layui-btn-xs" lay-event="update" style="width: 15%;height: 75%">修改</a>
-		<a type="button" class="layui-btn layui-btn-xs" lay-event="delete" style="width: 15%;height: 75%">删除</a>
+		<a type="button" class="layui-btn layui-btn-xs" lay-event="approve" style="width: 25%;height: 75%">审批</a>
 	</script>
 </body>
 <script>
@@ -90,7 +80,7 @@
 			,$ = layui.jquery;
 		var path = $("#path").val();
 		var tableIns = table.render({
-			elem: '#kinder'
+			elem: '#qualify'
 			, height: 312
 			, url: path + "/admin/qualifyAppInfo"//数据接口
 			, page: true //开启分页
@@ -99,11 +89,14 @@
 			, cols: [[ //表头
 				{field: 'kinderid', title: '序号', align: 'center', width: 120, sort: true, fixed: 'left'}
 				, {field: 'kindername', title: '园所名称', align: 'center', width: 120}
+				, {field: 'kinderregtime', title: '申请时间', align: 'center', width: 180
+					,templet:"<div>{{layui.util.toDateString(d.kinderregtime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
 				, {field: 'kinderapptime', title: '审批时间', align: 'center', width: 180
 				   ,templet:"<div>{{layui.util.toDateString(d.kinderapptime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
-				, {fixed: 'right', title: '操作', align: 'center', width: 400, toolbar: '#barOption'}
+				, {field: 'kinderstatus', title: '状态', align: 'center', width: 120}
+				, {fixed: 'right', title: '操作', align: 'center', width: 200, toolbar: '#barOption'}
 			]]
-			, id: 'kinderTable'
+			, id: 'qualifyTable'
 			, parseData: function (res) { //res 即为原始返回的数据
 				return {
 					"code": res.code, //解析接口状态
@@ -120,57 +113,78 @@
 				data = obj.data; //获得当前行数据
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				var tr = obj.tr; //获得当前行 tr 的DOM对象
-				if (layEvent === 'restpwd') { //审核通过
-					layer.prompt({
-							formType: 0,
-							id: "remarksPrompt",
-							title: '资质审核-温馨提示(0:未审核,1:通过,2：未通过)',
-							success: function (layero, index) {
-							}
-						},
-						// function () {
-						// 	$("#remarksPrompt").blur(function () {
-						// 		var reg = /^[1-2]*$/;
-						// 		if (!($('#remarksPrompt').val().match(reg))) {
-						// 			layer.msg("请输入数字(1或2)！", {icon: 2, title: '温馨提示'})
-						// 		} else {
-						// 			layer.msg("输入合法", {icon: 5, title: '温馨提示'})
-						// 		}
-						// 	});
-						// },
-						function (value, index, elem) {
-							layer.close(index);
-							var reg = /^[1-2]*$/;
-							//向服务端发送审核通过指令
-							if (value == 0) {
-								layer.msg("请输入数字(1或2)！", {icon: 2, title: '温馨提示'})
-							} else if (value == 1 || value == 2) {
-								$.ajax({
-									url: path + "/admin/checkQualify",
-									type: "post",
-									data: {"kinderid": data.kinderid, "kinderstatus": value},
-									dataType: "text",
-									success: function (result) {
-										if (result == "success") {
-											layer.alert('审核通过！');
-										} else if (result == "codeerror") {
-											layer.alert('状态码输入异常！');
-										} else {
-											layer.alert('审核失败！');
-										}
-										tableIns.reload();    //审核之后,刷新表格
+				if (layEvent === 'approve') { //审核通过
+					$.ajax({
+						url:path+"/admin/findTblKinderById",
+						type:'POST',
+						dataType:'text',
+						data:{"kinderid":data.kinderid},
+						success:function (msg) {
+						}
+					});
+					layer.open({
+						type:2
+						,title:"园所审批"
+						,area:['38%','100%']
+						,btn:['允许','拒绝']
+						// ,shadeClose: false //点击遮罩不会关闭
+						,content:path+"/admin/toUrl/gardenApproval"
+						,success : function(layero, index) {
+						}
+						,btn1:function () {
+							$.ajax({
+								url:path+"/admin/checkQualify",
+								type:'POST',
+								dataType:'text',
+								data:{"kinderid":data.kinderid},
+								success:function (result,index) {
+									console.log(result);
+									if (result == 'success')
+									{
+										layer.alert('审核成功！');
+									}else if(result == 'codeerror')
+									{
+										layer.alert('无相关数据！');
 									}
-								});
-							} else {
-								layer.msg("请输入数字(1或2)！", {icon: 2, title: '温馨提示'});
-							}
-						});
+									else {
+										layer.alert('审核失败！');
+									}
+									layer.close(index);
+									tableIns.reload();    //审核之后,刷新表格
+								}
+							});
+						}
+						,btn2:function () {
+							$.ajax({
+								url:path+"/admin/reject",
+								type:'POST',
+								dataType:'text',
+								data:{"kinderid":data.kinderid},
+								success:function (result,index) {
+									console.log(result);
+									if (result == 'success')
+									{
+										layer.alert('审核成功！');
+									}else if(result == 'codeerror')
+									{
+										layer.alert('无相关数据！');
+									}
+									else {
+										layer.alert('审核失败！');
+									}
+									index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+									parent.layer.close(index);
+									tableIns.reload();    //审核之后,刷新表格
+								}
+							});
+						}
+					});
 				}
 			});
 		});
 
 		//搜索功能的实现
-		$('.kinderTable .layui-btn').on('click', function () {
+		$('.qualifyTable .layui-btn').on('click', function () {
 			var type = $(this).data('type');
 			active[type] ? active[type].call(this) : '';
 		});
@@ -178,7 +192,7 @@
 		var $ = layui.$, active = {
 			reload: function () {
 				//执行重载
-				table.reload('kinderTable', {
+				table.reload('qualifyTable', {
 					where: {
 						time1: $('#time1').val()
 						,time2: $('#time2').val()

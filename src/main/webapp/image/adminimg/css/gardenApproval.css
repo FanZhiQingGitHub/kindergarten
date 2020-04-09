@@ -1,0 +1,43 @@
+.garden {
+    margin-top: 1%;
+    padding: 1% 0;
+    width: 100%;
+    background-color: #FFF;
+}
+
+.btn-center {
+    text-center: center;
+    margin: 0 auto;
+}
+
+.garden-div{
+    border-top-width: 2px !important;
+    border-top-style: solid !important;
+    border-top-color: rgb(19, 39, 50) !important;
+    border-right-width: 2px !important;
+    border-right-style: solid !important;
+    border-right-color: rgb(19, 39, 50) !important;
+    border-left-width: 2px !important;
+    border-left-style: solid !important;
+    border-left-color: rgb(19, 39, 50) !important;
+    border-bottom-width: 2px !important;
+    border-bottom-style: solid !important;
+    border-bottom-color: rgb(19, 39, 50) !important;
+    padding-left: 1%;
+    border-radius: 50px;
+}
+
+h3{
+    margin: -2% 0 2% 0;
+}
+
+label{
+    margin: 0 -6%;
+}
+
+input{
+    margin: -3% -3%;
+    background: none;
+    border: none;
+}
+

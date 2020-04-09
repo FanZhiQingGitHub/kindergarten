@@ -117,6 +117,9 @@
             </if>
         </where>
     </select>
+    <select id="findTblKinderById" resultType="com.great.kindergarten.commons.entity.TblKinder">
+        select * from tbl_kinder where kinderid = #{kinderid}
+    </select>
 
     <!--    &lt;!&ndash;    查找用户类型&ndash;&gt;-->
 <!--    <select id="findUserType" parameterType="java.lang.String" resultMap="userMap">-->

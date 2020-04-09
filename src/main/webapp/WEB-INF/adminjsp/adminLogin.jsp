@@ -274,6 +274,10 @@
                         layer.alert("该用户已被禁用或者不存在！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/admin/loginCode?"+Math.random();
+                    }else if(msg == "pwderror"){
+                        layer.alert("账号密码错误，请确认！", {icon: 2});
+                        var code = document.getElementById("code");
+                        code.src = path + "/admin/loginCode?"+Math.random();
                     }
                 }, error: function (msg) {
                     layer.alert("网络繁忙！", {icon: 2});

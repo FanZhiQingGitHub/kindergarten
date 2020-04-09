@@ -42,6 +42,10 @@ spring:
     view:
       suffix: .jsp
       prefix: /WEB-INF/
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
 
 mybatis:
   config-location: classpath:SqlMapConfig.xml
