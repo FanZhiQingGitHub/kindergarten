@@ -21,6 +21,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -56,7 +57,9 @@ public class AdminController {
 	}
 
     @RequestMapping(value = "/logout")
-    public String toLogout(){
+    public String toLogout(HttpSession session){
+        //销毁session
+        session.invalidate();
         return "adminjsp/adminLogin";
     }
 
@@ -113,11 +116,11 @@ public class AdminController {
         }
     }
 
+    //管理员登录校验
 //    @AdminSystemLog(operationType = "登录",operationName = "管理员登录")
     @RequestMapping("/checkLogin")
     public void login(TblAdmin tblAdmin, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
-        System.out.println(tblAdmin);
         boolean flag = admincode.equalsIgnoreCase(tblAdmin.getCode());
         if(flag)
         {
@@ -206,8 +209,6 @@ public class AdminController {
     {
         HashMap<String,Object> condition = new HashMap<>();
 
-        System.out.println("当前页"+page+","+"条数"+limit+","+tblSysLog);
-
         if(null != tblSysLog.getTime1() && !"".equals(tblSysLog.getTime1().trim())) {
             condition.put("time1",tblSysLog.getTime1());
         }
@@ -241,8 +242,6 @@ public class AdminController {
     {
         HashMap<String,Object> condition = new HashMap<>();
 
-        System.out.println("当前页"+page+","+"条数"+limit+","+tblKinder);
-
         if(null != tblKinder.getTime1() && !"".equals(tblKinder.getTime1().trim())) {
             condition.put("time1",tblKinder.getTime1());
         }
@@ -254,6 +253,11 @@ public class AdminController {
         if(null != tblKinder.getKinderstatus() && !"".equals(tblKinder.getKinderstatus().trim())) {
             condition.put("kinderstatus",tblKinder.getKinderstatus());
         }
+
+	    if(null != tblKinder.getKindercode() && !"".equals(tblKinder.getKindercode().trim())) {
+
+			condition.put("kindercode",tblKinder.getKindercode());
+	    }
 
         if(null != tblKinder.getKindername() && !"".equals(tblKinder.getKindername().trim())) {
             condition.put("kindername",tblKinder.getKindername());
@@ -267,11 +271,14 @@ public class AdminController {
 	    tblKinderList = adminService.findAllKinder(condition,rowBounds);
         if(tblKinderList != null)
         {
+            List<TblKinder> kinderList = adminService.findKinder();
+	        System.out.println("***"+kinderList);
             Gson gson = new GsonBuilder().serializeNulls().create();
             dataResult.setCode(0);
             dataResult.setCount(num);
             dataResult.setMsg("");
             dataResult.setData(tblKinderList);
+            req.getSession().setAttribute("kinderList",kinderList);
             res.setContentType("application/json; charset=utf-8");
             res.getWriter().write(gson.toJson(dataResult));
             res.getWriter().flush();
@@ -300,7 +307,6 @@ public class AdminController {
 	    {
 		    kinderstatus = "通过";
 		    int num = adminService.checkQualify(kinderstatus,kinderid,sf.format(new Date()));
-		    System.out.println("num1="+num+","+sf.format(new Date()));
 		    if(num > 0)
 		    {
 			    ResponseUtils.outHtml(response,"success");
@@ -323,7 +329,6 @@ public class AdminController {
         {
             kinderstatus = "未通过";
             int num = adminService.checkQualify(kinderstatus,kinderid,sf.format(new Date()));
-            System.out.println("num1="+num+","+sf.format(new Date()));
             if(num > 0)
             {
                 ResponseUtils.outHtml(response,"success");

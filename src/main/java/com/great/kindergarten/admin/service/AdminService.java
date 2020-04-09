@@ -81,4 +81,9 @@ public class AdminService {
     {
         return adminMapper.findTblKinderById(kinderid);
     }
+
+    public List<TblKinder> findKinder()
+    {
+        return adminMapper.findKinder();
+    }
 }

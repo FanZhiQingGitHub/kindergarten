@@ -115,10 +115,16 @@
             <if test=" kinderstatus != '' and  kinderstatus != null and kinderstatus !='请选择'">
                 and kinderstatus = #{kinderstatus}
             </if>
+            <if test=" kindercode != '' and  kindercode != null and kindercode !='请选择'">
+                and kindercode = #{kindercode}
+            </if>
         </where>
     </select>
     <select id="findTblKinderById" resultType="com.great.kindergarten.commons.entity.TblKinder">
         select * from tbl_kinder where kinderid = #{kinderid}
+    </select>
+    <select id="findKinder" resultType="com.great.kindergarten.commons.entity.TblKinder">
+        select * from tbl_kinder
     </select>
 
     <!--    &lt;!&ndash;    查找用户类型&ndash;&gt;-->

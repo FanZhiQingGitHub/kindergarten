@@ -32,7 +32,7 @@ public class TblKinder {
     private Date kinderregtime;
     private String kinderstatus;
     private String kinderacount;
-    private Integer kindercode;
+    private String kindercode;
     private String time1;
     private String time2;
 
@@ -178,12 +178,12 @@ public class TblKinder {
         this.kinderacount = kinderacount;
     }
 
-    public Integer getKindercode()
+    public String getKindercode()
     {
         return kindercode;
     }
 
-    public void setKindercode(Integer kindercode)
+    public void setKindercode(String kindercode)
     {
         this.kindercode = kindercode;
     }

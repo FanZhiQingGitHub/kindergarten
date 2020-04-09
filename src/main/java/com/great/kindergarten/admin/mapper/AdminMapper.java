@@ -51,4 +51,6 @@ public interface AdminMapper {
 	public int checkQualify(String kinderstatus, Integer kinderid, String kinderapptime);
 
 	public TblKinder findTblKinderById(Integer kinderid);
+
+	public List<TblKinder> findKinder();
 }
