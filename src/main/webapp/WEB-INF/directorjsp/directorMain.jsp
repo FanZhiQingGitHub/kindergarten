@@ -33,7 +33,7 @@
         .getbtn{
             height: 240px;
             /*width: 75px;*/
-            width: 8%;
+            width: 7.5%;
             font-weight: bold;
             font-size: 18px;
             background: #FF5722;
@@ -125,8 +125,8 @@
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="approvalGarden">园<br/>所<br/>审<br/>批</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="teachersManagement">教<br/>师<br/>管<br/>理</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="teachersExamAffection">教<br/>师<br/>考<br/>勤</button>
-        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">幼<br/>儿<br/>管<br/>理</button>
-        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">家<br/>长<br/>管<br/>理</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="childrenManagement">幼<br/>儿<br/>管<br/>理</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="parentManagement">家<br/>长<br/>管<br/>理</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">班<br/>级<br/>管<br/>理</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">班<br/>级<br/>成<br/>员<br/>管<br/>理</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">课<br/>程<br/>管<br/>理</button>
@@ -300,6 +300,26 @@
             layer.confirm('您确定要进入到教师管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
                 layer.close(index);
                 window.location.href = src+"/director/toUrl/director_TeacherManage";
+                return true;
+            });
+            return false;
+        });
+
+        //幼儿管理
+        $("#childrenManagement").on('click',function () {
+            layer.confirm('您确定要进入到幼儿管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
+                layer.close(index);
+                window.location.href = src+"/director/toUrl/director_ChildrenManage";
+                return true;
+            });
+            return false;
+        });
+
+        //家长管理
+        $("#parentManagement").on('click',function () {
+            layer.confirm('您确定要进入到家长管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
+                layer.close(index);
+                window.location.href = src+"/director/toUrl/director_ParentManage";
                 return true;
             });
             return false;

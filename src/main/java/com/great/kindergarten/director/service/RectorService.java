@@ -1,8 +1,6 @@
 package com.great.kindergarten.director.service;
 
-import com.great.kindergarten.commons.entity.TblKinder;
-import com.great.kindergarten.commons.entity.TblRector;
-import com.great.kindergarten.commons.entity.TblTeacher;
+import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.director.mapper.RectorMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,4 +69,70 @@ public class RectorService
 	{
 		return rectorMapper.addTeacherForm(tblTeacher);
 	}
+
+	/*
+	* 幼儿管理
+	* */
+	//查询幼儿对应的信息
+	public List<TblStudent> findChildrenAll(Map<String, Object> map)
+	{
+		return rectorMapper.findChildrenAll(map);
+	}
+
+	//幼儿模块--查询记录条数
+	public Long findChildrenAllCount(Map<String, Object> map)
+	{
+		return rectorMapper.findChildrenAllCount(map);
+	}
+
+	//对应的幼儿----新增
+	@Transactional
+	public int addChildrenForm(TblStudent tblStudent)
+	{
+		return rectorMapper.addChildrenForm(tblStudent);
+	}
+
+	//对应的幼儿----删除
+	@Transactional
+	public int delChildrenTable(int studentid)
+	{
+		return rectorMapper.delChildrenTable(studentid);
+	}
+
+	//对应的幼儿----修改
+	@Transactional
+	public int updateChildrenById(TblStudent tblStudent)
+	{
+		int result = rectorMapper.updateChildrenById(tblStudent);
+		return result;
+	}
+
+	/*
+	 * 家长和学生的两表联查
+	 * */
+	//查询家长和学生对应的信息
+	public List<TblParent> findParentAll(Map<String, Object> map){
+		return rectorMapper.findParentAll(map);
+	}
+
+	//家长模块--查询家长和学生记录条数
+	public Long findParentAllCount(Map<String, Object> map){
+		return rectorMapper.findParentAllCount(map);
+	}
+
+
+	//对应的进行家长的新增
+
+	public int addParentForm(TblParent tblParent){
+		return rectorMapper.addParentForm(tblParent);
+	}
+	//查询对应的新增家长的ID
+	public TblParent selectParentByPid(String studentname){
+		return rectorMapper.selectParentByPid(studentname);
+	}
+	//修改对应的学生表的pid
+	public int updateChildrenByPid(Map<String, Object> map){
+		return rectorMapper.updateChildrenByPid(map);
+	}
+
 }

@@ -11,7 +11,6 @@ import java.util.Date;
  */
 public class TblParent
 {
-
 	private Integer parentId;
 	private String parentName;
 	private String parentPwd;
@@ -26,12 +25,15 @@ public class TblParent
 	private Date parentRegTime;
 	private String parentStatus;
 	private Integer rid;
+	private TblStudent tblStudent;
+	private Integer studentid;
+	private String studentname;
 
 	public TblParent()
 	{
 	}
 
-	public TblParent(Integer parentId, String parentName, String parentPwd, String parentSex, Integer parentAge, String parentAdd, String parentPhone, String parentSon, String parentJob, Date parentRegTime, String parentStatus, Integer rid)
+	public TblParent(Integer parentId, String parentName, String parentPwd, String parentSex, Integer parentAge, String parentAdd, String parentPhone, String parentSon, String parentJob, Date parentRegTime, String parentStatus, Integer rid, TblStudent tblStudent)
 	{
 		this.parentId = parentId;
 		this.parentName = parentName;
@@ -45,6 +47,7 @@ public class TblParent
 		this.parentRegTime = parentRegTime;
 		this.parentStatus = parentStatus;
 		this.rid = rid;
+		this.tblStudent = tblStudent;
 	}
 
 	public Integer getParentId()
@@ -167,9 +170,39 @@ public class TblParent
 		this.rid = rid;
 	}
 
+	public TblStudent getTblStudent()
+	{
+		return tblStudent;
+	}
+
+	public void setTblStudent(TblStudent tblStudent)
+	{
+		this.tblStudent = tblStudent;
+	}
+
+	public Integer getStudentid()
+	{
+		return studentid;
+	}
+
+	public void setStudentid(Integer studentid)
+	{
+		this.studentid = studentid;
+	}
+
+	public String getStudentname()
+	{
+		return studentname;
+	}
+
+	public void setStudentname(String studentname)
+	{
+		this.studentname = studentname;
+	}
+
 	@Override
 	public String toString()
 	{
-		return "TblParent{" + "parentId=" + parentId + ", parentName='" + parentName + '\'' + ", parentPwd='" + parentPwd + '\'' + ", parentSex='" + parentSex + '\'' + ", parentAge=" + parentAge + ", parentAdd='" + parentAdd + '\'' + ", parentPhone='" + parentPhone + '\'' + ", parentSon='" + parentSon + '\'' + ", parentJob='" + parentJob + '\'' + ", parentRegTime=" + parentRegTime + ", parentStatus='" + parentStatus + '\'' + ", rid=" + rid + '}';
+		return "TblParent{" + "parentId=" + parentId + ", parentName='" + parentName + '\'' + ", parentPwd='" + parentPwd + '\'' + ", parentSex='" + parentSex + '\'' + ", parentAge=" + parentAge + ", parentAdd='" + parentAdd + '\'' + ", parentPhone='" + parentPhone + '\'' + ", parentSon='" + parentSon + '\'' + ", parentJob='" + parentJob + '\'' + ", parentRegTime=" + parentRegTime + ", parentStatus='" + parentStatus + '\'' + ", rid=" + rid + ", tblStudent=" + tblStudent + '}';
 	}
 }

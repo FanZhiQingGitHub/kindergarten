@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <html>
 <head>
-	<title>教师管理</title>
+	<title>幼儿管理</title>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/layui/css/layui.css" media="all">
 </head>
 <style>
@@ -22,25 +22,33 @@
 	}
 </style>
 <body>
-<h1 style="text-align:center;font-size: 40px;color: #009688">教师管理</h1>
+<h1 style="text-align:center;font-size: 40px;color: #009688">幼儿管理</h1>
 <!-- 增加搜索条件 -->
 <div class="demoTable">
 	查询条件：
 	<br/>
-	教师名称：
+	创建时间：
 	<div class="layui-inline selects">
-		<input class="layui-input" name="teachername" id="teachername" autocomplete="off">
+		<input type="date" class="layui-input" name="beginTime" id="beginTime" autocomplete="off">
+	</div>
+	至
+	<div class="layui-inline selects">
+		<input type="date" class="layui-input" name="overTime" id="overTime" autocomplete="off">
+	</div>
+	宝宝名称：
+	<div class="layui-inline selects">
+		<input class="layui-input" name="studentname" id="studentname" autocomplete="off">
 	</div>
 	<button class="layui-btn" data-type="reload"><i class="layui-icon">&#xe615;</i>查询</button>
-	<button class="layui-btn" data-type="addTeacher"><i class="layui-icon">&#xe654;</i>新增</button>
+	<button class="layui-btn" data-type="addChildren"><i class="layui-icon">&#xe654;</i>新增</button>
 </div>
 <input type="hidden" value="${pageContext.request.contextPath}" id="srcAddress"/>
 
 <table id="demo" lay-filter="test"></table>
 <script type="text/html" id="barDemo">
+	<%--	<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>--%>
 	<a class="layui-btn edit layui-btn-xs" data-method="dialog" lay-event="edit"><i class="layui-icon">&#xe642;</i>编辑</a>
 	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon">&#xe67e;</i>删除</a>
-
 </script>
 
 <script src="${pageContext.request.contextPath}/layui/layui.js"></script>
@@ -57,16 +65,21 @@
 			, height: 312
 			, limit: 5//设置的一页要有几条的记录
 			, limits: [5, 10]//设置的是对应的是有几个内容值
-			, url: src + '/director/selectTeacherManage' //数据接口
+			, url: src + '/director/selectChildrenManagement' //数据接口
 			, page: true //开启分页
 			, id: 'demotable'//当对应的进行条件查询的时候
 			, cellMinWidth: 50 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
 			, cols: [[ //表头
-				{field: 'teacherid', title: '教师编号', align: 'center', sort: true, fixed: 'left', width: 180}
-				, {field: 'teachername', title: '教师名称', align: 'center', width: 180}
-				, {field: 'teacherjob', title: '角色', align: 'center', width: 180}
-				, {field: 'teacherregtime', title: '创建时间', align: 'center', sort: true, width: 180,
-					templet: "<div>{{layui.util.toDateString(d.teacherregtime,'yyyy-MM-dd HH:mm')}}</div>"
+				{field: 'studentid', title: '宝宝编号', sort: true, align: 'center', width: 160}
+				, {field: 'studentname', title: '宝宝名称', align: 'center', width: 180}
+				, {field: 'studentsex', title: '性别', sort: true, align: 'center', width: 180}
+				, {
+					field: 'studentbrith', title: '出生年月', align: 'center', width: 180,
+					templet: "<div>{{layui.util.toDateString(d.studentbrith,'yyyy-MM-dd')}}</div>"
+				}
+				, {
+					field: 'studenttime', title: '创建时间', align: 'center', width: 180,
+					templet: "<div>{{layui.util.toDateString(d.studenttime,'yyyy-MM-dd HH:mm')}}</div>"
 				}
 				, {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo'}
 			]]
@@ -76,25 +89,21 @@
 		table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
 			var data = obj.data //获得当前行数据
 				, layEvent = obj.event; //获得 lay-event 对应的值
-			// if (layEvent === 'detail') {
-			// 	layer.alert(JSON.stringify(data), {
-			// 		title: '当前行数据：'
-			// 	});
-			// } else
 			if (layEvent === 'del') {
-				layer.confirm('真的删除本行么？', function (index) {
+				layer.confirm('真的删除行么', function (index) {
 					obj.del(); //删除对应行（tr）的DOM结构
 					layer.close(index);
 					//向服务端发送删除指令
 					$.ajax({
-						url: src + '/director/delTeacherTable',
+						url: src + '/director/delChildrenTable',
 						type: 'post'
-						, data: {teacherid: data.teacherid},
+						, data: {studentid: data.studentid},
 						success: function (data) {
 							console.log("--" + data.toString());
 							if (data == "删除成功") {
 								layer.msg(data);
-								window.location.href = src + "/director/toUrl/director_TeacherManage";
+								window.location.href = src + "/director/toUrl/director_ChildrenManage";
+								// form.render(); //更新全部
 							} else {
 								layer.msg(data);
 							}
@@ -113,6 +122,7 @@
 						type: 2,
 						title: '修改信息',
 						area: ['500px', '400px'],
+						moveType: 1,//拖拽模式，0或者1
 						btn: ['修改', '取消'],
 						btn1: function (index, layero) {
 							var src = $("#srcAddress").val();
@@ -120,59 +130,79 @@
 							//serializeArray jquery方法，将表单对象序列化为数组
 							var formData = serializeObject($, layer.getChildFrame("form", index).serializeArray());
 
-							if (formData.teachername.length == 0) {
-								layer.alert("请输入教师名称", {icon: 2});
-							} else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(formData.teachername)) {
-								layer.alert('教师名称不能有特殊字符');
-							}else if(formData.teacherjob=='暂无')
-							{
-								layer.alert("请选择教师性别！");
+							if (formData.studentname.length == 0) {
+								layer.alert("请输入宝宝名称", {icon: 2});
+							} else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(formData.studentname)) {
+								layer.alert("宝宝名称不能有特殊字符", {icon: 2});
+							} else if (formData.studentsex == '暂无') {
+								layer.alert("请选择宝宝性别！");
+							} else if (formData.studentbrith.length == 0) {
+								layer.alert("请选择宝宝出生年月！");
 							} else {
 								$.ajax({
-									url: src + '/director/updateTeacherTable',
+									url: src + '/director/updateChildrenTable',
 									type: 'post',
 									data: formData,
 									success: function (data) {
 										layer.msg(data);
 										layer.close(index);
-										window.location.href = src + "/director/toUrl/director_TeacherManage";
+										window.location.href = src + "/director/toUrl/director_ChildrenManage";
 									}, error: function (err) {
 										console.log(err);
 									}
 								});
 							}
 						},
-						content: src + '/director/toUrl/director_TeacherDetailmanage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+						content: src + '/director/toUrl/director_ChildrenDetailManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 						, success: function (layero, index) {
 							console.log(layero, index);
 							//	显示
 							var frameId = $(layero).find("iframe").attr('id');
-							$(window.frames[frameId].document).find("#teacherid").val(data.teacherid);
-							$(window.frames[frameId].document).find("#teachername").val(data.teachername);
-							console.log("对应="+data.teacherjob);
-							$(window.frames[frameId].document).find("#teacherjob").val(data.teacherjob).prop("selected",true);
-							// $(window.frames[frameId].document).find("#teacherjob").find("option[value='data.teacherjob']").prop("selected",true);
-							// console.log("查询到的值="+$(window.frames[frameId].document).find("#teacherjob").find("option[value='data.teacherjob']"));
-							// obj.each(function () {
-							// 	console.log("对应的显示");
-							// 	if($(this).val()==){
-							// 		$(this).attr("selected",true);
-							// 	}
-							// });
+							$(window.frames[frameId].document).find("#studentid").val(data.studentid);
+							$(window.frames[frameId].document).find("#studentname").val(data.studentname);
+							// $(window.frames[frameId].document).find("#studentsex").val(data.studentsex);
+							var isChecked = data.studentsex == "男" ? "男" : "女";
 
-							// for(var i =0;i<obj.length;i++){
-							// 	console.log("进入到这个对应的方法;");
-							// 	if(obj[i].val()==(data.teacherjob)){
-							// 		obj[i].selected = true;
-							// 		console.log("添加对应的选择成功方法;");
-							// 	}
-							// }
-
+							$(window.frames[frameId].document).find("select[name=studentsex]").each(function () {//循环判断添加 radio
+								if ($(this).val() == isChecked) {
+									console.log($(this).val() + "对应的性别");
+									$(this).prop("selected", "selected");
+								}
+							});
+							console.log(data.studentbrith);
+							var studentbirths = data.studentbrith.substring(0, 10).toString();
+							console.log(studentbirths);
+							$(window.frames[frameId].document).find("#studentbrith").val(studentbirths);
 							form.render(); //更新全部
+
 						}
 					});
 				}
 			}
+			// 	else if (layEvent === 'userstatus') {
+			// 	layer.confirm('是否确定修改状态？', function (index) {
+			// 		$.ajax({
+			// 			url: src + "/servlet/back/updateState",
+			// 			async: true,
+			// 			type: "POST",
+			// 			data: {"userid": data.userid, "userstate": data.userstate},
+			// 			datatype: "text",
+			// 			success: function (data) {
+			// 				if (data == "success") {
+			// 					layer.msg("修改成功！");
+			// 					window.parent.location.reload();
+			// 				} else {
+			// 					layer.msg("修改失败！");
+			// 				}
+			// 			},
+			// 			error: function () {
+			// 				alert("网络错误！");
+			// 			}
+			// 		});
+			// 		return true;
+			// 	});
+			// 	return false;
+			// }
 		});
 
 
@@ -184,18 +214,21 @@
 				//执行重载--只重载数据
 				table.reload('demotable', {
 					where: { //设定异步数据接口的额外参数，任意设
-						teachername: $("#teachername").val()
+						studentname: $("#studentname").val(),
+						beginTime: $("#beginTime").val(),
+						overTime: $("#overTime").val()
 					}
 					, page: {
 						curr: 1 //重新从第 1 页开始
 					}
 				});
 			}
-			if (type === 'addTeacher') {
+			if (type === 'addChildren') {
 				layer.open({
 					type: 2,
 					title: '添加信息',
 					area: ['500px', '400px'],
+					moveType: 1,//拖拽模式，0或者1
 					btn: ['添加', '取消'],
 					btn1: function (index, layero) {
 						var src = $("#srcAddress").val();
@@ -203,29 +236,30 @@
 						//serializeArray jquery方法，将表单对象序列化为数组
 						var formData = serializeObject($, layer.getChildFrame("form", index).serializeArray());
 
-						if (formData.teachername.length == 0) {
-							layer.alert("请输入教师名称", {icon: 2});
-						} else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(formData.teachername)) {
-							layer.alert('教师名称不能有特殊字符');
-						}else if(formData.teacherjob=='暂无')
-						{
-							layer.alert("请选择教师性别！");
-						}
-						else {
+						if (formData.studentname.length == 0) {
+							layer.alert("请输入宝宝名称", {icon: 2});
+						} else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(formData.studentname)) {
+							layer.alert("宝宝名称不能有特殊字符", {icon: 2});
+						} else if (formData.studentsex == '暂无') {
+							layer.alert("请选择宝宝性别！");
+						} else if (formData.studentbrith.length == 0) {
+							layer.alert("请选择宝宝出生年月！");
+						} else {
 							$.ajax({
-								url: src + '/director/addTeacherForm',
+								url: src + '/director/addChildrenForm',
 								type: 'post',
 								data: formData,
 								success: function (data) {
 									layer.msg(data);
 									layer.close(index);
+									window.location.href = src + "/director/toUrl/director_ChildrenManage";
 								}, error: function (err) {
 									console.log(err);
 								}
 							});
 						}
 					},
-					content: src + '/director/toUrl/director_TeacherDetailmanage'  //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					content: src + '/director/toUrl/director_ChildrenDetailManage'  //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 					, success: function (layero, index) {
 						console.log(layero, index);
 					}

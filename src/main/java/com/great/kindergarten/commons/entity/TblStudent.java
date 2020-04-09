@@ -1,13 +1,17 @@
 package com.great.kindergarten.commons.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.context.annotation.Scope;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 /**
  * 学生信息实体了
  */
+@Component(value = "TblStudent")
+@Scope("prototype")
 public class TblStudent {
     private Integer studentid;
     private String studentname;

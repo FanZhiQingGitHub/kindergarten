@@ -24,25 +24,32 @@
 <body>
 
 <form class="layui-form" action="#" lay-filter="test1">
-	<input type="text" name="teacherid" id="teacherid">
+	<input type="text" name="studentid" id="studentid">
 	<input type="hidden" value="${pageContext.request.contextPath}" id="path"/>
 	<div class="layui-form-item">
-		<label class="layui-form-label">教师名称：</label>
+		<label class="layui-form-label">宝宝名称：</label>
 		<div class="layui-input-inline">
-			<input type="text" name="teachername" id="teachername" autocomplete="off" required lay-verify="required"
-			       placeholder="请输入教师名称" class="layui-input">
+			<input type="text" name="studentname" id="studentname" autocomplete="off" required lay-verify="required"
+			       placeholder="请输入宝宝名称" class="layui-input">
 		</div>
-		<div class="layui-form-mid layui-word-aux" id="divoldpassword"></div>
 	</div>
 	<div class="layui-form-item layui-form-text">
-		<label class="layui-form-label">角色：</label>
+		<label class="layui-form-label">性别：</label>
+		<div class="layui-input-inline">
+			<div class="layui-form">
+				<select name="studentsex" id="studentsex" lay-filter="mySelect">
+					<option value="暂无" selected>暂无选择</option>
+					<option value="男">男</option>
+					<option value="女">女</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item layui-form-text">
+		<label class="layui-form-label">出生年月：</label>
 		<div class="layui-input-inline">
 			<div class="layui-form" lay-filter="myDiv">
-				<select name="teacherjob" id="teacherjob" lay-filter="mySelect">
-					<option value="班主任">班主任</option>
-					<option value="保健员">保健员</option>
-					<option value="安防员">安防员</option>
-				</select>
+				<input type="date" class="layui-input" name="studentbrith" id="studentbrith" autocomplete="off">
 			</div>
 		</div>
 	</div>

@@ -33,6 +33,27 @@
         <result column="rid" property="rid"/>
     </resultMap>
 
+<!--    家长表和学生表-->
+    <resultMap id="tbl_ParentStudent" type="TblParent">
+        <result property="parentId" column="parentid"/>
+        <result property="parentName" column="parentname"/>
+        <result property="parentPwd" column="parentpwd"/>
+        <result property="parentSex" column="parentsex"/>
+        <result property="parentAge" column="parentage"/>
+        <result property="parentAdd" column="parentadd"/>
+        <result property="parentPhone" column="parentphone"/>
+        <result property="parentSon" column="parentson"/>
+        <result property="parentJob" column="parentjob"/>
+        <result property="parentRegTime" column="parentRegTime"/>
+        <result property="parentStatus" column="parentstatus"/>
+        <result property="studentid" column="studentid"/>
+        <result property="studentname" column="studentname"/>
+        <association property="tblStudent" javaType="TblStudent">
+            <result property="studentid" column="studentid"/>
+            <result property="studentname" column="studentname"/>
+        </association>
+    </resultMap>
+
     <!--园长登录查询-->
     <select id="findRector" resultMap="rectorMap" parameterType="TblRector">
 		select * from tbl_rector where rectorname=#{rectorname} and rectorpwd = #{rectorpwd};
@@ -55,7 +76,7 @@
                 and teachername like "%"#{teachername}"%"
             </if>
         </where>
-        order by teacherid limit #{pageInt},#{limitInt}
+        order by teacherregtime desc limit #{pageInt},#{limitInt}
     </select>
     <!--    教师搜索界面的设计,查询记录条数-->
     <select id="findTeacherAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
@@ -91,5 +112,106 @@
 			,#{teacherjob}
 		)
 	</insert>
+
+
+    <!--幼儿管理-->
+    <!--查询幼儿对应的信息-->
+    <select id="findChildrenAll" resultType="TblStudent" parameterType="java.util.HashMap">
+        select * from tbl_student
+        <where>1=1
+            <if test="studentname != null and studentname != ''">
+                and studentname like "%"#{studentname}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and studenttime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and studenttime &lt; #{overTime}
+            </if>
+        </where>
+        order by studenttime desc limit #{pageInt},#{limitInt}
+    </select>
+    <!--幼儿模块....查询记录条数-->
+    <select id="findChildrenAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(*) from tbl_student
+        <where>1=1
+            <if test="studentname != null and studentname != ''">
+                and studentname like "%"#{studentname}"%"
+            </if>
+        </where>
+    </select>
+
+    <!--对应的进行幼儿的新增-->
+    <insert id="addChildrenForm" parameterType="TblStudent">
+		insert into tbl_student(
+		    studentname
+			,studentsex
+			,studentbrith
+			,studenttime
+		)values(
+		    #{studentname}
+			,#{studentsex}
+			,#{studentbrith}
+			,#{studenttime})
+	</insert>
+
+    <!--对应的幼儿表格信息....删除语句信息-->
+    <delete id="delChildrenTable" parameterType="int">
+        delete from tbl_student
+        where studentid = #{studentid}
+    </delete>
+
+    <!--对应的幼儿表格信息....更新语句信息-->
+    <update id="updateChildrenById" parameterType="TblStudent">
+        update tbl_student
+        set  studentname = #{studentname}
+            ,studentsex = #{studentsex}
+            ,studentbrith = #{studentbrith}
+        where studentid = #{studentid}
+    </update>
+
+    <!--家长和学生的对应的表格的显示-->
+    <select id="findParentAll" resultMap="tbl_ParentStudent" parameterType="java.util.HashMap">
+        select p.*,s.studentid,s.studentname from tbl_student s,tbl_parent p
+        <where> s.pid=p.parentid
+            <if test="parentname != null and parentname != ''">
+                and p.parentname like "%"#{parentname}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and p.parentregtime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and p.parentregtime &lt; #{overTime}
+            </if>
+        </where>
+        order by p.parentregtime desc limit #{pageInt},#{limitInt}
+    </select>
+    <!--家长模块....查询记录条数-->
+    <select id="findParentAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(*) from tbl_student s,tbl_parent p
+        <where>s.pid=p.parentid
+            <if test="parentname != null and parentname != ''">
+                and parentname like "%"#{parentname}"%"
+            </if>
+        </where>
+    </select>
+
+    <!--对应的进行家长的新增-->
+    <insert id="addParentForm" parameterType="TblParent">
+		insert into tbl_parent(parentname,parentpwd,parentsex,
+		parentage,parentadd,parentson,parentphone,parentjob,
+		parentregtime,parentstatus,rid)
+        values(#{parentName},'e10adc3949ba59abbe56e057f20f883e',
+        #{parentSex},#{parentAge},#{parentAdd},#{parentSon},#{parentPhone},
+        #{parentJob},#{parentRegTime},'启用',1);
+	</insert>
+    <select id="selectParentByPid" resultType="TblParent" parameterType="string">
+        select * from tbl_parent where parentname = #{parentname};
+    </select>
+    <update id="updateChildrenByPid" parameterType="java.util.HashMap">
+        update tbl_student set pid = #{pid} where studentname = #{studentname};
+    </update>
+
+
 
 </mapper>

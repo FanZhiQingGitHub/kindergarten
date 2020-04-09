@@ -39,12 +39,6 @@
         }
 
         #hh1 {
-            /*color: black;*/
-            /*font-weight: bold;*/
-            /*font-size: 30px;*/
-            /*margin-left: 16%;*/
-            /*margin-top: 3%;*/
-            /*font-family: 楷体;*/
             color: black;
             font-weight: bold;
             font-size: 24px;
@@ -80,9 +74,6 @@
         }
 
         .layui-form-item {
-            /*margin-left: -7%;*/
-            /*margin-top: 3%;*/
-            /*font-size: 20px;*/
             color: #3a3a3a;
         }
 
