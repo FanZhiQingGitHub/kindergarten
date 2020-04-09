@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<canvas width="400px" id="canvas" height="400px" style="display: block;"></canvas>
+<video id="webcam" class="myVideo" autoplay playsinline></video>
+
+<button class="check" onclick="startFace();">开始验证</button>
+
+<button class="check" onclick="getFaceImg();">发送图片到后台</button>
+
+<script type="text/javascript">
+
+
+	var video = document.getElementById('webcam');
+
+	function startFace() {
+        //判断是否支持开启视频
+		if (navigator.getUserMedia) {
+			navigator.getUserMedia({
+				audio : false,
+				video : {
+					width : 400,
+					height : 400,
+					facingMode : "user"
+				}
+			}, function(stream) {
+				try {
+					video.src = window.URL.createObjectURL(stream);
+				} catch (e) {
+					video.srcObject = stream;         //注意，不同版本video.src和video.srcObject两种
+				}
+				video.onloadedmetadata = function(e) {
+					//开始录制
+					video.play();
+				};
+
+			}, function(err) {
+				console.log("The following error occurred: " + err.name);
+			});
+		} else {
+			console.log("getUserMedia not supported");
+		}
+	}
+
+	//获取视频中人脸，转换成图片，发送后台请求，识别图片
+	function getFaceImg() {
+
+		var video = document.querySelector('video');
+		var canvasObj = document.querySelector('canvas');
+		var context1 = canvasObj.getContext('2d');
+		context1.fillStyle = "#FF0000";
+		context1.fillRect(0, 0, 300, 300);
+		context1.drawImage(video, 0, 0, 300, 300);
+
+		var url = canvasObj.toDataURL();  //toDataURL()获取的数据有images前缀，要split取后面一部分传给后台，后台直接用
+		var face = url.split(",")[1];
+
+		console.log(face);
+
+
+		// $('#idcard').val(studentInfo.id_number);
+		// $.ajax({
+		// 	url: basePath+'/h5/checkFace',
+		// 	type:"POST",
+		// 	async: false,
+		// 	cache: false,
+		// 	data: {"face":face,"idcard":face},
+		// 	success: function(data) {
+		//
+		// 	},
+		// 	error:function(msg) {
+		// 		console.log(msg);
+		// 	}
+		// });
+	}
+</script>
+</body>
+</html>

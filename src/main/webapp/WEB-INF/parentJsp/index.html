@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+</head>
+<body>
+<canvas width="620px" id="canvas" height="720px" style="display: none;"></canvas>
+<div id="allmap" style="display:none;"></div>
+<div class="swiper-container swiper-no-swiping">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide searchBox">
+            <div class="search">
+                <div class="sTop">
+                    <h2>
+                        <span>在线</span>报到
+                    </h2>
+                </div>
+                <i class="fa fa-search sIcon"></i>
+                <!-- <input type="text" placeholder="请输入身份证号" /> -->
+                <input id="idcard" name="idcard" type="text" placeholder="请输入身份证号" value="">
+                <button id="next" onclick="nextSwiper(1);">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="swiper-slide white">
+            <div class="infor">
+                <div class="header"></div>
+                <div class="inforTop clearfix">
+                    <div class="userImg">
+                    </div>
+                    <div class="userInfor">
+                        <h3>
+                            <i class="fa fa-vcard"></i><span id="name"></span><b id="gender"></b>
+                        </h3>
+                        <p class="clearfix">
+                            <label>学号</label><span id="student_id"></span>
+                        </p>
+                        <p>
+                            <label>专业</label><span id="major_name"></span>
+                        </p>
+                        <p>
+                            <label>班级</label><span id="class_name"></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="inforCon basic">
+                    <h3>
+                        <span>基本信息</span>
+                    </h3>
+                    <table cellpadding="0" cellspacing="0" width="100%"
+                           class="inforTable">
+                        <tr>
+                            <td>出生日期</td>
+                            <td><span id="date_birth"></span></td>
+                            <td>籍贯</td>
+                            <td><span id="hometown"></span></td>
+                        </tr>
+                        <tr>
+                            <td>身份证号</td>
+                            <td colspan="3"><span id="id_number"></span></td>
+                        </tr>
+                        <tr>
+                            <td>政治面貌</td>
+                            <td><span id="political_affiliation">团员</span></td>
+                            <td>民族</td>
+                            <td><span id="nation">汉族</span></td>
+                        </tr>
+                        <tr>
+                            <td>家庭地址</td>
+                            <td colspan="3"><span id="family_address"></span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <button id="cameraBtn" class="check" onclick="">确认信息并进行身份验证</button>
+        </div>
+        <div class="swiper-slide">
+            <div class="topBg">
+                <div class="videoBox">
+                    <!-- <video id="webcam" class="myVideo"></video> -->
+                    <video id="webcam" class="myVideo" autoplay playsinline></video>
+                </div>
+                <div class="borderBox"></div>
+                <div class="fgBg"></div>
+            </div>
+            <div class="bottomBg girl"></div>
+            <div id="demo"></div>
+            <!-- <button class="check" onclick="getCurLocation()">开始验证</button> -->
+            <button class="check" onclick="getFaceImg();">开始验证</button>
+        </div>
+    </div>
+    <!-- 遮罩层DIV -->
+    <div id="overlay" class="overlay"></div>
+    <!-- Loading提示 DIV -->
+    <div id="loadingTip" class="loading-tip">
+    </div>
+</div>
+<script type="text/javascript">
+	var studentInfo;
+	var index;
+	var pos;
+	var basePath = '[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]';
+	var regEx = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+	var swiper = new Swiper('.swiper-container', {
+		simulateTouch : false,
+		onSlideChangeStart: function(swiper){
+			var currentIndex = swiper.clickedIndex
+			var activeIndex = swiper.activeIndex;
+			if(currentIndex==0 && activeIndex==1){//第一页，滑动到第二页，校验身份证号码
+				var result = checkIdCard();
+				if(!result){
+					layer.msg("请输入正确的身份证号码");
+					//alert("请输入正确的身份证号码");
+					return;
+				}else{
+					nextSwiper(activeIndex);
+				}
+			}
+		}
+	});
+	const video = document.getElementById('webcam');
+	const button = document.getElementById('cameraBtn');
+	let currentStream;
+	button.addEventListener('click', event => {
+		nextSwiper(2);
+	var constraints = {
+		video: {'facingMode': "user"},
+		audio: false
+	};
+	navigator.mediaDevices
+		.getUserMedia(constraints)
+		.then(stream => {
+		currentStream = stream;
+	video.srcObject = stream;
+	return navigator.mediaDevices.enumerateDevices();
+	})
+	.catch(error => {
+		console.error(error);
+	});
+	});
+
+	function checkIdCard(){
+		var idcard = $('#idcard').val();//获取用户输入的身份证号码
+		var result = regEx.test(idcard);
+		return result;
+	}
+	//填好身份证，点按钮或滑动，滑动到第二个页面
+	function nextSwiper(index) {
+		//滑动前，获取第二个页面学生信息;
+		if (index === 1) {
+			var result = checkIdCard();
+			if(!result){
+				layer.msg("请输入正确的身份证号码");
+				//alert("请输入正确的身份证号码");
+			}else{
+				$.ajax({
+					url : basePath + '/h5/getStudentInfo',
+					async : false,
+					cache : false,
+					data : {
+						"idcard" : $('#idcard').val()
+					},
+					error : function(result) {// 请求失败处理函数
+						layer.msg(result.msg);
+						//alert(result.msg);
+					},
+					success : function(result) { //请求成功后处理函数
+						debugger;
+						studentInfo = result;
+						swiper.slideTo(index);
+						//将获取的学生信息赋值
+						if (result.admission_photo) {
+							$('#admission_photo').attr("src",basePath + "/uploadImg/admission_photo/"+ result.admission_photo);
+						}
+						$('#name').html(result.name);
+						$('#gender').text(result.gender);
+						$('#student_id').html(result.student_id);
+						$('#major_name').html(result.major_name);
+						$('#class_name').html(result.class_name);
+						//基本信息
+						$('#date_birth').html(result.date_birth);
+						$('#hometown').html(result.hometown);
+						$('#id_number').html(result.id_number);
+						$('#political_affiliation').html(result.political_affiliation);
+						$('#nation').html(result.nation);
+						$('#family_address').html(result.family_address);
+					}
+				})
+			}
+		} else if (index === 2) {//滑到
+			swiper.slideTo(index);
+			startFace();
+		}
+	}
+
+	function startFace() {
+		navigator.getUserMedia = navigator.getUserMedia
+			|| navigator.webkitGetUserMedia
+			|| navigator.mozGetUserMedia;
+
+		if (navigator.getUserMedia) {
+			navigator.getUserMedia({
+				audio : false,
+				video : {
+					width : 400,
+					height : 400,
+					facingMode : "user"
+				}
+			}, function(stream) {
+				debugger;
+				var video = document.querySelector('video');
+				try {
+					video.src = window.URL.createObjectURL(stream);
+				} catch (e) {
+					console.log(e);
+					video.srcObject = stream;         //注意，不同版本video.src和video.srcObject两种
+				}
+				video.onloadedmetadata = function(e) {
+					video.play();
+				};
+
+			}, function(err) {
+				console.log("The following error occurred: " + err.name);
+			});
+		} else {
+			console.log("getUserMedia not supported");
+		}
+	}
+
+	//获取视频中人脸，转换成图片，发送后台请求，识别图片
+	function getFaceImg() {
+		showLoading();
+		debugger;
+		var video = document.querySelector('video');
+		var canvasObj = document.querySelector('canvas')
+		var context1 = canvasObj.getContext('2d');
+		context1.fillStyle = "#000000";
+		context1.fillRect(0, 0, 300, 300);
+		context1.drawImage(video, 0, 0, 300, 300);
+
+		var url = canvasObj.toDataURL();  //toDataURL()获取的数据有images前缀，要split取后面一部分传给后台，后台直接用
+		var face = url.split(",")[1];
+		$('#idcard').val(studentInfo.id_number);
+		$.ajax({
+			url: basePath+'/h5/checkFace',
+			type:"POST",
+			async: false,
+			cache: false,
+			data: {"face":face,"idcard":studentInfo.id_number},
+			success: function(data) {
+				hideLoading();
+				debugger;
+				var data = $.parseJSON(data);
+				if(data.success){
+					registerFun();
+				}else{
+					var msg = data.msg;
+					if('不是待报到学生'==msg){
+						//关闭当前人脸识别页面，避免人脸识别百度接口多次调用，产生多次费用
+						window.close();
+					}else{
+						layer.msg(msg);
+					}
+				}
+			},
+			error:function(msg) {
+				console.log(msg);
+			}
+		});
+	}
+	//base64转换为Blob
+	function dataURItoBlob(base64Data) {
+		var byteString;
+		if (base64Data.split(",")[0].indexOf("base64") >= 0)
+			byteString = atob(base64Data.split(",")[1]);
+		else
+			byteString = unescape(base64Data.split(",")[1]);
+		var mimeString = base64Data.split(",")[0].split(":")[1].split(";")[0];
+		var ia = new Uint8Array(byteString.length);
+		for (var i = 0; i < byteString.length; i++) {
+			ia[i] = byteString.charCodeAt(i);
+		}
+		return new Blob([ ia ], {
+			type : mimeString
+		});
+	}
+	var geolocation = new BMap.Geolocation();
+	var gc = new BMap.Geocoder();
+	var map = new BMap.Map("allmap");
+	geolocation.getCurrentPosition(function(r) {
+		if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+			var pt = r.point;
+			gc.getLocation(pt, function(rs){
+				var address = rs.addressComponents;
+				var mk = new BMap.Marker(r.point);
+				map.addOverlay(mk);
+				var latCurrent = r.point.lat;
+				var lngCurrent = r.point.lng;
+				var myPoint = new BMap.Point(lngCurrent, latCurrent);
+				debugger;
+				pos = {
+					lat : latCurrent,
+					lng : lngCurrent,
+					nation : address.nation==undefined?null:address.nation,
+					province : address.province==undefined?null:address.province,
+					city : address.city==undefined?null:address.city,
+					district : address.district==undefined?null:address.district,
+					street : address.street==undefined?null:address.street,
+					streetNumber : address.streetNumber==undefined?null:address.streetNumber,
+					adcode : address.adcode==undefined?null:address.adcode,
+					address : rs.address==undefined?null:rs.address,
+					business : rs.business==undefined?null:rs.business,
+				}
+			});
+		} else {
+			alert('failed' + this.getStatus());
+		}
+	}, {
+		enableHighAccuracy : true
+	})
+	function registerFun(){
+		var data={};
+		data["reg_id"]=$('#reg_id').val();
+		data["complete"]="报到成功";
+		data["location"]=pos;
+		data["step_id"]="4";
+		data["school_address"]=null;
+		$.ajax({
+			url : basePath+'/h5/registe',
+			method: "POST",
+			dataType: "json",
+			contentType: "application/json;charset=utf-8",
+			async: false,
+			data:JSON.stringify(data),
+			error : function(result) {// 请求失败处理函数
+				alert(result.msg);
+			},
+			success : function(result) { //请求成功后处理函数
+				debugger;
+				if (result.success) {
+					window.close();
+
+					layer.msg('报到成功', {icon: 1});
+					//sleep 1秒钟，再关闭，让用户能看到提示消息
+					var start = (new Date()).getTime();
+					while ((new Date()).getTime() - start < 1000) {
+						continue;
+					}
+					window.close();
+				}else {
+					layer.msg('报到失败', {icon: 1});
+				}
+			}
+		})
+	}
+	/**
+	 * 显示遮罩层
+	 */
+	function showOverlay() {
+		// 遮罩层宽高分别为页面内容的宽高
+		$('.overlay').css({'height':$(document).height(),'width':$(document).width()});
+		$('.overlay').show();
+	}
+	/**
+	 * 显示Loading提示
+	 */
+	function showLoading() {
+		// 先显示遮罩层
+		showOverlay();
+		// Loading提示窗口居中
+		$("#loadingTip").css('top',
+			(getWindowInnerHeight() - $("#loadingTip").height()) / 2 + 'px');
+		$("#loadingTip").css('left',
+			(getWindowInnerWidth() - $("#loadingTip").width()) / 2 + 'px');
+
+		$("#loadingTip").show();
+		$(document).scroll(function() {
+			return false;
+		});
+	}
+	/**
+	 * 隐藏Loading提示
+	 */
+	function hideLoading() {
+		$('.overlay').hide();
+		$("#loadingTip").hide();
+		$(document).scroll(function() {
+			return true;
+		});
+	}
+	//浏览器兼容 取得浏览器可视区高度
+	function getWindowInnerHeight() {
+		var winHeight = window.innerHeight
+			|| (document.documentElement && document.documentElement.clientHeight)
+			|| (document.body && document.body.clientHeight);
+		return winHeight;
+	}
+	// 浏览器兼容 取得浏览器可视区宽度
+	function getWindowInnerWidth() {
+		var winWidth = window.innerWidth
+			|| (document.documentElement && document.documentElement.clientWidth)
+			|| (document.body && document.body.clientWidth);
+		return winWidth;
+	}
+</script>
+</body>
+</html>
