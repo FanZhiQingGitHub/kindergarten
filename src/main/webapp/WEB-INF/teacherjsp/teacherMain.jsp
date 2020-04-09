@@ -160,16 +160,18 @@
 					, success: function (layero, index) {
 					}
 				});
-			}),$("#exit").click(function () {
+			});
+			$("#exit").click(function () {
 				layer.confirm('您确定要退出到登录界面吗?', {icon: 3, title:'温馨提示'},function(index){
 					layer.close(index);
 					location.href = path + "/teacher/toUrl/teacherLogin";
 				});
 			});
-		})
+
+
 	});
 
-
+	});
 </script>
 
 

@@ -8,6 +8,8 @@ import java.util.Map;
 @Mapper
 public interface TeacherMapper {
 
-	public String findTeacherStatus(Map<String,String> teachermap);
+	public String findTeacherStatus(Map<String, String> teachermap);
 	public TblTeacher findTeacher(TblTeacher tblTeacher);
+	public Boolean updateTeacherPwd(Map<String, String> teacherMap);
+	public TblTeacher checkPwd(Integer teacherid);
 }

@@ -16,7 +16,7 @@
         <result column="teacheradd" property="teacheradd"></result>
         <result column="teacherphone" property="teacherphone"></result>
         <result column="teacherjob" property="teacherjob"></result>
-        <result column="teacherretime" property="teacherretime"></result>
+        <result column="teacherregtime" property="teacherregtime"></result>
         <result column="teacherstatus" property="teacherstatus"></result>
         <result column="cid" property="cid"></result>
         <result column="rid" property="rid"></result>
@@ -39,6 +39,13 @@
             </if>
         </where>
 	</select>
+<!--       根据id查信息-->
+    <select id="checkPwd" resultMap="teacherMap" parameterType="java.lang.Integer">
+        select * from tbl_teacher where teacherid = #{teacherid};
 
-    <!---->
+    </select>
+    <!--修改密码-->
+    <update id="updateTeacherPwd" parameterType="java.util.Map">
+        UPDATE tbl_teacher SET teacherpwd = #{teacherpwd} where teacherid = #{teacherid};
+    </update>
 </mapper>

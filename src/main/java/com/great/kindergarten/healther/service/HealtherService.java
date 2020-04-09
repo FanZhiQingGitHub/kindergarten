@@ -6,6 +6,8 @@ import com.great.kindergarten.commons.entity.TblHealther;
 import com.great.kindergarten.healther.mapper.HealtherMapper;
 import com.great.kindergarten.healther.resultbean.ExaminationPage;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,6 +39,7 @@ public class HealtherService {
         return healtherMapper.findHealtherId(healthermap);
     }
 
+    @Transactional
     public Boolean updateHealtherPwd(String healtherpwd,String healtherid){
         Map<String,String> healthermap = new LinkedHashMap<>();
         healthermap.put("healtherpwd",healtherpwd);
@@ -56,6 +59,7 @@ public class HealtherService {
         return healtherMapper.findAllClass();
     }
 
+    @Transactional
     public Boolean updateExaminationInfo(TblExamination tblExamination){
         return healtherMapper.updateExaminationInfo(tblExamination);
     }
@@ -66,6 +70,7 @@ public class HealtherService {
         return healtherMapper.findStudentId(studentmap);
     }
 
+    @Transactional
     public Boolean addExaminationInfo(List<TblExamination> tblExaminationList){
         return healtherMapper.addExaminationInfo(tblExaminationList);
     }

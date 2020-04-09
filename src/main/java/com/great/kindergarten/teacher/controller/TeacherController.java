@@ -3,6 +3,7 @@ package com.great.kindergarten.teacher.controller;
 import com.great.kindergarten.commons.entity.TblTeacher;
 import com.great.kindergarten.teacher.service.TeacherService;
 import com.great.kindergarten.util.MD5Utils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +24,11 @@ import java.util.Random;
 @RequestMapping("/teacher")
 public class TeacherController {
     private String vcode;
-
+    private TblTeacher tblTeacher1;
     @Resource
     private TeacherService teacherService;
+
+
 
     @RequestMapping("/main")
     public String showMainView(){
@@ -95,6 +98,7 @@ public class TeacherController {
         String str=null;
 //        密码加密
         String teacherpwd = MD5Utils.md5(tblTeacher.getTeacherpwd());
+        tblTeacher.setTeacherpwd(teacherpwd);
         System.out.println("teacherpwd="+teacherpwd);
 //        获取验证码
         String code = tblTeacher.getCode();
@@ -107,7 +111,7 @@ public class TeacherController {
             if (teacherStatus.equals("启用")){
                 System.out.println("登录="+teacherStatus);
 //                登录 获取全部信息
-                TblTeacher tblTeacher1 = teacherService.findTeacher(tblTeacher);
+                 tblTeacher1 = teacherService.findTeacher(tblTeacher);
                 List<TblTeacher> tblTeacherList=new ArrayList<>();
 
                 if (null!=tblTeacher1){
@@ -116,7 +120,9 @@ public class TeacherController {
 //                    存信息到页面显示
                     tblTeacherList.add(tblTeacher1);
                     System.out.println("tblTeacherList个人信息="+tblTeacherList);
+                    request.getSession().setAttribute("tblTeacher1",tblTeacher1);
                     request.getSession().setAttribute("tblTeacherList",tblTeacherList);
+
                     str="success";
                 }else {
                     str="error";
@@ -131,5 +137,30 @@ public class TeacherController {
         }
         return str;
     }
+//修改密码
+    @RequestMapping("/updateTeacherPwd")
+    @ResponseBody
+    public String updateTeacherPwd(String oldTeacherPwd, String teacherPwd, HttpServletRequest request){
 
+        String str=null;
+//        查询旧密码
+        String oldTeachererPwd1 = MD5Utils.md5(oldTeacherPwd);//旧密码
+        String teacherPwd1 = MD5Utils.md5(teacherPwd);//新密码
+//        根据教师id 查找信息
+        int teacherid=tblTeacher1.getTeacherid();
+        TblTeacher tblTeacher2 = teacherService.checkPwd(teacherid);
+        if(oldTeachererPwd1.equals(tblTeacher2.getTeacherpwd())){
+//            根据id 修改密码
+            String teacherid1 = Integer.toString(teacherid);
+            Boolean flag=teacherService.updateTeacherPwd(teacherPwd1,teacherid1);
+            if(flag){
+                str="success";
+            }else {
+                str="error";
+            }
+        }else {
+            str="sureError";
+        }
+         return str;
+    }
 }

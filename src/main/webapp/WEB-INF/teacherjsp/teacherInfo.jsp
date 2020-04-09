@@ -30,7 +30,7 @@
 		<a style="font-size: 18px">welcome to <span class="name" style="color: darkorchid">&nbsp;${healthername}&nbsp;</span> home !!!</a>
 	</div>
 	<p class="welcome-text">
-		<button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal addUserScore" style="margin-top: 48%">
+		<button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal updateTeacherPwd" style="margin-top: 48%">
 			修改密码
 		</button>
 	</p>
@@ -76,50 +76,96 @@
 	</div>
 </div>
 
+<div id="type-content" style="display: none;">
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<input type="password" id="oldTeacherPwd"  placeholder="请输入6-12位旧密码" value=""
+			       autocomplete="off" class="layui-input" style="width: 300px">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<input type="password" id="teacherPwd"  placeholder="请输入6-12位密码" value=""
+			       autocomplete="off" class="layui-input" style="width: 300px">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<input type="password" id="sureTeacherPwd"  placeholder="请确认密码" value=""
+			       autocomplete="off" class="layui-input" style="width: 300px">
+		</div>
+	</div>
+</div>
+
 <script>
-	var path = $("#path").val();
+
 
 	layui.use(['jquery','layer'], function () {
-		var jquery = layui.jquery;
+		var $ = layui.jquery;
 		var layer = layui.layer;
 
-		$('body').on('click', '.addUserScore', function () {
-			var userid = $("#userid").val();
+		var path = $("#path").val();
+		$('body').on('click', '.updateTeacherPwd', function () {
 			layer.open({
 				type: 1,
 				content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-				title: '请输入充值积分',
+				title: '修改密码',
 				btn: ['确定', '取消'],
 				offset: '100px',
 				btnAlign: 'c',
 				btn1: function (index) {
-					var num = /^[0-9]+.?[0-9]*/;
-					var userscore = $("#userscore").val();
-					if(!num.test(userscore)){
-						layer.alert("请输入数字",{icon:2});
-					}else {
+
+					var oldTeacherPwd = $("#oldTeacherPwd").val();
+					var teacherPwd = $("#teacherPwd").val();
+					var sureTeacherPwd= $("#sureTeacherPwd").val();
+
+					if (oldTeacherPwd.length == 0 ) {
+						console.log("进来");
+						layer.alert("请输入旧密码", {icon: 2});
+					}else if (teacherPwd.length < 6) {
+						layer.alert("新密码长度低于6位", {icon: 2});
+					} else if (teacherPwd.length > 12) {
+						layer.alert("新密码长度大于12位", {icon: 2});
+					} else if (teacherPwd.length == 0) {
+						layer.alert("新密码不能为空", {icon: 2});
+					} else if (sureTeacherPwd.length == 0) {
+						layer.alert("请确认密码", {icon: 2});
+					} else if (teacherPwd != sureTeacherPwd) {
+						layer.alert("密码输入不一致", {icon: 2});
+					} else {
+
 						$.ajax({
-							url: path + '/user/addUserScore',
+							url: path + '/teacher/updateTeacherPwd',
 							async: true,
 							type: 'post',
-							data: {"userid": userid,"userscore":userscore},
+							data: {"oldTeacherPwd": oldTeacherPwd,"teacherPwd":teacherPwd},
 							datatype: 'text',
 							success: function (data) {
-								if (data == "error") {
-									layer.alert("充值失败！", {icon: 2});
-								} else {
-									layer.close(index);
-									layer.alert("充值成功", {icon: 6}, function (index) {
-										$("#score").text("积分："+data);
-										layer.close(index);
-									});
+								console.log(data);
+								if (data =="success") {
+									console.log("修改返回");
+									alert("修改成功");
+									$(":input").val(" ");
+									//当你在iframe页面关闭自身时
+									var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+									parent.layer.close(index); //再执行关闭
+									///location.href = "login.html";
+								}
+								else if (data =="sureError") {
+									console.log("旧密码错误");
+									layer.msg('旧密码错误');
+									///location.href = "login.html";
+								}
+								else {
+									layer.msg('修改失败');
 								}
 							}, error: function (data) {
 								layer.alert("网络繁忙！", {icon: 2});
 							}
 						});
+
 					}
-				},
+				}
 			});
 		});
 	})

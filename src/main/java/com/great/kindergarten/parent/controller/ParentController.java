@@ -32,25 +32,6 @@ public class ParentController {
         return "parentJsp/"+url;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request) {
         //移除当前在线的家长
