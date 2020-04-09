@@ -17,6 +17,7 @@ public class TblMeal {
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date mealendtime;
 
+
     public TblMeal() {
     }
 
@@ -30,12 +31,24 @@ public class TblMeal {
         return mealid;
     }
 
+    public void setMealid(Integer mealid) {
+        this.mealid = mealid;
+    }
+
     public Date getMealstarttime() {
         return mealstarttime;
     }
 
+    public void setMealstarttime(Date mealstarttime) {
+        this.mealstarttime = mealstarttime;
+    }
+
     public Date getMealendtime() {
         return mealendtime;
+    }
+
+    public void setMealendtime(Date mealendtime) {
+        this.mealendtime = mealendtime;
     }
 
     @Override

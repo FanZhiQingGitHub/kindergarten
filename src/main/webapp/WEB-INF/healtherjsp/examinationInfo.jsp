@@ -89,7 +89,7 @@
             , limits: [5, 10, 15, 20]
             , cols: [[ //表头
                 {field: 'examinationid', title: '体检ID', width: 120, align: 'center',hide:'true'}
-                , {field: 'studentid', title: '宝宝ID', width: 120, sort: true, fixed: 'left', align: 'center'}
+                , {field: 'studentid', title: '宝宝ID', width: 120,sort: true, fixed: 'left', align: 'center'}
                 , {field: 'studentname', title: '宝宝名称', width: 120, align: 'center'}
                 , {field: 'height', title: '身高', width: 120, sort: true, align: 'center'}
                 , {field: 'weight', title: '体重', width: 120, sort: true, align: 'center'}

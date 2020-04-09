@@ -210,6 +210,21 @@
                     , success: function (layero, index) {
                     }
                 });
+            }),$("#bu2").click(function () { //膳食管理
+                layer.open({
+                    type: 2,
+                    area: ['95%', '80%'],
+                    offset: ['10%', '3%'],
+                    title:'智慧幼儿园-宝宝膳食信息页',
+                    btn1: function (index, layero) {
+                        //layer.getChildFrame("form", index)获取iframe的表单
+                        //serializeArray jquery方法，将表单对象序列化为数组
+                        layer.close(index);
+                    },
+                    content: path + '/healther/path/mealInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                    }
+                });
             });
         })
     });

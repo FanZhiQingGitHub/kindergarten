@@ -1,11 +1,11 @@
 package com.great.kindergarten.healther.mapper;
 
-import com.great.kindergarten.commons.entity.TblClass;
-import com.great.kindergarten.commons.entity.TblExamination;
-import com.great.kindergarten.commons.entity.TblHealther;
+import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.healther.resultbean.ExaminationPage;
+import com.great.kindergarten.healther.resultbean.MealPage;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,4 +31,21 @@ public interface HealtherMapper {
     public Integer findStudentId(Map<String, String> studentmap);
 
     public Boolean addExaminationInfo(List<TblExamination> tblExaminationList);
+
+    public Boolean addMealInfo(List<TblMeal> tblMealList);
+
+    public Integer findMealID(Map<String, Date> mealMap);
+
+    public Boolean addRecipeInfo(List<TblRecipe> tblRecipeList);
+
+    public List<TblMeal> findAllMealInfo(MealPage mealPage);
+
+    public Long findAllMealInfoCount(MealPage mealPage);
+
+    public List<TblRecipe> findAllRecipeInfo(Map<String, Integer> mealIdMap);
+
+    public Long findAllRecipeInfoCount(Map<String, Integer> mealIdMap);
+
+    public Boolean updateRecipeInfo(Integer mid);
+
 }

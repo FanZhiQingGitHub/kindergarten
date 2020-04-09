@@ -1,16 +1,19 @@
 package com.great.kindergarten.healther.controller;
 
-import com.great.kindergarten.commons.entity.TblClass;
-import com.great.kindergarten.commons.entity.TblExamination;
-import com.great.kindergarten.commons.entity.TblHealther;
+import com.google.gson.Gson;
+import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.healther.resultbean.DateWrite;
 import com.great.kindergarten.healther.resultbean.ExaminationPage;
+import com.great.kindergarten.healther.resultbean.MealPage;
 import com.great.kindergarten.healther.service.HealtherService;
+import com.great.kindergarten.util.GsonUtils;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -20,6 +23,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -109,7 +113,7 @@ public class HealtherController {
                     List<TblHealther> tblHealtherList = new ArrayList<>();
                     tblHealtherList.add(Healther);
                     List<TblClass> tblClassList = healtherService.findAllClass();
-                    request.getSession().setAttribute("tblClassList",tblClassList);
+                    request.getSession().setAttribute("tblClassList", tblClassList);
                     request.getSession().setAttribute("healthername", healthername);
                     request.getSession().setAttribute("tblHealtherList", tblHealtherList);
                     ResponseUtils.outHtml(response, "success");
@@ -161,7 +165,6 @@ public class HealtherController {
         Integer maxpage = limit;
         ExaminationPage examinationPage = new ExaminationPage(cName, minpage, maxpage);
         List<TblExamination> tblExaminationList = healtherService.findALLExamination(examinationPage);
-        System.out.println("tblExaminationList="+tblExaminationList);
         if (0 != tblExaminationList.size()) {
             Integer count = healtherService.findALLExaminationCount(examinationPage).intValue();
             dateWrite.setCode(0);
@@ -177,36 +180,178 @@ public class HealtherController {
     }
 
     @RequestMapping("/updateExaminationInfo")
-    public void updateExaminationInfo(TblExamination tblExamination,HttpServletResponse response){
+    public void updateExaminationInfo(TblExamination tblExamination, HttpServletResponse response) {
         Boolean flag = healtherService.updateExaminationInfo(tblExamination);
-        if(flag){
-            ResponseUtils.outHtml(response,"success");
-        }else {
-            ResponseUtils.outHtml(response,"error");
+        if (flag) {
+            ResponseUtils.outHtml(response, "success");
+        } else {
+            ResponseUtils.outHtml(response, "error");
         }
     }
 
     @RequestMapping("/addExaminationInfo")
-    public void addExaminationInfo(TblExamination tblExamination,HttpServletResponse response) throws ParseException {
+    public void addExaminationInfo(TblExamination tblExamination, HttpServletResponse response) throws ParseException {
         Integer studentid = healtherService.findStudentId(tblExamination.getStudentname());
-        if(studentid == null){
-            ResponseUtils.outHtml(response,"notname");
-        }else {
+        if (studentid == null) {
+            ResponseUtils.outHtml(response, "notname");
+        } else {
             tblExamination.setSid(studentid);
 
 
             tblExamination.setExaminationtime(new Date());
 
-            System.out.println("tblExamination="+tblExamination);
+            System.out.println("tblExamination=" + tblExamination);
             List<TblExamination> tblExaminationList = new ArrayList<>();
             tblExaminationList.add(tblExamination);
             Boolean flag = healtherService.addExaminationInfo(tblExaminationList);
+            if (flag) {
+                ResponseUtils.outHtml(response, "success");
+            } else {
+                ResponseUtils.outHtml(response, "error");
+            }
+        }
+    }
+
+    @RequestMapping("/showAllMealInfo")
+    public void showAllMealInfo(MealPage mealPage, DateWrite dateWrite, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        Integer page = Integer.valueOf(request.getParameter("page"));
+        Integer limit = Integer.valueOf(request.getParameter("limit"));
+
+        Integer minpage = (page - 1) * limit;
+        Integer maxpage = limit;
+        mealPage.setPage(minpage);
+        mealPage.setLimit(maxpage);
+        List<TblMeal> tblMealList = healtherService.findAllMealInfo(mealPage);
+        if (0 != tblMealList.size()) {
+            Integer count = healtherService.findAllMealInfoCount(mealPage).intValue();
+            dateWrite.setCode(0);
+            dateWrite.setMsg(" ");
+            dateWrite.setCount(count);
+            dateWrite.setData(tblMealList);
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        }
+    }
+
+    @RequestMapping("/addMealInfo")
+    public void addMealInfo(TblMeal tblMeal, TblRecipe tblRecipe, HttpServletRequest request, HttpServletResponse response) throws ParseException {
+        String msg = request.getParameter("TblRecipe");
+        Gson g = new Gson();
+        tblRecipe = g.fromJson(msg, TblRecipe.class);
+        List<TblRecipe> tblRecipeList = tblRecipe.getTblRecipeList();
+        String mealtime = tblRecipe.getMealtime();
+        String time1 = null;
+        String time2 = null;
+        if (mealtime != null) {
+            String[] arr = mealtime.split("~ ");
+            time1 = arr[0];
+            time2 = arr[arr.length - 1];
+        }
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date mealstarttime = format.parse(time1);
+        Date mealendtime = format.parse(time2);
+
+        List<TblMeal> tblMealList = new ArrayList<>();
+        tblMeal.setMealstarttime(mealstarttime);
+        tblMeal.setMealendtime(mealendtime);
+        tblMealList.add(tblMeal);
+        Boolean flag = null;
+        flag = healtherService.addMealInfo(tblMealList);
+        if (flag) {
+            Integer mealid = healtherService.findMealID(mealstarttime, mealendtime);
+            String info = "暂未配置";
+            for (int i = 0; i < tblRecipeList.size(); i++) {
+                tblRecipeList.get(i).setMid(mealid);
+                tblRecipeList.get(i).getFriday();
+
+                if ("".equals(tblRecipeList.get(i).getMonday())) {
+                    tblRecipeList.get(i).setMonday(info);
+                }
+                if ("".equals(tblRecipeList.get(i).getTuesday())) {
+                    tblRecipeList.get(i).setTuesday(info);
+                }
+                if ("".equals(tblRecipeList.get(i).getWednesday())) {
+                    tblRecipeList.get(i).setWednesday(info);
+                }
+                if ("".equals(tblRecipeList.get(i).getThursday())) {
+                    tblRecipeList.get(i).setThursday(info);
+                }
+                if ("".equals(tblRecipeList.get(i).getFriday())) {
+                    tblRecipeList.get(i).setFriday(info);
+                }
+            }
+            flag = healtherService.addRecipeInfo(tblRecipeList);
+            if (flag) {
+                ResponseUtils.outHtml(response, "success");
+            } else {
+                ResponseUtils.outHtml(response, "error");
+            }
+        } else {
+            ResponseUtils.outHtml(response, "error");
+        }
+    }
+
+    @RequestMapping("/showAllRecipeInfo")
+    public void showAllRecipeInfo(DateWrite dateWrite, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        String mealid = request.getParameter("mealid");
+        Integer mid = Integer.valueOf(mealid);
+        List<TblRecipe> tblRecipeList = healtherService.findAllRecipeInfo(mid);
+        if (0 != tblRecipeList.size()) {
+            Integer count = healtherService.findAllRecipeInfoCount(mid).intValue();
+            dateWrite.setCode(0);
+            dateWrite.setMsg(" ");
+            dateWrite.setCount(count);
+            dateWrite.setData(tblRecipeList);
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        }
+    }
+
+    @RequestMapping("/updateMealInfo")
+    public void updateMealInfo(TblMeal tblMeal, TblRecipe tblRecipe, HttpServletRequest request, HttpServletResponse response) throws ParseException {
+        String msg = request.getParameter("TblRecipe");
+        Gson g = new Gson();
+        tblRecipe = g.fromJson(msg, TblRecipe.class);
+        List<TblRecipe> tblRecipeList = tblRecipe.getTblRecipeList();
+        String mid = null;
+        Boolean flag = null;
+        for (int j = 0;j<tblRecipeList.size();j++){
+            mid = tblRecipeList.get(j).getMid().toString();
+        }
+        flag = healtherService.updateRecipeInfo(Integer.valueOf(mid));
+        if(flag){
+            String info = "暂未配置";
+            for (int i = 0; i < tblRecipeList.size(); i++) {
+
+                if ("".equals(tblRecipeList.get(i).getMonday())) {
+                    tblRecipeList.get(i).setMonday(info);
+                }
+                if ("".equals(tblRecipeList.get(i).getTuesday())) {
+                    tblRecipeList.get(i).setTuesday(info);
+                }
+                if ("".equals(tblRecipeList.get(i).getWednesday())) {
+                    tblRecipeList.get(i).setWednesday(info);
+                }
+                if ("".equals(tblRecipeList.get(i).getThursday())) {
+                    tblRecipeList.get(i).setThursday(info);
+                }
+                if ("".equals(tblRecipeList.get(i).getFriday())) {
+                    tblRecipeList.get(i).setFriday(info);
+                }
+            }
+
+            flag = healtherService.addRecipeInfo(tblRecipeList);
             if(flag){
                 ResponseUtils.outHtml(response,"success");
             }else {
                 ResponseUtils.outHtml(response,"error");
             }
+        }else {
+            ResponseUtils.outHtml(response,"error");
         }
     }
-
 }

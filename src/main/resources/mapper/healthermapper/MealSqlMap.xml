@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.kindergarten.healther.mapper.HealtherMapper">
+
+
+    <!--    新增膳食表信息-->
+    <insert id="addMealInfo" parameterType="java.util.List">
+        insert into
+        tbl_meal(mealstarttime,mealendtime)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.mealstarttime},#{i.mealendtime})
+        </foreach>
+    </insert>
+
+    <select id="findMealID" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select mealid from tbl_meal where mealstarttime = #{mealstarttime} and mealendtime = #{mealendtime}
+    </select>
+
+
+    <!--    新增食谱表信息-->
+    <insert id="addRecipeInfo" parameterType="java.util.List">
+        insert into
+        tbl_recipe(recipename,monday,tuesday,wednesday,thursday,friday,mid)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.recipename},#{i.monday},#{i.tuesday},#{i.wednesday},#{i.thursday},#{i.friday},#{i.mid})
+        </foreach>
+    </insert>
+
+    <!--    查询膳食表信息-->
+    <select id="findAllMealInfo" resultType="com.great.kindergarten.commons.entity.TblMeal"
+            parameterType="com.great.kindergarten.healther.resultbean.MealPage">
+        select * from tbl_meal order by mealstarttime desc limit #{page},#{limit};
+    </select>
+
+    <!--    查询膳食表信息记录条数-->
+    <select id="findAllMealInfoCount" resultType="java.lang.Long"
+            parameterType="com.great.kindergarten.healther.resultbean.MealPage">
+        select count(*) from tbl_meal limit #{page},#{limit};
+    </select>
+
+<!--    查询所有的食谱信息-->
+    <select id="findAllRecipeInfo" resultType="com.great.kindergarten.commons.entity.TblRecipe" parameterType="java.util.Map">
+        select r.* from tbl_meal m,tbl_recipe r where m.mealid = r.mid and
+        <if test="mealid != '' and mealid != null ">
+            m.mealid = #{mealid}
+        </if>
+    </select>
+
+    <!--    查询所有的食谱信息记录条数-->
+    <select id="findAllRecipeInfoCount" resultType="java.lang.Long" parameterType="java.util.Map" >
+        select count(*) from tbl_meal m,tbl_recipe r where m.mealid = r.mid and
+        <if test="mealid != '' and mealid != null ">
+            m.mealid = #{mealid}
+        </if>
+    </select>
+
+
+    <delete id="updateRecipeInfo" parameterType="java.lang.Integer">
+        delete from tbl_recipe where mid = #{mid}
+    </delete>
+
+</mapper>

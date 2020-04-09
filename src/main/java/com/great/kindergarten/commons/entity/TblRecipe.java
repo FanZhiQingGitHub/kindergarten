@@ -1,9 +1,6 @@
 package com.great.kindergarten.commons.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.Date;
+import java.util.List;
 
 /**
  * 食谱表信息实体类
@@ -11,19 +8,28 @@ import java.util.Date;
 public class TblRecipe {
     private Integer recipeid;
     private String recipename;
-    private String recipedetail;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
-    private Date recipetime;
+    private String monday;
+    private String tuesday;
+    private String wednesday;
+    private String thursday;
+    private String friday;
+    private Integer mid;
+
+    private List<TblRecipe> tblRecipeList;
+    private String mealtime;
 
     public TblRecipe() {
     }
 
-    public TblRecipe(Integer recipeid, String recipename, String recipedetail, Date recipetime) {
+    public TblRecipe(Integer recipeid, String recipename, String monday, String tuesday, String wednesday, String thursday, String friday, Integer mid) {
         this.recipeid = recipeid;
         this.recipename = recipename;
-        this.recipedetail = recipedetail;
-        this.recipetime = recipetime;
+        this.monday = monday;
+        this.tuesday = tuesday;
+        this.wednesday = wednesday;
+        this.thursday = thursday;
+        this.friday = friday;
+        this.mid = mid;
     }
 
     public Integer getRecipeid() {
@@ -42,20 +48,68 @@ public class TblRecipe {
         this.recipename = recipename;
     }
 
-    public String getRecipedetail() {
-        return recipedetail;
+    public String getMonday() {
+        return monday;
     }
 
-    public void setRecipedetail(String recipedetail) {
-        this.recipedetail = recipedetail;
+    public void setMonday(String monday) {
+        this.monday = monday;
     }
 
-    public Date getRecipetime() {
-        return recipetime;
+    public String getTuesday() {
+        return tuesday;
     }
 
-    public void setRecipetime(Date recipetime) {
-        this.recipetime = recipetime;
+    public void setTuesday(String tuesday) {
+        this.tuesday = tuesday;
+    }
+
+    public String getWednesday() {
+        return wednesday;
+    }
+
+    public void setWednesday(String wednesday) {
+        this.wednesday = wednesday;
+    }
+
+    public String getThursday() {
+        return thursday;
+    }
+
+    public void setThursday(String thursday) {
+        this.thursday = thursday;
+    }
+
+    public String getFriday() {
+        return friday;
+    }
+
+    public void setFriday(String friday) {
+        this.friday = friday;
+    }
+
+    public Integer getMid() {
+        return mid;
+    }
+
+    public void setMid(Integer mid) {
+        this.mid = mid;
+    }
+
+    public List<TblRecipe> getTblRecipeList() {
+        return tblRecipeList;
+    }
+
+    public void setTblRecipeList(List<TblRecipe> tblRecipeList) {
+        this.tblRecipeList = tblRecipeList;
+    }
+
+    public String getMealtime() {
+        return mealtime;
+    }
+
+    public void setMealtime(String mealtime) {
+        this.mealtime = mealtime;
     }
 
     @Override
@@ -63,8 +117,14 @@ public class TblRecipe {
         return "TblRecipe{" +
                 "recipeid=" + recipeid +
                 ", recipename='" + recipename + '\'' +
-                ", recipedetail='" + recipedetail + '\'' +
-                ", recipetime=" + recipetime +
+                ", monday='" + monday + '\'' +
+                ", tuesday='" + tuesday + '\'' +
+                ", wednesday='" + wednesday + '\'' +
+                ", thursday='" + thursday + '\'' +
+                ", friday='" + friday + '\'' +
+                ", mid=" + mid +
+                ", tblRecipeList=" + tblRecipeList +
+                ", mealtime='" + mealtime + '\'' +
                 '}';
     }
 }
