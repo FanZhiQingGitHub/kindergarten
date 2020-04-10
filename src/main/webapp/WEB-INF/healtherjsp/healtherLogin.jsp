@@ -54,7 +54,7 @@
             height: 39%;
             min-height: 33%;
             max-height: 50%;
-            top: 0;
+            top: -20%;
             left: 0;
             bottom: 0;
             right: 0;
@@ -65,6 +65,7 @@
             background-color: rgba(240, 255, 255, 0.2);
             box-shadow: 0 3px 18px rgba(240, 255, 255, 0.2);
             font-size: 16px;
+            border: 1px solid darkgray;
         }
 
         .layui-input {
@@ -110,11 +111,23 @@
             background-color: transparent;
             color: black;
         }
+
+        #bu1{
+            color: black;
+        }
+
+        #bu1:hover{
+            color: red;
+        }
+
         #bu3:hover{
-            color: #09ff3d;
+            color: cyan;
         }
         #bu4:hover{
-            color: #09ff3d;
+            color: cyan;
+        }
+        #bu5:hover{
+            color: cyan;
         }
 
         #codediv {
@@ -140,8 +153,8 @@
             border: none;
             font-size: 13px;
             background-color: transparent;
-            color: red;
         }
+
         .admin-icon {
             position: absolute;
             margin-left: 280px;
@@ -200,8 +213,19 @@
             </div>
 
             <div id="butdiv">
-                <button type="button" class="layui-btn" id="bu3">忘记密码？</button>
+                <button type="button" class="layui-btn" id="bu3">忘记密码？重置一下</button>
                 <button type="button" class="layui-btn" id="bu4">点击此处返回首页</button>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div id="type-content" style="display: none;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <input type="text" id="healtherphone" placeholder="请输入11位手机号码" value=""
+                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
             </div>
         </div>
     </div>
@@ -235,7 +259,6 @@
             , content: function (value) {
                 layedit.sync(editIndex);
             }
-
         });
         form.on('submit(formDemo)', function (data) {
             $.ajax({
@@ -249,18 +272,18 @@
                         layer.alert("登录成功！", {icon: 6}, function () {
                             location.href = path + "/healther/path/healtherMain";
                         });
-                    } else if(msg == "error"){
+                    } else if (msg == "error") {
                         layer.alert("登录失败！", {icon: 2});
                         var code = document.getElementById("code");
-                        code.src = path + "/healther/loginCode?"+Math.random();
-                    }else if(msg == "codeerror") {
+                        code.src = path + "/healther/loginCode?" + Math.random();
+                    } else if (msg == "codeerror") {
                         layer.alert("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
-                        code.src = path + "/healther/loginCode?"+Math.random();
-                    }else if(msg == "notmen"){
+                        code.src = path + "/healther/loginCode?" + Math.random();
+                    } else if (msg == "notmen") {
                         layer.alert("该用户已被禁用或者不存在！", {icon: 2});
                         var code = document.getElementById("code");
-                        code.src = path + "/healther/loginCode?"+Math.random();
+                        code.src = path + "/healther/loginCode?" + Math.random();
 
                     }
                 }, error: function (msg) {
@@ -272,17 +295,55 @@
         $(function () {
             $("#code").click(function () {
                 var code = document.getElementById("code");
-                code.src = path + "/healther/loginCode?"+Math.random();
+                code.src = path + "/healther/loginCode?" + Math.random();
 
-            }),$("#bu1").click(function () {
+            }), $("#bu1").click(function () {
                 var code = document.getElementById("code");
-                code.src = path + "/healther/loginCode?"+Math.random();
-            }),$("#bu3").click(function () {
-                layer.alert("该功能尚未开放！", {icon: 6});
-            }),$("#bu4").click(function () {
-                location.href = path + "/healther/main";
+                code.src = path + "/healther/loginCode?" + Math.random();
+            }), $("#bu3").click(function () {
+                layer.open({
+                    type: 1,
+                    content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+                    title: '个人密码重置',
+                    btn: ['确定', '取消'],
+                    area: ['20%', '22%'],
+                    offset: ['30%'],
+                    btnAlign: 'c',
+                    btn1: function (index) {
+                        var healtherphone = $("#healtherphone").val();
+                        var num = /^1\d{10}$/;
+                        if (!num.test(healtherphone)) {
+                            layer.alert("您好，手机号码必须11位，且不能出现空格！", {icon: 2});
+                        } else {
+                            $.ajax({
+                                url: path + '/healther/resetHealtherpwd',
+                                async: true,
+                                type: 'post',
+                                data: {
+                                    "healtherphone": healtherphone,
+                                },
+                                datatype: 'text',
+                                success: function (data) {
+                                    if (data == "error") {
+                                        layer.alert("重置失败！", {icon: 2});
+                                    } else {
+                                        layer.alert("重置成功，新密码为：'123456' ", {icon: 6});
+                                        layer.close(index);
+                                    }
+                                }, error: function (data) {
+                                    layer.alert("网络繁忙！", {icon: 2});
+                                }
+                            });
+                        }
+                    }
+                });
+
+
+            }), $("#bu4").click(function () {
+                location.href = path + "/main/path/main";
             });
         })
+
     });
 </script>
 

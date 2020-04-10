@@ -40,11 +40,6 @@ public class HealtherController {
     @Resource
     private HealtherService healtherService;
 
-    @RequestMapping("/main")
-    public String showMainView() {
-        return "mainjsp/main";
-    }
-
     @RequestMapping("/path/{url}")
     public String showView(@PathVariable(value = "url") String path) {
         return "healtherjsp/" + path;
@@ -123,6 +118,16 @@ public class HealtherController {
             }
         } else {
             ResponseUtils.outHtml(response, "codeerror");
+        }
+    }
+
+    @RequestMapping("/resetHealtherpwd")
+    public void resetHealtherpwd(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
+        Boolean flag = healtherService.resetHealtherpwd(tblHealther.getHealtherphone());
+        if(flag){
+            ResponseUtils.outHtml(response,"success");
+        }else {
+            ResponseUtils.outHtml(response,"error");
         }
     }
 
@@ -319,11 +324,11 @@ public class HealtherController {
         List<TblRecipe> tblRecipeList = tblRecipe.getTblRecipeList();
         String mid = null;
         Boolean flag = null;
-        for (int j = 0;j<tblRecipeList.size();j++){
+        for (int j = 0; j < tblRecipeList.size(); j++) {
             mid = tblRecipeList.get(j).getMid().toString();
         }
         flag = healtherService.updateRecipeInfo(Integer.valueOf(mid));
-        if(flag){
+        if (flag) {
             String info = "暂未配置";
             for (int i = 0; i < tblRecipeList.size(); i++) {
 
@@ -345,13 +350,13 @@ public class HealtherController {
             }
 
             flag = healtherService.addRecipeInfo(tblRecipeList);
-            if(flag){
-                ResponseUtils.outHtml(response,"success");
-            }else {
-                ResponseUtils.outHtml(response,"error");
+            if (flag) {
+                ResponseUtils.outHtml(response, "success");
+            } else {
+                ResponseUtils.outHtml(response, "error");
             }
-        }else {
-            ResponseUtils.outHtml(response,"error");
+        } else {
+            ResponseUtils.outHtml(response, "error");
         }
     }
 }

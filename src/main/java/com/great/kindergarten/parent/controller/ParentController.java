@@ -22,11 +22,6 @@ public class ParentController {
     @Resource
     private ParentService parentService;
 
-    @RequestMapping("/main")
-    public String showMainView() {
-        return "mainjsp/main";
-    }
-
     @RequestMapping("/toUrl/{url}")
     public String toUrl(@PathVariable  String url) {
         return "parentJsp/"+url;

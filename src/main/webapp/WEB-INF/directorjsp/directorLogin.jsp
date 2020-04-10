@@ -53,7 +53,7 @@
             height: 39%;
             min-height: 33%;
             max-height: 50%;
-            top: 0;
+            top: -20%;
             left: 0;
             bottom: 0;
             right: 0;
@@ -63,6 +63,7 @@
             border-radius: 10px;
             background-color: rgba(240, 255, 255, 0.2);
             box-shadow: 0 3px 18px rgba(240, 255, 255, 0.2);
+            border: 1px solid darkgray;
             /*font-size: 16px;*/
         }
 
@@ -106,11 +107,23 @@
             background-color: transparent;
             color: black;
         }
+
+        #bu1{
+            color: black;
+        }
+
+        #bu1:hover{
+            color: red;
+        }
+
         #bu3:hover{
-            color: #09ff3d;
+            color: cyan;
         }
         #bu4:hover{
-            color: #09ff3d;
+            color: cyan;
+        }
+        #bu5:hover{
+            color: cyan;
         }
 
 
@@ -138,7 +151,6 @@
             border: none;
             font-size: 13px;
             background-color: transparent;
-            color: red;
         }
         .admin-icon {
             position: absolute;
@@ -304,8 +316,7 @@
             });
             $("#bu4").click(function () {
                 var path = $("#path").val();
-                // location.href = path + "/director/rectorReg";
-	            location.href = path + "/main/main";
+	            location.href = path + "/main/path/main";
             });
 	        // $("#bu5").click(function () {
 		    //     var path = $("#path").val();

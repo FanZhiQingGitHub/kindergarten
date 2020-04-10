@@ -40,7 +40,7 @@
             <p style="font-size: 28px">关于我们</p>
         </h1>
         <div class="nav" style="visibility: visible">
-            <a href="${pageContext.request.contextPath}/main/main" class="active" style="font-size: 18px">首页</a>
+            <a href="${pageContext.request.contextPath}/main/path/main" class="active" style="font-size: 18px">首页</a>
         </div>
     </div>
 </div>

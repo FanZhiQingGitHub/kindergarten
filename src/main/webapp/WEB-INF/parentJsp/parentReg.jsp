@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false"%>
 <html>
 <head>
-    <title>文档管理系统-用户注册界面</title>
+    <title>智慧幼儿园-用户注册界面</title>
     <%String path = request.getContextPath(); %>
     <link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
     <script src=<%=path + "/layui/layui.js"%>></script>
@@ -109,7 +109,7 @@
 <form class="layui-form" method="post">
     <input type="hidden" id="path" value="<%=path%>">
     <div id="alldiv">
-        <h1 id="hh1">文档管理系统用户注册界面</h1>
+        <h1 id="hh1">智慧幼儿园用户注册界面</h1>
         <hr style="color: white">
         <div class="container">
 
