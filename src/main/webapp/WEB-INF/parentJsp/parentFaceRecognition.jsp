@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2020/4/9
+  Time: 21:43
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ include file="/commons/basejs.jsp" %>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+	<title>家长人脸识别页面</title>
 </head>
 <body>
+
 
 <canvas width="500px" id="canvas" height="500px" style="display: block;"></canvas>
 
@@ -20,7 +28,7 @@
 	var video = document.getElementById('webcam');
 
 	function startFace() {
-        //判断是否支持开启视频
+		//判断是否支持开启视频
 		if (navigator.getUserMedia) {
 			navigator.getUserMedia({
 				audio : false,
@@ -50,11 +58,11 @@
 
 	//获取视频中人脸，转换成图片，发送后台请求，识别图片
 	function getFaceImg() {
-        //找到视频显示的位置
+		//找到视频显示的位置
 		var video = document.querySelector('video');
 		//canvas 用来保存图片的一个标签
 		var canvasObj = document.querySelector('canvas');
-		//获取2d框框里面的内容
+		//创建一个2d环境的画布
 		var context1 = canvasObj.getContext('2d');
 		//框框的样式颜色
 		context1.fillStyle = "#000000";
@@ -68,26 +76,29 @@
 		//获取到String类型的image信息
 		var face = url.split(",")[1];
 
-		console.log(face);
+		//用ajax做验证 ,判断是否验证成功
+		$.ajax({
+			url: path+'/parent/parentFaceRecognition',
+			type:"POST",
+			async: false,
+			cache: false,
+			data: {"face":face},
+			success: function(data) {
 
-        //用ajax做验证 ,判断是否验证成功
-		// $.ajax({
-		// 	url: basePath+'/h5/checkFace',
-		// 	type:"POST",
-		// 	async: false,
-		// 	cache: false,
-		// 	data: {"face":face},
-		// 	success: function(data) {
-        //
-		// 	},
-		// 	error:function(msg) {
-		// 		console.log(msg);
-		// 	}
-		// });
+			},
+			error:function(msg) {
+				console.log(msg);
+			}
+		});
 	}
 
 
+
+
 </script>
+
+
+
 
 
 

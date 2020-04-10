@@ -87,7 +87,7 @@
 
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
-                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">幼儿中心</button></h3>
+                        <h3><button type="button" id="FaceRecognition" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">人脸识别</button></h3>
                     </div>
 
 
@@ -102,7 +102,7 @@
 
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
-                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">安全教育</button></h3>
+                        <h3><button type="button" id="SafetyVideo" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">安全教育</button></h3>
                     </div>
                 </div>
 
@@ -211,6 +211,8 @@
         };
 
         $(function () {
+
+
             $("#a1").click(function () {
                 layer.open({
                     type: 2,
@@ -227,12 +229,26 @@
 
                     }
                 });
-            }),$("#exit").click(function () {
+            });
+
+            $("#exit").click(function () {
                 layer.confirm('您确定要退出到登录界面吗?', {icon: 3, title:'温馨提示'},function(index){
                     layer.close(index);
                     location.href=path+'/parent/logout';
                 });
+            });
+
+            //人脸识别跳转
+            $("#FaceRecognition").click(function () {
+                window.location.href=path+"/parent/toUrl/parentFaceRecognition"
+            });
+
+            //前往查看安全试题跳转
+            $("#SafetyVideo").click(function () {
+                window.location.href=path+"/parent/toUrl/SafetyTestTable"
             })
+
+
         });
     });
 

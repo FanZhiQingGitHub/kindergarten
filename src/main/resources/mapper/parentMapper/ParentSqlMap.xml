@@ -19,6 +19,83 @@
         <result column="rid" property="rid"/>
     </resultMap>
 
+    <resultMap id="reVideo" type="com.great.kindergarten.commons.entity.TblSafetyvideo">
+
+        <result column="safetyvideoid" property="safetyvideoid"/>
+        <result column="safetyvideoname" property="safetyvideoname"/>
+        <result column="safetyvideotime" property="safetyvideotime"/>
+        <result column="videoname" property="videoname"/>
+        <result column="videoadd" property="videoadd"/>
+        <result column="safetytestscore" property="safetytestscore"/>
+        <result column="safetytestresult" property="safetytestresult"/>
+
+
+    </resultMap>
+
+
+
+    <select id="countVideoListNumber" resultType="integer">
+        select count(*) from
+        (tbl_safetyvideo ts  left join tbl_safetytestcompletion tsc on ts.safetyvideoid=tsc.safetyvideoid
+
+
+            and tsc.parentid=#{parentId}
+
+            <if test=" name != null and name != ''">
+                and safetyvideoname like "%"#{name}"%"
+            </if>
+
+            <if test="status != null and status != ''">
+                and safetytestresult like "%"#{status}"%"
+            </if>
+
+            <if test="beginTime != null ">
+                and safetyvideotime &gt; #{beginTime}
+            </if>
+
+            <if test="endTime != null ">
+                and safetyvideotime &lt; #{endTime}
+            </if>
+
+
+        )
+
+
+    </select>
+
+    <select id="findVideoList" resultMap="reVideo" >
+
+        select ts.*,tsc.safetytestscore,tsc.safetytestresult from
+         (
+          tbl_safetyvideo ts  left join tbl_safetytestcompletion tsc on ts.safetyvideoid=tsc.safetyvideoid
+            and tsc.parentid=#{parentId}
+
+            <if test=" name != null and name != ''">
+                and safetyvideoname like "%"#{name}"%"
+            </if>
+
+            <if test="status != null and status != ''">
+                and safetytestresult like "%"#{status}"%"
+            </if>
+
+            <if test="beginTime != null ">
+                and safetyvideotime &gt; #{beginTime}
+            </if>
+
+            <if test="endTime != null ">
+                and safetyvideotime &lt; #{endTime}
+            </if>
+
+
+             )
+
+    </select>
+
+
+
+
+
+
     <!--   家长端登陆-->
     <select id="parentLogin" resultMap="reParent" >
 
@@ -26,14 +103,14 @@
     where parentname=#{parentName} and parentPwd=#{parentPwd} and parentstatus='启用'
 
     </select>
-
+<!--    判断家长旧密码是否输入正确-->
     <select id="countOldParentPwd" resultType="integer">
 
     select count(*) from tbl_parent where parentpwd =#{oldParentPwd} and parentid =#{parentId}
 
     </select>
 
-
+<!--  更新家长的旧密码 换成输入的新密码-->
     <update id="updateParentPwd"  >
 
     update tbl_parent set parentpwd =#{parentPwd} where parentid=#{parentId}

@@ -1,5 +1,7 @@
 package com.great.kindergarten.parent.service;
 
+import com.great.kindergarten.commons.entity.SearchCondition;
+import com.great.kindergarten.commons.entity.TableDate;
 import com.great.kindergarten.commons.entity.TblParent;
 import com.great.kindergarten.commons.entity.Result;
 import com.great.kindergarten.parent.mapper.ParentMapper;
@@ -19,6 +21,36 @@ public class ParentService {
     {
 
     }
+
+
+    /**
+     * 根据id和条件找到安全视频列表
+     * @param searchCondition
+     * @return
+     */
+    public TableDate parentSafetyTestList(SearchCondition searchCondition){
+        TableDate result = new TableDate();
+
+        //计算总共的页数
+        result.setCount(parentMapper.countVideoListNumber(searchCondition));
+        //放入查询的数据
+        result.setData( parentMapper.findVideoList(searchCondition));
+
+        return result;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 家长根据旧密码修改新密码

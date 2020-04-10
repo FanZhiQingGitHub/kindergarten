@@ -1,8 +1,11 @@
 package com.great.kindergarten.parent.controller;
 
+import com.great.kindergarten.commons.entity.SearchCondition;
+import com.great.kindergarten.commons.entity.TableDate;
 import com.great.kindergarten.commons.entity.TblParent;
 import com.great.kindergarten.commons.entity.Result;
 import com.great.kindergarten.parent.service.ParentService;
+import com.great.kindergarten.util.FaceRecognitionUtils;
 import com.great.kindergarten.util.MD5Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 
 /**
  * @author Administrator
@@ -31,6 +35,49 @@ public class ParentController {
     public String toUrl(@PathVariable  String url) {
         return "parentJsp/"+url;
     }
+
+
+
+
+    @RequestMapping("/parentSafetyTestList")
+    @ResponseBody
+    public TableDate parentSafetyTestList(HttpServletRequest request,SearchCondition searchCondition){
+//    查询家长安全视频列表方法
+        //取得是谁要执行查询操作
+        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
+
+        searchCondition.setParentId(1);
+        //返回查找的结果
+        return parentService.parentSafetyTestList(searchCondition);
+    }
+
+
+
+
+    @RequestMapping("/play/{videoId}")
+    public void playVideo(@PathVariable  String videoId){
+//    播放视频返回地址方法
+
+    }
+
+
+
+    @RequestMapping("/parentFaceRecognition")
+    @ResponseBody
+    public Result parentFaceRecognition(String face)
+    {
+        Result result = new Result();
+
+        FaceRecognitionUtils.identify(face,null);
+
+        return result;
+    }
+
+
+
+
+
+
 
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request) {
