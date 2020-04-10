@@ -11,7 +11,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 <head>
 
-    <title>智慧幼儿园-首页</title>
+    <title>智慧幼儿园-保健员首页</title>
     <%String path = request.getContextPath(); %>
     <link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
     <script src=<%=path + "/layui/layui.js"%>></script>
@@ -57,7 +57,7 @@
             </li>
         </ul>
         <h1 class="logo">
-            <img style="width: 100%;" src="${pageContext.request.contextPath}/image/logo/logo.png">
+            <img style="width: 100%;height: 90px" src="${pageContext.request.contextPath}/image/logo/logo.png">
         </h1>
         <h1 style="margin-left: 17%;font-size: 40px;color: coral">保健员首页</h1>
 

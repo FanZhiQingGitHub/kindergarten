@@ -50,7 +50,8 @@ public class HealtherController {
         try {
             int width = 60;
             int height = 30;
-            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
+//            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
+            String data = "0000";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
             Random random = new Random();//随机类
             //1 创建图片数据缓存区域（核心类）
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);//创建一个彩色的图片

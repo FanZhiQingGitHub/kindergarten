@@ -43,7 +43,7 @@
 
             </dl>
         </li>
-        <li class="layui-nav-item"><a href="javascript:void(0); "  id="exit" style="color: black;font-size: 18px">退出登陆</a></li>
+        <li class="layui-nav-item"><a href="javascript:void(0); "  id="exit" style="color: black;font-size: 18px">注销</a></li>
     </ul>
 
 
@@ -54,9 +54,9 @@
             </li>
         </ul>
         <h1 class="logo">
-            <img style="width: 100%;" src="${pageContext.request.contextPath}/image/logo/logo.png">
+            <img style="width: 100%;height: 90px" src="${pageContext.request.contextPath}/image/logo/logo.png">
         </h1>
-        <h1 style="margin-left: 17%;font-size: 40px;color: coral">家长端首页</h1>
+        <h1 style="margin-left: 21%;font-size: 40px;color: coral">家长端首页</h1>
 
     </div>
 </div>
@@ -66,14 +66,14 @@
 <!-- content -->
 <div class="content">
     <div class="title">
-        <h3>好营养我们造,为孩子健康护航</h3>
-        <h4>We make good nutrition, escort the health of children.</h4>
+        <h3>世上最大的恩情，莫过于父母的养育之恩</h3>
+        <h4>The greatest kindness in the world is the kindness of parenting.</h4>
     </div>
     <div class="layui-carousel imgbox" id="test1">
         <div carousel-item class="imgH">
             <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-1.jpg"></div>
             <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-2.jpg"></div>
-            <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-3.jpeg"></div>
+            <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-3.jpg"></div>
             <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-4.jpg"></div>
             <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-5.jpg"></div>
         </div>

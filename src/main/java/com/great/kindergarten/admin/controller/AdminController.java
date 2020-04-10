@@ -64,7 +64,8 @@ public class AdminController {
             int width = 60;
             int height = 30;
             //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
-            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";
+//            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";
+            String data = "0000";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
             //随机类
             Random random = new Random();
             //1 创建图片数据缓存区域（核心类）

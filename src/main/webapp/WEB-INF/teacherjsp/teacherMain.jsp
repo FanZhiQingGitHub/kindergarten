@@ -56,9 +56,9 @@
 			</li>
 		</ul>
 		<h1 class="logo">
-			<img style="width: 100%;" src="${pageContext.request.contextPath}/image/logo/logo.png">
+			<img style="width: 100%;height: 90px" src="${pageContext.request.contextPath}/image/logo/logo.png">
 		</h1>
-		<h1 style="margin-left: 17%;font-size: 40px;color: coral">教师首页</h1>
+		<h1 style="margin-left: 21%;font-size: 40px;color: coral">教师首页</h1>
 
 	</div>
 </div>
@@ -68,14 +68,14 @@
 <!-- content -->
 <div class="content">
 	<div class="title">
-		<h3>好营养我们造,为孩子健康护航</h3>
-		<h4>We make good nutrition, escort the health of children.</h4>
+		<h3>您是辛勤的园丁，默默给孩子带来最好的知识</h3>
+		<h4>You are a hard-working gardener who silently brings the best knowledge to your children.</h4>
 	</div>
 	<div class="layui-carousel imgbox" id="test1">
 		<div carousel-item class="imgH">
 			<div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-1.jpg"></div>
 			<div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-2.jpg"></div>
-			<div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-3.jpeg"></div>
+			<div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-3.jpg"></div>
 			<div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-4.jpg"></div>
 			<div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-5.jpg"></div>
 		</div>
