@@ -53,7 +53,7 @@
             height: 39%;
             min-height: 33%;
             max-height: 50%;
-            top: -20%;
+            top: 0;
             left: 0;
             bottom: 0;
             right: 0;
@@ -62,16 +62,13 @@
             z-index: 130;
             border-radius: 10px;
             background-color: rgba(240, 255, 255, 0.2);
-            box-shadow: 0 3px 18px rgba(240, 255, 255, 0.2);
-            border: 1px solid darkgray;
-            /*font-size: 16px;*/
+            box-shadow: 0 3px 18px rgba(21, 49, 31, 0.39);
         }
 
         .layui-input {
             border-radius: 5px;
-            width: 240px;
+            width: 160%;
             height: 40px;
-            /*font-size: 18px;*/
         }
 
         .layui-form-item {
@@ -79,7 +76,7 @@
         }
 
         .layui-btn {
-            margin-left: -45px;
+            margin-left: -15%;
             border-radius: 5px;
             width: 85%;
             height: 15%;
@@ -87,7 +84,7 @@
         }
 
         .verity {
-            width: 100px;
+            width: 60%;
         }
 
         #bu3 {
@@ -107,30 +104,18 @@
             background-color: transparent;
             color: black;
         }
-
-        #bu1{
-            color: black;
-        }
-
-        #bu1:hover{
-            color: red;
-        }
-
         #bu3:hover{
-            color: cyan;
+            color: #09ff3d;
         }
         #bu4:hover{
-            color: cyan;
-        }
-        #bu5:hover{
-            color: cyan;
+            color: #09ff3d;
         }
 
 
         #codediv {
             position: absolute;
             background-color: transparent;
-            margin-left: 52%;
+            margin-left: 48%;
             width: 45%;
             height: 12.5%;
         }
@@ -139,7 +124,7 @@
             width: 40%;
             height: 75%;
             border-radius: 3px;
-            margin-top: 4%;
+            margin-top: 2%;
         }
 
         #bu1 {
@@ -147,17 +132,16 @@
             width: 55%;
             height: 50%;
             margin-left: 1%;
-            margin-top: 6%;
+            margin-top: 4%;
             border: none;
             font-size: 13px;
             background-color: transparent;
+            color: red;
         }
         .admin-icon {
             position: absolute;
-            margin-left: 250px;
+            margin-left: 170%;
             margin-top: 10px;
-            /*font-size: 30px;*/
-            /*color: black;*/
         }
         .btn{
             /*margin-left: 7%;*/
@@ -177,7 +161,7 @@
             <hr style="color: white">
             <div class="layui-form-item">
                 <label class="layui-form-label">用户名</label>
-                <div class="layui-input-block">
+                <div class="layui-input-inline">
                     <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
                     <input type="text" name="username" lay-verify="required" placeholder="请输入用户名" value=""
                            autocomplete="off" class="layui-input" id="te1">
@@ -217,7 +201,7 @@
             <div id="butdiv">
                 <button type="button" class="layui-btn" id="bu3">忘记密码？</button>
                 <button type="button" class="layui-btn" id="bu4">点击此处返回首页</button>
-<%--	            <button type="button" class="layui-btn" id="bu5"></button>--%>
+                <%--	            <button type="button" class="layui-btn" id="bu5"></button>--%>
             </div>
         </div>
     </div>
@@ -228,26 +212,26 @@
 
     layui.use(['form', 'layer', 'jquery', 'layedit', 'laydate'], function () {
         var form = layui.form
-            , layer = layui.layer
-            , layedit = layui.layedit
-            , laydate = layui.laydate;
+                , layer = layui.layer
+                , layedit = layui.layedit
+                , laydate = layui.laydate;
         $ = layui.jquery;
         form.verify({
             required: function (value) {
                 if (value.length < 2) {
                     return '您好，用户名至少得2个字符！';
                 }
-	            if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
-		            return '用户名不能有特殊字符';
-	            }
-	            if(/(^\_)|(\__)|(\_+$)/.test(value)){
-		            return '用户名首尾不能出现下划线\'_\'';
-	            }
-	            if(/^\d+\d+\d$/.test(value)){
-		            return '用户名不能全为数字';
-	            }
+                if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+                    return '用户名不能有特殊字符';
+                }
+                if(/(^\_)|(\__)|(\_+$)/.test(value)){
+                    return '用户名首尾不能出现下划线\'_\'';
+                }
+                if(/^\d+\d+\d$/.test(value)){
+                    return '用户名不能全为数字';
+                }
             },
-	        //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+            //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
             pass: [
                 /^[\S]{6,12}$/
                 , '您好，密码必须6~12位，且不能出现空格！'
@@ -316,12 +300,13 @@
             });
             $("#bu4").click(function () {
                 var path = $("#path").val();
-	            location.href = path + "/main/path/main";
+                // location.href = path + "/director/rectorReg";
+                location.href = path + "/main/main";
             });
-	        // $("#bu5").click(function () {
-		    //     var path = $("#path").val();
-		    //     location.href = path + "/main/main";
-	        // });
+            // $("#bu5").click(function () {
+            //     var path = $("#path").val();
+            //     location.href = path + "/main/main";
+            // });
         })
     });
 </script>

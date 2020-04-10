@@ -72,6 +72,16 @@ public interface RectorMapper
 	public int addParentForm(TblParent tblParent);
 	public TblParent selectParentByPid(String studentname);
 	public int updateChildrenByPid(Map<String, Object> map);
+	//查找对应的所有学生信息
+	public List<TblStudent> findChildrenParentAll();
 
+	/*家长的删除*/
+	public int delParentTable(int parentId);
+
+	/*
+	 * 家长对应的信息进行修改操作
+	 * */
+	public int updateParentTable(TblParent tblParent);
+	public int updateChildrenByPidDown(Map<String, Object> map);
 
 }

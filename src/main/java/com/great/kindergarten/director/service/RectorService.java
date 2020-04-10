@@ -122,7 +122,7 @@ public class RectorService
 
 
 	//对应的进行家长的新增
-
+	@Transactional
 	public int addParentForm(TblParent tblParent){
 		return rectorMapper.addParentForm(tblParent);
 	}
@@ -130,9 +130,39 @@ public class RectorService
 	public TblParent selectParentByPid(String studentname){
 		return rectorMapper.selectParentByPid(studentname);
 	}
+
 	//修改对应的学生表的pid
+	@Transactional
 	public int updateChildrenByPid(Map<String, Object> map){
 		return rectorMapper.updateChildrenByPid(map);
 	}
+
+	//查找对应的所有学生信息
+	public List<TblStudent> findChildrenParentAll()
+	{
+		return rectorMapper.findChildrenParentAll();
+	}
+
+	/*
+	* 家长的删除操作
+	* */
+	@Transactional
+	public int delParentTable(int parentId)
+	{
+		return rectorMapper.delParentTable(parentId);
+	}
+	/*
+	* 家长对应的信息进行修改操作
+	* */
+	//修改对应的学生表的pid
+	@Transactional
+	public int updateChildrenByPidDown(Map<String, Object> map){
+		return rectorMapper.updateChildrenByPidDown(map);
+	}
+	@Transactional
+	public int updateParentTable(TblParent tblParent){
+		return rectorMapper.updateParentTable(tblParent);
+	}
+
 
 }

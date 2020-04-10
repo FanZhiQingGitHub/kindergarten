@@ -62,7 +62,7 @@
 		//第一个实例
 		table.render({
 			elem: '#demo'
-			, height: 312
+			, height: 445
 			, limit: 5//设置的一页要有几条的记录
 			, limits: [5, 10]//设置的是对应的是有几个内容值
 			, url: src + '/director/selectParentManagement' //数据接口
@@ -94,18 +94,27 @@
 					layer.close(index);
 					//向服务端发送删除指令
 					$.ajax({
-						url: src + '/director/delChildrenTable',
+						url: src + '/director/delParentTable',
 						type: 'post'
-						, data: {studentid: data.studentid},
+						, data: {parentId: data.parentId,studentname:data.studentname},
 						success: function (data) {
 							console.log("--" + data.toString());
-							if (data == "删除成功") {
-								layer.msg(data);
-								window.location.href = src + "/director/toUrl/director_ChildrenManage";
-								// form.render(); //更新全部
-							} else {
-								layer.msg(data);
-							}
+							// if (data == "删除成功") {
+							// 	layer.msg(data);
+							// 	window.location.href = src + "/director/toUrl/director_ParentManage";
+							// } else {
+							// 	layer.msg(data);
+							// }
+
+							// if(data==="success"){
+							// 	layer.alert("删除家长成功！",{icon: 6}, function(){
+							// 		window.location.href = src + "/director/toUrl/director_ParentManage";
+							// 	});
+							// }else{
+							// 	layer.alert("删除家长失败！",{icon: 2});
+							// }
+							layer.msg(data);
+							layer.close(index);
 
 						}, error: function (err) {
 							console.log(err);
@@ -120,7 +129,7 @@
 					layer.open({
 						type: 2,
 						title: '修改信息',
-						area: ['500px', '400px'],
+						area: ['500px', '500px'],
 						moveType: 1,//拖拽模式，0或者1
 						btn: ['修改', '取消'],
 						btn1: function (index, layero) {
@@ -129,51 +138,60 @@
 							//serializeArray jquery方法，将表单对象序列化为数组
 							var formData = serializeObject($, layer.getChildFrame("form", index).serializeArray());
 
-							if (formData.studentname.length == 0) {
+							if (formData.parentName.length == 0) {
+								layer.alert("请输入家长名称", {icon: 2});
+							} else if (formData.studentname.length == 0) {
 								layer.alert("请输入宝宝名称", {icon: 2});
 							} else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(formData.studentname)) {
 								layer.alert("宝宝名称不能有特殊字符", {icon: 2});
-							} else if (formData.studentsex == '暂无') {
-								layer.alert("请选择宝宝性别！");
-							} else if (formData.studentbrith.length == 0) {
-								layer.alert("请选择宝宝出生年月！");
+							} else if (formData.studentname == '暂无') {
+								layer.alert("请选择宝宝名称！");
+							} else if (formData.parentSon == '暂无') {
+								layer.alert("请选择家长的亲子关系！");
+							} else if (formData.parentJob.length == 0) {
+								layer.alert("请选择家长的职业！");
+							} else if (formData.parentPhone.length == 0) {
+								layer.alert("请选择家长的联系方式！");
+							}else if(!new RegExp("^([1-9]\\d?|1[01]\\d|120)$").test(formData.parentAge)){
+								layer.alert("请输入1-120之间的家长的年龄！");
+							}else if(formData.parentAdd.length == 0){
+								layer.alert("请输入对应的家长的地址信息！");
 							} else {
 								$.ajax({
-									url: src + '/director/updateChildrenTable',
+									url: src + '/director/updateParentTable',
 									type: 'post',
 									data: formData,
 									success: function (data) {
-										layer.alert(data);
+										if(data==="success"){
+											layer.alert("修改家长成功！",{icon: 6}, function(){
+												window.location.href = src + "/director/toUrl/director_ParentManage";
+											});
+										}else{
+											layer.alert("修改家长失败！",{icon: 2});
+										}
 										layer.close(index);
-										window.location.href = src + "/director/toUrl/director_ChildrenManage";
-									}, error: function (err) {
+										}, error: function (err) {
 										console.log(err);
 									}
 								});
 							}
 						},
-						content: src + '/director/toUrl/director_ChildrenDetailManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+						content: src + '/director/toUrl/director_ParentDetailManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 						, success: function (layero, index) {
 							console.log(layero, index);
 							//	显示
 							var frameId = $(layero).find("iframe").attr('id');
-							$(window.frames[frameId].document).find("#studentid").val(data.studentid);
-							$(window.frames[frameId].document).find("#studentname").val(data.studentname);
-							// $(window.frames[frameId].document).find("#studentsex").val(data.studentsex);
-							var isChecked = data.studentsex == "男" ? "男" : "女";
-
-							$(window.frames[frameId].document).find("select[name=studentsex]").each(function () {//循环判断添加 radio
-								if ($(this).val() == isChecked) {
-									console.log($(this).val() + "对应的性别");
-									$(this).prop("selected", "selected");
-								}
-							});
-							console.log(data.studentbrith);
-							var studentbirths = data.studentbrith.substring(0, 10).toString();
-							console.log(studentbirths);
-							$(window.frames[frameId].document).find("#studentbrith").val(studentbirths);
-							form.render(); //更新全部
-
+							// 弹出一个页面的时候，下拉框赋值但不能刷新到选定的值。需要做如下调整:红色部分
+							var iframeWindow = layero.find("iframe")[0].contentWindow;
+							$(window.frames[frameId].document).find("#parentId").val(data.parentId);
+							$(window.frames[frameId].document).find("#parentName").val(data.parentName);
+							$(window.frames[frameId].document).find("#studentname").val(data.studentname).prop("selected",true);
+							$(window.frames[frameId].document).find("#parentSon").val(data.parentSon).prop("selected",true);
+							$(window.frames[frameId].document).find("#parentAge").val(data.parentAge);
+							$(window.frames[frameId].document).find("#parentAdd").val(data.parentAdd);
+							$(window.frames[frameId].document).find("#parentPhone").val(data.parentPhone);
+							$(window.frames[frameId].document).find("#parentJob").val(data.parentJob);
+							iframeWindow.layui.form.render(); //更新全部
 						}
 					});
 				}
@@ -212,11 +230,12 @@
 
 						if (formData.parentName.length == 0) {
 							layer.alert("请输入家长名称", {icon: 2});
-						}
-						else if (formData.studentname.length == 0) {
+						} else if (formData.studentname.length == 0) {
 							layer.alert("请输入宝宝名称", {icon: 2});
 						} else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(formData.studentname)) {
 							layer.alert("宝宝名称不能有特殊字符", {icon: 2});
+						} else if (formData.studentname == '暂无') {
+							layer.alert("请选择宝宝名称！");
 						} else if (formData.parentSon == '暂无') {
 							layer.alert("请选择家长的亲子关系！");
 						} else if (formData.parentJob.length == 0) {
@@ -234,7 +253,6 @@
 								type: 'post',
 								data: formData,
 								success: function (data) {
-									layer.close(index);
 									if(data==="success"){
 										layer.alert("新增家长成功！",{icon: 6}, function(){
 											window.location.href = src + "/director/toUrl/director_ParentManage";
@@ -242,6 +260,7 @@
 									}else{
 										layer.alert(data,{icon: 2});
 									}
+									layer.close(index);
 								}, error: function (err) {
 									console.log(err);
 								}

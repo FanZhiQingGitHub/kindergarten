@@ -24,7 +24,7 @@
 <body>
 
 <form class="layui-form" action="#" lay-filter="test1">
-	<input type="text" name="teacherid" id="teacherid">
+	<input type="hidden" name="teacherid" id="teacherid">
 	<input type="hidden" value="${pageContext.request.contextPath}" id="path"/>
 	<div class="layui-form-item">
 		<label class="layui-form-label">教师名称：</label>
@@ -39,7 +39,7 @@
 			<div class="layui-form" lay-filter="myDiv">
 				<select name="teacherjob" id="teacherjob" lay-filter="mySelect">
 					<option value="暂无">暂无选择</option>
-					<option value="班主任">班主任</option>
+					<option value="班主任" selected>班主任</option>
 					<option value="保健员">保健员</option>
 					<option value="安防员">安防员</option>
 				</select>

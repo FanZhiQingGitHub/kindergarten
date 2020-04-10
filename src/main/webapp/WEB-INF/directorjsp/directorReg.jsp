@@ -103,6 +103,21 @@
         <h1 id="hh1">园所资格审批界面</h1>
         <hr style="color: white">
         <div class="container">
+            <div class="layui-form-item">
+                <label class="layui-form-label">账号：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="kinderacount" id="kinderacount" lay-verify="kinderacount" placeholder="请输入账号" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码：</label>
+                <div class="layui-input-inline">
+                    <input type="password" name="kinderpwd" id="kinderpwd" lay-verify="kinderpwd" placeholder="请输入密码" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">幼儿园名称：</label>
@@ -170,7 +185,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">消防许可证：</label>
                     <div class="layui-input-inline">
-                        <input type="tel" name="firepermit" id="firepermit" lay-verify="firepermit|license" placeholder="请输入11位联系电话" autocomplete="off"
+                        <input type="tel" name="firepermit" id="firepermit" lay-verify="firepermit|license" placeholder="请输入" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
@@ -218,6 +233,22 @@
 
         //验证规则
         form.verify({
+            kinderacount: function (value) {
+                if (value.length == 0) {
+                    return '您好，账号不能为空！';
+                }
+                ///^[a-zA-Z]([-_a-zA-Z0-9]{6,10})$/
+                if(!new RegExp("^[a-zA-Z]([-_a-zA-Z0-9]{6,10})$").test(value)){
+                    return '账号不能有特殊字符，并且只能7—10个字符';
+                }
+                if(/^\d+\d+\d$/.test(value)){
+                    return '账号名称不能全为数字';
+                }
+            },
+            kinderpwd: [
+                /^[\S]{6,12}$/
+                , '您好，密码必须6~12位，且不能出现空格！'
+            ],
             kindername: function (value) {
                 if (value.length < 2) {
                     return '您好，幼儿园名称至少得4个字符！';
@@ -261,28 +292,6 @@
             }
 
         });
-
-        // $("#te1").blur(function(){
-        //     var path = $("#path").val();
-        //     var username = $(this).val();
-        //     $.ajax({
-        //         url: path + "/parent/parentRegCheck",
-        //         async: true,
-        //         type: "post",
-        //         data: {"username":username},
-        //         datatype: "text",
-        //         success: function (msg) {
-        //             if(msg == "existYes"){
-        //                 layer.alert("该账号可以使用！", {icon: 6});
-        //             }else {
-        //                 layer.alert("该账号已被注册！", {icon: 2});
-        //             }
-        //         }, error: function (msg) {
-        //             layer.alert("网络繁忙！", {icon: 2});
-        //         }
-        //     });
-        // });
-
 
         form.on('submit(approval)', function (data) {
             var path = $("#path").val();

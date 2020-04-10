@@ -62,9 +62,11 @@ public class RectorController
 	@RequestMapping("/loginCode")
 	public void cherkCode(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
+		int width = 68;
+		int height = 22;
 		System.out.println("进来这个方法里面=========================");
 		//BufferedImage将图片存入缓存中，有三个构造方法，此处的三个参数为图片的宽，高，以及创建的图像类型。
-		BufferedImage bi = new BufferedImage(68, 22, BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		//为bi创建图形上下文
 		Graphics g = bi.getGraphics();
 		//设置颜色，此处调用的构造方法是基于RGB数值作为参数的
@@ -72,7 +74,7 @@ public class RectorController
 		//设置颜色
 		g.setColor(c);
 		//该方法用于填充指定的矩形，参数是坐标和宽高
-		g.fillRect(0, 0, 68, 22);
+		g.fillRect(0, 0, width, height);
 
 		//编写随机获取验证码的部分
 
@@ -87,7 +89,7 @@ public class RectorController
 		for (int j = 0, n = r.nextInt(100); j < n; j++)
 		{
 			g.setColor(Color.RED);
-			g.fillRect(r.nextInt(68), r.nextInt(22), 1, 1);//随机噪音点
+			g.fillRect(r.nextInt(width), r.nextInt(height), 1, 1);//随机噪音点
 		}
 		//用于存储随机生成的四位验证码
 		StringBuffer sb = new StringBuffer();
@@ -215,6 +217,8 @@ public class RectorController
 	{
 		tblKinder.setKinderstatus("未审批");
 		tblKinder.setKinderregtime(new Date());
+		String md5pwd = MD5Utils.md5(tblKinder.getKinderpwd());
+		tblKinder.setKinderpwd(md5pwd);
 		System.out.println("园所申请审批：" + tblKinder);
 		int result = kinderService.addKinderMsg(tblKinder);
 		if (result > 0)
@@ -281,10 +285,10 @@ public class RectorController
 		int result = rectorService.delTeacherTable(teacherid);
 		if (result > 0)
 		{
-			ResponseUtils.outHtml(response, "删除成功");
+			ResponseUtils.outHtml(response, "success");
 		} else
 		{
-			ResponseUtils.outHtml(response, "删除失败");
+			ResponseUtils.outHtml(response, "error");
 		}
 	}
 
@@ -308,10 +312,10 @@ public class RectorController
 		int result = rectorService.updateTeacherById(tblTeacher);
 		if (result > 0)
 		{
-			ResponseUtils.outHtml(response, "更新成功");
+			ResponseUtils.outHtml(response, "success");
 		} else
 		{
-			ResponseUtils.outHtml(response, "更新失败");
+			ResponseUtils.outHtml(response, "error");
 		}
 	}
 
@@ -323,10 +327,10 @@ public class RectorController
 		int result = rectorService.addTeacherForm(tblTeacher);
 		if (result > 0)
 		{
-			ResponseUtils.outHtml(response, "新增教师成功");
+			ResponseUtils.outHtml(response, "success");
 		} else
 		{
-			ResponseUtils.outHtml(response, "新增教师失败");
+			ResponseUtils.outHtml(response, "error");
 		}
 	}
 
@@ -392,10 +396,10 @@ public class RectorController
 		int result = rectorService.addChildrenForm(tblStudent);
 		if (result > 0)
 		{
-			ResponseUtils.outHtml(response, "新增宝宝成功");
+			ResponseUtils.outHtml(response, "success");
 		} else
 		{
-			ResponseUtils.outHtml(response, "新增宝宝失败");
+			ResponseUtils.outHtml(response, "error");
 		}
 	}
 
@@ -410,10 +414,10 @@ public class RectorController
 		int result = rectorService.delChildrenTable(studentid);
 		if (result > 0)
 		{
-			ResponseUtils.outHtml(response, "删除宝宝资料成功");
+			ResponseUtils.outHtml(response, "success");
 		} else
 		{
-			ResponseUtils.outHtml(response, "删除宝宝资料失败");
+			ResponseUtils.outHtml(response, "error");
 		}
 	}
 
@@ -437,10 +441,10 @@ public class RectorController
 		int result = rectorService.updateChildrenById(tblStudent);
 		if (result > 0)
 		{
-			ResponseUtils.outHtml(response, "更新宝宝成功");
+			ResponseUtils.outHtml(response, "success");
 		} else
 		{
-			ResponseUtils.outHtml(response, "更新宝宝失败");
+			ResponseUtils.outHtml(response, "error");
 		}
 	}
 
@@ -494,7 +498,13 @@ public class RectorController
 			request.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
-			//			request.getSession().setAttribute("cName", cName);
+
+			//查找对应的幼儿园的孩子信息--下拉框的显示
+//			List<TblStudent> tblStudentList = rectorService.findChildren(map);
+
+			List<TblStudent> tblStudentList = rectorService.findChildrenParentAll();
+			System.out.println("请获取孩子的信息："+tblStudentList);
+			request.getSession().setAttribute("tblStudentList", tblStudentList);
 			ResponseUtils.outJson(response, dateTable);
 		}
 	}
@@ -503,7 +513,6 @@ public class RectorController
 	@RequestMapping("/addParentForm")
 	protected void addParentForm(TblParent tblParent, String studentname, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-
 		System.out.println("家长的添加信息显示：" + tblParent + studentname);
 		if (tblParent.getParentSon().equals("爸爸"))
 		{
@@ -529,6 +538,71 @@ public class RectorController
 			}
 
 			int result0 = rectorService.updateChildrenByPid(map);
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//园所----家长信息----删除操作
+	@RequestMapping("/delParentTable")
+	public void delParentTable(String studentname,HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String id = request.getParameter("parentId");
+		System.out.println("删除servlet" + id);
+		int parentId = Integer.valueOf(id);
+
+		int result = rectorService.delParentTable(parentId);
+		if (result > 0)
+		{
+//			删除成功对应的家长信息
+			Map<String, Object> map = new HashMap<>();
+			if (null != studentname && "" != studentname)
+			{
+				map.put("studentname", studentname);
+			}
+			if (0!=parentId)
+			{
+				map.put("pid", null);
+			}
+			int result0 = rectorService.updateChildrenByPid(map);
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//园所-----家长信息----更新对应表格的内容的值
+	@RequestMapping("/updateParentTable")
+	public void updateParentTable(TblParent tblParent, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+//		String parentId = request.getParameter("parentId");
+//		System.out.println("内容是=" + parentId);
+//		int parentIds = Integer.valueOf(parentId);
+		String studentname = request.getParameter("studentname");
+//		String studentsex = request.getParameter("studentsex");
+//		String studentbrith = request.getParameter("studentbrith");
+//
+//		tblStudent.setStudentid(studentids);
+//		tblStudent.setStudentname(studentname);
+//		tblStudent.setStudentsex(studentsex);
+//		tblStudent.setStudentbrith(studentbrith);
+		Map<String, Object> map = new HashMap<>();
+		if (null != studentname && "" != studentname)
+		{
+			map.put("studentname", studentname);
+		}
+		if (0!=tblParent.getParentId())
+		{
+			map.put("pid", tblParent.getParentId());
+		}
+		int result0 = rectorService.updateChildrenByPidDown(map);
+		System.out.println("内容是=" + tblParent);
+		int result = rectorService.updateParentTable(tblParent);
+		if (result > 0&&result0>0)
+		{
 			ResponseUtils.outHtml(response, "success");
 		} else
 		{

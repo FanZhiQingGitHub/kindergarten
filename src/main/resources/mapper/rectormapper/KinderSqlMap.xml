@@ -33,6 +33,8 @@ insert into tbl_kinder(
             ,registrationpermit
             ,kinderregtime
             ,kinderstatus
+            ,kinderacount
+            ,kinderpwd
 		)values(
 			 #{kindername}
 			,#{kinderlp}
@@ -46,6 +48,8 @@ insert into tbl_kinder(
 			,#{registrationpermit}
 			,#{kinderregtime}
 			,#{kinderstatus}
+			,#{kinderacount}
+			,#{kinderpwd}
 		)
     </insert>
 
