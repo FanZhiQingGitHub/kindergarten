@@ -16,7 +16,7 @@ public class TblSecurity {
     private String securitystatus;
     private Integer rid;
 
-    private String securitycode;
+    private String code;
 
     public TblSecurity() {
     }
@@ -114,12 +114,12 @@ public class TblSecurity {
         this.rid = rid;
     }
 
-    public String getSecuritycode() {
-        return securitycode;
+    public String getCode() {
+        return code;
     }
 
-    public void setSecuritycode(String securitycode) {
-        this.securitycode = securitycode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     @Override
@@ -135,7 +135,7 @@ public class TblSecurity {
                 ", securityregtime='" + securityregtime + '\'' +
                 ", securitystatus='" + securitystatus + '\'' +
                 ", rid=" + rid +
-                ", securitycode='" + securitycode + '\'' +
+                ", code='" + code + '\'' +
                 '}';
     }
 }

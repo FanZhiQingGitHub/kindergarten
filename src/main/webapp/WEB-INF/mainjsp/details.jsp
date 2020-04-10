@@ -37,7 +37,7 @@
             <img style="width: 100%;" src="${pageContext.request.contextPath}/image/logo/logo.png">
         </h1>
         <div class="nav" style="visibility: visible">
-            <a href="${pageContext.request.contextPath}/main/main" class="active" style="font-size: 18px">首页</a>
+            <a href="${pageContext.request.contextPath}/main/path/main" class="active" style="font-size: 18px">首页</a>
         </div>
     </div>
 </div>

@@ -99,15 +99,14 @@
 						type: 'post'
 						, data: {studentid: data.studentid},
 						success: function (data) {
-							console.log("--" + data.toString());
-							if (data == "删除成功") {
-								layer.msg(data);
-								window.location.href = src + "/director/toUrl/director_ChildrenManage";
-								// form.render(); //更新全部
-							} else {
-								layer.msg(data);
+							if(data==="success"){
+								layer.alert("删除幼儿信息成功！",{icon: 6}, function(){
+									window.location.href = src + "/director/toUrl/director_ChildrenManage";
+								});
+							}else{
+								layer.alert("删除幼儿信息失败！",{icon: 2});
 							}
-
+							layer.close(index);
 						}, error: function (err) {
 							console.log(err);
 						}
@@ -144,9 +143,17 @@
 									type: 'post',
 									data: formData,
 									success: function (data) {
-										layer.msg(data);
+										// layer.msg(data);
+										// layer.close(index);
+										// window.location.href = src + "/director/toUrl/director_ChildrenManage";
+										if(data==="success"){
+											layer.alert("更新宝宝信息成功！",{icon: 6}, function(){
+												window.location.href = src + "/director/toUrl/director_ChildrenManage";
+											});
+										}else{
+											layer.alert("更新幼儿信息失败！",{icon: 2});
+										}
 										layer.close(index);
-										window.location.href = src + "/director/toUrl/director_ChildrenManage";
 									}, error: function (err) {
 										console.log(err);
 									}
@@ -157,52 +164,17 @@
 						, success: function (layero, index) {
 							console.log(layero, index);
 							//	显示
+							var iframeWindow = layero.find("iframe")[0].contentWindow;
 							var frameId = $(layero).find("iframe").attr('id');
 							$(window.frames[frameId].document).find("#studentid").val(data.studentid);
 							$(window.frames[frameId].document).find("#studentname").val(data.studentname);
-							// $(window.frames[frameId].document).find("#studentsex").val(data.studentsex);
-							var isChecked = data.studentsex == "男" ? "男" : "女";
-
-							$(window.frames[frameId].document).find("select[name=studentsex]").each(function () {//循环判断添加 radio
-								if ($(this).val() == isChecked) {
-									console.log($(this).val() + "对应的性别");
-									$(this).prop("selected", "selected");
-								}
-							});
-							console.log(data.studentbrith);
-							var studentbirths = data.studentbrith.substring(0, 10).toString();
-							console.log(studentbirths);
+							$(window.frames[frameId].document).find("#studentsex").val(data.studentsex).prop("selected", true);
 							$(window.frames[frameId].document).find("#studentbrith").val(studentbirths);
-							form.render(); //更新全部
-
+							iframeWindow.layui.form.render(); //更新全部
 						}
 					});
 				}
 			}
-			// 	else if (layEvent === 'userstatus') {
-			// 	layer.confirm('是否确定修改状态？', function (index) {
-			// 		$.ajax({
-			// 			url: src + "/servlet/back/updateState",
-			// 			async: true,
-			// 			type: "POST",
-			// 			data: {"userid": data.userid, "userstate": data.userstate},
-			// 			datatype: "text",
-			// 			success: function (data) {
-			// 				if (data == "success") {
-			// 					layer.msg("修改成功！");
-			// 					window.parent.location.reload();
-			// 				} else {
-			// 					layer.msg("修改失败！");
-			// 				}
-			// 			},
-			// 			error: function () {
-			// 				alert("网络错误！");
-			// 			}
-			// 		});
-			// 		return true;
-			// 	});
-			// 	return false;
-			// }
 		});
 
 
@@ -250,9 +222,14 @@
 								type: 'post',
 								data: formData,
 								success: function (data) {
-									layer.msg(data);
+									if(data==="success"){
+										layer.alert("添加宝宝信息成功！",{icon: 6}, function(){
+											window.location.href = src + "/director/toUrl/director_ChildrenManage";
+										});
+									}else{
+										layer.alert("添加幼儿信息失败！",{icon: 2});
+									}
 									layer.close(index);
-									window.location.href = src + "/director/toUrl/director_ChildrenManage";
 								}, error: function (err) {
 									console.log(err);
 								}

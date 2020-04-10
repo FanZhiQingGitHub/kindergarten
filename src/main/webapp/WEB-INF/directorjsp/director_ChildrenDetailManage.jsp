@@ -17,6 +17,7 @@
 	* {
 		margin: 0 auto;
 	}
+
 	body {
 		line-height: 50px;
 	}
@@ -39,7 +40,7 @@
 			<div class="layui-form">
 				<select name="studentsex" id="studentsex" lay-filter="mySelect">
 					<option value="暂无" selected>暂无选择</option>
-					<option value="男">男</option>
+					<option value="男" selected>男</option>
 					<option value="女">女</option>
 				</select>
 			</div>

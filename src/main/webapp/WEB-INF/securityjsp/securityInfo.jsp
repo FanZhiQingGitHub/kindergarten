@@ -28,7 +28,7 @@
     </h1>
     <div class="nav">
         <a style="font-size: 18px">welcome to <span class="name"
-                                                    style="color: darkorchid">&nbsp;${healthername}&nbsp;</span> home
+                                                    style="color: darkorchid">&nbsp;${securityname}&nbsp;</span> home
             !!!</a>
     </div>
     <p class="welcome-text">
@@ -48,17 +48,17 @@
                 <img src="${pageContext.request.contextPath}/image/logo/head.jpg">
                 <div class="per-info">
                     <ul style="font-size: 18px">
-                        <c:if test="${not empty tblHealtherList}">
-                            <c:forEach items="${tblHealtherList}" var="i" step="1">
-                                <li>姓名：${i.healthername}</li>
+                        <c:if test="${not empty tblSecurityList}">
+                            <c:forEach items="${tblSecurityList}" var="i" step="1">
+                                <li>姓名：${i.securityname}</li>
                                 <br/>
-                                <li>性别：${i.healthersex}</li>
+                                <li>性别：${i.securitysex}</li>
                                 <br/>
-                                <li>年龄：${i.healtherage}</li>
+                                <li>年龄：${i.securityage}</li>
                                 <br/>
-                                <li>地址：${i.healtheradd}</li>
+                                <li>地址：${i.securityadd}</li>
                                 <br/>
-                                <li>电话：${i.healtherphone}</li>
+                                <li>电话：${i.securityphone}</li>
                                 <br/>
                             </c:forEach>
                         </c:if>
@@ -86,19 +86,19 @@
 <div id="type-content" style="display: none;">
     <div class="layui-form-item">
         <div class="layui-inline">
-            <input type="password" id="oldhealtherpwd" placeholder="请输入6-12位旧密码" value=""
+            <input type="password" id="oldSecuritypwd" placeholder="请输入6-12位旧密码" value=""
                    autocomplete="off" class="layui-input" style="width: 300px">
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
-            <input type="password" id="healtherpwd" placeholder="请输入6-12位密码" value=""
+            <input type="password" id="securitypwd" placeholder="请输入6-12位密码" value=""
                    autocomplete="off" class="layui-input" style="width: 300px">
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
-            <input type="password" id="confrimHealtherpwd" placeholder="请确认密码" value=""
+            <input type="password" id="confrimSecuritypwd" placeholder="请确认密码" value=""
                    autocomplete="off" class="layui-input" style="width: 300px">
         </div>
     </div>
@@ -112,16 +112,16 @@
         var form = layui.form;
         var path = $("#path").val();
 
-        $("#oldhealtherpwd").blur(function () {
-            var oldhealtherpwd = $("#oldhealtherpwd").val();
-            if (oldhealtherpwd.length == 0) {
+        $("#oldSecuritypwd").blur(function () {
+            var oldSecuritypwd = $("#oldSecuritypwd").val();
+            if (oldSecuritypwd.length == 0) {
                 layer.alert("请输入旧密码", {icon: 2});
             } else {
                 $.ajax({
-                    url: path + '/healther/checkOldPwd',
+                    url: path + '/security/checkOldPwd',
                     async: true,
                     type: 'post',
-                    data: {"oldhealtherpwd": oldhealtherpwd},
+                    data: {"oldSecuritypwd": oldSecuritypwd},
                     datatype: 'text',
                     success: function (data) {
                         if (data == "error") {
@@ -145,27 +145,27 @@
                 offset: '130px',
                 btnAlign: 'c',
                 btn1: function (index) {
-                    var healtherpwd = $("#healtherpwd").val();
-                    var confrimHealtherpwd = $("#confrimHealtherpwd").val();
-                    var oldhealtherpwd = $("#oldhealtherpwd").val();
+                    var securitypwd = $("#securitypwd").val();
+                    var confrimSecuritypwd = $("#confrimSecuritypwd").val();
+                    var oldSecuritypwd = $("#oldSecuritypwd").val();
 
                     var pwd = /^[\S]{6,12}$/;
-                    if (oldhealtherpwd.length == 0) {
+                    if (oldSecuritypwd.length == 0) {
                         layer.alert("请输入旧密码", {icon: 2});
-                    } else if (!pwd.test(healtherpwd)) {
+                    } else if (!pwd.test(securitypwd)) {
                         layer.alert("您好，新密码必须6~12位，且不能出现空格！", {icon: 2});
-                    } else if (!pwd.test(confrimHealtherpwd)) {
+                    } else if (!pwd.test(confrimSecuritypwd)) {
                         layer.alert("请确认密码，必须6~12位，且不能出现空格！", {icon: 2});
-                    } else if (healtherpwd != confrimHealtherpwd) {
+                    } else if (securitypwd != confrimSecuritypwd) {
                         layer.alert("密码输入不一致", {icon: 2});
                     } else {
                         $.ajax({
-                            url: path + '/healther/updateHealtherpwd',
+                            url: path + '/security/updateSecuritypwd',
                             async: true,
                             type: 'post',
                             data: {
-                                "healtherpwd": healtherpwd,
-                                "confrimHealtherpwd": confrimHealtherpwd
+                                "securitypwd": securitypwd,
+                                "confrimSecuritypwd": confrimSecuritypwd
                             },
                             datatype: 'text',
                             success: function (data) {

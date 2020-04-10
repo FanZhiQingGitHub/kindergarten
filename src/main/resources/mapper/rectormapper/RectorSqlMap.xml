@@ -107,9 +107,11 @@
 		insert into tbl_teacher(
 			 teachername
 			,teacherjob
+			,teacherregtime
 		)values(
 			 #{teachername}
 			,#{teacherjob}
+			,now()
 		)
 	</insert>
 
@@ -211,7 +213,29 @@
     <update id="updateChildrenByPid" parameterType="java.util.HashMap">
         update tbl_student set pid = #{pid} where studentname = #{studentname};
     </update>
+<!--    查找所有对应的学生表的学生信息-->
+    <select id="findChildrenParentAll" resultType="TblStudent">
+        select * from tbl_student
+    </select>
 
-
+    <!--家长的删除操作-->
+    <delete id="delParentTable" parameterType="int">
+        delete from tbl_parent
+        where parentid = #{parentId}
+    </delete>
+<!--    家长对应的信息进行修改操作-->
+    <update id="updateChildrenByPidDown" parameterType="java.util.HashMap">
+        update tbl_student set studentname = #{studentname} where pid = #{pid};
+    </update>
+    <update id="updateParentTable" parameterType="TblParent">
+        update tbl_parent
+        set  parentName = #{parentName}
+            ,parentSon = #{parentSon}
+            ,parentAge = #{parentAge}
+            ,parentAdd = #{parentAdd}
+            ,parentPhone = #{parentPhone}
+            ,parentJob = #{parentJob}
+        where parentId = #{parentId}
+    </update>
 
 </mapper>

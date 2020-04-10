@@ -54,17 +54,17 @@
             </li>
         </ul>
         <h1 class="logo">
-            <img style="width: 100%;" src="${pageContext.request.contextPath}/image/logo/logo.png">
+            <img style="width: 100%;height: 90px" src="${pageContext.request.contextPath}/image/logo/logo.png">
         </h1>
         <div class="nav" style="visibility: visible">
-            <a href="${pageContext.request.contextPath}/main/main" class="active" style="font-size: 18px">首页</a>
+            <a href="${pageContext.request.contextPath}/main/path/main" class="active" style="font-size: 18px">首页</a>
             <a href="${pageContext.request.contextPath}/main/parent" class="active" style="font-size: 18px">家长端</a>
             <a href="${pageContext.request.contextPath}/main/teacher" class="active" style="font-size: 18px">教师端</a>
             <a href="${pageContext.request.contextPath}/main/healther" class="active" style="font-size: 18px">保健员端</a>
             <a href="${pageContext.request.contextPath}/main/security" class="active" style="font-size: 18px">安防员端</a>
             <a href="${pageContext.request.contextPath}/main/director" class="active" style="font-size: 18px">园长端</a>
             <a href="${pageContext.request.contextPath}/main/admin" class="active" style="font-size: 18px">平台端</a>
-            <a href="${pageContext.request.contextPath}/main/about" class="active" style="font-size: 18px">关于</a>
+            <a href="${pageContext.request.contextPath}/main/path/about" class="active" style="font-size: 18px">关于</a>
         </div>
     </div>
 </div>
@@ -82,7 +82,7 @@
         <div carousel-item class="imgH">
             <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-1.jpg"></div>
             <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-2.jpg"></div>
-            <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-3.jpeg"></div>
+            <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-3.jpg"></div>
             <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-4.jpg"></div>
             <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/carousel/main-5.jpg"></div>
         </div>
@@ -134,7 +134,7 @@
                         <div class="text">
                             <h3>专为幼儿园量身定做</h3>
                             <p>"智慧幼儿园"帮助园长更方便的管理园所日常工作，帮助老师更快捷的进行幼儿教学工作；同时方便家长及时查看孩子在校情况，操作方便，无需专业培训就可轻松使用。</p>
-                            <a href="${pageContext.request.contextPath}/main/detail">查看更多 ></a>
+                            <a href="${pageContext.request.contextPath}/main/path/details">查看更多 ></a>
                         </div>
                     </div>
                     <div class="layui-col-xs12 layui-col-sm12 layui-col-md8 bot-img-box" style="width: 55%">

@@ -47,6 +47,13 @@ public class HealtherService {
         return healtherMapper.updateHealtherPwd(healthermap);
     }
 
+    @Transactional
+    public Boolean resetHealtherpwd(String healtherphone){
+        Map<String,String> healthermap = new LinkedHashMap<>();
+        healthermap.put("healtherphone",healtherphone);
+        return healtherMapper.resetHealtherpwd(healthermap);
+    }
+
     public List<TblExamination> findALLExamination(ExaminationPage examinationPage){
         return healtherMapper.findALLExamination(examinationPage);
     }

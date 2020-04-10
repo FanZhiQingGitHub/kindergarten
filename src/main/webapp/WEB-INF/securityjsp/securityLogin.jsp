@@ -53,7 +53,7 @@
             height: 39%;
             min-height: 33%;
             max-height: 50%;
-            top: 0;
+            top: -20%;
             left: 0;
             bottom: 0;
             right: 0;
@@ -64,6 +64,7 @@
             background-color: rgba(240, 255, 255, 0.2);
             box-shadow: 0 3px 18px rgba(240, 255, 255, 0.2);
             font-size: 16px;
+            border: 1px solid darkgray;
         }
 
         .layui-input {
@@ -109,11 +110,22 @@
             background-color: transparent;
             color: black;
         }
+        #bu1{
+            color: black;
+        }
+
+        #bu1:hover{
+            color: red;
+        }
+
         #bu3:hover{
-            color: #09ff3d;
+            color: cyan;
         }
         #bu4:hover{
-            color: #09ff3d;
+            color: cyan;
+        }
+        #bu5:hover{
+            color: cyan;
         }
 
 
@@ -140,7 +152,6 @@
             border: none;
             font-size: 13px;
             background-color: transparent;
-            color: red;
         }
         .admin-icon {
             position: absolute;
@@ -164,7 +175,7 @@
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-block">
                     <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
-                    <input type="text" name="username" lay-verify="required" placeholder="请输入用户名" value=""
+                    <input type="text" name="securityname" lay-verify="required" placeholder="请输入用户名" value="张三"
                            autocomplete="off" class="layui-input" id="te1">
                 </div>
             </div>
@@ -172,8 +183,8 @@
                 <label class="layui-form-label">密 &nbsp;&nbsp;码</label>
                 <div class="layui-input-inline">
                     <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
-                    <input type="password" name="userpwd" required lay-verify="pass" placeholder="请输入6-12位密码"
-                           value=""
+                    <input type="password" name="securitypwd" required lay-verify="pass" placeholder="请输入6-12位密码"
+                           value="123456"
                            autocomplete="off" class="layui-input" id="te2">
                 </div>
             </div>
@@ -239,7 +250,7 @@
         form.on('submit(formDemo)', function (data) {
             var path = $("#path").val();
             $.ajax({
-                url: path + "/parent/parentLogin",
+                url: path + "/security/securityLogin",
                 async: true,
                 type: "post",
                 data: data.field,
@@ -247,7 +258,7 @@
                 success: function (msg) {
                     if (msg == "success") {
                         layer.alert("登录成功！", {icon: 6}, function () {
-                            location.href = path + "/security/securityMain";
+                            location.href = path + "/security/path/securityMain";
                         });
                     } else if(msg == "error"){
                         layer.alert("登录失败！", {icon: 2});
@@ -285,7 +296,7 @@
                 layer.alert("该功能尚未开放！", {icon: 6});
             }),$("#bu4").click(function () {
                 var path = $("#path").val();
-                location.href = path + "/security/main";
+                location.href = path + "/main/path/main";
             });
         })
     });

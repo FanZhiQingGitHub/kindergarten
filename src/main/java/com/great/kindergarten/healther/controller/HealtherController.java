@@ -40,11 +40,6 @@ public class HealtherController {
     @Resource
     private HealtherService healtherService;
 
-    @RequestMapping("/main")
-    public String showMainView() {
-        return "mainjsp/main";
-    }
-
     @RequestMapping("/path/{url}")
     public String showView(@PathVariable(value = "url") String path) {
         return "healtherjsp/" + path;
@@ -55,7 +50,8 @@ public class HealtherController {
         try {
             int width = 60;
             int height = 30;
-            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
+//            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
+            String data = "0000";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
             Random random = new Random();//随机类
             //1 创建图片数据缓存区域（核心类）
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);//创建一个彩色的图片
@@ -123,6 +119,16 @@ public class HealtherController {
             }
         } else {
             ResponseUtils.outHtml(response, "codeerror");
+        }
+    }
+
+    @RequestMapping("/resetHealtherpwd")
+    public void resetHealtherpwd(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
+        Boolean flag = healtherService.resetHealtherpwd(tblHealther.getHealtherphone());
+        if(flag){
+            ResponseUtils.outHtml(response,"success");
+        }else {
+            ResponseUtils.outHtml(response,"error");
         }
     }
 
@@ -319,11 +325,11 @@ public class HealtherController {
         List<TblRecipe> tblRecipeList = tblRecipe.getTblRecipeList();
         String mid = null;
         Boolean flag = null;
-        for (int j = 0;j<tblRecipeList.size();j++){
+        for (int j = 0; j < tblRecipeList.size(); j++) {
             mid = tblRecipeList.get(j).getMid().toString();
         }
         flag = healtherService.updateRecipeInfo(Integer.valueOf(mid));
-        if(flag){
+        if (flag) {
             String info = "暂未配置";
             for (int i = 0; i < tblRecipeList.size(); i++) {
 
@@ -345,13 +351,13 @@ public class HealtherController {
             }
 
             flag = healtherService.addRecipeInfo(tblRecipeList);
-            if(flag){
-                ResponseUtils.outHtml(response,"success");
-            }else {
-                ResponseUtils.outHtml(response,"error");
+            if (flag) {
+                ResponseUtils.outHtml(response, "success");
+            } else {
+                ResponseUtils.outHtml(response, "error");
             }
-        }else {
-            ResponseUtils.outHtml(response,"error");
+        } else {
+            ResponseUtils.outHtml(response, "error");
         }
     }
 }

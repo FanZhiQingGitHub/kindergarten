@@ -92,13 +92,14 @@
 						, data: {teacherid: data.teacherid},
 						success: function (data) {
 							console.log("--" + data.toString());
-							if (data == "删除成功") {
-								layer.msg(data);
-								window.location.href = src + "/director/toUrl/director_TeacherManage";
-							} else {
-								layer.msg(data);
+							if(data==="success"){
+								layer.alert("删除教师信息成功！",{icon: 6}, function(){
+									window.location.href = src + "/director/toUrl/director_TeacherManage";
+								});
+							}else{
+								layer.alert("删除教师信息失败！",{icon: 2});
 							}
-
+							layer.close(index);
 						}, error: function (err) {
 							console.log(err);
 						}
@@ -133,9 +134,14 @@
 									type: 'post',
 									data: formData,
 									success: function (data) {
-										layer.msg(data);
+										if(data==="success"){
+											layer.alert("更新教师信息成功！",{icon: 6}, function(){
+												window.location.href = src + "/director/toUrl/director_TeacherManage";
+											});
+										}else{
+											layer.alert("更新教师信息失败！",{icon: 2});
+										}
 										layer.close(index);
-										window.location.href = src + "/director/toUrl/director_TeacherManage";
 									}, error: function (err) {
 										console.log(err);
 									}
@@ -146,29 +152,13 @@
 						, success: function (layero, index) {
 							console.log(layero, index);
 							//	显示
+							// 弹出一个页面的时候，下拉框赋值但不能刷新到选定的值。需要做如下调整:红色部分
+							var iframeWindow = layero.find("iframe")[0].contentWindow;
 							var frameId = $(layero).find("iframe").attr('id');
 							$(window.frames[frameId].document).find("#teacherid").val(data.teacherid);
 							$(window.frames[frameId].document).find("#teachername").val(data.teachername);
-							console.log("对应="+data.teacherjob);
 							$(window.frames[frameId].document).find("#teacherjob").val(data.teacherjob).prop("selected",true);
-							// $(window.frames[frameId].document).find("#teacherjob").find("option[value='data.teacherjob']").prop("selected",true);
-							// console.log("查询到的值="+$(window.frames[frameId].document).find("#teacherjob").find("option[value='data.teacherjob']"));
-							// obj.each(function () {
-							// 	console.log("对应的显示");
-							// 	if($(this).val()==){
-							// 		$(this).attr("selected",true);
-							// 	}
-							// });
-
-							// for(var i =0;i<obj.length;i++){
-							// 	console.log("进入到这个对应的方法;");
-							// 	if(obj[i].val()==(data.teacherjob)){
-							// 		obj[i].selected = true;
-							// 		console.log("添加对应的选择成功方法;");
-							// 	}
-							// }
-
-							form.render(); //更新全部
+							iframeWindow.layui.form.render(); //更新全部
 						}
 					});
 				}
@@ -217,7 +207,13 @@
 								type: 'post',
 								data: formData,
 								success: function (data) {
-									layer.msg(data);
+									if(data==="success"){
+										layer.alert("新增教师成功！",{icon: 6}, function(){
+											window.location.href = src + "/director/toUrl/director_TeacherManage";
+										});
+									}else{
+										layer.alert("新增教师失败！",{icon: 2});
+									}
 									layer.close(index);
 								}, error: function (err) {
 									console.log(err);

@@ -29,7 +29,7 @@ body{font: 12px/1.5 PingFangSC-Regular,Tahoma,'Microsoft Yahei',sans-serif;}
 .header h1{display: inline-block; padding-left: 35px;}
 .header .nav{font-size: 14px; text-align: right; display: inline-block; vertical-align: top; float: right;}
 .header .nav a{color: #010101!important; display: inline-block; padding:0 35px;}
-.header .nav a.active{color: #ab8e75!important;}
+.header .nav a.active{color: #0C0C0C!important;}
 .app-header{display: none;}
 .app-header-menuicon{display: block; position: absolute; top: 0; width: 80px; height: 80px; cursor: pointer; text-align: center;}
 .app-header-menuicon i{font-size: 30px;}

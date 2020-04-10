@@ -54,4 +54,8 @@
         UPDATE tbl_healther SET healtherpwd = #{healtherpwd} where healtherid = #{healtherid};
     </update>
 
+    <update id="resetHealtherpwd" parameterType="java.util.Map">
+        UPDATE tbl_healther SET healtherpwd = 'e10adc3949ba59abbe56e057f20f883e' where healtherphone = #{healtherphone};
+    </update>
+
 </mapper>

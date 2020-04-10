@@ -32,6 +32,7 @@ public class TblKinder {
     private Date kinderregtime;
     private String kinderstatus;
     private String kinderacount;
+    private String kinderpwd;
     private String kindercode;
     private String time1;
     private String time2;
@@ -204,9 +205,19 @@ public class TblKinder {
         this.time2 = time2;
     }
 
+    public String getKinderpwd()
+    {
+        return kinderpwd;
+    }
+
+    public void setKinderpwd(String kinderpwd)
+    {
+        this.kinderpwd = kinderpwd;
+    }
+
     @Override
     public String toString()
     {
-        return "TblKinder{" + "kinderid=" + kinderid + ", kindername='" + kindername + '\'' + ", kinderlp='" + kinderlp + '\'' + ", kinderlpid='" + kinderlpid + '\'' + ", kinderlpadd='" + kinderlpadd + '\'' + ", kinderlpphone='" + kinderlpphone + '\'' + ", schoolpermit='" + schoolpermit + '\'' + ", healthpermit='" + healthpermit + '\'' + ", firepermit='" + firepermit + '\'' + ", grouppermit='" + grouppermit + '\'' + ", registrationpermit='" + registrationpermit + '\'' + ", kinderapptime=" + kinderapptime + ", kinderregtime=" + kinderregtime + ", kinderstatus='" + kinderstatus + '\'' + ", kinderacount='" + kinderacount + '\'' + ", kindercode=" + kindercode + '}';
+        return "TblKinder{" + "kinderid=" + kinderid + ", kindername='" + kindername + '\'' + ", kinderlp='" + kinderlp + '\'' + ", kinderlpid='" + kinderlpid + '\'' + ", kinderlpadd='" + kinderlpadd + '\'' + ", kinderlpphone='" + kinderlpphone + '\'' + ", schoolpermit='" + schoolpermit + '\'' + ", healthpermit='" + healthpermit + '\'' + ", firepermit='" + firepermit + '\'' + ", grouppermit='" + grouppermit + '\'' + ", registrationpermit='" + registrationpermit + '\'' + ", kinderapptime=" + kinderapptime + ", kinderregtime=" + kinderregtime + ", kinderstatus='" + kinderstatus + '\'' + ", kinderacount='" + kinderacount + '\'' + ", kinderpwd='" + kinderpwd + '\'' + ", kindercode='" + kindercode + '\'' + ", time1='" + time1 + '\'' + ", time2='" + time2 + '\'' + '}';
     }
 }
