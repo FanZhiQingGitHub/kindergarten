@@ -39,7 +39,7 @@
         <li class="layui-nav-item">
             <a href="javascript:;" style="color: black;font-size: 18px">
                 <img src="${pageContext.request.contextPath}/image/logo/head.jpg" class="layui-nav-img">
-                欢迎&nbsp;,${healthername}&nbsp;安防员
+                欢迎&nbsp;,${securityname}&nbsp;安防员
             </a>
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0);" id="a1">个人信息</a></dd>
@@ -59,7 +59,7 @@
         <h1 class="logo">
             <img style="width: 100%;height: 90px" src="${pageContext.request.contextPath}/image/logo/logo.png">
         </h1>
-        <h1 style="margin-left: 17%;font-size: 40px;color: coral">安防员首页</h1>
+        <h1 style="margin-left: 21%;font-size: 40px;color: coral">安防员首页</h1>
 
     </div>
 </div>
@@ -69,8 +69,8 @@
 <!-- content -->
 <div class="content">
     <div class="title">
-        <h3>好营养我们造,为孩子健康护航</h3>
-        <h4>We make good nutrition, escort the health of children.</h4>
+        <h3>为了孩子的安全，我们义无反顾</h3>
+        <h4>For the safety of our children, we have no turning back.</h4>
     </div>
     <div class="layui-carousel imgbox" id="test1">
         <div carousel-item class="imgH">
@@ -187,52 +187,22 @@
                     type: 2,
                     area: ['95%', '80%'],
                     offset: ['10%', '3%'],
-                    title: '智慧幼儿园-保健员个人信息页',
+                    title: '智慧幼儿园-安防员个人信息页',
                     btn1: function (index, layero) {
                         //layer.getChildFrame("form", index)获取iframe的表单
                         //serializeArray jquery方法，将表单对象序列化为数组
                         layer.close(index);
                     },
-                    content: path + '/healther/path/healtherInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    content: path + '/security/path/securityInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                     , success: function (layero, index) {
                     }
                 });
             }), $("#exit").click(function () {
                 layer.confirm('您确定要退出到登录界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
                     layer.close(index);
-                    location.href = path + "/healther/path/healtherLogin";
+                    location.href = path + "/security/path/securityLogin";
                 });
-            }), $("#bu1").click(function () { //体检管理
-                layer.open({
-                    type: 2,
-                    area: ['95%', '80%'],
-                    offset: ['10%', '3%'],
-                    title: '智慧幼儿园-宝宝体检信息页',
-                    btn1: function (index, layero) {
-                        //layer.getChildFrame("form", index)获取iframe的表单
-                        //serializeArray jquery方法，将表单对象序列化为数组
-                        layer.close(index);
-                    },
-                    content: path + '/healther/path/examinationInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-                    , success: function (layero, index) {
-                    }
-                });
-            }), $("#bu2").click(function () { //膳食管理
-                layer.open({
-                    type: 2,
-                    area: ['95%', '80%'],
-                    offset: ['10%', '3%'],
-                    title: '智慧幼儿园-宝宝膳食信息页',
-                    btn1: function (index, layero) {
-                        //layer.getChildFrame("form", index)获取iframe的表单
-                        //serializeArray jquery方法，将表单对象序列化为数组
-                        layer.close(index);
-                    },
-                    content: path + '/healther/path/mealInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-                    , success: function (layero, index) {
-                    }
-                });
-            });
+            })
         })
     });
 

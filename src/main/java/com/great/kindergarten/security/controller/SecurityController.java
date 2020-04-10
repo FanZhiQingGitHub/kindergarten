@@ -1,7 +1,13 @@
 package com.great.kindergarten.security.controller;
 
+import com.great.kindergarten.commons.entity.TblClass;
+import com.great.kindergarten.commons.entity.TblHealther;
+import com.great.kindergarten.commons.entity.TblSecurity;
 import com.great.kindergarten.security.service.SecurityService;
+import com.great.kindergarten.util.MD5Utils;
+import com.great.kindergarten.util.ResponseUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -10,15 +16,23 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Controller
 @RequestMapping("/security")
 public class SecurityController {
-    private String vcode;
+    private String securitycode;
+    private String securityname;
+
     @Resource
     private SecurityService securityService;
 
+    @RequestMapping("/path/{url}")
+    public String showView(@PathVariable(value = "url") String path) {
+        return "securityjsp/" + path;
+    }
 
     @RequestMapping("/loginCode")
     public void cherkCode(HttpServletRequest request, HttpServletResponse response) {
@@ -60,8 +74,8 @@ public class SecurityController {
                 g.fillRect(random.nextInt(width), random.nextInt(height), 1, 1);//随机噪音点
             }
             /**3 获得随机数据，并保存session*/
-            vcode = builder.toString();
-            request.getSession().setAttribute("vcode", vcode);
+            securitycode = builder.toString();
+            request.getSession().setAttribute("securitycode", securitycode);
             //.. 生成图片发送到浏览器 --相当于下载
             ImageIO.write(image, "jpg", response.getOutputStream());
             response.getOutputStream().flush();
@@ -69,5 +83,57 @@ public class SecurityController {
             e.printStackTrace();
         }
     }
+
+    @RequestMapping("/securityLogin")
+    public void healtherLogin(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response) {
+        securityname = tblSecurity.getSecurityname();
+        String securitypwd = MD5Utils.md5(tblSecurity.getSecuritypwd());
+        String code = tblSecurity.getCode();
+        Boolean confirm = code.equalsIgnoreCase(securitycode);
+        if (confirm) {
+            String securitystatus = securityService.findSecurityStatus(securityname);
+            if (securitystatus.equals("启用")) {
+                TblSecurity Security = securityService.securityLogin(securityname, securitypwd);
+                if (null != Security) {
+                    List<TblSecurity> tblSecurityList = new ArrayList<>();
+                    tblSecurityList.add(Security);
+
+                    request.getSession().setAttribute("securityname", securityname);
+                    request.getSession().setAttribute("tblSecurityList", tblSecurityList);
+                    ResponseUtils.outHtml(response, "success");
+                }
+            } else {
+                ResponseUtils.outHtml(response, "notmen");
+            }
+        } else {
+            ResponseUtils.outHtml(response, "codeerror");
+        }
+    }
+
+    @RequestMapping("/checkOldPwd")
+    public void checkOldPwd(HttpServletRequest request, HttpServletResponse response) {
+        String oldpwd = request.getParameter("oldSecuritypwd");
+        String oldSecuritypwd = MD5Utils.md5(oldpwd);//旧密码
+        TblSecurity tblSecurity = securityService.findSecurityId(securityname);
+        if (oldSecuritypwd.equals(tblSecurity.getSecuritypwd())) {
+            ResponseUtils.outHtml(response, "success");
+        } else {
+            ResponseUtils.outHtml(response, "error");
+        }
+    }
+
+    @RequestMapping("/updateSecuritypwd")
+    public void updateHealtherpwd(HttpServletRequest request, HttpServletResponse response) {
+        TblSecurity tblSecurity = securityService.findSecurityId(securityname);
+        String confrimpwd = request.getParameter("confrimSecuritypwd");
+        String securitypwd = MD5Utils.md5(confrimpwd);
+        Boolean flag = securityService.updateSecurityPwd(securitypwd, tblSecurity.getSecurityid().toString());
+        if (flag) {
+            ResponseUtils.outHtml(response, "success");
+        } else {
+            ResponseUtils.outHtml(response, "error");
+        }
+    }
+
 
 }
