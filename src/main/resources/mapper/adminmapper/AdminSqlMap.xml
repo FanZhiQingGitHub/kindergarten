@@ -12,6 +12,31 @@
         <result column="adminstatus" property="adminstatus"/>
         <result column="rid" property="rid"/>
     </resultMap>
+    <insert id="addKinder" parameterType="java.util.List">
+        insert into
+        tbl_kinder(kindername,kinderregtime,kinderstatus,kinderacount,kindercode)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.kindername},#{i.kinderregtime},#{i.kinderstatus},#{i.kinderacount},#{i.kindercode})
+        </foreach>
+    </insert>
+    <insert id="addMenuInfo">
+        insert into
+        tbl_menu(menuname,menuurl,menusonid,sort)
+        values (#{menuname},#{menuurl},#{menusonid},#{sort})
+    </insert>
+    <delete id="deleteKinderInfo">
+        delete from tbl_kinder where kinderid = #{kinderid}
+    </delete>
+    <delete id="deleteMenuInfo">
+        delete from tbl_menu where menuid = #{menuid}
+    </delete>
+    <delete id="deleteRoleMenu">
+        delete from tbl_rolemenu where rolemenuid = #{rolemenuid}
+    </delete>
+    <delete id="deleteRoleInfo">
+        delete from tbl_role where roleid = #{roleid}
+    </delete>
 
     <!--    用户状态查询-->
     <select id="findAdminStatus" resultType="java.lang.String" parameterType="java.util.Map">
@@ -36,7 +61,7 @@
         </where>
     </select>
 
-    <select id="findMenuByName" resultType="com.great.kindergarten.commons.entity.TblMenu" parameterType="string">
+    <select id="findMenuByName" resultType="com.great.kindergarten.commons.entity.TblMenu" parameterType="java.lang.String">
 		select *
 		from tbl_menu
 		where menuid in (
@@ -80,6 +105,75 @@
         </set>
         where kinderid = #{kinderid}
     </update>
+    <update id="updateKinderCode">
+        update tbl_kinder
+        <set>
+            <if test="kindercode != '' and kindercode != null">
+                kindercode = #{kindercode},
+            </if>
+        </set>
+        where kinderid = #{kinderid}
+    </update>
+    <update id="restKinderPwd">
+        update tbl_kinder
+        <set>
+            <if test="kinderpwd != '' and kinderpwd != null">
+                kinderpwd = #{kinderpwd},
+            </if>
+        </set>
+        where kinderid = #{kinderid}
+    </update>
+    <update id="updateKinderInfo">
+        update tbl_kinder
+        <set>
+            <if test="kindername != '' and kindername != null">
+                kindername = #{kindername},
+            </if>
+            <if test="kinderacount != '' and kinderacount != null">
+                kinderacount = #{kinderacount},
+            </if>
+            <if test="kinderlp != '' and kinderlp != null">
+                kinderlp = #{kinderlp},
+            </if>
+            <if test="kinderlpid != '' and kinderlpid != null">
+                kinderlpid = #{kinderlpid},
+            </if>
+            <if test="kinderlpadd != '' and kinderlpadd != null">
+                kinderlpadd = #{kinderlpadd},
+            </if>
+            <if test="kinderlpphone != '' and kinderlpphone != null">
+                kinderlpphone = #{kinderlpphone},
+            </if>
+        </set>
+        where kinderid = #{kinderid}
+    </update>
+    <update id="updateMenuInfo">
+        update tbl_menu
+        <set>
+            <if test="menuname != '' and menuname != null">
+                menuname = #{menuname},
+            </if>
+            <if test="menusonid != '' and menusonid != null">
+                menusonid = #{menusonid},
+            </if>
+            <if test="menuurl != '' and menuurl != null">
+                menuurl = #{menuurl},
+            </if>
+            <if test="sort != '' and sort != null">
+                sort = #{sort},
+            </if>
+        </set>
+        where menuid = #{menuid}
+    </update>
+    <update id="updateRoleInfo">
+        update tbl_role
+        <set>
+            <if test="rolename != '' and rolename != null">
+                rolename = #{rolename},
+            </if>
+        </set>
+        where roleid = #{roleid}
+    </update>
 
     <select id="findAllKinder" resultType="com.great.kindergarten.commons.entity.TblKinder">
         select * from tbl_kinder
@@ -95,6 +189,9 @@
             </if>
             <if test=" kinderstatus != '' and kinderstatus != null and kinderstatus !='请选择'">
                 and kinderstatus = #{kinderstatus}
+            </if>
+            <if test=" kindercode != '' and  kindercode != null and kindercode !='请选择'">
+                and kindercode = #{kindercode}
             </if>
         </where>
         order by kinderregtime desc
@@ -120,12 +217,120 @@
             </if>
         </where>
     </select>
+
     <select id="findTblKinderById" resultType="com.great.kindergarten.commons.entity.TblKinder">
         select * from tbl_kinder where kinderid = #{kinderid}
     </select>
+
     <select id="findKinder" resultType="com.great.kindergarten.commons.entity.TblKinder">
         select * from tbl_kinder
     </select>
+
+    <select id="findAccountByName" resultType="java.lang.String">
+        select kinderacount from tbl_kinder where kindername = #{kindername}
+    </select>
+
+    <select id="initialPwd" resultType="java.lang.String">
+        select parameterval from tbl_parameter where parametername = #{parametername}
+    </select>
+
+    <select id="findAllParameter" resultType="com.great.kindergarten.commons.entity.TblParameter">
+        select * from tbl_kinder
+        <where>
+            <if test=" parametername != '' and parametername != null">
+                and parametername like concat('%',#{parametername},'%')
+            </if>
+            <if test=" parametertype != '' and parametertype != null and parametertype !='请选择'">
+                and kinderstatus = #{kinderstatus}
+            </if>
+        </where>
+        order by parametertype
+    </select>
+    <select id="findParameterCount" resultType="java.lang.Integer">
+        select count(*) from tbl_parameter
+        <where>
+            <if test=" parametername != '' and parametername != null">
+                and parametername like concat('%',#{parametername},'%')
+            </if>
+            <if test=" parametertype != '' and parametertype != null and parametertype !='请选择'">
+                and kinderstatus = #{kinderstatus}
+            </if>
+        </where>
+        order by parametertype
+    </select>
+    <select id="findParameterInfo" resultType="com.great.kindergarten.commons.entity.TblParameter">
+        select * from tbl_parameter;
+    </select>
+    <select id="findStairMenu" resultType="com.great.kindergarten.commons.entity.TblMenu">
+        select * from tbl_menu where menusonid = 0
+    </select>
+
+    <select id="findAllMenu" resultType="com.great.kindergarten.commons.entity.TblMenu">
+        select * from tbl_menu
+        <where>
+            <if test=" mName != '' and mName != null">
+                and menuname like concat('%',#{mName},'%')
+            </if>
+            <if test=" pName != '' and pName != null and pName !='请选择'">
+                and menuname = #{pName}
+            </if>
+        </where>
+        order by menuname asc
+    </select>
+
+    <select id="findMenuCount" resultType="java.lang.Integer">
+        select count(*) from tbl_menu
+        <where>
+            <if test=" mName != '' and mName != null">
+                and menuname like concat('%',#{mName},'%')
+            </if>
+            <if test=" pName != '' and pName != null and pName !='请选择'">
+                and menuname = #{pName}
+            </if>
+        </where>
+        order by menuname asc
+    </select>
+
+
+    <select id="findSuperierMenu" resultType="java.lang.String">
+        select menuname from tbl_menu where menuid in (
+            select menusonid from tbl_menu where menuid = #{menuid}
+        )
+    </select>
+    <select id="findSidByName" resultType="java.lang.Integer">
+        select menuid from tbl_menu where menuname = #{menuname}
+    </select>
+    <select id="findRoleMenuIdByMid" resultType="java.lang.Integer">
+        select rolemenuid from tbl_rolemenu where mid = #{mid}
+    </select>
+    <select id="findSidByMid" resultType="java.lang.Integer">
+        select menusonid from tbl_menu where menuid = #{menuid}
+    </select>
+
+    <select id="findAllRoleInfo" resultType="com.great.kindergarten.commons.entity.TblRole">
+        select * from tbl_role
+        <where>
+            <if test="rolename != '' and rolename != null and rolename != '请选择'">
+                and rolename = #{rolename}
+            </if>
+        </where>
+    </select>
+
+    <select id="findRoleCount" resultType="java.lang.Integer">
+        select count(*) from tbl_role
+        <where>
+            <if test="rolename != '' and rolename != null and rolename != '请选择'">
+                and rolename = #{rolename}
+            </if>
+        </where>
+    </select>
+    <select id="findAllRoleName" resultType="com.great.kindergarten.commons.entity.TblRole">
+        select * from tbl_role
+    </select>
+    <select id="findRoleMenuIdByRid" resultType="com.great.kindergarten.commons.entity.TblRoleMenu">
+        select t2.rolemenuid from tbl_role t1,tbl_rolemenu t2 where t1.roleid = t2.rid
+    </select>
+
 
     <!--    &lt;!&ndash;    查找用户类型&ndash;&gt;-->
 <!--    <select id="findUserType" parameterType="java.lang.String" resultMap="userMap">-->

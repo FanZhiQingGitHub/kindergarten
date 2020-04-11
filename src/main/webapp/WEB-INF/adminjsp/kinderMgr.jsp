@@ -23,6 +23,11 @@
 			width: 168%;
 			height: 30%;
 		}
+		#selNames{
+			margin-top: 5%;
+			width: 168%;
+			height: 30%;
+		}
 	</style>
 </head>
 <body>
@@ -70,28 +75,79 @@
 		</form>
 	</div>
 	<table id="kinder" lay-filter="test"></table>
-		<div id="type-content" style="display: none;">
-			<div class="layui-form-item">
-				<label class="layui-form-label">园所名称：</label>
-				<div class="layui-inline">
-					<select name="selName" id="selName" lay-filter="selectName" lay-verify="" >
-						<option value="请选择">请选择</option>
-						<c:if test="${not empty kinderList}">
-							<c:forEach items="${kinderList}" var="u">
-								<option value="${u.kindername}">${u.kindername}</option>
-							</c:forEach>
-						</c:if>
-					</select>
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">账号：</label>
-				<div class="layui-inline">
-					<input type="text" id="account" placeholder="请输入园所账号" value=""
-					       autocomplete="off" class="layui-input" style="width: 120%">
-				</div>
+	<div id="type-content" style="display: none;">
+		<div class="layui-form-item">
+			<label class="layui-form-label">园所名称：</label>
+			<div class="layui-inline">
+				<select name="selName" id="selName" lay-filter="selectName" lay-verify="" >
+					<option value="请选择">请选择</option>
+					<c:if test="${not empty kinderList}">
+						<c:forEach items="${kinderList}" var="u">
+							<option value="${u.kindername}">${u.kindername}</option>
+						</c:forEach>
+					</c:if>
+				</select>
 			</div>
 		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">账号：</label>
+			<div class="layui-inline">
+				<input type="text" id="account" placeholder="请输入园所账号" value=""
+				       autocomplete="off" class="layui-input" style="width: 120%">
+			</div>
+		</div>
+	</div>
+
+	<div id="type-content2" style="display: none;">
+		<div class="layui-form-item">
+			<label class="layui-form-label">园所名称：</label>
+			<div class="layui-inline">
+				<select name="selNames" id="selNames" lay-filter="selectNames" lay-verify="" >
+					<option value="请选择">请选择</option>
+					<c:if test="${not empty kinderList}">
+						<c:forEach items="${kinderList}" var="u">
+							<option value="${u.kindername}">${u.kindername}</option>
+						</c:forEach>
+					</c:if>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">账号：</label>
+			<div class="layui-inline">
+				<input type="text" id="accounts" placeholder="请输入园所账号" value=""
+				       autocomplete="off" class="layui-input" style="width: 120%">
+			</div>
+		</div>
+<%--		<div class="layui-form-item">--%>
+<%--			<label class="layui-form-label">法人：</label>--%>
+<%--			<div class="layui-inline">--%>
+<%--				<input type="text" id="kinderlp" placeholder="请输入法人名字" value=""--%>
+<%--				       autocomplete="off" class="layui-input" style="width: 120%">--%>
+<%--			</div>--%>
+<%--		</div>--%>
+<%--		<div class="layui-form-item">--%>
+<%--			<label class="layui-form-label">法人身份证号：</label>--%>
+<%--			<div class="layui-inline">--%>
+<%--				<input type="text" id="kinderlpid" placeholder="请输入法人身份证号" value=""--%>
+<%--				       autocomplete="off" class="layui-input" style="width: 120%">--%>
+<%--			</div>--%>
+<%--		</div>--%>
+<%--		<div class="layui-form-item">--%>
+<%--			<label class="layui-form-label">法人住址：</label>--%>
+<%--			<div class="layui-inline">--%>
+<%--				<input type="text" id="kinderlpadd" placeholder="请输入法人住址" value=""--%>
+<%--				       autocomplete="off" class="layui-input" style="width: 120%">--%>
+<%--			</div>--%>
+<%--		</div>--%>
+<%--		<div class="layui-form-item">--%>
+<%--			<label class="layui-form-label">法人手机号：</label>--%>
+<%--			<div class="layui-inline">--%>
+<%--				<input type="text" id="kinderlpphone" placeholder="请输入法人手机号" value=""--%>
+<%--				       autocomplete="off" class="layui-input" style="width: 120%">--%>
+<%--			</div>--%>
+<%--		</div>--%>
+	</div>
 	<script type="text/html" id="barOption">
 		{{#  if(d.kindercode == '启用'){ }}
 		<a  class="layui-btn layui-btn-danger layui-btn-xs" lay-event="forbidden" style="width: 15%;height: 75%">禁用</a>
@@ -99,7 +155,7 @@
 		{{#  if(d.kindercode == '禁用'){ }}
 		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="open" style="width: 15%;height: 75%">启用</a>
 		{{#  } }}
-		<a type="button" class="layui-btn layui-btn-xs" lay-event="restpwd" style="width: 25%;height: 75%">重置密码</a>
+		<a type="button" class="layui-btn layui-btn-xs" lay-event="restPwd" style="width: 25%;height: 75%">重置密码</a>
 		<a type="button" class="layui-btn layui-btn-xs" lay-event="update" style="width: 15%;height: 75%">修改</a>
 		<a type="button" class="layui-btn layui-btn-xs" lay-event="delete" style="width: 15%;height: 75%">删除</a>
 	</script>
@@ -154,54 +210,123 @@
 				table.on('tool(test)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 					data = obj.data; //获得当前行数据
 					var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-					var tr = obj.tr; //获得当前行 tr 的DOM对象
-					if (layEvent === 'restpwd') { //审核通过
-						layer.prompt({
-								formType: 0,
-								id: "remarksPrompt",
-								title: '资质审核-温馨提示(0:未审核,1:通过,2：未通过)',
-								success: function (layero, index) {
-								}
-							},
-							// function () {
-							// 	$("#remarksPrompt").blur(function () {
-							// 		var reg = /^[1-2]*$/;
-							// 		if (!($('#remarksPrompt').val().match(reg))) {
-							// 			layer.msg("请输入数字(1或2)！", {icon: 2, title: '温馨提示'})
-							// 		} else {
-							// 			layer.msg("输入合法", {icon: 5, title: '温馨提示'})
-							// 		}
-							// 	});
-							// },
-							function (value, index, elem) {
-								layer.close(index);
-								var reg = /^[1-2]*$/;
-								//向服务端发送审核通过指令
-								if (value == 0) {
-									layer.msg("请输入数字(1或2)！", {icon: 2, title: '温馨提示'})
-								} else if (value == 1 || value == 2) {
-									$.ajax({
-										url: path + "/admin/checkQualify",
-										type: "post",
-										data: {"kinderid": data.kinderid, "kinderstatus": value},
-										dataType: "text",
-										success: function (result) {
-											if (result == "success") {
-												layer.alert('审核通过！');
-											} else if (result == "codeerror") {
-												layer.alert('状态码输入异常！');
-											} else {
-												layer.alert('审核失败！');
-											}
-											tableIns.reload();    //审核之后,刷新表格
-										}
-									});
-								} else {
-									layer.msg("请输入数字(1或2)！", {icon: 2, title: '温馨提示'});
+					if (layEvent === 'forbidden') {
+						layer.confirm("确定禁用园所账号？",{icon:3,title:'温馨提示'},function (index) {
+							layer.close(index);
+							$.ajax({
+								url: path + "/admin/forbiddenAccount",
+								type: "post",
+								data: {"kinderid": data.kinderid},
+								dataType: "text",
+								success: function (result) {
+									if(result == "success")
+									{
+										layer.alert("禁用成功！", {icon: 6});
+										tableIns.reload();
+									}else{
+										layer.alert("禁用失败！", {icon: 2});
+									}
 								}
 							});
+						});
+						}else if(layEvent === 'open'){
+							layer.confirm("确定启用园所账号？",{icon:3,title:'温馨提示'},function (index) {
+								layer.close(index);
+								$.ajax({
+									url: path + "/admin/openAccount",
+									type: "post",
+									data: {"kinderid": data.kinderid},
+									dataType: "text",
+									success: function (result) {
+										if(result == "success")
+										{
+											layer.alert("启用成功！", {icon: 6});
+											tableIns.reload();
+										}else{
+											layer.alert("启用失败！", {icon: 2});
+										}
+									}
+								});
+							});
+						}else if(layEvent === 'restPwd'){
+							layer.confirm("确定要重置密码？",{icon:3,title:'温馨提示'},function (index) {
+								layer.close(index);
+								$.ajax({
+									url: path + "/admin/restKinderPwd",
+									type: "post",
+									data: {"kinderid": data.kinderid},
+									dataType: "text",
+									success: function (result) {
+										if(result == "success")
+										{
+											layer.alert("密码重置成功！", {icon: 6});
+											tableIns.reload();
+										}else{
+											layer.alert("密码重置失败！", {icon: 2});
+										}
+									}
+								});
+							});
+						}else if(layEvent === 'update'){
+							layer.confirm("确定要修改？",{icon:3,title:'温馨提示'},function (index) {
+								layer.close(index);
+								layer.open({
+									type: 1,
+									area: ['30%', '40%'],
+									content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
+									title: '修改园所',
+									btn: ['保存', '取消'],
+									offset: '100px',
+									btnAlign: 'c',
+									btn1: function (index) {
+										$("#selNames").find("option[value="+data.kinderid+"]").prop("selected",true);
+										var kindername = $("#selNames").val();
+										var kinderacount = $("#accounts").val();
+										if (kinderacount.length == 0) {
+											layer.alert("请输入园所账号", {icon: 2});
+										}  else {
+											$.ajax({
+												url: path + "/admin/updateKinderInfo",
+												type: "post",
+												data: {"kinderid": data.kinderid,"kindername":kindername,"kinderacount":kinderacount},
+												dataType: "text",
+												success: function (result) {
+													if(result == "success")
+													{
+														layer.close(index);
+														layer.alert("修改园所信息成功！", {icon: 6});
+														tableIns.reload();
+													}else{
+														layer.alert("修改园所信失败！", {icon: 2});
+													}
+												}
+											});
+										}
+									},
+								});
+							});
+						}else if(layEvent === 'delete'){
+						layer.confirm("确定要删除该园所信息？",{icon:3,title:'温馨提示'},function (index) {
+							layer.close(index);
+							$.ajax({
+								url: path + "/admin/deleteKinderInfo",
+								type: "post",
+								data: {"kinderid": data.kinderid},
+								dataType: "text",
+								success: function (result) {
+									if(result == "success")
+									{
+										layer.alert("园所删除成功！", {icon: 6});
+										tableIns.reload();
+									}else{
+										layer.alert("园所删除失败！", {icon: 2});
+									}
+								}
+							});
+						});
 					}
 				});
+			});
 
 				$("#btn-add").click(function () {
 					layer.open({
@@ -213,52 +338,48 @@
 						offset: '100px',
 						btnAlign: 'c',
 						btn1: function (index) {
-							// var oldadminpwd = $("#oldadminpwd").val();
-							// var adminpwd = $("#adminpwd").val();
-							// var confrimAdminpwd = $("#confrimAdminpwd").val();
-							//
-							// if (oldadminpwd.length == 0) {
-							// 	layer.alert("请输入旧密码", {icon: 2});
-							// } else if (adminpwd.length < 6) {
-							// 	layer.alert("新密码长度低于6位", {icon: 2});
-							// } else if (adminpwd.length > 12) {
-							// 	layer.alert("新密码长度大于12位", {icon: 2});
-							// } else if (adminpwd.length == 0) {
-							// 	layer.alert("新密码不能为空", {icon: 2});
-							// } else if (confrimAdminpwd.length == 0) {
-							// 	layer.alert("请确认密码", {icon: 2});
-							// } else if (adminpwd != confrimAdminpwd) {
-							// 	layer.alert("密码输入不一致", {icon: 2});
-							// } else {
-							// 	$.ajax({
-							// 		url: path + '/admin/updateAdminpwd',
-							// 		async: true,
-							// 		type: 'post',
-							// 		data: {
-							// 			"adminid": $("#adminid").val(),
-							// 			"oldadminpwd": oldadminpwd,
-							// 			"adminpwd": adminpwd,
-							// 			"confrimAdminpwd": confrimAdminpwd
-							// 		},
-							// 		datatype: 'text',
-							// 		success: function (data) {
-							// 			if (data == "error") {
-							// 				layer.alert("修改失败！", {icon: 2});
-							// 			} else if (data == "pwderror") {
-							// 				layer.alert("旧密码输入错误", {icon: 2});
-							// 			} else {
-							// 				layer.alert("修改成功", {icon: 6});
-							// 				layer.close(index);
-							// 			}
-							// 		}, error: function (data) {
-							// 			layer.alert("网络繁忙！", {icon: 2});
-							// 		}
-							// 	});
-							// }
+							var kindername = $("#selName").val();
+							var kinderacount = $("#account").val();
+							if (kinderacount.length == 0) {
+								layer.alert("请输入园所账号", {icon: 2});
+							}  else {
+								$.ajax({
+									url: path + '/admin/addKinder',
+									async: true,
+									type: 'post',
+									data: {
+										"kindername": kindername,
+										"kinderacount": kinderacount,},
+									datatype: 'text',
+									success: function (data) {
+										if (data == "success") {
+											layer.alert("新增成功！", {icon: 6});
+											layer.close(index);
+											tableIns.reload();
+										} else {
+											layer.alert("新增失败", {icon: 2});
+										}
+									}, error: function (data) {
+										layer.alert("网络繁忙！", {icon: 2});
+									}
+								});
+							}
 						},
 					});
 				});
-			});
+
+				$("#selName").change(function () {
+					var kindername = $("#selName").val();
+					$.ajax({
+						url: path + "/admin/kinderAccount",
+						type: "post",
+						data: {"kindername": kindername},
+						dataType: "text",
+						success: function (result) {
+							$("#account").val(result);
+						}
+					});
+				});
 
 			//搜索功能的实现
 			$('.kinderTable .layui-btn').on('click', function () {

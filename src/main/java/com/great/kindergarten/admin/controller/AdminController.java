@@ -5,11 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.great.kindergarten.admin.annotation.AdminSystemLog;
 import com.great.kindergarten.admin.javabean.DataResult;
 import com.great.kindergarten.admin.service.SystemLogService;
-import com.great.kindergarten.commons.entity.TblAdmin;
-import com.great.kindergarten.commons.entity.TblKinder;
-import com.great.kindergarten.commons.entity.TblMenu;
+import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.admin.service.AdminService;
-import com.great.kindergarten.commons.entity.TblSyslog;
+import com.great.kindergarten.util.GsonUtils;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
 import org.apache.ibatis.session.RowBounds;
@@ -157,11 +155,134 @@ public class AdminController {
 	{
 		String adminname = (String) request.getSession().getAttribute("adminname");
 		List<TblMenu> list = adminService.findMenuByName(adminname);
-		Gson gson = new Gson();
+        List<TblMenu> stairMenuList = adminService.findStairMenu();
 		response.setContentType("application/json; charset=utf-8");
-		response.getWriter().write(gson.toJson(list));
+		request.getSession().setAttribute("stairMenuList",stairMenuList);
+		response.getWriter().write(GsonUtils.getgsonUtils().toStr(list));
 		response.getWriter().flush();
 		response.getWriter().close();
+	}
+
+	//菜单管理
+    @RequestMapping("/menuMgrInfo")
+    public void menuMgrInfo(String page, String limit, TblMenu tblMenu, DataResult dataResult, HttpServletRequest req, HttpServletResponse res) throws IOException
+    {
+        HashMap<String,Object> condition = new HashMap<>();
+        if(null != tblMenu.getmName() && !"".equals(tblMenu.getmName().trim())) {
+            condition.put("mName",tblMenu.getmName());
+            System.out.println("mName="+tblMenu.getmName());
+        }
+
+        if(null != tblMenu.getpName() && !"".equals(tblMenu.getpName().trim())) {
+            condition.put("pName",tblMenu.getpName());
+            System.out.println("pName="+tblMenu.getpName());
+        }
+
+        int num = adminService.findMenuCount(condition);
+
+        RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+
+        List<TblMenu> list = new ArrayList<>();
+        list = adminService.findAllMenu(condition,rowBounds);
+
+        String supName = null;
+        TblMenu menu = null;
+        List<TblMenu> tblMenuList = new ArrayList<>();
+        for(int i = 0; i < list.size(); i++)
+        {
+            menu = new TblMenu();
+            menu.setMenuid(list.get(i).getMenuid());
+            menu.setMenuname(list.get(i).getMenuname());
+            menu.setMenuurl(list.get(i).getMenuurl());
+            menu.setSort(list.get(i).getSort());
+            supName = adminService.findSuperierMenu(list.get(i).getMenuid());
+            if(supName == null)
+            {
+                menu.setSupMenu(null);
+            }else{
+                menu.setSupMenu(supName);
+            }
+            tblMenuList.add(menu);
+        }
+
+        if(tblMenuList != null)
+        {
+            Gson gson = new GsonBuilder().serializeNulls().create();
+            dataResult.setCode(0);
+            dataResult.setCount(num);
+            dataResult.setMsg("");
+            dataResult.setData(tblMenuList);
+            res.setContentType("application/json; charset=utf-8");
+            res.getWriter().write(gson.toJson(dataResult));
+            res.getWriter().flush();
+            res.getWriter().close();
+        }
+    }
+
+    //新增菜单
+    @AdminSystemLog(operationType = "新增菜单",operationName = "管理员新增菜单")
+	@RequestMapping("/addMenuItems")
+	public void addMenuItems(TblMenu tblMenu,HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println(tblMenu);
+		if(tblMenu.getpName() != null && !"".equals(tblMenu.getpName().trim()) && !"请选择".equals(tblMenu.getpName()))
+		{
+			Integer menuId = adminService.findSidByName(tblMenu.getpName());
+			tblMenu.setMenusonid(menuId);
+		}
+		int num = adminService.addMenuInfo(tblMenu);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@AdminSystemLog(operationType = "修改菜单",operationName = "管理员修改菜单信息")
+	@RequestMapping("/updateMenuInfo")
+	public void updateMenuInfo(TblMenu tblMenu,HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println(tblMenu);
+		if(tblMenu.getpName() != null && !"".equals(tblMenu.getpName().trim()) && !"请选择".equals(tblMenu.getpName()))
+		{
+			Integer menuId = adminService.findSidByName(tblMenu.getpName());
+			tblMenu.setMenusonid(menuId);
+		}
+		int num = adminService.updateMenuInfo(tblMenu);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@AdminSystemLog(operationType = "删除菜单",operationName = "管理员删除菜单信息")
+	@RequestMapping("/deleteMenuInfo")
+	public void deleteMenuInfo(TblMenu tblMenu,HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println(tblMenu);
+		Integer menusonid = adminService.findSidByMid(tblMenu.getMenuid());
+		if(menusonid != null)
+		{
+			Integer rolemenuid = adminService.findRoleMenuIdByMid(tblMenu.getMenuid());
+			adminService.deleteRoleMenu(rolemenuid);
+		}
+		if(tblMenu.getpName() != null && !"".equals(tblMenu.getpName().trim()) && !"请选择".equals(tblMenu.getpName()))
+		{
+			Integer menuId = adminService.findSidByName(tblMenu.getpName());
+			System.out.println("子id="+menuId);
+			tblMenu.setMenusonid(menuId);
+		}
+
+		int num = adminService.deleteMenuInfo(tblMenu.getMenuid());
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
 	}
 
     @RequestMapping("/checkOldPwd")
@@ -251,11 +372,11 @@ public class AdminController {
         }
 
 	    if(null != tblKinder.getKindercode() && !"".equals(tblKinder.getKindercode().trim())) {
-
 			condition.put("kindercode",tblKinder.getKindercode());
 	    }
 
         if(null != tblKinder.getKindername() && !"".equals(tblKinder.getKindername().trim())) {
+            System.out.println("园所="+tblKinder.getKindername());
             condition.put("kindername",tblKinder.getKindername());
         }
 
@@ -268,7 +389,6 @@ public class AdminController {
         if(tblKinderList != null)
         {
             List<TblKinder> kinderList = adminService.findKinder();
-	        System.out.println("***"+kinderList);
             Gson gson = new GsonBuilder().serializeNulls().create();
             dataResult.setCode(0);
             dataResult.setCount(num);
@@ -335,4 +455,155 @@ public class AdminController {
             ResponseUtils.outHtml(response,"codeerror");
         }
     }
+
+    //根据园所名称查找园所账号
+    @RequestMapping("/kinderAccount")
+    public void findAccountByName(HttpServletRequest request, HttpServletResponse response)
+	{
+		String kindername = request.getParameter("kindername");
+		System.out.println(kindername);
+		String kinderacount = adminService.findAccountByName(kindername);
+		System.out.println(kinderacount);
+	    if(kinderacount != null && !"".equals(kinderacount.trim()))
+	    {
+		    ResponseUtils.outHtml(response,kinderacount);
+	    }else{
+		    ResponseUtils.outHtml(response,"error");
+	    }
+    }
+
+    //新增园所
+    @RequestMapping("/addKinder")
+    public void addKinder(TblKinder tblKinder,HttpServletRequest request, HttpServletResponse response)
+    {
+        tblKinder.setKinderregtime(new Date());
+        tblKinder.setKinderstatus("未审批");
+        tblKinder.setKindercode("启用");
+        List<TblKinder> tblKinderList = new ArrayList<>();
+        tblKinderList.add(tblKinder);
+        int num = adminService.addKinder(tblKinderList);
+        if(num > 0)
+        {
+            ResponseUtils.outHtml(response,"success");
+        }else{
+            ResponseUtils.outHtml(response,"error");
+        }
+    }
+
+    @RequestMapping("/forbiddenAccount")
+    public void forbiddenAccount(TblKinder tblKinder,HttpServletRequest request, HttpServletResponse response)
+    {
+        tblKinder.setKindercode("禁用");
+        int num = adminService.updateKinderCode(tblKinder);
+        if(num > 0)
+        {
+            ResponseUtils.outHtml(response,"success");
+        }else{
+            ResponseUtils.outHtml(response,"error");
+        }
+    }
+
+    @RequestMapping("/openAccount")
+    public void openAccount(TblKinder tblKinder,HttpServletRequest request, HttpServletResponse response)
+    {
+        tblKinder.setKindercode("启用");
+        int num = adminService.updateKinderCode(tblKinder);
+        if(num > 0)
+        {
+            ResponseUtils.outHtml(response,"success");
+        }else{
+            ResponseUtils.outHtml(response,"error");
+        }
+    }
+
+    @RequestMapping("/restKinderPwd")
+    public void restKinderPwd(TblKinder tblKinder,HttpServletRequest request, HttpServletResponse response)
+    {
+        String kinderPwd = MD5Utils.md5(adminService.initialPwd("初始密码"));
+//        tblKinder.setKinderpwd(kinderPwd);
+        int num = adminService.updateKinderCode(tblKinder);
+        if(num > 0)
+        {
+            ResponseUtils.outHtml(response,"success");
+        }else{
+            ResponseUtils.outHtml(response,"error");
+        }
+    }
+
+    @RequestMapping("/deleteKinderInfo")
+    public void deleteKinderInfo(TblKinder tblKinder,HttpServletRequest request, HttpServletResponse response)
+    {
+        int num = adminService.deleteKinderInfo(tblKinder);
+        if(num > 0)
+        {
+            ResponseUtils.outHtml(response,"success");
+        }else{
+            ResponseUtils.outHtml(response,"error");
+        }
+    }
+
+    @RequestMapping("/updateKinderInfo")
+    public void updateKinderInfo(TblKinder tblKinder,HttpServletRequest request, HttpServletResponse response)
+    {
+        int num = adminService.updateKinderInfo(tblKinder);
+        if(num > 0)
+        {
+            ResponseUtils.outHtml(response,"success");
+        }else{
+            ResponseUtils.outHtml(response,"error");
+        }
+    }
+
+	@RequestMapping("/roleMgrInfo")
+	public void roleDemo(String page, String limit, TblRole tblRole, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null != tblRole.getRolename() && !"".equals(tblRole.getRolename().trim())) {
+			condition.put("rolename",tblRole.getRolename());
+		}
+		int num = adminService.findRoleCount(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+		List<TblRole> roleList = adminService.findAllRoleInfo(condition,rowBounds);
+		List<TblRole> tblRoleList = adminService.findAllRoleName();
+		System.out.println("角色："+GsonUtils.getgsonUtils().toStr(tblRoleList));
+		if(roleList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(roleList);
+			request.getSession().setAttribute("tblRoleList",tblRoleList);
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/updateRoleInfo")
+	public void updateRoleInfo(TblRole tblRole,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.updateRoleInfo(tblRole);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/deleteRoleInfo")
+	public void deleteRoleInfo(TblRole tblRole,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.deleteRoleInfo(tblRole.getRoleid());
+		List<TblRoleMenu> list = adminService.findRoleMenuIdByRid(tblRole.getRoleid());
+		System.out.println(GsonUtils.getgsonUtils().toStr(list));
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
 }
