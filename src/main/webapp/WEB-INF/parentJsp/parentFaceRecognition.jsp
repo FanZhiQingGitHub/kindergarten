@@ -83,11 +83,13 @@
 			async: false,
 			cache: false,
 			data: {"face":face},
-			success: function(data) {
+			success: function(result) {
+
+
 
 			},
 			error:function(msg) {
-				console.log(msg);
+				layer.alert("网络繁忙，请您稍后重试")
 			}
 		});
 	}

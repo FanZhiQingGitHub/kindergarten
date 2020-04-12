@@ -301,7 +301,7 @@
                 code.src = path + "/parent/loginCode?"+Math.random();
             }), $("#bu3").click(function () {
                 var path = $("#path").val();
-                location.href = path + "//parent/toUrl/parentLogin";
+                location.href = path + "/parent/toUrl/parentLogin";
             });
         })
     });
