@@ -9,7 +9,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>智慧幼儿园-</title>
+    <title>智慧幼儿园-食谱信息修改界面</title>
     <%String path = request.getContextPath(); %>
     <link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
     <script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
@@ -49,7 +49,8 @@
         var laydate = layui.laydate;
         var path = $("#path").val();
         var mealid = $("#mealid").val();
-        var tableInfo = table.render({
+        var tblRecipeList;
+        table.render({
             elem: '#layui_table'
             , url: path + '/healther/showAllRecipeInfo?mealid=' + mealid //数据接口
             , cols: [[ //表头
@@ -62,33 +63,13 @@
                 , {field: 'friday', title: '星期五', width: 250, edit: 'text', align: 'center'}
                 , {field: 'mid', title: '膳食id', width: 250, edit: 'text', align: 'center',hide:true}
             ]]
-            , data: [{
-                "recipename": ""
-                , "monday": ""
-                , "tuesday": ""
-                , "wednesday": ""
-                , "thursday": ""
-                , "friday": ""
-            }, {
-                "recipename": ""
-                , "monday": ""
-                , "tuesday": ""
-                , "wednesday": ""
-                , "thursday": ""
-                , "friday": ""
-            }, {
-                "recipename": ""
-                , "monday": ""
-                , "tuesday": ""
-                , "wednesday": ""
-                , "thursday": ""
-                , "friday": ""
-            }]
+            ,done : function(res, curr, count){
+                tblRecipeList = res.data;
+            }
         });
 
         $(function () {
             $("#bu1").click(function () {
-                var tblRecipeList = tableInfo.config.data;
                 if(tblRecipeList.length == 0){
                     layer.alert("您必须选择一行数据进行修改！", {icon: 2});
                 }else {

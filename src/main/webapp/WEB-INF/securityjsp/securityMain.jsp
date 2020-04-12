@@ -239,7 +239,20 @@
                     }
                 });
             }), $("#bu4").click(function () {
-                layer.alert('敬请期待', {icon: 6});
+                layer.open({
+                    type: 2,
+                    area: ['95%', '80%'],
+                    offset: ['10%', '3%'],
+                    title: '智慧幼儿园-电子围栏',
+                    btn1: function (index, layero) {
+                        //layer.getChildFrame("form", index)获取iframe的表单
+                        //serializeArray jquery方法，将表单对象序列化为数组
+                        layer.close(index);
+                    },
+                    content: path + '/security/path/electricFence' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                    }
+                });
             }), $("#bu5").click(function () {
                 layer.alert('敬请期待', {icon: 6});
             }), $("#bu6").click(function () {

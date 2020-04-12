@@ -224,7 +224,6 @@
         var point = new BMap.Point(118.1930, 24.4885);//定义一个中心点坐标
         map.centerAndZoom(point, 11);//设定地图的中心点和坐标并将地图显示在地图容器中
         map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
-        // map.setCurrentCity("厦门"); // 设置地图显示的城市 此项是必须设置的
         map.addOverlay(new BMap.Marker(point))
         window.map = map;//将map变量存储在全局
     }
