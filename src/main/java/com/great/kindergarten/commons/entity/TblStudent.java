@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * 学生信息实体了
+ * 学生信息实体类
  */
 @Component(value = "TblStudent")
 @Scope("prototype")
@@ -27,6 +27,8 @@ public class TblStudent {
     private Integer pid;
     private Integer kid;
     private Integer rid;
+
+
 
     public TblStudent() {
     }
