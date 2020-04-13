@@ -21,6 +21,26 @@
 			margin: 0;
 			padding: 0;
 		}
+
+		.nav_btn{
+			padding: 30px 0;
+			max-width: 80%;
+			margin: 0 auto;
+		}
+		.getbtn{
+			height: 240px;
+			/*width: 75px;*/
+			width: 8%;
+			font-weight: bold;
+			font-size: 18px;
+			background: #FF5722;
+		}
+		.footer{
+			margin: 0 auto;
+			width: 80%;
+			padding: 0;
+		}
+
 	</style>
 	<!--加载meta IE兼容文件-->
 	<!--[if lt IE 9]>
@@ -88,18 +108,45 @@
 					<div class="img-txt">
 						<img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-1.jpg"
 						     alt="">
-						<h3>体检管理</h3>
+						<h3>作业中心</h3>
 					</div>
 				</div>
 				<div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
 					<div class="img-txt">
 						<img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-2.jpg"
 						     alt="">
-						<h3>膳食管理</h3>
+						<h3>安全教育</h3>
+					</div>
+				</div>
+				<div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
+					<div class="img-txt">
+						<img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-2.jpg"
+						     alt="">
+						<h3>班级中心</h3>
+					</div>
+				</div>
+				<div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
+					<div class="img-txt">
+						<img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-2.jpg"
+						     alt="">
+						<h3>资源中心</h3>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
+	<div class="nav_btn">
+		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="course">课<br/>程<br/>表</button>
+		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="publishAssignment">发<br/>布<br/>作<br/>业</button>
+		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="examineAssignment">查<br/>看<br/>作<br/>业</button>
+		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="configurationTopic">配<br/>置<br/>试<br/>题</button>
+		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="finish">完<br/>成<br/>情<br/>况</button>
+		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="classInfo">班<br/>级<br/>信<br/>息</button>
+		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="attendanceManagement">考<br/>勤<br/>管<br/>理</button>
+		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="classPhoto">班<br/>级<br/>相<br/>册</button>
+		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="messageInform">消<br/>息<br/>通<br/>知</button>
+		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="parentInform">家<br/>长<br/>通<br/>知</button>
+
 	</div>
 </div>
 
@@ -136,9 +183,9 @@
 		});
 		$('.app-header-menuicon').on('click', function () {
 			$('.header-down-nav').toggleClass('down-nav')
-		})
+		});
 		var imgH = $('.imgbox div.layui-this').outerHeight();
-		$('.imgH').css('height', imgH + 'px')
+		$('.imgH').css('height', imgH + 'px');
 		window.onresize = function () {
 			var imgH = $('.imgbox div.layui-this').outerHeight();
 			$('.imgH').css('height', imgH + 'px')
@@ -168,7 +215,57 @@
 					location.href = path + "/teacher/toUrl/teacherLogin";
 				});
 			});
-
+			// 课程表弹窗
+			$("#course").click(function () {
+				layer.open({
+					type: 2,
+					area: ['70%', '80%'],
+					offset: ['10%', '3%'],
+					title:"智慧幼儿园-教师课程表",
+					btn1: function (index, layero) {
+						//layer.getChildFrame("form", index)获取iframe的表单
+						//serializeArray jquery方法，将表单对象序列化为数组
+						layer.close(index);
+					},
+					content: path + '/teacher/toUrl/course' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					, success: function (layero, index) {
+					}
+				});
+			});
+			// 发布作业
+			$("#publishAssignment").click(function () {
+				layer.open({
+					type: 2,
+					area: ['70%', '80%'],
+					offset: ['10%', '3%'],
+					title:"智慧幼儿园-教师发布作业",
+					btn1: function (index, layero) {
+						//layer.getChildFrame("form", index)获取iframe的表单
+						//serializeArray jquery方法，将表单对象序列化为数组
+						layer.close(index);
+					},
+					content: path + '/teacher/toUrl/workRelease' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					, success: function (layero, index) {
+					}
+				});
+			});
+			// 查看作业
+			$("#examineAssignment").click(function () {
+				layer.open({
+					type: 2,
+					area: ['70%', '80%'],
+					offset: ['10%', '3%'],
+					title:"智慧幼儿园-教师查看作业",
+					btn1: function (index, layero) {
+						//layer.getChildFrame("form", index)获取iframe的表单
+						//serializeArray jquery方法，将表单对象序列化为数组
+						layer.close(index);
+					},
+					content: path + '/teacher/toUrl/checkWork' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					, success: function (layero, index) {
+					}
+				});
+			});
 
 	});
 

@@ -16,6 +16,10 @@ public class TblReadmag {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date readmagtime;
+    private Integer readmagpage;
+    private String photourl;
+    private String time1;
+    private String time2;
 
     public TblReadmag() {
     }
@@ -68,14 +72,49 @@ public class TblReadmag {
         this.readmagtime = readmagtime;
     }
 
+    public String getTime1()
+    {
+        return time1;
+    }
+
+    public void setTime1(String time1)
+    {
+        this.time1 = time1;
+    }
+
+    public String getTime2()
+    {
+        return time2;
+    }
+
+    public void setTime2(String time2)
+    {
+        this.time2 = time2;
+    }
+
+    public Integer getReadmagpage()
+    {
+        return readmagpage;
+    }
+
+    public void setReadmagpage(Integer readmagpage)
+    {
+        this.readmagpage = readmagpage;
+    }
+
+    public String getPhotourl()
+    {
+        return photourl;
+    }
+
+    public void setPhotourl(String photourl)
+    {
+        this.photourl = photourl;
+    }
+
     @Override
-    public String toString() {
-        return "TblReadmag{" +
-                "readmagid=" + readmagid +
-                ", readmagname='" + readmagname + '\'' +
-                ", readmagurl='" + readmagurl + '\'' +
-                ", readmagdetail='" + readmagdetail + '\'' +
-                ", readmagtime=" + readmagtime +
-                '}';
+    public String toString()
+    {
+        return "TblReadmag{" + "readmagid=" + readmagid + ", readmagname='" + readmagname + '\'' + ", readmagurl='" + readmagurl + '\'' + ", readmagdetail='" + readmagdetail + '\'' + ", readmagtime=" + readmagtime + ", readmagpage=" + readmagpage + ", photourl='" + photourl + '\'' + ", time1='" + time1 + '\'' + ", time2='" + time2 + '\'' + '}';
     }
 }

@@ -322,7 +322,24 @@
 				var menuName = $('#menuName').val();
 				if(!$('#menuName').val().match(reg)||menuName == 0)
 				{
-					layer.alert("请输入至少2位中文字符", {icon: 2});
+					layer.msg("请输入至少2位中文字符", {icon: 2});
+				}else{
+					$.ajax({
+						url: path + '/admin/checkMenuName',
+						async: true,
+						type: 'post',
+						data: {"menuname": menuName},
+						datatype: 'text',
+						success: function (data) {
+							if (data == "success") {
+								layer.msg("菜单名可用",{icon:6})
+							} else {
+								layer.msg("菜单名已存在,不可用",{icon:2});
+							}
+						}, error: function (data) {
+							layer.alert("网络繁忙！", {icon: 2});
+						}
+					});
 				}
 			});
 
@@ -331,7 +348,7 @@
 				var supName = $('#supName').val();
 				if(!$('#supName').val().match(reg)||supName == 0)
 				{
-					layer.alert("请输入中文", {icon: 2});
+					layer.msg("请输入中文", {icon: 2});
 				}
 			});
 
@@ -341,18 +358,17 @@
 				var arr = menuUrl.split("/");
 				if(menuUrl == 0 || arr.length <= 1)
 				{
-					layer.alert("必须是以admin/toUrl开头，如：admin/toUrl/**", {icon: 2});
+					layer.msg("必须是以admin/toUrl开头，如：admin/toUrl/**", {icon: 2});
 				}else if(arr[1] != "" && arr.length >=2){
 					if(menuUrl.split("/")[0] != "admin" || !arr[1].match(reg))
 					{
-						layer.alert("输入不合法，斜杠后必须是字母，请输入如格式：admin/toUrl/**", {icon: 2});
+						layer.msg("输入不合法，斜杠后必须是字母，请输入如格式：admin/toUrl/**", {icon: 2});
 					}else{
 						// console.log(arr[1].match(reg));
 					}
 				}else{
-					layer.alert("输入不合法，斜杠后必须是字母，请输入如格式：admin/toUrl/**", {icon: 2});
+					layer.msg("输入不合法，斜杠后必须是字母，请输入如格式：admin/toUrl/**", {icon: 2});
 				}
-
 			});
 
 			$("#sort").blur(function () {
@@ -360,7 +376,7 @@
 				var sort = $('#sort').val();
 				if(!$('#sort').val().match(reg)||sort == 0)
 				{
-					layer.alert("输入不合法，请输入数字", {icon: 2});
+					layer.msg("输入不合法，请输入数字", {icon: 2});
 				}
 			});
 
@@ -369,7 +385,7 @@
 				var menuName = $('#menuName2').val();
 				if(!$('#menuName2').val().match(reg)||menuName == 0)
 				{
-					layer.alert("请输入至少2位中文字符", {icon: 2});
+					layer.msg("请输入至少2位中文字符", {icon: 2});
 				}
 			});
 
@@ -378,7 +394,7 @@
 				var pName = $('#pName2').val();
 				if(!$('#pName2').val().match(reg)||pName == 0)
 				{
-					layer.alert("请输入至少2位中文字符", {icon: 2});
+					layer.msg("请输入至少2位中文字符", {icon: 2});
 				}
 			});
 
@@ -387,7 +403,7 @@
 				var sort = $('#sort2').val();
 				if(!$('#sort2').val().match(reg)||sort == 0)
 				{
-					layer.alert("输入不合法，请输入数字", {icon: 2});
+					layer.msg("输入不合法，请输入数字", {icon: 2});
 				}
 			});
 		});

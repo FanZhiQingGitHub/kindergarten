@@ -14,12 +14,19 @@
 	<title>智慧幼儿园平台端-角色管理</title>
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
 	<script src=<%=path + "/layui/layui.js"%>></script>
+	<style>
+		.layui-table-cell{
+			height:40px;
+			line-height: 40px;
+		}
+		h2{
+			text-align: center;
+		}
+	</style>
 </head>
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
-	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-		<legend style="text-align: center">角色信息</legend>
-	</fieldset>
+	<h2>角色信息</h2>
 	<div class="layui-row" style="margin-top: 20px;">
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="roleTable">
@@ -42,7 +49,18 @@
 			</div>
 		</form>
 	</div>
-	<table id="roleInfo" lay-filter="role"></table>
+	<table id="roleInfo" lay-filter="role" class="layui-table-cell"></table>
+	<div id="type-content" style="display: none;">
+		<form class="layui-form" action="">
+			<div class="layui-form-item">
+				<span class="layui-form-label" style="margin-top: 2%">角色名称：</span>
+				<div class="layui-inline">
+					<input type="text" id="roleName2" name="roleName2" placeholder="请输入菜单名称" value=""
+					       autocomplete="off" class="layui-input" style="width: 120%;margin-top: 5%" lay-verify="required">
+				</div>
+			</div>
+		</form>
+	</div>
 	<script type="text/html" id="barOption">
 		<button type="button" class="layui-btn layui-btn-normal" lay-event="update" style="text-align: -moz-center"><i class="layui-icon">&#xe642;修改</i></button>
 		<button type="button" class="layui-btn layui-btn-normal" lay-event="delete" ><i class="layui-icon">&#xe640;删除</i></button>
@@ -67,7 +85,7 @@
 		var path = $("#path").val();
 		var tableIns = table.render({
 			elem: '#roleInfo'
-			, height: 312
+			, height: 350
 			, url: path + "/admin/roleMgrInfo"//数据接口
 			, page: true //开启分页
 			, limit: 5
@@ -144,8 +162,75 @@
 					});
 				}
 			});
-		})
+		});
 
+		$("#btn-add").click(function () {
+			layer.open({
+				type: 1,
+				area: ['30%', '32%'],
+				content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+				title: '新增角色',
+				btn: ['提交', '返回'],
+				offset: '100px',
+				btnAlign: 'c',
+				success:function(){
+
+				},
+				btn1: function (index) {
+					var roleName2 = $('#roleName2').val();
+					$.ajax({
+						url: path + '/admin/addRoleItems',
+						async: true,
+						type: 'post',
+						data: {"rolename": roleName2},
+						datatype: 'text',
+						success: function (data) {
+							if (data == "success") {
+								layer.alert("新增角色成功！", {icon: 6});
+								layer.close(index);
+								tableIns.reload();
+							} else {
+								layer.alert("新增角色失败", {icon: 2});
+							}
+						}, error: function (data) {
+							layer.alert("网络繁忙！", {icon: 2});
+						}
+					});
+				},
+				btn2:function(index){
+					layer.close(index);
+					$('#roleName2').val("");
+				}
+			});
+		});
+
+		$(function(){
+			$("#roleName2").blur(function () {
+				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
+				var roleName2 = $('#roleName2').val();
+				if(!$('#roleName2').val().match(reg)||roleName2 == 0)
+				{
+					layer.msg("请输入至少2位中文字符", {icon: 2});
+				}else{
+					$.ajax({
+						url: path + '/admin/checkRoleName',
+						async: true,
+						type: 'post',
+						data: {"rolename": roleName2},
+						datatype: 'text',
+						success: function (data) {
+							if (data == "success") {
+								layer.msg("角色名可用",{icon:6})
+							} else {
+								layer.msg("角色名已存在,不可用",{icon:2});
+							}
+						}, error: function (data) {
+							layer.alert("网络繁忙！", {icon: 2});
+						}
+					});
+				}
+			});
+		});
 
 		//搜索功能的实现
 		$('.roleTable .layui-btn').on('click', function () {
