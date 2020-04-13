@@ -1,8 +1,13 @@
 package com.great.kindergarten.commons.entity;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 /**
  * 课程表信息实体类
  */
+@Component(value = "TblCourse")
+@Scope("prototype")
 public class TblCourse {
     private Integer courseid;
     private Integer coursenum;
@@ -12,6 +17,7 @@ public class TblCourse {
     private String coursename4;
     private String coursename5;
     private Integer cid;
+
 
     public TblCourse() {
     }

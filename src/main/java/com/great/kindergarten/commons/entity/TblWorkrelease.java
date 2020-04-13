@@ -2,15 +2,18 @@ package com.great.kindergarten.commons.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 /**
  * 教师作业发布表实体类
  */
+@Component
 public class TblWorkrelease {
     private Integer workreleaseid;
     private String workreleasedetail;
+    private String worklocation;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date workreleasetime;
@@ -19,11 +22,23 @@ public class TblWorkrelease {
     public TblWorkrelease() {
     }
 
-    public TblWorkrelease(Integer workreleaseid, String workreleasedetail, Date workreleasetime, Integer cid) {
+    public TblWorkrelease(Integer workreleaseid, String workreleasedetail, String worklocation, Date workreleasetime, Integer cid)
+    {
         this.workreleaseid = workreleaseid;
         this.workreleasedetail = workreleasedetail;
+        this.worklocation = worklocation;
         this.workreleasetime = workreleasetime;
         this.cid = cid;
+    }
+
+    public String getWorklocation()
+    {
+        return worklocation;
+    }
+
+    public void setWorklocation(String worklocation)
+    {
+        this.worklocation = worklocation;
     }
 
     public Integer getWorkreleaseid() {
@@ -59,12 +74,8 @@ public class TblWorkrelease {
     }
 
     @Override
-    public String toString() {
-        return "TblWorkrelease{" +
-                "workreleaseid=" + workreleaseid +
-                ", workreleasedetail='" + workreleasedetail + '\'' +
-                ", workreleasetime=" + workreleasetime +
-                ", cid=" + cid +
-                '}';
+    public String toString()
+    {
+        return "TblWorkrelease{" + "workreleaseid=" + workreleaseid + ", workreleasedetail='" + workreleasedetail + '\'' + ", worklocation='" + worklocation + '\'' + ", workreleasetime=" + workreleasetime + ", cid=" + cid + '}';
     }
 }
