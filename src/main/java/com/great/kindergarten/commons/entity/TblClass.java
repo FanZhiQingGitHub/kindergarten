@@ -15,6 +15,10 @@ public class TblClass {
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date classregtime;
     private String classstatus;
+    //从表的教师表的值
+    private TblTeacher tblTeacher;
+    private Integer teacherid;
+    private String teachername;
 
     public TblClass() {
     }
@@ -56,6 +60,36 @@ public class TblClass {
 
     public void setClassstatus(String classstatus) {
         this.classstatus = classstatus;
+    }
+
+    public TblTeacher getTblTeacher()
+    {
+        return tblTeacher;
+    }
+
+    public void setTblTeacher(TblTeacher tblTeacher)
+    {
+        this.tblTeacher = tblTeacher;
+    }
+
+    public Integer getTeacherid()
+    {
+        return teacherid;
+    }
+
+    public void setTeacherid(Integer teacherid)
+    {
+        this.teacherid = teacherid;
+    }
+
+    public String getTeachername()
+    {
+        return teachername;
+    }
+
+    public void setTeachername(String teachername)
+    {
+        this.teachername = teachername;
     }
 
     @Override

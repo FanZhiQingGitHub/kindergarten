@@ -5,18 +5,19 @@
 <mapper namespace="com.great.kindergarten.director.mapper.KinderMapper">
     <!--    com.great.kindergarten.director.javabean.-->
     <!--resultType先是传入的，parameterType是传-一样的话，其实是可以不用写的-->
-<!--    <resultMap id="rectorMap" type="TblRector">-->
-<!--        <result column="rectorid" property="rectorid"></result>-->
-<!--        <result column="rectorname" property="rectorname"></result>-->
-<!--        <result column="rectorpwd" property="rectorpwd"></result>-->
-<!--        <result column="rectorsex" property="rectorsex"></result>-->
-<!--        <result column="rectorage" property="rectorage"></result>-->
-<!--        <result column="rectoradd" property="rectoradd"></result>-->
-<!--        <result column="rectorphone" property="rectorphone"></result>-->
-<!--        <result column="rectorregtime" property="rectorregtime"></result>-->
-<!--        <result column="rectorstatus" property="rectorstatus"></result>-->
-<!--        <result column="rid" property="rid"></result>-->
-<!--    </resultMap>-->
+    <!--    班级和教师表-->
+    <resultMap id="tbl_ClassTeacher" type="TblClass">
+        <result property="classid" column="classid"/>
+        <result property="classname" column="classname"/>
+        <result property="classregtime" column="classregtime"/>
+        <result property="classstatus" column="classstatus"/>
+        <result property="teacherid" column="teacherid"/>
+        <result property="teachername" column="teachername"/>
+        <association property="tblTeacher" javaType="TblTeacher">
+            <result property="teacherid" column="teacherid"/>
+            <result property="teachername" column="teachername"/>
+        </association>
+    </resultMap>
 
     <!--申请园所-->
     <insert id="addKinderMsg" parameterType="TblKinder">
@@ -53,4 +54,198 @@ insert into tbl_kinder(
 		)
     </insert>
 
+
+    <!--课程管理....班级和教师表的对应的表格的显示-->
+    <select id="findClassTeacherAll" resultMap="tbl_ClassTeacher" parameterType="java.util.HashMap">
+        select c.*,t.teacherid,t.teachername from tbl_teacher t,tbl_class c
+        <where>t.cid=c.classid
+            <if test="classname != null and classname != ''">
+                and c.classname like "%"#{classname}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and c.classregtime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and c.classregtime &lt; #{overTime}
+            </if>
+        </where>
+        order by c.classregtime desc limit #{pageInt},#{limitInt}
+    </select>
+    <!--课程管理....班级和教师表.查询记录条数-->
+    <select id="findClassTeacherAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(*) from tbl_teacher t,tbl_class c
+        <where>t.cid=c.classid
+            <if test="classname != null and classname != ''">
+                and c.classname like "%"#{classname}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and c.classregtime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and c.classregtime &lt; #{overTime}
+            </if>
+        </where>
+    </select>
+    <select id="findAllCourseName" resultType="TblCourse" parameterType="java.util.HashMap">
+        select * from tbl_course
+        <where>cid = #{cid}
+        </where>
+        order by coursenum
+    </select>
+    <!--课程管理....班级和教师表.查询记录条数-->
+    <select id="findAllCourseNameCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(*) from tbl_course
+        <where>cid = #{cid}
+        </where>
+    </select>
+
+    <!--课程管理....新增课程表信息-->
+    <insert id="addTblCourseInfo" parameterType="java.util.List">
+        insert into
+        tbl_course(coursenum,coursename1,coursename2,coursename3,coursename4,coursename5,cid)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.coursenum},#{i.coursename1},#{i.coursename2},#{i.coursename3},#{i.coursename4},#{i.coursename5},#{i.cid})
+        </foreach>
+    </insert>
+<!--    课程管理....删除对应的课程表的该时间的课程-->
+    <delete id="delTblCourseInfo" parameterType="java.lang.Integer">
+        delete from tbl_course where cid = #{cid}
+    </delete>
+
+    <!--班级管理....查找对应的老师的信息下拉框-->
+    <select id="findTeacherClassAll" resultType="TblTeacher">
+        select * from tbl_teacher where teacherjob='班主任'
+    </select>
+
+    <!--班级管理....对应的进行家长的新增-->
+    <insert id="addClassForm" parameterType="TblClass">
+		insert into tbl_class(classname,classregtime,classstatus)
+        values(#{classname},#{classregtime},'启用');
+	</insert>
+    <select id="selectClassByCid" resultType="TblClass" parameterType="string">
+        select * from tbl_class where classname = #{classname};
+    </select>
+    <update id="updateTeacherByCid" parameterType="java.util.HashMap">
+        update tbl_teacher set cid = #{cid} where teachername = #{teachername};
+    </update>
+<!--    班级管理....删除对应的班级信息-->
+    <delete id="delClassTable" parameterType="int">
+        delete from tbl_class
+        where classid = #{cid}
+    </delete>
+<!--    班级管理....修改对应的班级信息-->
+    <select id="selectTeacherByTeacherId" resultType="TblTeacher" parameterType="int">
+        select * from tbl_teacher where cid = #{classid};
+    </select>
+    <update id="updateClassTable" parameterType="TblClass">
+        update tbl_class
+        set  classname = #{classname}
+        where classid = #{classid}
+    </update>
+
+    <!--班级成员管理-->
+    <select id="findClassMemberAll" resultType="com.great.kindergarten.director.resultbean.TblScTInfo" parameterType="java.util.HashMap">
+        select * from tbl_student s,tbl_class c,tbl_teacher t
+        <where> s.cid=c.classid and c.classid=t.cid
+            <if test="studentname != null and studentname != ''">
+                and s.studentname like "%"#{studentname}"%"
+            </if>
+            <if test="classname != null and classname != ''">
+                and c.classname like "%"#{classname}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and s.studenttime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and s.studenttime &lt; #{overTime}
+            </if>
+        </where>
+        order by s.studenttime desc limit #{pageInt},#{limitInt}
+    </select>
+
+    <!--课程管理....班级和教师表.查询记录条数-->
+    <select id="findClassMemberAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(*) from tbl_student s,tbl_class c,tbl_teacher t
+        <where> s.cid=c.classid and c.classid=t.cid
+            <if test="studentname != null and studentname != ''">
+                and s.studentname like "%"#{studentname}"%"
+            </if>
+            <if test="classname != null and classname != ''">
+                and c.classname like "%"#{classname}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and s.studenttime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and s.studenttime &lt; #{overTime}
+            </if>
+        </where>
+    </select>
+    <select id="findAllClassAll" resultType="TblClass">
+        select * from tbl_class
+    </select>
+    <!--添加对应的班级成员信息-->
+    <update id="updateStudentByCid" parameterType="java.util.HashMap">
+        update tbl_student set cid = #{cid} where studentname = #{studentname};
+    </update>
+
+    <!--校园公告管理....查询总记录-->
+    <select id="findCampusBulletinAll" resultType="TblCampus" parameterType="java.util.HashMap">
+        select * from tbl_campusinfo
+        <where> 1=1
+            <if test="campusinfoname != null and campusinfoname != ''">
+                and campusinfoname like "%"#{campusinfoname}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and campustime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and campustime &lt; #{overTime}
+            </if>
+        </where>
+        order by campustime desc limit #{pageInt},#{limitInt}
+    </select>
+
+    <!--校园公告管理...校园公告表的查询记录条数-->
+    <select id="findCampusBulletinAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(*) from tbl_campusinfo
+        <where> 1=1
+            <if test="campusinfoname != null and campusinfoname != ''">
+                and campusinfoname like "%"#{campusinfoname}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and campustime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and campustime &lt; #{overTime}
+            </if>
+        </where>
+    </select>
+
+    <!--校园公告新增-->
+    <insert id="addCampusBulletin" parameterType="TblCampus">
+		insert into tbl_campusinfo(
+		    campusinfoname
+			,campusinfodetail
+			,campustime
+		)values(
+		    #{campusinfoname}
+			,#{campusinfodetail}
+			,#{campustime})
+	</insert>
+
+    <!--校园公告删除-->
+    <delete id="delCampusBulletin" parameterType="int">
+        delete from tbl_campusinfo
+        where campusinfoid = #{campusinfoid}
+    </delete>
+
+    <!--校园公告修改-->
+    <update id="updateCampusBulletin" parameterType="TblCampus">
+        update tbl_campusinfo
+        set  campusinfoname = #{campusinfoname}
+            ,campusinfodetail = #{campusinfodetail}
+        where campusinfoid = #{campusinfoid}
+    </update>
 </mapper>

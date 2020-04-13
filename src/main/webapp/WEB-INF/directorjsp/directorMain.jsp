@@ -32,8 +32,7 @@
         }
         .getbtn{
             height: 240px;
-            /*width: 75px;*/
-            width: 7.5%;
+            width: 8%;
             font-weight: bold;
             font-size: 18px;
             background: #FF5722;
@@ -134,11 +133,11 @@
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="teachersExamAffection">教<br/>师<br/>考<br/>勤</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="childrenManagement">幼<br/>儿<br/>管<br/>理</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="parentManagement">家<br/>长<br/>管<br/>理</button>
-        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">班<br/>级<br/>管<br/>理</button>
-        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">班<br/>级<br/>成<br/>员<br/>管<br/>理</button>
-        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">课<br/>程<br/>管<br/>理</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="classManagement">班<br/>级<br/>管<br/>理</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="classMemberManagement">班<br/>级<br/>成<br/>员<br/>管<br/>理</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="courseManagement">课<br/>程<br/>管<br/>理</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">消<br/>息<br/>通<br/>知</button>
-        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">校<br/>园<br/>公<br/>告</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="campusBulletinManagement">校<br/>园<br/>公<br/>告</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">联<br/>系<br/>老<br/>师</button>
     </div>
     <div class="prod-show" style="max-width: 80%;">
@@ -331,6 +330,46 @@
             });
             return false;
         });
+
+        //课程管理
+        $("#courseManagement").on('click',function () {
+            layer.confirm('您确定要进入到课程管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
+                layer.close(index);
+                window.location.href = src+"/director/toUrl/director_CourseManage";
+                return true;
+            });
+            return false;
+        });
+
+        //班级管理
+        $("#classManagement").on('click',function () {
+            layer.confirm('您确定要进入到班级管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
+                layer.close(index);
+                window.location.href = src+"/director/toUrl/director_ClassManage";
+                return true;
+            });
+            return false;
+        });
+
+        //班级成员管理
+        $("#classMemberManagement").on('click',function () {
+            layer.confirm('您确定要进入到班级成员管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
+                layer.close(index);
+                window.location.href = src+"/director/toUrl/director_ClassMemberManage";
+                return true;
+            });
+            return false;
+        });
+        //校园公告管理
+        $("#campusBulletinManagement").on('click',function () {
+            layer.confirm('您确定要进入到校园公告管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
+                layer.close(index);
+                window.location.href = src+"/director/toUrl/director_CampusBulletinManage";
+                return true;
+            });
+            return false;
+        });
+
     });
 </script>
 

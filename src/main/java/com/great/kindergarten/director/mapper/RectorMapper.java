@@ -1,9 +1,6 @@
 package com.great.kindergarten.director.mapper;
 
-import com.great.kindergarten.commons.entity.TblParent;
-import com.great.kindergarten.commons.entity.TblRector;
-import com.great.kindergarten.commons.entity.TblStudent;
-import com.great.kindergarten.commons.entity.TblTeacher;
+import com.great.kindergarten.commons.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +21,8 @@ public interface RectorMapper
 
 
 	/*
-	* 教师模块的设计
-	* */
+	 * 教师模块的设计
+	 * */
 	//教师模块设计
 	public List<TblTeacher> findTeacherAll(Map<String, Object> map);
 
@@ -60,8 +57,8 @@ public interface RectorMapper
 	public int updateChildrenById(TblStudent tblStudent);
 
 	/*
-	* 家长和学生的两表联查
-	* */
+	 * 家长和学生的两表联查
+	 * */
 	//查询家长和学生对应的信息
 	public List<TblParent> findParentAll(Map<String, Object> map);
 
@@ -70,8 +67,11 @@ public interface RectorMapper
 
 	//对应的进行幼儿的新增
 	public int addParentForm(TblParent tblParent);
+
 	public TblParent selectParentByPid(String studentname);
+
 	public int updateChildrenByPid(Map<String, Object> map);
+
 	//查找对应的所有学生信息
 	public List<TblStudent> findChildrenParentAll();
 
@@ -82,6 +82,10 @@ public interface RectorMapper
 	 * 家长对应的信息进行修改操作
 	 * */
 	public int updateParentTable(TblParent tblParent);
-	public int updateChildrenByPidDown(Map<String, Object> map);
+
+	//对应的修改先删除
+	public TblStudent selectStudentByStudentId(int pid);
+	//	public int updateChildrenByPidDown(Map<String, Object> map);
+
 
 }

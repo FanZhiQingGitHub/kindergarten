@@ -1,4 +1,4 @@
-package com.great.kindergarten.commons.entity;
+package com.great.kindergarten.director.resultbean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.context.annotation.Scope;
@@ -8,11 +8,12 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * 学生信息实体了
+ * 学生-班级-教师信息实体
  */
-@Component(value = "TblStudent")
+@Component(value = "TblScTInfo")
 @Scope("prototype")
-public class TblStudent {
+public class TblScTInfo
+{
     private Integer studentid;
     private String studentname;
     private String studentpwd;
@@ -28,11 +29,13 @@ public class TblStudent {
     private Integer kid;
     private Integer rid;
 
+    private String classname;
+    private String teachername;
 
-    public TblStudent() {
+    public TblScTInfo() {
     }
 
-    public TblStudent(Integer studentid, String studentname, String studentpwd, String studentsex, String studentbrith, String studentadd, Date studenttime, String studentstatus, Integer cid, Integer pid, Integer kid, Integer rid) {
+    public TblScTInfo(Integer studentid, String studentname, String studentpwd, String studentsex, String studentbrith, String studentadd, Date studenttime, String studentstatus, Integer cid, Integer pid, Integer kid, Integer rid) {
         this.studentid = studentid;
         this.studentname = studentname;
         this.studentpwd = studentpwd;
@@ -143,22 +146,30 @@ public class TblStudent {
         this.rid = rid;
     }
 
+    public String getClassname()
+    {
+        return classname;
+    }
+
+    public void setClassname(String classname)
+    {
+        this.classname = classname;
+    }
+
+    public String getTeachername()
+    {
+        return teachername;
+    }
+
+    public void setTeachername(String teachername)
+    {
+        this.teachername = teachername;
+    }
+
     @Override
-    public String toString() {
-        return "TblStudent{" +
-                "studentid=" + studentid +
-                ", studentname='" + studentname + '\'' +
-                ", studentpwd='" + studentpwd + '\'' +
-                ", studentsex='" + studentsex + '\'' +
-                ", studentbrith='" + studentbrith + '\'' +
-                ", studentadd='" + studentadd + '\'' +
-                ", studenttime=" + studenttime +
-                ", studentstatus='" + studentstatus + '\'' +
-                ", cid=" + cid +
-                ", pid=" + pid +
-                ", kid=" + kid +
-                ", rid=" + rid +
-                '}';
+    public String toString()
+    {
+        return "TblScTInfo{" + "studentid=" + studentid + ", studentname='" + studentname + '\'' + ", studentpwd='" + studentpwd + '\'' + ", studentsex='" + studentsex + '\'' + ", studentbrith='" + studentbrith + '\'' + ", studentadd='" + studentadd + '\'' + ", studenttime=" + studenttime + ", studentstatus='" + studentstatus + '\'' + ", cid=" + cid + ", pid=" + pid + ", kid=" + kid + ", rid=" + rid + ", classname='" + classname + '\'' + ", teachername='" + teachername + '\'' + '}';
     }
 }
 

@@ -223,10 +223,14 @@
         delete from tbl_parent
         where parentid = #{parentId}
     </delete>
-<!--    家长对应的信息进行修改操作-->
-    <update id="updateChildrenByPidDown" parameterType="java.util.HashMap">
-        update tbl_student set studentname = #{studentname} where pid = #{pid};
-    </update>
+<!--&lt;!&ndash;    家长对应的信息进行修改操作&ndash;&gt;-->
+<!--    <update id="updateChildrenByPidDown" parameterType="java.util.HashMap">-->
+<!--        update tbl_student set studentname = #{studentname} where pid = #{pid};-->
+<!--    </update>-->
+<!--    查询是否有这个对应的ID值，然后进行删除-->
+    <select id="selectStudentByStudentId" resultType="TblStudent" parameterType="int">
+        select * from tbl_student where pid = #{pid};
+    </select>
     <update id="updateParentTable" parameterType="TblParent">
         update tbl_parent
         set  parentName = #{parentName}
