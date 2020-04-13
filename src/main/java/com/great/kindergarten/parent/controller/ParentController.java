@@ -49,15 +49,29 @@ public class ParentController {
 
 
 
+    @RequestMapping("/kidHomeWorkList")
+    @ResponseBody
+    public TableDate kidHomeWorkList(HttpServletRequest request,SearchCondition searchCondition){
+//    查询家长的孩子的作业列表方法
+        //取得是谁要执行查询操作
+        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
+        //设置查找人id
+        searchCondition.setParentId(3);
+        //返回查找的结
+        return parentService.kidHomeWorkList(searchCondition);
+    }
+
+    @RequestMapping("/getKids")
+    @ResponseBody
+    public Result getKids(HttpServletRequest request){
+//    查询家长id 查询孩子列表
+        //取得是谁要执行查询操作
+        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
+        //返回查找的结果
+        return parentService.getKids(3);
 
 
-
-
-
-
-
-
-
+    }
 
 
 
