@@ -13,10 +13,10 @@ public class SearchCondition
 	private String name;
 	private String status;
 	private Integer parentId;
-	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
 	@DateTimeFormat(pattern ="yyyy-MM-dd")
 	private Date beginTime;
-	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
 	@DateTimeFormat(pattern ="yyyy-MM-dd")
 	private Date endTime;
 	private Integer page;
@@ -25,6 +25,7 @@ public class SearchCondition
 
 	public SearchCondition()
 	{
+
 	}
 
 	public SearchCondition(String name, String status, Integer parentId, Date beginTime, Date endTime, Integer page, Integer limit)

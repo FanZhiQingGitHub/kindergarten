@@ -1,12 +1,10 @@
 package com.great.kindergarten.parent.controller;
 
-import com.great.kindergarten.commons.entity.SearchCondition;
-import com.great.kindergarten.commons.entity.TableDate;
-import com.great.kindergarten.commons.entity.TblParent;
-import com.great.kindergarten.commons.entity.Result;
+import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.parent.service.ParentService;
 import com.great.kindergarten.util.FaceRecognitionUtils;
 import com.great.kindergarten.util.MD5Utils;
+import javafx.scene.Parent;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
  * @author Administrator
@@ -32,27 +30,22 @@ public class ParentController {
     }
 
 
-
-
-    @RequestMapping("/parentSafetyTestList")
+    @RequestMapping("/recordScore")
     @ResponseBody
-    public TableDate parentSafetyTestList(HttpServletRequest request,SearchCondition searchCondition){
-//    查询家长安全视频列表方法
-        //取得是谁要执行查询操作
-        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
-
-        searchCondition.setParentId(1);
-        //返回查找的结果
-        return parentService.parentSafetyTestList(searchCondition);
-    }
-
-
-
-
-    @RequestMapping("/play/{videoId}")
-    public void playVideo(@PathVariable  String videoId){
-//    播放视频返回地址方法
-
+    public Result recordScore(HttpServletRequest request){
+        Result result = new Result();
+        //获取信息
+       TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
+       Integer videoId = Integer.valueOf(request.getParameter("videoId"));
+        Integer score = Integer.valueOf(request.getParameter("score"));
+//        调用插入数据信息
+        if (parent!=null){
+            if (parentService.recordScore(parent.getParentId(),videoId,score)){
+                //成功返回状态
+                result.setSuccess(true);
+            }
+        }
+        return result;
     }
 
 
@@ -61,6 +54,7 @@ public class ParentController {
     @ResponseBody
     public Result parentFaceRecognition(String face)
     {
+        //人脸识别调用 (可根据id单张图片比较)
         Result result = new Result();
 
         FaceRecognitionUtils.identify(face,null);
@@ -69,9 +63,30 @@ public class ParentController {
     }
 
 
+    @RequestMapping("/parentSafetyTestList")
+    @ResponseBody
+    public TableDate parentSafetyTestList(HttpServletRequest request,SearchCondition searchCondition){
+//    查询家长安全视频列表方法
+        //取得是谁要执行查询操作
+        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
+        //设置查找人id
+        searchCondition.setParentId(parent.getParentId());
+        //返回查找的结果
+        return parentService.parentSafetyTestList(searchCondition);
+    }
 
+    @RequestMapping("/SafetyTestQuestion")
+    public String playVideo(HttpServletRequest request){
+//        获取要做哪套题
+        Integer safetyVideoId =  Integer.valueOf(request.getParameter("safetyVideoId"));
 
-
+        //查询出对应的题目列表
+        List<TblSafetyvtq> subject= parentService.findSafetyTestQuestionList(safetyVideoId);
+        //给请求加上题目
+        request.setAttribute("subject",subject);
+        //转发
+	    return "parentJsp/SafetyTestQuestion";
+    }
 
 
     @RequestMapping("/logout")

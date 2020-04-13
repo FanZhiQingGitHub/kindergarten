@@ -34,15 +34,6 @@
 		</div>
 	</div>
 
-	<label>
-		完成状态：
-		<select id="status">
-			<option value="0">未选择</option>
-			<option value="">已完成</option>
-			<option value="">未完成</option>
-		</select>
-	</label>
-
 	<button class="layui-btn" data-type="reload">搜索</button>
 
 </div>
@@ -56,10 +47,7 @@
 	<a class="layui-btn edit layui-btn-xs" data-method="dialog" lay-event="play">播放视频</a>
 
 
-	{{#  if(d.safetytestresult == "已完成" ){ }}
-	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="showPoint">查看得分</a>
-
-	{{#  } else if(d.safetytestresult == null ) { }}
+	{{#  if(d.safetytestresult == null ){ }}
 	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="SafetyTest">安全试题</a>
 	{{#  } }}
 
@@ -86,7 +74,15 @@
 				,{field: 'safetyvideoname', title: '视频名称'}
 				,{field: 'safetyvideotime', title: '发布时间',  sort: true}
 				,{field: 'safetytestscore', title: '得分'}
-				,{field: 'safetytestresult', title: '完成情况'  }
+				,{field: 'safetytestresult', title: '完成情况',templet:function (d) {
+					if (d.safetytestresult==null){
+						return '未完成'
+					}
+					else {
+						return  d.safetytestresult
+					}
+
+					}   }
 				,{fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo'}
 			]]
 		});
@@ -111,7 +107,6 @@
 					,where:{
 						//发送的值
 						name:$('#uName').val(),
-						status:$('#status').val(),
 						beginTime:$('#beginTime').val(),
 						endTime:$('#endTime').val()
 					}
@@ -129,28 +124,78 @@
 
 			//事件等于编辑
 			if (layEvent === 'play') {
-				var othis = $(this), //othis当前button对象
-					method = othis.data('method');//data-method="dialog"中的值
 					layer.open({
-						type: 2,
-						area: ['700px', '500px'],
-						btn: ['修改', '取消'],
-						btn1: function(index, layero){
-						},
-						content: path+'/parent/toUrl/parentVedioPlay' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-						,success: function(layero, index){
-						}
+						//打开一个窗口播放视频
+						type: 1,
+						area: ['70%', '70%'],
+						content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
+							'<source src=" ${path}/'+data.videoadd+'" type="video/mp4"></source></video>'
+						//直接跳出一个标签播放视频
 					});
 			}
 
+			//事件等于做安全试题
+			if (layEvent === 'SafetyTest') {
+				layer.open({
+					//打开一个窗口做题
+					type: 2,
+					area: ['70%', '70%'],
+					btn: ['提交', '取消'],
+					btn1: function(index){
+						//找到窗口的body标签里面的内容
+						var body = layer.getChildFrame("body", index);
+						//检查是否有做完所有题目
+							var score =0;
+							//找到有多少题目
+							var ChooseNumber = body.find(".Choose").length;
 
+							if(body.find('input[type="radio"]:checked').length < ChooseNumber){
+								layer.alert('您还有题目未选哦');
+								//如果没有选择完整则返回
+								return false;
+							}else {
 
+								//计算分数
+								for(var i = 0;i < ChooseNumber;i++){
+									{
+										//分数累加
+										if(Number(i+1) == ChooseNumber)
+										{
+											body.find('input:radio:checked').each(function () {
+												score+=parseInt($(this).val());
+											});
+										}
+									}
+								}
+							}
+							//获取题目id
+							var videoId= body.find("#videoId").val();
+							//发送ajax
+							$.ajax({
+								url: path+'/parent/recordScore',
+								type:"POST",
+								async: false,
+								cache: false,
+								data: {"videoId":videoId,"score":score},
+								success: function(result) {
+									//如果成功记录分数
+									if (result.success){
+										layer.close(index);
+										alert("提交成功,即将刷新页面");
+										location.reload();
+									}else {
+										alert("提交失败,请您重试");
+									}
+								},
+								error:function(msg) {
+									console.log(msg);
+								}
+							});
+					},
+					content: path+"/parent/SafetyTestQuestion?safetyVideoId="+data.safetyvideoid
+				});
 
-
-
-
-
-
+			}
 
 
 

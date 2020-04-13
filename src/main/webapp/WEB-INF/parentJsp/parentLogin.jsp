@@ -208,7 +208,7 @@
                 </div>
 
                 <div id="codediv">
-                    <img src="${pageContext.request.contextPath}/security/loginCode" id="code">
+                    <img src="${pageContext.request.contextPath}/teacher/loginCode" id="code">
                     <input type="button" id="bu1" value="看不清？换一张"></td>
                 </div>
             </div>
