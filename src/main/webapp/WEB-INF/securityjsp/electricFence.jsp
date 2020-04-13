@@ -107,8 +107,9 @@
         var drawpoint;
         var point2s = [];
 
-        var dafaultpoint;
-        var point3s = [];
+        var dafaultpoint;//给定默认的显示地点经纬度
+        var dafpoint = [];
+
 
 
 
@@ -120,7 +121,7 @@
             point2s.push(drawpoint);
             addMarker(point2s);
             point2s.shift();
-            point3s.shift();
+            dafpoint.shift();
         });
         //创建一个圆
         var circle = new BMap.Circle(new BMap.Point(118.1932, 24.4886), 35, {
@@ -132,8 +133,8 @@
 
         //用作默认显示一个点
         dafaultpoint =  new BMap.Point(118.1932, 24.48854);
-        point3s = [dafaultpoint];
-        addMarker(point3s);
+        dafpoint = [dafaultpoint];
+        addMarker(dafpoint);
 
         function addMarker(points) {
             console.log(points.length);
