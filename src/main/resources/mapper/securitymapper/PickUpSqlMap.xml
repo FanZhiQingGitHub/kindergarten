@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.kindergarten.security.mapper.SecurityMapper">
+
+    <!--    查找班级信息，不带分页，作为搜索条件-->
+    <select id="findAllClass" resultType="com.great.kindergarten.commons.entity.TblClass">
+        select * from tbl_class
+    </select>
+
+    <resultMap id="pickUpInfoMap" type="com.great.kindergarten.commons.entity.TblPickup">
+        <id property="pickupid" column="p_pickupid"></id>
+        <result property="sid" column="p_sid"></result>
+        <result property="studentname" column="s_name"></result>
+        <result property="studentsex" column="s_sex"></result>
+        <result property="classname" column="c_name"></result>
+        <result property="teachername" column="t_name"></result>
+
+        <association property="tblTeacher" column="teacherid" javaType="com.great.kindergarten.commons.entity.TblTeacher" resultMap="tblTeacherMap" />
+        <association property="tblStudent" column="studentid" javaType="com.great.kindergarten.commons.entity.TblStudent" resultMap="tblStudentMap" />
+        <association property="tblClass" column="classid" javaType="com.great.kindergarten.commons.entity.TblClass" resultMap="tblClassMap" />
+    </resultMap>
+    <resultMap id="tblTeacherMap" type="com.great.kindergarten.commons.entity.TblTeacher">
+        <id property="teacherid" column="t_id"></id>
+        <result property="teachername" column="t_name"></result>
+    </resultMap>
+    <resultMap id="tblStudentMap" type="com.great.kindergarten.commons.entity.TblStudent">
+        <id property="studentid" column="s_tuid"></id>
+        <result property="studentname" column="s_name"></result>
+        <result property="studentsex" column="s_sex"></result>
+    </resultMap>
+    <resultMap id="tblClassMap" type="com.great.kindergarten.commons.entity.TblClass">
+        <id property="classid" column="c_id"></id>
+        <result property="classname" column="c_name"></result>
+
+    </resultMap>
+
+
+    <select id="findALLPickUpInfo" resultMap="pickUpInfoMap"
+            parameterType="com.great.kindergarten.security.resultbean.PickUpInfoPage">
+        select p.pickupid as p_pickupid ,p.sid as p_sid , s.studentid as s_tuid , s.studentname as s_name,s.studentsex as s_sex ,c.classid as c_id , c.classname as c_name ,
+        t.teacherid as t_id, t.teachername as t_name
+        from tbl_pickup p,tbl_student s,tbl_class c,tbl_teacher t
+        <where>
+            p.sid = s.studentid and c.classid = t.cid and s.cid = c.classid
+            <if test="uStuName != '' and uStuName != null ">
+                and s.studentname = #{uStuName}
+            </if>
+            <if test="cName != '' and cName != null and cName != '请选择' ">
+                and c.classname = #{cName}
+            </if>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(p.mondaydate, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(p.sundaydate, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+        </where>
+        order by p.sundaydate desc limit #{page},#{limit}
+
+    </select>
+
+    <select id="findALLPickUpInfoCount" resultType="java.lang.Long"
+            parameterType="com.great.kindergarten.security.resultbean.PickUpInfoPage">
+        select count(*) from tbl_pickup p,tbl_student s,tbl_class c,tbl_teacher t
+        <where>
+            p.sid = s.studentid and c.classid = t.cid and s.cid = c.classid
+            <if test="uStuName != '' and uStuName != null ">
+                and s.studentname = #{uStuName}
+            </if>
+            <if test="cName != '' and cName != null and cName != '请选择' ">
+                and c.classname = #{cName}
+            </if>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(p.mondaydate, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(p.sundaydate, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+        </where>
+    </select>
+
+
+    <resultMap id="pickUpDetailMap" type="com.great.kindergarten.commons.entity.TblStutime">
+        <result column="stutimeid" property="stutimeid"></result>
+        <result column="stutimetype" property="stutimetype"></result>
+        <result column="stutimemonday" property="stutimemonday"></result>
+        <result column="stutimetuesday" property="stutimetuesday"></result>
+        <result column="stutimewednesday" property="stutimewednesday"></result>
+        <result column="stutimethursday" property="stutimethursday"></result>
+        <result column="stutimefriday" property="stutimefriday"></result>
+        <result column="pickid" property="pickid"></result>
+        <result column="pickupid" property="pickupid"></result>
+        <result column="mondaydate" property="mondaydate"></result>
+        <result column="sundaydate" property="sundaydate"></result>
+        <result column="sid" property="sid"></result>
+
+        <association property="tblPickup" javaType="com.great.kindergarten.commons.entity.TblPickup">
+            <id property="pickupid" column="pickupid"/>
+            <result column="pickupid" property="pickupid"></result>
+            <result column="mondaydate" property="mondaydate"></result>
+            <result column="sundaydate" property="sundaydate"></result>
+            <result column="sid" property="sid"></result>
+        </association>
+
+    </resultMap>
+
+    <!--    查找宝宝接送详细信息表-->
+    <select id="findALLPickUpDetailInfo" resultMap="pickUpDetailMap"
+            parameterType="com.great.kindergarten.security.resultbean.PickUpInfoDetailPage">
+        select * from tbl_stutime st,tbl_pickup pi,tbl_student s
+        <where>
+            st.pickid = pi.pickupid and pi.sid = s.studentid
+            <if test="studentid != '' and studentid != null ">
+                and s.studentid = #{studentid}
+            </if>
+            <if test=" mondaydate != '' and mondaydate != null">
+                <![CDATA[   and DATE_FORMAT(pi.mondaydate, '%Y-%m-%d')>=  DATE_FORMAT(#{mondaydate}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" sundaydate != '' and sundaydate != null">
+                <![CDATA[   and DATE_FORMAT(pi.sundaydate, '%Y-%m-%d')<=  DATE_FORMAT(#{sundaydate}, '%Y-%m-%d')   ]]>
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

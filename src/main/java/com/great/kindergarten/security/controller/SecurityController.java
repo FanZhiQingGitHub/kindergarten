@@ -1,9 +1,11 @@
 package com.great.kindergarten.security.controller;
 
-import com.great.kindergarten.commons.entity.TblClass;
-import com.great.kindergarten.commons.entity.TblHealther;
-import com.great.kindergarten.commons.entity.TblSecurity;
+import com.great.kindergarten.commons.entity.*;
+import com.great.kindergarten.healther.resultbean.DateWrite;
+import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
+import com.great.kindergarten.security.resultbean.PickUpInfoPage;
 import com.great.kindergarten.security.service.SecurityService;
+import com.great.kindergarten.security.util.DateUtil;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -97,7 +100,8 @@ public class SecurityController {
                 if (null != Security) {
                     List<TblSecurity> tblSecurityList = new ArrayList<>();
                     tblSecurityList.add(Security);
-
+                    List<TblClass> tblClassList = securityService.findAllClass();
+                    request.getSession().setAttribute("tblClassList", tblClassList);
                     request.getSession().setAttribute("securityname", securityname);
                     request.getSession().setAttribute("tblSecurityList", tblSecurityList);
                     ResponseUtils.outHtml(response, "success");
@@ -135,5 +139,107 @@ public class SecurityController {
         }
     }
 
+    //孩子接送信息，不含考勤
+    @RequestMapping("/showPickUpInfo")
+    public void showPickUpInfo(PickUpInfoPage pickUpInfoPage, DateWrite dateWrite ,HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        String liketime = request.getParameter("key1");//接送时间
+        String likeName = request.getParameter("key2");//学生姓名
+        String likeCName= request.getParameter("key3");//班级姓名
+
+        Object liketime1 = null;
+        Object liketime2 = null;
+
+        if (liketime != null) {
+            String[] arr = liketime.split("~ ");
+            liketime1 = arr[0];
+            liketime2 = arr[arr.length - 1];
+        }
+        Integer page = Integer.valueOf(request.getParameter("page"));
+        Integer limit = Integer.valueOf(request.getParameter("limit"));
+        Object time1 = null;
+        Object time2 = null;
+        String uStuName = null;
+        String cName = null;
+        if (null != liketime1 && !"".equals(((String) liketime1).trim())) {
+            time1 = liketime1;
+        }
+        if (null != liketime2 && !"".equals(((String) liketime2).trim())) {
+            time2 = liketime2;
+        }
+
+        if (null != likeName && !"".equals(likeName.trim())) {
+            uStuName = likeName;
+        }
+
+        if (null != likeCName && !"".equals(likeCName.trim()) && !"请选择".equals(likeCName)) {
+            cName = likeCName;
+        }
+        Integer minpage = (page - 1) * limit;
+        Integer maxpage = limit;
+        pickUpInfoPage.setTime1(time1);
+        pickUpInfoPage.setTime2(time2);
+        pickUpInfoPage.setuStuName(uStuName);
+        pickUpInfoPage.setcName(cName);
+        List<TblStudent> tblStudentList = securityService.findALLPickUpInfo(pickUpInfoPage);
+        System.out.println("tblStudentList="+tblStudentList);
+        System.out.println("长度="+tblStudentList.size());
+        if (0 != tblStudentList.size()) {
+            Integer count = securityService.findALLPickUpInfoCount(pickUpInfoPage).intValue();
+            dateWrite.setCode(0);
+            dateWrite.setMsg(" ");
+            dateWrite.setCount(count);
+            dateWrite.setData(tblStudentList);
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            request.getSession().setAttribute("uStuName", uStuName);
+            ResponseUtils.outJson(response, dateWrite);
+        }
+
+    }
+
+    //孩子详细接送信息，含考勤
+    @RequestMapping("/showPickUpDetailInfo")
+    public void showPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage, DateWrite dateWrite , HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        String currentmonday = "1";
+        String currentsonday = "7";
+        String dafultsid = request.getParameter("studentid");
+
+        String startdate = request.getParameter("key1");//周一日期
+        String enddate = request.getParameter("key2");//周日日期
+        String sid = request.getParameter("key3");//周日日期
+        String mondaydate = null;
+        String sundaydate = null;
+
+        if(null != startdate && null != enddate){
+            mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(startdate));
+            sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(enddate));
+        }else {
+            mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(currentmonday));
+            sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(currentsonday));
+        }
+        pickUpInfoDetailPage.setMondaydate(mondaydate);
+        pickUpInfoDetailPage.setSundaydate(sundaydate);
+        if(null != sid){
+            pickUpInfoDetailPage.setStudentid(Integer.valueOf(sid));
+        }else {
+            pickUpInfoDetailPage.setStudentid(Integer.valueOf(dafultsid));
+        }
+        List<TblStutime> tblStutimeList = securityService.findALLPickUpDetailInfo(pickUpInfoDetailPage);
+
+        if (0 != tblStutimeList.size()) {
+            dateWrite.setCode(0);
+            dateWrite.setMsg(" ");
+            dateWrite.setCount(5);
+            dateWrite.setData(tblStutimeList);
+
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+
+            ResponseUtils.outJson(response, dateWrite);
+        }
+
+    }
 
 }

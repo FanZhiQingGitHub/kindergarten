@@ -7,6 +7,8 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 <head>
@@ -59,7 +61,7 @@
         <h1 class="logo">
             <img style="width: 100%;height: 90px" src="${pageContext.request.contextPath}/image/logo/logo.png">
         </h1>
-        <h1 style="margin-left: 17%;font-size: 40px;color: coral">保健员首页</h1>
+        <h1 style="margin-left: 21%;font-size: 40px;color: coral">保健员首页</h1>
 
     </div>
 </div>
@@ -200,6 +202,7 @@
             }), $("#exit").click(function () {
                 layer.confirm('您确定要退出到登录界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
                     layer.close(index);
+                    sessionStorage.clear();//清除session信息
                     location.href = path + "/healther/path/healtherLogin";
                 });
             }), $("#bu1").click(function () { //体检管理

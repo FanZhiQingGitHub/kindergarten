@@ -10,23 +10,36 @@ import java.util.Date;
  */
 public class TblStutime {
     private Integer stutimeid;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
-    private Date stutimes;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
-    private Date stutimedate;
-    private String stutimeperiod;
+    private String stutimetype;
+    private String stutimemonday;
+    private String stutimetuesday;
+    private String stutimewednesday;
+    private String stutimethursday;
+    private String stutimefriday;
+    private Integer pickid;
+
+    private TblPickup tblPickup;
+    private Integer pickupid;
+    private Date mondaydate;//上下周一的日期
+    private Date sundaydate;//上下周日的日期
     private Integer sid;
+
 
     public TblStutime() {
     }
 
-    public TblStutime(Integer stutimeid, Date stutimes, Date stutimedate, String stutimeperiod, Integer sid) {
+    public TblStutime(Integer stutimeid, String stutimetype, String stutimemonday, String stutimetuesday, String stutimewednesday, String stutimethursday, String stutimefriday, Integer pickid, Integer pickupid, Date mondaydate, Date sundaydate, Integer sid) {
         this.stutimeid = stutimeid;
-        this.stutimes = stutimes;
-        this.stutimedate = stutimedate;
-        this.stutimeperiod = stutimeperiod;
+        this.stutimetype = stutimetype;
+        this.stutimemonday = stutimemonday;
+        this.stutimetuesday = stutimetuesday;
+        this.stutimewednesday = stutimewednesday;
+        this.stutimethursday = stutimethursday;
+        this.stutimefriday = stutimefriday;
+        this.pickid = pickid;
+        this.pickupid = pickupid;
+        this.mondaydate = mondaydate;
+        this.sundaydate = sundaydate;
         this.sid = sid;
     }
 
@@ -38,28 +51,92 @@ public class TblStutime {
         this.stutimeid = stutimeid;
     }
 
-    public Date getStutimes() {
-        return stutimes;
+    public String getStutimetype() {
+        return stutimetype;
     }
 
-    public void setStutimes(Date stutimes) {
-        this.stutimes = stutimes;
+    public void setStutimetype(String stutimetype) {
+        this.stutimetype = stutimetype;
     }
 
-    public Date getStutimedate() {
-        return stutimedate;
+    public String getStutimemonday() {
+        return stutimemonday;
     }
 
-    public void setStutimedate(Date stutimedate) {
-        this.stutimedate = stutimedate;
+    public void setStutimemonday(String stutimemonday) {
+        this.stutimemonday = stutimemonday;
     }
 
-    public String getStutimeperiod() {
-        return stutimeperiod;
+    public String getStutimetuesday() {
+        return stutimetuesday;
     }
 
-    public void setStutimeperiod(String stutimeperiod) {
-        this.stutimeperiod = stutimeperiod;
+    public void setStutimetuesday(String stutimetuesday) {
+        this.stutimetuesday = stutimetuesday;
+    }
+
+    public String getStutimewednesday() {
+        return stutimewednesday;
+    }
+
+    public void setStutimewednesday(String stutimewednesday) {
+        this.stutimewednesday = stutimewednesday;
+    }
+
+    public String getStutimethursday() {
+        return stutimethursday;
+    }
+
+    public void setStutimethursday(String stutimethursday) {
+        this.stutimethursday = stutimethursday;
+    }
+
+    public String getStutimefriday() {
+        return stutimefriday;
+    }
+
+    public void setStutimefriday(String stutimefriday) {
+        this.stutimefriday = stutimefriday;
+    }
+
+    public Integer getPickid() {
+        return pickid;
+    }
+
+    public void setPickid(Integer pickid) {
+        this.pickid = pickid;
+    }
+
+    public TblPickup getTblPickup() {
+        return tblPickup;
+    }
+
+    public void setTblPickup(TblPickup tblPickup) {
+        this.tblPickup = tblPickup;
+    }
+
+    public Integer getPickupid() {
+        return pickupid;
+    }
+
+    public void setPickupid(Integer pickupid) {
+        this.pickupid = pickupid;
+    }
+
+    public Date getMondaydate() {
+        return mondaydate;
+    }
+
+    public void setMondaydate(Date mondaydate) {
+        this.mondaydate = mondaydate;
+    }
+
+    public Date getSundaydate() {
+        return sundaydate;
+    }
+
+    public void setSundaydate(Date sundaydate) {
+        this.sundaydate = sundaydate;
     }
 
     public Integer getSid() {
@@ -74,9 +151,17 @@ public class TblStutime {
     public String toString() {
         return "TblStutime{" +
                 "stutimeid=" + stutimeid +
-                ", stutimes=" + stutimes +
-                ", stutimedate=" + stutimedate +
-                ", stutimeperiod='" + stutimeperiod + '\'' +
+                ", stutimetype='" + stutimetype + '\'' +
+                ", stutimemonday='" + stutimemonday + '\'' +
+                ", stutimetuesday='" + stutimetuesday + '\'' +
+                ", stutimewednesday='" + stutimewednesday + '\'' +
+                ", stutimethursday='" + stutimethursday + '\'' +
+                ", stutimefriday='" + stutimefriday + '\'' +
+                ", pickid=" + pickid +
+                ", tblPickup=" + tblPickup +
+                ", pickupid=" + pickupid +
+                ", mondaydate=" + mondaydate +
+                ", sundaydate=" + sundaydate +
                 ", sid=" + sid +
                 '}';
     }

@@ -86,21 +86,35 @@
         </div>
     </div>
 
-    <div class="prod-show" >
+    <div class="prod-show">
 
-        <div class="img-txt">
+        <div class="img-txt" style="float: left">
             <h3>
                 <button type="button" id="bu1" class="layui-btn layui-btn-lg layui-btn-normal"
-                        style="width: 100%;height: 100%;font-size: 20px">体检管理
+                        style="width: 450px;height: 100%;font-size: 20px">安全中心
                 </button>
+
+                <div class="layui-btn-container" id="div1" style="display: none">
+                    <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="bu3">接送管理</button>
+                    <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="bu4">电子围栏
+                    </button>
+                </div>
+
             </h3>
         </div>
 
-        <div class="img-txt">
+        <div class="img-txt" style="float: right">
             <h3>
-                <button type="button" id="bu2" class="layui-btn layui-btn-lg layui-btn-warm"
-                        style="width: 100%;height: 100%;font-size: 20px">膳食管理
+                <button type="button" id="bu2" class="layui-btn layui-btn-lg layui-btn-normal"
+                        style="width: 450px;height: 100%;font-size: 20px">直播中心
                 </button>
+                <div class="layui-btn-container" id="div2" style="display: none">
+                    <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="bu5">直播管理</button>
+                    <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="bu6">
+                        直播权限管理
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="bu7">视频管理</button>
+                </div>
             </h3>
         </div>
 
@@ -114,7 +128,8 @@
                     <div class="img-txt">
                         <h3 style="text-align: left">园所动态News</h3>
                         <div style=" overflow:auto;">
-                            <a><img style="width: 100%" src="${pageContext.request.contextPath}/image/healtherimg/img/news.jpg"></a>
+                            <a><img style="width: 100%"
+                                    src="${pageContext.request.contextPath}/image/healtherimg/img/news.jpg"></a>
                         </div>
                         <div style=" overflow:auto;">
                             <a href="javascript:;">新闻一</a><br>
@@ -130,7 +145,8 @@
                     <div class="img-txt">
                         <h3 style="text-align: left">园所视频Videos</h3>
                         <div style=" overflow:auto;">
-                            <a href="javascript:;"><img style="width: 100%" src="${pageContext.request.contextPath}/image/healtherimg/img/heather-1.jpeg"></a>
+                            <a href="javascript:;"><img style="width: 100%"
+                                                        src="${pageContext.request.contextPath}/image/healtherimg/img/heather-1.jpeg"></a>
                         </div>
                     </div>
                 </div>
@@ -200,9 +216,50 @@
             }), $("#exit").click(function () {
                 layer.confirm('您确定要退出到登录界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
                     layer.close(index);
+                    sessionStorage.clear();//清除session信息
                     location.href = path + "/security/path/securityLogin";
                 });
-            })
+            }), $("#bu1").click(function () {
+                $("#div1").slideToggle("slow");
+            }), $("#bu2").click(function () {
+                $("#div2").slideToggle("slow");
+            }), $("#bu3").click(function () {
+                layer.open({
+                    type: 2,
+                    area: ['95%', '80%'],
+                    offset: ['10%', '3%'],
+                    title: '智慧幼儿园-学生接送信息页',
+                    btn1: function (index, layero) {
+                        //layer.getChildFrame("form", index)获取iframe的表单
+                        //serializeArray jquery方法，将表单对象序列化为数组
+                        layer.close(index);
+                    },
+                    content: path + '/security/path/pickupInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                    }
+                });
+            }), $("#bu4").click(function () {
+                layer.open({
+                    type: 2,
+                    area: ['95%', '80%'],
+                    offset: ['10%', '3%'],
+                    title: '智慧幼儿园-电子围栏',
+                    btn1: function (index, layero) {
+                        //layer.getChildFrame("form", index)获取iframe的表单
+                        //serializeArray jquery方法，将表单对象序列化为数组
+                        layer.close(index);
+                    },
+                    content: path + '/security/path/electricFence' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                    }
+                });
+            }), $("#bu5").click(function () {
+                layer.alert('敬请期待', {icon: 6});
+            }), $("#bu6").click(function () {
+                layer.alert('敬请期待', {icon: 6});
+            }), $("#bu7").click(function () {
+                layer.alert('敬请期待', {icon: 6});
+            });
         })
     });
 

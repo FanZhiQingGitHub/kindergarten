@@ -1,10 +1,11 @@
 package com.great.kindergarten.director.controller;
 
+import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.director.resultbean.DateTable;
+import com.great.kindergarten.director.resultbean.TblScTInfo;
 import com.great.kindergarten.director.service.KinderService;
 import com.great.kindergarten.director.service.RectorService;
-import com.great.kindergarten.healther.resultbean.DateWrite;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
 import org.springframework.stereotype.Controller;
@@ -500,10 +501,10 @@ public class RectorController
 			response.setCharacterEncoding("UTF-8");
 
 			//查找对应的幼儿园的孩子信息--下拉框的显示
-//			List<TblStudent> tblStudentList = rectorService.findChildren(map);
+			//			List<TblStudent> tblStudentList = rectorService.findChildren(map);
 
 			List<TblStudent> tblStudentList = rectorService.findChildrenParentAll();
-			System.out.println("请获取孩子的信息："+tblStudentList);
+			System.out.println("请获取孩子的信息：" + tblStudentList);
 			request.getSession().setAttribute("tblStudentList", tblStudentList);
 			ResponseUtils.outJson(response, dateTable);
 		}
@@ -532,7 +533,7 @@ public class RectorController
 			{
 				map.put("studentname", studentname);
 			}
-			if (0!=tblParentByPid.getParentId())
+			if (0 != tblParentByPid.getParentId())
 			{
 				map.put("pid", tblParentByPid.getParentId());
 			}
@@ -547,7 +548,7 @@ public class RectorController
 
 	//园所----家长信息----删除操作
 	@RequestMapping("/delParentTable")
-	public void delParentTable(String studentname,HttpServletRequest request, HttpServletResponse response) throws IOException
+	public void delParentTable(String studentname, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 		String id = request.getParameter("parentId");
 		System.out.println("删除servlet" + id);
@@ -556,13 +557,13 @@ public class RectorController
 		int result = rectorService.delParentTable(parentId);
 		if (result > 0)
 		{
-//			删除成功对应的家长信息
+			//			删除成功对应的家长信息
 			Map<String, Object> map = new HashMap<>();
 			if (null != studentname && "" != studentname)
 			{
 				map.put("studentname", studentname);
 			}
-			if (0!=parentId)
+			if (0 != parentId)
 			{
 				map.put("pid", null);
 			}
@@ -578,30 +579,535 @@ public class RectorController
 	@RequestMapping("/updateParentTable")
 	public void updateParentTable(TblParent tblParent, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
-//		String parentId = request.getParameter("parentId");
-//		System.out.println("内容是=" + parentId);
-//		int parentIds = Integer.valueOf(parentId);
+		//先删除对应的cid的内容
+		TblStudent tblStudent = rectorService.selectStudentByStudentId(tblParent.getParentId());
+
+		Map<String, Object> map0 = new HashMap<>();
+		map0.put("studentname", tblStudent.getStudentname());
+		map0.put("pid", null);
+		int result = rectorService.updateChildrenByPid(map0);
+
 		String studentname = request.getParameter("studentname");
-//		String studentsex = request.getParameter("studentsex");
-//		String studentbrith = request.getParameter("studentbrith");
-//
-//		tblStudent.setStudentid(studentids);
-//		tblStudent.setStudentname(studentname);
-//		tblStudent.setStudentsex(studentsex);
-//		tblStudent.setStudentbrith(studentbrith);
 		Map<String, Object> map = new HashMap<>();
 		if (null != studentname && "" != studentname)
 		{
 			map.put("studentname", studentname);
 		}
-		if (0!=tblParent.getParentId())
+		if (0 != tblParent.getParentId())
 		{
 			map.put("pid", tblParent.getParentId());
 		}
-		int result0 = rectorService.updateChildrenByPidDown(map);
+		//		int result0 = rectorService.updateChildrenByPidDown(map);
+		int result1 = rectorService.updateChildrenByPid(map);
 		System.out.println("内容是=" + tblParent);
-		int result = rectorService.updateParentTable(tblParent);
-		if (result > 0&&result0>0)
+		int result2 = rectorService.updateParentTable(tblParent);
+		if (result1 > 0 && result2 > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	/*
+	 *园所----课程管理--班级管理的查询用的是同一个
+	 * */
+	//班级信息的显示
+	@RequestMapping("/selectCourseManagement")
+	public void selectCourseManagement(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String page = request.getParameter("page");
+		String limit = request.getParameter("limit");
+		String classname = request.getParameter("classname");
+		String beginTime = request.getParameter("beginTime");
+		String overTime = request.getParameter("overTime");
+		int pageInt = Integer.valueOf(page);
+		int limitInt = Integer.valueOf(limit);
+
+		System.out.println("班级名是=" + classname);
+		//		获取对应的id值
+		Map<String, Object> map = new HashMap<>();
+		if (null != classname && "" != classname)
+		{
+			map.put("classname", classname);
+		}
+		if (null != beginTime && "" != beginTime)
+		{
+			map.put("beginTime", beginTime);
+		}
+		if (null != overTime && "" != overTime)
+		{
+			map.put("overTime", overTime);
+		}
+		int pages = (pageInt - 1) * limitInt;
+		int limits = limitInt;
+		map.put("pageInt", pages);
+		map.put("limitInt", limits);
+
+		System.out.println("班级信息=" + map);
+		List<TblTeacher> tblTeachers = kinderService.findClassTeacherAll(map);
+
+		System.out.println("班级输出=" + tblTeachers);
+		if (0 != tblTeachers.size())
+		{
+			Integer count = kinderService.findClassTeacherAllCount(map).intValue();
+			System.out.println("输出班级次数：" + count);
+			dateTable.setCode(0);
+			dateTable.setMsg(" ");
+			dateTable.setCount(count);
+			dateTable.setData(tblTeachers);
+			request.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+
+			//查找对应的教师的班级信息--下拉框的显示
+			List<TblTeacher> tblTeacherList = kinderService.findTeacherClassAll();
+			System.out.println("请获取班主任的信息：" + tblTeacherList);
+			request.getSession().setAttribute("tblTeacherList", tblTeacherList);
+			ResponseUtils.outJson(response, dateTable);
+		}
+	}
+
+	//课程题目
+	@RequestMapping("/showAllCourseId")
+	public void showAllCourseId(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException
+	{
+		String classid = request.getParameter("classid");
+		System.out.println("课程对应的信息：" + classid);
+		if (null != classid || !"".equals(classid))
+		{
+			int classids = Integer.valueOf(classid);
+			Map<String, Object> map = new HashMap<>();
+			if (0 != classids)
+			{
+				map.put("cid", classids);
+			}
+			List<TblCourse> tblCourseList = kinderService.findAllCourseName(map);
+			if (0 != tblCourseList.size())
+			{
+				Integer count = kinderService.findAllCourseNameCount(map).intValue();
+				dateTable.setCode(0);
+				dateTable.setMsg(" ");
+				dateTable.setCount(count);
+				dateTable.setData(tblCourseList);
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			}
+		}
+	}
+
+	//课程表-课程名称的修改
+	@RequestMapping("/updateCourseInfo")
+	public void updateCourseInfo(TblCourse tblCourse, HttpServletRequest request, HttpServletResponse response) throws ParseException
+	{
+		String msg = request.getParameter("TblCourse");
+		Gson g = new Gson();
+		tblCourse = g.fromJson(msg, TblCourse.class);
+		List<TblCourse> tblCourseList = tblCourse.getTblCourseList();
+		String cid = null;
+		for (int k = 0; k < tblCourseList.size(); k++)
+		{
+			cid = tblCourseList.get(k).getCid().toString();
+		}
+		System.out.println(tblCourse.getCid() + "对应的集合的值是：" + tblCourseList);
+		int result = kinderService.delTblCourseInfo(Integer.parseInt(cid));
+		if (result > 0)
+		{
+			String info = "无";
+			for (int i = 0; i < tblCourseList.size(); i++)
+			{
+				System.out.println("进入到对应的=" + tblCourseList);
+				if ("".equals(tblCourseList.get(i).getCoursename1()))
+				{
+					tblCourseList.get(i).setCoursename1(info);
+				}
+				if ("".equals(tblCourseList.get(i).getCoursename2()))
+				{
+					tblCourseList.get(i).setCoursename2(info);
+				}
+				if ("".equals(tblCourseList.get(i).getCoursename3()))
+				{
+					tblCourseList.get(i).setCoursename3(info);
+				}
+				if ("".equals(tblCourseList.get(i).getCoursename4()))
+				{
+					tblCourseList.get(i).setCoursename4(info);
+				}
+				if ("".equals(tblCourseList.get(i).getCoursename5()))
+				{
+					tblCourseList.get(i).setCoursename5(info);
+				}
+			}
+
+			int result2 = kinderService.addTblCourseInfo(tblCourseList);
+			if (result2 > 0)
+			{
+				ResponseUtils.outHtml(response, "success");
+			} else
+			{
+				ResponseUtils.outHtml(response, "error");
+			}
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	/*
+	 * 班级模块--增删改
+	 * */
+	//班级管理的新增记录内容
+	@RequestMapping("/addClassForm")
+	protected void addClassForm(TblClass tblClass, String teachername, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		System.out.println("班级的添加信息显示：" + tblClass + teachername);
+		tblClass.setClassregtime(new Date());
+		int result = kinderService.addClassForm(tblClass);
+		if (result > 0)
+		{
+			TblClass tblClassInfo = kinderService.selectClassByCid(tblClass.getClassname());
+			//修改对应的学生表的家长的外键
+			Map<String, Object> map = new HashMap<>();
+			if (null != teachername && "" != teachername)
+			{
+				map.put("teachername", teachername);
+			}
+			if (0 != tblClassInfo.getClassid())
+			{
+				map.put("cid", tblClassInfo.getClassid());
+			}
+
+			int result0 = kinderService.updateTeacherByCid(map);
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//班级信息----删除操作
+	@RequestMapping("/delClassTable")
+	public void delClassTable(String teachername, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String id = request.getParameter("classid");
+		System.out.println("删除servlet" + id);
+		int classid = Integer.valueOf(id);
+
+		int result = kinderService.delClassTable(classid);
+		if (result > 0)
+		{
+			//			删除成功对应的家长信息
+			Map<String, Object> map = new HashMap<>();
+			if (null != teachername && "" != teachername)
+			{
+				map.put("teachername", teachername);
+			}
+			if (0 != classid)
+			{
+				map.put("cid", null);
+			}
+			int result0 = kinderService.updateTeacherByCid(map);
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//班级信息----更新对应表格值
+	@RequestMapping("/updateClassTable")
+	public void updateClassTable(TblClass tblClass, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		//先删除对应的cid的内容
+		TblTeacher tblTeachera = kinderService.selectTeacherByTeacherId(tblClass.getClassid());
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("teachername", tblTeachera.getTeachername());
+		map.put("cid", null);
+		int result0 = kinderService.updateTeacherByCid(map);
+
+		//再进行对应的改变值
+		String teachername = request.getParameter("teachername");
+		Map<String, Object> map1 = new HashMap<>();
+		if (null != teachername && "" != teachername)
+		{
+			map1.put("teachername", teachername);
+		}
+		if (0 != tblClass.getClassid())
+		{
+			map1.put("cid", tblClass.getClassid());
+		}
+		int result2 = kinderService.updateTeacherByCid(map1);
+
+		System.out.println("内容是=" + tblClass);
+		int result = kinderService.updateClassTable(tblClass);
+		if (result > 0 && result2 > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//班级成员管理
+	@RequestMapping("/selectClassMemberManagement")
+	public void selectClassMemberManagement(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String page = request.getParameter("page");
+		String limit = request.getParameter("limit");
+		String studentname = request.getParameter("studentname");
+		String classname = request.getParameter("classname");
+		String beginTime = request.getParameter("beginTime");
+		String overTime = request.getParameter("overTime");
+		int pageInt = Integer.valueOf(page);
+		int limitInt = Integer.valueOf(limit);
+
+		System.out.println("班级成员名是=" + studentname + "=" + classname);
+		//		获取对应的id值
+		Map<String, Object> map = new HashMap<>();
+		if (null != studentname && "" != studentname)
+		{
+			map.put("studentname", studentname);
+		}
+		if (null != classname && "" != classname)
+		{
+			map.put("classname", classname);
+		}
+		if (null != beginTime && "" != beginTime)
+		{
+			map.put("beginTime", beginTime);
+		}
+		if (null != overTime && "" != overTime)
+		{
+			map.put("overTime", overTime);
+		}
+		int pages = (pageInt - 1) * limitInt;
+		int limits = limitInt;
+		map.put("pageInt", pages);
+		map.put("limitInt", limits);
+
+		System.out.println("班级成员信息=" + map);
+		List<TblScTInfo> tblScTInfoList = kinderService.findClassMemberAll(map);
+
+		System.out.println("班级成员输出=" + tblScTInfoList);
+		if (0 != tblScTInfoList.size())
+		{
+			Integer count = kinderService.findClassMemberAllCount(map).intValue();
+			System.out.println("输出班级成员次数：" + count);
+			dateTable.setCode(0);
+			dateTable.setMsg(" ");
+			dateTable.setCount(count);
+			dateTable.setData(tblScTInfoList);
+			request.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+
+			//			查找对应的班级的班级信息--下拉框的显示
+			List<TblClass> tblClassList = kinderService.findAllClassAll();
+			System.out.println("请获取班级的信息：" + tblClassList);
+			request.getSession().setAttribute("tblClassList", tblClassList);
+
+			//查找对应的幼儿园的孩子信息--下拉框的显示
+			List<TblStudent> tblStudentList = rectorService.findChildrenParentAll();
+			System.out.println("请获取孩子的信息：" + tblStudentList);
+			request.getSession().setAttribute("tblStudentList", tblStudentList);
+			ResponseUtils.outJson(response, dateTable);
+		}
+	}
+
+	//班级成员管理---新增记录
+	@RequestMapping("/addClassMemberForm")
+	protected void addClassMemberForm(TblStudent tblStudent, String classname, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		System.out.println("班级成员的添加信息显示：" + tblStudent + classname);
+		String studentname = tblStudent.getStudentname();
+		TblClass tblClassInfo = kinderService.selectClassByCid(classname);
+		//修改对应的学生表的家长的外键
+		Map<String, Object> map = new HashMap<>();
+		if (null != studentname && "" != studentname)
+		{
+			map.put("studentname", studentname);
+		}
+		if (0 != tblClassInfo.getClassid())
+		{
+			map.put("cid", tblClassInfo.getClassid());
+		}
+
+		int result0 = kinderService.updateStudentByCid(map);
+		if (result0 > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//	班级成员信息----删除操作
+	@RequestMapping("/delClassMemberTable")
+	public void delClassMemberTable(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String id = request.getParameter("studentid");
+		System.out.println("删除班级成员=" + id);
+		int studentid = Integer.valueOf(id);
+
+//		int result = kinderService.delClassTable(studentid);
+		Map<String, Object> map = new HashMap<>();
+		if (null != tblStudent.getStudentname() && "" != tblStudent.getStudentname())
+		{
+			map.put("studentname", tblStudent.getStudentname());
+		}
+		map.put("cid", null);
+		int result0 = kinderService.updateStudentByCid(map);
+		if (result0 > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+	//班级信息----更新对应表格值
+	@RequestMapping("/updateClassMemberTable")
+	public void updateClassMemberTable(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		//先删除对应的cid的内容
+//		TblTeacher tblTeachera = kinderService.selectTeacherByTeacherId(tblStudent.getStudentid());
+
+//		Map<String, Object> map = new HashMap<>();
+//		map.put("teachername", tblTeachera.getTeachername());
+//		map.put("cid", null);
+//		int result0 = kinderService.updateTeacherByCid(map);
+		//再进行对应的改变值
+		String classname = request.getParameter("classname");
+
+		TblClass tblClass = kinderService.selectClassByCid(classname);
+
+		Map<String, Object> map1 = new HashMap<>();
+		if (null != tblStudent.getStudentname() && "" != tblStudent.getStudentname())
+		{
+			map1.put("studentname", tblStudent.getStudentname());
+		}
+		if (0 != tblClass.getClassid())
+		{
+			map1.put("cid", tblClass.getClassid());
+		}
+		int result = kinderService.updateStudentByCid(map1);
+		if (result > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	/*
+	* 校园公告管理
+	* */
+	@RequestMapping("/selectCampusBulletin")
+	public void selectCampusBulletin(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String page = request.getParameter("page");
+		String limit = request.getParameter("limit");
+		String campusinfoname = request.getParameter("campusinfoname");
+		String beginTime = request.getParameter("beginTime");
+		String overTime = request.getParameter("overTime");
+		int pageInt = Integer.valueOf(page);
+		int limitInt = Integer.valueOf(limit);
+
+		System.out.println("校园公告名是=" + campusinfoname);
+		//		获取对应的id值
+		Map<String, Object> map = new HashMap<>();
+		if (null != campusinfoname && "" != campusinfoname)
+		{
+			map.put("campusinfoname", campusinfoname);
+		}
+		if (null != beginTime && "" != beginTime)
+		{
+			map.put("beginTime", beginTime);
+		}
+		if (null != overTime && "" != overTime)
+		{
+			map.put("overTime", overTime);
+		}
+		int pages = (pageInt - 1) * limitInt;
+		int limits = limitInt;
+		map.put("pageInt", pages);
+		map.put("limitInt", limits);
+
+		System.out.println("校园公告信息=" + map);
+		List<TblCampus> tblCampusinfoList = kinderService.findCampusBulletinAll(map);
+
+		System.out.println("校园公告输出=" + tblCampusinfoList);
+		if (0 != tblCampusinfoList.size())
+		{
+			Integer count = kinderService.findCampusBulletinAllCount(map).intValue();
+			System.out.println("输出校园公告次数：" + count);
+			dateTable.setCode(0);
+			dateTable.setMsg(" ");
+			dateTable.setCount(count);
+			dateTable.setData(tblCampusinfoList);
+			request.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+			ResponseUtils.outJson(response, dateTable);
+		}
+	}
+	//校园公告的增加
+	@RequestMapping("/addCampusBulletin")
+	protected void addCampusBulletin(TblCampus tblCampus, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		tblCampus.setCampustime(new Date());
+		int result = kinderService.addCampusBulletin(tblCampus);
+		if (result > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//园所----幼儿信息进行对应的删除操作delTeacherTable
+	@RequestMapping("/delCampusBulletin")
+	public void delCampusBulletin(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String id = request.getParameter("campusinfoid");
+		System.out.println("删除servlet" + id);
+		int campusinfoid = Integer.valueOf(id);
+
+		int result = kinderService.delCampusBulletin(campusinfoid);
+		if (result > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//园所-----幼儿信息----更新对应表格的内容的值
+	@RequestMapping("/updateCampusBulletin")
+	public void updateCampusBulletin(TblCampus tblCampus, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String campusinfoid = request.getParameter("campusinfoid");
+		System.out.println("内容是=" + campusinfoid);
+		int campusinfoids = Integer.valueOf(campusinfoid);
+		String campusinfoname = request.getParameter("campusinfoname");
+		String campusinfodetail = request.getParameter("campusinfodetail");
+
+		tblCampus.setCampusinfoid(campusinfoids);
+		tblCampus.setCampusinfoname(campusinfoname);
+		tblCampus.setCampusinfodetail(campusinfodetail);
+
+		System.out.println("校园公告内容是=" + tblCampus);
+		int result = kinderService.updateCampusBulletin(tblCampus);
+		if (result > 0)
 		{
 			ResponseUtils.outHtml(response, "success");
 		} else

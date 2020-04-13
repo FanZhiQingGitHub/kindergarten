@@ -28,6 +28,7 @@ public class TblStudent {
     private Integer kid;
     private Integer rid;
 
+
     public TblStudent() {
     }
 

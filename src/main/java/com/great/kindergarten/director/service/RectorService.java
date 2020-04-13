@@ -154,15 +154,21 @@ public class RectorService
 	/*
 	* 家长对应的信息进行修改操作
 	* */
-	//修改对应的学生表的pid
-	@Transactional
-	public int updateChildrenByPidDown(Map<String, Object> map){
-		return rectorMapper.updateChildrenByPidDown(map);
+//	//修改对应的学生表的pid
+//	@Transactional
+//	public int updateChildrenByPidDown(Map<String, Object> map){
+//		return rectorMapper.updateChildrenByPidDown(map);
+//	}
+	//对应的修改先删除
+	public TblStudent selectStudentByStudentId(int pid){
+		return rectorMapper.selectStudentByStudentId(pid);
 	}
+
 	@Transactional
 	public int updateParentTable(TblParent tblParent){
 		return rectorMapper.updateParentTable(tblParent);
 	}
+
 
 
 }

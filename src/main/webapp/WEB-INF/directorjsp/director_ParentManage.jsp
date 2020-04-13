@@ -1,8 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
   User: JK
-  Date: 2020-3-10
-  Time: 10:21
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
@@ -99,23 +97,13 @@
 						, data: {parentId: data.parentId,studentname:data.studentname},
 						success: function (data) {
 							console.log("--" + data.toString());
-							// if (data == "删除成功") {
-							// 	layer.msg(data);
-							// 	window.location.href = src + "/director/toUrl/director_ParentManage";
-							// } else {
-							// 	layer.msg(data);
-							// }
-
-							// if(data==="success"){
-							// 	layer.alert("删除家长成功！",{icon: 6}, function(){
-							// 		window.location.href = src + "/director/toUrl/director_ParentManage";
-							// 	});
-							// }else{
-							// 	layer.alert("删除家长失败！",{icon: 2});
-							// }
-							layer.msg(data);
-							layer.close(index);
-
+							if(data==="success"){
+								layer.alert("删除家长成功！",{icon: 6}, function(){
+									window.location.href = src + "/director/toUrl/director_ParentManage";
+								});
+							}else{
+								layer.alert("删除家长失败！",{icon: 2});
+							}
 						}, error: function (err) {
 							console.log(err);
 						}

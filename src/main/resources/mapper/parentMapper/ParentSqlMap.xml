@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.great.kindergarten.parent.mapper.ParentMapper">
 
-    <resultMap id="reParent" type="com.great.kindergarten.commons.entity.TblParent">
+    <resultMap id="reParent" type="TblParent">
         <result column="parentId" property="parentId"/>
         <result column="parentName" property="parentName"/>
         <result column="parentPwd" property="parentPwd"/>
@@ -19,6 +19,115 @@
         <result column="rid" property="rid"/>
     </resultMap>
 
+    <resultMap id="reVideo" type="TblSafetyvideo">
+
+        <result column="safetyvideoid" property="safetyvideoid"/>
+        <result column="safetyvideoname" property="safetyvideoname"/>
+        <result column="safetyvideotime" property="safetyvideotime"/>
+        <result column="videoname" property="videoname"/>
+        <result column="videoadd" property="videoadd"/>
+        <result column="safetytestscore" property="safetytestscore"/>
+        <result column="safetytestresult" property="safetytestresult"/>
+    </resultMap>
+
+    <resultMap id="reVideoQuestion" type="TblSafetyvtq">
+        <result column="safetyvtqid" property="safetyvtqid"/>
+        <result column="safetyvtqname" property="safetyvtqname"/>
+        <result column="a" property="a"/>
+        <result column="avalue" property="avalue"/>
+        <result column="b" property="b"/>
+        <result column="bvalue" property="bvalue"/>
+        <result column="c" property="c"/>
+        <result column="cvalue" property="cvalue"/>
+        <result column="d" property="d"/>
+        <result column="dvalue" property="dvalue"/>
+    </resultMap>
+
+
+
+
+
+    <select id="countScore"  resultType="integer">
+        select count(*) from tbl_safetytestcompletion where parentid =#{parentId} and safetyvideoid=#{videoId}
+    </select>
+
+    <insert id="recordScore"  >
+
+        insert into  tbl_safetytestcompletion (safetyvideoid, parentid, safetytestscore, safetytestresult) values
+            (#{videoId},#{parentId},#{score},'已完成');
+    </insert>
+
+
+
+
+    <select id="findSafetyTestQuestionList" resultMap="reVideoQuestion" parameterType="integer" >
+
+        select * from tbl_safetyvtq where safetyvideoid =#{safetyVideoId}
+        order by safetyvtqid
+    </select>
+
+
+
+    <select id="countVideoListNumber" resultType="integer" parameterType="SearchCondition">
+        select count(*) from
+        (tbl_safetyvideo ts  left join tbl_safetytestcompletion tsc on ts.safetyvideoid=tsc.safetyvideoid
+            and tsc.parentid=#{parentId}
+        )
+
+        <where>
+            1=1
+            <if test=" name != null and name != ''">
+                and ts.safetyvideoname like "%"#{name}"%"
+            </if>
+
+
+
+            <if test="beginTime != null ">
+                and ts.safetyvideotime &gt;= #{beginTime}
+            </if>
+
+            <if test="endTime != null ">
+                and ts.safetyvideotime &lt;= #{endTime}
+            </if>
+
+        </where>
+        order by ts.safetyvideotime desc
+
+    </select>
+
+    <select id="findVideoList" resultMap="reVideo" parameterType="SearchCondition" >
+
+        select ts.*,tsc.safetytestscore,tsc.safetytestresult from
+         (
+          tbl_safetyvideo ts  left join tbl_safetytestcompletion tsc on ts.safetyvideoid=tsc.safetyvideoid
+            and tsc.parentid=#{parentId}
+             )
+
+        <where>
+
+             1=1
+            <if test=" name != null and name != ''">
+                and ts.safetyvideoname like "%"#{name}"%"
+            </if>
+
+            <if test="beginTime != null ">
+                and ts.safetyvideotime  &gt;= #{beginTime}
+            </if>
+
+            <if test="endTime != null ">
+                and ts.safetyvideotime &lt;= #{endTime}
+            </if>
+
+        </where>
+
+        order by ts.safetyvideotime desc
+    </select>
+
+
+
+
+
+
     <!--   家长端登陆-->
     <select id="parentLogin" resultMap="reParent" >
 
@@ -26,14 +135,14 @@
     where parentname=#{parentName} and parentPwd=#{parentPwd} and parentstatus='启用'
 
     </select>
-
+<!--    判断家长旧密码是否输入正确-->
     <select id="countOldParentPwd" resultType="integer">
 
     select count(*) from tbl_parent where parentpwd =#{oldParentPwd} and parentid =#{parentId}
 
     </select>
 
-
+<!--  更新家长的旧密码 换成输入的新密码-->
     <update id="updateParentPwd"  >
 
     update tbl_parent set parentpwd =#{parentPwd} where parentid=#{parentId}
