@@ -95,4 +95,14 @@ public interface KinderMapper
 
 	//校园公告----修改
 	public int updateCampusBulletin(TblCampus tblCampus);
+
+	/*
+	 * 教师考勤信息
+	 * */
+	//教师考勤信息--查询记录
+	public List<TblTeacherAttend> findTeacherAttendAll(Map<String, Object> map);
+	//教师考勤信息--查询记录次数
+	public Long findTeacherAttendAllCount(Map<String, Object> map);
+	//教师考勤对应的显示--考勤信息值
+	public List<TblTertime> findALLTeacherAttendDetail(TblTeacherAttend tblTeacherAttend);
 }
