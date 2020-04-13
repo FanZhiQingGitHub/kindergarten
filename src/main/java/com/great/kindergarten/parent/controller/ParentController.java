@@ -30,9 +30,44 @@ public class ParentController {
     }
 
 
+
+    @RequestMapping("/parentFaceRecognition")
+    @ResponseBody
+    public Result parentFaceRecognition(String face)
+    {
+        //人脸识别调用 (可根据id单张图片比较)
+        Result result = new Result();
+
+        FaceRecognitionUtils.identify(face,null);
+
+        return result;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @RequestMapping("/recordScore")
     @ResponseBody
     public Result recordScore(HttpServletRequest request){
+
+
+
         Result result = new Result();
         //获取信息
        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
@@ -45,20 +80,6 @@ public class ParentController {
                 result.setSuccess(true);
             }
         }
-        return result;
-    }
-
-
-
-    @RequestMapping("/parentFaceRecognition")
-    @ResponseBody
-    public Result parentFaceRecognition(String face)
-    {
-        //人脸识别调用 (可根据id单张图片比较)
-        Result result = new Result();
-
-        FaceRecognitionUtils.identify(face,null);
-
         return result;
     }
 

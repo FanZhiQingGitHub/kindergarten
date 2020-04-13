@@ -46,9 +46,11 @@
 
 	<a class="layui-btn edit layui-btn-xs" data-method="dialog" lay-event="play">播放视频</a>
 
-
 	{{#  if(d.safetytestresult == null ){ }}
 	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="SafetyTest">安全试题</a>
+
+	{{#  else if(d.safetytestresult == '已完成' ){ }}
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="SafetyTest">查看解析</a>
 	{{#  } }}
 
 
@@ -63,7 +65,7 @@
 		//第一个实例
 		table.render({
 			elem: '#demo'
-			,height: 480
+			,height: 700
 			,url: path+'/parent/parentSafetyTestList' //数据接口
 			,method:'post'
 			,page: true //开启分页

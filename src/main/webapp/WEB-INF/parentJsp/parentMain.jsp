@@ -107,6 +107,11 @@
                 </div>
 
 
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
+                    <div class="img-txt">
+                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-warm" style="width: 100%;height: 100%;font-size: 20px">幼儿中心</button></h3>
+                    </div>
+                </div>
 
             </div>
 
@@ -153,12 +158,8 @@
                     <div class="img-txt">
                         <h3 style="text-align: left">园所视频Videos</h3>
                         <div style=" overflow:auto;">
-
-                            <a href="javascript:;">视频一</a><br>
-                            <a href="javascript:;">视频二</a><br>
-                            <a href="javascript:;">视频三</a><br>
-                            <a href="javascript:;">视频四</a><br>
-                            <a href="javascript:;">视频五</a>
+                            
+                            <a  id="playVideos"><img src="${path}/image/logo/logo.png" alt=""/></a><br>
 
                         </div>
 
@@ -247,8 +248,24 @@
             //前往查看安全试题跳转
             $("#SafetyVideo").click(function () {
                 window.location.href=path+"/parent/toUrl/SafetyTestTable"
-            })
+            });
 
+
+            //点击查看园所视频
+            $("#playVideos").click(function () {
+
+                //打开一个窗口播放视频
+                layer.open({
+                    //打开一个窗口播放视频
+                    type: 1,
+                    area: ['70%', '70%'],
+	                offset:['10%','5%'],
+	                title:'',
+                    content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
+                            '<source src="${pageContext.request.contextPath}/videos/TakeTheElevatorSafely.mp4" type="video/mp4"></source></video>'
+                    //直接跳出一个标签播放视频
+                });
+            });
 
         });
     });
