@@ -51,35 +51,7 @@ public class AdminService {
 
 	public List<TblMenu> findAllMenu(HashMap<String, Object> condition, RowBounds rowBounds)
 	{
-		List<TblMenu> list = new ArrayList<>();
-		list = adminMapper.findAllMenu(condition, rowBounds);
-//		TblMenu tblMenu = new TblMenu();
-//		String supName = null;
-//		System.out.println("集合="+list);
-//		System.out.println("集合大小="+list.size());
-//		List<TblMenu> tblMenuList = new ArrayList<>();
-//		for(int i = 0; i < list.size(); i++)
-//		{
-//			tblMenu.setMenuid(list.get(i).getMenuid());
-//			System.out.println("第"+i+"个菜单id=  "+tblMenu.getMenuid());
-//			tblMenu.setMenuname(list.get(i).getMenuname());
-//			System.out.println("第"+i+"个菜单名称=  "+tblMenu.getMenuname());
-//			tblMenu.setMenuurl(list.get(i).getMenuurl());
-//			System.out.println("第"+i+"个菜单url=  "+tblMenu.getMenuurl());
-//			supName = adminMapper.findSuperierMenu(list.get(i).getMenuid());
-//			if(supName == null)
-//			{
-//				System.out.println("第"+i+"个上级菜单=  "+tblMenu.getSupMenu());
-////				tblMenu.setSupMenu("无");
-//			}else{
-//				tblMenu.setSupMenu(supName);
-//				System.out.println("第"+i+"个上级菜单=  "+tblMenu.getSupMenu());
-//			}
-//			tblMenuList.add(tblMenu);
-//			System.out.println("新表="+tblMenu);
-//		}
-//		System.out.println("新集合="+tblMenuList);
-		return list;
+		return adminMapper.findAllMenu(condition, rowBounds);
 	}
 
 	public String findSuperierMenu(Integer menuid)
@@ -131,10 +103,16 @@ public class AdminService {
     {
         return adminMapper.findRoleByRid(rid);
     }
+
     public TblAdmin findTblAdminByName(String name)
     {
         return adminMapper.findTblAdminByName(name);
     }
+
+	public Integer checkMenuName(String menuName)
+	{
+		return adminMapper.checkMenuName(menuName);
+	}
 
     //修改管理员密码
     public int updateAdminPwd(String adminpwd,String adminid)
@@ -235,5 +213,41 @@ public class AdminService {
 	public List<TblRoleMenu> findRoleMenuIdByRid(Integer roleid)
 	{
 		return adminMapper.findRoleMenuIdByRid(roleid);
+	}
+
+	public int addRoleInfo(TblRole tblRole)
+	{
+		return adminMapper.addRoleInfo(tblRole);
+	}
+
+	public Integer checkRoleName(String roleName)
+	{
+		return adminMapper.checkRoleName(roleName);
+	}
+
+	//亲子阅读
+	public List<TblReadmag> findAllReadInfo(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findAllReadInfo(condition, rowBounds);
+	}
+
+	public int findReadCount(HashMap<String, Object> condition)
+	{
+		return adminMapper.findReadCount(condition);
+	}
+
+	public int deleteReadInfo(Integer readMagId)
+	{
+		return adminMapper.deleteReadInfo(readMagId);
+	}
+
+	public int addPhotoImg(TblReadmag tblReadmag)
+	{
+		return adminMapper.addPhotoImg(tblReadmag);
+	}
+
+	public int reUploadBook(TblReadmag tblReadmag)
+	{
+		return adminMapper.reUploadBook(tblReadmag);
 	}
 }

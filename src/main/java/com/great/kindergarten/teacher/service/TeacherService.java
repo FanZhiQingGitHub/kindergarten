@@ -1,12 +1,13 @@
 package com.great.kindergarten.teacher.service;
 
-import com.great.kindergarten.commons.entity.TblTeacher;
+import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.teacher.mapper.TeacherMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -38,4 +39,60 @@ public class TeacherService {
 
         return teacherMapper.updateTeacherPwd(teacherMap);
     }
+//    查找班级名称
+    public TblClass findClassAll(Integer cid){
+
+        return teacherMapper.findClassAll(cid);
+    }
+//    根据cid查找课程
+    public List<TblCourse> findCourse(Integer cid){
+
+        return teacherMapper.findCourse(cid);
+    }
+//    查找课程表数据数量
+    public Integer findCount()
+    {
+        return teacherMapper.findCount();
+    }
+    //    查找班级所有名称
+    public List<TblClass> findClassName()
+    {
+
+        return teacherMapper.findClassName();
+    }
+    //根据班级名查找id
+    public Integer findClassidByName(TblClass tblClass)
+    {
+        return teacherMapper.findClassidByName(tblClass);
+    }
+    //新增发布作业信息
+    @Transactional
+    public Boolean addFileInfo(TblWorkrelease tblWorkrelease){
+        return teacherMapper.addFileInfo(tblWorkrelease);
+    }
+    //   根据班级所有作业数据
+    public TblWork findWork(Integer cid){
+
+        return teacherMapper.findWork(cid);
+    }
+    //   根据班级id 发布作业id查作业表
+    public List<TblWork> findWorkTable(TblWork tblWork){
+
+        return teacherMapper.findWorkTable(tblWork);
+    }
+    //    查找作业数据数量
+    public Integer findWorkCount(Integer cid)
+    {
+        return teacherMapper.findWorkCount(cid);
+    }
+    //打分
+
+    @Transactional
+    public Boolean workScore(String score,String sid){
+        Map<String,String> scoreMap = new LinkedHashMap<>();
+        scoreMap.put("score",score);
+        scoreMap.put("sid",sid);
+        return teacherMapper.workScore(scoreMap);
+    }
+
 }

@@ -1,10 +1,13 @@
 package com.great.kindergarten.commons.entity;
 
-import java.util.List;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * 课程表信息实体类
  */
+@Component(value = "TblCourse")
+@Scope("prototype")
 public class TblCourse {
     private Integer courseid;
     private Integer coursenum;
@@ -14,7 +17,7 @@ public class TblCourse {
     private String coursename4;
     private String coursename5;
     private Integer cid;
-    private List<TblCourse> tblCourseList;
+
 
     public TblCourse() {
     }
@@ -94,19 +97,18 @@ public class TblCourse {
         this.cid = cid;
     }
 
-    public List<TblCourse> getTblCourseList()
-    {
-        return tblCourseList;
-    }
-
-    public void setTblCourseList(List<TblCourse> tblCourseList)
-    {
-        this.tblCourseList = tblCourseList;
-    }
 
     @Override
-    public String toString()
-    {
-        return "TblCourse{" + "courseid=" + courseid + ", coursenum=" + coursenum + ", coursename1='" + coursename1 + '\'' + ", coursename2='" + coursename2 + '\'' + ", coursename3='" + coursename3 + '\'' + ", coursename4='" + coursename4 + '\'' + ", coursename5='" + coursename5 + '\'' + ", cid=" + cid + ", tblCourseList=" + tblCourseList + '}';
+    public String toString() {
+        return "TblCourse{" +
+                "courseid=" + courseid +
+                ", coursenum=" + coursenum +
+                ", coursename1='" + coursename1 + '\'' +
+                ", coursename2='" + coursename2 + '\'' +
+                ", coursename3='" + coursename3 + '\'' +
+                ", coursename4='" + coursename4 + '\'' +
+                ", coursename5='" + coursename5 + '\'' +
+                ", cid=" + cid +
+                '}';
     }
 }
