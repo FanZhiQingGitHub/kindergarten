@@ -1,5 +1,7 @@
 package com.great.kindergarten.admin.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.great.kindergarten.admin.annotation.AdminSystemLog;
@@ -12,8 +14,9 @@ import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -22,7 +25,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -63,7 +69,7 @@ public class AdminController {
             int height = 30;
             //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
 //            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";
-            String data = "0000";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
+            String data = "0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
             //随机类
             Random random = new Random();
             //1 创建图片数据缓存区域（核心类）
@@ -232,6 +238,20 @@ public class AdminController {
 		}
 		int num = adminService.addMenuInfo(tblMenu);
 		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/checkMenuName")
+	public void checkMenuName(TblMenu tblMenu,HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println(tblMenu.getMenuname());
+		Integer menuId = adminService.checkMenuName(tblMenu.getMenuname());
+		System.out.println(menuId);
+		if(menuId == null)
 		{
 			ResponseUtils.outHtml(response,"success");
 		}else{
@@ -606,4 +626,136 @@ public class AdminController {
 		}
 	}
 
+	@RequestMapping("/checkRoleName")
+	public void checkRoleName(TblRole tblRole,HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println(tblRole.getRolename());
+		Integer roleId = adminService.checkRoleName(tblRole.getRolename());
+		System.out.println(roleId);
+		if(roleId == null)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	//新增角色
+	@AdminSystemLog(operationType = "新增角色",operationName = "管理员新增角色")
+	@RequestMapping("/addRoleItems")
+	public void addRoleItems(TblRole tblRole,HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println(tblRole);
+		int num = adminService.addRoleInfo(tblRole);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/readMgrInfo")
+	public void readMgrInfo(String page, String limit, TblReadmag tblReadmag, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		String readMagName = request.getParameter("readmagname");
+		System.out.println(readMagName);
+		if(null != readMagName && !"".equals(readMagName.trim())) {
+			condition.put("readmagname",readMagName);
+		}
+		if(null != tblReadmag.getTime1() && !"".equals(tblReadmag.getTime1().trim())) {
+			condition.put("time1",tblReadmag.getTime1());
+		}
+
+		if(null != tblReadmag.getTime2() && !"".equals(tblReadmag.getTime2().trim())) {
+			condition.put("time2",tblReadmag.getTime2());
+		}
+
+		int num = adminService.findReadCount(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+		List<TblReadmag> readMagList = adminService.findAllReadInfo(condition,rowBounds);
+		if(readMagList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(readMagList);
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/deleteReadInfo")
+	public void deleteReadInfo(TblReadmag tblReadmag,HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println(tblReadmag);
+		int num = adminService.deleteReadInfo(tblReadmag.getReadmagid());
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/uploadImg")
+	public void upload(@RequestParam("file") MultipartFile file, String contentInfo ,String pageNum , String reamagname1, TblReadmag tblReadmag, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		System.out.println("file="+file+"绘本名称"+reamagname1+"内容信息"+contentInfo+"页数"+pageNum);
+		String prefix = "";
+		String dateStr = "";
+		//保存上传
+		if(file != null){
+			String originalName = file.getOriginalFilename();
+			prefix = originalName.substring(originalName.lastIndexOf(".")+1);
+			Date date = new Date();
+			String uuid = UUID.randomUUID()+"";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			dateStr = simpleDateFormat.format(date);
+//			String filepath = "D:\\kindergarten\\src\\main\\webapp\\image\\adminimg\\img\\" + dateStr+"\\"+uuid+"." + prefix;
+			String filepath = "D:\\kindergarten\\src\\main\\webapp\\image\\adminimg\\img\\" + "\\"+originalName;
+			File files = new File(filepath);
+			//打印查看上传路径
+			System.out.println(filepath);
+			if(!files.getParentFile().exists()){
+				files.getParentFile().mkdirs();
+			}
+			tblReadmag.setReadmagname("三只小羊");
+			tblReadmag.setReadmagurl("E:\\kindergarten\\亲子阅读");
+			tblReadmag.setReadmagdetail(contentInfo);
+			tblReadmag.setPhotourl("image/adminimg/img/"+originalName);
+			tblReadmag.setReadmagpage(Integer.valueOf(pageNum));
+			tblReadmag.setReadmagtime(date);
+			int num = adminService.addPhotoImg(tblReadmag);
+			if(num > 0)
+			{
+				file.transferTo(files);
+				response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
+				response.getWriter().flush();
+				response.getWriter().close();
+			}
+
+		}else{
+			response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/reUploadBook")
+	public void reUploadBook(TblReadmag tblReadmag, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException
+	{
+		System.out.println("重新"+tblReadmag);
+		tblReadmag.setReadmagtime(new Date());
+		int num = adminService.reUploadBook(tblReadmag);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
 }

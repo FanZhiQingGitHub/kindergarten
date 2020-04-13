@@ -25,6 +25,17 @@
         tbl_menu(menuname,menuurl,menusonid,sort)
         values (#{menuname},#{menuurl},#{menusonid},#{sort})
     </insert>
+    <insert id="addRoleInfo">
+        insert into
+            tbl_role(rolename) values (#{rolename})
+    </insert>
+    <insert id="addPhotoImg">
+        insert into
+           tbl_readmag(readmagname, readmagurl, readmagdetail, readmagtime, readmagpage, photourl)
+           values (#{readmagname},#{readmagurl},#{readmagdetail},#{readmagtime},#{readmagpage},#{photourl})
+    </insert>
+
+
     <delete id="deleteKinderInfo">
         delete from tbl_kinder where kinderid = #{kinderid}
     </delete>
@@ -36,6 +47,9 @@
     </delete>
     <delete id="deleteRoleInfo">
         delete from tbl_role where roleid = #{roleid}
+    </delete>
+    <delete id="deleteReadInfo">
+         delete from tbl_readmag where readmagid = #{readmagid}
     </delete>
 
     <!--    用户状态查询-->
@@ -173,6 +187,28 @@
             </if>
         </set>
         where roleid = #{roleid}
+    </update>
+    <update id="reUploadBook">
+        update tbl_readmag
+        <set>
+            <if test="readmagname != '' and readmagname != null">
+                readmagname = #{readmagname},
+            </if>
+            <if test="readmagurl != '' and readmagurl != null">
+                readmagurl = #{readmagurl},
+            </if>
+            <if test="readmagdetail != '' and readmagdetail != null">
+                readmagdetail = #{readmagdetail},
+            </if>
+                readmagtime = now(),
+            <if test="readmagpage != '' and readmagpage != null">
+                readmagpage = #{readmagpage},
+            </if>
+            <if test="photourl != '' and photourl != null">
+                photourl = #{photourl},
+            </if>
+        </set>
+        where readmagid = #{readmagid}
     </update>
 
     <select id="findAllKinder" resultType="com.great.kindergarten.commons.entity.TblKinder">
@@ -329,6 +365,41 @@
     </select>
     <select id="findRoleMenuIdByRid" resultType="com.great.kindergarten.commons.entity.TblRoleMenu">
         select t2.rolemenuid from tbl_role t1,tbl_rolemenu t2 where t1.roleid = t2.rid
+    </select>
+    <select id="checkRoleName" resultType="java.lang.Integer">
+        select roleid from tbl_role where rolename = #{rolename}
+    </select>
+    <select id="checkMenuName" resultType="java.lang.Integer">
+        select menuid from tbl_menu where menuname = #{menuname}
+    </select>
+    <select id="findAllReadInfo" resultType="com.great.kindergarten.commons.entity.TblReadmag">
+        select * from tbl_readmag
+        <where>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(readmagtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(readmagtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" readmagname != '' and readmagname != null">
+                and readmagname like concat('%',#{readmagname},'%')
+            </if>
+        </where>
+        order by readmagtime desc
+    </select>
+    <select id="findReadCount" resultType="java.lang.Integer">
+        select count(*) from tbl_readmag
+        <where>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(readmagtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(readmagtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" readmagname != '' and readmagname != null">
+                and readmagname like concat('%',#{readmagname},'%')
+            </if>
+        </where>
     </select>
 
 

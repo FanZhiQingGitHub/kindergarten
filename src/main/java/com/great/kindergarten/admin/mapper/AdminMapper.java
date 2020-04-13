@@ -67,6 +67,8 @@ public interface AdminMapper {
 
 	public String findRoleByRid(Integer rid);
 
+	public Integer checkMenuName(String menuName);
+
 	//角色管理
 	public List<TblRole> findAllRoleInfo(HashMap<String, Object> condition, RowBounds rowBounds);
 
@@ -79,6 +81,10 @@ public interface AdminMapper {
 	public int deleteRoleInfo(Integer roleid);
 
 	public List<TblRoleMenu> findRoleMenuIdByRid(Integer roleid);
+
+	public int addRoleInfo(TblRole tblRole);
+
+	public Integer checkRoleName(String roleName);
 
 	//修改管理员密码
 	public int updateAdminPwd(Map<String,String> adminMap);
@@ -115,4 +121,15 @@ public interface AdminMapper {
 	public int findParameterCount(HashMap<String, Object> condition);
 
 	public List<TblParameter> findParameterInfo();
+
+	//亲子阅读管理
+	public List<TblReadmag> findAllReadInfo(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public int findReadCount(HashMap<String, Object> condition);
+
+	public int deleteReadInfo(Integer readMagId);
+
+	public int addPhotoImg(TblReadmag tblReadmag);
+
+	public int reUploadBook(TblReadmag tblReadmag);
 }
