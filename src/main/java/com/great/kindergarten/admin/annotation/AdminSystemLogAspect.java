@@ -117,7 +117,7 @@ public class AdminSystemLogAspect {
             log.setOperatedetail(operationName);
             log.setOperatetype(operationType);
             log.setOperateip(ip);
-            log.setOperateresult( null);
+            log.setOperateresult("正常");
             if(tblAdmin != null)
             {
                 log.setOperateor(tblAdmin.getAdminname());
@@ -128,6 +128,7 @@ public class AdminSystemLogAspect {
             log.setOperatetime(new Date());
             //保存数据库
             systemLogService.addLog(log);
+
         }  catch (Exception e) {
             //记录本地异常日志
             logger.error("==后置通知异常==");
@@ -192,7 +193,7 @@ public class AdminSystemLogAspect {
              log.setOperatedetail(operationName);
              log.setOperatetype(operationType);
              log.setOperateip(ip);
-             log.setOperateresult( null);
+             log.setOperateresult("异常");
              if(tblAdmin != null)
              {
                  log.setOperateor(tblAdmin.getAdminname());

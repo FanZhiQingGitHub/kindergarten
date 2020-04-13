@@ -101,7 +101,7 @@
             var mealid = $(this).parents('tr').children('td').eq(0).text();
             layer.open({
                 type: 2,
-                area: ['80%', '68%'],
+                area: ['80%', '58%'],
                 offset: ['10%', '9.5%'],
                 title: '修改膳食信息',
                 content: path + '/healther/path/mealUpdate' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']

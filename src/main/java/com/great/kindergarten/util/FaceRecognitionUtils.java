@@ -22,6 +22,13 @@ public class FaceRecognitionUtils
 	public static final String API_KEY = "0LGAAfoAKvVlXm0bZC2XKSpW";
 	public static final String SECRET_KEY = "l8jmnLhu76HIe5rb7dUiePrfGSCvGI7W";
 
+	public static AipFace client =new AipFace(APP_ID, API_KEY, SECRET_KEY);
+
+	public FaceRecognitionUtils()
+	{
+
+
+	}
 
 	/**
 	 * 传入图片的Base64字符串信息 去服务器比对是否有这个人
@@ -33,8 +40,7 @@ public class FaceRecognitionUtils
 //        http://ai.baidu.com/docs#/Face-Java-SDK/top
 		String imageType = "BASE64";
 
-		// 初始化一个AipFace
-		AipFace client = new AipFace(APP_ID, API_KEY, SECRET_KEY);
+
 
 		// 可选：设置网络连接参数
 		client.setConnectionTimeoutInMillis(2000);
@@ -81,17 +87,29 @@ public class FaceRecognitionUtils
 
 
 	/**
-	 * 用方法把String类型的字符串 转化成base格式的字符串
-	 * @param imgString
-	 * @return
-	 * @throws UnsupportedEncodingException
+	 * 人脸注册方法
+	 * @param imageString
+	 * @param name
 	 */
-	public static String stringToBase64(String imgString) throws UnsupportedEncodingException
-	{
-		Base64 base64 = new Base64();
-		//用方法把String类型的字符串 转化成base格式的字符串
-		return  base64.encodeToString(imgString.getBytes("UTF-8"));
+	public static void faceRegister(String imageString,String name){
+		// 传入可选参数调用接口，根据需求自行设置
+		HashMap<String, String> options = new HashMap<String, String>(10);
+		String imageType = "BASE64";
+
+		if (imageString!=null&&!"".equals(imageString)&&name!=null&&!"".equals(name)){
+
+			JSONObject res =client.addUser(imageString,imageType,"AllFace",name,options);
+
+			System.out.println(res);
+		}
+
+
+
 	}
+
+
+
+
 
 
 

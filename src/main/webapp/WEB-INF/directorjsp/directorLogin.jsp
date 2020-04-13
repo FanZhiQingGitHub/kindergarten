@@ -301,7 +301,7 @@
             $("#bu4").click(function () {
                 var path = $("#path").val();
                 // location.href = path + "/director/rectorReg";
-                location.href = path + "/main/main";
+                location.href = path + "/main/path/main";
             });
             // $("#bu5").click(function () {
             //     var path = $("#path").val();

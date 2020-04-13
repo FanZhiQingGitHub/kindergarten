@@ -274,6 +274,7 @@
 	    $("#exit").on('click',function () {
 		    layer.confirm('您确定退出到园长端登录界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
 			    layer.close(index);
+                sessionStorage.clear();//清除session信息
 			    window.location.href = src+"/director/exit";
                 return true;
 		    });

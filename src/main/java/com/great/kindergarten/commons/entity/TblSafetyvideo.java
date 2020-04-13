@@ -18,11 +18,14 @@ public class TblSafetyvideo {
     private Integer mid;
     private String videoname;
     private String videoadd;
+    private String safetytestscore;
+    private String safetytestresult;
 
     public TblSafetyvideo() {
     }
 
-    public TblSafetyvideo(Integer safetyvideoid, String safetyvideoname, Date safetyvideotime, String safetyvideoplace, Integer mid, String videoname, String videoadd) {
+    public TblSafetyvideo(Integer safetyvideoid, String safetyvideoname, Date safetyvideotime, String safetyvideoplace, Integer mid, String videoname, String videoadd, String safetytestscore, String safetytestresult)
+    {
         this.safetyvideoid = safetyvideoid;
         this.safetyvideoname = safetyvideoname;
         this.safetyvideotime = safetyvideotime;
@@ -30,6 +33,18 @@ public class TblSafetyvideo {
         this.mid = mid;
         this.videoname = videoname;
         this.videoadd = videoadd;
+        this.safetytestscore = safetytestscore;
+        this.safetytestresult = safetytestresult;
+    }
+
+    public String getSafetytestresult()
+    {
+        return safetytestresult;
+    }
+
+    public void setSafetytestresult(String safetytestresult)
+    {
+        this.safetytestresult = safetytestresult;
     }
 
     public Integer getSafetyvideoid() {
@@ -86,6 +101,16 @@ public class TblSafetyvideo {
 
     public void setVideoadd(String videoadd) {
         this.videoadd = videoadd;
+    }
+
+    public String getSafetytestscore()
+    {
+        return safetytestscore;
+    }
+
+    public void setSafetytestscore(String safetytestscore)
+    {
+        this.safetytestscore = safetytestscore;
     }
 
     @Override

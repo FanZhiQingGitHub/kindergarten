@@ -39,7 +39,7 @@
         <li class="layui-nav-item">
             <a href="javascript:;" style="color: black;font-size: 18px">
                 <img src="${pageContext.request.contextPath}/image/logo/head.jpg" class="layui-nav-img">
-                欢迎&nbsp;,${healthername}&nbsp;安防员
+                欢迎&nbsp;,${securityname}&nbsp;安防员
             </a>
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0);" id="a1">个人信息</a></dd>
@@ -59,7 +59,7 @@
         <h1 class="logo">
             <img style="width: 100%;height: 90px" src="${pageContext.request.contextPath}/image/logo/logo.png">
         </h1>
-        <h1 style="margin-left: 17%;font-size: 40px;color: coral">安防员首页</h1>
+        <h1 style="margin-left: 21%;font-size: 40px;color: coral">安防员首页</h1>
 
     </div>
 </div>
@@ -69,8 +69,8 @@
 <!-- content -->
 <div class="content">
     <div class="title">
-        <h3>好营养我们造,为孩子健康护航</h3>
-        <h4>We make good nutrition, escort the health of children.</h4>
+        <h3>为了孩子的安全，我们义无反顾</h3>
+        <h4>For the safety of our children, we have no turning back.</h4>
     </div>
     <div class="layui-carousel imgbox" id="test1">
         <div carousel-item class="imgH">
@@ -86,21 +86,35 @@
         </div>
     </div>
 
-    <div class="prod-show" >
+    <div class="prod-show">
 
-        <div class="img-txt">
+        <div class="img-txt" style="float: left">
             <h3>
                 <button type="button" id="bu1" class="layui-btn layui-btn-lg layui-btn-normal"
-                        style="width: 100%;height: 100%;font-size: 20px">体检管理
+                        style="width: 450px;height: 100%;font-size: 20px">安全中心
                 </button>
+
+                <div class="layui-btn-container" id="div1" style="display: none">
+                    <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="bu3">接送管理</button>
+                    <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="bu4">电子围栏
+                    </button>
+                </div>
+
             </h3>
         </div>
 
-        <div class="img-txt">
+        <div class="img-txt" style="float: right">
             <h3>
-                <button type="button" id="bu2" class="layui-btn layui-btn-lg layui-btn-warm"
-                        style="width: 100%;height: 100%;font-size: 20px">膳食管理
+                <button type="button" id="bu2" class="layui-btn layui-btn-lg layui-btn-normal"
+                        style="width: 450px;height: 100%;font-size: 20px">直播中心
                 </button>
+                <div class="layui-btn-container" id="div2" style="display: none">
+                    <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="bu5">直播管理</button>
+                    <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="bu6">
+                        直播权限管理
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="bu7">视频管理</button>
+                </div>
             </h3>
         </div>
 
@@ -114,7 +128,8 @@
                     <div class="img-txt">
                         <h3 style="text-align: left">园所动态News</h3>
                         <div style=" overflow:auto;">
-                            <a><img style="width: 100%" src="${pageContext.request.contextPath}/image/healtherimg/img/news.jpg"></a>
+                            <a><img style="width: 100%"
+                                    src="${pageContext.request.contextPath}/image/healtherimg/img/news.jpg"></a>
                         </div>
                         <div style=" overflow:auto;">
                             <a href="javascript:;">新闻一</a><br>
@@ -130,7 +145,8 @@
                     <div class="img-txt">
                         <h3 style="text-align: left">园所视频Videos</h3>
                         <div style=" overflow:auto;">
-                            <a href="javascript:;"><img style="width: 100%" src="${pageContext.request.contextPath}/image/healtherimg/img/heather-1.jpeg"></a>
+                            <a href="javascript:;"><img style="width: 100%"
+                                                        src="${pageContext.request.contextPath}/image/healtherimg/img/heather-1.jpeg"></a>
                         </div>
                     </div>
                 </div>
@@ -187,51 +203,62 @@
                     type: 2,
                     area: ['95%', '80%'],
                     offset: ['10%', '3%'],
-                    title: '智慧幼儿园-保健员个人信息页',
+                    title: '智慧幼儿园-安防员个人信息页',
                     btn1: function (index, layero) {
                         //layer.getChildFrame("form", index)获取iframe的表单
                         //serializeArray jquery方法，将表单对象序列化为数组
                         layer.close(index);
                     },
-                    content: path + '/healther/path/healtherInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    content: path + '/security/path/securityInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                     , success: function (layero, index) {
                     }
                 });
             }), $("#exit").click(function () {
                 layer.confirm('您确定要退出到登录界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
                     layer.close(index);
-                    location.href = path + "/healther/path/healtherLogin";
+                    sessionStorage.clear();//清除session信息
+                    location.href = path + "/security/path/securityLogin";
                 });
-            }), $("#bu1").click(function () { //体检管理
+            }), $("#bu1").click(function () {
+                $("#div1").slideToggle("slow");
+            }), $("#bu2").click(function () {
+                $("#div2").slideToggle("slow");
+            }), $("#bu3").click(function () {
                 layer.open({
                     type: 2,
                     area: ['95%', '80%'],
                     offset: ['10%', '3%'],
-                    title: '智慧幼儿园-宝宝体检信息页',
+                    title: '智慧幼儿园-学生接送信息页',
                     btn1: function (index, layero) {
                         //layer.getChildFrame("form", index)获取iframe的表单
                         //serializeArray jquery方法，将表单对象序列化为数组
                         layer.close(index);
                     },
-                    content: path + '/healther/path/examinationInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    content: path + '/security/path/pickupInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                     , success: function (layero, index) {
                     }
                 });
-            }), $("#bu2").click(function () { //膳食管理
+            }), $("#bu4").click(function () {
                 layer.open({
                     type: 2,
                     area: ['95%', '80%'],
                     offset: ['10%', '3%'],
-                    title: '智慧幼儿园-宝宝膳食信息页',
+                    title: '智慧幼儿园-电子围栏',
                     btn1: function (index, layero) {
                         //layer.getChildFrame("form", index)获取iframe的表单
                         //serializeArray jquery方法，将表单对象序列化为数组
                         layer.close(index);
                     },
-                    content: path + '/healther/path/mealInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    content: path + '/security/path/electricFence' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                     , success: function (layero, index) {
                     }
                 });
+            }), $("#bu5").click(function () {
+                layer.alert('敬请期待', {icon: 6});
+            }), $("#bu6").click(function () {
+                layer.alert('敬请期待', {icon: 6});
+            }), $("#bu7").click(function () {
+                layer.alert('敬请期待', {icon: 6});
             });
         })
     });

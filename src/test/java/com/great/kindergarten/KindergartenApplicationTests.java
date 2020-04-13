@@ -18,7 +18,13 @@ class KindergartenApplicationTests {
     {
 
 //        String img64Str = FaceRecognitionUtils.fileToBase64("E:\\Idea4\\kindergarten\\src\\main\\webapp\\image\\logo\\parent1.jpg");
-//        FaceRecognitionUtils.identify(img64Str,null);
+//
+//        System.out.println(img64Str);
+//
+//        //        FaceRecognitionUtils.identify(img64Str,null);
+//
+//        FaceRecognitionUtils.faceRegister(img64Str,"testPhoto1");
+
 
     }
 }

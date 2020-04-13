@@ -6,80 +6,147 @@ package com.great.kindergarten.commons.entity;
 public class TblSafetyvtq {
     private Integer safetyvtqid;
     private String safetyvtqname;
-    private Integer safetyvtqsonid;
-    private Integer safetyvtqscore;
-    private String safetyvtqresult;
-    private Integer sid;
+    private String a;
+    private String avalue;
+    private String b;
+    private String bvalue;
+    private String c;
+    private String cvalue;
+    private String d;
+    private String dvalue;
+    private Integer safetyvideoid;
 
     public TblSafetyvtq() {
     }
 
-    public TblSafetyvtq(Integer safetyvtqid, String safetyvtqname, Integer safetyvtqsonid, Integer safetyvtqscore, String safetyvtqresult, Integer sid) {
+    public TblSafetyvtq(Integer safetyvtqid, String safetyvtqname, String a, String avalue, String b, String bvalue, String c, String cvalue, String d, String dvalue, Integer safetyvideoid)
+    {
         this.safetyvtqid = safetyvtqid;
         this.safetyvtqname = safetyvtqname;
-        this.safetyvtqsonid = safetyvtqsonid;
-        this.safetyvtqscore = safetyvtqscore;
-        this.safetyvtqresult = safetyvtqresult;
-        this.sid = sid;
+        this.a = a;
+        this.avalue = avalue;
+        this.b = b;
+        this.bvalue = bvalue;
+        this.c = c;
+        this.cvalue = cvalue;
+        this.d = d;
+        this.dvalue = dvalue;
+        this.safetyvideoid = safetyvideoid;
     }
 
-    public Integer getSafetyvtqid() {
+    public Integer getSafetyvtqid()
+    {
         return safetyvtqid;
     }
 
-    public void setSafetyvtqid(Integer safetyvtqid) {
+    public void setSafetyvtqid(Integer safetyvtqid)
+    {
         this.safetyvtqid = safetyvtqid;
     }
 
-    public String getSafetyvtqname() {
+    public String getSafetyvtqname()
+    {
         return safetyvtqname;
     }
 
-    public void setSafetyvtqname(String safetyvtqname) {
+    public void setSafetyvtqname(String safetyvtqname)
+    {
         this.safetyvtqname = safetyvtqname;
     }
 
-    public Integer getSafetyvtqsonid() {
-        return safetyvtqsonid;
+    public String getA()
+    {
+        return a;
     }
 
-    public void setSafetyvtqsonid(Integer safetyvtqsonid) {
-        this.safetyvtqsonid = safetyvtqsonid;
+    public void setA(String a)
+    {
+        this.a = a;
     }
 
-    public Integer getSafetyvtqscore() {
-        return safetyvtqscore;
+    public String getAvalue()
+    {
+        return avalue;
     }
 
-    public void setSafetyvtqscore(Integer safetyvtqscore) {
-        this.safetyvtqscore = safetyvtqscore;
+    public void setAvalue(String avalue)
+    {
+        this.avalue = avalue;
     }
 
-    public String getSafetyvtqresult() {
-        return safetyvtqresult;
+    public String getB()
+    {
+        return b;
     }
 
-    public void setSafetyvtqresult(String safetyvtqresult) {
-        this.safetyvtqresult = safetyvtqresult;
+    public void setB(String b)
+    {
+        this.b = b;
     }
 
-    public Integer getSid() {
-        return sid;
+    public String getBvalue()
+    {
+        return bvalue;
     }
 
-    public void setSid(Integer sid) {
-        this.sid = sid;
+    public void setBvalue(String bvalue)
+    {
+        this.bvalue = bvalue;
+    }
+
+    public String getC()
+    {
+        return c;
+    }
+
+    public void setC(String c)
+    {
+        this.c = c;
+    }
+
+    public String getCvalue()
+    {
+        return cvalue;
+    }
+
+    public void setCvalue(String cvalue)
+    {
+        this.cvalue = cvalue;
+    }
+
+    public String getD()
+    {
+        return d;
+    }
+
+    public void setD(String d)
+    {
+        this.d = d;
+    }
+
+    public String getDvalue()
+    {
+        return dvalue;
+    }
+
+    public void setDvalue(String dvalue)
+    {
+        this.dvalue = dvalue;
+    }
+
+    public Integer getSafetyvideoid()
+    {
+        return safetyvideoid;
+    }
+
+    public void setSafetyvideoid(Integer safetyvideoid)
+    {
+        this.safetyvideoid = safetyvideoid;
     }
 
     @Override
-    public String toString() {
-        return "TblSafetyvtq{" +
-                "safetyvtqid=" + safetyvtqid +
-                ", safetyvtqname='" + safetyvtqname + '\'' +
-                ", safetyvtqsonid=" + safetyvtqsonid +
-                ", safetyvtqscore=" + safetyvtqscore +
-                ", safetyvtqresult='" + safetyvtqresult + '\'' +
-                ", sid=" + sid +
-                '}';
+    public String toString()
+    {
+        return "TblSafetyvtq{" + "safetyvtqid=" + safetyvtqid + ", safetyvtqname='" + safetyvtqname + '\'' + ", a='" + a + '\'' + ", avalue='" + avalue + '\'' + ", b='" + b + '\'' + ", bvalue='" + bvalue + '\'' + ", c='" + c + '\'' + ", cvalue='" + cvalue + '\'' + ", d='" + d + '\'' + ", dvalue='" + dvalue + '\'' + ", safetyvideoid=" + safetyvideoid + '}';
     }
 }
