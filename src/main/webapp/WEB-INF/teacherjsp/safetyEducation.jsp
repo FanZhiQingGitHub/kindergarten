@@ -53,7 +53,7 @@
 </body>
 <script>
 
-	layui.use(['table','laydate','layer'], function() {
+	layui.use(['table','laydate','layer','jquery'], function() {
 		var laydate = layui.laydate;
 		var layer = layui.layer;
 		var table = layui.table;
@@ -69,11 +69,12 @@
 			,cols: [[ //表头
 				{field: 'safetyvideoid', title: '视频编号', width:150, sort: true, fixed: 'left'}
 				,{field: 'safetyvideoname', title: '视频名称', width:150}
-				,{field: 'safetyvideotime', title: '布置时间', width:200}
-				,{field: 'safetyfinishtime', title: '完成时间', width:200}
+				,{field: 'safetyvideotime', title: '布置时间', width:200 ,templet:"<div>{{layui.util.toDateString(d.safetyvideotime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
+				,{field: 'safetyfinishtime', title: '完成时间', width:200,templet:"<div>{{layui.util.toDateString(d.safetyfinishtime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
 				,{field: '', title: '操作', toolbar: '#barDemo' , width:200}
 			]]
 		});
+
 		//配置试题
 		$('body').on('click', '.questions', function () {
 			var type = $(this).text();

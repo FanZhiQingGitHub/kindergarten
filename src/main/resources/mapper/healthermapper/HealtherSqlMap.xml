@@ -5,6 +5,7 @@
 <mapper namespace="com.great.kindergarten.healther.mapper.HealtherMapper">
 
     <resultMap id="HealtherMap" type="com.great.kindergarten.commons.entity.TblHealther">
+        <id column="healtherid" property="healtherid"></id>
         <result column="healtherid" property="healtherid"></result>
         <result column="healthername" property="healthername"></result>
         <result column="healtherpwd" property="healtherpwd"></result>
