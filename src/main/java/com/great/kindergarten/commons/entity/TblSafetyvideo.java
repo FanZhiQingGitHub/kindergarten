@@ -55,6 +55,106 @@ public class TblSafetyvideo {
         this.safetytestresult = safetytestresult;
     }
 
+    public Integer getSafetyvideoid()
+    {
+        return safetyvideoid;
+    }
+
+    public void setSafetyvideoid(Integer safetyvideoid)
+    {
+        this.safetyvideoid = safetyvideoid;
+    }
+
+    public String getSafetyvideoname()
+    {
+        return safetyvideoname;
+    }
+
+    public void setSafetyvideoname(String safetyvideoname)
+    {
+        this.safetyvideoname = safetyvideoname;
+    }
+
+    public Date getSafetyvideotime()
+    {
+        return safetyvideotime;
+    }
+
+    public void setSafetyvideotime(Date safetyvideotime)
+    {
+        this.safetyvideotime = safetyvideotime;
+    }
+
+    public Date getSafetyfinishtime()
+    {
+        return safetyfinishtime;
+    }
+
+    public void setSafetyfinishtime(Date safetyfinishtime)
+    {
+        this.safetyfinishtime = safetyfinishtime;
+    }
+
+    public String getSafetyvideoplace()
+    {
+        return safetyvideoplace;
+    }
+
+    public void setSafetyvideoplace(String safetyvideoplace)
+    {
+        this.safetyvideoplace = safetyvideoplace;
+    }
+
+    public Integer getMid()
+    {
+        return mid;
+    }
+
+    public void setMid(Integer mid)
+    {
+        this.mid = mid;
+    }
+
+    public String getVideoname()
+    {
+        return videoname;
+    }
+
+    public void setVideoname(String videoname)
+    {
+        this.videoname = videoname;
+    }
+
+    public String getVideoadd()
+    {
+        return videoadd;
+    }
+
+    public void setVideoadd(String videoadd)
+    {
+        this.videoadd = videoadd;
+    }
+
+    public String getSafetytestscore()
+    {
+        return safetytestscore;
+    }
+
+    public void setSafetytestscore(String safetytestscore)
+    {
+        this.safetytestscore = safetytestscore;
+    }
+
+    public String getSafetytestresult()
+    {
+        return safetytestresult;
+    }
+
+    public void setSafetytestresult(String safetytestresult)
+    {
+        this.safetytestresult = safetytestresult;
+    }
+
     public String getTime1()
     {
         return time1;
