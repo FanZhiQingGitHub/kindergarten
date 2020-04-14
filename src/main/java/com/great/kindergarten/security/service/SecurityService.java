@@ -1,10 +1,7 @@
 package com.great.kindergarten.security.service;
 
 import com.great.kindergarten.admin.mapper.AdminMapper;
-import com.great.kindergarten.commons.entity.TblClass;
-import com.great.kindergarten.commons.entity.TblSecurity;
-import com.great.kindergarten.commons.entity.TblStudent;
-import com.great.kindergarten.commons.entity.TblStutime;
+import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.security.mapper.SecurityMapper;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoPage;
@@ -58,7 +55,7 @@ public class SecurityService {
         return securityMapper.findALLPickUpInfoCount(pickUpInfoPage);
     }
 
-    public List<TblStutime> findALLPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage){
+    public List<TblDate> findALLPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage){
         return securityMapper.findALLPickUpDetailInfo(pickUpInfoDetailPage);
     }
 

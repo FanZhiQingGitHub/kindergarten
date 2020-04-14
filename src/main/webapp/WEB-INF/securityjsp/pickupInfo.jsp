@@ -106,7 +106,7 @@
             , limit: 5
             , limits: [5, 10, 15, 20]
             , cols: [[ //表头
-                {field: 'sid', title: '宝宝ID', width: 120,sort: true, fixed: 'left', align: 'center'}
+                {field: 'studentid', title: '宝宝ID', width: 120,sort: true, fixed: 'left', align: 'center'}
                 , {field: 'studentname', title: '宝宝名称', width: 200, align: 'center'}
                 , {field: 'studentsex', title: '性别', width: 200, sort: true, align: 'center'}
                 , {field: 'classname', title: '所在班级', width: 200, sort: true, align: 'center'}
@@ -140,7 +140,6 @@
             var studentname = $(this).parents('tr').children('td').eq(1).text();
             var studentsex = $(this).parents('tr').children('td').eq(2).text();
             var classname = $(this).parents('tr').children('td').eq(3).text();
-
 
             layer.open({
                 type: 2,
