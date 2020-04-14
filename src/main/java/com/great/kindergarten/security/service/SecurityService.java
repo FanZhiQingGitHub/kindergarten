@@ -6,6 +6,8 @@ import com.great.kindergarten.security.mapper.SecurityMapper;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoPage;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,6 +43,13 @@ public class SecurityService {
         securitymap.put("securitypwd",securitypwd);
         securitymap.put("securityid",securityid);
         return securityMapper.updateSecurityPwd(securitymap);
+    }
+
+    @Transactional
+    public Boolean resetSecuritypwd(String securityphone){
+        Map<String,String> securitymap = new LinkedHashMap<>();
+        securitymap.put("securityphone",securityphone);
+        return securityMapper.resetSecuritypwd(securitymap);
     }
 
     public List<TblClass> findAllClass(){

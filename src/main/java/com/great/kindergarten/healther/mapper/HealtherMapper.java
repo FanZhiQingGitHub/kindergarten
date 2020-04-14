@@ -22,6 +22,7 @@ public interface HealtherMapper {
 
     public Boolean resetHealtherpwd(Map<String, String> healthermap);
 
+
     public List<TblExamination> findALLExamination(ExaminationPage examinationPage);
 
     public Long findALLExaminationCount(ExaminationPage examinationPage);

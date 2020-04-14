@@ -140,6 +140,17 @@ public class SecurityController {
         }
     }
 
+    @RequestMapping("/resetSecuritypwd")
+    public void resetSecuritypwd(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response) {
+        Boolean flag = securityService.resetSecuritypwd(tblSecurity.getSecurityphone());
+        if(flag){
+            ResponseUtils.outHtml(response,"success");
+        }else {
+            ResponseUtils.outHtml(response,"error");
+        }
+    }
+
+
     //孩子接送信息，不含考勤
     @RequestMapping("/showPickUpInfo")
     public void showPickUpInfo(PickUpInfoPage pickUpInfoPage, DateWrite dateWrite ,HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {

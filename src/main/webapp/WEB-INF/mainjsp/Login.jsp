@@ -132,10 +132,6 @@
         .footer_l{ float:left}
         .footer_r{ float:right}
 
-        .header{ width:100%; height:100px; line-height:60px; position:fixed;top:0; bottom:0; background:url(${pageContext.request.contextPath}/loginres/images/footerBg.png);background-color: transparent;}
-        .header0{ width:1200px; height:60px; margin:0 auto; font-size:14px; color:#adacac}
-        .header_l{ float:left}
-        .header_r{ float:right}
     </style>
 
 </head>
@@ -143,14 +139,12 @@
 <input type="hidden" id="path" value="<%=path%>">
 <form class="layui-form" method="post">
 
-<%--    <div class="header">--%>
-<%--        <div class="header0">--%>
-<%--            <div class="header_l"><img style="width: 100%;height: 90px" src="${pageContext.request.contextPath}/image/logo/logo.jpg"></div>--%>
-<%--        </div>--%>
-<%--    </div>--%>
-
     <div id="alldiv">
         <div class="container">
+
+            <div style="margin-left: 10%;margin-top: -3%">
+                <img src="${pageContext.request.contextPath}/image/logo/hs-word.png"/>
+            </div>
 
             <div class="main_left">
                 <img src="${pageContext.request.contextPath}/loginres/images/login-image-3.png" class="theimg"/>
