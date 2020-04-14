@@ -3,6 +3,7 @@ package com.great.kindergarten.teacher.controller;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.teacher.service.TeacherService;
 import com.great.kindergarten.util.MD5Utils;
+import com.great.kindergarten.util.ResponseUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -226,7 +227,7 @@ public class TeacherController {
 
     @RequestMapping(value="/workRelease",produces = "text/plain;charset=UTF-8")
     @ResponseBody
-    public Map<String, Object> workRelease(@RequestParam("file") MultipartFile file,String classname, HttpServletRequest request){
+    public Map<String, Object> workRelease(@RequestParam("file") MultipartFile file,String classname, HttpServletRequest request,HttpServletResponse response){
 
 //        String classname=request.getParameter("classname");
 	    TblClass tblClass =new TblClass();
@@ -278,8 +279,8 @@ public class TeacherController {
                         //将文件路径返回
                         uploadData.put("data", "{\'src\':\'"+path+"\'}");
                         System.out.println(uploadData);
-//	                    return JSONObject.toJSONString(uploadData);
-                        return uploadData;
+	                    ResponseUtils.outJson(response,uploadData);
+//                        return uploadData;
                     }
                 }
 
@@ -348,7 +349,7 @@ public class TeacherController {
 	//安全教育视频表
 
     @RequestMapping(value="/safetyVideoTable")
-    @ResponseBody
+//    @ResponseBody
     public CourseTable safetyVideoTable(HttpServletRequest request, HttpServletResponse response){
         String page=request.getParameter("page");
         String limit=request.getParameter("limit");
@@ -371,7 +372,8 @@ public class TeacherController {
             courseTable.setMsg("");
             courseTable.setCount(count);
             courseTable.setData(tblSafetyvideoList);
-            return courseTable;
+	        ResponseUtils.outJson(response,courseTable);
+//            return courseTable;
         }
 
         return null;

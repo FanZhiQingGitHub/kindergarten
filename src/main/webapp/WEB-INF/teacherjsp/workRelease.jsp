@@ -30,12 +30,7 @@
 			<label class="layui-form-label" >选择班级：</label>
 			<select name="selectClass" id="selectClass" lay-verify="required" style="width: 100px">
 				<option value="" selected>请选择班级</option>
-<%--	                <option value="请选择班级">请选择班级</option>--%>
-<%--	                <c:if test="${not empty tblClassList}">--%>
-<%--		               <c:forEach items="${tblClassList}" var="i" step="1">--%>
-<%--			              <option value="${i.classname}">${i.classname}</option>--%>
-<%--		            </c:forEach>--%>
-<%--	                </c:if>--%>
+
 			</select>
 		</div>
 	</div>
