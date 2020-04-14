@@ -28,12 +28,12 @@ public class ParentService {
      * @param searchCondition
      * @return
      */
-    public TableDate kidHomeWorkList(SearchCondition searchCondition){
+    public TableDate kidHomeWorkList(SearchCondition searchCondition,Integer cid){
         TableDate result = new TableDate();
         //计算总共的页数
-        result.setCount(parentMapper.countHomeWorkList(searchCondition));
+        result.setCount(parentMapper.countHomeWorkList(searchCondition,cid));
         //放入查询的数据
-        result.setData( parentMapper.findHomeWorkList(searchCondition));
+        result.setData( parentMapper.findHomeWorkList(searchCondition,cid));
         return result;
     }
 

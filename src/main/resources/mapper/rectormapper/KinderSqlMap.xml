@@ -248,4 +248,48 @@ insert into tbl_kinder(
             ,campusinfodetail = #{campusinfodetail}
         where campusinfoid = #{campusinfoid}
     </update>
+
+    <!--教师考勤信息...查询和查询次数对应的值-->
+    <select id="findTeacherAttendAll" resultType="TblTeacherAttend" parameterType="java.util.HashMap">
+        select tt.*,t.teacherid,t.teachername,t.teacherjob
+        from tbl_teacher t,tbl_teachertest tt
+        <where> t.teacherid = tt.tid
+            <if test="teachername != null and teachername != ''">
+                and teachername like "%"#{teachername}"%"
+            </if>
+            <if test="teacherjob != null and teacherjob != ''">
+                and teacherjob like "%"#{teacherjob}"%"
+            </if>
+        </where>
+        order by tattendbegin desc limit #{pageInt},#{limitInt}
+    </select>
+    <!--    教师搜索界面的设计,查询记录条数-->
+    <select id="findTeacherAttendAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(*) from tbl_teacher t,tbl_teachertest tt
+        <where> t.teacherid = tt.tid
+            <if test="teachername != null and teachername != ''">
+                and teachername like "%"#{teachername}"%"
+            </if>
+            <if test="teacherjob != null and teacherjob != ''">
+                and teacherjob like "%"#{teacherjob}"%"
+            </if>
+        </where>
+    </select>
+
+    <!--教师考勤对应的显示...考勤信息值-->
+    <select id="findALLTeacherAttendDetail" resultType="TblTertime" parameterType="TblTeacherAttend">
+        select * from tbl_stutime st,tbl_pickup pi,tbl_student s
+        <where>
+            st.pickid = pi.pickupid and pi.sid = s.studentid
+            <if test="studentid != '' and studentid != null ">
+                and s.studentid = #{studentid}
+            </if>
+            <if test=" mondaydate != '' and mondaydate != null">
+                <![CDATA[   and DATE_FORMAT(pi.mondaydate, '%Y-%m-%d')>=  DATE_FORMAT(#{mondaydate}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" sundaydate != '' and sundaydate != null">
+                <![CDATA[   and DATE_FORMAT(pi.sundaydate, '%Y-%m-%d')<=  DATE_FORMAT(#{sundaydate}, '%Y-%m-%d')   ]]>
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -2,6 +2,7 @@ package com.great.kindergarten.parent.mapper;
 
 import com.great.kindergarten.commons.entity.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,16 +24,18 @@ public interface ParentMapper {
 	/**
 	 * 根据家长id和其他条件 找到自己孩子的作业列表
 	 * @param  condition
+	 * @param  cid
 	 * @return
 	 */
-	List<TblWork> findHomeWorkList(SearchCondition condition);
+	List<TblWork> findHomeWorkList(@Param("condition") SearchCondition condition ,@Param("cid") Integer cid);
 
 	/**
 	 * 根据家长id和其他条件 找到自己孩子有几条作业记录
 	 * @param  condition
+	 * @param  cid
 	 * @return
 	 */
-	Integer countHomeWorkList(SearchCondition condition);
+	Integer countHomeWorkList(@Param("condition")SearchCondition condition ,@Param("cid") Integer cid);
 
 
 	/**

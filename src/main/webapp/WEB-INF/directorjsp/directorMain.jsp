@@ -130,7 +130,7 @@
     <div class="nav_btn">
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="approvalGarden">园<br/>所<br/>审<br/>批</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="teachersManagement">教<br/>师<br/>管<br/>理</button>
-        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="teachersExamAffection">教<br/>师<br/>考<br/>勤</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="teachersAttendManagement">教<br/>师<br/>考<br/>勤</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="childrenManagement">幼<br/>儿<br/>管<br/>理</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="parentManagement">家<br/>长<br/>管<br/>理</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="classManagement">班<br/>级<br/>管<br/>理</button>
@@ -312,6 +312,15 @@
             return false;
         });
 
+        //教师考勤管理
+        $("#teachersAttendManagement").on('click',function () {
+            layer.confirm('您确定要进入到教师考勤管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
+                layer.close(index);
+                window.location.href = src+"/director/toUrl/director_TeacherAttendManage";
+                return true;
+            });
+            return false;
+        });
         //幼儿管理
         $("#childrenManagement").on('click',function () {
             layer.confirm('您确定要进入到幼儿管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {

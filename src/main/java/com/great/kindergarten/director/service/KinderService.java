@@ -177,4 +177,22 @@ public class KinderService
 		return result;
 	}
 
+	/*
+	* 教师考勤信息
+	* */
+	//教师考勤信息--查询记录
+	public List<TblTeacherAttend> findTeacherAttendAll(Map<String, Object> map)
+	{
+		return kinderMapper.findTeacherAttendAll(map);
+	}
+	//教师考勤信息--查询记录次数
+	public Long findTeacherAttendAllCount(Map<String, Object> map){
+		return kinderMapper.findTeacherAttendAllCount(map);
+	}
+
+	//教师考勤对应的显示--考勤信息值
+	public List<TblTertime> findALLTeacherAttendDetail(TblTeacherAttend tblTeacherAttend){
+		return kinderMapper.findALLTeacherAttendDetail(tblTeacherAttend);
+	}
+
 }

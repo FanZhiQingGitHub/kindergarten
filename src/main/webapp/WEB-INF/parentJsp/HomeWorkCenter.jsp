@@ -42,13 +42,19 @@
 		</div>
 	</div>
 
-	宝宝昵称：
+
 	<div class="layui-inline" >
-		<select id="status">
+		宝宝昵称：
+		<select id="status" onchange="selectClass()">
 			<option value="">宝宝</option>
 		</select>
 	</div>
 
+	<div class="layui-inline" >
+		<div id="classId">
+
+		</div>
+	</div>
 
 
 
@@ -76,7 +82,7 @@
 
 <script type="text/javascript" >
 
-
+var kidList ;
 
 	layui.use('table', function(){
 		var table = layui.table;
@@ -87,21 +93,31 @@
 			cache: false,
 			data: {},
 			success: function(result) {
-
+				//获取宝宝列表
 				var $selectKis =$("#status");
-				var kidList =result.data;
-
+				var $classId =$("#classId");
+				//获取宝宝列表数据
+				kidList =result.data;
+				//清空原本有的宝宝
 				$selectKis.empty();
 
-				for (var items =0;items<kidList.length;items++ ){
-					$selectKis.append("<option value='"+kidList[items].studentid+"'>"+kidList[items].studentname+"</option>")
+				if (kidList>0){
+
+					//输入打印出自己的宝宝
+					for (var keys = 0;keys<kidList.length;keys++ ){
+						$selectKis.append("<option value='"+kidList[keys].studentid+"'>"+kidList[keys].studentname+"</option>")
+					}
+
+					//更改班级信息
+					selectClass();
 				}
+
 
 				//查询作业数据
 				table.render({
 					elem: '#demo'
 					,height: 700
-					,url: path+'/parent/kidHomeWorkList?status='+$selectKis.val() //数据接口
+					,url: path+'/parent/kidHomeWorkList?status='+$selectKis.val()+'&cid='+$classId.html() //数据接口
 					,method:'post'
 					,page: true //开启分页
 					,id: 'demo'
@@ -152,7 +168,9 @@
 						//发送的值
 						name:$('#uName').val(),
 						beginTime:$('#beginTime').val(),
-						endTime:$('#endTime').val()
+						endTime:$('#endTime').val(),
+						status:$('#status').val(),
+						cid:$('#classId').html()
 					}
 				})
 			}
@@ -189,6 +207,22 @@
 		});
 	});
 
+
+	
+	function selectClass() {
+		var kidId =$("#status").val();
+		var $kidClass =$("#classId");
+		//在页面隐藏宝宝的班级
+		for (var number =0;number<kidList.length;number++ ){
+			if (kidList[number].studentid==kidId){
+				$kidClass.html(kidList[number].cid);
+				return;
+			}
+		}
+	}
+	
+	
+	
 </script>
 
 
