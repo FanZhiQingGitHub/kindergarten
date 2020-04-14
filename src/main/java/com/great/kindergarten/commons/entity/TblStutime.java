@@ -1,142 +1,76 @@
 package com.great.kindergarten.commons.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.Date;
-
 /**
- * 学生考勤信息实体类
+ * 宝宝考勤详细信息实体类（上下午接送信息）
  */
 public class TblStutime {
-    private Integer stutimeid;
-    private String stutimetype;
-    private String stutimemonday;
-    private String stutimetuesday;
-    private String stutimewednesday;
-    private String stutimethursday;
-    private String stutimefriday;
-    private Integer pickid;
-
-    private TblPickup tblPickup;
-    private Integer pickupid;
-    private Date mondaydate;//上下周一的日期
-    private Date sundaydate;//上下周日的日期
+    private Integer timeamid;
+    private String timeamdate;
+    private String timeam;
+    private String pnameam;
+    private Integer pmid;
     private Integer sid;
+    private Integer did;
+
+    private Integer timepmid;
+    private String timepm;
+    private String pnamepm;
 
 
     public TblStutime() {
     }
 
-    public TblStutime(Integer stutimeid, String stutimetype, String stutimemonday, String stutimetuesday, String stutimewednesday, String stutimethursday, String stutimefriday, Integer pickid, Integer pickupid, Date mondaydate, Date sundaydate, Integer sid) {
-        this.stutimeid = stutimeid;
-        this.stutimetype = stutimetype;
-        this.stutimemonday = stutimemonday;
-        this.stutimetuesday = stutimetuesday;
-        this.stutimewednesday = stutimewednesday;
-        this.stutimethursday = stutimethursday;
-        this.stutimefriday = stutimefriday;
-        this.pickid = pickid;
-        this.pickupid = pickupid;
-        this.mondaydate = mondaydate;
-        this.sundaydate = sundaydate;
+    public TblStutime(Integer timeamid, String timeamdate, String timeam, String pnameam, Integer pmid, Integer sid, Integer did, Integer timepmid, String timepm, String pnamepm) {
+        this.timeamid = timeamid;
+        this.timeamdate = timeamdate;
+        this.timeam = timeam;
+        this.pnameam = pnameam;
+        this.pmid = pmid;
         this.sid = sid;
+        this.did = did;
+        this.timepmid = timepmid;
+        this.timepm = timepm;
+        this.pnamepm = pnamepm;
     }
 
-    public Integer getStutimeid() {
-        return stutimeid;
+    public Integer getTimeamid() {
+        return timeamid;
     }
 
-    public void setStutimeid(Integer stutimeid) {
-        this.stutimeid = stutimeid;
+    public void setTimeamid(Integer timeamid) {
+        this.timeamid = timeamid;
     }
 
-    public String getStutimetype() {
-        return stutimetype;
+    public String getTimeamdate() {
+        return timeamdate;
     }
 
-    public void setStutimetype(String stutimetype) {
-        this.stutimetype = stutimetype;
+    public void setTimeamdate(String timeamdate) {
+        this.timeamdate = timeamdate;
     }
 
-    public String getStutimemonday() {
-        return stutimemonday;
+    public String getTimeam() {
+        return timeam;
     }
 
-    public void setStutimemonday(String stutimemonday) {
-        this.stutimemonday = stutimemonday;
+    public void setTimeam(String timeam) {
+        this.timeam = timeam;
     }
 
-    public String getStutimetuesday() {
-        return stutimetuesday;
+    public String getPnameam() {
+        return pnameam;
     }
 
-    public void setStutimetuesday(String stutimetuesday) {
-        this.stutimetuesday = stutimetuesday;
+    public void setPnameam(String pnameam) {
+        this.pnameam = pnameam;
     }
 
-    public String getStutimewednesday() {
-        return stutimewednesday;
+    public Integer getPmid() {
+        return pmid;
     }
 
-    public void setStutimewednesday(String stutimewednesday) {
-        this.stutimewednesday = stutimewednesday;
-    }
-
-    public String getStutimethursday() {
-        return stutimethursday;
-    }
-
-    public void setStutimethursday(String stutimethursday) {
-        this.stutimethursday = stutimethursday;
-    }
-
-    public String getStutimefriday() {
-        return stutimefriday;
-    }
-
-    public void setStutimefriday(String stutimefriday) {
-        this.stutimefriday = stutimefriday;
-    }
-
-    public Integer getPickid() {
-        return pickid;
-    }
-
-    public void setPickid(Integer pickid) {
-        this.pickid = pickid;
-    }
-
-    public TblPickup getTblPickup() {
-        return tblPickup;
-    }
-
-    public void setTblPickup(TblPickup tblPickup) {
-        this.tblPickup = tblPickup;
-    }
-
-    public Integer getPickupid() {
-        return pickupid;
-    }
-
-    public void setPickupid(Integer pickupid) {
-        this.pickupid = pickupid;
-    }
-
-    public Date getMondaydate() {
-        return mondaydate;
-    }
-
-    public void setMondaydate(Date mondaydate) {
-        this.mondaydate = mondaydate;
-    }
-
-    public Date getSundaydate() {
-        return sundaydate;
-    }
-
-    public void setSundaydate(Date sundaydate) {
-        this.sundaydate = sundaydate;
+    public void setPmid(Integer pmid) {
+        this.pmid = pmid;
     }
 
     public Integer getSid() {
@@ -147,22 +81,51 @@ public class TblStutime {
         this.sid = sid;
     }
 
+    public Integer getDid() {
+        return did;
+    }
+
+    public void setDid(Integer did) {
+        this.did = did;
+    }
+
+    public Integer getTimepmid() {
+        return timepmid;
+    }
+
+    public void setTimepmid(Integer timepmid) {
+        this.timepmid = timepmid;
+    }
+
+    public String getTimepm() {
+        return timepm;
+    }
+
+    public void setTimepm(String timepm) {
+        this.timepm = timepm;
+    }
+
+    public String getPnamepm() {
+        return pnamepm;
+    }
+
+    public void setPnamepm(String pnamepm) {
+        this.pnamepm = pnamepm;
+    }
+
     @Override
     public String toString() {
         return "TblStutime{" +
-                "stutimeid=" + stutimeid +
-                ", stutimetype='" + stutimetype + '\'' +
-                ", stutimemonday='" + stutimemonday + '\'' +
-                ", stutimetuesday='" + stutimetuesday + '\'' +
-                ", stutimewednesday='" + stutimewednesday + '\'' +
-                ", stutimethursday='" + stutimethursday + '\'' +
-                ", stutimefriday='" + stutimefriday + '\'' +
-                ", pickid=" + pickid +
-                ", tblPickup=" + tblPickup +
-                ", pickupid=" + pickupid +
-                ", mondaydate=" + mondaydate +
-                ", sundaydate=" + sundaydate +
+                "timeamid=" + timeamid +
+                ", timeamdate='" + timeamdate + '\'' +
+                ", timeam='" + timeam + '\'' +
+                ", pnameam='" + pnameam + '\'' +
+                ", pmid=" + pmid +
                 ", sid=" + sid +
+                ", did=" + did +
+                ", timepmid=" + timepmid +
+                ", timepm='" + timepm + '\'' +
+                ", pnamepm='" + pnamepm + '\'' +
                 '}';
     }
 }

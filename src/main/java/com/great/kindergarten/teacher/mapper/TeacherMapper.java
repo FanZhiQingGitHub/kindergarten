@@ -3,6 +3,7 @@ package com.great.kindergarten.teacher.mapper;
 import com.great.kindergarten.commons.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,4 +28,9 @@ public interface TeacherMapper {
 	public Integer findWorkCount(Integer cid);
 	//打分
 	public Boolean workScore(Map<String,String> scoreMap);
+	//    查看视频数量
+	public Integer findSafetyCount();
+	//查看视频表
+	public List<TblSafetyvideo> findSafetyTable(HashMap<String,Object> dataHashMap);
+
 }

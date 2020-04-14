@@ -16,6 +16,9 @@ public class TblPlatforminfo {
     private Date platforminfotime;
     private String platforminfodetail;
     private Integer itid;
+    private String platforminfostatus;
+    private String time1;
+    private String time2;
 
     public TblPlatforminfo() {
     }
@@ -68,14 +71,39 @@ public class TblPlatforminfo {
         this.itid = itid;
     }
 
+    public String getPlatforminfostatus()
+    {
+        return platforminfostatus;
+    }
+
+    public void setPlatforminfostatus(String platforminfostatus)
+    {
+        this.platforminfostatus = platforminfostatus;
+    }
+
+    public String getTime1()
+    {
+        return time1;
+    }
+
+    public void setTime1(String time1)
+    {
+        this.time1 = time1;
+    }
+
+    public String getTime2()
+    {
+        return time2;
+    }
+
+    public void setTime2(String time2)
+    {
+        this.time2 = time2;
+    }
+
     @Override
-    public String toString() {
-        return "TblPlatforminfo{" +
-                "platforminfoid=" + platforminfoid +
-                ", platforminfoname='" + platforminfoname + '\'' +
-                ", platforminfotime=" + platforminfotime +
-                ", platforminfodetail='" + platforminfodetail + '\'' +
-                ", itid=" + itid +
-                '}';
+    public String toString()
+    {
+        return "TblPlatforminfo{" + "platforminfoid=" + platforminfoid + ", platforminfoname='" + platforminfoname + '\'' + ", platforminfotime=" + platforminfotime + ", platforminfodetail='" + platforminfodetail + '\'' + ", itid=" + itid + ", platforminfostatus='" + platforminfostatus + '\'' + ", time1='" + time1 + '\'' + ", time2='" + time2 + '\'' + '}';
     }
 }

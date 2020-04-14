@@ -43,6 +43,81 @@
         <result column="dvalue" property="dvalue"/>
     </resultMap>
 
+    <resultMap id="reHomeWork" type="TblWork">
+
+    </resultMap>
+
+
+    <select id="findKisByParentId" resultType="com.great.kindergarten.commons.entity.TblStudent">
+
+        select * from tbl_student where pid=#{parentId}
+
+    </select>
+
+    <select id="findHomeWorkList"  resultMap="reHomeWork">
+
+
+        select twl.* ,tw.* from
+        (
+        tbl_workrelease twl  left join tbl_work tw on twl.workreleaseid =tw.workreleaseid
+        and tw.pid =#{condition.parentId} and tw.sid=#{condition.status}  and tw.cid=twl.cid =#{cid}
+        )
+
+        <where>
+
+            1=1
+            <if test=" condition.name != null and condition.name != ''">
+                and twl.workreleasedetail like "%"#{condition.name}"%"
+            </if>
+
+
+            <if test="condition.beginTime != null ">
+                and twl.workreleasetime  &gt;= #{condition.beginTime}
+            </if>
+
+            <if test="condition.endTime != null ">
+                and twl.workreleasetime &lt;= #{condition.endTime}
+            </if>
+
+        </where>
+
+        order by twl.workreleasetime desc
+
+    </select>
+
+    <select id="countHomeWorkList"  resultType="integer">
+
+        select count(*)  from
+        (
+        tbl_workrelease twl  left join tbl_work tw on twl.workreleaseid =tw.workreleaseid
+        and tw.pid =#{condition.parentId} and tw.sid=#{condition.status}  and tw.cid=twl.cid =#{cid}
+        )
+
+        <where>
+
+            1=1
+            <if test=" condition.name != null and condition.name != ''">
+                and twl.workreleasedetail like "%"#{condition.name}"%"
+            </if>
+
+            <if test="condition.beginTime != null ">
+                and twl.workreleasetime  &gt;= #{condition.beginTime}
+            </if>
+
+            <if test="condition.endTime != null ">
+                and twl.workreleasetime &lt;= #{condition.endTime}
+            </if>
+
+        </where>
+
+        order by twl.workreleasetime desc
+
+    </select>
+
+
+
+
+
 
 
 
@@ -79,8 +154,6 @@
             <if test=" name != null and name != ''">
                 and ts.safetyvideoname like "%"#{name}"%"
             </if>
-
-
 
             <if test="beginTime != null ">
                 and ts.safetyvideotime &gt;= #{beginTime}

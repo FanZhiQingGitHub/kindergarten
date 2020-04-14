@@ -174,13 +174,19 @@ public class HealtherController {
         if (0 != tblExaminationList.size()) {
             Integer count = healtherService.findALLExaminationCount(examinationPage).intValue();
             dateWrite.setCode(0);
-            dateWrite.setMsg(" ");
+            dateWrite.setMsg("");
             dateWrite.setCount(count);
             dateWrite.setData(tblExaminationList);
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             request.getSession().setAttribute("cName", cName);
+            ResponseUtils.outJson(response, dateWrite);
+        }else {
+            dateWrite.setMsg("亲，暂无相关数据");
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
         }
     }
@@ -231,9 +237,15 @@ public class HealtherController {
         if (0 != tblMealList.size()) {
             Integer count = healtherService.findAllMealInfoCount(mealPage).intValue();
             dateWrite.setCode(0);
-            dateWrite.setMsg(" ");
+            dateWrite.setMsg("");
             dateWrite.setCount(count);
             dateWrite.setData(tblMealList);
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        }else {
+            dateWrite.setMsg("亲，暂无相关数据");
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
@@ -307,9 +319,15 @@ public class HealtherController {
         if (0 != tblRecipeList.size()) {
             Integer count = healtherService.findAllRecipeInfoCount(mid).intValue();
             dateWrite.setCode(0);
-            dateWrite.setMsg(" ");
+            dateWrite.setMsg("");
             dateWrite.setCount(count);
             dateWrite.setData(tblRecipeList);
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        }else {
+            dateWrite.setMsg("亲，暂无相关数据");
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");

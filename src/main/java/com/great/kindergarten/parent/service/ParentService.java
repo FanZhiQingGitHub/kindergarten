@@ -21,6 +21,34 @@ public class ParentService {
     }
 
 
+
+
+    /**
+     * 根据id和条件找到孩子作业列表
+     * @param searchCondition
+     * @return
+     */
+    public TableDate kidHomeWorkList(SearchCondition searchCondition,Integer cid){
+        TableDate result = new TableDate();
+        //计算总共的页数
+        result.setCount(parentMapper.countHomeWorkList(searchCondition,cid));
+        //放入查询的数据
+        result.setData( parentMapper.findHomeWorkList(searchCondition,cid));
+        return result;
+    }
+
+    /**
+     * 根据家长id找到属于自己的宝宝
+     * @param parentId
+     * @return
+     */
+    public Result getKids(Integer parentId){
+        Result result = new Result();
+        result.setData(parentMapper.findKisByParentId(parentId));
+        return result;
+    }
+
+
     /**
      * 根据家长的id和视频id插入相对应的分数
      * @param parentId

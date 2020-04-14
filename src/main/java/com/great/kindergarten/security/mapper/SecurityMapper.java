@@ -25,6 +25,6 @@ public interface SecurityMapper {
 
     public Long findALLPickUpInfoCount(PickUpInfoPage pickUpInfoPage);
 
-    public List<TblStutime> findALLPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage);
+    public List<TblDate> findALLPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage);
 
 }

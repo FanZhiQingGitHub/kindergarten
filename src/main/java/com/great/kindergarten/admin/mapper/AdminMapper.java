@@ -132,4 +132,38 @@ public interface AdminMapper {
 	public int addPhotoImg(TblReadmag tblReadmag);
 
 	public int reUploadBook(TblReadmag tblReadmag);
+
+	public List<TblRole> findRoleInfo();
+
+	public List<TblMenu> findMenuByRid(Integer roleid);
+
+	//平台资讯
+	public List<TblPlatforminfo> findAllPlatFormInfo(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public int findPlatFormInfoCount(HashMap<String, Object> condition);
+
+	public int releasePlatFormInfo(TblPlatforminfo tblPlatforminfo);
+
+	public int cancelPlatFormInfo(TblPlatforminfo tblPlatforminfo);
+
+	public int deletePlatFormInfo(Integer platforminfoid);
+
+	public int updatePlatFormInfo(TblPlatforminfo tblPlatforminfo);
+
+	public int addPlatFormInfo(TblPlatforminfo tblPlatforminfo);
+
+	//园长管理
+	public List<TblRector> findAllRectorInfo(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public int findRectorInfoCount(HashMap<String, Object> condition);
+
+	public int restRectorPwd(TblRector tblRector);
+
+	public int updateRector(TblRector tblRector);
+
+	public int deleteRector(Integer rectorid);
+
+	public int updateRectorStatus(TblRector tblRector);
+
+	public int addRector(List<TblRector> tblRectorList);
 }

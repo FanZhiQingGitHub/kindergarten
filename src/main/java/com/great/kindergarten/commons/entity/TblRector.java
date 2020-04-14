@@ -27,6 +27,8 @@ public class TblRector
 	private Date rectorregtime;
 	private String rectorstatus;
 	private Integer rid;
+	private String time1;
+	private String time2;
 
 	public Integer getRectorid()
 	{
@@ -128,9 +130,29 @@ public class TblRector
 		this.rid = rid;
 	}
 
+	public String getTime1()
+	{
+		return time1;
+	}
+
+	public void setTime1(String time1)
+	{
+		this.time1 = time1;
+	}
+
+	public String getTime2()
+	{
+		return time2;
+	}
+
+	public void setTime2(String time2)
+	{
+		this.time2 = time2;
+	}
+
 	@Override
 	public String toString()
 	{
-		return "TblRector{" + "rectorid=" + rectorid + ", rectorname='" + rectorname + '\'' + ", rectorpwd='" + rectorpwd + '\'' + ", rectorsex='" + rectorsex + '\'' + ", rectorage=" + rectorage + ", rectoradd='" + rectoradd + '\'' + ", rectorphone='" + rectorphone + '\'' + ", rectorregtime=" + rectorregtime + ", rectorstatus='" + rectorstatus + '\'' + ", rid=" + rid + '}';
+		return "TblRector{" + "rectorid=" + rectorid + ", rectorname='" + rectorname + '\'' + ", rectorpwd='" + rectorpwd + '\'' + ", rectorsex='" + rectorsex + '\'' + ", rectorage=" + rectorage + ", rectoradd='" + rectoradd + '\'' + ", rectorphone='" + rectorphone + '\'' + ", rectorregtime=" + rectorregtime + ", rectorstatus='" + rectorstatus + '\'' + ", rid=" + rid + ", time1='" + time1 + '\'' + ", time2='" + time2 + '\'' + '}';
 	}
 }

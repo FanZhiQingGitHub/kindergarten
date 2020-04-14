@@ -49,8 +49,8 @@
 	{{#  if(d.safetytestresult == null ){ }}
 	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="SafetyTest">安全试题</a>
 
-	{{#  else if(d.safetytestresult == '已完成' ){ }}
-	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="SafetyTest">查看解析</a>
+<%--	{{#  else if(d.safetytestresult == '已完成' ){ }}--%>
+<%--	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="SafetyTest">查看解析</a>--%>
 	{{#  } }}
 
 
@@ -96,8 +96,6 @@
 			//获取按钮类型
 			var type = $(this).data('type');
 
-			var method = $(this).data('method');//data-method="dialog"中的值
-
 			//类型等于重载的话 刷新表格数据
 			if(type == 'reload'){
 				table.reload('demo',{
@@ -130,6 +128,8 @@
 						//打开一个窗口播放视频
 						type: 1,
 						area: ['70%', '70%'],
+						offset:['10%','5%'],
+						title:'安全视频播放',
 						content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
 							'<source src=" ${path}/'+data.videoadd+'" type="video/mp4"></source></video>'
 						//直接跳出一个标签播放视频
@@ -143,6 +143,8 @@
 					type: 2,
 					area: ['70%', '70%'],
 					btn: ['提交', '取消'],
+					offset:['10%','5%'],
+					title:'安全教育试题',
 					btn1: function(index){
 						//找到窗口的body标签里面的内容
 						var body = layer.getChildFrame("body", index);

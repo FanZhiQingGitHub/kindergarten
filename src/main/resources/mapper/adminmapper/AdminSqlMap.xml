@@ -34,6 +34,19 @@
            tbl_readmag(readmagname, readmagurl, readmagdetail, readmagtime, readmagpage, photourl)
            values (#{readmagname},#{readmagurl},#{readmagdetail},#{readmagtime},#{readmagpage},#{photourl})
     </insert>
+    <insert id="addPlatFormInfo">
+        insert into
+            tbl_platforminfo(platforminfoname, platforminfotime, platforminfodetail, platforminfostatus)
+            values (#{platforminfoname},#{platforminfotime},#{platforminfodetail},#{platforminfostatus})
+    </insert>
+    <insert id="addRector">
+        insert into
+            tbl_rector(rectorname, rectorpwd, rectorsex, rectorage, rectoradd, rectorphone, rectorregtime, rectorstatus, rid)
+            values
+            <foreach collection="list" item="i" index="index" separator=",">
+                (#{i.rectorname},#{i.rectorpwd},#{i.rectorsex},#{i.rectorage},#{i.rectoradd},#{i.rectorphone},#{i.rectorregtime},#{i.rectorstatus},#{i.rid})
+            </foreach>
+    </insert>
 
 
     <delete id="deleteKinderInfo">
@@ -50,6 +63,12 @@
     </delete>
     <delete id="deleteReadInfo">
          delete from tbl_readmag where readmagid = #{readmagid}
+    </delete>
+    <delete id="deletePlatFormInfo">
+        delete from tbl_platforminfo where platforminfoid = #{platforminfoid}
+    </delete>
+    <delete id="deleteRector">
+        delete from tbl_rector where rectorid = #{rectorid}
     </delete>
 
     <!--    用户状态查询-->
@@ -209,6 +228,77 @@
             </if>
         </set>
         where readmagid = #{readmagid}
+    </update>
+    <update id="releasePlatFormInfo">
+        update tbl_platforminfo
+        <set>
+            <if test="platforminfostatus != '' and platforminfostatus != null">
+                platforminfostatus = #{platforminfostatus},
+            </if>
+        </set>
+        where platforminfoid = #{platforminfoid}
+    </update>
+
+    <update id="cancelPlatFormInfo">
+        update tbl_platforminfo
+        <set>
+            <if test="platforminfostatus != '' and platforminfostatus != null">
+                platforminfostatus = #{platforminfostatus},
+            </if>
+        </set>
+        where platforminfoid = #{platforminfoid}
+    </update>
+    <update id="updatePlatFormInfo">
+        update tbl_platforminfo
+        <set>
+            <if test="platforminfoname != '' and platforminfoname != null">
+                platforminfoname = #{platforminfoname},
+            </if>
+            <if test="platforminfodetail != '' and platforminfodetail != null">
+                platforminfodetail = #{platforminfodetail},
+            </if>
+            platforminfotime = now()
+        </set>
+        where platforminfoid = #{platforminfoid}
+    </update>
+    <update id="restRectorPwd">
+        update tbl_rector
+        <set>
+            <if test="rectorpwd != '' and rectorpwd != null">
+                rectorpwd = #{rectorpwd},
+            </if>
+        </set>
+        where rectorid = #{rectorid}
+    </update>
+    <update id="updateRector">
+        update tbl_rector
+        <set>
+            <if test="rectorpwd != '' and rectorpwd != null">
+                rectorpwd = #{rectorpwd},
+            </if>
+            <if test="rectorphone != '' and rectorphone != null">
+                rectorphone = #{rectorphone},
+            </if>
+            <if test="rectoradd != '' and rectoradd != null">
+                rectoradd = #{rectoradd},
+            </if>
+            <if test="rectorstatus != '' and rectorstatus != null">
+                rectorstatus = #{rectorstatus},
+            </if>
+            <if test="rectorage != '' and rectorage != null">
+                rectorage = #{rectorage},
+            </if>
+        </set>
+        where rectorid = #{rectorid}
+    </update>
+    <update id="updateRectorStatus">
+         update tbl_rector
+        <set>
+            <if test="rectorstatus != '' and rectorstatus != null">
+                rectorstatus = #{rectorstatus},
+            </if>
+        </set>
+        where rectorid = #{rectorid}
     </update>
 
     <select id="findAllKinder" resultType="com.great.kindergarten.commons.entity.TblKinder">
@@ -400,6 +490,88 @@
                 and readmagname like concat('%',#{readmagname},'%')
             </if>
         </where>
+    </select>
+    <select id="findRoleInfo" resultType="com.great.kindergarten.commons.entity.TblRole">
+        select roleid, rolename from tbl_role where rolename like '%管理员%';
+    </select>
+    <select id="findMenuByRid" resultType="com.great.kindergarten.commons.entity.TblMenu">
+        select *
+		from tbl_menu
+		where menuid in (
+			select mid
+			from tbl_rolemenu R1
+			where R1.rid in
+				  (select R.roleid
+				   from tbl_role R
+							left join tbl_admin A on R.roleid = A.rid
+				   where R.roleid = #{roleid} and menusonid = 0)
+				   )
+    </select>
+    <select id="findAllPlatFormInfo" resultType="com.great.kindergarten.commons.entity.TblPlatforminfo">
+        select * from tbl_platforminfo
+        <where>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(platforminfotime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(platforminfo, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" platforminfoname != '' and platforminfoname != null">
+                and platforminfo like concat('%',#{platforminfo},'%')
+            </if>
+        </where>
+        order by platforminfotime asc
+    </select>
+    <select id="findPlatFormInfoCount" resultType="java.lang.Integer">
+        select count(*) from tbl_platforminfo
+        <where>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(platforminfotime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(platforminfo, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" platforminfoname != '' and platforminfoname != null">
+                and platforminfo like concat('%',#{platforminfo},'%')
+            </if>
+        </where>
+        order by platforminfotime asc
+    </select>
+    <select id="findAllRectorInfo" resultType="com.great.kindergarten.commons.entity.TblRector">
+        select * from tbl_rector
+        <where>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(rectorregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(rectorregtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" rectorname != '' and rectorname != null ">
+                and rectorname like concat('%',#{rectorname},'%')
+            </if>
+            <if test=" rectorstatus != '' and rectorstatus != null and rectorstatus != '请选择'">
+                and rectorstatus = #{rectorstatus}
+            </if>
+        </where>
+        order by rectorregtime desc
+    </select>
+    <select id="findRectorInfoCount" resultType="java.lang.Integer">
+        select count(*) from tbl_rector
+        <where>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(rectorregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(rectorregtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" rectorname != '' and rectorname != null">
+                and rectorname like concat('%',#{rectorname},'%')
+            </if>
+            <if test=" rectorstatus != '' and rectorstatus != null and rectorstatus != '请选择'">
+                and rectorstatus = #{rectorstatus}
+            </if>
+        </where>
+        order by rectorregtime desc
     </select>
 
 

@@ -11,7 +11,7 @@
 <%@ include file="/commons/basejs.jsp" %>
 <head>
 
-    <title>智慧幼儿园-首页</title>
+    <title>家长端首页</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/mainres/css/main.css">
     <style type="text/css">
         html, body {
@@ -86,8 +86,19 @@
 
 
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
+
                     <div class="img-txt">
-                        <h3><button type="button" id="FaceRecognition" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">人脸识别</button></h3>
+                        <h3>
+                            <button type="button"  class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">幼儿中心</button>
+
+                            <div class="layui-btn-container"  >
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="kidHealth">幼儿保健</button>
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="kidAttendance">
+                                    宝宝考勤
+                                </button>
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="kidMeal">宝宝膳食</button>
+                            </div>
+                        </h3>
                     </div>
 
 
@@ -96,22 +107,27 @@
 
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
-                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-warm" style="width: 100%;height: 100%;font-size: 20px">作业中心</button></h3>
+                        <h3>
+                            <button type="button"   class="layui-btn layui-btn-lg layui-btn-warm" style="width: 100%;height: 100%;font-size: 20px">作业中心</button>
+                            <div class="layui-btn-container"  >
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="homeWorkCenter">查看作业</button>
+                            </div>
+                        </h3>
                     </div>
                 </div>
 
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
-                        <h3><button type="button" id="SafetyVideo" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">安全教育</button></h3>
+                        <h3>
+                            <button type="button"  class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">安全教育</button>
+                            <div class="layui-btn-container"  >
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="SafetyVideo">教育视频列表</button>
+                            </div>
+
+                        </h3>
                     </div>
                 </div>
 
-
-                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
-                    <div class="img-txt">
-                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-warm" style="width: 100%;height: 100%;font-size: 20px">幼儿中心</button></h3>
-                    </div>
-                </div>
 
             </div>
 
@@ -120,13 +136,32 @@
 
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
-                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">资源中心</button></h3>
+                        <h3>
+                            <button type="button" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">资源中心</button>
+
+                            <div class="layui-btn-container" >
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="Parent-childReading">亲子阅读</button>
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="ContactTeacher">
+                                    联系老师
+                                </button>
+                            </div>
+
+                        </h3>
                     </div>
                 </div>
 
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
-                        <h3><button type="button" class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">消息中心</button></h3>
+                        <h3>
+                            <button type="button"  class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">消息中心</button>
+
+                            <div class="layui-btn-container" >
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="CampusAnnouncement">校园公告</button>
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="PlatformInformation">
+                                    平台资讯
+                                </button>
+                            </div>
+                        </h3>
                     </div>
                 </div>
 
@@ -234,24 +269,72 @@
 
             $("#exit").click(function () {
                 layer.confirm('您确定要退出到登录界面吗?', {icon: 3, title:'温馨提示'},function(index){
-                    layer.close(index);
-                    sessionStorage.clear();//清除session信息
                     location.href=path+'/parent/logout';
                 });
             });
 
-            //人脸识别跳转
-            $("#FaceRecognition").click(function () {
-                window.location.href=path+"/parent/toUrl/parentFaceRecognition"
+
+            //前往查看宝宝健康
+            $("#kidHealth").click(function () {
+
             });
+
+
+            //前往查看宝宝考勤
+            $("#kidAttendance").click(function () {
+
+            });
+
+            //前往查看宝宝膳食
+            $("#kidMeal").click(function () {
+
+
+            });
+
+
+
+            //前往查看亲子阅读
+            $("#Parent-childReading").click(function () {
+
+            });
+
+            //前往查看联系老师界面
+            $("#ContactTeacher").click(function () {
+
+            });
+
+
+
+            //前往查看校园公告
+            $("#CampusAnnouncement").click(function () {
+
+            });
+
+            //前往查看平台资讯
+            $("#PlatformInformation").click(function () {
+
+            });
+
+
+
+
+
+
 
             //前往查看安全试题跳转
             $("#SafetyVideo").click(function () {
                 window.location.href=path+"/parent/toUrl/SafetyTestTable"
             });
 
+	        //前往作业中心
+	        $("#homeWorkCenter").click(function () {
+		        window.location.href=path+"/parent/toUrl/HomeWorkCenter"
+	        });
 
-            //点击查看园所视频
+
+
+
+	        //点击查看园所视频
             $("#playVideos").click(function () {
 
                 //打开一个窗口播放视频
@@ -260,7 +343,7 @@
                     type: 1,
                     area: ['70%', '70%'],
 	                offset:['10%','5%'],
-	                title:'',
+	                title:'园所介绍',
                     content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
                             '<source src="${pageContext.request.contextPath}/videos/TakeTheElevatorSafely.mp4" type="video/mp4"></source></video>'
                     //直接跳出一个标签播放视频

@@ -1,10 +1,8 @@
 package com.great.kindergarten.parent.mapper;
 
-import com.great.kindergarten.commons.entity.SearchCondition;
-import com.great.kindergarten.commons.entity.TblParent;
-import com.great.kindergarten.commons.entity.TblSafetyvideo;
-import com.great.kindergarten.commons.entity.TblSafetyvtq;
+import com.great.kindergarten.commons.entity.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,6 +11,31 @@ import java.util.List;
  */
 @Mapper
 public interface ParentMapper {
+
+
+	/**
+	 * 根据家长id找到属于自己的宝宝
+	 * @param parentId
+	 * @return
+	 */
+	List<TblStudent> findKisByParentId(Integer parentId);
+
+
+	/**
+	 * 根据家长id和其他条件 找到自己孩子的作业列表
+	 * @param  condition
+	 * @param  cid
+	 * @return
+	 */
+	List<TblWork> findHomeWorkList(@Param("condition") SearchCondition condition ,@Param("cid") Integer cid);
+
+	/**
+	 * 根据家长id和其他条件 找到自己孩子有几条作业记录
+	 * @param  condition
+	 * @param  cid
+	 * @return
+	 */
+	Integer countHomeWorkList(@Param("condition")SearchCondition condition ,@Param("cid") Integer cid);
 
 
 	/**

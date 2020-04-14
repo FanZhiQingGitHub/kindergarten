@@ -13,6 +13,7 @@ import com.great.kindergarten.util.GsonUtils;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
 import org.apache.ibatis.session.RowBounds;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -539,9 +540,9 @@ public class AdminController {
     @RequestMapping("/restKinderPwd")
     public void restKinderPwd(TblKinder tblKinder,HttpServletRequest request, HttpServletResponse response)
     {
-        String kinderPwd = MD5Utils.md5(adminService.initialPwd("初始密码"));
-//        tblKinder.setKinderpwd(kinderPwd);
-        int num = adminService.updateKinderCode(tblKinder);
+        String kinderPwd = adminService.initialPwd("初始密码");
+        tblKinder.setKinderpwd(kinderPwd);
+        int num = adminService.restKinderPwd(tblKinder);
         if(num > 0)
         {
             ResponseUtils.outHtml(response,"success");
@@ -751,6 +752,331 @@ public class AdminController {
 		System.out.println("重新"+tblReadmag);
 		tblReadmag.setReadmagtime(new Date());
 		int num = adminService.reUploadBook(tblReadmag);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+	@RequestMapping("/findRoleInfo")
+	public void findRoleInfo(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		List<TblRole> tblRoleList = adminService.findRoleInfo();
+		System.out.println("角色"+tblRoleList);
+//		Map map = null;
+//		for(int i = 0; i < tblRoleList.size() ; i++)
+//		{
+//			map = new LinkedHashMap();
+//			map.put("roleid",tblRoleList.get(i).getRoleid());
+//			map.put("title",tblRoleList.get(i).getRolename());
+//		}
+
+		List<HashMap<String, Object>> result = new ArrayList<>();
+		response.setContentType("application/json; charset=utf-8");
+		response.getWriter().write(GsonUtils.getgsonUtils().toStr(fun(tblRoleList,result)));
+		response.getWriter().flush();
+		response.getWriter().close();
+//		if(map != null)
+//		{
+//			ResponseUtils.outJson(response,GsonUtils.getgsonUtils().toStr(map));
+//		}else{
+//			ResponseUtils.outHtml(response,"error");
+//		}
+	}
+
+	private Object fun(List<TblRole> list, List<HashMap<String, Object>> result) {
+		for(TblRole tblRole : list){
+			HashMap<String, Object> map = new HashMap<>();
+			//id，title，spread等的命名是layui需要的，所以需要把获取到的list重新遍历一遍并命名成layui需要的字段名称
+			map.put("id", tblRole.getRoleid());
+//			if("管理员".equals(tblRole.getRolename()))
+//			{
+				map.put("title", tblRole.getRolename());
+//			}
+			//设置是否展开
+			map.put("spread", false);
+			result.add(map);
+		}
+		System.out.println(result);
+		return result;
+	}
+
+	@RequestMapping("/findMenuByRoleName")
+	public void findMenuByRoleName(TblRole tblRole, Integer data, HttpServletResponse response, HttpServletRequest request) throws IOException
+	{
+		System.out.println("前台信息"+data);
+		List<TblMenu> list = adminService.findMenuByRid(data);
+
+		for(TblMenu tblMenu : list){
+			//根据一级菜单获取二级菜单，并把它加入到list
+			tblMenu.setChildrenList(adminService.findMenuBySid(tblMenu.getMenuid()));
+		}
+
+		//定义一个map处理json键名问题
+		List<HashMap<String, Object>> result = new ArrayList<>();
+		response.setContentType("application/json; charset=utf-8");
+//		response.getWriter().write(GsonUtils.getgsonUtils().toStr(list));
+		response.getWriter().write(GsonUtils.getgsonUtils().toStr(fun2(list,result)));
+		response.getWriter().flush();
+		response.getWriter().close();
+
+	}
+
+//	private List<TblMenu> getChildNodes(Integer id, List<TblMenu> parentMenuList) throws Exception {
+//		// 子节点
+//		List<TblMenu> childList = new ArrayList<>();
+//		// 把sid=mid的子节点放到对应mid的父节点上
+//		for (TblMenu tblMenu : parentMenuList) {
+//			if (tblMenu.getMenusonid() != 0) {
+//				if (tblMenu.getMenusonid() == id) {
+//					childList.add(tblMenu);
+//				}
+//			}
+//		}
+//		if (childList.size() == 0) {
+//			return null;
+//		}
+//		// Look up it's child node and fill
+//		for (TblMenu tblMenu : childList) {
+//			tblMenu.setChildrenList(getChildNodes(tblMenu.getMenuid(), parentMenuList));
+//		}
+//		return childList;
+//	}
+
+	private Object fun2(List<TblMenu> list, List<HashMap<String, Object>> result) {
+		for(TblMenu d : list){
+			HashMap<String, Object> map = new HashMap<>();
+			//id，title，spread等的命名是layui需要的，所以需要把获取到的list重新遍历一遍并命名成layui需要的字段名称
+			map.put("id", d.getMenuid());
+			map.put("title", d.getMenuname());
+//			map.put("url",d.getMurl());
+			//设置是否展开
+			map.put("spread", true);
+			List<HashMap<String, Object>> result1 = new ArrayList<>();
+			if(d.getChildrenList() != null){
+				//下级菜单
+				List<TblMenu> children = d.getChildrenList();
+				//这里可以根据自己需求判断节点默认选中
+				//				if(d.getPmid() != null || d.getChildNodes().size() == 0){
+				//					map.put("checked", true);    //设置为选中状态
+				//				}
+				map.put("children", fun2(children, result1));
+			}
+			result.add(map);
+		}
+		System.out.println("大小"+list.size());
+		System.out.println("111"+result);
+		return result;
+	}
+
+	@RequestMapping("/platformInfoMag")
+	public void platformInfoMag(String page, String limit, TblPlatforminfo tblPlatforminfo, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null != tblPlatforminfo.getPlatforminfoname() && !"".equals(tblPlatforminfo.getPlatforminfoname().trim())) {
+			condition.put("platforminfoname",tblPlatforminfo.getPlatforminfoname());
+		}
+		if(null != tblPlatforminfo.getTime1() && !"".equals(tblPlatforminfo.getTime1().trim())) {
+			condition.put("time1",tblPlatforminfo.getTime1());
+		}
+
+		if(null != tblPlatforminfo.getTime2() && !"".equals(tblPlatforminfo.getTime2().trim())) {
+			condition.put("time2",tblPlatforminfo.getTime2());
+		}
+
+		int num = adminService.findPlatFormInfoCount(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+		List<TblPlatforminfo> readMagList = adminService.findAllPlatFormInfo(condition,rowBounds);
+		if(readMagList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(readMagList);
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/releasePlatFormInfo")
+	public void releasePlatFormInfo(TblPlatforminfo tblPlatforminfo,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblPlatforminfo.setPlatforminfostatus("已发布");
+		int num = adminService.releasePlatFormInfo(tblPlatforminfo);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/cancelPlatFormInfo")
+	public void cancelPlatFormInfo(TblPlatforminfo tblPlatforminfo,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblPlatforminfo.setPlatforminfostatus("未发布");
+		int num = adminService.cancelPlatFormInfo(tblPlatforminfo);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/deletePlatFormInfo")
+	public void deletePlatFormInfo(TblPlatforminfo tblPlatforminfo,HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println(tblPlatforminfo);
+		int num = adminService.deletePlatFormInfo(tblPlatforminfo.getPlatforminfoid());
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/updatePlatFormInfo")
+	public void updatePlatFormInfo(TblPlatforminfo tblPlatforminfo,HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println(tblPlatforminfo);
+		int num = adminService.updatePlatFormInfo(tblPlatforminfo);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/addPlatFormInfo")
+	public void addPlatFormInfo(TblPlatforminfo tblPlatforminfo,HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println(tblPlatforminfo);
+		tblPlatforminfo.setPlatforminfotime(new Date());
+		tblPlatforminfo.setPlatforminfostatus("未发布");
+		int num = adminService.addPlatFormInfo(tblPlatforminfo);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	//园长管理
+	@RequestMapping("/rectorMgrInfo")
+	public void rectorMgrInfo(String page, String limit, TblRector tblRector, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null != tblRector.getRectorname() && !"".equals(tblRector.getRectorname().trim())) {
+			condition.put("rectorname",tblRector.getRectorname());
+		}
+
+		if(null != tblRector.getRectorstatus() && !"".equals(tblRector.getRectorstatus().trim())) {
+			condition.put("rectorstatus",tblRector.getRectorstatus());
+		}
+
+		if(null != tblRector.getTime1() && !"".equals(tblRector.getTime1().trim())) {
+			condition.put("time1",tblRector.getTime1());
+		}
+
+		if(null != tblRector.getTime2() && !"".equals(tblRector.getTime2().trim())) {
+			condition.put("time2",tblRector.getTime2());
+		}
+
+		int num = adminService.findRectorInfoCount(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+		List<TblRector> tblRectorList = adminService.findAllRectorInfo(condition,rowBounds);
+		if(tblRectorList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(tblRectorList );
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/addRector")
+	public void addRector(TblRector tblRector,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblRector.setRectorregtime(new Date());
+		tblRector.setRectorstatus("启用");
+		List<TblRector> tblRectorList = new ArrayList<>();
+		tblRectorList.add(tblRector);
+		int num = adminService.addRector(tblRectorList);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/forbiddenRector")
+	public void forbiddenRector(TblRector tblRector,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblRector.setRectorstatus("禁用");
+		int num = adminService.updateRectorStatus(tblRector);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/openRector")
+	public void openRector(TblRector tblRector,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblRector.setRectorstatus("启用");
+		int num = adminService.updateRectorStatus(tblRector);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/restRectorPwd")
+	public void restRectorPwd(TblRector tblRector,HttpServletRequest request, HttpServletResponse response)
+	{
+		String rectorPwd = adminService.initialPwd("初始密码");
+		tblRector.setRectorpwd(rectorPwd);
+		int num = adminService.restRectorPwd(tblRector);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/deleteRector")
+	public void deleteRector(TblRector tblRector,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.deleteRector(tblRector.getRectorid());
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/updateRector")
+	public void updateRector(TblRector tblRector,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.updateRector(tblRector);
 		if(num > 0)
 		{
 			ResponseUtils.outHtml(response,"success");

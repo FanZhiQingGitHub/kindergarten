@@ -6,11 +6,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * 作业信息表实体类
+ * 提交作业信息表实体类
  */
 public class TblWork {
     private Integer workid;
-    private Integer workreleaseid;
+    private String workreleaseid;
     private String workreleasedetail;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
     @DateTimeFormat(pattern ="yyyy-MM-dd")
@@ -28,10 +28,13 @@ public class TblWork {
     private String parentname;
     private Integer cid;
 
-    public TblWork() {
+
+    public TblWork()
+    {
+
     }
 
-    public TblWork(Integer workid, Integer workreleaseid, String workreleasedetail, Date workreleasetime, String workurl, Date wfinishtime, String worklocation, String workresult, String workeva, Integer sid, String studentname, Integer pid, String parentname, Integer cid)
+    public TblWork(Integer workid, String workreleaseid, String workreleasedetail, Date workreleasetime, String workurl, Date wfinishtime, String worklocation, String workresult, String workeva, Integer sid, String studentname, Integer pid, String parentname, Integer cid)
     {
         this.workid = workid;
         this.workreleaseid = workreleaseid;
@@ -49,26 +52,6 @@ public class TblWork {
         this.cid = cid;
     }
 
-    public Integer getWorkid()
-    {
-        return workid;
-    }
-
-    public void setWorkid(Integer workid)
-    {
-        this.workid = workid;
-    }
-
-    public Integer getWorkreleaseid()
-    {
-        return workreleaseid;
-    }
-
-    public void setWorkreleaseid(Integer workreleaseid)
-    {
-        this.workreleaseid = workreleaseid;
-    }
-
     public String getWorkreleasedetail()
     {
         return workreleasedetail;
@@ -79,6 +62,16 @@ public class TblWork {
         this.workreleasedetail = workreleasedetail;
     }
 
+    public String getWorklocation()
+    {
+        return worklocation;
+    }
+
+    public void setWorklocation(String worklocation)
+    {
+        this.worklocation = worklocation;
+    }
+
     public Date getWorkreleasetime()
     {
         return workreleasetime;
@@ -87,6 +80,26 @@ public class TblWork {
     public void setWorkreleasetime(Date workreleasetime)
     {
         this.workreleasetime = workreleasetime;
+    }
+
+    public Integer getWorkid()
+    {
+        return workid;
+    }
+
+    public void setWorkid(Integer workid)
+    {
+        this.workid = workid;
+    }
+
+    public String getWorkreleaseid()
+    {
+        return workreleaseid;
+    }
+
+    public void setWorkreleaseid(String workreleaseid)
+    {
+        this.workreleaseid = workreleaseid;
     }
 
     public String getWorkurl()
@@ -107,16 +120,6 @@ public class TblWork {
     public void setWfinishtime(Date wfinishtime)
     {
         this.wfinishtime = wfinishtime;
-    }
-
-    public String getWorklocation()
-    {
-        return worklocation;
-    }
-
-    public void setWorklocation(String worklocation)
-    {
-        this.worklocation = worklocation;
     }
 
     public String getWorkresult()
@@ -189,9 +192,10 @@ public class TblWork {
         this.cid = cid;
     }
 
+
     @Override
     public String toString()
     {
-        return "TblWork{" + "workid=" + workid + ", workreleaseid=" + workreleaseid + ", workreleasedetail='" + workreleasedetail + '\'' + ", workreleasetime=" + workreleasetime + ", workurl='" + workurl + '\'' + ", wfinishtime=" + wfinishtime + ", worklocation='" + worklocation + '\'' + ", workresult='" + workresult + '\'' + ", workeva='" + workeva + '\'' + ", sid=" + sid + ", studentname='" + studentname + '\'' + ", pid=" + pid + ", parentname='" + parentname + '\'' + ", cid=" + cid + '}';
+        return "TblWork{" + "workid=" + workid + ", workreleaseid='" + workreleaseid + '\'' + ", workreleasedetail='" + workreleasedetail + '\'' + ", workreleasetime=" + workreleasetime + ", workurl='" + workurl + '\'' + ", wfinishtime=" + wfinishtime + ", worklocation='" + worklocation + '\'' + ", workresult='" + workresult + '\'' + ", workeva='" + workeva + '\'' + ", sid=" + sid + ", studentname='" + studentname + '\'' + ", pid=" + pid + ", parentname='" + parentname + '\'' + ", cid=" + cid + '}';
     }
 }

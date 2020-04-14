@@ -17,14 +17,13 @@ class KindergartenApplicationTests {
     public static void main(String[] args)
     {
 
-//        String img64Str = FaceRecognitionUtils.fileToBase64("E:\\Idea4\\kindergarten\\src\\main\\webapp\\image\\logo\\parent1.jpg");
-//
-//        System.out.println(img64Str);
-//
-//        //        FaceRecognitionUtils.identify(img64Str,null);
-//
-//        FaceRecognitionUtils.faceRegister(img64Str,"testPhoto1");
+        String  img64Str = FaceRecognitionUtils.fileToBase64("C:\\Users\\Mr.Fan\\Pictures\\Camera Roll\\parent1.jpg");
 
+        System.out.println(img64Str);
+
+//        FaceRecognitionUtils.identify(img64Str,null);
+
+        FaceRecognitionUtils.faceRegister(img64Str,"testPhoto1");
 
     }
 }
