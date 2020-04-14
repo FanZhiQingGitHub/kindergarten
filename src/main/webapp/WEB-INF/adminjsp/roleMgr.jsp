@@ -55,7 +55,7 @@
 			<div class="layui-form-item">
 				<span class="layui-form-label" style="margin-top: 2%">角色名称：</span>
 				<div class="layui-inline">
-					<input type="text" id="roleName2" name="roleName2" placeholder="请输入菜单名称" value=""
+					<input type="text" id="roleName2" name="roleName2" placeholder="请输入角色名称" value=""
 					       autocomplete="off" class="layui-input" style="width: 120%;margin-top: 5%" lay-verify="required">
 				</div>
 			</div>

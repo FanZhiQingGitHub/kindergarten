@@ -250,4 +250,101 @@ public class AdminService {
 	{
 		return adminMapper.reUploadBook(tblReadmag);
 	}
+
+	//权限管理
+	public List<TblRole> findRoleInfo()
+	{
+		return adminMapper.findRoleInfo();
+	}
+
+	public List<TblMenu> findMenuByRid(Integer roleid)
+	{
+		//获取主菜单
+		List<TblMenu> rootMenu = new ArrayList<>();
+		rootMenu = adminMapper.findMenuByRid(roleid);
+		//获取子菜单
+//		for (TblMenu menu : rootMenu)
+//		{
+//			menu.setChildrenList(adminMapper.findMenuBySid(menu.getMenuid()));
+//		}
+		return rootMenu;
+	}
+
+	public List<TblMenu> findMenuBySid(Integer sid)
+	{
+		return adminMapper.findMenuBySid(sid);
+	}
+
+	//平台资讯
+
+	public List<TblPlatforminfo> findAllPlatFormInfo(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findAllPlatFormInfo(condition, rowBounds);
+	}
+
+	public int findPlatFormInfoCount(HashMap<String, Object> condition)
+	{
+		return adminMapper.findPlatFormInfoCount(condition);
+	}
+
+	public int releasePlatFormInfo(TblPlatforminfo tblPlatforminfo)
+	{
+		return adminMapper.releasePlatFormInfo(tblPlatforminfo);
+	}
+
+	public int cancelPlatFormInfo(TblPlatforminfo tblPlatforminfo)
+	{
+		return adminMapper.cancelPlatFormInfo(tblPlatforminfo);
+	}
+
+	public int deletePlatFormInfo(Integer platforminfoid)
+	{
+		return adminMapper.deletePlatFormInfo(platforminfoid);
+	}
+
+	public int updatePlatFormInfo(TblPlatforminfo tblPlatforminfo)
+	{
+		return adminMapper.updatePlatFormInfo(tblPlatforminfo);
+	}
+
+	public int addPlatFormInfo(TblPlatforminfo tblPlatforminfo)
+	{
+		return adminMapper.addPlatFormInfo(tblPlatforminfo);
+	}
+
+	//园长管理
+	public List<TblRector> findAllRectorInfo(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findAllRectorInfo(condition, rowBounds);
+	}
+
+	public int findRectorInfoCount(HashMap<String, Object> condition)
+	{
+		return adminMapper.findRectorInfoCount(condition);
+	}
+
+	public int restRectorPwd(TblRector tblRector)
+	{
+		return adminMapper.restRectorPwd(tblRector);
+	}
+
+	public int updateRector(TblRector tblRector)
+	{
+		return adminMapper.updateRector(tblRector);
+	}
+
+	public int deleteRector(Integer rectorid)
+	{
+		return adminMapper.deleteRector(rectorid);
+	}
+
+	public int updateRectorStatus(TblRector tblRector)
+	{
+		return adminMapper.updateRectorStatus(tblRector);
+	}
+
+	public int addRector(List<TblRector> tblRectorList)
+	{
+		return adminMapper.addRector(tblRectorList);
+	}
 }
