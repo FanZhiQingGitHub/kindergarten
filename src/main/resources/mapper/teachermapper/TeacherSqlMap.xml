@@ -41,7 +41,7 @@
     </resultMap>
     <resultMap id="workMap" type="TblWork">
         <result column="workid" property="workid"></result>
-        <result column="workname" property="workname"></result>
+        <result column="workreleaseid" property="workreleaseid"></result>
         <result column="workurl" property="workurl"></result>
         <result column="workreleaseid" property="workreleaseid"></result>
         <result column="wfinishtime" property="wfinishtime"></result>
@@ -50,8 +50,23 @@
         <result column="studentname" property="studentname"></result>
         <result column="parentname" property="parentname"></result>
         <result column="cid" property="cid"></result>
-        <result column="worktime" property="worktime"></result>
+        <result column="wfinishtime" property="wfinishtime"></result>
     </resultMap>
+
+    <resultMap id="safetyMap" type="TblSafetyvideo">
+        <id column="safetyvideoid" property="safetyvideoid"></id>
+        <result column="safetyvideoid" property="safetyvideoid"></result>
+        <result column="safetyvideoname" property="safetyvideoname"></result>
+        <result column="safetyvideotime" property="safetyvideotime"></result>
+        <result column="safetyfinishtime" property="safetyfinishtime"></result>
+
+        <result column="safetyvideoplace" property="safetyvideoplace"></result>
+        <result column="mid" property="mid"></result>
+        <result column="videoname" property="videoname"></result>
+        <result column="videoadd" property="videoadd"></result>
+    </resultMap>
+
+
 
 
     <!--用户状态查询-->
@@ -122,4 +137,12 @@
     <update id="workScore" parameterType="java.util.Map">
         UPDATE tbl_work SET workeva = #{score} where sid = #{sid};
     </update>
+    <!--查询安全视频总数量-->
+    <select id="findSafetyCount" resultType="java.lang.Integer" >
+			select count(*) from tbl_safetyvideo ;
+	</select>
+<!--    查询安全视频表-->
+    <select id="findSafetyTable" resultMap="safetyMap" parameterType="HashMap">
+        select * from tbl_safetyvideo limit #{pageInt},#{limitInt}
+    </select>
 </mapper>

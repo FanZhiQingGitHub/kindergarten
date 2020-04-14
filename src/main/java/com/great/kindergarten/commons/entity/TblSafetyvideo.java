@@ -14,6 +14,9 @@ public class TblSafetyvideo {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date safetyvideotime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    private Date safetyfinishtime;
     private String safetyvideoplace;
     private Integer mid;
     private String videoname;
@@ -24,105 +27,31 @@ public class TblSafetyvideo {
     public TblSafetyvideo() {
     }
 
-    public TblSafetyvideo(Integer safetyvideoid, String safetyvideoname, Date safetyvideotime, String safetyvideoplace, Integer mid, String videoname, String videoadd, String safetytestscore, String safetytestresult)
+    public TblSafetyvideo(Integer safetyvideoid, String safetyvideoname, Date safetyvideotime, Date safetyfinishtime)
     {
         this.safetyvideoid = safetyvideoid;
         this.safetyvideoname = safetyvideoname;
         this.safetyvideotime = safetyvideotime;
+        this.safetyfinishtime = safetyfinishtime;
+    }
+
+    public TblSafetyvideo(Integer safetyvideoid, String safetyvideoname, Date safetyvideotime, Date safetyfinishtime, String safetyvideoplace, Integer mid, String videoname, String videoadd, String safetytestscore, String safetytestresult)
+    {
+        this.safetyvideoid = safetyvideoid;
+        this.safetyvideoname = safetyvideoname;
+        this.safetyvideotime = safetyvideotime;
+        this.safetyfinishtime = safetyfinishtime;
         this.safetyvideoplace = safetyvideoplace;
         this.mid = mid;
         this.videoname = videoname;
         this.videoadd = videoadd;
         this.safetytestscore = safetytestscore;
         this.safetytestresult = safetytestresult;
-    }
-
-    public String getSafetytestresult()
-    {
-        return safetytestresult;
-    }
-
-    public void setSafetytestresult(String safetytestresult)
-    {
-        this.safetytestresult = safetytestresult;
-    }
-
-    public Integer getSafetyvideoid() {
-        return safetyvideoid;
-    }
-
-    public void setSafetyvideoid(Integer safetyvideoid) {
-        this.safetyvideoid = safetyvideoid;
-    }
-
-    public String getSafetyvideoname() {
-        return safetyvideoname;
-    }
-
-    public void setSafetyvideoname(String safetyvideoname) {
-        this.safetyvideoname = safetyvideoname;
-    }
-
-    public Date getSafetyvideotime() {
-        return safetyvideotime;
-    }
-
-    public void setSafetyvideotime(Date safetyvideotime) {
-        this.safetyvideotime = safetyvideotime;
-    }
-
-    public String getSafetyvideoplace() {
-        return safetyvideoplace;
-    }
-
-    public void setSafetyvideoplace(String safetyvideoplace) {
-        this.safetyvideoplace = safetyvideoplace;
-    }
-
-    public Integer getMid() {
-        return mid;
-    }
-
-    public void setMid(Integer mid) {
-        this.mid = mid;
-    }
-
-    public String getVideoname() {
-        return videoname;
-    }
-
-    public void setVideoname(String videoname) {
-        this.videoname = videoname;
-    }
-
-    public String getVideoadd() {
-        return videoadd;
-    }
-
-    public void setVideoadd(String videoadd) {
-        this.videoadd = videoadd;
-    }
-
-    public String getSafetytestscore()
-    {
-        return safetytestscore;
-    }
-
-    public void setSafetytestscore(String safetytestscore)
-    {
-        this.safetytestscore = safetytestscore;
     }
 
     @Override
-    public String toString() {
-        return "TblSafetyvideo{" +
-                "safetyvideoid=" + safetyvideoid +
-                ", safetyvideoname='" + safetyvideoname + '\'' +
-                ", safetyvideotime=" + safetyvideotime +
-                ", safetyvideoplace='" + safetyvideoplace + '\'' +
-                ", mid=" + mid +
-                ", videoname='" + videoname + '\'' +
-                ", videoadd='" + videoadd + '\'' +
-                '}';
+    public String toString()
+    {
+        return "TblSafetyvideo{" + "safetyvideoid=" + safetyvideoid + ", safetyvideoname='" + safetyvideoname + '\'' + ", safetyvideotime=" + safetyvideotime + ", safetyfinishtime=" + safetyfinishtime + ", safetyvideoplace='" + safetyvideoplace + '\'' + ", mid=" + mid + ", videoname='" + videoname + '\'' + ", videoadd='" + videoadd + '\'' + ", safetytestscore='" + safetytestscore + '\'' + ", safetytestresult='" + safetytestresult + '\'' + '}';
     }
 }

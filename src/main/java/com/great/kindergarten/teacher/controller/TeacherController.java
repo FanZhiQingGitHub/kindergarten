@@ -345,5 +345,35 @@ public class TeacherController {
 
 		return str;
 	}
+	//安全教育视频表
 
+    @RequestMapping(value="/safetyVideoTable")
+    @ResponseBody
+    public CourseTable safetyVideoTable(HttpServletRequest request, HttpServletResponse response){
+        String page=request.getParameter("page");
+        String limit=request.getParameter("limit");
+        int pageInt1 = Integer.valueOf(page);
+        int limitInt =Integer.valueOf(limit);
+        int pageInt=(pageInt1-1)*limitInt;
+        //查询条件
+        HashMap<String,Object> dataHashMap =new HashMap<>();
+        dataHashMap.put("pageInt",pageInt);
+        dataHashMap.put("limitInt",limitInt);
+        //            查询视频总数
+        Integer count=teacherService.findSafetyCount();
+        System.out.println("count="+count);
+
+        //	    查看视频表
+        List<TblSafetyvideo>  tblSafetyvideoList = teacherService.findSafetyTable(dataHashMap);
+        System.out.println("tblSafetyvideoList="+tblSafetyvideoList);
+        if(null!=tblSafetyvideoList){
+            courseTable.setCode(0);
+            courseTable.setMsg("");
+            courseTable.setCount(count);
+            courseTable.setData(tblSafetyvideoList);
+            return courseTable;
+        }
+
+        return null;
+    }
 	}

@@ -45,7 +45,7 @@
 			<div class="layui-input-block" id="workeva">
 				<label class="layui-form-label" >作业评级：</label>
 				<select name="selectClass" id="score" lay-verify="required" style="width: 100px">
-					<option value="" selected>请打分</option>
+					<option value="" >请打分</option>
 					<option value="A" selected>A</option>
 					<option value="B" selected>B</option>
 					<option value="C" selected>C</option>

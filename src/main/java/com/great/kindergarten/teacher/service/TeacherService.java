@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +94,16 @@ public class TeacherService {
         scoreMap.put("score",score);
         scoreMap.put("sid",sid);
         return teacherMapper.workScore(scoreMap);
+    }
+    //    查看视频数量
+    public Integer findSafetyCount()
+    {
+        return teacherMapper.findSafetyCount();
+    }
+    //查看视频表
+    public List<TblSafetyvideo> findSafetyTable(HashMap<String,Object> dataHashMap)
+    {
+        return teacherMapper.findSafetyTable(dataHashMap);
     }
 
 }
