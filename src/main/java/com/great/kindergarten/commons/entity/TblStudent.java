@@ -28,6 +28,18 @@ public class TblStudent {
     private Integer kid;
     private Integer rid;
 
+    private String time1;
+    private String time2;
+    private TblClass tblClass;
+    private Integer classid;
+    private String classname;
+    private TblParent tblParent;
+    private Integer parentId;
+    private String parentName;
+    private TblKinder tblKinder;
+    private Integer kinderid;
+    private String kindername;
+
 
     public TblStudent() {
     }
@@ -141,6 +153,117 @@ public class TblStudent {
 
     public void setRid(Integer rid) {
         this.rid = rid;
+    }
+
+    public String getTime1()
+    {
+        return time1;
+    }
+
+    public void setTime1(String time1)
+    {
+        this.time1 = time1;
+    }
+
+    public String getTime2()
+    {
+        return time2;
+    }
+
+    public void setTime2(String time2)
+    {
+        this.time2 = time2;
+    }
+
+    public TblClass getTblClass()
+    {
+        return tblClass;
+    }
+
+    public void setTblClass(TblClass tblClass)
+    {
+        this.tblClass = tblClass;
+    }
+
+    public String getClassname()
+    {
+        return classname;
+    }
+
+    public void setClassname(String classname)
+    {
+        this.classname = classname;
+    }
+
+    public TblParent getTblParent()
+    {
+        return tblParent;
+    }
+
+    public void setTblParent(TblParent tblParent)
+    {
+        this.tblParent = tblParent;
+    }
+
+    public Integer getParentId()
+    {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId)
+    {
+        this.parentId = parentId;
+    }
+
+    public String getParentName()
+    {
+        return parentName;
+    }
+
+    public void setParentName(String parentName)
+    {
+        this.parentName = parentName;
+    }
+
+    public TblKinder getTblKinder()
+    {
+        return tblKinder;
+    }
+
+    public void setTblKinder(TblKinder tblKinder)
+    {
+        this.tblKinder = tblKinder;
+    }
+
+    public String getKindername()
+    {
+        return kindername;
+    }
+
+    public void setKindername(String kindername)
+    {
+        this.kindername = kindername;
+    }
+
+    public Integer getClassid()
+    {
+        return classid;
+    }
+
+    public void setClassid(Integer classid)
+    {
+        this.classid = classid;
+    }
+
+
+    public Integer getKinderid()
+    {
+        return kinderid;
+    }
+
+    public void setKinderid(Integer kinderid)
+    {
+        this.kinderid = kinderid;
     }
 
     @Override

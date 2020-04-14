@@ -24,6 +24,12 @@ public class TblSafetyvideo {
     private String safetytestscore;
     private String safetytestresult;
 
+    private String time1;
+    private String time2;
+    private TblMonitor tblMonitor;
+    private Integer monitorid;
+    private String monitorname;
+
     public TblSafetyvideo() {
     }
 
@@ -47,6 +53,56 @@ public class TblSafetyvideo {
         this.videoadd = videoadd;
         this.safetytestscore = safetytestscore;
         this.safetytestresult = safetytestresult;
+    }
+
+    public String getTime1()
+    {
+        return time1;
+    }
+
+    public void setTime1(String time1)
+    {
+        this.time1 = time1;
+    }
+
+    public String getTime2()
+    {
+        return time2;
+    }
+
+    public void setTime2(String time2)
+    {
+        this.time2 = time2;
+    }
+
+    public TblMonitor getTblMonitor()
+    {
+        return tblMonitor;
+    }
+
+    public void setTblMonitor(TblMonitor tblMonitor)
+    {
+        this.tblMonitor = tblMonitor;
+    }
+
+    public Integer getMonitorid()
+    {
+        return monitorid;
+    }
+
+    public void setMonitorid(Integer monitorid)
+    {
+        this.monitorid = monitorid;
+    }
+
+    public String getMonitorname()
+    {
+        return monitorname;
+    }
+
+    public void setMonitorname(String monitorname)
+    {
+        this.monitorname = monitorname;
     }
 
     @Override

@@ -347,4 +347,215 @@ public class AdminService {
 	{
 		return adminMapper.addRector(tblRectorList);
 	}
+
+	//教师管理
+	public List<TblTeacher> findAllTeacherInfo(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findAllTeacherInfo(condition, rowBounds);
+	}
+
+	public int findTeacherInfoCount(HashMap<String, Object> condition)
+	{
+		return adminMapper.findTeacherInfoCount(condition);
+	}
+
+	public int restTeacherPwd(TblTeacher tblTeacher)
+	{
+		return adminMapper.restTeacherPwd(tblTeacher);
+	}
+
+	public int updateTeacher(TblTeacher tblTeacher)
+	{
+		return adminMapper.updateTeacher(tblTeacher);
+	}
+
+	public int deleteTeacher(Integer teacherid)
+	{
+		return adminMapper.deleteTeacher(teacherid);
+	}
+
+	public int updateTeacherStatus(TblTeacher tblTeacher)
+	{
+		return adminMapper.updateTeacherStatus(tblTeacher);
+	}
+
+	public int addTeacher(List<TblTeacher> tblTeacherList)
+	{
+		return adminMapper.addTeacher(tblTeacherList);
+	}
+
+	public List<String> findAllJob()
+	{
+		return adminMapper.findAllJob();
+	}
+
+	//家长管理
+	public List<TblParent> findAllParentInfo(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findAllParentInfo(condition, rowBounds);
+	}
+
+	public int findParentInfoCount(HashMap<String, Object> condition)
+	{
+		return adminMapper.findParentInfoCount(condition);
+	}
+
+	public int restParentPwd(TblParent tblParent)
+	{
+		return adminMapper.restParentPwd(tblParent);
+	}
+
+	public int updateParent(TblParent tblParent)
+	{
+		return adminMapper.updateParent(tblParent);
+	}
+
+	public int deleteParent(Integer parentId)
+	{
+		return adminMapper.deleteParent(parentId);
+	}
+
+	public int updateParentStatus(TblParent tblParent)
+	{
+		return adminMapper.updateParentStatus(tblParent);
+	}
+
+	public int addParent(List<TblParent> tblParentList)
+	{
+		return adminMapper.addParent(tblParentList);
+	}
+
+	public List<String> findParentJob()
+	{
+		return adminMapper.findParentJob();
+	}
+
+	//保健员管理
+	public List<TblHealther> findAllHealtherInfo(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findAllHealtherInfo(condition, rowBounds);
+	}
+
+	public int findHealtherInfoCount(HashMap<String, Object> condition)
+	{
+		return adminMapper.findHealtherInfoCount(condition);
+	}
+
+	public int restHealtherPwd(TblHealther tblHealther)
+	{
+		return adminMapper.restHealtherPwd(tblHealther);
+	}
+
+	public int updateHealther(TblHealther tblHealther)
+	{
+		return adminMapper.updateHealther(tblHealther);
+	}
+
+	public int deleteHealther(Integer healtherId)
+	{
+		return adminMapper.deleteHealther(healtherId);
+	}
+
+	public int updateHealtherStatus(TblHealther tblHealther)
+	{
+		return adminMapper.updateHealtherStatus(tblHealther);
+	}
+
+	public int addHealther(List<TblHealther> tblHealtherList)
+	{
+		return adminMapper.addHealther(tblHealtherList);
+	}
+
+	//安防员管理
+	public List<TblSecurity> findAllSecurityInfo(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findAllSecurityInfo(condition, rowBounds);
+	}
+
+	public int findSecurityInfoCount(HashMap<String, Object> condition)
+	{
+		return adminMapper.findSecurityInfoCount(condition);
+	}
+
+	public int restSecurityPwd(TblSecurity tblSecurity)
+	{
+		return adminMapper.restSecurityPwd(tblSecurity);
+	}
+
+	public int updateSecurity(TblSecurity tblSecurity)
+	{
+		return adminMapper.updateSecurity(tblSecurity);
+	}
+
+	public int deleteSecurity(Integer securityId)
+	{
+		return adminMapper.deleteSecurity(securityId);
+	}
+
+	public int updateSecurityStatus(TblSecurity tblSecurity)
+	{
+		return adminMapper.updateSecurityStatus(tblSecurity);
+	}
+
+	public int addSecurity(List<TblSecurity> tblSecurityList)
+	{
+		return adminMapper.addSecurity(tblSecurityList);
+	}
+
+//	public List<String> findHealtherJob()
+//	{
+//		return adminMapper.findHealtherJob();
+//	}
+
+	//学生管理
+	public List<TblStudent> findAllStudentInfo(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findAllStudentInfo(condition, rowBounds);
+	}
+
+	public int findStudentInfoCount(HashMap<String, Object> condition)
+	{
+		return adminMapper.findStudentInfoCount(condition);
+	}
+
+	public int restStudentPwd(TblStudent tblStudent)
+	{
+		return adminMapper.restStudentPwd(tblStudent);
+	}
+
+	public int updateStudent(TblStudent tblStudent)
+	{
+		return adminMapper.updateStudent(tblStudent);
+	}
+
+	public int deleteStudent(Integer studentId)
+	{
+		return adminMapper.deleteStudent(studentId);
+	}
+
+	public int updateStudentStatus(TblStudent tblStudent)
+	{
+		return adminMapper.updateStudentStatus(tblStudent);
+	}
+
+	public int addStudent(List<TblStudent> tblStudentList)
+	{
+		return adminMapper.addStudent(tblStudentList);
+	}
+
+	//安全教育管理
+	public List<TblSafetyvideo> findAllSafetyVideoInfo(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findAllSafetyVideoInfo(condition, rowBounds);
+	}
+
+	public int findSafetyVideoInfoCount(HashMap<String, Object> condition)
+	{
+		return adminMapper.findSafetyVideoInfoCount(condition);
+	}
+
+	public int deleteSafetyVideoInfo(Integer safetyVideoId)
+	{
+		return adminMapper.deleteSafetyVideoInfo(safetyVideoId);
+	}
 }
