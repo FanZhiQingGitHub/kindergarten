@@ -1,5 +1,6 @@
 package com.great.kindergarten.security.controller;
 
+import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.healther.resultbean.DateWrite;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
@@ -181,8 +182,6 @@ public class SecurityController {
         pickUpInfoPage.setuStuName(uStuName);
         pickUpInfoPage.setcName(cName);
         List<TblStudent> tblStudentList = securityService.findALLPickUpInfo(pickUpInfoPage);
-        System.out.println("tblStudentList="+tblStudentList);
-        System.out.println("长度="+tblStudentList.size());
         if (0 != tblStudentList.size()) {
             Integer count = securityService.findALLPickUpInfoCount(pickUpInfoPage).intValue();
             dateWrite.setCode(0);
@@ -194,20 +193,27 @@ public class SecurityController {
             response.setCharacterEncoding("UTF-8");
             request.getSession().setAttribute("uStuName", uStuName);
             ResponseUtils.outJson(response, dateWrite);
+        }else {
+            dateWrite.setMsg("亲，暂无相关数据(注：如果是时间搜索，请选择周一至周日的时间进行查询，谢谢！)");
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
         }
 
     }
 
     //孩子详细接送信息，含考勤
     @RequestMapping("/showPickUpDetailInfo")
-    public void showPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage, DateWrite dateWrite , HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+    public void showPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage, DateWrite dateWrite , HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Gson g = new Gson();
         String currentmonday = "1";
         String currentsonday = "7";
-        String dafultsid = request.getParameter("studentid");
+        String dafultsid = request.getParameter("sid");
+        String startdate = request.getParameter("startdate");//周一日期
+        String enddate = request.getParameter("enddate");//周日日期
+        String sid = request.getParameter("studentid");//学生id
 
-        String startdate = request.getParameter("key1");//周一日期
-        String enddate = request.getParameter("key2");//周日日期
-        String sid = request.getParameter("key3");//周日日期
         String mondaydate = null;
         String sundaydate = null;
 
@@ -220,26 +226,23 @@ public class SecurityController {
         }
         pickUpInfoDetailPage.setMondaydate(mondaydate);
         pickUpInfoDetailPage.setSundaydate(sundaydate);
+
         if(null != sid){
             pickUpInfoDetailPage.setStudentid(Integer.valueOf(sid));
         }else {
             pickUpInfoDetailPage.setStudentid(Integer.valueOf(dafultsid));
         }
-        List<TblStutime> tblStutimeList = securityService.findALLPickUpDetailInfo(pickUpInfoDetailPage);
+        List<TblDate> tblDateList = securityService.findALLPickUpDetailInfo(pickUpInfoDetailPage);
 
-        if (0 != tblStutimeList.size()) {
-            dateWrite.setCode(0);
-            dateWrite.setMsg(" ");
-            dateWrite.setCount(5);
-            dateWrite.setData(tblStutimeList);
-
+        if (0 != tblDateList.size()) {
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
-
-            ResponseUtils.outJson(response, dateWrite);
+            Object[] info = tblDateList.toArray();
+            String result = g.toJson(info);
+            response.getWriter().print(result);
+        }else {
+            response.getWriter().print("error");
         }
-
     }
-
 }

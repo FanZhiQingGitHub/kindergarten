@@ -6,8 +6,8 @@ import java.util.List;
  * layui数据表实体类
  */
 public class DateWrite {
-    private Integer code;
-    private String msg = " ";
+    private Integer code ;
+    private String msg = "";
     private Integer count;
     private List<?> data;
 

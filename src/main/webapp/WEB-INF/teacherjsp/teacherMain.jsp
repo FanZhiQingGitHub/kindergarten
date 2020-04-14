@@ -167,7 +167,7 @@
 <script>
 
 	layui.use(['carousel', 'jquery', 'element','layer'], function () {
-		var carousel = layui.carousel, $ = layui.$;
+		var carousel = layui.carousel, $ = layui.jquery;
 		var element = layui.element;
 		var layer = layui.layer;
 		var path = $("#path").val();
@@ -262,6 +262,23 @@
 						layer.close(index);
 					},
 					content: path + '/teacher/toUrl/checkWork' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					, success: function (layero, index) {
+					}
+				});
+			});
+			// 安全教育视频
+			$("#configurationTopic").click(function () {
+				layer.open({
+					type: 2,
+					area: ['70%', '80%'],
+					offset: ['10%', '3%'],
+					title:"智慧幼儿园-安全教育配置",
+					btn1: function (index, layero) {
+						//layer.getChildFrame("form", index)获取iframe的表单
+						//serializeArray jquery方法，将表单对象序列化为数组
+						layer.close(index);
+					},
+					content: path + '/teacher/toUrl/safetyEducation' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 					, success: function (layero, index) {
 					}
 				});

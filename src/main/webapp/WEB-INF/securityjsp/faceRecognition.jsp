@@ -76,24 +76,22 @@
 		//获取到String类型的image信息
 		var face = url.split(",")[1];
 
-		console.log("face="+face)
-
 		//用ajax做验证 ,判断是否验证成功
-		// $.ajax({
-		// 	url: path+'/parent/parentFaceRecognition',
-		// 	type:"POST",
-		// 	async: false,
-		// 	cache: false,
-		// 	data: {"face":face},
-		// 	success: function(result) {
-		//
-		//
-		//
-		// 	},
-		// 	error:function(msg) {
-		// 		layer.alert("网络繁忙，请您稍后重试")
-		// 	}
-		// });
+		$.ajax({
+			url: path+'/parent/parentFaceRecognition',
+			type:"POST",
+			async: false,
+			cache: false,
+			data: {"face":face},
+			success: function(result) {
+
+
+
+			},
+			error:function(msg) {
+				layer.alert("网络繁忙，请您稍后重试")
+			}
+		});
 	}
 
 

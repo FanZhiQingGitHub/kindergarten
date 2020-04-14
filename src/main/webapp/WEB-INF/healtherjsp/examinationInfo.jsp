@@ -49,7 +49,8 @@
                 </div>
 
 
-                <button type="button" class="layui-btn layui-btn-normal" data-type="reload"><i class="layui-icon">&#xe615;</i>搜索体检信息</button>
+                <button type="button" class="layui-btn layui-btn-normal" data-type="reload"><i class="layui-icon">&#xe615;</i>搜索体检信息
+                </button>
                 <button type="button" class="layui-btn add"><i class="layui-icon">&#xe654;</i>新增体检信息</button>
             </div>
         </div>
@@ -69,7 +70,7 @@
 
 <script>
     //用户管理数据表格
-    layui.use(['table', 'jquery','layer','form'], function () {
+    layui.use(['table', 'jquery', 'layer', 'form'], function () {
         $ = layui.jquery;
         var table = layui.table;
         var form = layui.form;
@@ -78,8 +79,8 @@
         //第一个实例
         table.render({
             elem: '#dataTable'
-            ,text: { //自定义文本，此处用法--》当返回数据为空时的异常提示
-                none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+            , text: {
+                none: '${lang == "zh_CN" ? "无数据" : "No Data"}'
             }
             , height: 280
             , url: path + '/healther/showALLExamination' //数据接口
@@ -88,8 +89,8 @@
             , limit: 5
             , limits: [5, 10, 15, 20]
             , cols: [[ //表头
-                {field: 'examinationid', title: '体检ID', width: 120, align: 'center',hide:'true'}
-                , {field: 'studentid', title: '宝宝ID', width: 120,sort: true, fixed: 'left', align: 'center'}
+                {field: 'examinationid', title: '体检ID', width: 120, align: 'center', hide: 'true'}
+                , {field: 'studentid', title: '宝宝ID', width: 120, sort: true, fixed: 'left', align: 'center'}
                 , {field: 'studentname', title: '宝宝名称', width: 120, align: 'center'}
                 , {field: 'height', title: '身高', width: 120, sort: true, align: 'center'}
                 , {field: 'weight', title: '体重', width: 120, sort: true, align: 'center'}
@@ -97,9 +98,16 @@
                 , {field: 'temperature', title: '体温', width: 160, sort: true, align: 'center'}
                 , {field: 'skin', title: '皮肤状况', width: 160, sort: true, align: 'center'}
                 , {field: 'healthstatus', title: '健康状况', width: 180, sort: true, align: 'center'}
-                , {field: 'examinationtime', title: '体检时间', width: 180, sort: true, align: 'center',templet:"<div>{{layui.util.toDateString(d.examinationtime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
+                , {
+                    field: 'examinationtime',
+                    title: '体检时间',
+                    width: 180,
+                    sort: true,
+                    align: 'center',
+                    templet: "<div>{{layui.util.toDateString(d.examinationtime,'yyyy-MM-dd HH:mm:ss')}}</div>"
+                }
                 , {field: '', title: '操作', toolbar: "#butdiv", width: 200, align: 'center'}
-            ]]
+            ]],
         });
 
         $('#searchTable .layui-btn').on('click', function () {
