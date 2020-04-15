@@ -25,7 +25,8 @@ public class TblSafetyvideo {
     private String videoadd;
     private String safetytestscore;
     private String safetytestresult;
-
+    private String time1;
+    private String time2;
     public TblSafetyvideo() {
     }
 
@@ -37,7 +38,7 @@ public class TblSafetyvideo {
         this.safetyfinishtime = safetyfinishtime;
     }
 
-    public TblSafetyvideo(Integer safetyvideoid, String safetyvideoname, Date safetyvideotime, Date safetyfinishtime, String safetyvideoplace, Integer mid, String videoname, String videoadd, String safetytestscore, String safetytestresult)
+    public TblSafetyvideo(Integer safetyvideoid, String safetyvideoname, Date safetyvideotime, Date safetyfinishtime, String safetyvideoplace, Integer mid, String videoname, String videoadd, String safetytestscore, String safetytestresult, String time1, String time2)
     {
         this.safetyvideoid = safetyvideoid;
         this.safetyvideoname = safetyvideoname;
@@ -49,6 +50,28 @@ public class TblSafetyvideo {
         this.videoadd = videoadd;
         this.safetytestscore = safetytestscore;
         this.safetytestresult = safetytestresult;
+        this.time1 = time1;
+        this.time2 = time2;
+    }
+
+    public String getTime1()
+    {
+        return time1;
+    }
+
+    public void setTime1(String time1)
+    {
+        this.time1 = time1;
+    }
+
+    public String getTime2()
+    {
+        return time2;
+    }
+
+    public void setTime2(String time2)
+    {
+        this.time2 = time2;
     }
 
     public Integer getSafetyvideoid()
