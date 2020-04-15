@@ -38,7 +38,7 @@
         }
 
         #hh1 {
-            color: white;
+            color: #f37d25;
             font-weight: bold;
             font-size: 55px;
             margin-left: 32.3%;
@@ -80,7 +80,7 @@
         }
 
         .layui-form-label {
-            color: white;
+            color: black;
         }
 
         .layui-btn {
@@ -101,6 +101,10 @@
             margin-left: 25%;
             font-size: 13px;
             background-color: transparent;
+            color: black;
+        }
+        #bu3:hover{
+            color: cyan;
         }
 
     </style>
@@ -110,7 +114,7 @@
     <input type="hidden" id="path" value="<%=path%>">
     <div id="alldiv">
         <h1 id="hh1">智慧幼儿园用户注册界面</h1>
-        <hr style="color: white">
+<%--        <hr style="color: white">--%>
         <div class="container">
 
             <div class="layui-form-item">
@@ -139,7 +143,7 @@
 
             <div class="layui-form-item">
                 <label class="layui-form-label">性别</label>
-                <div class="layui-input-block" style="color: white">
+                <div class="layui-input-block" style="color: black">
                     <input type="radio" name="usersex" value="男" title="男" checked>
                     <input type="radio" name="usersex" value="女" title="女">
                 </div>

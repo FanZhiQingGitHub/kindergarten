@@ -136,7 +136,31 @@ public class AdminController {
                     tblAdmin = adminService.adminLogin(tblAdmin);
                     if(tblAdmin != null)
                     {
-                        String rolename = adminService.findRoleByRid(tblAdmin.getRid());
+	                    List<String> teacherList = adminService.findAllJob();
+	                    List<String> teacherNewList = new ArrayList<String>();
+	                    for (String str : teacherList) {
+		                    if (!teacherNewList.contains(str)) {
+			                    teacherNewList.add(str);
+		                    }
+	                    }
+	                    List<String> parentList = adminService.findParentJob();
+	                    List<String> parentNewList = new ArrayList<String>();
+	                    for (String str : parentList) {
+		                    if (!parentNewList.contains(str)) {
+			                    parentNewList.add(str);
+		                    }
+	                    }
+//	                    List<String> healtherList = adminService.findHealtherJob();
+//	                    List<String> healtherNewList = new ArrayList<String>();
+//	                    for (String str : healtherList) {
+//		                    if (!healtherNewList.contains(str)) {
+//			                    healtherNewList.add(str);
+//		                    }
+//	                    }
+	                    req.getSession().setAttribute("teacherNewList",teacherNewList);
+	                    req.getSession().setAttribute("teacherNewList",teacherNewList);
+//	                    req.getSession().setAttribute("healtherNewList",healtherNewList);
+	                    String rolename = adminService.findRoleByRid(tblAdmin.getRid());
                         List<TblAdmin> tblAdminList = adminService.findAdminByName(tblAdmin.getAdminname());
                         req.getSession().setAttribute("tblAdminList",tblAdminList);
                         req.getSession().setAttribute("rolename",rolename);
@@ -1077,6 +1101,666 @@ public class AdminController {
 	public void updateRector(TblRector tblRector,HttpServletRequest request, HttpServletResponse response)
 	{
 		int num = adminService.updateRector(tblRector);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	//教师管理
+	@RequestMapping("/teacherMgrInfo")
+	public void teacherMgrInfo(String page, String limit, TblTeacher tblTeacher, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null != tblTeacher.getTeachername() && !"".equals(tblTeacher.getTeachername().trim())) {
+			condition.put("teachername",tblTeacher.getTeachername());
+		}
+
+		if(null != tblTeacher.getTeacherstatus() && !"".equals(tblTeacher.getTeacherstatus().trim())) {
+			condition.put("teacherstatus",tblTeacher.getTeacherstatus());
+		}
+
+		if(null != tblTeacher.getTeacherjob() && !"".equals(tblTeacher.getTeacherjob().trim())) {
+			condition.put("teacherjob",tblTeacher.getTeacherjob());
+		}
+
+		if(null != tblTeacher.getTime1() && !"".equals(tblTeacher.getTime1().trim())) {
+			condition.put("time1",tblTeacher.getTime1());
+		}
+
+		if(null != tblTeacher.getTime2() && !"".equals(tblTeacher.getTime2().trim())) {
+			condition.put("time2",tblTeacher.getTime2());
+		}
+
+		int num = adminService.findTeacherInfoCount(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+		List<TblTeacher> tblTeacherList = adminService.findAllTeacherInfo(condition,rowBounds);
+		if(tblTeacherList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(tblTeacherList);
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/addTeacher")
+	public void addTeacher(TblTeacher tblTeacher,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblTeacher.setTeacherregtime(new Date());
+		tblTeacher.setTeacherstatus("启用");
+		List<TblTeacher> tblTeacherList = new ArrayList<>();
+		tblTeacherList.add(tblTeacher);
+		int num = adminService.addTeacher(tblTeacherList);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/forbiddenTeacher")
+	public void forbiddenTeacher(TblTeacher tblTeacher,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblTeacher.setTeacherstatus("禁用");
+		int num = adminService.updateTeacherStatus(tblTeacher);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/openTeacher")
+	public void openTeacher(TblTeacher tblTeacher,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblTeacher.setTeacherstatus("启用");
+		int num = adminService.updateTeacherStatus(tblTeacher);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/restTeacherPwd")
+	public void restTeacherPwd(TblTeacher tblTeacher,HttpServletRequest request, HttpServletResponse response)
+	{
+		String teacherPwd = adminService.initialPwd("初始密码");
+		tblTeacher.setTeacherpwd(teacherPwd);
+		int num = adminService.restTeacherPwd(tblTeacher);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/deleteTeacher")
+	public void deleteTeacher(TblTeacher tblTeacher,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.deleteTeacher(tblTeacher.getTeacherid());
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/updateTeacher")
+	public void updateTeacher(TblTeacher tblTeacher,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.updateTeacher(tblTeacher);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	//家长管理
+	@RequestMapping("/parentMgrInfo")
+	public void parentMgrInfo(String page, String limit, TblParent tblParent, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null != tblParent.getParentName() && !"".equals(tblParent.getParentName().trim())) {
+			condition.put("parentName",tblParent.getParentName());
+		}
+
+		if(null != tblParent.getParentStatus() && !"".equals(tblParent.getParentStatus().trim())) {
+			condition.put("parentStatus",tblParent.getParentStatus());
+		}
+
+		if(null != tblParent.getParentJob() && !"".equals(tblParent.getParentJob().trim())) {
+			condition.put("parentJob",tblParent.getParentJob());
+		}
+
+		if(null != tblParent.getTime1() && !"".equals(tblParent.getTime1().trim())) {
+			condition.put("time1",tblParent.getTime1());
+		}
+
+		if(null != tblParent.getTime2() && !"".equals(tblParent.getTime2().trim())) {
+			condition.put("time2",tblParent.getTime2());
+		}
+
+		int num = adminService.findParentInfoCount(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+		List<TblParent> tblParentList = adminService.findAllParentInfo(condition,rowBounds);
+		if(tblParentList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(tblParentList);
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/addParent")
+	public void addParent(TblParent tblParent,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblParent.setParentRegTime(new Date());
+		tblParent.setParentStatus("启用");
+		List<TblParent> tblParentList = new ArrayList<>();
+		tblParentList.add(tblParent);
+		int num = adminService.addParent(tblParentList);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/forbiddenParent")
+	public void forbiddenParent(TblParent tblParent,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblParent.setParentStatus("禁用");
+		int num = adminService.updateParentStatus(tblParent);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/openParent")
+	public void openParent(TblParent tblParent,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblParent.setParentStatus("启用");
+		int num = adminService.updateParentStatus(tblParent);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/restParentPwd")
+	public void restParentPwd(TblParent tblParent,HttpServletRequest request, HttpServletResponse response)
+	{
+		String parentPwd = adminService.initialPwd("初始密码");
+		tblParent.setParentPwd(parentPwd);
+		int num = adminService.restParentPwd(tblParent);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/deleteParent")
+	public void deleteParent(TblParent tblParent,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.deleteParent(tblParent.getParentId());
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/updateParent")
+	public void updateParent(TblParent tblParent,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.updateParent(tblParent);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	//保健员管理
+	@RequestMapping("/healtherMgrInfo")
+	public void healtherMgrInfo(String page, String limit, TblHealther tblHealther, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null != tblHealther.getHealthername() && !"".equals(tblHealther.getHealthername().trim())) {
+			condition.put("healthername",tblHealther.getHealthername());
+		}
+
+		if(null != tblHealther.getHealtherstatus() && !"".equals(tblHealther.getHealtherstatus().trim())) {
+			condition.put("healtherstatus",tblHealther.getHealtherstatus());
+		}
+
+//		if(null != tblHealther.getHealtherjob() && !"".equals(tblHealther.getHealtherjob().trim())) {
+//			condition.put("Healtherjob",tblHealther.getHealtherjob());
+//		}
+
+		if(null != tblHealther.getTime1() && !"".equals(tblHealther.getTime1().trim())) {
+			condition.put("time1",tblHealther.getTime1());
+		}
+
+		if(null != tblHealther.getTime2() && !"".equals(tblHealther.getTime2().trim())) {
+			condition.put("time2",tblHealther.getTime2());
+		}
+
+		int num = adminService.findHealtherInfoCount(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+		List<TblHealther> tblHealtherList = adminService.findAllHealtherInfo(condition,rowBounds);
+		if(tblHealtherList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(tblHealtherList);
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/addHealther")
+	public void addHealther(TblHealther tblHealther,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblHealther.setHealtherregtime(new Date());
+		tblHealther.setHealtherstatus("启用");
+		List<TblHealther> tblHealtherList = new ArrayList<>();
+		tblHealtherList.add(tblHealther);
+		int num = adminService.addHealther(tblHealtherList);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/forbiddenHealther")
+	public void forbiddenHealther(TblHealther tblHealther,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblHealther.setHealtherstatus("禁用");
+		int num = adminService.updateHealtherStatus(tblHealther);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/openHealther")
+	public void openHealther(TblHealther tblHealther,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblHealther.setHealtherstatus("启用");
+		int num = adminService.updateHealtherStatus(tblHealther);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/restHealtherPwd")
+	public void restHealtherPwd(TblHealther tblHealther,HttpServletRequest request, HttpServletResponse response)
+	{
+		String healtherPwd = adminService.initialPwd("初始密码");
+		tblHealther.setHealtherpwd(healtherPwd);
+		int num = adminService.restHealtherPwd(tblHealther);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/deleteHealther")
+	public void deleteHealther(TblHealther tblHealther,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.deleteHealther(tblHealther.getHealtherid());
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/updateHealther")
+	public void updateHealther(TblHealther tblHealther,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.updateHealther(tblHealther);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	//安防员管理
+	@RequestMapping("/securityMgrInfo")
+	public void securityMgrInfo(String page, String limit, TblSecurity tblSecurity, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null != tblSecurity.getSecurityname() && !"".equals(tblSecurity.getSecurityname().trim())) {
+			condition.put("securityname",tblSecurity.getSecurityname());
+		}
+
+		if(null != tblSecurity.getSecuritystatus() && !"".equals(tblSecurity.getSecuritystatus().trim())) {
+			condition.put("securitystatus",tblSecurity.getSecuritystatus());
+		}
+
+		//		if(null != tblHealther.getHealtherjob() && !"".equals(tblHealther.getHealtherjob().trim())) {
+		//			condition.put("Healtherjob",tblHealther.getHealtherjob());
+		//		}
+
+		if(null != tblSecurity.getTime1() && !"".equals(tblSecurity.getTime1().trim())) {
+			condition.put("time1",tblSecurity.getTime1());
+		}
+
+		if(null != tblSecurity.getTime2() && !"".equals(tblSecurity.getTime2().trim())) {
+			condition.put("time2",tblSecurity.getTime2());
+		}
+
+		int num = adminService.findSecurityInfoCount(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+		List<TblSecurity> tblSecurityList = adminService.findAllSecurityInfo(condition,rowBounds);
+		if(tblSecurityList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(tblSecurityList);
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/addSecurity")
+	public void addSecurity(TblSecurity tblSecurity,HttpServletRequest request, HttpServletResponse response)
+	{
+		SimpleDateFormat sf = new SimpleDateFormat();
+		tblSecurity.setSecurityregtime(sf.format(new Date()));
+		tblSecurity.setSecuritystatus("启用");
+		List<TblSecurity> tblSecurityList = new ArrayList<>();
+		tblSecurityList.add(tblSecurity);
+		int num = adminService.addSecurity(tblSecurityList);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/forbiddenSecurity")
+	public void forbiddenSecurity(TblSecurity tblSecurity,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblSecurity.setSecuritystatus("禁用");
+		int num = adminService.updateSecurityStatus(tblSecurity);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/openSecurity")
+	public void openSecurity(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response)
+	{
+		tblSecurity.setSecuritystatus("启用");
+		int num = adminService.updateSecurityStatus(tblSecurity);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/restSecurityPwd")
+	public void restSecurityPwd(TblSecurity tblSecurity,HttpServletRequest request, HttpServletResponse response)
+	{
+		String securityPwd = adminService.initialPwd("初始密码");
+		tblSecurity.setSecuritypwd(securityPwd);
+		int num = adminService.restSecurityPwd(tblSecurity);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/deleteSecurity")
+	public void deleteSecurity(TblSecurity tblSecurity,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.deleteSecurity(tblSecurity.getSecurityid());
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/updateSecurity")
+	public void updateSecurity(TblSecurity tblSecurity,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.updateSecurity(tblSecurity);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	//学生管理
+	@RequestMapping("/studentMgrInfo")
+	public void studentMgrInfo(String page, String limit, TblStudent tblStudent, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null != tblStudent.getStudentname() && !"".equals(tblStudent.getStudentname().trim())) {
+			condition.put("studentname",tblStudent.getStudentname());
+		}
+
+		if(null != tblStudent.getStudentstatus() && !"".equals(tblStudent.getStudentstatus().trim())) {
+			condition.put("studentstatus",tblStudent.getStudentstatus());
+		}
+
+		//		if(null != tblHealther.getHealtherjob() && !"".equals(tblHealther.getHealtherjob().trim())) {
+		//			condition.put("Healtherjob",tblHealther.getHealtherjob());
+		//		}
+
+		if(null != tblStudent.getTime1() && !"".equals(tblStudent.getTime1().trim())) {
+			condition.put("time1",tblStudent.getTime1());
+		}
+
+		if(null != tblStudent.getTime2() && !"".equals(tblStudent.getTime2().trim())) {
+			condition.put("time2",tblStudent.getTime2());
+		}
+
+		int num = adminService.findStudentInfoCount(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+		List<TblStudent> tblStudentList = adminService.findAllStudentInfo(condition,rowBounds);
+		if(tblStudentList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(tblStudentList);
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/addStudent")
+	public void addStudent(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response)
+	{
+		SimpleDateFormat sf = new SimpleDateFormat();
+		tblStudent.setStudenttime(new Date());
+		tblStudent.setStudentstatus("启用");
+		List<TblStudent> tblStudentList = new ArrayList<>();
+		tblStudentList.add(tblStudent);
+		int num = adminService.addStudent(tblStudentList);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/forbiddenStudent")
+	public void forbiddenStudent(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response)
+	{
+		tblStudent.setStudentstatus("禁用");
+		int num = adminService.updateStudentStatus(tblStudent);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/openStudent")
+	public void openStudent(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response)
+	{
+		tblStudent.setStudentstatus("启用");
+		int num = adminService.updateStudentStatus(tblStudent);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/restStudentPwd")
+	public void restStudentPwd(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response)
+	{
+		String studentPwd = adminService.initialPwd("初始密码");
+		tblStudent.setStudentpwd(studentPwd);
+		int num = adminService.restStudentPwd(tblStudent);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/deleteStudent")
+	public void deleteStudent(TblStudent tblStudent,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.deleteStudent(tblStudent.getStudentid());
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/updateStudent")
+	public void updateStudent(TblStudent tblStudent,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.updateStudent(tblStudent);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	//安全教育管理
+	@RequestMapping("/safetyEducationInfo")
+	public void safetyEducationInfo(String page, String limit, TblSafetyvideo tblSafetyvideo, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null != tblSafetyvideo.getSafetyvideoname() && !"".equals(tblSafetyvideo.getSafetyvideoname().trim())) {
+			condition.put("safetyvideoname",tblSafetyvideo.getSafetyvideoname());
+		}
+
+//		if(null != tblSafetyvideo.getStudentstatus() && !"".equals(tblStudent.getStudentstatus().trim())) {
+//			condition.put("studentstatus",tblStudent.getStudentstatus());
+//		}
+
+		//		if(null != tblHealther.getHealtherjob() && !"".equals(tblHealther.getHealtherjob().trim())) {
+		//			condition.put("Healtherjob",tblHealther.getHealtherjob());
+		//		}
+
+		if(null != tblSafetyvideo.getTime1() && !"".equals(tblSafetyvideo.getTime1().trim())) {
+			condition.put("time1",tblSafetyvideo.getTime1());
+		}
+
+		if(null != tblSafetyvideo.getTime2() && !"".equals(tblSafetyvideo.getTime2().trim())) {
+			condition.put("time2",tblSafetyvideo.getTime2());
+		}
+
+		int num = adminService.findSafetyVideoInfoCount(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+		List<TblSafetyvideo> tblSafetyVideoList = adminService.findAllSafetyVideoInfo(condition,rowBounds);
+		if(tblSafetyVideoList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(tblSafetyVideoList);
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/deleteSafetyVideoInfo")
+	public void deleteSafetyVideoInfo(TblSafetyvideo tblSafetyvideo,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.deleteSafetyVideoInfo(tblSafetyvideo.getSafetyvideoid());
 		if(num > 0)
 		{
 			ResponseUtils.outHtml(response,"success");

@@ -31,6 +31,11 @@ public class TblTeacher
 	private Integer cid;
 	private Integer rid;
 	private String code;
+	private String time1;
+	private String time2;
+	private TblClass tblClass;
+	private Integer classid;
+	private String classname;
 
 	public String getCode()
 	{
@@ -160,6 +165,56 @@ public class TblTeacher
 	public void setRid(Integer rid)
 	{
 		this.rid = rid;
+	}
+
+	public String getTime1()
+	{
+		return time1;
+	}
+
+	public void setTime1(String time1)
+	{
+		this.time1 = time1;
+	}
+
+	public String getTime2()
+	{
+		return time2;
+	}
+
+	public void setTime2(String time2)
+	{
+		this.time2 = time2;
+	}
+
+	public TblClass getTblClass()
+	{
+		return tblClass;
+	}
+
+	public void setTblClass(TblClass tblClass)
+	{
+		this.tblClass = tblClass;
+	}
+
+	public Integer getClassid()
+	{
+		return classid;
+	}
+
+	public void setClassid(Integer classid)
+	{
+		this.classid = classid;
+	}
+
+	public String getClassname()
+	{
+		return classname;
+	}
+
+	public void setClassname(String classname)
+	{
+		this.classname = classname;
 	}
 
 	@Override

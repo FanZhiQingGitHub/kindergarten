@@ -241,7 +241,7 @@
             }), $("#bu4").click(function () {
                 layer.open({
                     type: 2,
-                    area: ['95%', '80%'],
+                    area: ['95%', '83%'],
                     offset: ['10%', '3%'],
                     title: '智慧幼儿园-电子围栏',
                     btn1: function (index, layero) {

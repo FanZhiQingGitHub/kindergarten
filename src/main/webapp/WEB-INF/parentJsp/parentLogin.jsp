@@ -208,7 +208,7 @@
                 </div>
 
                 <div id="codediv">
-                    <img src="${pageContext.request.contextPath}/teacher/loginCode" id="code">
+                    <img src="${pageContext.request.contextPath}/parent/loginCode" id="code">
                     <input type="button" id="bu1" value="看不清？换一张"></td>
                 </div>
             </div>
@@ -271,12 +271,12 @@
                     //验证码错误
                         layer.alert("啊哦，验证码输入错误", {icon: 2});
                         var code = document.getElementById("code");
-                        code.src = path + "/security/loginCode?"+Math.random();
+                        code.src = path + "/parent/loginCode?"+Math.random();
                     }else if (result.msg=="loginFailed") {
                     //登陆失败
                         layer.alert("登陆失败，请检查您输入的账号密码！多次登陆失败请联系园长", {icon: 2});
                         var code = document.getElementById("code");
-                        code.src = path + "/security/loginCode?"+Math.random();
+                        code.src = path + "/parent/loginCode?"+Math.random();
                     }
                     else if(result.success){
                     //    登陆成功
@@ -296,11 +296,11 @@
             $("#code").click(function () {
                 var path = $("#path").val();
                 var code = document.getElementById("code");
-                code.src = path + "/security/loginCode?"+Math.random();
+                code.src = path + "/parent/loginCode?"+Math.random();
             }),$("#bu1").click(function () {
                 var path = $("#path").val();
                 var code = document.getElementById("code");
-                code.src = path + "/security/loginCode?"+Math.random();
+                code.src = path + "/parent/loginCode?"+Math.random();
             }),$("#bu3").click(function () {
                 layer.alert("该功能尚未开放！", {icon: 6});
             }),$("#bu4").click(function () {

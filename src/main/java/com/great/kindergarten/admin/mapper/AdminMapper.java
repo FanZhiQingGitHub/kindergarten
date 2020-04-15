@@ -14,13 +14,14 @@ import java.util.Map;
  */
 
 @Mapper
-public interface AdminMapper {
+public interface AdminMapper
+{
 
 	/**
 	 * @param adminname
 	 * @return
 	 */
-	public String findAdminStatus(@Param(value="adminname")String adminname);
+	public String findAdminStatus(@Param(value = "adminname") String adminname);
 
 	/**
 	 * @param tblAdmin
@@ -40,7 +41,7 @@ public interface AdminMapper {
 	//一级菜单
 	public List<TblMenu> findStairMenu();
 
-//	public List<TblMenuInfo> findAllMenu(HashMap<String, Object> condition, RowBounds rowBounds);
+	//	public List<TblMenuInfo> findAllMenu(HashMap<String, Object> condition, RowBounds rowBounds);
 
 	//菜单管理
 	public List<TblMenu> findAllMenu(HashMap<String, Object> condition, RowBounds rowBounds);
@@ -87,7 +88,7 @@ public interface AdminMapper {
 	public Integer checkRoleName(String roleName);
 
 	//修改管理员密码
-	public int updateAdminPwd(Map<String,String> adminMap);
+	public int updateAdminPwd(Map<String, String> adminMap);
 
 	//园所管理
 	public List<TblKinder> findAllKinder(HashMap<String, Object> condition, RowBounds rowBounds);
@@ -166,4 +167,93 @@ public interface AdminMapper {
 	public int updateRectorStatus(TblRector tblRector);
 
 	public int addRector(List<TblRector> tblRectorList);
+
+	//教师管理
+	public List<TblTeacher> findAllTeacherInfo(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public int findTeacherInfoCount(HashMap<String, Object> condition);
+
+	public int restTeacherPwd(TblTeacher tblTeacher);
+
+	public int updateTeacher(TblTeacher tblTeacher);
+
+	public int deleteTeacher(Integer teacherid);
+
+	public int updateTeacherStatus(TblTeacher tblTeacher);
+
+	public int addTeacher(List<TblTeacher> tblTeacherList);
+
+	public List<String> findAllJob();
+
+	//家长管理
+	public List<TblParent> findAllParentInfo(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public int findParentInfoCount(HashMap<String, Object> condition);
+
+	public int restParentPwd(TblParent tblParent);
+
+	public int updateParent(TblParent tblParent);
+
+	public int deleteParent(Integer parentId);
+
+	public int updateParentStatus(TblParent tblParent);
+
+	public int addParent(List<TblParent> tblParentList);
+
+	public List<String> findParentJob();
+
+	//保健员管理
+	public List<TblHealther> findAllHealtherInfo(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public int findHealtherInfoCount(HashMap<String, Object> condition);
+
+	public int restHealtherPwd(TblHealther tblHealther);
+
+	public int updateHealther(TblHealther tblHealther);
+
+	public int deleteHealther(Integer healtherId);
+
+	public int updateHealtherStatus(TblHealther tblHealther);
+
+	public int addHealther(List<TblHealther> tblHealtherList);
+
+	//	public List<String> findHealtherJob();
+
+	//安防员管理
+	public List<TblSecurity> findAllSecurityInfo(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public int findSecurityInfoCount(HashMap<String, Object> condition);
+
+	public int restSecurityPwd(TblSecurity tblSecurity);
+
+	public int updateSecurity(TblSecurity tblSecurity);
+
+	public int deleteSecurity(Integer securityId);
+
+	public int updateSecurityStatus(TblSecurity tblSecurity);
+
+	public int addSecurity(List<TblSecurity> tblSecurityList);
+
+
+	//学生管理
+	public List<TblStudent> findAllStudentInfo(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public int findStudentInfoCount(HashMap<String, Object> condition);
+
+	public int restStudentPwd(TblStudent tblStudent);
+
+	public int updateStudent(TblStudent tblStudent);
+
+	public int deleteStudent(Integer studentId);
+
+	public int updateStudentStatus(TblStudent tblStudent);
+
+	public int addStudent(List<TblStudent> tblStudentList);
+
+	//安全教育管理
+	public List<TblSafetyvideo> findAllSafetyVideoInfo(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public int findSafetyVideoInfoCount(HashMap<String, Object> condition);
+
+	public int deleteSafetyVideoInfo(Integer safetyVideoId);
 }

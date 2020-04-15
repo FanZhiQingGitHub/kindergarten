@@ -211,8 +211,17 @@
             </div>
 
             <div id="butdiv">
-                <button type="button" class="layui-btn" id="bu3">忘记密码？</button>
+                <button type="button" class="layui-btn" id="bu3">忘记密码？重置一下</button>
                 <button type="button" class="layui-btn" id="bu4">点击此处返回首页</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="type-content" style="display: none;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <input type="text" id="securityphone" placeholder="请输入11位手机号码" value=""
+                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
             </div>
         </div>
     </div>
@@ -293,7 +302,43 @@
                 code.src = path + "/security/loginCode?"+Math.random();
 
             }),$("#bu3").click(function () {
-                layer.alert("该功能尚未开放！", {icon: 6});
+                var path = $("#path").val();
+                layer.open({
+                    type: 1,
+                    content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+                    title: '个人密码重置',
+                    btn: ['确定', '取消'],
+                    area: ['20%', '22%'],
+                    offset: ['30%'],
+                    btnAlign: 'c',
+                    btn1: function (index) {
+                        var securityphone = $("#securityphone").val();
+                        var num = /^1\d{10}$/;
+                        if (!num.test(securityphone)) {
+                            layer.alert("您好，手机号码必须11位，且不能出现空格！", {icon: 2});
+                        } else {
+                            $.ajax({
+                                url: path + '/security/resetSecuritypwd',
+                                async: true,
+                                type: 'post',
+                                data: {
+                                    "securityphone": securityphone,
+                                },
+                                datatype: 'text',
+                                success: function (data) {
+                                    if (data == "error") {
+                                        layer.alert("重置失败！", {icon: 2});
+                                    } else {
+                                        layer.alert("重置成功，新密码为：'123456' ", {icon: 6});
+                                        layer.close(index);
+                                    }
+                                }, error: function (data) {
+                                    layer.alert("网络繁忙！", {icon: 2});
+                                }
+                            });
+                        }
+                    }
+                });
             }),$("#bu4").click(function () {
                 var path = $("#path").val();
                 location.href = path + "/main/path/main";

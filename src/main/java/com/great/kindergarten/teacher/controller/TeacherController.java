@@ -347,7 +347,7 @@ public class TeacherController {
     //安全教育视频表
 
     @RequestMapping(value = "/safetyVideoTable")
-//    @ResponseBody
+    @ResponseBody
     public void safetyVideoTable(HttpServletRequest request, HttpServletResponse response) {
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
