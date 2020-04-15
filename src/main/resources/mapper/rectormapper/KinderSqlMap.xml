@@ -98,12 +98,7 @@ insert into tbl_kinder(
         </where>
         order by c.coursenum
     </select>
-    <!--课程管理....班级和教师表.查询记录条数-->
-    <!--    <select id="findAllCourseNameCount" resultType="java.lang.Long" parameterType="java.util.HashMap">-->
-    <!--        select count(*) from tbl_course-->
-    <!--        <where>cid = #{cid}-->
-    <!--        </where>-->
-    <!--    </select>-->
+
 
     <!--课程管理....新增课程表信息-->
     <insert id="addTblCourseInfo" parameterType="java.util.List">
