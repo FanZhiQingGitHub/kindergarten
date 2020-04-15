@@ -2,7 +2,6 @@ package com.great.kindergarten.commons.entity;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 /**
@@ -19,6 +18,9 @@ public class TblCourse {
     private String coursename4;
     private String coursename5;
     private Integer cid;
+    private Integer ctids;
+    private String mondaydate;
+    private String sundaydate;
     private List<TblCourse> tblCourseList;
 
     public TblCourse() {
@@ -107,6 +109,36 @@ public class TblCourse {
     public void setTblCourseList(List<TblCourse> tblCourseList)
     {
         this.tblCourseList = tblCourseList;
+    }
+
+    public String getMondaydate()
+    {
+        return mondaydate;
+    }
+
+    public void setMondaydate(String mondaydate)
+    {
+        this.mondaydate = mondaydate;
+    }
+
+    public String getSundaydate()
+    {
+        return sundaydate;
+    }
+
+    public void setSundaydate(String sundaydate)
+    {
+        this.sundaydate = sundaydate;
+    }
+
+    public Integer getCtids()
+    {
+        return ctids;
+    }
+
+    public void setCtids(Integer ctids)
+    {
+        this.ctids = ctids;
     }
 
     @Override

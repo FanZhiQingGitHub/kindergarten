@@ -14,6 +14,7 @@
 </head>
 <body>
 <input type="hidden" id="path" value="<%=path%>">
+<input type="text" id="classid" name="classid">
 
 <div class="layui-fluid">
     <div class="layadmin-user-login-box layadmin-user-login-header">
@@ -46,6 +47,7 @@
         var layer = layui.layer;
         var laydate = layui.laydate;
         var path = $("#path").val();
+        var classid = $("#classid").val();
 
         //展示已知数据
         var tableInfo = table.render({
@@ -98,26 +100,29 @@
 
         $(function () {
             $("#bu1").click(function () {
-                var tblRecipeList = tableInfo.config.data;
+                var tblCourseList = tableInfo.config.data;
                 var mealtime = $("#mealtime").val();
-                var msg = {"tblRecipeList": tblRecipeList, "mealtime": mealtime};
+                // var msg = {"tblRecipeList": tblRecipeList, "mealtime": mealtime};
+                // msg = JSON.stringify(msg);
+                //对应的选择的日期一周的时间
+                var msg = {"tblCourseList": tblCourseList, "mondaydate": mealtime,"cid":classid};
                 msg = JSON.stringify(msg);
                 if (mealtime == 0) {
                     layer.alert("您好，需要选择日期区间才能保存信息哦！", {icon: 6});
                 } else {
                     $.ajax({
-                        url: path + "/healther/addMealInfo",
+                        url: path + "/director/addCourseInfo",
                         async: true,
                         type: "post",
-                        data: "TblRecipe=" + msg,
+                        data: "TblCourse=" + msg,
                         datatype: "text",
                         success: function (msg) {
                             if (msg == "success") {
-                                layer.alert("添加成功！", {icon: 6}, function (index) {
+                                layer.alert("添加课程成功！", {icon: 6}, function (index) {
                                     window.parent.location.reload();
                                 });
                             } else {
-                                layer.alert("添加失败！", {icon: 2});
+                                layer.alert("添加课程失败！", {icon: 2});
                             }
                         }, error: function (msg) {
                             layer.alert("网络繁忙！", {icon: 2});

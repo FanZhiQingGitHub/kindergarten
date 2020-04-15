@@ -87,31 +87,54 @@ insert into tbl_kinder(
         </where>
     </select>
     <select id="findAllCourseName" resultType="TblCourse" parameterType="java.util.HashMap">
-        select * from tbl_course
-        <where>cid = #{cid}
+        select * from tbl_course c,tbl_coursetest ct
+        <where>c.ctids=ct.ctid and c.cid = #{cid}
+            <if test=" mondaydate != '' and mondaydate != null">
+                <![CDATA[ and DATE_FORMAT(ct.mondaydate, '%Y-%m-%d')>=  DATE_FORMAT(#{mondaydate}, '%Y-%m-%d') ]]>
+            </if>
+            <if test=" sundaydate != '' and sundaydate != null">
+                <![CDATA[ and DATE_FORMAT(ct.sundaydate, '%Y-%m-%d')<=  DATE_FORMAT(#{sundaydate}, '%Y-%m-%d') ]]>
+            </if>
         </where>
-        order by coursenum
+        order by c.coursenum
     </select>
     <!--课程管理....班级和教师表.查询记录条数-->
-    <select id="findAllCourseNameCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
-        select count(*) from tbl_course
-        <where>cid = #{cid}
-        </where>
-    </select>
+    <!--    <select id="findAllCourseNameCount" resultType="java.lang.Long" parameterType="java.util.HashMap">-->
+    <!--        select count(*) from tbl_course-->
+    <!--        <where>cid = #{cid}-->
+    <!--        </where>-->
+    <!--    </select>-->
 
     <!--课程管理....新增课程表信息-->
     <insert id="addTblCourseInfo" parameterType="java.util.List">
         insert into
-        tbl_course(coursenum,coursename1,coursename2,coursename3,coursename4,coursename5,cid)
+        tbl_course(coursenum,coursename1,coursename2,coursename3,
+        coursename4,coursename5,cid,ctids)
         values
         <foreach collection="list" item="i" index="index" separator=",">
-            (#{i.coursenum},#{i.coursename1},#{i.coursename2},#{i.coursename3},#{i.coursename4},#{i.coursename5},#{i.cid})
+            (#{i.coursenum},#{i.coursename1},#{i.coursename2},
+            #{i.coursename3},#{i.coursename4},#{i.coursename5},
+            #{i.cid},#{i.ctids})
         </foreach>
     </insert>
     <!--    课程管理....删除对应的课程表的该时间的课程-->
-    <delete id="delTblCourseInfo" parameterType="java.lang.Integer">
-        delete from tbl_course where cid = #{cid}
+    <delete id="delTblCourseInfo" parameterType="TblCourse">
+        delete from tbl_course where cid = #{cid} and ctids = #{ctids}
     </delete>
+
+
+    <!--添加对应的课程时间表的内容 -->
+    <insert id="addCoursetestInfo" parameterType="TblCoursetest">
+        insert into
+        tbl_coursetest(mondaydate,sundaydate)
+        values
+            (#{mondaydate},#{sundaydate})
+    </insert>
+
+    <!--查询对应的课程时间表的ID值 -->
+    <select id="findCoursetestID" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select ctid from tbl_coursetest where mondaydate = #{mondaydate} and sundaydate = #{sundaydate}
+    </select>
 
     <!--班级管理....查找对应的老师的信息下拉框-->
     <select id="findTeacherClassAll" resultType="TblTeacher">
@@ -165,7 +188,7 @@ insert into tbl_kinder(
         order by s.studenttime desc limit #{pageInt},#{limitInt}
     </select>
 
-    <!--课程管理....班级和教师表.查询记录条数-->
+    <!--班级成员管理....班级和教师表.查询记录条数-->
     <select id="findClassMemberAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
         select count(*) from tbl_student s,tbl_class c,tbl_teacher t
         <where>s.cid=c.classid and c.classid=t.cid
