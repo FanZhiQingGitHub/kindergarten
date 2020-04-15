@@ -32,7 +32,21 @@ public interface TeacherMapper {
 	//    查看视频数量
 	public Integer findSafetyCount();
 	//查看视频表
-	public List<TblSafetyvideo> findSafetyTable(HashMap<String,Object> dataHashMap);
+	public List<TblSafetyConfig> findSafetyTable(HashMap<String,Object> dataHashMap);
 	//新增上传视频
 	public Boolean uploadVideo(TblSafetyvideo tblSafetyvideo);
+	//查找所有安全视频名称
+	public List<TblSafetyvideo> findVideoName();
+	//根据视频名查id
+	public Integer findSafetyvideoidByName(TblSafetyvideo tblSafetyvideo);
+	//新增安全配置
+
+	public Boolean addSafetyConfig(TblSafetyConfig tblSafetyConfig);
+	/**
+	 * 根据题目的id找到对应的一堆题目
+	 * @param safetyVideoId
+	 * @return
+	 */
+	List<TblSafetyvtq> findSafetyTestQuestionList(Integer safetyVideoId);
+
 }

@@ -43,6 +43,8 @@ public class TeacherController {
     private TblWorkrelease tblWorkrelease;
 	@Resource
 	private TblSafetyvideo tblSafetyvideo;
+	@Resource
+	private TblSafetyConfig tblSafetyConfig;
 
     @RequestMapping("/main")
     public String showMainView(){
@@ -224,10 +226,22 @@ public class TeacherController {
     public List<TblClass> selectClass(HttpServletRequest request){
         System.out.println("selectClass进来");
         List<TblClass> tblClassList = teacherService.findClassName();
+
 	    request.getSession().setAttribute("tblClassList",tblClassList);
         System.out.println("所有tblClassList="+tblClassList);
             return tblClassList;
     }
+	//查找所有安全视频名称
+	@RequestMapping("/selectVideoName")
+	@ResponseBody
+	public List<TblSafetyvideo> selectVideoName(HttpServletRequest request){
+		List<TblSafetyvideo> tblSafetyvideoList=teacherService.findVideoName();
+		request.getSession().setAttribute("tblSafetyvideoList",tblSafetyvideoList);
+		System.out.println("所有tblSafetyvideoList="+tblSafetyvideoList);
+		return tblSafetyvideoList;
+	}
+
+
 //    发布作业
 
     @RequestMapping(value="/workRelease",produces = "text/plain;charset=UTF-8")
@@ -351,10 +365,10 @@ public class TeacherController {
 
 		return str;
 	}
-	//安全教育视频表
+	//安全教育配置表
 
     @RequestMapping(value="/safetyVideoTable")
-//    @ResponseBody
+    @ResponseBody
     public CourseTable safetyVideoTable(HttpServletRequest request, HttpServletResponse response){
         String page=request.getParameter("page");
         String limit=request.getParameter("limit");
@@ -370,15 +384,15 @@ public class TeacherController {
         System.out.println("count="+count);
 
         //	    查看视频表
-        List<TblSafetyvideo>  tblSafetyvideoList = teacherService.findSafetyTable(dataHashMap);
-        System.out.println("tblSafetyvideoList="+tblSafetyvideoList);
-        if(null!=tblSafetyvideoList){
+        List<TblSafetyConfig>  tblSafetyConfigList = teacherService.findSafetyTable(dataHashMap);
+        System.out.println("tblSafetyConfigList="+tblSafetyConfigList);
+        if(null!=tblSafetyConfigList){
             courseTable.setCode(0);
             courseTable.setMsg("");
             courseTable.setCount(count);
-            courseTable.setData(tblSafetyvideoList);
-	        ResponseUtils.outJson(response,courseTable);
-//            return courseTable;
+            courseTable.setData(tblSafetyConfigList);
+//	        ResponseUtils.outJson(response,courseTable);
+            return courseTable;
         }
 
         return null;
@@ -474,4 +488,71 @@ public class TeacherController {
 
     }
 
-    }
+    //新增安全教育配置
+
+	@RequestMapping("/addSafetyConfig")
+	@ResponseBody
+	public String addSafetyConfig(HttpServletRequest request){
+    	String classname=request.getParameter("classname");
+		String safetyvideoname=request.getParameter("safetyvideoname");
+		String startDate1=request.getParameter("startDate");
+		String endDate1=request.getParameter("endDate");
+		//
+		System.out.println("startDate="+startDate1);
+		System.out.println("endDate="+endDate1);
+		//	    String时间格式转化为date
+		//创建DateFormat的对象，在构造器中传入跟要转换的String字符串相同格式的
+		//	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date startDate = null;
+		Date endDate=null;
+		try {
+			//转换的过程中可能会抛出ParseException，必须抛出或者捕获处理
+			startDate = dateFormat.parse(startDate1);
+			endDate = dateFormat.parse(endDate1);
+
+			System.out.println("转换后的startDate类型=" + startDate);
+			System.out.println("转换后的endDate类型=" + endDate);
+			tblSafetyConfig.setSafetyvideotime(startDate);
+			tblSafetyConfig.setSafetyfinishtime(endDate);
+
+		} catch (ParseException e) {}
+
+
+		//根据班级名查id
+		TblClass tblClass =new TblClass();
+		tblClass.setClassname(classname);
+		System.out.println("classname="+classname);
+			//根据班级名查找id
+		Integer classid = teacherService.findClassidByName(tblClass);
+		System.out.println("下拉框班级id="+classid);
+		//根据视频名查id
+		tblSafetyvideo.setSafetyvideoname(safetyvideoname);
+		Integer safetyvideoid = teacherService.findSafetyvideoidByName(tblSafetyvideo);
+		tblSafetyConfig.setSafetyvideoid(safetyvideoid);
+		tblSafetyConfig.setClassname(classname);
+		tblSafetyConfig.setSafetyvideoname(safetyvideoname);
+		tblSafetyConfig.setClassid(classid);
+		System.out.println("tblSafetyConfig="+tblSafetyConfig);
+//		新增安全配置
+		boolean flag=teacherService.addSafetyConfig(tblSafetyConfig);
+		String string=null;
+		if(flag){
+			string ="success";
+		}
+		return string;
+	}
+    //查看配置试题
+	@RequestMapping("/SafetyTestQuestion")
+	public String playVideo(HttpServletRequest request){
+		//        获取要做哪套题
+		Integer safetyVideoId =  Integer.valueOf(request.getParameter("safetyVideoId"));
+
+		//查询出对应的题目列表
+		List<TblSafetyvtq> subject= teacherService.findSafetyTestQuestionList(safetyVideoId);
+		//给请求加上题目
+		request.setAttribute("subject",subject);
+		//转发
+		return "parentJsp/SafetyTestQuestion";
+	}
+}

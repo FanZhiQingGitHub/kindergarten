@@ -266,11 +266,11 @@
 					}
 				});
 			});
-			// 安全教育视频
+			// 安全教育视频配置
 			$("#configurationTopic").click(function () {
 				layer.open({
 					type: 2,
-					area: ['70%', '80%'],
+					area: ['80%', '80%'],
 					offset: ['10%', '3%'],
 					title:"智慧幼儿园-安全教育配置",
 					btn1: function (index, layero) {

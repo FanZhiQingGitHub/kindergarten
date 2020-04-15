@@ -101,7 +101,7 @@ public class TeacherService {
         return teacherMapper.findSafetyCount();
     }
     //查看视频表
-    public List<TblSafetyvideo> findSafetyTable(HashMap<String,Object> dataHashMap)
+    public List<TblSafetyConfig> findSafetyTable(HashMap<String,Object> dataHashMap)
     {
         return teacherMapper.findSafetyTable(dataHashMap);
     }
@@ -110,5 +110,25 @@ public class TeacherService {
     public Boolean uploadVideo(TblSafetyvideo tblSafetyvideo){
 	    return teacherMapper.uploadVideo(tblSafetyvideo);
     }
-
+    //查找所有安全视频名称
+    public List<TblSafetyvideo> findVideoName(){
+        return teacherMapper.findVideoName();
+    }
+    //根据视频名查id
+    public Integer findSafetyvideoidByName(TblSafetyvideo tblSafetyvideo){
+        return teacherMapper.findSafetyvideoidByName(tblSafetyvideo);
+    }
+    //新增安全配置
+    @Transactional
+    public Boolean addSafetyConfig(TblSafetyConfig tblSafetyConfig){
+        return teacherMapper.addSafetyConfig(tblSafetyConfig);
+    }
+    /**
+     * 根据题目id找到配对的试题
+     * @param safetyVideoId
+     * @return
+     */
+    public List<TblSafetyvtq> findSafetyTestQuestionList(Integer safetyVideoId){
+        return teacherMapper.findSafetyTestQuestionList(safetyVideoId);
+    }
 }

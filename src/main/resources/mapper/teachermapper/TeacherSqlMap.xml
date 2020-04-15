@@ -53,19 +53,33 @@
         <result column="wfinishtime" property="wfinishtime"></result>
     </resultMap>
 
-    <resultMap id="safetyMap" type="TblSafetyvideo">
+    <resultMap id="safetyMap" type="TblSafetyConfig">
         <id column="safetyvideoid" property="safetyvideoid"></id>
         <result column="safetyvideoid" property="safetyvideoid"></result>
         <result column="safetyvideoname" property="safetyvideoname"></result>
         <result column="safetyvideotime" property="safetyvideotime"></result>
         <result column="safetyfinishtime" property="safetyfinishtime"></result>
-
-        <result column="safetyvideoplace" property="safetyvideoplace"></result>
-        <result column="mid" property="mid"></result>
-        <result column="videoname" property="videoname"></result>
-        <result column="videoadd" property="videoadd"></result>
+        <result column="classid" property="classid"></result>
+        <result column="classname" property="classname"></result>
     </resultMap>
+    <resultMap id="safetyVideoName" type="TblSafetyvideo">
+        <id column="safetyvideoid" property="safetyvideoid"></id>
+        <result column="safetyvideoid" property="safetyvideoid"></result>
+        <result column="safetyvideoname" property="safetyvideoname"></result>
 
+    </resultMap>
+    <resultMap id="reVideoQuestion" type="TblSafetyvtq">
+        <result column="safetyvtqid" property="safetyvtqid"/>
+        <result column="safetyvtqname" property="safetyvtqname"/>
+        <result column="a" property="a"/>
+        <result column="avalue" property="avalue"/>
+        <result column="b" property="b"/>
+        <result column="bvalue" property="bvalue"/>
+        <result column="c" property="c"/>
+        <result column="cvalue" property="cvalue"/>
+        <result column="d" property="d"/>
+        <result column="dvalue" property="dvalue"/>
+    </resultMap>
 
 
 
@@ -139,11 +153,13 @@
     </update>
     <!--查询安全视频总数量-->
     <select id="findSafetyCount" resultType="java.lang.Integer" >
-			select count(*) from tbl_safetyvideo ;
+			select count(*) from tbl_safetyconfig ;
 	</select>
 <!--    查询安全视频表-->
     <select id="findSafetyTable" resultMap="safetyMap" parameterType="HashMap">
-        select * from tbl_safetyvideo limit #{pageInt},#{limitInt}
+        select ts.safetyvideoid,ts.safetyvideoname,ts.safetyvideotime,ts.safetyfinishtime,tbs.classname from tbl_safetyconfig ts,tbl_class tbs where ts.classid=tbs.classid
+         order by ts.safetyvideotime desc
+        limit #{pageInt},#{limitInt}
     </select>
 <!--    新增安全教育视频-->
     <insert id="uploadVideo" parameterType="TblSafetyvideo">
@@ -151,4 +167,27 @@
         (safetyvideoname,safetyvideotime,safetyfinishtime,videoadd)
         values (#{safetyvideoname},#{safetyvideotime},#{safetyfinishtime},#{videoadd});
     </insert>
+
+
+<!--    查找安全视频所有名称-->
+    <select id="findVideoName" resultMap="safetyVideoName" >
+        select * from tbl_safetyvideo
+
+    </select>
+    <!--    根据视频名名查找id-->
+    <select id="findSafetyvideoidByName" resultType="java.lang.Integer" parameterType="TblSafetyvideo">
+			select safetyvideoid from tbl_safetyvideo where safetyvideoname=#{safetyvideoname};
+	</select>
+    <!--    新增安全配置-->
+    <insert id="addSafetyConfig" parameterType="TblSafetyConfig">
+        insert into tbl_safetyconfig
+        (safetyvideoid,safetyvideoname,safetyvideotime,safetyfinishtime,classid)
+        values (#{safetyvideoid},#{safetyvideoname},#{safetyvideotime},#{safetyfinishtime},#{classid});
+    </insert>
+
+    <select id="findSafetyTestQuestionList" resultMap="reVideoQuestion" parameterType="integer" >
+
+        select * from tbl_safetyvtq where safetyvideoid =#{safetyVideoId}
+        order by safetyvtqid
+    </select>
 </mapper>
