@@ -6,7 +6,6 @@ import com.great.kindergarten.director.resultbean.DateTable;
 import com.great.kindergarten.director.resultbean.TblScTInfo;
 import com.great.kindergarten.director.service.KinderService;
 import com.great.kindergarten.director.service.RectorService;
-import com.great.kindergarten.healther.resultbean.DateWrite;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import com.great.kindergarten.security.util.DateUtil;
 import com.great.kindergarten.util.MD5Utils;

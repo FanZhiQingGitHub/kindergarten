@@ -145,8 +145,8 @@
                     <div class="img-txt">
                         <h3 style="text-align: left">园所视频Videos</h3>
                         <div style=" overflow:auto;">
-                            <a href="javascript:;"><img style="width: 100%"
-                                                        src="${pageContext.request.contextPath}/image/healtherimg/img/heather-1.jpeg"></a>
+                            <a href="javascript:void(0);" id="playVideos"><img style="width: 100%"
+                                                        src="${pageContext.request.contextPath}/image/securityimg/Traffic_safety.jpg"></a>
                         </div>
                     </div>
                 </div>
@@ -169,6 +169,9 @@
     </div>
 </div>
 <!-- end-footer -->
+
+
+
 <script>
 
     layui.use(['carousel', 'jquery', 'element', 'layer'], function () {
@@ -261,6 +264,22 @@
                 layer.alert('敬请期待', {icon: 6});
             });
         })
+
+        //点击查看园所视频
+        $("#playVideos").click(function () {
+            //打开一个窗口播放视频
+            layer.open({
+                //打开一个窗口播放视频
+                type: 1,
+                area: ['95%', '80%'],
+                offset:['10%','3%'],
+                title:'安全乘坐电梯',
+                content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
+                    '<source src="${pageContext.request.contextPath}/videos/Traffic_safety.mp4" type="video/mp4"></source></video>'
+                //直接跳出一个标签播放视频
+            });
+        });
+
     });
 
 </script>

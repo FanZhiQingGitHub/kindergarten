@@ -3,6 +3,7 @@ package com.great.kindergarten.security.service;
 import com.great.kindergarten.admin.mapper.AdminMapper;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.security.mapper.SecurityMapper;
+import com.great.kindergarten.security.resultbean.AlarmLogPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoPage;
 import org.springframework.stereotype.Service;
@@ -66,6 +67,30 @@ public class SecurityService {
 
     public List<TblDate> findALLPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage){
         return securityMapper.findALLPickUpDetailInfo(pickUpInfoDetailPage);
+    }
+
+    public List<TblStudent> findAllStuInfo(){
+        return securityMapper.findAllStuInfo();
+    }
+
+    public List<TblStudent> findStuLngLetInfo(String studentid,String studentname,String studentbrith){
+        Map<String, String> stumap = new LinkedHashMap<>();
+        stumap.put("studentid",studentid);
+        stumap.put("studentname",studentname);
+        stumap.put("studentbrith",studentbrith);
+        return securityMapper.findStuLngLetInfo(stumap);
+    }
+
+    public Boolean addAlarmLogInfo(List<TblAlarmLog> tblAlarmLogList){
+        return securityMapper.addAlarmLogInfo(tblAlarmLogList);
+    }
+
+    public List<TblAlarmLog> findAlarmInfo(AlarmLogPage alarmLogPage){
+        return securityMapper.findAlarmInfo(alarmLogPage);
+    }
+
+    public Long findAlarmInfoCount(AlarmLogPage alarmLogPage){
+        return securityMapper.findAlarmInfoCount(alarmLogPage);
     }
 
 
