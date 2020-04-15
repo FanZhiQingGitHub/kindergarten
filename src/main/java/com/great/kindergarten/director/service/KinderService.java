@@ -52,10 +52,10 @@ public class KinderService
 	}
 
 	//课程管理--对应的课程的记录值
-	public Long findAllCourseNameCount(Map<String, Object> map)
-	{
-		return kinderMapper.findAllCourseNameCount(map);
-	}
+//	public Long findAllCourseNameCount(Map<String, Object> map)
+//	{
+//		return kinderMapper.findAllCourseNameCount(map);
+//	}
 
 	//课程管理--添加课程表
 	public int addTblCourseInfo(List<TblCourse> tblCourseList)
@@ -64,8 +64,17 @@ public class KinderService
 	}
 
 	//删除--课程表
-	public int delTblCourseInfo(int cid){
-		return kinderMapper.delTblCourseInfo(cid);
+	public int delTblCourseInfo(int cid,int ctids){
+		return kinderMapper.delTblCourseInfo(cid,ctids);
+	}
+
+	//添加对应的课程时间表的内容
+	public int addCoursetestInfo(TblCoursetest tblCoursetest){
+		return kinderMapper.addCoursetestInfo(tblCoursetest);
+	}
+	//查询对应的课程时间表的ID值
+	public int findCoursetestID(Map<String, Object> map){
+		return kinderMapper.findCoursetestID(map);
 	}
 
 	/*

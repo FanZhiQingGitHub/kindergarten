@@ -26,11 +26,13 @@
     <script type="text/javascript" src="http://api.map.baidu.com/library/GeoUtils/1.2/src/GeoUtils_min.js"></script>
 
 
-    <script type="text/javascript" src="//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
-    <link rel="stylesheet" href="//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+    <script type="text/javascript"
+            src="//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+    <link rel="stylesheet" href="//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css"/>
     <!--加载检索信息窗口-->
-    <script type="text/javascript" src="//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
-    <link rel="stylesheet" href="//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
+    <script type="text/javascript"
+            src="//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
+    <link rel="stylesheet" href="//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css"/>
 
 </head>
 <body>
@@ -40,7 +42,7 @@
 <div class="layui-fluid">
 
     <div class="layadmin-user-login-box layadmin-user-login-header">
-        <h2 style="margin-left: 43%">电子围栏</h2>
+        <h2 style="margin-left: 46%">电子围栏</h2>
     </div>
     <div class="layui-inline" style="width:100%;">
         <hr>
@@ -70,12 +72,20 @@
             </div>
         </div>
     </div>
-
-        <div id="allmap" style="overflow:hidden;zoom:1;position:relative;width: 90%;height: 73%;margin-top: 2%;margin-left: 5%">
-            <div id="map" style="height:100%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;"></div>
-        </div>
-
+    <div id="allmap"
+         style="overflow:hidden;zoom:1;position:relative;width: 90%;height: 73%;margin-top: 2%;margin-left: 5%">
+        <div id="map"
+             style="height:100%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;"></div>
     </div>
+</div>
+
+<div class="layui-btn-container" style="margin-left: 35%;margin-top: 1%">
+    <button type="button" class="layui-btn"><i class="layui-icon">&#xe624;</i> 调整经度</button>
+    <button type="button" class="layui-btn layui-btn-normal"><i class="layui-icon">&#xe67e;</i> 调整经度</button>
+    <button type="button" class="layui-btn"><i class="layui-icon">&#xe624;</i> 调整纬度</button>
+    <button type="button" class="layui-btn layui-btn-normal"><i class="layui-icon">&#xe67e;</i> 调整纬度</button>
+</div>
+
 </div>
 <script>
 
@@ -102,8 +112,8 @@
 
         // 创建Map
         var map = new BMap.Map("map");
-        var lngnum ;
-        var latnum ;
+        var lngnum;
+        var latnum;
         var drawpoint;
         var point2s = [];
 
@@ -111,13 +121,11 @@
         var dafpoint = [];
 
 
-
-
-        map.addEventListener("click",function(e){
+        map.addEventListener("click", function (e) {
             // console.log(e.point.lng + "," + e.point.lat);
             lngnum = e.point.lng;
             latnum = e.point.lat;
-            drawpoint =  new BMap.Point(lngnum, latnum);
+            drawpoint = new BMap.Point(lngnum, latnum);
             point2s.push(drawpoint);
             addMarker(point2s);
             point2s.shift();
@@ -132,7 +140,7 @@
         });
 
         //用作默认显示一个点
-        dafaultpoint =  new BMap.Point(118.1932, 24.48854);
+        dafaultpoint = new BMap.Point(118.1932, 24.48854);
         dafpoint = [dafaultpoint];
         addMarker(dafpoint);
 
@@ -141,7 +149,8 @@
             for (var i = 0, pointsLen = points.length; i < pointsLen; i++) {
                 var marker = new BMap.Marker(points[i]);
                 map.addOverlay(marker);
-                marker.setAnimation(BMAP_ANIMATION_BOUNCE);  //增加点的弹跳动画
+                // marker.setAnimation(BMAP_ANIMATION_BOUNCE);  //增加点的弹跳动画
+                marker.enableDragging();
                 var thePoint = points[i];
                 showInfo(marker, thePoint);
 

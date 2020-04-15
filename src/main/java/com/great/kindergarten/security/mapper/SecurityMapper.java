@@ -19,6 +19,8 @@ public interface SecurityMapper {
 
     public Boolean updateSecurityPwd(Map<String, String> securitymap);
 
+    public Boolean resetSecuritypwd(Map<String, String> securitymap);
+
     public List<TblClass> findAllClass();
 
     public List<TblStudent> findALLPickUpInfo(PickUpInfoPage pickUpInfoPage);

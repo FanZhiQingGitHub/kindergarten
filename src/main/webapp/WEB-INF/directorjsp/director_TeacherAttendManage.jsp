@@ -64,7 +64,7 @@
 		//第一个实例
 		table.render({
 			elem: '#demo'
-			, height: 312
+			, height: 454
 			, limit: 5//设置的一页要有几条的记录
 			, limits: [5, 10]//设置的是对应的是有几个内容值
 			, url: src + '/director/selectTeacherAttendManage' //数据接口
@@ -95,14 +95,14 @@
 				if (method == "dialog") {
 					layer.open({
 						type: 2,
-						title: '修改信息',
-						area: ['500px', '400px'],
-						btn: ['修改', '取消'],
-						btn1: function (index, layero) {
-							var src = $("#srcAddress").val();
-							//layer.getChildFrame("form", index)获取iframe的表单
-							//serializeArray jquery方法，将表单对象序列化为数组
-							var formData = serializeObject($, layer.getChildFrame("form", index).serializeArray());
+						title: '教师考勤信息信息',
+						area: ['50%', '65%'],
+						// btn: ['修改', '取消'],
+						// btn1: function (index, layero) {
+						// 	var src = $("#srcAddress").val();
+						// 	//layer.getChildFrame("form", index)获取iframe的表单
+						// 	//serializeArray jquery方法，将表单对象序列化为数组
+						// 	var formData = serializeObject($, layer.getChildFrame("form", index).serializeArray());
 							//
 							// if (formData.teachername.length == 0) {
 							// 	layer.alert("请输入教师名称", {icon: 2});
@@ -130,8 +130,8 @@
 							// 		}
 							// 	});
 							// }
-						},
-						content: src + '/director/toUrl/director_TeacherDetailmanage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+						// },
+						content: src + '/director/toUrl/director_TeacherAttendDetailmanage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 						, success: function (layero, index) {
 							console.log(layero, index);
 							//	显示

@@ -19,6 +19,7 @@
 			margin-top: 1%;
 		}
 		#selName{
+			/*margin-left: -50%;*/
 			margin-top: 5%;
 			width: 168%;
 			height: 30%;
@@ -36,7 +37,7 @@
 	<div class="layui-row" >
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="kinderTable">
-				<div class="layui-form-item">
+				<div class="layui-form-item" style="margin-left: 6%;">
 					<div class="layui-block">查询条件：</div>
 					<div class="layui-inline">
 						<span class="layui-form-label">申请时间：</span>
@@ -45,14 +46,14 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<span class="layui-form-label" style="margin-left: -28%">至</span>
+						<span class="layui-form-label" style="margin-left: -35%">至</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 2% 0 0 30%">
+							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 2% 0 0 10%">
 						</div>
 					</div>
 					<div class="layui-inline" >
-						<span class="layui-form-label" style="margin-left: -20%">状态：</span>
-						<div class="layui-input-inline">
+						<span class="layui-form-label" style="margin-left: -55%">状态：</span>
+						<div class="layui-input-inline" style="margin-left: -18%;">
 							<select name="sel" id="sel" lay-filter="mySelect" lay-verify="" >
 								<option value="请选择">请选择</option>
 								<option value="禁用">禁用</option>
@@ -60,16 +61,16 @@
 							</select>
 						</div>
 					</div>
-					<button class="layui-btn" data-type="reload" ><i class="layui-icon">&#xe615;查询</i></button>
+					<button class="layui-btn" data-type="reload" style="margin-left: -15%"><i class="layui-icon">&#xe615;查询</i></button>
 				</div>
-				<div class="layui-form-item">
+				<div class="layui-form-item" style="margin-left: 6%;">
 					<div class="layui-inline">
 						<span class="layui-form-label">园所名称：</span>
 						<div class="layui-input-inline">
 							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" style="width: 82%;margin-top: 3% ">
 						</div>
 					</div>
-					<button class="layui-btn btn-add btn-default" id="btn-add" style="margin-left: 56.5%"><i class="layui-icon">&#xe624;新增</i></button>
+					<button class="layui-btn btn-add btn-default" id="btn-add" style="margin-left:45%"><i class="layui-icon">&#xe624;新增</i></button>
 				</div>
 			</div>
 		</form>

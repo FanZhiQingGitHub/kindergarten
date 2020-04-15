@@ -24,12 +24,6 @@
 		<input class="layui-input" name="name" id="uName" autocomplete="off">
 	</div>
 
-	<%--<div class="layui-form-item" style="text-align: right;padding-right: 10%;">--%>
-	<%--	<div class="layui-input-block">--%>
-	<%--		<button class="layui-btn layui-btn-normal" data-type="reload" style="width: 100px;">上一周</button>--%>
-	<%--		<button class="layui-btn layui-btn-normal" data-type="reload" style="width: 100px;">下一周</button>--%>
-	<%--	</div>--%>
-	<%--</div>--%>
 
 	<div class="layui-inline">
 		按照发布时间搜索：
@@ -51,7 +45,7 @@
 	</div>
 
 	<div class="layui-inline" >
-		<div id="classId">
+		<div id="classId" style="display: none">
 
 		</div>
 	</div>
@@ -66,15 +60,13 @@
 
 <table id="demo" lay-filter="test"></table>
 
-<script type="text/html" id="barDemo">
+<script type="text/html" id="barDemo" style="width: 300px">
 
-	<a class="layui-btn edit layui-btn-xs" data-method="dialog" lay-event="CheckHomeWork">查看作业</a>
+	<button class="layui-btn edit layui-btn-xs" data-method="dialog" lay-event="CheckHomeWork">查看作业</button>
 
+	<button type="button" class="layui-btn" lay-event="SubmitHomeWork"><i class="layui-icon"></i>提交作业</button>
 
-	<a class="layui-btn edit layui-btn-xs"  lay-event="SubmitHomeWork">提交作业</a>
-
-
-	<a class="layui-btn edit layui-btn-xs"  lay-event="DownloadHomeWork">下载作业</a>
+	<button class="layui-btn edit layui-btn-xs"  lay-event="DownloadHomeWork">下载作业</button>
 
 
 </script>
@@ -82,10 +74,15 @@
 
 <script type="text/javascript" >
 
-var kidList ;
+	var kidList;
 
-	layui.use('table', function(){
+	layui.use(['table','upload'], function(){
 		var table = layui.table;
+		var upload = layui.upload;
+
+
+
+
 		$.ajax({
 			url: path+'/parent/getKids',
 			type:"POST",
@@ -95,29 +92,27 @@ var kidList ;
 			success: function(result) {
 				//获取宝宝列表
 				var $selectKis =$("#status");
-				var $classId =$("#classId");
+				var $kidClass =$("#classId");
 				//获取宝宝列表数据
-				kidList =result.data;
+				 kidList =result.data;
 				//清空原本有的宝宝
 				$selectKis.empty();
 
-				if (kidList>0){
-
+				if (kidList.length>0){
 					//输入打印出自己的宝宝
-					for (var keys = 0;keys<kidList.length;keys++ ){
-						$selectKis.append("<option value='"+kidList[keys].studentid+"'>"+kidList[keys].studentname+"</option>")
+					for (var startNumber =0;startNumber<kidList.length;startNumber++ ){
+						$selectKis.append("<option value='"+kidList[startNumber].studentid+"'>"+kidList[startNumber].studentname+"</option>")
 					}
-
-					//更改班级信息
-					selectClass();
 				}
 
+				//更改班级信息
+				selectClass();
 
 				//查询作业数据
 				table.render({
 					elem: '#demo'
 					,height: 700
-					,url: path+'/parent/kidHomeWorkList?status='+$selectKis.val()+'&cid='+$classId.html() //数据接口
+					,url: path+'/parent/kidHomeWorkList?status='+$selectKis.val()+'&cid='+$kidClass.html() //数据接口
 					,method:'post'
 					,page: true //开启分页
 					,id: 'demo'
@@ -148,6 +143,18 @@ var kidList ;
 			}
 		});
 
+
+		//同时绑定多个元素，并将属性设定在元素上
+		upload.render({
+			elem: '.demoMore'
+			,before: function(){
+				layer.tips('接口地址：'+ this.url, this.item, {tips: 1});
+			}
+			,done: function(res, index, upload){
+				var item = this.item;
+				console.log(item); //获取当前触发上传的元素，layui 2.1.0 新增
+			}
+		});
 
 		//layui按钮绑定绑定查询事件
 
@@ -187,15 +194,11 @@ var kidList ;
 
 			}
 
-			//事件等于提交作业
-			if (layEvent === 'SubmitHomeWork') {
 
-
-			}
 
 			//事件等于下载
 			if (layEvent === 'DownloadHomeWork') {
-
+				var DownloadHomeWorkUlr = data.worklocation;
 
 
 
@@ -208,19 +211,20 @@ var kidList ;
 	});
 
 
-	
+
 	function selectClass() {
 		var kidId =$("#status").val();
 		var $kidClass =$("#classId");
+		$kidClass.empty();
 		//在页面隐藏宝宝的班级
-		for (var number =0;number<kidList.length;number++ ){
-			if (kidList[number].studentid==kidId){
-				$kidClass.html(kidList[number].cid);
+		for (var numbers =0;numbers<kidList.length;numbers++ ){
+			if (kidList[numbers].studentid==kidId){
+				$kidClass.html(kidList[numbers].cid);
 				return;
 			}
 		}
 	}
-	
+
 	
 	
 </script>

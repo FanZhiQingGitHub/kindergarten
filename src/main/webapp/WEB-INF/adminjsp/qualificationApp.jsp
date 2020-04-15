@@ -17,6 +17,9 @@
 			text-align: center;
 			margin-top: 1%;
 		}
+		/*#sel{*/
+		/*	margin-left: -30%;*/
+		/*}*/
 	</style>
 </head>
 <body>
@@ -25,33 +28,33 @@
 	<div class="layui-row" >
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="qualifyTable">
-				<div class="layui-form-item">
+				<div class="layui-form-item" style="margin-left: 6%">
 					<div class="layui-block">查询条件：</div>
 					<div class="layui-inline">
-						<span class="layui-form-label">申请时间：</span>
+						<span class="layui-form-label" >申请时间：</span>
 						<div class="layui-input-inline">
 							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" style="width: 82%;margin-top: 2% ">
 						</div>
 					</div>
 					<div class="layui-inline">
-						<span class="layui-form-label" style="margin-left: -28%">至</span>
+						<span class="layui-form-label" style="margin-left: -35%">至</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 2% 0 0 30%">
+							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 2% 0 0 10%">
 						</div>
 					</div>
 					<div class="layui-inline" >
-						<span class="layui-form-label" style="margin-left: -15%">状态：</span>
-						<div class="layui-input-inline">
+						<span class="layui-form-label" style="margin-left: -55%">状态：</span>
+						<div class="layui-input-inline" style="margin-left: -18%;">
 							<select name="sel" id="sel" lay-filter="mySelect" lay-verify="" >
-								<option value="请选择">请选择</option>
-								<option value="未审核">未审核</option>
-								<option value="通过">通过</option>
-								<option value="未通过">未通过</option>
+								<option value="请选择" >请选择</option>
+								<option value="未审核" >未审核</option>
+								<option value="通过" >通过</option>
+								<option value="未通过" >未通过</option>
 							</select>
 						</div>
 					</div>
 				</div>
-				<div class="layui-form-item">
+				<div class="layui-form-item" style="margin-left: 6%">
 					<div class="layui-inline">
 						<span class="layui-form-label">园所名称：</span>
 						<div class="layui-input-inline">

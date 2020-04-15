@@ -10,7 +10,7 @@
 <%String path = request.getContextPath();%>
 <html>
 <head>
-	<title>智慧幼儿园平台端-园长管理</title>
+	<title>智慧幼儿园平台端-家长管理</title>
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
@@ -29,14 +29,14 @@
 </head>
 <body>
 <input type="hidden" id="path" value="<%=path%>">
-	<h2>园长管理</h2>
+	<h2>家长管理</h2>
 	<div class="layui-row" >
 	<form class="layui-form" action="" onsubmit="return false;" >
-		<div class="rectorTable">
+		<div class="parentTable">
 			<div class="layui-form-item" style="margin-left: 3%">
 				<div class="layui-block">查询条件：</div>
 				<div class="layui-inline">
-					<span class="layui-form-label">入职时间：</span>
+					<span class="layui-form-label">注册时间：</span>
 					<div class="layui-input-inline">
 						<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" style="width: 100%;margin-top: 2% ">
 					</div>
@@ -52,9 +52,9 @@
 			</div>
 			<div class="layui-form-item">
 				<div class="layui-inline">
-					<span class="layui-form-label" style="margin-left: 11%">园长名称：</span>
+					<span class="layui-form-label" style="margin-left: 11%">家长名称：</span>
 					<div class="layui-input-inline">
-						<input type="text" class="layui-input" name="rectorName" id="rectorName" placeholder="请输入园长名称" style="margin: -20% 0 0 75%;">
+						<input type="text" class="layui-input" name="parentName" id="parentName" placeholder="请输入家长名称" style="margin: -20% 0 0 75%;">
 					</div>
 				</div>
 				<div class="layui-inline">
@@ -67,31 +67,51 @@
 						</select>
 					</div>
 				</div>
+				<div class="layui-inline">
+					<span class="layui-form-label" style="margin-left: -25%;">职业：</span>
+					<div class="layui-inline">
+						<select name="parentJob" id="parentJob" lay-filter="selectName" lay-verify="" >
+							<option value="请选择">请选择</option>
+							<c:if test="${not empty parentNewList}">
+								<c:forEach items="${parentNewList}" var="u">
+									<option value="${u}">${u}</option>
+								</c:forEach>
+							</c:if>
+						</select>
+					</div>
+				</div>
 			</div>
 		</div>
 	</form>
 	</div>
-	<table id="rector" lay-filter="test" class="layui-table-cell"></table>
+	<table id="parent" lay-filter="test" class="layui-table-cell"></table>
 
 	<div id="type-content" style="display: none;">
 		<div class="layui-form-item">
-			<label class="layui-form-label">园长名称：</label>
+			<label class="layui-form-label">家长名称：</label>
 			<div class="layui-inline">
-				<input type="text" id="name" name = "name" placeholder="请输入园长名称" value=""
+				<input type="text" id="name" name = "name" placeholder="请输入教师名称" value=""
 				       autocomplete="off" class="layui-input" style="width: 120%">
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">住址：</label>
 			<div class="layui-inline">
-				<input type="text" id="rectorAdd" name = "rectorAdd" placeholder="请输入园长住址" value=""
+				<input type="text" id="parentAdd" name = "parentAdd" placeholder="请输入家长住址" value=""
 				       autocomplete="off" class="layui-input" style="width: 120%">
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">手机号：</label>
 			<div class="layui-inline">
-				<input type="text" id="phone" name = "phone" placeholder="请输入园长手机号" value=""
+				<input type="text" id="phone" name = "phone" placeholder="请输入家长手机号" value=""
+				       autocomplete="off" class="layui-input" style="width: 120%">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">职业：</label>
+			<div class="layui-inline">
+				<input type="text" id="job" name = "job" placeholder="请输入家长职业" value=""
 				       autocomplete="off" class="layui-input" style="width: 120%">
 			</div>
 		</div>
@@ -99,33 +119,40 @@
 
 	<div id="type-content2" style="display: none;">
 		<div class="layui-form-item">
-			<label class="layui-form-label">园长名称：</label>
+			<label class="layui-form-label">家长名称：</label>
 			<div class="layui-inline">
-				<input type="text" id="name2" name = "name2" placeholder="请输入园长账号" value=""
+				<input type="text" id="name2" name = "name2" placeholder="请输入家长名称" value=""
 				       autocomplete="off" class="layui-input" style="width: 120%">
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">住址：</label>
 			<div class="layui-inline">
-				<input type="text" id="rectorAdd2" name = "rectorAdd2" placeholder="请输入园长住址" value=""
+				<input type="text" id="teacherAdd2" name = "teacherAdd2" placeholder="请输入家长住址" value=""
 				       autocomplete="off" class="layui-input" style="width: 120%">
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">手机号：</label>
 			<div class="layui-inline">
-				<input type="text" id="phone2" name = "phone2" placeholder="请输入园长手机号" value=""
+				<input type="text" id="phone2" name = "phone2" placeholder="请输入家长手机号" value=""
+				       autocomplete="off" class="layui-input" style="width: 120%">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">职业：</label>
+			<div class="layui-inline">
+				<input type="text" id="job2" name = "job2" placeholder="请输入家长职业" value=""
 				       autocomplete="off" class="layui-input" style="width: 120%">
 			</div>
 		</div>
 	</div>
 
 	<script type="text/html" id="barOption">
-		{{#  if(d.rectorstatus == '启用'){ }}
+		{{#  if(d.parentStatus == '启用'){ }}
 		<button type="button" class="layui-btn layui-btn-danger" lay-event="forbidden" >禁用</button>
 		{{#  } }}
-		{{#  if(d.rectorstatus == '禁用'){ }}
+		{{#  if(d.parentStatus == '禁用'){ }}
 		<button type="button" class="layui-btn layui-btn-danger" lay-event="open" >启用</button>
 		{{#  } }}
 		<button type="button" class="layui-btn " lay-event="restPwd" >重置密码</button>
@@ -133,6 +160,12 @@
 		<button type="button" class="layui-btn " lay-event="delete" >删除</button>
 	</script>
 </body>
+<script>
+	layui.use(['form', 'tree', 'table'], function () {
+		var form = layui.form;
+		form.render();
+	});
+</script>
 <script>
 	layui.use(['form', 'layer', 'jquery', 'layedit', 'laydate', 'element', 'tree', 'table'], function () {
 		var form = layui.form
@@ -145,25 +178,27 @@
 			, $ = layui.jquery;
 		var path = $("#path").val();
 		var tableIns = table.render({
-			elem: '#rector'
+			elem: '#parent'
 			, height: 350
-			, url: path + "/admin/rectorMgrInfo"//数据接口
+			, url: path + "/admin/parentMgrInfo"//数据接口
 			, page: true //开启分页
 			, limit: 5
 			, limits: [5, 10]
 			, cols: [[ //表头
-				{field: 'rectorid', title: '园长编号', align: 'center', width: 120, sort: true, fixed: 'left'}
-				, {field: 'rectorname', title: '园长名称', align: 'center', width: 90}
-				, {field: 'rectoradd', title: '园长住址', align: 'center', width: 160}
-				, {field: 'rectorphone', title: '手机号', align: 'center', width: 120}
+				{field: 'parentId', title: '家长编号', align: 'center', width: 120, sort: true, fixed: 'left'}
+				, {field: 'parentName', title: '家长名称', align: 'center', width: 90}
+				, {field: 'parentAdd', title: '住址', align: 'center', width: 160}
+				, {field: 'parentPhone', title: '手机号', align: 'center', width: 120}
+				, {field: 'parentJob', title: '职业', align: 'center', width: 80}
 				, {
-					field: 'rectorregtime', title: '入职时间', align: 'center', width: 180
-					, templet: "<div>{{layui.util.toDateString(d.rectorregtime,'yyyy-MM-dd HH:mm:ss')}}</div>"
+					field: 'parentRegTime', title: '注册时间', align: 'center', width: 180
+					, templet: "<div>{{layui.util.toDateString(d.parentRegTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
 				}
-				, {field: 'rectorstatus', title: '状态', align: 'center', width: 60}
+				, {field: 'parentSon', title: '亲子关系', align: 'center', width: 120}
+				, {field: 'parentStatus', title: '状态', align: 'center', width: 60}
 				, {fixed: 'right', title: '操作', align: 'center', width: 360, toolbar: '#barOption'}
 			]]
-			, id: 'rectorTable'
+			, id: 'parentTable'
 			, parseData: function (res) { //res 即为原始返回的数据
 				return {
 					"code": res.code, //解析接口状态
@@ -181,12 +216,12 @@
 				data = obj.data; //获得当前行数据
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if (layEvent === 'forbidden') {
-					layer.confirm("确定禁用园长账号？",{icon:3,title:'温馨提示'},function (index) {
+					layer.confirm("确定禁用家长账号？",{icon:3,title:'温馨提示'},function (index) {
 						layer.close(index);
 						$.ajax({
-							url: path + "/admin/forbiddenRector",
+							url: path + "/admin/forbiddenParent",
 							type: "post",
-							data: {"rectorid": data.rectorid},
+							data: {"parentId": data.parentId},
 							dataType: "text",
 							success: function (result) {
 								if(result == "success")
@@ -200,12 +235,12 @@
 						});
 					});
 				}else if(layEvent === 'open'){
-					layer.confirm("确定启用园长账号？",{icon:3,title:'温馨提示'},function (index) {
+					layer.confirm("确定启用家长账号？",{icon:3,title:'温馨提示'},function (index) {
 						layer.close(index);
 						$.ajax({
-							url: path + "/admin/openRector",
+							url: path + "/admin/openParent",
 							type: "post",
-							data: {"rectorid": data.rectorid},
+							data: {"parentId": data.parentId},
 							dataType: "text",
 							success: function (result) {
 								if(result == "success")
@@ -222,9 +257,9 @@
 					layer.confirm("确定要重置密码？",{icon:3,title:'温馨提示'},function (index) {
 						layer.close(index);
 						$.ajax({
-							url: path + "/admin/restRectorPwd",
+							url: path + "/admin/restParentPwd",
 							type: "post",
-							data: {"rectorid": data.rectorid},
+							data: {"parentId": data.parentId},
 							dataType: "text",
 							success: function (result) {
 								if(result == "success")
@@ -244,35 +279,37 @@
 							type: 1,
 							area: ['30%', '60%'],
 							content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-							title: '修改园长信息',
+							title: '修改家长信息',
 							btn: ['保存', '取消'],
 							offset: '100px',
 							btnAlign: 'c',
 							success:function(){
-								$("#name").val(data.rectorname);
-								$("#rectorAdd").val(data.rectoradd);
-								$("#phone").val(data.rectorphone);
+								$("#name").val(data.parentname);
+								$("#parentAdd").val(data.parentadd);
+								$("#phone").val(data.parentphone);
+								$("#job").val(data.parentjob);
 							},
 							btn1: function (index) {
 								var name = $("#name").val();
-								var add = $("#rectorAdd").val();
+								var add = $("#parentAdd").val();
 								var phone = $("#phone").val();
+								var job = $("#job").val();
 								if (name.length == 0) {
-									layer.alert("请输入园长名称", {icon: 2});
+									layer.alert("请输入家长名称", {icon: 2});
 								}  else {
 									$.ajax({
-										url: path + "/admin/updateRector",
+										url: path + "/admin/updateParent",
 										type: "post",
-										data: {"rectorid": data.rectorid,"rectorname":name,"rectoradd":add,"rectorphone":phone},
+										data: {"parentId": data.parentId,"parentName":name,"parentAdd":add,"parentPhone":phone,"parentJob":job},
 										dataType: "text",
 										success: function (result) {
 											if(result == "success")
 											{
 												layer.close(index);
-												layer.alert("修改园所信息成功！", {icon: 6});
+												layer.alert("修改家长信息成功！", {icon: 6});
 												tableIns.reload();
 											}else{
-												layer.alert("修改园所信失败！", {icon: 2});
+												layer.alert("修改家长信失败！", {icon: 2});
 											}
 										}
 									});
@@ -281,20 +318,20 @@
 						});
 					});
 				}else if(layEvent === 'delete'){
-					layer.confirm("确定要删除该园长信息？",{icon:3,title:'温馨提示'},function (index) {
+					layer.confirm("确定要删除该家长信息？",{icon:3,title:'温馨提示'},function (index) {
 						layer.close(index);
 						$.ajax({
-							url: path + "/admin/deleteRector",
+							url: path + "/admin/deleteParent",
 							type: "post",
-							data: {"rectorid": data.rectorid},
+							data: {"parentId": data.parentId},
 							dataType: "text",
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("园长信息删除成功！", {icon: 6});
+									layer.alert("家长信息删除成功！", {icon: 6});
 									tableIns.reload();
 								}else{
-									layer.alert("园长信息删除失败！", {icon: 2});
+									layer.alert("家长信息删除失败！", {icon: 2});
 								}
 							}
 						});
@@ -308,25 +345,27 @@
 				type: 1,
 				area: ['30%', '60%'],
 				content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
-				title: '新增园长',
+				title: '新增家长',
 				btn: ['保存', '取消'],
 				offset: '100px',
 				btnAlign: 'c',
 				btn1: function (index) {
 					var name = $("#name2").val();
-					var add = $("#rectorAdd2").val();
+					var add = $("#parentAdd2").val();
 					var phone = $("#phone2").val();
+					var job = $("#job2").val();
 					if (name.length == 0) {
-						layer.alert("请输入园长名称", {icon: 2});
+						layer.alert("请输入家长名称", {icon: 2});
 					}  else {
 						$.ajax({
-							url: path + '/admin/addRector',
+							url: path + '/admin/addParent',
 							async: true,
 							type: 'post',
 							data: {
-								"rectorname": name,
-								"rectoradd": add,
-							"rectorphone":phone},
+								"parentName": name,
+								"parentAdd": add,
+								"parentPhone":phone,
+								"parentJob":job},
 							datatype: 'text',
 							success: function (data) {
 								if (data == "success") {
@@ -356,10 +395,10 @@
 					layer.msg("输入合法",{icon:6});
 				}
 			});
-			$("#rectorAdd").blur(function () {
-				var add = $("#rectorAdd").val();
+			$("#parentAdd").blur(function () {
+				var add = $("#parentAdd").val();
 				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
-				if(!$('#rectorAdd').val().match(reg)||add == 0)
+				if(!$('#parentAdd').val().match(reg)||add == 0)
 				{
 					layer.msg("请输入至少2位中文字符", {icon: 2});
 				}else{
@@ -376,6 +415,16 @@
 					layer.msg("输入合法",{icon:6});
 				}
 			});
+			$("#job").blur(function () {
+				var job = $("#job").val();
+				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
+				if(!$('#job').val().match(reg)||job == 0)
+				{
+					layer.msg("请输入至少2位中文字符", {icon: 2});
+				}else{
+					layer.msg("输入合法",{icon:6});
+				}
+			});
 			$("#name2").blur(function () {
 				var name = $("#name2").val();
 				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
@@ -386,10 +435,10 @@
 					layer.msg("输入合法",{icon:6});
 				}
 			});
-			$("#rectorAdd2").blur(function () {
-				var add = $("#rectorAdd2").val();
+			$("#parentAdd2").blur(function () {
+				var add = $("#parentAdd2").val();
 				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
-				if(!$('#rectorAdd2').val().match(reg)||add == 0)
+				if(!$('#parentAdd2').val().match(reg)||add == 0)
 				{
 					layer.msg("请输入至少2位中文字符", {icon: 2});
 				}else{
@@ -405,12 +454,22 @@
 				}else{
 					layer.msg("输入合法",{icon:6});
 				}
-			})
+			});
+			$("#job2").blur(function () {
+				var job = $("#job2").val();
+				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
+				if(!$('#job2').val().match(reg)||job == 0)
+				{
+					layer.msg("请输入至少2位中文字符", {icon: 2});
+				}else{
+					layer.msg("输入合法",{icon:6});
+				}
+			});
 
 		});
 
 		//搜索功能的实现
-		$('.rectorTable .layui-btn').on('click', function () {
+		$('.parentTable .layui-btn').on('click', function () {
 			var type = $(this).data('type');
 			active[type] ? active[type].call(this) : '';
 		});
@@ -418,12 +477,13 @@
 		var $ = layui.$, active = {
 			reload: function () {
 				//执行重载
-				table.reload('rectorTable', {
+				table.reload('parentTable', {
 					where: {
 						time1: $('#time1').val()
 						, time2: $('#time2').val()
-						, rectorstatus: $('#sel').val()
-						, rectorname: $('#rectorName').val()
+						, parentStatus: $('#sel').val()
+						, parentName: $('#parentName').val()
+						, parentJob: $('#parentJob').val()
 					}
 					, page: {
 						curr: 1

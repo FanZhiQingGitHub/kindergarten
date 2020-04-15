@@ -48,6 +48,46 @@
             </foreach>
     </insert>
 
+    <insert id="addTeacher">
+        insert into
+        tbl_teacher(teachername, teacherpwd, teachersex, teacherage, teacherjob, teacheradd, teacherphone, teacherregtime, teacherstatus, rid)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.teachername},#{i.teacherpwd},#{i.teachersex},#{i.teacherage},#{i.teacherjob},#{i.teacheradd},#{i.teacherphone},#{i.teacherregtime},#{i.teacherstatus},#{i.rid})
+        </foreach>
+    </insert>
+    <insert id="addParent">
+        insert into
+            tbl_parent(parentname, parentpwd, parentsex, parentage, parentadd, parentphone, parentson, parentjob, parentregtime, parentstatus, rid)
+            values
+            <foreach collection="list" item="i" index="index" separator=",">
+                (#{i.parentName},#{i.parentPwd},#{i.parentSex},#{i.parentAge},#{i.parentJob},#{i.parentAdd},#{i.parentPhone},#{i.parentRegTime},#{i.parentStatus},#{i.rid})
+            </foreach>
+    </insert>
+    <insert id="addHealther">
+        insert into
+            tbl_healther(healthername, healtherpwd, healthersex, healtherage, healtheradd, healtherphone, healtherregtime, healtherstatus, rid)
+            values
+            <foreach collection="list" item="i" index="index" separator=",">
+                (#{i.healthername},#{i.healtherpwd},#{i.healthersex},#{i. healtherage},#{i.healtheradd},#{i.healtherphone},#{i.healtherregtime},#{i.healtherstatus},#{i.rid})
+            </foreach>
+    </insert>
+    <insert id="addSecurity">
+        insert into
+            tbl_security(securityname, securitypwd, securitysex, securityage, securityadd, securityphone, securityregtime, securitystatus, rid)
+            values
+            <foreach collection="list" item="i" index="index" separator=",">
+                (#{i.securityname},#{i.securitypwd},#{i.securitysex},#{i.securityage},#{i.securityadd},#{i.securityphone},#{i.securityregtime},#{i.securitystatus},#{i.rid})
+            </foreach>
+    </insert>
+    <insert id="addStudent">
+        insert into
+            tbl_student(studentname, studentpwd, studentsex, studentbrith, studentadd, studenttime, studentstatus, cid, pid, kid, rid)
+            values
+            <foreach collection="list" item="i" index="index" separator=",">
+                (#{i.studentname},#{i.studentpwd},#{i.studentsex},#{i. studentbrith},#{i.studentadd},#{i.studenttime},#{i.studentstatus},#{i.cid},#{i.kid},#{i.rid})
+            </foreach>
+    </insert>
 
     <delete id="deleteKinderInfo">
         delete from tbl_kinder where kinderid = #{kinderid}
@@ -70,6 +110,25 @@
     <delete id="deleteRector">
         delete from tbl_rector where rectorid = #{rectorid}
     </delete>
+    <delete id="deleteTeacher">
+        delete from tbl_teacher where teacherid = #{teacherid}
+    </delete>
+    <delete id="deleteParent">
+        delete from tbl_parent where parentid = #{parentId}
+    </delete>
+    <delete id="deleteHealther">
+        delete from tbl_healther where healtherid = #{healtherid}
+    </delete>
+    <delete id="deleteSecurity">
+        delete from tbl_security where securityid = #{securityid}
+    </delete>
+    <delete id="deleteStudent">
+        delete from tbl_student where studentid = #{studentid}
+    </delete>
+    <delete id="deleteSafetyVideoInfo">
+        delete from tbl_safetyvideo where safetyvideoid = #{safetyvideoid}
+    </delete>
+
 
     <!--    用户状态查询-->
     <select id="findAdminStatus" resultType="java.lang.String" parameterType="java.util.Map">
@@ -301,6 +360,214 @@
         where rectorid = #{rectorid}
     </update>
 
+<!--    教师-->
+    <update id="restTeacherPwd">
+        update tbl_teacher
+        <set>
+            <if test="teacherpwd != '' and teacherpwd != null">
+                teacherpwd = #{teacherpwd},
+            </if>
+        </set>
+        where teacherid = #{teacherid}
+    </update>
+    <update id="updateTeacher">
+        update tbl_teacher
+        <set>
+            <if test="teacherpwd != '' and teacherpwd != null">
+                teacherpwd = #{teacherpwd},
+            </if>
+            <if test="teacherphone != '' and teacherphone != null">
+                teacherphone = #{teacherphone},
+            </if>
+            <if test="teacheradd != '' and teacheradd != null">
+                teacheradd = #{teacheradd},
+            </if>
+            <if test="teacherstatus != '' and teacherstatus != null">
+                teacherstatus = #{teacherstatus},
+            </if>
+            <if test="teacherage != '' and teacherage != null">
+                teacherage = #{teacherage},
+            </if>
+            <if test="teacherjob != '' and teacherjob != null">
+                teacherjob = #{teacherjob},
+            </if>
+        </set>
+        where teacherid = #{teacherid}
+    </update>
+    <update id="updateTeacherStatus">
+        update tbl_teacher
+        <set>
+            <if test="teacherstatus != '' and teacherstatus != null">
+                teacherstatus = #{teacherstatus},
+            </if>
+        </set>
+        where teacherid = #{teacherid}
+    </update>
+
+<!--    家长管理-->
+    <update id="updateParent">
+        update tbl_parent
+        <set>
+            <if test="parentPwd != '' and parentPwd != null">
+                parentpwd = #{parentPwd},
+            </if>
+            <if test="parentPhone != '' and parentPhone != null">
+                praentphone = #{parentPhone},
+            </if>
+            <if test="parentAdd != '' and parentAdd != null">
+                parentadd = #{parentAdd},
+            </if>
+            <if test="parentStatus != '' and parentStatus != null">
+                parentstatus = #{parentStatus},
+            </if>
+            <if test="parentAge != '' and parentAge != null">
+                parentage = #{parentAge},
+            </if>
+            <if test="parentJob != '' and parentJob != null">
+                parentjob = #{parentJob},
+            </if>
+        </set>
+        where parentid = #{parentId}
+    </update>
+    <update id="updateParentStatus">
+        update tbl_parent
+        <set>
+            <if test="parentStatus != '' and parentStatus != null">
+                parentstatus = #{parentStatus},
+            </if>
+        </set>
+        where parentid = #{parentId}
+    </update>
+    <update id="restParentPwd">
+        update tbl_parent
+        <set>
+            <if test="parentPwd != '' and parentPwd != null">
+                parentpwd = #{parentPwd},
+            </if>
+        </set>
+        where parentid = #{parentId}
+    </update>
+
+    <!--    保健员管理-->
+    <update id="updateHealther">
+        update tbl_healther
+        <set>
+            <if test="healtherpwd != '' and healtherpwd != null">
+                healtherpwd = #{healtherpwd},
+            </if>
+            <if test="healtherphone != '' and healtherphone != null">
+                healtherphone = #{healtherphone},
+            </if>
+            <if test="healtheradd != '' and healtheradd != null">
+                healtheradd = #{healtheradd},
+            </if>
+            <if test="healtherstatus != '' and healtherstatus != null">
+                healtherstatus = #{healtherstatus},
+            </if>
+            <if test="healtherage != '' and healtherage != null">
+                healtherage = #{healtherage},
+            </if>
+        </set>
+        where healtherid = #{healtherid}
+    </update>
+    <update id="updateHealtherStatus">
+        update tbl_healther
+        <set>
+            <if test="healtherstatus != '' and healtherstatus != null">
+                healtherstatus = #{healtherstatus},
+            </if>
+        </set>
+        where healtherid = #{healtherid}
+    </update>
+    <update id="restHealtherPwd">
+        update tbl_healther
+        <set>
+            <if test="healtherpwd != '' and healtherpwd != null">
+                healtherpwd = #{healtherpwd},
+            </if>
+        </set>
+        where healtherid = #{healtherid}
+    </update>
+    <!--    安防员管理-->
+    <update id="updateSecurity">
+        update tbl_security
+        <set>
+            <if test="securitypwd != '' and securitypwd != null">
+                securitypwd = #{securitypwd},
+            </if>
+            <if test="securityphone != '' and securityphone != null">
+                securityphone = #{securityphone},
+            </if>
+            <if test="securityadd != '' and securityadd != null">
+                securityadd = #{securityadd},
+            </if>
+            <if test="securitystatus != '' and securitystatus != null">
+                securitystatus = #{securitystatus},
+            </if>
+            <if test="securityage != '' and securityage != null">
+                securityage = #{securityage},
+            </if>
+        </set>
+        where securityid = #{securityid}
+    </update>
+    <update id="updateSecurityStatus">
+        update tbl_security
+        <set>
+            <if test="securitystatus != '' and securitystatus != null">
+                securitystatus = #{securitystatus},
+            </if>
+        </set>
+        where securityid = #{securityid}
+    </update>
+    <update id="restSecurityPwd">
+        update tbl_security
+        <set>
+            <if test="securitypwd != '' and securitypwd != null">
+                securitypwd = #{securitypwd},
+            </if>
+        </set>
+        where securityid = #{securityid}
+    </update>
+
+    <!--    学生管理-->
+    <update id="updateStudent">
+        update tbl_student
+        <set>
+            <if test="studentpwd != '' and studentpwd != null">
+                studentpwd = #{studentpwd},
+            </if>
+            <if test="studentbirth != '' and studentbirth != null">
+                studentbirth = #{studentbirth},
+            </if>
+            <if test="studentadd != '' and studentdd != null">
+                studentadd = #{studentadd},
+            </if>
+            <if test="studentstatus != '' and studentstatus != null">
+                studentstatus = #{studentstatus},
+            </if>
+        </set>
+        where studentid = #{studentid}
+    </update>
+    <update id="updateStudentStatus">
+        update tbl_student
+        <set>
+            <if test="studentstatus != '' and studentstatus != null">
+                studentstatus = #{studentstatus},
+            </if>
+        </set>
+        where studentid = #{studentid}
+    </update>
+    <update id="restStudentPwd">
+        update tbl_student
+        <set>
+            <if test="studentpwd != '' and studentpwd != null">
+                studentpwd = #{studentpwd},
+            </if>
+        </set>
+        where studentid = #{studentid}
+    </update>
+
+
     <select id="findAllKinder" resultType="com.great.kindergarten.commons.entity.TblKinder">
         select * from tbl_kinder
         <where>
@@ -450,6 +717,7 @@
             </if>
         </where>
     </select>
+
     <select id="findAllRoleName" resultType="com.great.kindergarten.commons.entity.TblRole">
         select * from tbl_role
     </select>
@@ -462,6 +730,7 @@
     <select id="checkMenuName" resultType="java.lang.Integer">
         select menuid from tbl_menu where menuname = #{menuname}
     </select>
+
     <select id="findAllReadInfo" resultType="com.great.kindergarten.commons.entity.TblReadmag">
         select * from tbl_readmag
         <where>
@@ -537,6 +806,7 @@
         </where>
         order by platforminfotime asc
     </select>
+
     <select id="findAllRectorInfo" resultType="com.great.kindergarten.commons.entity.TblRector">
         select * from tbl_rector
         <where>
@@ -572,6 +842,331 @@
             </if>
         </where>
         order by rectorregtime desc
+    </select>
+
+    <resultMap id="TeacherMap" type="com.great.kindergarten.commons.entity.TblTeacher">
+        <result column="teacherid" property="teacherid"></result>
+        <result column="teachername" property="teachername"></result>
+        <result column="teacherpwd" property="teacherpwd"></result>
+        <result column="teachersex" property="teachersex"></result>
+        <result column="teacherage" property="teacherage"></result>
+        <result column="teacheradd" property="teacheradd"></result>
+        <result column="teacherphone" property="teacherphone"></result>
+        <result column="teacherjob" property="teacherjob"></result>
+        <result column="teacherregtime" property="teacherregtime"></result>
+        <result column="teacherstatus" property="teacherstatus"></result>
+        <result column="classid" property="classid"></result>
+        <result column="classname" property="classname"></result>
+        <result column="cid" property="cid"></result>
+        <association property="tblClass" javaType="com.great.kindergarten.commons.entity.TblClass">
+            <id property="classid" column="classid"/>
+            <result property="classid" column="classid"/>
+            <result property="classname" column="classname"/>
+        </association>
+    </resultMap>
+
+    <!--    查找教师信息表-->
+    <select id="findAllTeacherInfo" resultMap="TeacherMap" parameterType="com.great.kindergarten.commons.entity.TblTeacher">
+        select c.classid,c.classname,e.*
+        from tbl_teacher e,tbl_class c
+        <where>
+            e.cid = c.classid
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(teacherregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(teacherregtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" teachername != '' and teachername != null ">
+                and teachername like concat('%',#{teachername},'%')
+            </if>
+            <if test=" teacherstatus != '' and teacherstatus != null and teacherstatus != '请选择'">
+                and teacherstatus = #{teacherstatus}
+            </if>
+            <if test=" teacherjob != '' and teacherjob != null and teacherjob != '请选择'">
+                and teacherjob = #{teacherjob}
+            </if>
+        </where>
+        order by e.teacherregtime desc
+    </select>
+
+    <select id="findTeacherInfoCount" resultType="java.lang.Integer">
+        select count(*)
+        from tbl_teacher e,tbl_class c
+        <where>
+            e.cid = c.classid
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(teacherregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(teacherregtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" teachername != '' and teachername != null ">
+                and teachername like concat('%',#{teachername},'%')
+            </if>
+            <if test=" teacherstatus != '' and teacherstatus != null and teacherstatus != '请选择'">
+                and teacherstatus = #{teacherstatus}
+            </if>
+            <if test=" teacherjob != '' and teacherjob != null and teacherjob != '请选择'">
+                and teacherjob = #{teacherjob}
+            </if>
+        </where>
+        order by e.teacherregtime desc
+    </select>
+    <select id="findAllJob" resultType="java.lang.String">
+        select teacherjob from tbl_teacher;
+    </select>
+
+<!--    家长管理-->
+    <select id="findAllParentInfo" resultType="com.great.kindergarten.commons.entity.TblParent">
+        select * from tbl_parent
+        <where>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(parentRegTime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(parentRegTime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" parentName != '' and parentName != null ">
+                and parentName like concat('%',#{parentName},'%')
+            </if>
+            <if test=" parentStatus != '' and parentStatus != null and parentStatus != '请选择'">
+                and parentStatus = #{parentStatus}
+            </if>
+            <if test=" parentJob != '' and parentJob != null and parentJob != '请选择'">
+                and parentjob = #{parentJob}
+            </if>
+        </where>
+        order by parentRegTime desc
+    </select>
+    <select id="findParentInfoCount" resultType="java.lang.Integer">
+        select count(*) from tbl_parent
+        <where>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(parentRegTime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(parentRegTime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" parentName != '' and parentName != null ">
+                and parentName like concat('%',#{parentName},'%')
+            </if>
+            <if test=" parentStatus != '' and parentStatus != null and parentStatus != '请选择'">
+                and parentStatus = #{parentStatus}
+            </if>
+        </where>
+        order by parentRegTime desc
+    </select>
+    <select id="findParentJob" resultType="java.lang.String">
+        select parentjob from tbl_parent;
+    </select>
+
+    <!--    保健员管理-->
+    <select id="findAllHealtherInfo" resultType="com.great.kindergarten.commons.entity.TblHealther">
+        select * from tbl_healther
+        <where>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(healtherregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(healtherregtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" healthername != '' and healthername != null ">
+                and healthername like concat('%',#{healthername},'%')
+            </if>
+            <if test=" healtherstatus != '' and healtherstatus != null and healtherstatus != '请选择'">
+                and phealtherstatus = #{healtherstatus}
+            </if>
+        </where>
+        order by healtherregtime desc
+    </select>
+    <select id="findHealtherInfoCount" resultType="java.lang.Integer">
+        select count(*) from tbl_healther
+        <where>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(healtherregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(healtherregtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" healthername != '' and healthername != null ">
+                and healthername like concat('%',#{healthername},'%')
+            </if>
+            <if test=" healtherstatus != '' and healtherstatus != null and healtherstatus != '请选择'">
+                and healtherstatus = #{healtherstatus}
+            </if>
+        </where>
+        order by healtherregtime desc
+    </select>
+
+    <!--    安防员管理-->
+    <select id="findAllSecurityInfo" resultType="com.great.kindergarten.commons.entity.TblSecurity">
+        select * from tbl_security
+        <where>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(securityregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(securityregtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" securityname != '' and securityname != null ">
+                and securityname like concat('%',#{securityname},'%')
+            </if>
+            <if test=" securitystatus != '' and securitystatus != null and securitystatus != '请选择'">
+                and securitystatus = #{securitystatus}
+            </if>
+        </where>
+        order by securityregtime desc
+    </select>
+    <select id="findSecurityInfoCount" resultType="java.lang.Integer">
+        select count(*) from tbl_security
+        <where>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(securityregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(securityregtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" securityname != '' and securityname != null ">
+                and securityname like concat('%',#{securityname},'%')
+            </if>
+            <if test=" securitystatus != '' and securitystatus != null and securitystatus != '请选择'">
+                and securitystatus = #{securitystatus}
+            </if>
+        </where>
+        order by securityregtime desc
+    </select>
+
+
+    <resultMap id="StudentMap" type="com.great.kindergarten.commons.entity.TblStudent">
+        <result column="studentid" property="studentid"></result>
+        <result column="studentname" property="studentname"></result>
+        <result column="studentpwd" property="studentpwd"></result>
+        <result column="studentsex" property="studentsex"></result>
+        <result column="studentadd" property="studentadd"></result>
+        <result column="studentbirth" property="studentbrith"></result>
+        <result column="studenttime" property="studenttime"></result>
+        <result column="studentstatus" property="studentstatus"></result>
+        <result column="classid" property="classid"></result>
+        <result column="classname" property="classname"></result>
+        <result column="kinderid" property="kinderid"></result>
+        <result column="kindername" property="kindername"></result>
+        <result column="parentId" property="parentId"></result>
+        <result column="parentName" property="parentName"></result>
+        <result column="kid" property="kid"></result>
+        <result column="pid" property="pid"></result>
+        <result column="cid" property="cid"></result>
+        <association property="tblClass" javaType="com.great.kindergarten.commons.entity.TblClass">
+            <id property="classid" column="classid"/>
+            <result property="classid" column="classid"/>
+            <result property="classname" column="classname"/>
+        </association>
+        <association property="tblKinder" javaType="com.great.kindergarten.commons.entity.TblKinder">
+            <id property="kinderid" column="kinderid"/>
+            <result property="kinderid" column="kinderid"/>
+            <result property="kindername" column="kindername"/>
+        </association>
+        <association property="tblParent" javaType="com.great.kindergarten.commons.entity.TblParent">
+            <id property="parentId" column="parentId"/>
+            <result property="parentId" column="parentId"/>
+            <result property="parentName" column="parentName"/>
+        </association>
+    </resultMap>
+
+    <!--    查找学生信息表-->
+    <select id="findAllStudentInfo" resultMap="StudentMap" parameterType="com.great.kindergarten.commons.entity.TblStudent">
+        select c.classid,c.classname,k.kinderid,k.kindername,p.parentId,p.parentName,s.*
+        from tbl_student s,tbl_kinder k,tbl_class c,tbl_parent p
+        <where>
+            s.cid = c.classid and s.kid = k.kinderid and s.pid = p.parentId
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(studenttime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(studenttime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" studentname != '' and studentname != null ">
+                and studentname like concat('%',#{studentname},'%')
+            </if>
+            <if test=" studentstatus != '' and studentstatus != null and studentstatus != '请选择'">
+                and studentstatus = #{studentstatus}
+            </if>
+        </where>
+        order by s.studenttime desc
+    </select>
+
+    <select id="findStudentInfoCount" resultType="java.lang.Integer">
+        select count(*)
+        from tbl_student s,tbl_kinder k,tbl_class c,tbl_parent p
+        <where>
+            s.cid = c.classid and s.kid = k.kinderid and s.pid = p.parentId
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(studenttime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(studenttime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" studentname != '' and studentname != null ">
+                and studentname like concat('%',#{studentname},'%')
+            </if>
+            <if test=" studentstatus != '' and studentstatus != null and studentstatus != '请选择'">
+                and studentstatus = #{studentstatus}
+            </if>
+        </where>
+        order by s.studenttime desc
+    </select>
+
+<!--    安全教育管理-->
+    <resultMap id="VideoMap" type="com.great.kindergarten.commons.entity.TblSafetyvideo">
+        <result column="safetyvideoid" property="safetyvideoid"></result>
+        <result column="safetyvideoname" property="safetyvideoname"></result>
+        <result column="safetyvideotime" property="safetyvideotime"></result>
+        <result column="videoname" property="videoname"></result>
+        <result column="videoadd" property="videoadd"></result>
+        <result column="monitorid" property="monitorid"></result>
+        <result column="monitorname" property="monitorname"></result>
+        <result column="mid" property="mid"></result>
+        <association property="tblMonitor" javaType="com.great.kindergarten.commons.entity.TblMonitor">
+            <id property="monitorid" column="monitorid"/>
+            <result property="monitorid" column="monitorid"/>
+            <result property="monitorname" column="monitorname"/>
+        </association>
+    </resultMap>
+
+    <select id="findAllSafetyVideoInfo" resultType="com.great.kindergarten.commons.entity.TblSafetyvideo" parameterType="com.great.kindergarten.commons.entity.TblSafetyvideo">
+        select m.monitorid,m.monitorname,s.*
+            from tbl_safetyvideo s,tbl_monitor m
+            <where>
+                s.mid = m.monitorid
+                <if test=" time1 != '' and time1 != null">
+                    <![CDATA[   and DATE_FORMAT(safetyvideotime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+                </if>
+                <if test=" time2 != '' and time2 != null">
+                    <![CDATA[   and DATE_FORMAT(safetyvideotime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+                </if>
+                <if test=" safetyvideoname != '' and safetyvideoname != null ">
+                    and safetyvideoname like concat('%',#{safetyvideoname},'%')
+                </if>
+            </where>
+            order by s.safetyvideotime asc
+    </select>
+
+    <select id="findSafetyVideoInfoCount" resultType="java.lang.Integer">
+        select count(*)
+            from tbl_safetyvideo s,tbl_monitor m
+            <where>
+                s.mid = m.monitorid
+                <if test=" time1 != '' and time1 != null">
+                    <![CDATA[   and DATE_FORMAT(safetyvideotime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+                </if>
+                <if test=" time2 != '' and time2 != null">
+                    <![CDATA[   and DATE_FORMAT(safetyvideotime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+                </if>
+                <if test=" safetyvideoname != '' and safetyvideoname != null ">
+                    and safetyvideoname like concat('%',#{safetyvideoname},'%')
+                </if>
+            </where>
+            order by s.safetyvideotime asc
     </select>
 
 
