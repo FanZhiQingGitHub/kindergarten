@@ -167,7 +167,7 @@
 <script>
 
 	layui.use(['carousel', 'jquery', 'element','layer'], function () {
-		var carousel = layui.carousel, $ = layui.$;
+		var carousel = layui.carousel, $ = layui.jquery;
 		var element = layui.element;
 		var layer = layui.layer;
 		var path = $("#path").val();

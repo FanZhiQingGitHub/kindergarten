@@ -132,7 +132,7 @@
 			}
 			,done: function(res, index, upload){
 				if(res.code==0){ //上传成功
-					alert("上传成功"+res.data.src);
+					alert("上传成功");
 					var tr = demoListView.find('tr#upload-'+ index)
 						,tds = tr.children();
 					tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');

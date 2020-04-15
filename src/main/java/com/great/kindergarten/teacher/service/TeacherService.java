@@ -105,5 +105,10 @@ public class TeacherService {
     {
         return teacherMapper.findSafetyTable(dataHashMap);
     }
+    //新增上传视频
+    @Transactional
+    public Boolean uploadVideo(TblSafetyvideo tblSafetyvideo){
+	    return teacherMapper.uploadVideo(tblSafetyvideo);
+    }
 
 }

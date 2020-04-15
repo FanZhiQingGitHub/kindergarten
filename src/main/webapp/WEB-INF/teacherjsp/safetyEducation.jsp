@@ -32,10 +32,8 @@
 
 <div class="demoTable" style="padding: 15px">
 	<div class="layui-form-item" style="display: inline-block;width: 10%;">
-		<button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal addSafetyVideo" style="margin-top: 48%">
-			新增
-		</button>
-		<button type="button" class="layui-btn" id="testListAction">开始上传</button>
+		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="addSafetyVideo">新增</button>
+
 	</div>
 
 
@@ -70,13 +68,30 @@
 			,id: 'demoTable'
 			,cols: [[ //表头
 				{field: 'safetyvideoid', title: '视频编号', width:150, sort: true, fixed: 'left'}
-				,{field: 'safetyvideoname', title: '视频名称', width:150}
+				,{field: 'safetyvideoname', title: '视频名称', width:200}
 				,{field: 'safetyvideotime', title: '布置时间', width:200, templet:" <div>{{layui.util.toDateString(d.safetyvideotime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
 				,{field: 'safetyfinishtime', title: '完成时间', width:200,templet:" <div>{{layui.util.toDateString(d.safetyfinishtime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
 				,{field: '', title: '操作', toolbar: '#barDemo' , width:200}
 			]]
 		});
 
+        // 新增安全教育视频
+		$("#addSafetyVideo").click(function () {
+			layer.open({
+				type: 2,
+				area: ['70%', '80%'],
+				offset: ['10%', '3%'],
+				title:"智慧幼儿园-新增安全教育视频",
+				btn1: function (index, layero) {
+					//layer.getChildFrame("form", index)获取iframe的表单
+					//serializeArray jquery方法，将表单对象序列化为数组
+					layer.close(index);
+				},
+				content: path + '/teacher/toUrl/addSafetyVideo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+				, success: function (layero, index) {
+				}
+			});
+		});
 
 
 

@@ -56,7 +56,6 @@ public class ParentController {
         //取得是谁要执行查询操作
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
 
-
 //        Integer cid = Integer.valueOf(request.getParameter("cid"));
         //设置查找人id
         searchCondition.setParentId(3);

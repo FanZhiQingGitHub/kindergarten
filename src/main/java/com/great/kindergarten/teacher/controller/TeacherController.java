@@ -4,6 +4,7 @@ import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.teacher.service.TeacherService;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
+import org.springframework.boot.system.ApplicationHome;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -38,6 +41,8 @@ public class TeacherController {
     private CourseTable courseTable;
     @Resource
     private TblWorkrelease tblWorkrelease;
+	@Resource
+	private TblSafetyvideo tblSafetyvideo;
 
     @RequestMapping("/main")
     public String showMainView(){
@@ -378,4 +383,95 @@ public class TeacherController {
 
         return null;
     }
-	}
+    //上传视频
+
+    @RequestMapping(value="/uploadVideo")
+    @ResponseBody
+    public Map<String, Object> uploadVideo(@RequestParam("file") MultipartFile file,String classname, HttpServletRequest request,HttpServletResponse response)
+    {
+	    System.out.println("上传视频进来");
+	    String startDate1=request.getParameter("startDate");
+	    String endDate1=request.getParameter("endDate");
+//
+	    System.out.println("startDate="+startDate1);
+	    System.out.println("endDate="+endDate1);
+//	    String时间格式转化为date
+	    //创建DateFormat的对象，在构造器中传入跟要转换的String字符串相同格式的
+//	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    Date startDate = null;
+	    Date endDate=null;
+	    try {
+		    //转换的过程中可能会抛出ParseException，必须抛出或者捕获处理
+		    startDate = dateFormat.parse(startDate1);
+		    endDate = dateFormat.parse(endDate1);
+
+		    System.out.println("转换后的startDate类型=" + startDate);
+		    System.out.println("转换后的endDate类型=" + endDate);
+		    tblSafetyvideo.setSafetyvideotime(startDate);
+		    tblSafetyvideo.setSafetyfinishtime(endDate);
+		    System.out.println("tblSafetyvideo1="+tblSafetyvideo);
+	    } catch (ParseException e) {}
+
+
+
+
+	    try
+	    {
+//		    String path1  = request.getContextPath();
+		    String path1 = request.getRealPath("/") ;
+		    System.out.println("path1="+path1);
+		    //是得到上传时的文件名。
+		    String filename = file.getOriginalFilename().toString();
+		    System.out.println("filename="+filename);
+//		    //获取当前时间
+//		    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+//		    String filetime = df.format(new Date());
+		    //通过切割文件名，拿到扩展名即 .docx
+		    String[] arr = filename.split("\\.");
+		    System.out.println("arr="+arr);
+		    String filetype = "." + arr[arr.length - 1];
+		    System.out.println("filetype="+filetype);
+		    Long size = file.getSize();
+		    Long maxsize = 107374182400L;
+		    if(size > maxsize) {
+			    //            ResponseUtils.outHtml(response, "文件过大");
+		    }else {
+			    //文件存放位置
+//			  path1=path1+"Videos/";
+			    String path=path1+filename;
+			    System.out.println("path="+path);
+//			    上传文件
+			    file.transferTo(new File(path));
+			    //添加数据到数据表
+			    tblSafetyvideo.setSafetyvideoname(filename);
+			    tblSafetyvideo.setVideoadd("Videos/"+filename);
+
+			    System.out.println("tblSafetyvideo="+tblSafetyvideo);
+			    Boolean flag = teacherService.uploadVideo(tblSafetyvideo);
+			    System.out.println("上传成功="+flag);
+			    if(flag){
+				    //upload要求返回的数据格式
+				    Map<String, Object> uploadData = new HashMap<String, Object>();
+
+				    uploadData.put("code", "0");
+				    uploadData.put("msg", "");
+				    //将文件路径返回
+				    uploadData.put("data", "{}");
+				    System.out.println(uploadData);
+				    ResponseUtils.outJson(response,uploadData);
+				    //                        return uploadData;
+			    }
+		    }
+
+	    } catch (IOException e)
+	    {
+		    e.printStackTrace();
+	    }
+
+
+	    return null;
+
+    }
+
+    }

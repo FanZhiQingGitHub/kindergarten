@@ -114,7 +114,7 @@
     <select id="findClassidByName" resultType="java.lang.Integer" parameterType="TblClass">
 			select classid from tbl_class where classname=#{classname};
 	</select>
-    <!--    文件上传记录-->
+    <!--    作业文件上传记录-->
     <insert id="addFileInfo" parameterType="TblWorkrelease">
         insert into tbl_workrelease
         (workreleasedetail,worklocation,workreleasetime,cid)
@@ -145,4 +145,10 @@
     <select id="findSafetyTable" resultMap="safetyMap" parameterType="HashMap">
         select * from tbl_safetyvideo limit #{pageInt},#{limitInt}
     </select>
+<!--    新增安全教育视频-->
+    <insert id="uploadVideo" parameterType="TblSafetyvideo">
+        insert into tbl_safetyvideo
+        (safetyvideoname,safetyvideotime,safetyfinishtime,videoadd)
+        values (#{safetyvideoname},#{safetyvideotime},#{safetyfinishtime},#{videoadd});
+    </insert>
 </mapper>

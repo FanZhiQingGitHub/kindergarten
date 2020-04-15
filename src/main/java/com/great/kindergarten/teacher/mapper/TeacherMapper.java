@@ -2,6 +2,7 @@ package com.great.kindergarten.teacher.mapper;
 
 import com.great.kindergarten.commons.entity.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,5 +33,6 @@ public interface TeacherMapper {
 	public Integer findSafetyCount();
 	//查看视频表
 	public List<TblSafetyvideo> findSafetyTable(HashMap<String,Object> dataHashMap);
-
+	//新增上传视频
+	public Boolean uploadVideo(TblSafetyvideo tblSafetyvideo);
 }

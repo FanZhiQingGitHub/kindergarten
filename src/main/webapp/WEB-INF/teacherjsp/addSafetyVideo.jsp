@@ -1,0 +1,183 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: MI
+  Date: 2020/4/14
+  Time: 22:49
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+	<title>新增安全教育视频</title>
+	<%String path = request.getContextPath(); %>
+	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
+	<script src=<%=path + "/layui/layui.js"%>></script>
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/mainres/css/main.css">
+
+</head>
+<body>
+<input type="hidden" id="path" value="<%=path%>">
+<input type="hidden" id="classid" value="<%=path%>">
+<h1 style="margin-left: 17%;font-size: 40px;color: coral">新增安全教育视频</h1>
+<div class="layui-upload">
+
+	<%--选择视频文件--%>
+	<div class="layui-form-item">
+		<button type="button" class="layui-btn layui-btn-normal" id="testList">选择视频文件</button>
+		<label class="layui-form-label">布置时间：</label>
+		<div class="layui-input-inline">
+
+			<input type="text" class="layui-input" id="startDate" name="startDate" placeholder="请选择起始日期">
+
+		</div>
+		<label class="layui-form-label">完成时间：</label>
+		<div class="layui-input-inline" style="text-align: left;">
+			<input type="text" class="layui-input" id="endDate" name="endDate" placeholder="请选择结束日期">
+<%--			<input type="text" class="layui-input" id="endDate" name="${endDate}" placeholder="请选择结束日期">--%>
+		</div>
+	</div>
+<%--		<div class="layui-form-item" style="display: inline-block;width: 24%;">--%>
+<%--			<label class="layui-form-label">布置时间：</label>--%>
+<%--			<div class="layui-input-inline">--%>
+<%--				<input type="text" class="layui-input" id="startDate" name="${startDate}" placeholder="请选择起始日期">--%>
+<%--			</div>--%>
+<%--		</div>--%>
+<%--		<div class="layui-form-item" style="display: inline-block;width: 24%;">--%>
+<%--			<label class="layui-form-label">完成时间：</label>--%>
+<%--			<div class="layui-input-inline" style="text-align: left;">--%>
+<%--				<input type="text" class="layui-input" id="endDate" name="${endDate}" placeholder="请选择结束日期">--%>
+<%--			</div>--%>
+<%--		</div>--%>
+
+
+	<div class="layui-upload-list">
+		<table class="layui-table">
+			<thead>
+			<tr>
+				<th>视频名称</th>
+				<th>大小 </th>
+				<th>状态 </th>
+				<th>操作</th>
+			</tr></thead>
+			<tbody id="demoList"></tbody>
+		</table>
+	</div>
+	<button type="button" class="layui-btn" id="testListAction">开始上传</button>
+</div>
+</body>
+<script>
+	layui.use(['upload','form','laydate'], function(){
+		var laydate = layui.laydate;
+		var $ = layui.jquery
+			,upload = layui.upload
+
+		// var startDate=$("#startDate").val();
+		// var	endDate=$("#endDate").val()
+
+			,path = $("#path").val();
+
+
+
+
+
+		laydate.render({
+			elem: '#startDate' //指定元素
+			,type: 'datetime'
+			, theme: '#009688'
+			// , showBottom: false
+			// , format: 'yyyy-MM-dd HH:mm:ss'
+
+			, done: function (value, date, endDate) {
+				var startTime = new Date(value).getTime();
+				var endTime = new Date($('#endDate').val()).getTime();
+				if (endTime < startTime) {
+					layer.msg('结束时间不能小于开始时间');
+				}
+			}
+		});
+		laydate.render({
+			elem: '#endDate' //指定元素
+			// ,type: 'datetime'
+			, theme: '#009688'
+			, showBottom: false
+			, format: 'yyyy-MM-dd HH:mm:ss'
+
+			, done: function (value, date, startDate) {
+				var startTime = new Date($('#startDate').val()).getTime();
+				var endTime = new Date(value).getTime();
+				if (endTime < startTime) {
+					layer.msg('结束时间不能小于开始时间');
+				}
+			}
+		});
+
+		//多文件列表示例
+		var demoListView = $('#demoList')
+			,uploadListIns = upload.render({
+			elem: '#testList'//指定选择文件的容器
+			,url:path+ '/teacher/uploadVideo' //改成您自己的上传接口
+			,accept: 'video' //可上传视频文件
+			,multiple: true //是否允许多文件上传
+			,auto: false    //不自动上传
+			,bindAction: '#testListAction'  //指定上传的容器
+			// 上传前的回调
+			,before: function () {
+					this.data = {
+						startDate: $('input[name="startDate"]').val(),
+						endDate: $('input[name="endDate"]').val()
+					}
+				}
+			//选择文件后的回调
+			,choose: function(obj){
+				var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+				//读取本地文件
+				obj.preview(function(index, file, result){
+					var tr = $(['<tr id="upload-'+ index +'">'
+						,'<td>'+ file.name +'</td>'
+						,'<td>'+ (file.size/1024).toFixed(1) +'kb</td>'
+						,'<td>等待上传</td>'
+						,'<td>'
+						,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+						,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+						,'</td>'
+						,'</tr>'].join(''));
+
+					//单个重传
+					tr.find('.demo-reload').on('click', function(){
+						obj.upload(index, file);
+					});
+
+					//删除
+					tr.find('.demo-delete').on('click', function(){
+						delete files[index]; //删除对应的文件
+						tr.remove();
+						uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+					});
+
+					demoListView.append(tr);
+				});
+			}
+			//操作成功的回调
+			,done: function(res, index, upload){
+				if(res.code==0){ //上传成功
+					alert("上传成功");//+res.data.src
+					var tr = demoListView.find('tr#upload-'+ index)
+						,tds = tr.children();
+					tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+					tds.eq(3).html(''); //清空操作
+					return delete this.files[index]; //删除文件队列已经上传成功的文件
+				}
+				this.error(index, upload);
+			}
+			,error: function(index, upload){
+				var tr = demoListView.find('tr#upload-'+ index)
+					,tds = tr.children();
+				tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+				tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+			}
+		});
+
+	});
+</script>
+
+</html>
