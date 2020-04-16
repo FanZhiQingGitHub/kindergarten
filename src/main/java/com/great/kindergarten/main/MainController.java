@@ -1,9 +1,12 @@
 package com.great.kindergarten.main;
 
+import com.great.kindergarten.commons.entity.TblKinder;
+import com.great.kindergarten.util.MD5Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import com.great.kindergarten.util.ResponseUtils;
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,10 +20,42 @@ import java.util.Random;
 public class MainController {
 
     private String maincode;
+    private String kindername;
+
+    @Resource
+    private MainService mainService;
 
     @RequestMapping("/Login")
     public String Login(){
         return "mainjsp/Login";
+    }
+
+    @RequestMapping("/mainLogin")
+    public void mainLogin(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response) {
+        kindername = tblKinder.getKindername();
+        String kinderpwd = MD5Utils.md5(tblKinder.getKinderpwd());
+        String code = tblKinder.getKindercode();
+        Boolean confirm = code.equalsIgnoreCase(maincode);
+        if (confirm) {
+            TblKinder tblKinder1 = mainService.findKinderStatus(kindername);
+            if(tblKinder1.getKinderstatus().equals("通过")){
+                if (tblKinder1.getKindercode().equals("启用")) {
+                    tblKinder = mainService.kinderLogin(kindername, kinderpwd);
+                    if (null != tblKinder) {
+                        request.getSession().setAttribute("kindername", kindername);
+                        ResponseUtils.outHtml(response, "success");
+                    }else {
+                        ResponseUtils.outHtml(response, "error");
+                    }
+                } else {
+                    ResponseUtils.outHtml(response, "notmen");
+                }
+            }else {
+                ResponseUtils.outHtml(response, "notpass");
+            }
+        } else {
+            ResponseUtils.outHtml(response, "codeerror");
+        }
     }
 
     @RequestMapping("/LoginCode")

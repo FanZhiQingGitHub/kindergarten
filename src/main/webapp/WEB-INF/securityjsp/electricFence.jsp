@@ -65,7 +65,7 @@
         <div class="layui-inline">
             <label class="layui-form-label" style="font-size: 16px">幼儿园名称</label>
             <div class="layui-input-inline">
-                <input class="layui-input" id="kindername" value="${kindername}厦门市传一信息科技有限公司" style="width: 300px"
+                <input class="layui-input" id="kindername" value="${kindername}" style="width: 300px"
                        readonly>
             </div>
         </div>
@@ -80,7 +80,11 @@
         <div class="layui-inline" style="margin-left: 5%">
             <div class="layui-input-inline">
                 <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal alarmLogInfo"
-                        style="width: 200px">报警信息
+                        style="width: 150px">报警信息
+                </button>
+
+                <button type="button" class="layui-btn layui-btn-radius layui-btn-warm addElectricFence"
+                        style="width: 150px" id="bu">绘制电子围栏
                 </button>
             </div>
         </div>
@@ -117,7 +121,6 @@
         var path = $("#path").val();
 
 
-
         function timeTimer() {
             var d = new Date();//实例化日期对象
             var a = d.toLocaleTimeString();//获取日期
@@ -128,35 +131,6 @@
             timeTimer()
         }, 1000);//时间显示
 
-
-        //电子围栏---------------------------------------------------------------------------------------------------------
-
-        // 创建Map
-        var map = new BMap.Map("map");
-        var dafaultpoint;//给定默认的显示地点经纬度
-        var dafpoint = [];
-
-
-        // map.addEventListener("click", function (e) {
-        //     // console.log(e.point.lng + "," + e.point.lat);
-        //     lngnum = e.point.lng;
-        //     latnum = e.point.lat;
-            // alert(lngnum,latnum);
-            // drawpoint = new BMap.Point(lngnum, latnum);
-            // point2s.push(drawpoint);
-            // addMarker(point2s);
-            // point2s.shift();
-            // dafpoint.shift();
-        // });
-        //创建一个圆
-
-        //地图上画圆
-        var circle = new BMap.Circle(new BMap.Point(118.1932, 24.4886), 35, {
-            fillColor: "white",
-            strokeWeight: 3,
-            fillOpacity: 0.5,
-            strokeOpacity: 0.5
-        });
 
         //1、查出宝宝名称下拉框的值
         $.ajax({
@@ -182,9 +156,60 @@
             }
         })
 
+
+        //电子围栏---------------------------------------------------------------------------------------------------------
+        // 百度地图API功能
+        var map = new BMap.Map('map');
+        var poi = new BMap.Point(118.1932, 24.4886);
+        map.centerAndZoom(poi, 20);
+        map.addControl(new BMap.NavigationControl());               // 添加平移缩放控件
+        map.addControl(new BMap.ScaleControl());                    // 添加比例尺控件
+        map.addControl(new BMap.OverviewMapControl());              //添加缩略地图控件
+        map.enableScrollWheelZoom();                            //启用滚轮放大缩小
+        map.addControl(new BMap.MapTypeControl());          //添加地图类型控件
+
+        //从数据库获取到绘制得到的区域坐标
+        var polArry = [];
+        var polygon;
+        $.ajax({
+            url: path + '/security/findCoordinate',
+            async: true,
+            type: 'post',
+            datatype: 'text',
+            success: function (msg) {
+                if (msg == "error") {
+                    layer.alert("您好，电子围栏不存在，请先绘制该幼儿园的电子围栏！", {icon: 2});
+                } else {
+                    var info = JSON.parse(msg);
+                    var styleOptions = {
+                        strokeColor: "deepskyblue",    //边线颜色。
+                        fillColor: "lightcyan",      //填充颜色。当参数为空时，圆形将没有填充效果。
+                        strokeWeight: 3,       //边线的宽度，以像素为单位。
+                        strokeOpacity: 0.8,	   //边线透明度，取值范围0 - 1。
+                        fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
+                        strokeStyle: 'solid' //边线的样式，solid或dashed。
+                    }
+
+                    for (var i in info) {
+                        var p = new BMap.Point(info[i].lng, info[i].lat);
+                        polArry.push(p);
+                    }
+                    polygon = new BMap.Polygon(polArry, styleOptions);
+                    map.addOverlay(polygon);
+                    $("#bu").attr("disabled", true);
+                    $("#bu").css("background-color", "whitesmoke");
+                }
+            }, error: function (msg) {
+                layer.alert("网络繁忙！", {icon: 2});
+            }
+        });
+
+
+        map.addEventListener("click", function (e) {
+            console.log(e.point.lng + "," + e.point.lat);
+        });
+
         //2.查出给每个孩子默认的显示位置（即学校位置）
-        var lnginfo;
-        var latinfo;
         var studentid;
         var studentname;
         var studentbrith;
@@ -193,162 +218,76 @@
         $(function () {
             $("#stuname").change(function () {
                 var path = $("#path").val();
-                studentInfo = $("#stuname option:selected").val();
+                var studentInfo = $("#stuname option:selected").val();
                 studentid = studentInfo.split("&")[0];
                 studentname = studentInfo.split("&")[1];
                 studentbrith = studentInfo.split("&")[2];
                 $.ajax({
-                    url: path + '/security/findStuLngLatInfo',
+                    url: path + '/security/findStuTrack',
                     async: true,
                     type: 'post',
                     data: {"studentid": studentid, "studentname": studentname, "studentbrith": studentbrith},
                     datatype: 'text',
                     success: function (data) {
                         if (data == "error") {
-                            // deletePoint();
-                            // new BMap.Circle(new BMap.Point(118.1932, 24.4886), 35, {
-                            //     fillColor: "white",
-                            //     strokeWeight: 3,
-                            //     fillOpacity: 0.5,
-                            //     strokeOpacity: 0.5
-                            // });
-                            layer.alert("请选择宝宝名称！", {icon: 2});
+                            layer.alert("宝宝没有活动轨迹哦，在学校里！", {icon: 6});
                         } else {
-                            var stuLngLatinfo = JSON.parse(data);
-                            for (var i in stuLngLatinfo) {
-                                lnginfo = stuLngLatinfo[i].studentlng;
-                                latinfo = stuLngLatinfo[i].studentlat;
+                            var info = JSON.parse(data);
+                            var polArry = [];
+
+                            var styleOptions = {
+                                strokeColor: "red",    //边线颜色。
+                                fillColor: "red",      //填充颜色。当参数为空时，圆形将没有填充效果。
+                                strokeWeight: 3,       //边线的宽度，以像素为单位。
+                                strokeOpacity: 0.8,	   //边线透明度，取值范围0 - 1。
+                                fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
+                                strokeStyle: 'solid' //边线的样式，solid或dashed。
                             }
 
-                            $("#studentlng").val(lnginfo);
-                            $("#studentlat").val(latinfo);
+
+                            // function stuTrack(arr) {
+                            //     if(Object.prototype.toString.call(arr).slice(8,-1) !== "Array") return;
+                            //     var length = arr.length;
+                            //     var i = 0;
+                            //     return function(){
+                            //         if(i<length,i++)
+                            //             console.log(i);
+                            //         console.log(length);
+                            //         var lngLatNum = new BMap.Point(arr[i].lng,arr[i].lat);
+                            //
+                            //         addMarker([lngLatNum]);
+                            //         polArry.push(lngLatNum);
+                            //         var polyline = new BMap.Polyline(polArry, styleOptions);
+                            //         map.addOverlay(polyline);
+                            //     }
+                            // }
+                            // timer = setInterval(stuTrack(info),1000);
+
+
                             $("#studentname").val(studentname);
 
-                            var addtime = function add() {
-                                var lngnum = $("#studentlng").val();
-                                var latnum = $("#studentlat").val();
-                                var addnum = 0.00001;
-                                //西+
-                                var Y = lessLngAdd(lngnum, addnum);
-                                // var X = lessLatAdd(latnum, addnum);
-
-                                //东+
-                                // var Y = numLngAdd(lngnum, addnum);
-                                // var X = lessLatAdd(latnum, addnum);
-
-                                //北+
-                                // var Y = numLngAdd(lngnum, addnum);
-                                // var X = numLatAdd(latnum, addnum);
-
-                                //南+
-                                // var Y = numLngAdd(lngnum, addnum);
-                                // var X = lessLatAdd(latnum, addnum);
-
-                                //左右移动
-                                $("#studentlng").val(Y);
-                                $("#studentlat").val(latnum);
-
-                                //上下移动
-                                // $("#studentlng").val(lngnum);
-                                // $("#studentlat").val(X);
-
-
-                                //用作默认显示一个点（左右移动）
-                                dafaultpoint = new BMap.Point(Y, latnum);
-                                dafpoint = [dafaultpoint];
-                                addMarker(dafpoint);
-
-                                //用作默认显示一个点（上下移动）
-                                // dafaultpoint = new BMap.Point(lngnum, X);
-                                // dafpoint = [dafaultpoint];
-                                // addMarker(dafpoint);
-
+                            for(var i = 0; i < info.length; i++) {
+                                (function(e) {
+                                    timer = setTimeout(function() {
+                                        var lngLatNum = new BMap.Point(info[e].lng,info[e].lat);
+                                        $("#studentlng").val(info[e].lng);
+                                        $("#studentlat").val(info[e].lat);
+                                        // if(e == 0 || e == info.length-1 ){
+                                            addMarker([lngLatNum]);
+                                        // }
+                                        polArry.push(lngLatNum);
+                                        var polyline = new BMap.Polyline(polArry, styleOptions);
+                                        map.addOverlay(polyline);
+                                    }, i*1000);
+                                })(i);
                             }
-
-                            timer = setInterval(addtime,1000);
-
                         }
                     }, error: function (data) {
                         layer.alert("网络繁忙！", {icon: 2});
                     }
-                })
-            })
-
-
-        })
-
-
-        function numLngAdd (lngnum, addnum) {//要相加的两个数
-            var baseNum, baseNum1, baseNum2;
-            try {
-                baseNum1 = lngnum.toString().split(".")[1].length;
-            } catch (e) {
-                baseNum1 = 0;
-            }
-            try {
-                baseNum2 = addnum.toString().split(".")[1].length;
-            } catch (e) {
-                baseNum2 = 0;
-            }
-            baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
-            return (lngnum * baseNum + addnum * baseNum) / baseNum;
-        };
-
-        function numLatAdd(latnum, addnum) {//要相加的两个数
-            var baseNum, baseNum1, baseNum2;
-            try {
-                baseNum1 = latnum.toString().split(".")[1].length;
-            } catch (e) {
-                baseNum1 = 0;
-            }
-            try {
-                baseNum2 = addnum.toString().split(".")[1].length;
-            } catch (e) {
-                baseNum2 = 0;
-            }
-            baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
-            return (latnum * baseNum + addnum * baseNum) / baseNum;
-        };
-
-        function lessLngAdd (lngnum, addnum) {//要相减的两个数
-            var baseNum, baseNum1, baseNum2;
-            try {
-                baseNum1 = lngnum.toString().split(".")[1].length;
-            } catch (e) {
-                baseNum1 = 0;
-            }
-            try {
-                baseNum2 = addnum.toString().split(".")[1].length;
-            } catch (e) {
-                baseNum2 = 0;
-            }
-            baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
-            return (lngnum * baseNum - addnum * baseNum) / baseNum;
-        };
-
-        function lessLatAdd(latnum, addnum) {//要相减的两个数
-            var baseNum, baseNum1, baseNum2;
-            try {
-                baseNum1 = latnum.toString().split(".")[1].length;
-            } catch (e) {
-                baseNum1 = 0;
-            }
-            try {
-                baseNum2 = addnum.toString().split(".")[1].length;
-            } catch (e) {
-                baseNum2 = 0;
-            }
-            baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
-            return (latnum * baseNum - addnum * baseNum) / baseNum;
-        };
-
-        // function deletePoint(){
-        //     var allOverlay = map.getOverlays();
-        //     for (var i = 0; i < allOverlay.length; i++){
-        //         map.removeOverlay(allOverlay[i]);
-        //     }
-        // }
-        //
+                });
+            });
+        });
 
         //添加标注点
         function addMarker(points) {
@@ -359,27 +298,18 @@
                 marker.enableDragging();
                 var thePoint = points[i];
                 showInfo(marker, thePoint);
-
-                // //添加监听事件
-                // (function () {
-                //     var thePoint = points[i];
-                //     marker.addEventListener("click",
-                //         function () {
-                //             showInfo(this, thePoint);
-                //         });
-                // })();
             }
         }
 
         //地图上展示
         function showInfo(thismarker, point) {
-            if (BMapLib.GeoUtils.isPointInCircle(point, circle)) {
+            if (BMapLib.GeoUtils.isPointInPolygon(point, polygon)) {
                 // layer.msg('在圆形区域内');
-                var infoWindow = new BMap.InfoWindow(studentname + "在圆形区域内");
+                var infoWindow = new BMap.InfoWindow(studentname + "        在学校电子围栏区域内");
                 thismarker.openInfoWindow(infoWindow); //图片加载完后重绘infoWindow
             } else {
                 // layer.msg('不在圆形区域内');
-                var infoWindow = new BMap.InfoWindow(studentname + "不在圆形区域内");
+                var infoWindow = new BMap.InfoWindow(studentname + "        不在学校电子围栏区域内");
                 thismarker.openInfoWindow(infoWindow); //图片加载完后重绘infoWindow
                 var lnginfo = point.lng;
                 var latinfo = point.lat;
@@ -398,30 +328,12 @@
                     },error:function (msg) {
                         layer.alert('网络繁忙',{icon:2});
                     }
-                })
+                });
                 clearInterval(timer);
             }
         }
 
-        //初始化地图
-        function initialize() {
-            map.addControl(new BMap.NavigationControl());               // 添加平移缩放控件
-            map.addControl(new BMap.ScaleControl());                    // 添加比例尺控件
-            map.addControl(new BMap.OverviewMapControl());              //添加缩略地图控件
-            map.enableScrollWheelZoom();                            //启用滚轮放大缩小
-            map.addControl(new BMap.MapTypeControl());          //添加地图类型控件
-            var point = new BMap.Point(118.1930, 24.4885);    // 创建点坐标
-            map.centerAndZoom(point, 20);                // 初始化地图,设置中心点坐标和地图级别。
-            map.addOverlay(circle);
-
-        }
-        initialize();//初始化地图数据
-
-        // map.addTileLayer(new BMap.PanoramaCoverageLayer());
-        // var stCtrl = new BMap.PanoramaControl(); //构造全景控件
-        // stCtrl.setOffset(new BMap.Size(35, 35));
-        // map.addControl(stCtrl);//添加全景控件
-
+        //按钮监听-------------------------------------------------------------------------------------------------------------------
         //报警信息页面弹出
         $('body').on('click', '.alarmLogInfo', function () {
             layer.open({
@@ -436,7 +348,19 @@
             });
         });
 
-
+        //报警信息页面弹出
+        $('body').on('click', '.addElectricFence', function () {
+            layer.open({
+                type: 2,
+                area: ['100%', '100%'],
+                offset: ['0%', '0%'],
+                title: '绘制电子围栏',
+                content: path + '/security/path/addElectricFence' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                , success: function (layero, index) {
+                    var body = layer.getChildFrame("body", index);
+                }
+            });
+        });
     });
 
 </script>

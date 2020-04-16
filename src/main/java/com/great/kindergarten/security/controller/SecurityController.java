@@ -33,6 +33,7 @@ import java.util.Random;
 public class SecurityController {
     private String securitycode;
     private String securityname;
+    private String kindername;
 
     @Resource
     private SecurityService securityService;
@@ -105,6 +106,10 @@ public class SecurityController {
                 if (null != Security) {
                     List<TblSecurity> tblSecurityList = new ArrayList<>();
                     tblSecurityList.add(Security);
+
+                    kindername = (String) request.getSession().getAttribute("kindername");
+                    List<TblCampus> tblCampusList = securityService.findKinderNews(kindername);
+                    request.getSession().setAttribute("tblCampusList", tblCampusList);
                     request.getSession().setAttribute("securityname", securityname);
                     request.getSession().setAttribute("tblSecurityList", tblSecurityList);
                     ResponseUtils.outHtml(response, "success");
@@ -261,9 +266,7 @@ public class SecurityController {
         } else {
             pickUpInfoDetailPage.setStudentid(Integer.valueOf(dafultsid));
         }
-
         List<TblDate> tblDateList = securityService.findALLPickUpDetailInfo(pickUpInfoDetailPage);
-
         if (0 != tblDateList.size()) {
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
@@ -276,7 +279,7 @@ public class SecurityController {
         }
     }
 
-    //查找所有学生信息
+    //查找所有宝宝信息
     @RequestMapping("/findAllStuInfo")
     public void findAllStuInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Gson g = new Gson();
@@ -293,7 +296,7 @@ public class SecurityController {
         }
     } //查找所有学生信息
 
-    //查找所选择学生的默认坐标信息
+    //查找所选择宝宝的默认坐标信息(备用)
     @RequestMapping("/findStuLngLatInfo")
     public void findStuLngLatInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String studentid = request.getParameter("studentid");
@@ -306,6 +309,27 @@ public class SecurityController {
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             Object[] info = tblStudentList.toArray();
+            String result = g.toJson(info);
+            response.getWriter().print(result);
+        } else {
+            response.getWriter().print("error");
+        }
+    }
+
+    //查找宝宝轨迹
+    @RequestMapping("/findStuTrack")
+    public void findStuTrack(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String studentid = request.getParameter("studentid");
+        String studentname = request.getParameter("studentname");
+        String studentbrith = request.getParameter("studentbrith");
+        Gson g = new Gson();
+        List<TblStuTrack> tblStuTrackList = securityService.findStuTrack(studentid);//查找所选宝宝轨迹信息
+        System.out.println("tblStuTrackList="+tblStuTrackList);
+        if (0 != tblStuTrackList.size()) {
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            Object[] info = tblStuTrackList.toArray();
             String result = g.toJson(info);
             response.getWriter().print(result);
         } else {
@@ -343,9 +367,9 @@ public class SecurityController {
             lat = latinfo;
         }
 
-        if(lng.equals("118.19286") && lat.equals("24.48854")){
+        if(lng.equals("118.192697") && lat.equals("24.488705")){
             alarmlogarea = "西门";
-        }else if(lng.equals("118.19354") && lat.equals("24.48854")){
+        }else if(lng.equals("118.192697") && lat.equals("24.48854")){
             alarmlogarea = "东门";
         }else if(lng.equals("118.19320") && lat.equals("24.48892")){
             alarmlogarea = "北门";
@@ -420,5 +444,50 @@ public class SecurityController {
         }
 
     }
+
+    @RequestMapping("/addCoordinate")
+    public void addCoordinate(HttpServletRequest request, HttpServletResponse response){
+        Gson g = new Gson();
+        String msg = request.getParameter("TblCoordinate");
+        TblCoordinate tblCoordinate = g.fromJson(msg,TblCoordinate.class);
+        System.out.println(kindername);
+
+        TblKinder tblKinder = securityService.findKinderId(kindername);
+        List<TblCoordinate> tblCoordinateList = tblCoordinate.getCoordinatelist();
+        for(int i =0 ;i<tblCoordinateList.size();i++){
+            tblCoordinateList.get(i).setKinderid(tblKinder.getKinderid());
+        }
+
+        System.out.println(tblCoordinateList);
+
+        Boolean flag = securityService.addCoordinate(tblCoordinateList);
+        if(flag){
+            ResponseUtils.outHtml(response,"success");
+        }else {
+            ResponseUtils.outHtml(response,"error");
+        }
+    }
+
+
+    @RequestMapping("/findCoordinate")
+    public void findCoordinate(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Gson g = new Gson();
+//        TblKinder tblKinder = securityService.findKinderId(kindername);
+        String kinderid = "1";
+        List<TblCoordinate> tblCoordinateList = securityService.findCoordinate(kinderid);
+
+        System.out.println("tblCoordinateList2="+tblCoordinateList);
+        if(0 != tblCoordinateList.size()){
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            Object[] info = tblCoordinateList.toArray();
+            String result = g.toJson(info);
+            response.getWriter().print(result);
+        }else {
+            response.getWriter().print("error");
+        }
+    }
+
 
 }
