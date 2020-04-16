@@ -88,6 +88,15 @@
                 (#{i.studentname},#{i.studentpwd},#{i.studentsex},#{i. studentbrith},#{i.studentadd},#{i.studenttime},#{i.studentstatus},#{i.cid},#{i.kid},#{i.rid})
             </foreach>
     </insert>
+    <insert id="addSafetyVideo">
+        insert into
+        tbl_safetyvideo(safetyvideoname, safetyvideotime, safetyfinishtime, safetyvideoplace, mid, videoname, videoadd)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.safetyvideoname},#{i.safetyvideotime},#{i.safetyfinishtime},#{i.safetyvideoplace},#{i.mid},#{i.videoname},#{i.videoadd})
+        </foreach>
+    </insert>
+
 
     <delete id="deleteKinderInfo">
         delete from tbl_kinder where kinderid = #{kinderid}
@@ -1116,22 +1125,22 @@
         order by s.studenttime desc
     </select>
 
-<!--    安全教育管理-->
-    <resultMap id="VideoMap" type="com.great.kindergarten.commons.entity.TblSafetyvideo">
-        <result column="safetyvideoid" property="safetyvideoid"></result>
-        <result column="safetyvideoname" property="safetyvideoname"></result>
-        <result column="safetyvideotime" property="safetyvideotime"></result>
-        <result column="videoname" property="videoname"></result>
-        <result column="videoadd" property="videoadd"></result>
-        <result column="monitorid" property="monitorid"></result>
-        <result column="monitorname" property="monitorname"></result>
-        <result column="mid" property="mid"></result>
-        <association property="tblMonitor" javaType="com.great.kindergarten.commons.entity.TblMonitor">
-            <id property="monitorid" column="monitorid"/>
-            <result property="monitorid" column="monitorid"/>
-            <result property="monitorname" column="monitorname"/>
-        </association>
-    </resultMap>
+<!--&lt;!&ndash;    安全教育管理&ndash;&gt;-->
+<!--    <resultMap id="VideoMap" type="com.great.kindergarten.commons.entity.TblSafetyvideo">-->
+<!--        <result column="safetyvideoid" property="safetyvideoid"></result>-->
+<!--        <result column="safetyvideoname" property="safetyvideoname"></result>-->
+<!--        <result column="safetyvideotime" property="safetyvideotime"></result>-->
+<!--        <result column="videoname" property="videoname"></result>-->
+<!--        <result column="videoadd" property="videoadd"></result>-->
+<!--        <result column="monitorid" property="monitorid"></result>-->
+<!--        <result column="monitorname" property="monitorname"></result>-->
+<!--        <result column="mid" property="mid"></result>-->
+<!--        <association property="tblMonitor" javaType="com.great.kindergarten.commons.entity.TblMonitor">-->
+<!--            <id property="monitorid" column="monitorid"/>-->
+<!--            <result property="monitorid" column="monitorid"/>-->
+<!--            <result property="monitorname" column="monitorname"/>-->
+<!--        </association>-->
+<!--    </resultMap>-->
 
     <select id="findAllSafetyVideoInfo" resultType="com.great.kindergarten.commons.entity.TblSafetyvideo" parameterType="com.great.kindergarten.commons.entity.TblSafetyvideo">
         select m.monitorid,m.monitorname,s.*
@@ -1169,6 +1178,13 @@
             order by s.safetyvideotime asc
     </select>
 
+    <select id="findAllSafetyVideoItemsInfo" resultType="com.great.kindergarten.commons.entity.TblSafetyvtq" parameterType="com.great.kindergarten.commons.entity.TblSafetyvtq">
+        select s2.safetyvideoid,s2.safetyvideoname as safetyvideoname,s1.*
+        from tbl_safetyvtq s1,tbl_safetyvideo s2
+        <where>
+            s1.safetyvideoid = s2.safetyvideoid and s2.safetyvideoid = #{safetyvideoid}
+        </where>
+    </select>
 
     <!--    &lt;!&ndash;    查找用户类型&ndash;&gt;-->
 <!--    <select id="findUserType" parameterType="java.lang.String" resultMap="userMap">-->

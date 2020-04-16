@@ -256,4 +256,9 @@ public interface AdminMapper
 	public int findSafetyVideoInfoCount(HashMap<String, Object> condition);
 
 	public int deleteSafetyVideoInfo(Integer safetyVideoId);
+
+	//试题配置管理
+	public List<TblSafetyvtq> findAllSafetyVideoItemsInfo(Integer safetyVideoId);
+
+	public int addSafetyVideo(List<TblSafetyvideo> tblSafetyvideoList);
 }

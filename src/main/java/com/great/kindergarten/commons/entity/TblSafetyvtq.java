@@ -15,6 +15,7 @@ public class TblSafetyvtq {
     private String d;
     private String dvalue;
     private Integer safetyvideoid;
+    private String safetyvideoname;
 
     public TblSafetyvtq() {
     }
@@ -142,6 +143,16 @@ public class TblSafetyvtq {
     public void setSafetyvideoid(Integer safetyvideoid)
     {
         this.safetyvideoid = safetyvideoid;
+    }
+
+    public String getSafetyvideoname()
+    {
+        return safetyvideoname;
+    }
+
+    public void setSafetyvideoname(String safetyvideoname)
+    {
+        this.safetyvideoname = safetyvideoname;
     }
 
     @Override
