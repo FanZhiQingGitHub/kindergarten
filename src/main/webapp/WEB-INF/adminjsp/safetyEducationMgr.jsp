@@ -50,16 +50,6 @@
 							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 2% 0 0 10%">
 						</div>
 					</div>
-<%--					<div class="layui-inline" >--%>
-<%--						<span class="layui-form-label" style="margin-left: -55%">状态：</span>--%>
-<%--						<div class="layui-input-inline" style="margin-left: -18%;">--%>
-<%--							<select name="sel" id="sel" lay-filter="mySelect" lay-verify="" >--%>
-<%--								<option value="请选择">请选择</option>--%>
-<%--								<option value="禁用">禁用</option>--%>
-<%--								<option value="启用">启用</option>--%>
-<%--							</select>--%>
-<%--						</div>--%>
-<%--					</div>--%>
 					<button class="layui-btn" data-type="reload" style="margin-left: -5%"><i class="layui-icon">&#xe615;查询</i></button>
 					<button class="layui-btn btn-add btn-default" id="btn-add" style=""><i class="layui-icon">&#xe681;上传</i></button>
 				</div>
@@ -77,6 +67,7 @@
 	</div>
 	<table id="education" lay-filter="test"></table>
 	<div id="type-content" style="display: none;">
+		<input type="hidden" id="sid" name="sid>">
 		<div class="layui-form-item">
 			<label class="layui-form-label">上传视频：</label>
 			<button type="button" class="layui-btn layui-btn-primary" name="file" id="uploadVideo"><i class="layui-icon">&#xe624;</i></button>
@@ -130,12 +121,6 @@
 		</div>
 	</div>
 	<script type="text/html" id="barOption">
-<%--		{{#  if(d.kindercode == '启用'){ }}--%>
-<%--		<a  class="layui-btn layui-btn-danger layui-btn-xs" lay-event="forbidden" style="width: 15%;height: 75%">禁用</a>--%>
-<%--		{{#  } }}--%>
-<%--		{{#  if(d.kindercode == '禁用'){ }}--%>
-<%--		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="open" style="width: 15%;height: 75%">启用</a>--%>
-<%--		{{#  } }}--%>
 		<a type="button" class="layui-btn layui-btn-xs" lay-event="reUpload" style="width: 40%;height: 80%"><i class="layui-icon">&#xe67c;重新上传</i></a>
 		<a type="button" class="layui-btn layui-btn-xs" lay-event="delete" style="width: 25%;height: 80%"><i class="layui-icon">&#xe640;删除</i></a>
 	</script>
@@ -196,39 +181,51 @@
 					if(layEvent === 'reUpload'){
 						layer.confirm("确定要重新上传？",{icon:3,title:'温馨提示'},function (index) {
 							layer.close(index);
-							layer.open({
-								type: 1,
-								area: ['30%', '60%'],
-								content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+							parent.layer.open({
+								type: 2,
+								// area: ['30%', '60%'],
+								area: ['40%', '60%'],
+								// content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+								content: path+"/admin/toUrl/reUploadVideoInfo",
 								title: '重新上传',
-								btn: ['保存', '取消'],
+								// btn: ['保存', '取消'],
 								offset: '100px',
 								btnAlign: 'c',
-								btn1: function (index) {
-									var safetyVideoName = $("#safetyVideoName").val();
-									var videoName = $("#videoName").val();
-									var videoAdd = $("#videoAdd").val();
-									if (safetyVideoName.length == 0) {
-										layer.alert("请输入视频名称", {icon: 2});
-									}  else {
-										$.ajax({
-											url: path + "/admin/updateSafetyVideoInfo",
-											type: "post",
-											data: {"safetyvideoid": data.safetyvideoid,"safetyvideoname":safetyVideoName,"videoname":videoName,"videoadd":videoAdd},
-											dataType: "text",
-											success: function (result) {
-												if(result == "success")
-												{
-													layer.close(index);
-													layer.alert("重新上传信息成功！", {icon: 6});
-													tableIns.reload();
-												}else{
-													layer.alert("重新上传信失败！", {icon: 2});
-												}
-											}
-										});
-									}
-								},
+								success:function(layero, index){
+									var body = layer.getChildFrame('body',index);
+									body.find("#safetyVideoName3").val(data.safetyvideoname);
+									body.find("#videoName3").val(data.videoname);
+									body.find("#videoAdd3").val(data.videoadd);
+									// $("#sid").val(data.safetyvideoid);
+									// $("#safetyVideoName").val(data.safetyvideoname);
+									// $("#videoName").val(data.videoname);
+									// $("#videoAdd").val(data.videoadd);
+								}
+								// btn1: function (index) {
+								// 	var safetyVideoName = $("#safetyVideoName").val();
+								// 	var videoName = $("#videoName").val();
+								// 	var videoAdd = $("#videoAdd").val();
+								// 	if (safetyVideoName.length == 0) {
+								// 		layer.alert("请输入视频名称", {icon: 2});
+								// 	}  else {
+								// 		$.ajax({
+								// 			url: path + "/admin/updateSafetyVideoInfo",
+								// 			type: "post",
+								// 			data: {"safetyvideoid": data.safetyvideoid,"safetyvideoname":safetyVideoName,"videoname":videoName,"videoadd":videoAdd},
+								// 			dataType: "text",
+								// 			success: function (result) {
+								// 				if(result == "success")
+								// 				{
+								// 					layer.close(index);
+								// 					layer.alert("重新上传信息成功！", {icon: 6});
+								// 					tableIns.reload();
+								// 				}else{
+								// 					layer.alert("重新上传信失败！", {icon: 2});
+								// 				}
+								// 			}
+								// 		});
+								// 	}
+								// },
 							});
 						});
 					}else if(layEvent === 'delete'){
@@ -254,47 +251,8 @@
 				});
 			});
 
-			// var uploadInst = upload.render({
-			// 	elem: '#uploadVideo' //绑定元素
-			// 	,url: path+"/admin/uploadVideo" //上传接口
-			// 	,auto: false
-			// 	,accept: 'video'
-			// 	// ,acceptMime: 'image/*'
-			// 	,bindAction: '#save'
-			// 	,choose:function(obj){//选择文件的回调，obj为选中的文件
-			// 		//将每次选择的文件追加到文件队列
-			// 		var files = obj.pushFile();
-			// 		//预览选中的文件（本地文件）
-			// 		obj.preview(function(index,file,result){
-			// 			$('#demo1').attr('src', result);
-			// 		});
-			// 	}
-			// 	,before: function(obj){
-			// 		this.data = {
-			// 			contentInfo: $("#contentInfo").val()
-			// 			,pageNum: $("#pageNum").val()
-			// 			,readMagName1: $("#readMagName1").val()
-			// 		}
-			// 	}
-			// 	,done: function(res){
-			// 		//上传完毕回调
-			// 		if(res.code > 0){
-			// 			return layer.msg('上传失败');
-			// 		}
-			// 		layer.alert("上传成功！",{icon:6});
-			// 		var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-			// 		setTimeout(function () {
-			// 			parent.layer.close(index); //再执行关闭
-			// 		}, 6000);
-			// 	}
-			// 	,error: function(){
-			// 		//请求异常回调
-			// 		layer.alert("上传失败！",{icon:2});
-			// 	}
-			// });
-
 			$("#btn-add").click(function () {
-				layer.open({
+				parent.layer.open({
 					type: 2,
 					area: ['40%', '60%'],
 					// content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
@@ -302,7 +260,7 @@
 					title: '上传视频',
 					// btn: ['保存', '取消'],
 					offset: '100px',
-					btnAlign: 'c',
+					btnAlign: 'c'
 					// btn1: function (index) {
 					// 	var safetyVideoName = $("#safetyVideoName").val();
 					// 	var videoName = $("#videoName").val();

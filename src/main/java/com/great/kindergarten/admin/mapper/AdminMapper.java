@@ -117,11 +117,20 @@ public interface AdminMapper
 
 	public String initialPwd(String parametername);
 
+	//参数配置
 	public List<TblParameter> findAllParameter(HashMap<String, Object> condition, RowBounds rowBounds);
 
 	public int findParameterCount(HashMap<String, Object> condition);
 
 	public List<TblParameter> findParameterInfo();
+
+	public List<String> findAllParameterType();
+
+	public int addParameter(List<TblParameter> tblParameterList);
+
+	public int updateParameter(TblParameter tblParameter);
+
+	public int deleteParameter(Integer parameterid);
 
 	//亲子阅读管理
 	public List<TblReadmag> findAllReadInfo(HashMap<String, Object> condition, RowBounds rowBounds);
@@ -234,7 +243,6 @@ public interface AdminMapper
 
 	public int addSecurity(List<TblSecurity> tblSecurityList);
 
-
 	//学生管理
 	public List<TblStudent> findAllStudentInfo(HashMap<String, Object> condition, RowBounds rowBounds);
 
@@ -257,8 +265,21 @@ public interface AdminMapper
 
 	public int deleteSafetyVideoInfo(Integer safetyVideoId);
 
+	public int updateSafetyVideo(TblSafetyvideo tblSafetyvideo);
+
+	public int addSafetyVideo(List<TblSafetyvideo> tblSafetyvideoList);
+
 	//试题配置管理
 	public List<TblSafetyvtq> findAllSafetyVideoItemsInfo(Integer safetyVideoId);
 
-	public int addSafetyVideo(List<TblSafetyvideo> tblSafetyvideoList);
+
+	public List<TblSafetyvideo> findAllVideoQuestionConfigInfo(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public int addTopic(TblSafetyvtq tblSafetyvtq);
+
+	public List<TblSafetyvtq> queryTopicById(Integer safetyVideoId);
+
+	public int updateTopic(TblSafetyvtq tblSafetyvtq);
+
+	public int deleteTopic(TblSafetyvtq tblSafetyvtq);
 }
