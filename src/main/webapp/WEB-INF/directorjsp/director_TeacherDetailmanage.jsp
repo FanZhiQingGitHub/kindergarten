@@ -38,11 +38,50 @@
 		<div class="layui-input-inline">
 			<div class="layui-form" lay-filter="myDiv">
 				<select name="teacherjob" id="teacherjob" lay-filter="mySelect">
-					<option value="暂无">暂无选择</option>
-					<option value="班主任" selected>班主任</option>
+					<option value="暂无" selected>暂无选择</option>
+					<option value="班主任">班主任</option>
 					<option value="保健员">保健员</option>
 					<option value="安防员">安防员</option>
 				</select>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item layui-form-text">
+		<label class="layui-form-label">性别：</label>
+		<div class="layui-input-inline">
+			<div class="layui-form">
+				<select name="teachersex" id="teachersex" lay-filter="mySelect">
+					<option value="暂无" selected>暂无选择</option>
+					<option value="男">男</option>
+					<option value="女">女</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">年龄：</label>
+		<div class="layui-input-inline">
+			<div class="layui-form" lay-filter="myDiv">
+				<input type="text" class="layui-input" name="teacherage" placeholder="请输入20-60岁年龄" id="teacherage"
+				       autocomplete="off">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">地址：</label>
+		<div class="layui-input-inline">
+			<div class="layui-form" lay-filter="myDiv">
+				<input type="text" class="layui-input" name="teacheradd" placeholder="请输入地址" id="teacheradd"
+				       autocomplete="off">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">联系方式：</label>
+		<div class="layui-input-inline">
+			<div class="layui-form" lay-filter="myDiv">
+				<input type="text" class="layui-input" name="teacherphone" placeholder="请输入11位联系方式" id="teacherphone"
+				       autocomplete="off">
 			</div>
 		</div>
 	</div>

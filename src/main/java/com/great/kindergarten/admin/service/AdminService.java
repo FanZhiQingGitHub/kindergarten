@@ -558,4 +558,15 @@ public class AdminService {
 	{
 		return adminMapper.deleteSafetyVideoInfo(safetyVideoId);
 	}
+
+	public List<TblSafetyvtq> findAllSafetyVideoItemsInfo(Integer safetyVideoId)
+	{
+		return adminMapper.findAllSafetyVideoItemsInfo(safetyVideoId);
+	}
+
+	public int addSafetyVideo(List<TblSafetyvideo> tblSafetyvideoList)
+	{
+		return adminMapper.addSafetyVideo(tblSafetyvideoList);
+	}
+
 }

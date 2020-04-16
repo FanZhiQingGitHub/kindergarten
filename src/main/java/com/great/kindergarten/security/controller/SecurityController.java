@@ -2,7 +2,7 @@ package com.great.kindergarten.security.controller;
 
 import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
-import com.great.kindergarten.healther.resultbean.DateWrite;
+import com.great.kindergarten.security.resultbean.AlarmLogPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoPage;
 import com.great.kindergarten.security.service.SecurityService;
@@ -12,6 +12,8 @@ import com.great.kindergarten.util.ResponseUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +22,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -101,8 +105,6 @@ public class SecurityController {
                 if (null != Security) {
                     List<TblSecurity> tblSecurityList = new ArrayList<>();
                     tblSecurityList.add(Security);
-                    List<TblClass> tblClassList = securityService.findAllClass();
-                    request.getSession().setAttribute("tblClassList", tblClassList);
                     request.getSession().setAttribute("securityname", securityname);
                     request.getSession().setAttribute("tblSecurityList", tblSecurityList);
                     ResponseUtils.outHtml(response, "success");
@@ -141,23 +143,37 @@ public class SecurityController {
     }
 
     @RequestMapping("/resetSecuritypwd")
-    public void resetSecuritypwd(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response) {
+    public void resetSecuritypwd(TblSecurity tblSecurity, HttpServletResponse response) {
         Boolean flag = securityService.resetSecuritypwd(tblSecurity.getSecurityphone());
-        if(flag){
-            ResponseUtils.outHtml(response,"success");
-        }else {
-            ResponseUtils.outHtml(response,"error");
+        if (flag) {
+            ResponseUtils.outHtml(response, "success");
+        } else {
+            ResponseUtils.outHtml(response, "error");
         }
     }
 
+    @RequestMapping("/findStuClassInfo")
+    public void findStuClassInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Gson g = new Gson();
+        List<TblClass> tblClassList = securityService.findAllClass();//查找所有班级信息，用于接送信息班级下拉框查询
+        if (0 != tblClassList.size()) {
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            Object[] info = tblClassList.toArray();
+            String result = g.toJson(info);
+            response.getWriter().print(result);
+        } else {
+            response.getWriter().print("error");
+        }
+    }
 
     //孩子接送信息，不含考勤
     @RequestMapping("/showPickUpInfo")
-    public void showPickUpInfo(PickUpInfoPage pickUpInfoPage, DateWrite dateWrite ,HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+    public void showPickUpInfo(PickUpInfoPage pickUpInfoPage, DateWrite dateWrite, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         String liketime = request.getParameter("key1");//接送时间
         String likeName = request.getParameter("key2");//学生姓名
-        String likeCName= request.getParameter("key3");//班级姓名
-
+        String likeCName = request.getParameter("key3");//班级姓名
         Object liketime1 = null;
         Object liketime2 = null;
 
@@ -188,6 +204,8 @@ public class SecurityController {
         }
         Integer minpage = (page - 1) * limit;
         Integer maxpage = limit;
+        pickUpInfoPage.setPage(minpage);
+        pickUpInfoPage.setLimit(maxpage);
         pickUpInfoPage.setTime1(time1);
         pickUpInfoPage.setTime2(time2);
         pickUpInfoPage.setuStuName(uStuName);
@@ -204,7 +222,7 @@ public class SecurityController {
             response.setCharacterEncoding("UTF-8");
             request.getSession().setAttribute("uStuName", uStuName);
             ResponseUtils.outJson(response, dateWrite);
-        }else {
+        } else {
             dateWrite.setMsg("亲，暂无相关数据(注：如果是时间搜索，请选择周一至周日的时间进行查询，谢谢！)");
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
@@ -216,7 +234,7 @@ public class SecurityController {
 
     //孩子详细接送信息，含考勤
     @RequestMapping("/showPickUpDetailInfo")
-    public void showPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage, DateWrite dateWrite , HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void showPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage, DateWrite dateWrite, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Gson g = new Gson();
         String currentmonday = "1";
         String currentsonday = "7";
@@ -228,21 +246,22 @@ public class SecurityController {
         String mondaydate = null;
         String sundaydate = null;
 
-        if(null != startdate && null != enddate){
+        if (null != startdate && null != enddate) {
             mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(startdate));
             sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(enddate));
-        }else {
+        } else {
             mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(currentmonday));
             sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(currentsonday));
         }
         pickUpInfoDetailPage.setMondaydate(mondaydate);
         pickUpInfoDetailPage.setSundaydate(sundaydate);
 
-        if(null != sid){
+        if (null != sid) {
             pickUpInfoDetailPage.setStudentid(Integer.valueOf(sid));
-        }else {
+        } else {
             pickUpInfoDetailPage.setStudentid(Integer.valueOf(dafultsid));
         }
+
         List<TblDate> tblDateList = securityService.findALLPickUpDetailInfo(pickUpInfoDetailPage);
 
         if (0 != tblDateList.size()) {
@@ -252,8 +271,154 @@ public class SecurityController {
             Object[] info = tblDateList.toArray();
             String result = g.toJson(info);
             response.getWriter().print(result);
-        }else {
+        } else {
             response.getWriter().print("error");
         }
     }
+
+    //查找所有学生信息
+    @RequestMapping("/findAllStuInfo")
+    public void findAllStuInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Gson g = new Gson();
+        List<TblStudent> tblStudentList = securityService.findAllStuInfo();//查找所有宝宝信息，用于电子围栏宝宝名称下拉框查询
+        if (0 != tblStudentList.size()) {
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            Object[] info = tblStudentList.toArray();
+            String result = g.toJson(info);
+            response.getWriter().print(result);
+        } else {
+            response.getWriter().print("error");
+        }
+    } //查找所有学生信息
+
+    //查找所选择学生的默认坐标信息
+    @RequestMapping("/findStuLngLatInfo")
+    public void findStuLngLatInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String studentid = request.getParameter("studentid");
+        String studentname = request.getParameter("studentname");
+        String studentbrith = request.getParameter("studentbrith");
+        Gson g = new Gson();
+        List<TblStudent> tblStudentList = securityService.findStuLngLetInfo(studentid, studentname, studentbrith);//查找所有宝宝信息，用于电子围栏宝宝名称下拉框查询
+        if (0 != tblStudentList.size()) {
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            Object[] info = tblStudentList.toArray();
+            String result = g.toJson(info);
+            response.getWriter().print(result);
+        } else {
+            response.getWriter().print("error");
+        }
+    }
+
+    //记录学生越界报警信息
+    @RequestMapping("/addAlarmLogInfo")
+    public void addAlarmLogInfo(TblAlarmLog tblAlarmLog, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String studentid = request.getParameter("studentid");
+        String studentname = request.getParameter("studentname");
+        String lnginfo = request.getParameter("lnginfo");
+        String latinfo = request.getParameter("latinfo");
+        Gson g = new Gson();
+        String alarmlogarea = null;
+        String lng = null;
+        String lat = null;
+
+        String a = lnginfo.split("\\.")[0];
+        String b = lnginfo.split("\\.")[1];
+        if(b.length() == 4){
+            b+=0;
+            lng = a+"."+b;
+        }else {
+            lng = lnginfo;
+        }
+
+        String c = latinfo.split("\\.")[0];
+        String d = latinfo.split("\\.")[1];
+        if(d.length() == 4){
+            d+=0;
+            lat = c+"."+d;
+        }else {
+            lat = latinfo;
+        }
+
+        if(lng.equals("118.19286") && lat.equals("24.48854")){
+            alarmlogarea = "西门";
+        }else if(lng.equals("118.19354") && lat.equals("24.48854")){
+            alarmlogarea = "东门";
+        }else if(lng.equals("118.19320") && lat.equals("24.48892")){
+            alarmlogarea = "北门";
+        }else if(lng.equals("118.19320") && lat.equals("24.48828")){
+            alarmlogarea = "南门";
+        }
+        tblAlarmLog.setAlarmlogarea(alarmlogarea);
+        tblAlarmLog.setAlarmlogtime(new Date());
+        tblAlarmLog.setAlarmlogname("越界");
+        tblAlarmLog.setStudentname(studentname);
+        tblAlarmLog.setSid(Integer.valueOf(studentid));
+        List<TblAlarmLog> tblAlarmLogList = new ArrayList<>();
+        tblAlarmLogList.add(tblAlarmLog);
+        Boolean flag = securityService.addAlarmLogInfo(tblAlarmLogList);//查找所有宝宝信息，用于电子围栏宝宝名称下拉框查询
+        if (flag) {
+            ResponseUtils.outHtml(response, "success");
+        } else {
+            ResponseUtils.outHtml(response, "error");
+        }
+    }
+
+    //报警信息
+    @RequestMapping("/showAlarmInfo")
+    public void showAlarmInfo(AlarmLogPage alarmLogPage, DateWrite dateWrite, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        String liketime = request.getParameter("key1");//接送时间
+
+
+        Object liketime1 = null;
+        Object liketime2 = null;
+
+        if (liketime != null) {
+            String[] arr = liketime.split("~ ");
+            liketime1 = arr[0];
+            liketime2 = arr[arr.length - 1];
+        }
+        Integer page = Integer.valueOf(request.getParameter("page"));
+        Integer limit = Integer.valueOf(request.getParameter("limit"));
+        Object time1 = null;
+        Object time2 = null;
+        if (null != liketime1 && !"".equals(((String) liketime1).trim())) {
+            time1 = liketime1;
+        }
+        if (null != liketime2 && !"".equals(((String) liketime2).trim())) {
+            time2 = liketime2;
+        }
+
+        Integer minpage = (page - 1) * limit;
+        Integer maxpage = limit;
+
+        alarmLogPage.setPage(minpage);
+        alarmLogPage.setLimit(maxpage);
+        alarmLogPage.setTime1(time1);
+        alarmLogPage.setTime2(time2);
+
+        List<TblAlarmLog> tblAlarmLogList = securityService.findAlarmInfo(alarmLogPage);
+        if (0 != tblAlarmLogList.size()) {
+            Integer count = securityService.findAlarmInfoCount(alarmLogPage).intValue();
+            dateWrite.setCode(0);
+            dateWrite.setMsg(" ");
+            dateWrite.setCount(count);
+            dateWrite.setData(tblAlarmLogList);
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        } else {
+            dateWrite.setMsg("亲，暂无相关数据(注：如果是时间搜索，请选择周一至周日的时间进行查询，谢谢！)");
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        }
+
+    }
+
 }

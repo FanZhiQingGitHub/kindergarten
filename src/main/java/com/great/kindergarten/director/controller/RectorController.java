@@ -6,15 +6,15 @@ import com.great.kindergarten.director.resultbean.DateTable;
 import com.great.kindergarten.director.resultbean.TblScTInfo;
 import com.great.kindergarten.director.service.KinderService;
 import com.great.kindergarten.director.service.RectorService;
-import com.great.kindergarten.healther.resultbean.DateWrite;
-import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import com.great.kindergarten.security.util.DateUtil;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
+import com.great.kindergarten.websocket.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -25,7 +25,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -48,6 +50,9 @@ public class RectorController
 
 	@Resource
 	TblKinder tblKinder;
+
+	@Resource
+	TblCourse tblCourse;
 	//	@Resource
 	//	TblTeacher tblTeacher;
 	//结果集的处理
@@ -274,7 +279,8 @@ public class RectorController
 			response.setCharacterEncoding("UTF-8");
 			//			request.getSession().setAttribute("cName", cName);
 			ResponseUtils.outJson(response, dateTable);
-		}else{
+		} else
+		{
 			dateTable.setCode(201);
 			dateTable.setMsg("无数据");
 			request.setCharacterEncoding("UTF-8");
@@ -284,7 +290,7 @@ public class RectorController
 		}
 	}
 
-	//园所-----教师信息进行对应的删除操作delTeacherTable
+	//园所-----教师信息----进行对应的删除操作
 	//删除对应表格的内容的值
 	@RequestMapping("/delTeacherTable")
 	public void delTable(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -314,6 +320,16 @@ public class RectorController
 		String teachername = request.getParameter("teachername");
 		String teacherjob = request.getParameter("teacherjob");
 
+		if (teacherjob.equals("班主任"))
+		{
+			tblTeacher.setRid(4);
+		} else if (teacherjob.equals("安防员"))
+		{
+			tblTeacher.setRid(5);
+		} else if (teacherjob.equals("保健员"))
+		{
+			tblTeacher.setRid(6);
+		}
 		tblTeacher.setTeacherid(teacherids);
 		tblTeacher.setTeachername(teachername);
 		tblTeacher.setTeacherjob(teacherjob);
@@ -330,11 +346,25 @@ public class RectorController
 		}
 	}
 
-
-	//添加对应的表格的信息
+	//园所-----教师信息----添加对应的表格的信息
 	@RequestMapping("/addTeacherForm")
 	protected void addTeacherForm(TblTeacher tblTeacher, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		String teacherjob = tblTeacher.getTeacherjob();
+		if (teacherjob.equals("班主任"))
+		{
+			tblTeacher.setRid(4);
+		} else if (teacherjob.equals("安防员"))
+		{
+			tblTeacher.setRid(5);
+		} else if (teacherjob.equals("保健员"))
+		{
+			tblTeacher.setRid(6);
+		}
+		//使用的密码是默认的密码
+		String md5pwd = MD5Utils.md5("123456");
+		tblTeacher.setTeacherpwd(md5pwd);
+		System.out.println("申请教师=" + tblTeacher);
 		int result = rectorService.addTeacherForm(tblTeacher);
 		if (result > 0)
 		{
@@ -396,7 +426,8 @@ public class RectorController
 			response.setCharacterEncoding("UTF-8");
 			//			request.getSession().setAttribute("cName", cName);
 			ResponseUtils.outJson(response, dateTable);
-		}else{
+		} else
+		{
 			dateTable.setCode(201);
 			dateTable.setMsg("无数据");
 			request.setCharacterEncoding("UTF-8");
@@ -524,7 +555,8 @@ public class RectorController
 			System.out.println("请获取孩子的信息：" + tblStudentList);
 			request.getSession().setAttribute("tblStudentList", tblStudentList);
 			ResponseUtils.outJson(response, dateTable);
-		}else{
+		} else
+		{
 			dateTable.setCode(201);
 			dateTable.setMsg("无数据");
 			request.setCharacterEncoding("UTF-8");
@@ -689,7 +721,8 @@ public class RectorController
 			System.out.println("请获取班主任的信息：" + tblTeacherList);
 			request.getSession().setAttribute("tblTeacherList", tblTeacherList);
 			ResponseUtils.outJson(response, dateTable);
-		}else{
+		} else
+		{
 			dateTable.setCode(201);
 			dateTable.setMsg("无数据");
 			request.setCharacterEncoding("UTF-8");
@@ -703,37 +736,59 @@ public class RectorController
 	@RequestMapping("/showAllCourseId")
 	public void showAllCourseId(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException
 	{
-		String classid = request.getParameter("classid");
-		System.out.println("课程对应的信息：" + classid);
-		if (null != classid || !"".equals(classid))
+		String currentmonday = "1";
+		String currentsonday = "7";
+		String dafultsid = request.getParameter("classid");
+		System.out.println("课程对应的信息：" + dafultsid);
+		int classid = Integer.valueOf(dafultsid);
+
+		String startdate = request.getParameter("key1");//周一日期
+		String enddate = request.getParameter("key2");//周日日期
+		String cid = request.getParameter("key3");//教师ID值
+		String mondaydate = null;
+		String sundaydate = null;
+
+		Map<String, Object> map = new HashMap<>();
+		if (null != startdate && null != enddate)
 		{
-			int classids = Integer.valueOf(classid);
-			Map<String, Object> map = new HashMap<>();
-			if (0 != classids)
-			{
-				map.put("cid", classids);
-			}
-			List<TblCourse> tblCourseList = kinderService.findAllCourseName(map);
-			if (0 != tblCourseList.size())
-			{
-				Integer count = kinderService.findAllCourseNameCount(map).intValue();
-				dateTable.setCode(0);
-				dateTable.setMsg(" ");
-				dateTable.setCount(count);
-				dateTable.setData(tblCourseList);
-				request.setCharacterEncoding("UTF-8");
-				response.setContentType("text/html");
-				response.setCharacterEncoding("UTF-8");
-				ResponseUtils.outJson(response, dateTable);
-			}else{
-				dateTable.setCode(201);
-				dateTable.setMsg("无数据");
-				request.setCharacterEncoding("UTF-8");
-				response.setContentType("text/html");
-				response.setCharacterEncoding("UTF-8");
-				ResponseUtils.outJson(response, dateTable);
-			}
+			mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(startdate));
+			sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(enddate));
+		} else
+		{
+			mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(currentmonday));
+			sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(currentsonday));
 		}
+		System.out.println("课程对应的日期时间=" + mondaydate + "~" + sundaydate);
+		map.put("mondaydate", mondaydate);
+		map.put("sundaydate", sundaydate);
+		if (null != cid)
+		{
+			map.put("cid", Integer.valueOf(cid));
+		} else
+		{
+			map.put("cid", classid);
+		}
+		List<TblCourse> tblCourseList = kinderService.findAllCourseName(map);
+		if (0 != tblCourseList.size())
+		{
+			dateTable.setCode(0);
+			dateTable.setMsg(" ");
+			dateTable.setCount(5);
+			dateTable.setData(tblCourseList);
+			request.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+			ResponseUtils.outJson(response, dateTable);
+		} else
+		{
+			dateTable.setCode(201);
+			dateTable.setMsg("无数据");
+			request.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+			ResponseUtils.outJson(response, dateTable);
+		}
+
 	}
 
 	//课程表-课程名称的修改
@@ -745,12 +800,14 @@ public class RectorController
 		tblCourse = g.fromJson(msg, TblCourse.class);
 		List<TblCourse> tblCourseList = tblCourse.getTblCourseList();
 		String cid = null;
+		String ctids = null;
 		for (int k = 0; k < tblCourseList.size(); k++)
 		{
 			cid = tblCourseList.get(k).getCid().toString();
+			ctids = tblCourseList.get(k).getCtids().toString();
 		}
 		System.out.println(tblCourse.getCid() + "对应的集合的值是：" + tblCourseList);
-		int result = kinderService.delTblCourseInfo(Integer.parseInt(cid));
+		int result = kinderService.delTblCourseInfo(Integer.parseInt(cid), Integer.parseInt(ctids));
 		if (result > 0)
 		{
 			String info = "无";
@@ -791,6 +848,83 @@ public class RectorController
 		{
 			ResponseUtils.outHtml(response, "error");
 		}
+	}
+
+	//课程表-新增对应的额课程表信息
+	@RequestMapping("/addCourseInfo")
+	public void addCourseInfo(TblCoursetest tblCoursetest, HttpServletRequest request, HttpServletResponse response) throws ParseException
+	{
+		String msg = request.getParameter("TblCourse");
+		System.out.println("json的值是=" + msg);
+		Gson g = new Gson();
+		tblCourse = g.fromJson(msg, TblCourse.class);
+		//拿对应的集合内容显示
+		List<TblCourse> tblCourseList = tblCourse.getTblCourseList();
+		int classid = tblCourse.getCid();
+
+		String mealtime = tblCourse.getMondaydate();
+		String time1 = null;
+		String time2 = null;
+		if (mealtime != null)
+		{
+			String[] arr = mealtime.split("~ ");
+			time1 = arr[0];
+			time2 = arr[arr.length - 1];
+		}
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date mealstarttime = format.parse(time1);
+		Date mealendtime = format.parse(time2);
+
+		tblCoursetest.setMondaydate(mealstarttime);
+		tblCoursetest.setSundaydate(mealendtime);
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("mondaydate", mealstarttime);
+		map.put("sundaydate", mealendtime);
+		Integer ctid = kinderService.findCoursetestID(map);
+		System.out.println("对应的值是=" + ctid);
+		if (ctid == 0)
+		{
+			System.out.println("进去了=" + ctid);
+			int result = kinderService.addCoursetestInfo(tblCoursetest);
+			ctid = kinderService.findCoursetestID(map);
+		}
+		String info = "无";
+		for (int i = 0; i < tblCourseList.size(); i++)
+		{
+			tblCourseList.get(i).setCtids(ctid);
+			tblCourseList.get(i).setCid(classid);
+			if ("".equals(tblCourseList.get(i).getCoursename1()))
+			{
+				tblCourseList.get(i).setCoursename1(info);
+			}
+			if ("".equals(tblCourseList.get(i).getCoursename2()))
+			{
+				tblCourseList.get(i).setCoursename2(info);
+			}
+			if ("".equals(tblCourseList.get(i).getCoursename3()))
+			{
+				tblCourseList.get(i).setCoursename3(info);
+			}
+			if ("".equals(tblCourseList.get(i).getCoursename4()))
+			{
+				tblCourseList.get(i).setCoursename4(info);
+			}
+			if ("".equals(tblCourseList.get(i).getCoursename5()))
+			{
+				tblCourseList.get(i).setCoursename5(info);
+			}
+		}
+
+		int result2 = kinderService.addTblCourseInfo(tblCourseList);
+		if (result2 > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+
 	}
 
 	/*
@@ -953,7 +1087,8 @@ public class RectorController
 			System.out.println("请获取孩子的信息：" + tblStudentList);
 			request.getSession().setAttribute("tblStudentList", tblStudentList);
 			ResponseUtils.outJson(response, dateTable);
-		}else{
+		} else
+		{
 			dateTable.setCode(201);
 			dateTable.setMsg("无数据");
 			request.setCharacterEncoding("UTF-8");
@@ -991,13 +1126,13 @@ public class RectorController
 		}
 	}
 
-	//	班级成员信息----删除操作
+	//班级成员信息----删除操作
 	@RequestMapping("/delClassMemberTable")
 	public void delClassMemberTable(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
-//		String id = request.getParameter("studentid");
+		//		String id = request.getParameter("studentid");
 		System.out.println("删除班级成员=" + tblStudent);
-//		int studentid = Integer.valueOf(id);
+		//		int studentid = Integer.valueOf(id);
 
 		Map<String, Object> map = new HashMap<>();
 		if (null != tblStudent.getStudentname() && "" != tblStudent.getStudentname())
@@ -1014,17 +1149,18 @@ public class RectorController
 			ResponseUtils.outHtml(response, "error");
 		}
 	}
+
 	//班级信息----更新对应表格值
 	@RequestMapping("/updateClassMemberTable")
 	public void updateClassMemberTable(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 		//先删除对应的cid的内容
-//		TblTeacher tblTeachera = kinderService.selectTeacherByTeacherId(tblStudent.getStudentid());
+		//		TblTeacher tblTeachera = kinderService.selectTeacherByTeacherId(tblStudent.getStudentid());
 
-//		Map<String, Object> map = new HashMap<>();
-//		map.put("teachername", tblTeachera.getTeachername());
-//		map.put("cid", null);
-//		int result0 = kinderService.updateTeacherByCid(map);
+		//		Map<String, Object> map = new HashMap<>();
+		//		map.put("teachername", tblTeachera.getTeachername());
+		//		map.put("cid", null);
+		//		int result0 = kinderService.updateTeacherByCid(map);
 		//再进行对应的改变值
 		String classname = request.getParameter("classname");
 
@@ -1050,8 +1186,8 @@ public class RectorController
 	}
 
 	/*
-	* 校园公告管理
-	* */
+	 * 校园公告管理
+	 * */
 	@RequestMapping("/selectCampusBulletin")
 	public void selectCampusBulletin(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -1099,7 +1235,8 @@ public class RectorController
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
 			ResponseUtils.outJson(response, dateTable);
-		}else{
+		} else
+		{
 			dateTable.setCode(201);
 			dateTable.setMsg("无数据");
 			request.setCharacterEncoding("UTF-8");
@@ -1108,6 +1245,7 @@ public class RectorController
 			ResponseUtils.outJson(response, dateTable);
 		}
 	}
+
 	//校园公告的增加
 	@RequestMapping("/addCampusBulletin")
 	protected void addCampusBulletin(TblCampus tblCampus, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -1178,7 +1316,7 @@ public class RectorController
 		int pageInt = Integer.valueOf(page);
 		int limitInt = Integer.valueOf(limit);
 
-		System.out.println("教师考勤是=" + teachername+"还有"+teacherjob);
+		System.out.println("教师考勤是=" + teachername + "还有" + teacherjob);
 		//		获取对应的id值
 		Map<String, Object> map = new HashMap<>();
 		if (null != teachername && "" != teachername)
@@ -1210,7 +1348,8 @@ public class RectorController
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
 			ResponseUtils.outJson(response, dateTable);
-		}else{
+		} else
+		{
 			dateTable.setCode(201);
 			dateTable.setMsg("无数据");
 			request.setCharacterEncoding("UTF-8");
@@ -1222,7 +1361,8 @@ public class RectorController
 
 	//教师详细考勤信息---考勤管理
 	@RequestMapping("/showTeacherAttendDetail")
-	public void showTeacherAttendDetail(TblTeacherAttend tblTeacherAttend, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+	public void showTeacherAttendDetail(TblTeacherAttend tblTeacherAttend, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException
+	{
 		String currentmonday = "1";
 		String currentsonday = "7";
 		String dafultsid = request.getParameter("teacherid");
@@ -1233,23 +1373,28 @@ public class RectorController
 		String mondaydate = null;
 		String sundaydate = null;
 
-		if(null != startdate && null != enddate){
+		if (null != startdate && null != enddate)
+		{
 			mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(startdate));
 			sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(enddate));
-		}else {
+		} else
+		{
 			mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(currentmonday));
 			sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(currentsonday));
 		}
 		tblTeacherAttend.setTattendbegin(mondaydate);
 		tblTeacherAttend.setTattendover(sundaydate);
-		if(null != tid){
+		if (null != tid)
+		{
 			tblTeacherAttend.setTid(Integer.valueOf(tid));
-		}else {
+		} else
+		{
 			tblTeacherAttend.setTid(Integer.valueOf(dafultsid));
 		}
 		List<TblTertime> tblTertimeList = kinderService.findALLTeacherAttendDetail(tblTeacherAttend);
 
-		if (0 != tblTertimeList.size()) {
+		if (0 != tblTertimeList.size())
+		{
 			dateTable.setCode(0);
 			dateTable.setMsg(" ");
 			dateTable.setCount(5);
@@ -1260,7 +1405,8 @@ public class RectorController
 			response.setCharacterEncoding("UTF-8");
 
 			ResponseUtils.outJson(response, dateTable);
-		}else{
+		} else
+		{
 			dateTable.setCode(201);
 			dateTable.setMsg("无数据");
 			request.setCharacterEncoding("UTF-8");
@@ -1270,4 +1416,53 @@ public class RectorController
 		}
 
 	}
+
+	//在线聊天的内容显示
+
+//	// 跳转到登录页面
+//	@RequestMapping(value = "loginpage", method = RequestMethod.GET)
+//	public ModelAndView loginpage()
+//	{
+//		return new ModelAndView("views/login");
+//	}
+
+	// 登录进入聊天主页面
+	@RequestMapping(value = "chatLogin", method = RequestMethod.POST)
+	public ModelAndView login(User loginUser, HttpServletRequest request)
+	{
+		HttpSession session = request.getSession();
+		// 登录操作
+		// 判断是否是一个已经登录的用户，没有则登录
+		if (null != session.getAttribute("loginUser"))
+		{
+			// 清除旧的用户
+			session.removeAttribute("loginUser");
+		}
+		// 新登录，需要构建一个用户
+		// 随机生成一个用户
+		String id = UUID.randomUUID().toString();
+		loginUser.setId(id);
+		// 将用户放入session
+		session.setAttribute("loginUser", loginUser);
+
+		// 将登录信息放入数据库，便于协查跟踪聊天者
+		System.out.println("新用户诞生了：" + loginUser);
+		return new ModelAndView("redirect:mainpage");
+	}
+
+	// 跳转到聊天室页面
+	@RequestMapping(value = "mainpage", method = RequestMethod.GET)
+	public ModelAndView mainpage(HttpServletRequest request)
+	{
+		//判断，如果没有session，则跳到登录页面
+		HttpSession session = request.getSession();
+		if (null == session.getAttribute("loginUser"))
+		{
+			return new ModelAndView("directorjsp/chatlogin");
+		} else
+		{
+			return new ModelAndView("directorjsp/chatmain");
+		}
+	}
+
 }

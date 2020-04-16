@@ -32,12 +32,18 @@ public interface KinderMapper
 	public List<TblCourse> findAllCourseName(Map<String, Object> map);
 
 	//课程管理--对应的课程的记录值
-	public Long findAllCourseNameCount(Map<String, Object> map);
+//	public Long findAllCourseNameCount(Map<String, Object> map);
 
 	//课程管理--添加课程表
 	public int  addTblCourseInfo(List<TblCourse> tblCourseList);
 	//删除--课程表
-	public int delTblCourseInfo(int cid);
+	public int delTblCourseInfo(int cid,int ctids);
+
+	//添加对应的课程时间表的内容
+	public int addCoursetestInfo(TblCoursetest tblCoursetest);
+	//查询对应的课程时间表的ID值
+	public int findCoursetestID(Map<String, Object> map);
+
 	/*
 	 * 班级管理
 	 * */

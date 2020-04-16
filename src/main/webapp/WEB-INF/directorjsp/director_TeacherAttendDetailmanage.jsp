@@ -33,8 +33,6 @@
 	<div class="layui-input-inline">
 		<input type="text" name="teachername" id="teachername" autocomplete="off" class="layui-input" readonly>
 	</div>
-</div>
-<div class="layui-form-item layui-form-text">
 	<label class="layui-form-label">角色：</label>
 	<div class="layui-input-inline">
 		<input type="text" name="teacherjob" id="teacherjob" autocomplete="off" class="layui-input" readonly>
@@ -68,51 +66,52 @@
 		//第一个实例
 		table.render({
 			elem: '#dataTable'
-			, height: 280
+			, height: 270
 			, url: path + '/director/showTeacherAttendDetail?teacherid='+teacherid //数据接口
-			, page: true //开启分页
+			// , page: true //开启分页
 			, id: 'searchTable'
-			, limit: 5
-			, limits: [5, 10]
+			// , limit: 5
+			// , limits: [5, 10]
 			, cols: [[ //表头
-				{field: 'tertime', title: '项目', width: 120, fixed: 'left', align: 'center'}
-				, {field: 'tertimedate', title: '上午', width: 200, align: 'center'}
-				, {field: 'tertimeperiod', title: '下午', width: 200, align: 'center'}
+				{field: 'tertime', title: '日期', width: 250, fixed: 'left', align: 'center',
+					templet: "<div>{{layui.util.toDateString(d.tertime,'yyyy-MM-dd')}}</div>"}
+				, {field: 'tertimedate1', title: '上午', width: 200, align: 'center'}
+				, {field: 'tertimedate2', title: '下午', width: 200, align: 'center'}
 			]],
 			done: function (res) {
-				// res.data.forEach(function (item, index) {
-				// 	//如果单元格数据时间大于8:30 和小于17：:30 的，将背景颜色改成红色，请假和无的变成蓝色
-				// 	if (item.stutimemonday > "8:30") {
-				// 		$(".layui-table-body tbody tr[data-index='" + index + "'] td[data-field='stutimemonday']").css({
-				// 			"background-color": "yellow",
-				// 		});
-				// 	}
-				// 	if (item.stutimemonday < "17:30") {
-				// 		$(".layui-table-body tbody tr[data-index='" + index + "'] td[data-field='stutimemonday']").css({
-				// 			"background-color": "yellow",
-				// 		});
-				// 	}
-				// 	if (item.stutimemonday == "请假") {
-				// 		$(".layui-table-body tbody tr[data-index='" + index + "'] td[data-field='stutimemonday']").css({
-				// 			"background-color": "darkturquoise",
-				// 		});
-				// 	}
-				//
-				// 	if (item.stutimetuesday > "8:30") {
-				// 		$(".layui-table-body tbody tr[data-index='" + index + "'] td[data-field='stutimetuesday']").css({
-				// 			"background-color": "yellow",
-				// 		});
-				// 	}
-				// 	if (item.stutimetuesday < "17:30") {
-				// 		$(".layui-table-body tbody tr[data-index='" + index + "'] td[data-field='stutimetuesday']").css({
-				// 			"background-color": "yellow",
-				// 		});
-				// 	}
-				// 	if (item.stutimetuesday == "请假") {
-				// 		$(".layui-table-body tbody tr[data-index='" + index + "'] td[data-field='stutimetuesday']").css({
-				// 			"background-color": "darkturquoise",
-				// 		});
-				// 	}
+				res.data.forEach(function (item, index) {
+					//如果单元格数据时间大于8:30 和小于17：:30 的，将背景颜色改成红色，请假和无的变成蓝色
+					if (item.tertimedate1 > "8:30") {
+						$(".layui-table-body tbody tr[data-index='" + index + "'] td[data-field='tertimedate1']").css({
+							"background-color": "yellow",
+						});
+					}
+					if (item.tertimedate1 < "17:30") {
+						$(".layui-table-body tbody tr[data-index='" + index + "'] td[data-field='tertimedate1']").css({
+							"background-color": "yellow",
+						});
+					}
+					if (item.tertimedate1 == "请假") {
+						$(".layui-table-body tbody tr[data-index='" + index + "'] td[data-field='tertimedate1']").css({
+							"background-color": "darkturquoise",
+						});
+					}
+
+					if (item.tertimedate2 > "8:30") {
+						$(".layui-table-body tbody tr[data-index='" + index + "'] td[data-field='tertimedate2']").css({
+							"background-color": "yellow",
+						});
+					}
+					if (item.tertimedate2 < "17:30") {
+						$(".layui-table-body tbody tr[data-index='" + index + "'] td[data-field='tertimedate2']").css({
+							"background-color": "yellow",
+						});
+					}
+					if (item.tertimedate2 == "请假") {
+						$(".layui-table-body tbody tr[data-index='" + index + "'] td[data-field='tertimedate2']").css({
+							"background-color": "darkturquoise",
+						});
+					}
 				//
 				// 	if (item.stutimethursday > "8:30") {
 				// 		$(".layui-table-body tbody tr[data-index='" + index + "'] td[data-field='stutimethursday']").css({
@@ -162,7 +161,7 @@
 				// 			"background-color": "darkturquoise",
 				// 		});
 				// 	}
-				// });
+				});
 				// for (var i in res.data) {
 				// 	if (res.data[i].stutimetype == "日期") {
 				// 		$(".layui-table-body tbody tr[data-index='" + i + "'] td[data-field='stutimemonday']").css({
@@ -201,7 +200,7 @@
 				// 	}
 				//
 				// }
-			},
+			}
 		});
 
 		$('#searchTable .layui-btn').on('click', function () {

@@ -59,12 +59,7 @@
 	<a class="layui-btn layui-btn-primary layui-btn-xs detail" >查看作业</a>
 	<a class="layui-btn layui-btn-danger layui-btn-xs score" >打分</a>
 </script>
-<%--<div class="layui-form-item" style="text-align: right;padding-right: 10%;">--%>
-<%--	<div class="layui-input-block">--%>
-<%--		<button class="layui-btn layui-btn-normal" data-type="reload" style="width: 100px;">上一周</button>--%>
-<%--		<button class="layui-btn layui-btn-normal" data-type="reload" style="width: 100px;">下一周</button>--%>
-<%--	</div>--%>
-<%--</div>--%>
+
 
 </body>
 <script>

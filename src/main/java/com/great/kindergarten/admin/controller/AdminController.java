@@ -1768,4 +1768,64 @@ public class AdminController {
 			ResponseUtils.outHtml(response,"error");
 		}
 	}
+
+	//查找试题
+	@RequestMapping("/findAllSafetyVideoItemsInfo")
+	public void findAllSafetyVideoItemsInfo(TblSafetyvideo tblSafetyvideo,HttpServletRequest request,HttpServletResponse response)
+	{
+		System.out.println("当前视频名称"+tblSafetyvideo);
+		List<TblSafetyvtq> tblSafetyvtqList = adminService.findAllSafetyVideoItemsInfo(tblSafetyvideo.getSafetyvideoid());
+		System.out.println("试题"+tblSafetyvtqList);
+		if(tblSafetyvtqList != null)
+		{
+			ResponseUtils.outJson(response,GsonUtils.getgsonUtils().toStr(tblSafetyvtqList));
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@AdminSystemLog(operationType = "上传视频",operationName = "管理员上传视频")
+	@RequestMapping("/uploadVideo")
+	public void uploadVideo(@RequestParam("file") MultipartFile file, String safetyVideoName ,String videoName , String videoAdd, TblSafetyvideo tblSafetyvideo, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		System.out.println("file="+file+"视频名称:"+safetyVideoName+"文件名称："+videoName+"文件路径："+videoAdd);
+		String prefix = "";
+		String dateStr = "";
+		//保存上传
+		if(file != null){
+			String originalName = file.getOriginalFilename();
+			prefix = originalName.substring(originalName.lastIndexOf(".")+1);
+			Date date = new Date();
+			String uuid = UUID.randomUUID()+"";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			dateStr = simpleDateFormat.format(date);
+			//			String filepath = "D:\\kindergarten\\src\\main\\webapp\\image\\adminimg\\img\\" + dateStr+"\\"+uuid+"." + prefix;
+			String filepath = "D:\\kindergarten\\src\\main\\webapp\\image\\adminimg\\video\\" + "\\"+originalName;
+			File files = new File(filepath);
+			//打印查看上传路径
+			System.out.println(filepath);
+			if(!files.getParentFile().exists()){
+				files.getParentFile().mkdirs();
+			}
+			tblSafetyvideo.setSafetyvideoname(safetyVideoName);
+			tblSafetyvideo.setVideoadd(videoAdd);
+			tblSafetyvideo.setVideoname(videoName);
+			tblSafetyvideo.setSafetyvideotime(new Date());
+			List<TblSafetyvideo> tblSafetyVideoList = new ArrayList<>();
+			tblSafetyVideoList.add(tblSafetyvideo);
+			int num = adminService.addSafetyVideo(tblSafetyVideoList);
+			if(num > 0)
+			{
+				file.transferTo(files);
+				response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
+				response.getWriter().flush();
+				response.getWriter().close();
+			}
+
+		}else{
+			response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
 }

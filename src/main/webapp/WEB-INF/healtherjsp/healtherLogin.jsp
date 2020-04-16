@@ -195,7 +195,7 @@
                 <label class="layui-form-label">验证码</label>
                 <div class="layui-input-inline">
                     <input type="text" name="code" lay-verify="code" placeholder="请输入验证码"
-                           autocomplete="off" class="layui-input verity">
+                           autocomplete="off" class="layui-input verity" value="0000">
                 </div>
 
                 <div id="codediv">

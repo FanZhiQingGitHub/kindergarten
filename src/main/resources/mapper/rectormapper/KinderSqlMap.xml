@@ -87,31 +87,49 @@ insert into tbl_kinder(
         </where>
     </select>
     <select id="findAllCourseName" resultType="TblCourse" parameterType="java.util.HashMap">
-        select * from tbl_course
-        <where>cid = #{cid}
+        select * from tbl_course c,tbl_coursetest ct
+        <where>c.ctids=ct.ctid and c.cid = #{cid}
+            <if test=" mondaydate != '' and mondaydate != null">
+                <![CDATA[ and DATE_FORMAT(ct.mondaydate, '%Y-%m-%d')>=  DATE_FORMAT(#{mondaydate}, '%Y-%m-%d') ]]>
+            </if>
+            <if test=" sundaydate != '' and sundaydate != null">
+                <![CDATA[ and DATE_FORMAT(ct.sundaydate, '%Y-%m-%d')<=  DATE_FORMAT(#{sundaydate}, '%Y-%m-%d') ]]>
+            </if>
         </where>
-        order by coursenum
+        order by c.coursenum
     </select>
-    <!--课程管理....班级和教师表.查询记录条数-->
-    <select id="findAllCourseNameCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
-        select count(*) from tbl_course
-        <where>cid = #{cid}
-        </where>
-    </select>
+
 
     <!--课程管理....新增课程表信息-->
     <insert id="addTblCourseInfo" parameterType="java.util.List">
         insert into
-        tbl_course(coursenum,coursename1,coursename2,coursename3,coursename4,coursename5,cid)
+        tbl_course(coursenum,coursename1,coursename2,coursename3,
+        coursename4,coursename5,cid,ctids)
         values
         <foreach collection="list" item="i" index="index" separator=",">
-            (#{i.coursenum},#{i.coursename1},#{i.coursename2},#{i.coursename3},#{i.coursename4},#{i.coursename5},#{i.cid})
+            (#{i.coursenum},#{i.coursename1},#{i.coursename2},
+            #{i.coursename3},#{i.coursename4},#{i.coursename5},
+            #{i.cid},#{i.ctids})
         </foreach>
     </insert>
-<!--    课程管理....删除对应的课程表的该时间的课程-->
-    <delete id="delTblCourseInfo" parameterType="java.lang.Integer">
-        delete from tbl_course where cid = #{cid}
+    <!--    课程管理....删除对应的课程表的该时间的课程-->
+    <delete id="delTblCourseInfo" parameterType="TblCourse">
+        delete from tbl_course where cid = #{cid} and ctids = #{ctids}
     </delete>
+
+
+    <!--添加对应的课程时间表的内容 -->
+    <insert id="addCoursetestInfo" parameterType="TblCoursetest">
+        insert into
+        tbl_coursetest(mondaydate,sundaydate)
+        values
+            (#{mondaydate},#{sundaydate})
+    </insert>
+
+    <!--查询对应的课程时间表的ID值 -->
+    <select id="findCoursetestID" parameterType="java.util.Map" resultType="Integer">
+        select IFNULL(MAX(ctid),0) from tbl_coursetest where mondaydate = #{mondaydate} and sundaydate = #{sundaydate}
+    </select>
 
     <!--班级管理....查找对应的老师的信息下拉框-->
     <select id="findTeacherClassAll" resultType="TblTeacher">
@@ -129,12 +147,12 @@ insert into tbl_kinder(
     <update id="updateTeacherByCid" parameterType="java.util.HashMap">
         update tbl_teacher set cid = #{cid} where teachername = #{teachername};
     </update>
-<!--    班级管理....删除对应的班级信息-->
+    <!--    班级管理....删除对应的班级信息-->
     <delete id="delClassTable" parameterType="int">
         delete from tbl_class
         where classid = #{cid}
     </delete>
-<!--    班级管理....修改对应的班级信息-->
+    <!--    班级管理....修改对应的班级信息-->
     <select id="selectTeacherByTeacherId" resultType="TblTeacher" parameterType="int">
         select * from tbl_teacher where cid = #{classid};
     </select>
@@ -145,9 +163,10 @@ insert into tbl_kinder(
     </update>
 
     <!--班级成员管理-->
-    <select id="findClassMemberAll" resultType="com.great.kindergarten.director.resultbean.TblScTInfo" parameterType="java.util.HashMap">
+    <select id="findClassMemberAll" resultType="com.great.kindergarten.director.resultbean.TblScTInfo"
+            parameterType="java.util.HashMap">
         select * from tbl_student s,tbl_class c,tbl_teacher t
-        <where> s.cid=c.classid and c.classid=t.cid
+        <where>s.cid=c.classid and c.classid=t.cid
             <if test="studentname != null and studentname != ''">
                 and s.studentname like "%"#{studentname}"%"
             </if>
@@ -164,10 +183,10 @@ insert into tbl_kinder(
         order by s.studenttime desc limit #{pageInt},#{limitInt}
     </select>
 
-    <!--课程管理....班级和教师表.查询记录条数-->
+    <!--班级成员管理....班级和教师表.查询记录条数-->
     <select id="findClassMemberAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
         select count(*) from tbl_student s,tbl_class c,tbl_teacher t
-        <where> s.cid=c.classid and c.classid=t.cid
+        <where>s.cid=c.classid and c.classid=t.cid
             <if test="studentname != null and studentname != ''">
                 and s.studentname like "%"#{studentname}"%"
             </if>
@@ -193,7 +212,7 @@ insert into tbl_kinder(
     <!--校园公告管理....查询总记录-->
     <select id="findCampusBulletinAll" resultType="TblCampus" parameterType="java.util.HashMap">
         select * from tbl_campusinfo
-        <where> 1=1
+        <where>1=1
             <if test="campusinfoname != null and campusinfoname != ''">
                 and campusinfoname like "%"#{campusinfoname}"%"
             </if>
@@ -210,7 +229,7 @@ insert into tbl_kinder(
     <!--校园公告管理...校园公告表的查询记录条数-->
     <select id="findCampusBulletinAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
         select count(*) from tbl_campusinfo
-        <where> 1=1
+        <where>1=1
             <if test="campusinfoname != null and campusinfoname != ''">
                 and campusinfoname like "%"#{campusinfoname}"%"
             </if>
@@ -253,7 +272,7 @@ insert into tbl_kinder(
     <select id="findTeacherAttendAll" resultType="TblTeacherAttend" parameterType="java.util.HashMap">
         select tt.*,t.teacherid,t.teachername,t.teacherjob
         from tbl_teacher t,tbl_teachertest tt
-        <where> t.teacherid = tt.tid
+        <where>t.teacherid = tt.tid
             <if test="teachername != null and teachername != ''">
                 and teachername like "%"#{teachername}"%"
             </if>
@@ -266,7 +285,7 @@ insert into tbl_kinder(
     <!--    教师搜索界面的设计,查询记录条数-->
     <select id="findTeacherAttendAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
         select count(*) from tbl_teacher t,tbl_teachertest tt
-        <where> t.teacherid = tt.tid
+        <where>t.teacherid = tt.tid
             <if test="teachername != null and teachername != ''">
                 and teachername like "%"#{teachername}"%"
             </if>
@@ -278,17 +297,17 @@ insert into tbl_kinder(
 
     <!--教师考勤对应的显示...考勤信息值-->
     <select id="findALLTeacherAttendDetail" resultType="TblTertime" parameterType="TblTeacherAttend">
-        select * from tbl_stutime st,tbl_pickup pi,tbl_student s
+        select tt.*,te.*,t.teacherid,t.teachername,t.teacherjob from tbl_teacher t,tbl_teachertest tt,tbl_tertime te
         <where>
-            st.pickid = pi.pickupid and pi.sid = s.studentid
-            <if test="studentid != '' and studentid != null ">
-                and s.studentid = #{studentid}
+            t.teacherid = tt.tid and te.taid=tt.tattendid
+            <if test="tid != '' and tid != null ">
+                and tt.tid = #{tid}
             </if>
-            <if test=" mondaydate != '' and mondaydate != null">
-                <![CDATA[   and DATE_FORMAT(pi.mondaydate, '%Y-%m-%d')>=  DATE_FORMAT(#{mondaydate}, '%Y-%m-%d')   ]]>
+            <if test=" tattendbegin != '' and tattendbegin != null">
+                <![CDATA[   and DATE_FORMAT(te.tertime, '%Y-%m-%d')>=  DATE_FORMAT(#{tattendbegin}, '%Y-%m-%d')   ]]>
             </if>
-            <if test=" sundaydate != '' and sundaydate != null">
-                <![CDATA[   and DATE_FORMAT(pi.sundaydate, '%Y-%m-%d')<=  DATE_FORMAT(#{sundaydate}, '%Y-%m-%d')   ]]>
+            <if test=" tattendover != '' and tattendover != null">
+                <![CDATA[   and DATE_FORMAT(te.tertime, '%Y-%m-%d')<=  DATE_FORMAT(#{tattendover}, '%Y-%m-%d')   ]]>
             </if>
         </where>
     </select>
