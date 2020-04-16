@@ -80,9 +80,6 @@
 		var table = layui.table
 		,upload = layui.upload;
 
-
-
-
 		$.ajax({
 			url: path+'/parent/getKids',
 			type:"POST",
@@ -239,7 +236,7 @@
 
 			//事件等于下载
 			if (layEvent === 'DownloadHomeWork') {
-				var DownloadHomeWorkUlr = data.workurl;
+				var DownloadHomeWorkUlr = data.worklocation;
 				window.location.href=path+'/parent/download?url='+DownloadHomeWorkUlr
 
 			}

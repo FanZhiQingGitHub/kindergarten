@@ -2,6 +2,7 @@ package com.great.kindergarten.parent.service;
 
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.parent.mapper.ParentMapper;
+import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Date;
@@ -21,6 +22,15 @@ public class ParentService {
 
     }
 
+
+    /**
+     * 根据条件找到孩子的接送信息
+     * @param pickUpInfoDetailPage
+     * @return
+     */
+    public List<TblStutime> findPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage){
+        return parentMapper.findPickUpDetailInfo(pickUpInfoDetailPage);
+    };
 
     /**
      * 更新作业的路径

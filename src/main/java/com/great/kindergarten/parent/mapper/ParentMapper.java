@@ -1,6 +1,7 @@
 package com.great.kindergarten.parent.mapper;
 
 import com.great.kindergarten.commons.entity.*;
+import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,7 +15,12 @@ import java.util.List;
 public interface ParentMapper {
 
 
-
+	/**
+	 * 根据条件找到孩子的接送信息
+	 * @param pickUpInfoDetailPage
+	 * @return
+	 */
+	List<TblStutime> findPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage);
 
 	/**
 	 * 更改家长提交的作业位置

@@ -1,5 +1,10 @@
 package com.great.kindergarten.commons.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 /**
  * 安全试题完成情况表
  */
@@ -10,19 +15,45 @@ public class TblSafetyTestCompletion
     private Integer parentid;
     private String safetytestscore;
     private String safetytestresult;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    private Date safetytestfinishtime;
+    private Integer safetyconfigid;
+
 
     public TblSafetyTestCompletion() {
     }
 
-    public TblSafetyTestCompletion(Integer safetytestid, String safetyvideoid, Integer parentid, String safetytestscore, String safetytestresult)
+    public TblSafetyTestCompletion(Integer safetytestid, String safetyvideoid, Integer parentid, String safetytestscore, String safetytestresult, Date safetytestfinishtime, Integer safetyconfigid)
     {
         this.safetytestid = safetytestid;
         this.safetyvideoid = safetyvideoid;
         this.parentid = parentid;
         this.safetytestscore = safetytestscore;
         this.safetytestresult = safetytestresult;
+        this.safetytestfinishtime = safetytestfinishtime;
+        this.safetyconfigid = safetyconfigid;
     }
 
+    public Integer getSafetyconfigid()
+    {
+        return safetyconfigid;
+    }
+
+    public void setSafetyconfigid(Integer safetyconfigid)
+    {
+        this.safetyconfigid = safetyconfigid;
+    }
+
+    public Date getSafetytestfinishtime()
+    {
+        return safetytestfinishtime;
+    }
+
+    public void setSafetytestfinishtime(Date safetytestfinishtime)
+    {
+        this.safetytestfinishtime = safetytestfinishtime;
+    }
 
     public Integer getSafetytestid()
     {
@@ -74,10 +105,9 @@ public class TblSafetyTestCompletion
         this.safetytestresult = safetytestresult;
     }
 
-
     @Override
     public String toString()
     {
-        return "TblSafetyTestCompletion{" + "safetytestid=" + safetytestid + ", safetyvideoid='" + safetyvideoid + '\'' + ", parentid=" + parentid + ", safetytestscore='" + safetytestscore + '\'' + ", safetytestresult='" + safetytestresult + '\'' + '}';
+        return "TblSafetyTestCompletion{" + "safetytestid=" + safetytestid + ", safetyvideoid='" + safetyvideoid + '\'' + ", parentid=" + parentid + ", safetytestscore='" + safetytestscore + '\'' + ", safetytestresult='" + safetytestresult + '\'' + ", safetytestfinishtime=" + safetytestfinishtime + ", safetyconfigid=" + safetyconfigid + '}';
     }
 }

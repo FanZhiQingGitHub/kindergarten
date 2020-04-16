@@ -283,6 +283,49 @@
             //前往查看宝宝考勤
             $("#kidAttendance").click(function () {
 
+                layer.open({
+                    type: 2,
+                    area: ['80%', '75%'],
+                    offset: ['10%', '9.5%'],
+                    title: '宝宝考勤以及详细接送信息',
+                    content: path + '/parent/toUrl/AttendanceTable' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                        var body = layer.getChildFrame("body", index);
+
+                        //获取宝宝的列表
+                        $.ajax({
+                            url: path+'/parent/getKids',
+                            type:"POST",
+                            async: false,
+                            cache: false,
+                            data: {},
+                            success: function(result) {
+                                //获取宝宝列表
+                                var $selectKis = body.find("#studentid");
+                                //获取宝宝列表数据
+                                kidList =result.data;
+                                //清空原本有的宝宝
+                                $selectKis.empty();
+
+                                if (kidList.length>0){
+                                    //输入打印出自己的宝宝
+                                    for (var startNumber =0;startNumber<kidList.length;startNumber++ ){
+                                        $selectKis.append("<option value='"+kidList[startNumber].studentid+"'>"+kidList[startNumber].studentname+"</option>")
+                                    }
+                                }
+                            },
+                            error:function(msg) {
+                                layer.alert("网络繁忙，请您稍后重试")
+                            }
+                        });
+
+
+
+
+
+                    }
+                });
+
             });
 
             //前往查看宝宝膳食

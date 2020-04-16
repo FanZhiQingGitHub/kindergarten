@@ -49,6 +49,32 @@
     </resultMap>
 
 
+
+    <!--    查找宝宝接送详细信息表-->
+    <select id="findPickUpDetailInfo" resultType="com.great.kindergarten.commons.entity.TblStutime"
+            parameterType="com.great.kindergarten.security.resultbean.PickUpInfoDetailPage">
+        select * from tbl_stutimeam am,tbl_stutimepm pm,tbl_student stu,tbl_date da
+        <where>
+            am.pmid = pm.timepmid and stu.studentid= am.sid and am.did = da.dateid
+            <if test="studentid != '' and studentid != null ">
+                and stu.studentid = #{studentid}
+            </if>
+            <if test=" mondaydate != '' and mondaydate != null">
+                <![CDATA[   and DATE_FORMAT(da.monday, '%Y-%m-%d')>=  DATE_FORMAT(#{mondaydate}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" sundaydate != '' and sundaydate != null">
+                <![CDATA[   and DATE_FORMAT(da.sunday, '%Y-%m-%d')<=  DATE_FORMAT(#{sundaydate}, '%Y-%m-%d')   ]]>
+            </if>
+        </where>
+    </select>
+
+
+
+
+
+
+
+
     <update id="updateWorkUrl" parameterType="TblWork">
         update tbl_work set workurl=#{workurl} where workreleaseid =#{workreleaseid} and sid = #{sid} and pid = #{pid}
     </update>
@@ -218,6 +244,8 @@
         </where>
 
         order by ts.safetyvideotime desc
+
+
     </select>
 
 
