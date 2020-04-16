@@ -5,7 +5,12 @@ import com.great.kindergarten.parent.service.ParentService;
 import com.great.kindergarten.util.FaceRecognitionUtils;
 import com.great.kindergarten.util.MD5Utils;
 import javafx.scene.Parent;
+import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -54,15 +61,70 @@ public class ParentController {
 
 
 
+    //	下载文件信息
+    @RequestMapping("/download")
+    public ResponseEntity<byte[]> download( HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+        //设置下载的文件名
+        String url = request.getParameter("url");
+
+        String workreleaseid= url.split("@@")[0];
+
+        String dayTime =url.split("@@")[1].split("@@@")[0];
+
+        String downFileName =url.split("@@@")[1];
+
+        //获取文件的实际路径
+        String databasePath = "/homeWork/"+workreleaseid+"/"+dayTime+"/"+downFileName;
+
+
+
+        //路径
+         //得到要下载的文件
+        File file=new File(request.getServletContext().getRealPath(databasePath));
+        HttpHeaders headers = new HttpHeaders();
+        //设置文件下载头
+        //为了解决中文名称乱码问题
+        String fileName=new String(file.getName().getBytes("UTF-8"),"iso-8859-1");
+        headers.setContentDispositionFormData("attachment", fileName);
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
+                headers, HttpStatus.CREATED);
+    }
+
+
+
+
+
+
+
+
 	@RequestMapping("/upload")
     @ResponseBody
 	public UpLoadReturn upload(MultipartFile file, HttpServletRequest request){
-       Integer sid= Integer.valueOf(request.getParameter("studentId"));
+
+        //取得是谁要进行操作
+        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
+
+        Integer sid= Integer.valueOf(request.getParameter("sid"));
+        String sName = request.getParameter("sName");
+        String workName = request.getParameter("workName");
+        String name  =sName.split("</")[0].split(">")[1];
+        Integer cid = Integer.valueOf(request.getParameter("cid"));
+        String workreleaseid = request.getParameter("workreleaseid");
+
         OutputStream os = null;
         InputStream inputStream = null;
         String fileName = null;
         String filePath=null;
-        String path=request.getContextPath()+"/homeWork";
+
+        //获取当前时间
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String dayTime = df.format(new Date());
+
+
+        String path=request.getServletContext().getRealPath("/homeWork/"+workreleaseid+"/"+dayTime);
+
         UpLoadReturn res=new UpLoadReturn();
         try {
             inputStream = file.getInputStream();
@@ -79,13 +141,36 @@ public class ParentController {
                 tempFile.mkdirs();
             }
             filePath=tempFile.getPath() + File.separator + fileName;
-
             os = new FileOutputStream(filePath);
-
             // 开始读取
             while ((len = inputStream.read(bs)) != -1) {
                 os.write(bs, 0, len);
             }
+
+            //数据库存储路径
+            String databasePath = workreleaseid+"@@"+dayTime+"@@@"+fileName;
+
+
+            //数据库插入操作
+            TblWork tblWork = new TblWork();
+            tblWork.setWorkreleasedetail(workName);
+            tblWork.setWorkresult("完成");
+            tblWork.setWfinishtime(new Date());
+            tblWork.setWorkurl(databasePath);
+            tblWork.setSid(sid);
+            tblWork.setStudentname(name);
+            tblWork.setCid(cid);
+            tblWork.setWorkreleaseid(workreleaseid);
+            tblWork.setPid(3);
+            tblWork.setParentname("张飞爸爸");
+
+            //判断是要覆盖还是第一次提交
+            if (parentService.findSameWorkInsertRecord(tblWork)==0){
+                parentService.uploadHomeWork(tblWork);
+            }else {
+                parentService.updateWorkUrl(tblWork);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -137,6 +222,7 @@ public class ParentController {
        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
        Integer videoId = Integer.valueOf(request.getParameter("videoId"));
         Integer score = Integer.valueOf(request.getParameter("score"));
+
 //        调用插入数据信息
         if (parent!=null){
             if (parentService.recordScore(parent.getParentId(),videoId,score)){

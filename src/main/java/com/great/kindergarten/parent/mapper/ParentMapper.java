@@ -4,6 +4,7 @@ import com.great.kindergarten.commons.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,6 +12,30 @@ import java.util.List;
  */
 @Mapper
 public interface ParentMapper {
+
+
+
+
+	/**
+	 * 更改家长提交的作业位置
+	 * @param insertHomeWork
+	 * @return
+	 */
+	Integer updateWorkUrl(TblWork insertHomeWork);
+
+	/**
+	 * 查询是否已经上传了这个作业
+	 * @param insertHomeWork
+	 * @return
+	 */
+	Integer findSameWorkInsertRecord(TblWork insertHomeWork);
+
+	/**
+	 * 根据类插入作业信息
+	 * @param insertHomeWork
+	 * @return
+	 */
+	Integer uploadHomeWork(TblWork insertHomeWork);
 
 
 	/**
@@ -52,9 +77,11 @@ public interface ParentMapper {
 	 * @param videoId
 	 * @param parentId
 	 * @param score
+	 * @param score
+	 * @param finshTime
 	 * @return
 	 */
-	Integer recordScore (Integer videoId ,Integer parentId,Integer score);
+	Integer recordScore (Integer videoId , Integer parentId, Integer score, Date finshTime);
 
 
 	/**

@@ -13,6 +13,10 @@
 </head>
 <body>
 
+<h1 align="center"> 重复提交会覆盖原来的作业</h1>
+<form>
+
+
 <table>
 
 	<tr>
@@ -40,28 +44,28 @@
 
 	<tr>
 		<td>
-			<div id="homeWorkId"></div>
+			<div id="workreleaseid"></div>
 		</td>
 
 		<td>
-			<div id="homeWorkName"></div>
+			<div id="workreleasedetail"></div>
 		</td>
 
 		<td>
-			<div id="homeWorkSetTime"></div>
+			<div id="workreleasetime"></div>
 		</td>
 
 		<td>
-			<div id="homeWorkResult"></div>
+			<div id="workresult"></div>
 		</td>
 
 		<td>
-			<div id="babyName"></div>
+			<div id="studentname"></div>
 		</td>
 	</tr>
 
 </table>
-
+</form>
 
 <button  class="layui-btn" id="homeWorkSubmitBtn"><i class="layui-icon"></i>提交作业</button>
 

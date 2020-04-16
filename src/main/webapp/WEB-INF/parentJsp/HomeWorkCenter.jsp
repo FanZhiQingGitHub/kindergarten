@@ -200,18 +200,22 @@
 					,success: function(layero, index){
 						//	显示
 						var body = layer.getChildFrame("body", index);
-						body.find("#homeWorkId").html(data.workreleaseid);
-						body.find("#homeWorkName").html(data.workreleasedetail);
-						body.find("#homeWorkSetTime").html(data.workreleasetime);
-						body.find("#babyName").html($("#status").html());
+						body.find("#workreleaseid").html(data.workreleaseid);
+						body.find("#workreleasedetail").html(data.workreleasedetail);
+						body.find("#workreleasetime").html(data.workreleasetime);
+						body.find("#studentname").html($("#status").html());
+
+						var upLoadMsg = 'sid='+$("#status").val()+'&sName='+body.find("#studentname").html()+"&cid="+data.cid+"&workreleaseid="+data.workreleaseid
+						+"&workName="+data.workreleasedetail;
 						// 给打开的窗口绑定上传
 						upload.render({
 							elem: body.find("#homeWorkSubmitBtn"),
 							accept: 'file'
 							,size:10000 //此处设为最大100M
-							,url: path+'/parent/upload?studentId='+$("#status").val()//上传接口
+							,url: path+'/parent/upload?'+upLoadMsg//上传接口
 							,before: function(obj){
 								layer.load(); //上传loading
+
 							}
 							,done: function(res, index, upload){
 								if (res.code==0){
@@ -228,30 +232,15 @@
 							}
 						});
 					}
-
-
-
 				});
-
-
-
-
-
-
-
-
-
-
-
 
 			}
 
 
 			//事件等于下载
 			if (layEvent === 'DownloadHomeWork') {
-				var DownloadHomeWorkUlr = data.worklocation;
-
-
+				var DownloadHomeWorkUlr = data.workurl;
+				window.location.href=path+'/parent/download?url='+DownloadHomeWorkUlr
 
 			}
 
@@ -260,9 +249,6 @@
 
 		});
 	});
-
-
-
 
 	function selectClass() {
 		var kidId =$("#status").val();
@@ -277,8 +263,20 @@
 		}
 	}
 
-	
-	
+
+	//将表单转为js对象数据
+	function serializeObject(array){
+		var obj=new Object();
+
+		$.each(array, function(index,param){
+			if(!(param.name in obj)){
+				obj[param.name]=param.value;
+			}
+		});
+		return obj;
+	}
+
+
 </script>
 
 
