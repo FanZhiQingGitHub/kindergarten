@@ -6,14 +6,15 @@ import com.great.kindergarten.director.resultbean.DateTable;
 import com.great.kindergarten.director.resultbean.TblScTInfo;
 import com.great.kindergarten.director.service.KinderService;
 import com.great.kindergarten.director.service.RectorService;
-import com.great.kindergarten.healther.resultbean.DateWrite;
-import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import com.great.kindergarten.security.util.DateUtil;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
+import com.great.kindergarten.websocket.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -290,7 +291,7 @@ public class RectorController
 		}
 	}
 
-	//园所-----教师信息进行对应的删除操作delTeacherTable
+	//园所-----教师信息----进行对应的删除操作
 	//删除对应表格的内容的值
 	@RequestMapping("/delTeacherTable")
 	public void delTable(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -320,6 +321,16 @@ public class RectorController
 		String teachername = request.getParameter("teachername");
 		String teacherjob = request.getParameter("teacherjob");
 
+		if (teacherjob.equals("班主任"))
+		{
+			tblTeacher.setRid(4);
+		} else if (teacherjob.equals("安防员"))
+		{
+			tblTeacher.setRid(5);
+		} else if (teacherjob.equals("保健员"))
+		{
+			tblTeacher.setRid(6);
+		}
 		tblTeacher.setTeacherid(teacherids);
 		tblTeacher.setTeachername(teachername);
 		tblTeacher.setTeacherjob(teacherjob);
@@ -336,11 +347,25 @@ public class RectorController
 		}
 	}
 
-
-	//添加对应的表格的信息
+	//园所-----教师信息----添加对应的表格的信息
 	@RequestMapping("/addTeacherForm")
 	protected void addTeacherForm(TblTeacher tblTeacher, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		String teacherjob = tblTeacher.getTeacherjob();
+		if (teacherjob.equals("班主任"))
+		{
+			tblTeacher.setRid(4);
+		} else if (teacherjob.equals("安防员"))
+		{
+			tblTeacher.setRid(5);
+		} else if (teacherjob.equals("保健员"))
+		{
+			tblTeacher.setRid(6);
+		}
+		//使用的密码是默认的密码
+		String md5pwd = MD5Utils.md5("123456");
+		tblTeacher.setTeacherpwd(md5pwd);
+		System.out.println("申请教师=" + tblTeacher);
 		int result = rectorService.addTeacherForm(tblTeacher);
 		if (result > 0)
 		{
@@ -734,6 +759,7 @@ public class RectorController
 			mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(currentmonday));
 			sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(currentsonday));
 		}
+		System.out.println("课程对应的日期时间=" + mondaydate + "~" + sundaydate);
 		map.put("mondaydate", mondaydate);
 		map.put("sundaydate", sundaydate);
 		if (null != cid)
@@ -746,11 +772,6 @@ public class RectorController
 		List<TblCourse> tblCourseList = kinderService.findAllCourseName(map);
 		if (0 != tblCourseList.size())
 		{
-			//			System.out.println(mondaydate);
-			//			request.getSession().setAttribute("dateTimes",mondaydate+"~"+sundaydate);
-			////			Integer count = kinderService.findAllCourseNameCount(map).intValue();
-			//			String dateff = (String) request.getSession().getAttribute("dateTimes");
-			//			System.out.println(dateff);
 			dateTable.setCode(0);
 			dateTable.setMsg(" ");
 			dateTable.setCount(5);
@@ -835,7 +856,7 @@ public class RectorController
 	public void addCourseInfo(TblCoursetest tblCoursetest, HttpServletRequest request, HttpServletResponse response) throws ParseException
 	{
 		String msg = request.getParameter("TblCourse");
-		System.out.println("json的值是="+msg);
+		System.out.println("json的值是=" + msg);
 		Gson g = new Gson();
 		tblCourse = g.fromJson(msg, TblCourse.class);
 		//拿对应的集合内容显示
@@ -858,54 +879,53 @@ public class RectorController
 		tblCoursetest.setMondaydate(mealstarttime);
 		tblCoursetest.setSundaydate(mealendtime);
 
-		int result = kinderService.addCoursetestInfo(tblCoursetest);
-		if (result > 0)
+		Map<String, Object> map = new HashMap<>();
+		map.put("mondaydate", mealstarttime);
+		map.put("sundaydate", mealendtime);
+		Integer ctid = kinderService.findCoursetestID(map);
+		System.out.println("对应的值是=" + ctid);
+		if (ctid == 0)
 		{
-			Map<String, Object> map = new HashMap<>();
-			map.put("mondaydate",mealstarttime);
-			map.put("sundaydate",mealendtime);
-			Integer ctid = kinderService.findCoursetestID(map);
-			//			String info = "暂未配置";
-			//			for (int i = 0; i < tblRecipeList.size(); i++) {
-			//				tblRecipeList.get(i).setMid(mealid);
-			//				tblRecipeList.get(i).getFriday();
-
-			String info = "无";
-			for (int i = 0; i < tblCourseList.size(); i++)
+			System.out.println("进去了=" + ctid);
+			int result = kinderService.addCoursetestInfo(tblCoursetest);
+			ctid = kinderService.findCoursetestID(map);
+		}
+		String info = "无";
+		for (int i = 0; i < tblCourseList.size(); i++)
+		{
+			tblCourseList.get(i).setCtids(ctid);
+			tblCourseList.get(i).setCid(classid);
+			if ("".equals(tblCourseList.get(i).getCoursename1()))
 			{
-				tblCourseList.get(i).setCtids(ctid);
-				tblCourseList.get(i).setCid(classid);
-				if ("".equals(tblCourseList.get(i).getCoursename1()))
-				{
-					tblCourseList.get(i).setCoursename1(info);
-				}
-				if ("".equals(tblCourseList.get(i).getCoursename2()))
-				{
-					tblCourseList.get(i).setCoursename2(info);
-				}
-				if ("".equals(tblCourseList.get(i).getCoursename3()))
-				{
-					tblCourseList.get(i).setCoursename3(info);
-				}
-				if ("".equals(tblCourseList.get(i).getCoursename4()))
-				{
-					tblCourseList.get(i).setCoursename4(info);
-				}
-				if ("".equals(tblCourseList.get(i).getCoursename5()))
-				{
-					tblCourseList.get(i).setCoursename5(info);
-				}
+				tblCourseList.get(i).setCoursename1(info);
 			}
-
-			int result2 = kinderService.addTblCourseInfo(tblCourseList);
-			if (result2 > 0)
+			if ("".equals(tblCourseList.get(i).getCoursename2()))
 			{
-				ResponseUtils.outHtml(response, "success");
-			} else
+				tblCourseList.get(i).setCoursename2(info);
+			}
+			if ("".equals(tblCourseList.get(i).getCoursename3()))
 			{
-				ResponseUtils.outHtml(response, "error");
+				tblCourseList.get(i).setCoursename3(info);
+			}
+			if ("".equals(tblCourseList.get(i).getCoursename4()))
+			{
+				tblCourseList.get(i).setCoursename4(info);
+			}
+			if ("".equals(tblCourseList.get(i).getCoursename5()))
+			{
+				tblCourseList.get(i).setCoursename5(info);
 			}
 		}
+
+		int result2 = kinderService.addTblCourseInfo(tblCourseList);
+		if (result2 > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+
 	}
 
 	/*
@@ -1107,7 +1127,7 @@ public class RectorController
 		}
 	}
 
-	//	班级成员信息----删除操作
+	//班级成员信息----删除操作
 	@RequestMapping("/delClassMemberTable")
 	public void delClassMemberTable(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -1397,4 +1417,53 @@ public class RectorController
 		}
 
 	}
+
+	//在线聊天的内容显示
+
+//	// 跳转到登录页面
+//	@RequestMapping(value = "loginpage", method = RequestMethod.GET)
+//	public ModelAndView loginpage()
+//	{
+//		return new ModelAndView("views/login");
+//	}
+
+	// 登录进入聊天主页面
+	@RequestMapping(value = "chatLogin", method = RequestMethod.POST)
+	public ModelAndView login(User loginUser, HttpServletRequest request)
+	{
+		HttpSession session = request.getSession();
+		// 登录操作
+		// 判断是否是一个已经登录的用户，没有则登录
+		if (null != session.getAttribute("loginUser"))
+		{
+			// 清除旧的用户
+			session.removeAttribute("loginUser");
+		}
+		// 新登录，需要构建一个用户
+		// 随机生成一个用户
+		String id = UUID.randomUUID().toString();
+		loginUser.setId(id);
+		// 将用户放入session
+		session.setAttribute("loginUser", loginUser);
+
+		// 将登录信息放入数据库，便于协查跟踪聊天者
+		System.out.println("新用户诞生了：" + loginUser);
+		return new ModelAndView("redirect:mainpage");
+	}
+
+	// 跳转到聊天室页面
+	@RequestMapping(value = "mainpage", method = RequestMethod.GET)
+	public ModelAndView mainpage(HttpServletRequest request)
+	{
+		//判断，如果没有session，则跳到登录页面
+		HttpSession session = request.getSession();
+		if (null == session.getAttribute("loginUser"))
+		{
+			return new ModelAndView("directorjsp/chatlogin");
+		} else
+		{
+			return new ModelAndView("directorjsp/chatmain");
+		}
+	}
+
 }

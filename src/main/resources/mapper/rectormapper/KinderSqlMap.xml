@@ -127,8 +127,8 @@ insert into tbl_kinder(
     </insert>
 
     <!--查询对应的课程时间表的ID值 -->
-    <select id="findCoursetestID" parameterType="java.util.Map" resultType="java.lang.Integer">
-        select ctid from tbl_coursetest where mondaydate = #{mondaydate} and sundaydate = #{sundaydate}
+    <select id="findCoursetestID" parameterType="java.util.Map" resultType="Integer">
+        select IFNULL(MAX(ctid),0) from tbl_coursetest where mondaydate = #{mondaydate} and sundaydate = #{sundaydate}
     </select>
 
     <!--班级管理....查找对应的老师的信息下拉框-->

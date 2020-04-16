@@ -74,18 +74,16 @@
 			// , limit: 5
 			// , limits: [5, 10, 15, 20]
 			, cols: [[ //表头
-				// {type: 'checkbox',fixed: 'left'},
-				// {field: 'recipeid', title: '食谱id', width: 130, align: 'center',hide:true},
 				{field: 'coursenum', title: '课节', width: 135, align: 'center'}
 				, {field: 'coursename1', title: '周一', width: 130, edit: 'text', align: 'center'}
 				, {field: 'coursename2', title: '周二', width: 130, edit: 'text', align: 'center'}
 				, {field: 'coursename3', title: '周三', width: 130, edit: 'text', align: 'center'}
 				, {field: 'coursename4', title: '周四', width: 130, edit: 'text', align: 'center'}
 				, {field: 'coursename5', title: '周五', width: 130, edit: 'text', align: 'center'}
-				,{field: 'mondaydate', title: '开始时间', width: 200, edit: 'text', align: 'center'}
-				,{field: 'sundaydate', title: '结束时间', width: 200, edit: 'text', align: 'center'}
-				,{field: 'ctids', title: '课程表的时间id', width: 100, edit: 'text', align: 'center',hide:true}
-				]],
+				, {field: 'mondaydate', title: '开始时间', width: 200, edit: 'text', align: 'center'}
+				, {field: 'sundaydate', title: '结束时间', width: 200, edit: 'text', align: 'center'}
+				, {field: 'ctids', title: '课程表的时间id', width: 100, edit: 'text', align: 'center', hide: true}
+			]],
 			done: function (res) {
 				tblCourseList = res.data;
 			}
@@ -93,32 +91,26 @@
 
 		$(function () {
 			$("#save").click(function () {
-				// var tblCourseList = layui.table.data;
-				// console.log("对应的集合是"+tblCourseList.toString()+classid);
-				// if (tblCourseList.length == 0) {
-				// 	layer.alert("您必须选择一行数据进行修改！", {icon: 2});
-				// } else {
-					var msg = {"tblCourseList": tblCourseList, "cid": classid};
-					msg = JSON.stringify(msg);
-					$.ajax({
-						url: path + "/director/updateCourseInfo",
-						async: true,
-						type: "post",
-						data: "TblCourse=" + msg,
-						datatype: "text",
-						success: function (msg) {
-							if (msg == "success") {
-								layer.alert("修改成功！", {icon: 6}, function (index) {
-									window.parent.location.reload();
-								});
-							} else {
-								layer.alert("修改失败！", {icon: 2});
-							}
-						}, error: function (msg) {
-							layer.alert("网络繁忙！", {icon: 2});
+				var msg = {"tblCourseList": tblCourseList, "cid": classid};
+				msg = JSON.stringify(msg);
+				$.ajax({
+					url: path + "/director/updateCourseInfo",
+					async: true,
+					type: "post",
+					data: "TblCourse=" + msg,
+					datatype: "text",
+					success: function (msg) {
+						if (msg == "success") {
+							layer.alert("修改成功！", {icon: 6}, function (index) {
+								window.parent.location.reload();
+							});
+						} else {
+							layer.alert("修改失败！", {icon: 2});
 						}
-					})
-				// }
+					}, error: function (msg) {
+						layer.alert("网络繁忙！", {icon: 2});
+					}
+				})
 			});
 			$("#cancel").click(function () {
 				window.parent.location.reload();
@@ -129,15 +121,13 @@
 				var path = $("#path").val();
 				layer.open({
 					type: 2,
-					area: ['80%', '68%'],
-					offset: ['10%', '9.5%'],
+					area: ['100%', '95%'],
 					title: '新增课程信息',
 					content: path + '/director/toUrl/director_CourseAddManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 					, success: function (layero, index) {
 						var frameId = $(layero).find("iframe").attr('id');
 						// 弹出一个页面的时候，下拉框赋值但不能刷新到选定的值。需要做如下调整:红色部分
 						var iframeWindow = layero.find("iframe")[0].contentWindow;
-						// $(window.frames[frameId].document).find("#parentId").val(data.parentId);
 						$(window.frames[frameId].document).find("#classid").val(classid);
 						iframeWindow.layui.form.render(); //更新全部
 					}

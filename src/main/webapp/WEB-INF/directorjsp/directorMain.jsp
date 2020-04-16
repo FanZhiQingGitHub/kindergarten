@@ -138,7 +138,7 @@
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="courseManagement">课<br/>程<br/>管<br/>理</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">消<br/>息<br/>通<br/>知</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="campusBulletinManagement">校<br/>园<br/>公<br/>告</button>
-        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">联<br/>系<br/>老<br/>师</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="chatTeacher">联<br/>系<br/>老<br/>师</button>
     </div>
     <div class="prod-show" style="max-width: 80%;">
         <div class="layui-fluid">
@@ -375,6 +375,15 @@
             layer.confirm('您确定要进入到校园公告管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
                 layer.close(index);
                 window.location.href = src+"/director/toUrl/director_CampusBulletinManage";
+                return true;
+            });
+            return false;
+        });
+        //在线聊天
+        $("#chatTeacher").on('click',function () {
+            layer.confirm('您确定要进入到在线聊天中心吗?', {icon: 3, title: '温馨提示'}, function (index) {
+                layer.close(index);
+                window.location.href = src+"/director/toUrl/chatlogin";
                 return true;
             });
             return false;

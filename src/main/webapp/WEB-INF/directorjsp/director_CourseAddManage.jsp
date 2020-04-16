@@ -33,7 +33,7 @@
 
     <table class="layui-hide" id="demo"></table>
 
-    <div class="layui-btn-container" style="margin-left: 46%;margin-top: 6%">
+    <div class="layui-btn-container" style="margin-left: 46%;margin-top: 1%">
         <button type="button" class="layui-btn layui-btn-normal " id="bu1">保存信息</button>
     </div>
 </div>

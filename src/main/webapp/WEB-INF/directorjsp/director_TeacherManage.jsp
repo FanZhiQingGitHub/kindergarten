@@ -67,7 +67,10 @@
 				, {field: 'teacherjob', title: '角色', align: 'center', width: 180}
 				, {field: 'teacherregtime', title: '创建时间', align: 'center', sort: true, width: 180,
 					templet: "<div>{{layui.util.toDateString(d.teacherregtime,'yyyy-MM-dd HH:mm')}}</div>"
-				}
+				}, {field: 'teachersex', title: '性别', align: 'center',hide: true}
+				, {field: 'teacherage', title: '年龄', align: 'center',hide: true}
+				, {field: 'teacheradd', title: '地址', align: 'center', hide: true}
+				, {field: 'teacherphone', title: '手机', align: 'center', hide: true}
 				, {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo'}
 			]]
 		});
@@ -125,9 +128,18 @@
 								layer.alert("请输入教师名称", {icon: 2});
 							} else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(formData.teachername)) {
 								layer.alert('教师名称不能有特殊字符');
-							}else if(formData.teacherjob=='暂无')
-							{
+							}else if(formData.teacherjob=='暂无') {
+								layer.alert("请选择教师角色！");
+							}else if(formData.teachersex=='暂无') {
 								layer.alert("请选择教师性别！");
+							} else if (formData.teacherphone.length == 0) {
+								layer.alert("请选择教师的联系方式！");
+							}else if(!new RegExp("^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$").test(formData.teacherphone)){
+								layer.alert("请输入正确的手机格式！");
+							}else if(!new RegExp("^([2-5]\\d|60)$").test(formData.teacherage)){
+								layer.alert("请输入20-60之间的教师的年龄！");
+							}else if(formData.teacheradd.length == 0){
+								layer.alert("请输入对应的教师的地址信息！");
 							} else {
 								$.ajax({
 									url: src + '/director/updateTeacherTable',
@@ -158,6 +170,10 @@
 							$(window.frames[frameId].document).find("#teacherid").val(data.teacherid);
 							$(window.frames[frameId].document).find("#teachername").val(data.teachername);
 							$(window.frames[frameId].document).find("#teacherjob").val(data.teacherjob).prop("selected",true);
+							$(window.frames[frameId].document).find("#teachersex").val(data.teachersex).prop("selected",true);
+							$(window.frames[frameId].document).find("#teacherage").val(data.teacherage);
+							$(window.frames[frameId].document).find("#teacheradd").val(data.teacheradd);
+							$(window.frames[frameId].document).find("#teacherphone").val(data.teacherphone);
 							iframeWindow.layui.form.render(); //更新全部
 						}
 					});
@@ -197,11 +213,19 @@
 							layer.alert("请输入教师名称", {icon: 2});
 						} else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(formData.teachername)) {
 							layer.alert('教师名称不能有特殊字符');
-						}else if(formData.teacherjob=='暂无')
-						{
+						}else if(formData.teacherjob=='暂无') {
+							layer.alert("请选择教师角色！");
+						}else if(formData.teachersex=='暂无') {
 							layer.alert("请选择教师性别！");
-						}
-						else {
+						} else if (formData.teacherphone.length == 0) {
+							layer.alert("请选择教师的联系方式！");
+						}else if(!new RegExp("^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$").test(formData.teacherphone)){
+							layer.alert("请输入正确的手机格式！");
+						}else if(!new RegExp("^([2-5]\\d|60)$").test(formData.teacherage)){
+							layer.alert("请输入20-60之间的教师的年龄！");
+						}else if(formData.teacheradd.length == 0){
+							layer.alert("请输入对应的教师的地址信息！");
+						} else {
 							$.ajax({
 								url: src + '/director/addTeacherForm',
 								type: 'post',

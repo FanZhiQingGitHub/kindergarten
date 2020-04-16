@@ -99,6 +99,11 @@
         update tbl_teacher
         set  teachername = #{teachername}
             ,teacherjob = #{teacherjob}
+            ,teachersex = #{teachersex}
+			,teacherage = #{teacherage}
+			,teacheradd = #{teacheradd}
+			,teacherphone = #{teacherphone}
+			,rid = #{rid}
         where teacherid = #{teacherid}
     </update>
 
@@ -108,10 +113,22 @@
 			 teachername
 			,teacherjob
 			,teacherregtime
+			,teacherpwd
+			,teachersex
+			,teacherage
+			,teacheradd
+			,teacherphone
+			,rid
 		)values(
 			 #{teachername}
 			,#{teacherjob}
 			,now()
+			,#{teacherpwd}
+			,#{teachersex}
+			,#{teacherage}
+			,#{teacheradd}
+			,#{teacherphone}
+			,#{rid}
 		)
 	</insert>
 

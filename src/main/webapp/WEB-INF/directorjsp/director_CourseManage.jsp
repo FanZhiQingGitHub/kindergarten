@@ -38,15 +38,12 @@
 		<input class="layui-input" name="classname" id="classname" autocomplete="off">
 	</div>
 	<button class="layui-btn" data-type="reload"><i class="layui-icon">&#xe615;</i>查询</button>
-<%--	<button class="layui-btn" data-type="addChildren"><i class="layui-icon">&#xe654;</i>新增</button>--%>
 </div>
 <input type="hidden" value="${pageContext.request.contextPath}" id="srcAddress"/>
 
 <table id="demo" lay-filter="test"></table>
 <script type="text/html" id="barDemo">
-	<%--	<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>--%>
 	<a class="layui-btn edit layui-btn-xs" data-method="dialog" lay-event="edit"><i class="layui-icon">&#xe642;</i>配置课程</a>
-<%--	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon">&#xe67e;</i>删除</a>--%>
 </script>
 
 <script src="${pageContext.request.contextPath}/layui/layui.js"></script>
@@ -84,7 +81,7 @@
 		table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
 			var data = obj.data //获得当前行数据
 				, layEvent = obj.event; //获得 lay-event 对应的值
-			 if (layEvent === 'edit') {
+			if (layEvent === 'edit') {
 				var othis = $(this), //othis当前button对象
 					method = othis.data('method');//data-method="dialog"中的值
 				if (method == "dialog") {
@@ -100,15 +97,8 @@
 							var frameId = $(layero).find("iframe").attr('id');
 							// 弹出一个页面的时候，下拉框赋值但不能刷新到选定的值。需要做如下调整:红色部分
 							var iframeWindow = layero.find("iframe")[0].contentWindow;
-							// $(window.frames[frameId].document).find("#parentId").val(data.parentId);
 							$(window.frames[frameId].document).find("#classid").val(data.classid);
 							$(window.frames[frameId].document).find("#classname").val(data.classname);
-							// $(window.frames[frameId].document).find("#studentname").val(data.studentname).prop("selected",true);
-							// $(window.frames[frameId].document).find("#parentSon").val(data.parentSon).prop("selected",true);
-							// $(window.frames[frameId].document).find("#parentAge").val(data.parentAge);
-							// $(window.frames[frameId].document).find("#parentAdd").val(data.parentAdd);
-							// $(window.frames[frameId].document).find("#parentPhone").val(data.parentPhone);
-							// $(window.frames[frameId].document).find("#parentJob").val(data.parentJob);
 							iframeWindow.layui.form.render(); //更新全部
 						}
 					});
@@ -133,68 +123,7 @@
 					}
 				});
 			}
-			// if (type === 'addChildren') {
-			// 	layer.open({
-			// 		type: 2,
-			// 		title: '添加信息',
-			// 		area: ['500px', '500px'],
-			// 		moveType: 1,//拖拽模式，0或者1
-			// 		btn: ['添加', '取消'],
-			// 		btn1: function (index, layero) {
-			// 			var src = $("#srcAddress").val();
-			// 			//layer.getChildFrame("form", index)获取iframe的表单
-			// 			//serializeArray jquery方法，将表单对象序列化为数组
-			// 			var formData = serializeObject($, layer.getChildFrame("form", index).serializeArray());
-			//
-			// 			if (formData.parentName.length == 0) {
-			// 				layer.alert("请输入班级名称", {icon: 2});
-			// 			} else if (formData.studentname.length == 0) {
-			// 				layer.alert("请输入班级名称", {icon: 2});
-			// 			} else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(formData.studentname)) {
-			// 				layer.alert("班级名称不能有特殊字符", {icon: 2});
-			// 			} else if (formData.studentname == '暂无') {
-			// 				layer.alert("请选择班主任名称！");
-			// 			} else if (formData.parentSon == '暂无') {
-			// 				layer.alert("请选择所在教室！");
-			// 			}
-			// 			else {
-			// 				$.ajax({
-			// 					url: src + '/director/addParentForm',
-			// 					type: 'post',
-			// 					data: formData,
-			// 					success: function (data) {
-			// 						if(data==="success"){
-			// 							layer.alert("新增家长成功！",{icon: 6}, function(){
-			// 								window.location.href = src + "/director/toUrl/director_ParentManage";
-			// 							});
-			// 						}else{
-			// 							layer.alert(data,{icon: 2});
-			// 						}
-			// 						layer.close(index);
-			// 					}, error: function (err) {
-			// 						console.log(err);
-			// 					}
-			// 				});
-			// 			}
-			// 		},
-			// 		content: src + '/director/toUrl/director_ParentDetailManage'  //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-			// 		, success: function (layero, index) {
-			// 			console.log(layero, index);
-			// 		}
-			// 	});
-			// }
 		});
-
-		// //将表单转为js对象数据
-		// function serializeObject($, array) {
-		// 	var obj = new Object();
-		// 	$.each(array, function (index, param) {
-		// 		if (!(param.name in obj)) {
-		// 			obj[param.name] = param.value;
-		// 		}
-		// 	});
-		// 	return obj;
-		// }
 	});
 </script>
 </body>
