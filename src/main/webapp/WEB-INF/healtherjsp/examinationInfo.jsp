@@ -49,7 +49,7 @@
                 </div>
 
 
-                <button type="button" class="layui-btn layui-btn-normal" data-type="reload"><i class="layui-icon">&#xe615;</i>搜索体检信息
+                <button type="button" class="layui-btn layui-btn-normal" data-type="reload"><i class="layui-icon">&#xe615;</i>查询体检信息
                 </button>
                 <button type="button" class="layui-btn add"><i class="layui-icon">&#xe654;</i>新增体检信息</button>
             </div>
@@ -79,9 +79,6 @@
         //第一个实例
         table.render({
             elem: '#dataTable'
-            , text: {
-                none: '${lang == "zh_CN" ? "无数据" : "No Data"}'
-            }
             , height: 280
             , url: path + '/healther/showALLExamination' //数据接口
             , page: true //开启分页

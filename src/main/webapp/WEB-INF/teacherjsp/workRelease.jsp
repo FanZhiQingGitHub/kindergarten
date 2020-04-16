@@ -30,12 +30,7 @@
 			<label class="layui-form-label" >选择班级：</label>
 			<select name="selectClass" id="selectClass" lay-verify="required" style="width: 100px">
 				<option value="" selected>请选择班级</option>
-<%--	                <option value="请选择班级">请选择班级</option>--%>
-<%--	                <c:if test="${not empty tblClassList}">--%>
-<%--		               <c:forEach items="${tblClassList}" var="i" step="1">--%>
-<%--			              <option value="${i.classname}">${i.classname}</option>--%>
-<%--		            </c:forEach>--%>
-<%--	                </c:if>--%>
+
 			</select>
 		</div>
 	</div>
@@ -137,7 +132,7 @@
 			}
 			,done: function(res, index, upload){
 				if(res.code==0){ //上传成功
-					alert("上传成功"+res.data.src);
+					alert("上传成功");
 					var tr = demoListView.find('tr#upload-'+ index)
 						,tds = tr.children();
 					tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');

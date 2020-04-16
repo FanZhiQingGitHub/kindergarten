@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.kindergarten.security.mapper.SecurityMapper">
+
+    <!--    查找宝宝的所有信息，作为搜索条件-->
+    <select id="findAllStuInfo" resultType="com.great.kindergarten.commons.entity.TblStudent">
+        select * from tbl_student
+    </select>
+
+    <!--    根据宝宝名称和出生日期查找宝宝的坐标信息-->
+    <select id="findStuLngLetInfo" resultType="com.great.kindergarten.commons.entity.TblStudent" parameterType="java.util.Map">
+        select * from tbl_student where studentid = #{studentid} and studentname = #{studentname} and studentbrith = #{studentbrith}
+    </select>
+
+    <!--    新增报警信息-->
+    <insert id="addAlarmLogInfo" parameterType="java.util.List">
+        insert into
+        tbl_alarmlog(alarmlogname,alarmlogarea,alarmlogtime,studentname,sid)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.alarmlogname},#{i.alarmlogarea},#{i.alarmlogtime},#{i.studentname},#{i.sid})
+        </foreach>
+    </insert>
+
+    <!--    查找宝宝体检信息表-->
+    <select id="findAlarmInfo" resultType="com.great.kindergarten.commons.entity.TblAlarmLog" parameterType="com.great.kindergarten.security.resultbean.AlarmLogPage">
+        select al.alarmlogid,al.alarmlogname,al.studentname,al.alarmlogarea,al.alarmlogtime from tbl_alarmlog al,tbl_student stu
+        <where>
+            al.sid = stu.studentid
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(al.alarmlogtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(al.alarmlogtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+        </where>
+        order by al.alarmlogtime desc limit #{page},#{limit}
+    </select>
+
+    <!--    查找宝宝体检信息表-->
+    <select id="findAlarmInfoCount" resultType="java.lang.Long" parameterType="com.great.kindergarten.security.resultbean.AlarmLogPage">
+        select count(*) from tbl_alarmlog al,tbl_student stu
+        <where>
+            al.sid = stu.studentid
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(al.alarmlogtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(al.alarmlogtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+        </where>
+    </select>
+
+</mapper>

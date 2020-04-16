@@ -26,7 +26,8 @@ public class TblStudent {
     private Integer cid;
     private Integer pid;
     private Integer kid;
-    private Integer rid;
+    private String studentlng;
+    private String studentlat;
 
     private String time1;
     private String time2;
@@ -44,7 +45,7 @@ public class TblStudent {
     public TblStudent() {
     }
 
-    public TblStudent(Integer studentid, String studentname, String studentpwd, String studentsex, String studentbrith, String studentadd, Date studenttime, String studentstatus, Integer cid, Integer pid, Integer kid, Integer rid) {
+    public TblStudent(Integer studentid, String studentname, String studentpwd, String studentsex, String studentbrith, String studentadd, Date studenttime, String studentstatus, Integer cid, Integer pid, Integer kid, String studentlng, String studentlat, String time1, String time2, Integer classid, String classname, TblParent tblParent, Integer parentId, String parentName, Integer kinderid, String kindername) {
         this.studentid = studentid;
         this.studentname = studentname;
         this.studentpwd = studentpwd;
@@ -56,7 +57,17 @@ public class TblStudent {
         this.cid = cid;
         this.pid = pid;
         this.kid = kid;
-        this.rid = rid;
+        this.studentlng = studentlng;
+        this.studentlat = studentlat;
+        this.time1 = time1;
+        this.time2 = time2;
+        this.classid = classid;
+        this.classname = classname;
+        this.tblParent = tblParent;
+        this.parentId = parentId;
+        this.parentName = parentName;
+        this.kinderid = kinderid;
+        this.kindername = kindername;
     }
 
     public Integer getStudentid() {
@@ -147,123 +158,108 @@ public class TblStudent {
         this.kid = kid;
     }
 
-    public Integer getRid() {
-        return rid;
+    public String getStudentlng() {
+        return studentlng;
     }
 
-    public void setRid(Integer rid) {
-        this.rid = rid;
+    public void setStudentlng(String studentlng) {
+        this.studentlng = studentlng;
     }
 
-    public String getTime1()
-    {
+    public String getStudentlat() {
+        return studentlat;
+    }
+
+    public void setStudentlat(String studentlat) {
+        this.studentlat = studentlat;
+    }
+
+    public String getTime1() {
         return time1;
     }
 
-    public void setTime1(String time1)
-    {
+    public void setTime1(String time1) {
         this.time1 = time1;
     }
 
-    public String getTime2()
-    {
+    public String getTime2() {
         return time2;
     }
 
-    public void setTime2(String time2)
-    {
+    public void setTime2(String time2) {
         this.time2 = time2;
     }
 
-    public TblClass getTblClass()
-    {
+    public TblClass getTblClass() {
         return tblClass;
     }
 
-    public void setTblClass(TblClass tblClass)
-    {
+    public void setTblClass(TblClass tblClass) {
         this.tblClass = tblClass;
     }
 
-    public String getClassname()
-    {
-        return classname;
-    }
-
-    public void setClassname(String classname)
-    {
-        this.classname = classname;
-    }
-
-    public TblParent getTblParent()
-    {
-        return tblParent;
-    }
-
-    public void setTblParent(TblParent tblParent)
-    {
-        this.tblParent = tblParent;
-    }
-
-    public Integer getParentId()
-    {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId)
-    {
-        this.parentId = parentId;
-    }
-
-    public String getParentName()
-    {
-        return parentName;
-    }
-
-    public void setParentName(String parentName)
-    {
-        this.parentName = parentName;
-    }
-
-    public TblKinder getTblKinder()
-    {
-        return tblKinder;
-    }
-
-    public void setTblKinder(TblKinder tblKinder)
-    {
-        this.tblKinder = tblKinder;
-    }
-
-    public String getKindername()
-    {
-        return kindername;
-    }
-
-    public void setKindername(String kindername)
-    {
-        this.kindername = kindername;
-    }
-
-    public Integer getClassid()
-    {
+    public Integer getClassid() {
         return classid;
     }
 
-    public void setClassid(Integer classid)
-    {
+    public void setClassid(Integer classid) {
         this.classid = classid;
     }
 
+    public String getClassname() {
+        return classname;
+    }
 
-    public Integer getKinderid()
-    {
+    public void setClassname(String classname) {
+        this.classname = classname;
+    }
+
+    public TblParent getTblParent() {
+        return tblParent;
+    }
+
+    public void setTblParent(TblParent tblParent) {
+        this.tblParent = tblParent;
+    }
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public TblKinder getTblKinder() {
+        return tblKinder;
+    }
+
+    public void setTblKinder(TblKinder tblKinder) {
+        this.tblKinder = tblKinder;
+    }
+
+    public Integer getKinderid() {
         return kinderid;
     }
 
-    public void setKinderid(Integer kinderid)
-    {
+    public void setKinderid(Integer kinderid) {
         this.kinderid = kinderid;
+    }
+
+    public String getKindername() {
+        return kindername;
+    }
+
+    public void setKindername(String kindername) {
+        this.kindername = kindername;
     }
 
     @Override
@@ -280,7 +276,19 @@ public class TblStudent {
                 ", cid=" + cid +
                 ", pid=" + pid +
                 ", kid=" + kid +
-                ", rid=" + rid +
+                ", studentlng='" + studentlng + '\'' +
+                ", studentlat='" + studentlat + '\'' +
+                ", time1='" + time1 + '\'' +
+                ", time2='" + time2 + '\'' +
+                ", tblClass=" + tblClass +
+                ", classid=" + classid +
+                ", classname='" + classname + '\'' +
+                ", tblParent=" + tblParent +
+                ", parentId=" + parentId +
+                ", parentName='" + parentName + '\'' +
+                ", tblKinder=" + tblKinder +
+                ", kinderid=" + kinderid +
+                ", kindername='" + kindername + '\'' +
                 '}';
     }
 }

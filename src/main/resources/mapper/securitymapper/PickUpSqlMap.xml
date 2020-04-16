@@ -57,10 +57,10 @@
                 and cla.classname = #{cName}
             </if>
             <if test=" time1 != '' and time1 != null">
-                <![CDATA[   and DATE_FORMAT(#{time1}, '%Y-%m-%d')>=  DATE_FORMAT(da.monday, '%Y-%m-%d')   ]]>
+                <![CDATA[   and DATE_FORMAT(da.monday, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
             <if test=" time2 != '' and time2 != null">
-                <![CDATA[   and DATE_FORMAT(#{time2}, '%Y-%m-%d')<=  DATE_FORMAT(da.sunday, '%Y-%m-%d')   ]]>
+                <![CDATA[   and DATE_FORMAT(da.sunday, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
             </if>
         </where>
         order by da.sunday desc limit #{page},#{limit}
@@ -79,10 +79,10 @@
                 and cla.classname = #{cName}
             </if>
             <if test=" time1 != '' and time1 != null">
-                <![CDATA[   and DATE_FORMAT(#{time1}, '%Y-%m-%d')>=  DATE_FORMAT(da.monday, '%Y-%m-%d')   ]]>
+                <![CDATA[   and DATE_FORMAT(da.monday, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
             <if test=" time2 != '' and time2 != null">
-                <![CDATA[   and DATE_FORMAT(#{time2}, '%Y-%m-%d')<=  DATE_FORMAT(da.sunday, '%Y-%m-%d')   ]]>
+                <![CDATA[   and DATE_FORMAT(da.sunday, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
             </if>
         </where>
     </select>
@@ -98,10 +98,10 @@
                 and stu.studentid = #{studentid}
             </if>
             <if test=" mondaydate != '' and mondaydate != null">
-                <![CDATA[   and DATE_FORMAT(#{mondaydate}, '%Y-%m-%d')>=  DATE_FORMAT(da.monday, '%Y-%m-%d')   ]]>
+                <![CDATA[   and DATE_FORMAT(da.monday, '%Y-%m-%d')>=  DATE_FORMAT(#{mondaydate}, '%Y-%m-%d')   ]]>
             </if>
             <if test=" sundaydate != '' and sundaydate != null">
-                <![CDATA[   and DATE_FORMAT(#{sundaydate}, '%Y-%m-%d')<=  DATE_FORMAT(da.sunday, '%Y-%m-%d')   ]]>
+                <![CDATA[   and DATE_FORMAT(da.sunday, '%Y-%m-%d')<=  DATE_FORMAT(#{sundaydate}, '%Y-%m-%d')   ]]>
             </if>
         </where>
     </select>

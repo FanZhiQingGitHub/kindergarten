@@ -2,12 +2,14 @@ package com.great.kindergarten.commons.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 /**
  * 安全视频表实体类
  */
+@Component
 public class TblSafetyvideo {
     private Integer safetyvideoid;
     private String safetyvideoname;
@@ -23,13 +25,8 @@ public class TblSafetyvideo {
     private String videoadd;
     private String safetytestscore;
     private String safetytestresult;
-
     private String time1;
     private String time2;
-    private TblMonitor tblMonitor;
-    private Integer monitorid;
-    private String monitorname;
-
     public TblSafetyvideo() {
     }
 
@@ -41,7 +38,7 @@ public class TblSafetyvideo {
         this.safetyfinishtime = safetyfinishtime;
     }
 
-    public TblSafetyvideo(Integer safetyvideoid, String safetyvideoname, Date safetyvideotime, Date safetyfinishtime, String safetyvideoplace, Integer mid, String videoname, String videoadd, String safetytestscore, String safetytestresult)
+    public TblSafetyvideo(Integer safetyvideoid, String safetyvideoname, Date safetyvideotime, Date safetyfinishtime, String safetyvideoplace, Integer mid, String videoname, String videoadd, String safetytestscore, String safetytestresult, String time1, String time2)
     {
         this.safetyvideoid = safetyvideoid;
         this.safetyvideoname = safetyvideoname;
@@ -53,6 +50,28 @@ public class TblSafetyvideo {
         this.videoadd = videoadd;
         this.safetytestscore = safetytestscore;
         this.safetytestresult = safetytestresult;
+        this.time1 = time1;
+        this.time2 = time2;
+    }
+
+    public String getTime1()
+    {
+        return time1;
+    }
+
+    public void setTime1(String time1)
+    {
+        this.time1 = time1;
+    }
+
+    public String getTime2()
+    {
+        return time2;
+    }
+
+    public void setTime2(String time2)
+    {
+        this.time2 = time2;
     }
 
     public Integer getSafetyvideoid()
@@ -153,56 +172,6 @@ public class TblSafetyvideo {
     public void setSafetytestresult(String safetytestresult)
     {
         this.safetytestresult = safetytestresult;
-    }
-
-    public String getTime1()
-    {
-        return time1;
-    }
-
-    public void setTime1(String time1)
-    {
-        this.time1 = time1;
-    }
-
-    public String getTime2()
-    {
-        return time2;
-    }
-
-    public void setTime2(String time2)
-    {
-        this.time2 = time2;
-    }
-
-    public TblMonitor getTblMonitor()
-    {
-        return tblMonitor;
-    }
-
-    public void setTblMonitor(TblMonitor tblMonitor)
-    {
-        this.tblMonitor = tblMonitor;
-    }
-
-    public Integer getMonitorid()
-    {
-        return monitorid;
-    }
-
-    public void setMonitorid(Integer monitorid)
-    {
-        this.monitorid = monitorid;
-    }
-
-    public String getMonitorname()
-    {
-        return monitorname;
-    }
-
-    public void setMonitorname(String monitorname)
-    {
-        this.monitorname = monitorname;
     }
 
     @Override

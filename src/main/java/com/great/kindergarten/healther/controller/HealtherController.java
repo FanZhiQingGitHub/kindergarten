@@ -2,18 +2,14 @@ package com.great.kindergarten.healther.controller;
 
 import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
-import com.great.kindergarten.healther.resultbean.DateWrite;
 import com.great.kindergarten.healther.resultbean.ExaminationPage;
 import com.great.kindergarten.healther.resultbean.MealPage;
 import com.great.kindergarten.healther.service.HealtherService;
-import com.great.kindergarten.util.GsonUtils;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -131,7 +127,6 @@ public class HealtherController {
             ResponseUtils.outHtml(response,"error");
         }
     }
-
 
     @RequestMapping("/checkOldPwd")
     public void checkOldPwd(HttpServletRequest request, HttpServletResponse response) {
