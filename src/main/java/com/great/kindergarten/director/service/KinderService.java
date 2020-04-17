@@ -204,28 +204,4 @@ public class KinderService
 		return kinderMapper.findALLTeacherAttendDetail(tblTeacherAttend);
 	}
 
-	//查询对应的园所的ID值
-	public int selectkinderByName(String kindername){
-		return kinderMapper.selectkinderByName(kindername);
-	}
-
-	/*
-	* 消息通知
-	* */
-	//添加对应的消息信息到对应的消息表----tblInfotype
-	public int addInfoType(TblInfotype tblInfotype){
-		return kinderMapper.addInfoType(tblInfotype);
-	}
-
-	//消息通知---查询消息通知
-	public List<TblInfotype> findSchoolMessageAll(Map<String, Object> map){
-		return kinderMapper.findSchoolMessageAll(map);
-	}
-
-	//消息通知--对应消息通知记录值
-	public Long findSchoolMessageAllCount(Map<String, Object> map){
-		return kinderMapper.findSchoolMessageAllCount(map);
-	}
-
-
 }

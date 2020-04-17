@@ -1,8 +1,6 @@
 package com.great.kindergarten.teacher.controller;
 
 import com.great.kindergarten.commons.entity.*;
-import com.great.kindergarten.director.resultbean.DateTable;
-import com.great.kindergarten.security.util.DateUtil;
 import com.great.kindergarten.teacher.service.TeacherService;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
@@ -22,7 +20,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +32,6 @@ public class TeacherController {
     private String vcode;
     private TblTeacher tblTeacher1;
     private  int cid;
-    private TblWork tblWork;
 //    private TblWorkrelease tblWorkrelease;
     @Resource
     private TeacherService teacherService;
@@ -49,9 +45,6 @@ public class TeacherController {
 	private TblSafetyvideo tblSafetyvideo;
 	@Resource
 	private TblSafetyConfig tblSafetyConfig;
-	//结果集的处理
-	@Resource
-	DateTable dateTable;
 
     @RequestMapping("/main")
     public String showMainView(){
@@ -199,67 +192,34 @@ public class TeacherController {
          return str;
     }
 
-    //本周课程表
+    //课程表
 
-	@RequestMapping("/thisWeekCourse")
-	@ResponseBody
-	public DateTable thisWeekCourse(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException
-	{
-		//根据老师获取班级id
-		cid=tblTeacher1.getCid();
-		System.out.println("cid="+cid);
-		String currentmonday = "1";
-		String currentsonday = "7";
-		String startdate = request.getParameter("key1");//周一日期
-		String enddate = request.getParameter("key2");//周日日期
-		String mondaydate = null;
-		String sundaydate = null;
-		//查询条件
-		HashMap<String,Object> dataHashMap =new HashMap<>();
-		if (null != startdate && null != enddate)
-		{
-			mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(startdate));
-			sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(enddate));
-		} else
-		{
-			mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(currentmonday));
-			sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(currentsonday));
-		}
-		System.out.println("课程对应的日期时间=" + mondaydate + "~" + sundaydate);
-		dataHashMap.put("mondaydate", mondaydate);
-		dataHashMap.put("sundaydate", sundaydate);
-		if (0!= cid)
-		{
-			dataHashMap.put("cid", cid);
-		}
-		//根据班级id，当前时间查找课程信息
-		List<TblCourse> tblCourseList = teacherService.findCourseByTodayCid(dataHashMap);
-		if (0 != tblCourseList.size())
-		{
-			dateTable.setCode(0);
-			dateTable.setMsg(" ");
-			dateTable.setCount(5);
-			dateTable.setData(tblCourseList);
-			request.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
-//			ResponseUtils.outJson(response, dateTable);
-			return dateTable;
-		} else
-		{
-			dateTable.setCode(201);
-			dateTable.setMsg("无数据");
-			request.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
-//			ResponseUtils.outJson(response, dateTable);
-//			return dateTable;
-		}
+    @RequestMapping("/courseTable")
+    @ResponseBody
+    public CourseTable courseTable(HttpServletRequest request, HttpServletResponse response){
+        String page=request.getParameter("page");
+        String limit=request.getParameter("limit");
+        int pageInt1 = Integer.valueOf(page);
+        int limitInt =Integer.valueOf(limit);
+        int pageInt=(pageInt1-1)*limitInt;
 
-		return dateTable;
-	}
+        List<TblCourse> tblCourseList=new ArrayList<>();
 
+//            查询用户总数
+            Integer count=teacherService.findCount();
+//            查询用户数据
+             tblCourseList = teacherService.findCourse(cid);
+            System.out.println("tblCourseList="+tblCourseList);
+            if(null!=tblCourseList){
+                courseTable.setCode(0);
+                courseTable.setMsg("");
+                courseTable.setCount(count);
+                courseTable.setData(tblCourseList);
+                return courseTable;
+            }
 
+        return null;
+    }
 //    查询所有班级
     @RequestMapping("/selectClass")
     @ResponseBody
@@ -361,21 +321,22 @@ public class TeacherController {
         int pageInt1 = Integer.valueOf(page);
         int limitInt =Integer.valueOf(limit);
         int pageInt=(pageInt1-1)*limitInt;
-	    //查询条件
-	    HashMap<String,Object> dataHashMap =new HashMap<>();
-	    dataHashMap.put("pageInt",pageInt);
-	    dataHashMap.put("limitInt",limitInt);
         //        根据cid 查找班级名称信息
         int cid=tblTeacher1.getCid();
         System.out.println("cid="+cid);
+//        TblClass tblClass = teacherService.findClassAll(cid);
+//        System.out.println("tblClass="+tblClass);
 
-        //            查询作业总数
+//        request.getSession().setAttribute("classname",tblClass.getClassname());
+        //            查询用户总数
         Integer count=teacherService.findWorkCount(cid);
-	    dataHashMap.put("cid",cid);
+        //            查询用户数据
 	    System.out.println("count="+count);
-
-         //查看作业表
-        List<TblWork>  tblWorkList = teacherService.findWorkTable(dataHashMap);
+	    //查询班级作业所有信息
+	    TblWork tblWork= teacherService.findWork(cid);
+	    System.out.println("tblWork="+tblWork);
+//	    查看作业表
+        List<TblWork>  tblWorkList = teacherService.findWorkTable(tblWork);
         System.out.println("tblWorkList="+tblWorkList);
         if(null!=tblWorkList){
             courseTable.setCode(0);
@@ -388,7 +349,6 @@ public class TeacherController {
         return null;
     }
 //    打分
-
 	@RequestMapping(value="/workScore")
 	@ResponseBody
 	public String workScore(String score,Integer sid)
@@ -406,6 +366,7 @@ public class TeacherController {
 		return str;
 	}
 	//安全教育配置表
+
     @RequestMapping(value="/safetyVideoTable")
     @ResponseBody
     public CourseTable safetyVideoTable(HttpServletRequest request, HttpServletResponse response){
@@ -465,6 +426,10 @@ public class TeacherController {
 		    tblSafetyvideo.setSafetyfinishtime(endDate);
 		    System.out.println("tblSafetyvideo1="+tblSafetyvideo);
 	    } catch (ParseException e) {}
+
+
+
+
 	    try
 	    {
 //		    String path1  = request.getContextPath();
@@ -517,7 +482,10 @@ public class TeacherController {
 	    {
 		    e.printStackTrace();
 	    }
+
+
 	    return null;
+
     }
 
     //新增安全教育配置
@@ -532,7 +500,6 @@ public class TeacherController {
 		//
 		System.out.println("startDate="+startDate1);
 		System.out.println("endDate="+endDate1);
-		System.out.println("safetyvideoname="+safetyvideoname);
 		//	    String时间格式转化为date
 		//创建DateFormat的对象，在构造器中传入跟要转换的String字符串相同格式的
 		//	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -550,6 +517,7 @@ public class TeacherController {
 			tblSafetyConfig.setSafetyfinishtime(endDate);
 
 		} catch (ParseException e) {}
+
 
 		//根据班级名查id
 		TblClass tblClass =new TblClass();
@@ -587,55 +555,4 @@ public class TeacherController {
 		//转发
 		return "parentJsp/SafetyTestQuestion";
 	}
-	//问题完成情况
-	@RequestMapping("/questionFinishTable")
-	@ResponseBody
-	public CourseTable questionFinishTable(HttpServletRequest request, HttpServletResponse response){
-		String page=request.getParameter("page");
-		String limit=request.getParameter("limit");
-		int pageInt1 = Integer.valueOf(page);
-		int limitInt =Integer.valueOf(limit);
-		int pageInt=(pageInt1-1)*limitInt;
-//		查询条件
-		String startDate = request.getParameter("startDate");//选中日期
-		String endDate = request.getParameter("endDate");//选中日期
-		String finishStatus = request.getParameter("finishStatus");//完成状态
-
-		//查询条件
-		HashMap<String,Object> dataHashMap =new HashMap<>();
-		if (null != startDate && !"".equals(startDate.trim())) {
-			dataHashMap.put("startDate", startDate);
-		}
-		if (null != endDate && !"".equals(endDate.trim())) {
-			dataHashMap.put("endDate", endDate);
-		}
-		if (null != finishStatus && !"".equals(finishStatus.trim())) {
-			dataHashMap.put("finishStatus", finishStatus);
-		}
-		dataHashMap.put("pageInt",pageInt);
-		dataHashMap.put("limitInt",limitInt);
-		int cid=tblTeacher1.getCid();
-		dataHashMap.put("cid",cid);
-
-		// 查询试题完成情况总数
-		Integer count=teacherService.findSafetytqCount(dataHashMap);
-
-
-//		查询试题完成情况
-		List<TblSafetyFinish>  tblSafetyFinishList = teacherService.findSafetytqTable(dataHashMap);
-		System.out.println("tblSafetyFinishList="+tblSafetyFinishList);
-		if(null!=tblSafetyFinishList){
-			courseTable.setCode(0);
-			courseTable.setMsg("");
-			courseTable.setCount(count);
-			courseTable.setData(tblSafetyFinishList);
-//				        ResponseUtils.outJson(response,courseTable);
-			return courseTable;
-		}
-
-		return null;
-
-	}
-
-
-	}
+}

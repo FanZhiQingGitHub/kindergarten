@@ -58,7 +58,9 @@
 		var table = layui.table;
 		var form = layui.form;
 		var layer = layui.layer;
+		var laydate = layui.laydate;
 		var path = $("#path").val();
+		var classid = $("#classid").val();
 		var tblCourseList;
 		table.render({
 			elem: '#layui_table'
@@ -66,13 +68,11 @@
 				none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
 			}
 			, height: 250
-			//数据接口
-			, url: path + '/director/showAllCourseId'
+			, url: path + '/director/showAllCourseId?classid=' + classid //数据接口
 			// , page: true //开启分页
 			, id: 'searchTable'
-			,where: { //设定异步数据接口的额外参数，任意设
-				classid: $("#classid").val()
-			}
+			// , limit: 5
+			// , limits: [5, 10, 15, 20]
 			, cols: [[ //表头
 				{field: 'coursenum', title: '课节', width: 135, align: 'center'}
 				, {field: 'coursename1', title: '周一', width: 130, edit: 'text', align: 'center'}

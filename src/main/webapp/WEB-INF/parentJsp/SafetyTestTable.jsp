@@ -98,7 +98,6 @@
 
 			//类型等于重载的话 刷新表格数据
 			if(type == 'reload'){
-
 				table.reload('demo',{
 					url:path+'/parent/parentSafetyTestList' //数据源
 					,method:'post',
@@ -112,7 +111,6 @@
 						endTime:$('#endTime').val()
 					}
 				})
-
 			}
 
 

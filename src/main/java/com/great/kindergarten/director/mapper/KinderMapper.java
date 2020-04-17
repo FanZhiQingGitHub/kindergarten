@@ -111,22 +111,4 @@ public interface KinderMapper
 	public Long findTeacherAttendAllCount(Map<String, Object> map);
 	//教师考勤对应的显示--考勤信息值
 	public List<TblTertime> findALLTeacherAttendDetail(TblTeacherAttend tblTeacherAttend);
-
-	/*
-	* 消息通知
-	* */
-	//查询对应的园所的ID值
-	public int selectkinderByName(String kindername);
-
-	//添加对应的消息信息到对应的消息表----tblInfotype
-	public int addInfoType(TblInfotype tblInfotype);
-
-
-	//消息通知---查询消息通知
-	public List<TblInfotype> findSchoolMessageAll(Map<String, Object> map);
-
-	//消息通知--对应消息通知记录值
-	public Long findSchoolMessageAllCount(Map<String, Object> map);
-
-
 }
