@@ -95,7 +95,7 @@ public class RectorController
 		int len = ch.length, index;
 
 		//给图中绘制噪音点，让图片不那么好辨别
-		for (int j = 0, n = r.nextInt(100); j < n; j++)
+		for (int j = 0, n = r.nextInt(50); j < n; j++)
 		{
 			g.setColor(Color.RED);
 			g.fillRect(r.nextInt(width), r.nextInt(height), 1, 1);//随机噪音点
@@ -739,55 +739,68 @@ public class RectorController
 		String currentmonday = "1";
 		String currentsonday = "7";
 		String dafultsid = request.getParameter("classid");
-		System.out.println("课程对应的信息：" + dafultsid);
-		int classid = Integer.valueOf(dafultsid);
+		if(dafultsid!=null&&"" !=dafultsid){
+			System.out.println("课程对应的信息：" + dafultsid);
 
-		String startdate = request.getParameter("key1");//周一日期
-		String enddate = request.getParameter("key2");//周日日期
-		String cid = request.getParameter("key3");//教师ID值
-		String mondaydate = null;
-		String sundaydate = null;
+			int classid = Integer.valueOf(dafultsid);
 
-		Map<String, Object> map = new HashMap<>();
-		if (null != startdate && null != enddate)
+			String startdate = request.getParameter("key1");//周一日期
+			String enddate = request.getParameter("key2");//周日日期
+			String cid = request.getParameter("key3");//教师ID值
+			String mondaydate = null;
+			String sundaydate = null;
+
+			Map<String, Object> map = new HashMap<>();
+			if (null != startdate && null != enddate)
+			{
+				mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(startdate));
+				sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(enddate));
+			} else
+			{
+				mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(currentmonday));
+				sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(currentsonday));
+			}
+			System.out.println("课程对应的日期时间=" + mondaydate + "~" + sundaydate);
+			map.put("mondaydate", mondaydate);
+			map.put("sundaydate", sundaydate);
+			if (null != cid)
+			{
+				map.put("cid", Integer.valueOf(cid));
+			} else
+			{
+				map.put("cid", classid);
+			}
+			List<TblCourse> tblCourseList = kinderService.findAllCourseName(map);
+			if (0 != tblCourseList.size())
+			{
+				dateTable.setCode(0);
+				dateTable.setMsg(" ");
+				dateTable.setCount(5);
+				dateTable.setData(tblCourseList);
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			} else
+			{
+				dateTable.setCode(201);
+				dateTable.setMsg("无数据");
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			}
+		}else
 		{
-			mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(startdate));
-			sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(enddate));
-		} else
-		{
-			mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(currentmonday));
-			sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(currentsonday));
-		}
-		System.out.println("课程对应的日期时间=" + mondaydate + "~" + sundaydate);
-		map.put("mondaydate", mondaydate);
-		map.put("sundaydate", sundaydate);
-		if (null != cid)
-		{
-			map.put("cid", Integer.valueOf(cid));
-		} else
-		{
-			map.put("cid", classid);
-		}
-		List<TblCourse> tblCourseList = kinderService.findAllCourseName(map);
-		if (0 != tblCourseList.size())
-		{
-			dateTable.setCode(0);
-			dateTable.setMsg(" ");
-			dateTable.setCount(5);
-			dateTable.setData(tblCourseList);
-			request.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
-			ResponseUtils.outJson(response, dateTable);
-		} else
-		{
+			System.out.println("输出项目=异常情况");
 			dateTable.setCode(201);
-			dateTable.setMsg("无数据");
+			dateTable.setMsg("刷新数据，请关闭后尝试点击配置课程");
 			request.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
 			ResponseUtils.outJson(response, dateTable);
 		}
+
 
 	}
 
@@ -1447,6 +1460,84 @@ public class RectorController
 		} else
 		{
 			return new ModelAndView("directorjsp/chatmain");
+		}
+	}
+
+	//---------------消息通知的设置
+	@RequestMapping("/addInfoType")
+	protected void addInfoType(String infotypename,String kindername, TblInfotype tblInfotype,HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		Integer kid = kinderService.selectkinderByName(kindername);
+		tblInfotype.setInfotypetime(new Date());
+		tblInfotype.setKid(kid);
+		int result = kinderService.addInfoType(tblInfotype);
+		if (result > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//查询对应的额消息信息显示
+	@RequestMapping("/selectSchoolMessage")
+	public void selectSchoolMessage(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		//记得在前面要加上对应的园所ID的值
+
+		String page = request.getParameter("page");
+		String limit = request.getParameter("limit");
+		String infotypename = request.getParameter("infotypename");
+		String beginTime = request.getParameter("beginTime");
+		String overTime = request.getParameter("overTime");
+		int pageInt = Integer.valueOf(page);
+		int limitInt = Integer.valueOf(limit);
+
+		System.out.println("消息通知是=" + infotypename);
+		//		获取对应的id值
+		Map<String, Object> map = new HashMap<>();
+		if (null != infotypename && "" != infotypename)
+		{
+			map.put("infotypename", infotypename);
+		}
+		if (null != beginTime && "" != beginTime)
+		{
+			map.put("beginTime", beginTime);
+		}
+		if (null != overTime && "" != overTime)
+		{
+			map.put("overTime", overTime);
+		}
+		int pages = (pageInt - 1) * limitInt;
+		int limits = limitInt;
+		map.put("pageInt", pages);
+		map.put("limitInt", limits);
+
+		System.out.println("消息通知信息=" + map);
+		List<TblInfotype> tblInfotypeList = kinderService.findSchoolMessageAll(map);
+
+		System.out.println("消息通知输出=" + tblInfotypeList);
+		if (0 != tblInfotypeList.size())
+		{
+			Integer count = kinderService.findSchoolMessageAllCount(map).intValue();
+			System.out.println("输出消息通知次数：" + count);
+			dateTable.setCode(0);
+			dateTable.setMsg(" ");
+			dateTable.setCount(count);
+			dateTable.setData(tblInfotypeList);
+			request.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+			ResponseUtils.outJson(response, dateTable);
+		} else
+		{
+			dateTable.setCode(201);
+			dateTable.setMsg("无数据");
+			request.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+			ResponseUtils.outJson(response, dateTable);
 		}
 	}
 
