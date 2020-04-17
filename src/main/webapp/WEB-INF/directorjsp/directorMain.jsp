@@ -140,13 +140,18 @@
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="campusBulletinManagement">校<br/>园<br/>公<br/>告</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="chatTeacher">联<br/>系<br/>老<br/>师</button>
     </div>
+
     <div class="prod-show" style="max-width: 80%;">
         <div class="layui-fluid">
             <div class="row layui-col-space12 layui-clear">
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
                         <h3 style="text-align: left">园所动态News</h3>
-                        <div  style=" overflow:auto;" >
+                        <div style=" overflow:auto;">
+                            <a><img style="width: 100%"
+                                    src="${pageContext.request.contextPath}/image/healtherimg/img/news.jpg"></a>
+                        </div>
+                        <div style=" overflow:auto;">
                             <a href="javascript:;">新闻一</a><br>
                             <a href="javascript:;">新闻二</a><br>
                             <a href="javascript:;">新闻三</a><br>
@@ -160,11 +165,8 @@
                     <div class="img-txt">
                         <h3 style="text-align: left">园所视频Videos</h3>
                         <div style=" overflow:auto;">
-                            <a href="javascript:;">视频一</a><br>
-                            <a href="javascript:;">视频二</a><br>
-                            <a href="javascript:;">视频三</a><br>
-                            <a href="javascript:;">视频四</a><br>
-                            <a href="javascript:;">视频五</a>
+                            <a href="javascript:void(0);" id="playVideos"><img style="width: 100%"
+                                                                               src="${pageContext.request.contextPath}/image/photos/directorvideo.png"></a>
                         </div>
                     </div>
                 </div>
@@ -387,6 +389,20 @@
                 return true;
             });
             return false;
+        });
+
+        //点击查看园所视频
+        $("#playVideos").click(function () {
+            //打开一个窗口播放视频
+            layer.open({
+                //打开一个窗口播放视频
+                type: 1,
+                area: ['75%', '85%'],
+                title:'园所宣传视频',
+                content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
+                        '<source src="${pageContext.request.contextPath}/videos/farmPropaganda.mp4" type="video/mp4"></source></video>'
+                //直接跳出一个标签播放视频
+            });
         });
 
     });
