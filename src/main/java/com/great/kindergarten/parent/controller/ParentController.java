@@ -2,14 +2,13 @@ package com.great.kindergarten.parent.controller;
 
 import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
+import com.great.kindergarten.healther.resultbean.MealPage;
 import com.great.kindergarten.parent.service.ParentService;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import com.great.kindergarten.security.util.DateUtil;
 import com.great.kindergarten.util.FaceRecognitionUtils;
 import com.great.kindergarten.util.MD5Utils;
-import javafx.scene.Parent;
 import org.apache.commons.io.FileUtils;
-import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,6 +63,38 @@ public class ParentController {
 
 
 
+
+
+	@RequestMapping("/findExaminationByStudentId")
+	@ResponseBody
+	public TableDate findExaminationByStudentId(SearchCondition searchCondition){
+		//返回查找的结果
+		return parentService.findExaminationByStudentId(searchCondition);
+	}
+
+
+
+
+    @RequestMapping("/findRecipeInfo")
+    @ResponseBody
+    public TableDate findRecipeInfo(String mealId){
+        Integer id = Integer.valueOf(mealId);
+        //返回查找的结果
+        return parentService.findRecipeInfo(id);
+    }
+
+
+
+
+    @RequestMapping("/findAllMealInfo")
+    @ResponseBody
+    public TableDate findAllMealInfo(MealPage mealPage){
+        //返回查找的结果
+        return parentService.findAllMealInfo(mealPage);
+    }
+
+
+
     @RequestMapping("/showPickUpDetailInfo")
     @ResponseBody
     public void showPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -109,12 +139,6 @@ public class ParentController {
         }
     }
 
-
-
-
-
-
-
     @RequestMapping("/download")
     public ResponseEntity<byte[]> download( HttpServletRequest request, HttpServletResponse response) throws IOException
     {
@@ -130,8 +154,6 @@ public class ParentController {
         //获取文件的实际路径
         String databasePath = "/homeWork/"+workreleaseid+"/"+dayTime+"/"+downFileName;
 
-
-
         //路径
          //得到要下载的文件
         File file=new File(request.getServletContext().getRealPath(databasePath));
@@ -144,10 +166,6 @@ public class ParentController {
         return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
                 headers, HttpStatus.CREATED);
     }
-
-
-
-
 
 
 

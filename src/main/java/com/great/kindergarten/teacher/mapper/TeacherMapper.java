@@ -16,15 +16,18 @@ public interface TeacherMapper {
 	public Boolean updateTeacherPwd(Map<String, String> teacherMap);
 	public TblTeacher checkPwd(Integer teacherid);
 	public TblClass findClassAll(Integer cid);
-	public List<TblCourse> findCourse(Integer cid);
-	public Integer findCount();
+
+
+	//根据班级id，当前时间查找课程信息
+	public List<TblCourse> findCourseByTodayCid(HashMap<String,Object> dataHashMap);
+
+	public Integer findCount(Integer cid);
 	public List<TblClass> findClassName();
 	public Integer findClassidByName(TblClass tblClass);
 	public Boolean addFileInfo(TblWorkrelease tblWorkrelease);
-	//   根据查找作业数据
-	public TblWork findWork(Integer cid);
+
 	//   根据班级id 发布作业id查看作业表
-	public List<TblWork> findWorkTable(TblWork tblWork);
+	public List<TblWork> findWorkTable(HashMap<String,Object> dataHashMap);
 	//    查找作业数据数量
 	public Integer findWorkCount(Integer cid);
 	//打分
@@ -48,5 +51,10 @@ public interface TeacherMapper {
 	 * @return
 	 */
 	List<TblSafetyvtq> findSafetyTestQuestionList(Integer safetyVideoId);
+	// 查询试题完成情况总数
 
+	public Integer findSafetytqCount(HashMap<String,Object> dataHashMap);
+	//    查询试题完成情况表
+
+	public List<TblSafetyFinish> findSafetytqTable(HashMap<String,Object> dataHashMap);
 }

@@ -48,6 +48,98 @@
 
     </resultMap>
 
+    <resultMap id="ExaminationMap" type="com.great.kindergarten.commons.entity.TblExamination">
+        <result column="examinationid" property="examinationid"/>
+        <result column="height" property="height"/>
+        <result column="weight" property="weight"/>
+        <result column="vision" property="vision"/>
+        <result column="temperature" property="temperature"/>
+        <result column="skin" property="skin"/>
+        <result column="healthstatus" property="healthstatus"/>
+        <result column="examinationtime" property="examinationtime"/>
+        <result column="studentid" property="studentid"/>
+        <result column="studentname" property="studentname"/>
+        <result column="sid" property="sid"/>
+        <association property="tblStudent" javaType="com.great.kindergarten.commons.entity.TblStudent">
+            <id property="studentid" column="studentid"/>
+            <result property="studentid" column="studentid"/>
+            <result property="studentname" column="studentname"/>
+        </association>
+    </resultMap>
+
+
+
+    <!--    查找宝宝体检信息表-->
+    <select id="countExaminationByStudentId"  parameterType="SearchCondition" resultType="integer">
+        select count(*)
+        from tbl_examination e,tbl_student s ,tbl_class c
+        <where>
+            e.sid = s.studentid and s.cid = c.classid
+            <if test="name != '' and name != null ">
+                and s.studentid = #{name}
+            </if>
+
+            <if test="beginTime != null ">
+                and e.examinationtime  &gt;= #{beginTime}
+            </if>
+
+            <if test="endTime != null ">
+                and e.examinationtime &lt;= #{endTime}
+            </if>
+        </where>
+        order by e.examinationtime desc
+    </select>
+
+
+    <!--    查找宝宝体检信息表-->
+    <select id="findExaminationByStudentId" resultMap="ExaminationMap" parameterType="SearchCondition">
+        select s.studentid,s.studentname,e.*
+        from tbl_examination e,tbl_student s ,tbl_class c
+        <where>
+            e.sid = s.studentid and s.cid = c.classid
+            <if test="name != '' and name != null ">
+                and s.studentid = #{name}
+            </if>
+
+            <if test="beginTime != null ">
+                and e.examinationtime  &gt;= #{beginTime}
+            </if>
+
+            <if test="endTime != null ">
+                and e.examinationtime &lt;= #{endTime}
+            </if>
+        </where>
+        order by e.examinationtime desc limit #{page},#{limit}
+    </select>
+
+
+
+    <!--    查询食谱信息-->
+    <select id="findAllRecipeInfo" resultType="com.great.kindergarten.commons.entity.TblRecipe" >
+        select r.* from tbl_meal m,tbl_recipe r where m.mealid = r.mid and m.mealid = #{mealId}
+    </select>
+
+
+
+
+    <!--    查询膳食表信息-->
+    <select id="findAllMealInfo" resultType="com.great.kindergarten.commons.entity.TblMeal"
+            parameterType="com.great.kindergarten.healther.resultbean.MealPage">
+        select * from tbl_meal
+        <where>
+
+        </where>
+        order by mealstarttime desc limit #{page},#{limit}
+    </select>
+
+    <!--    查询膳食表信息记录条数-->
+    <select id="findAllMealInfoCount" resultType="integer">
+        select count(*) from tbl_meal
+    </select>
+
+
+
+
 
 
     <!--    查找宝宝接送详细信息表-->
@@ -66,10 +158,8 @@
                 <![CDATA[   and DATE_FORMAT(da.sunday, '%Y-%m-%d')<=  DATE_FORMAT(#{sundaydate}, '%Y-%m-%d')   ]]>
             </if>
         </where>
+
     </select>
-
-
-
 
 
 
@@ -133,6 +223,8 @@
 
         order by twl.workreleasetime desc
 
+            limit #{condition.page},#{condition.limit}
+
     </select>
 
     <select id="countHomeWorkList"  resultType="integer">
@@ -180,6 +272,7 @@
 
         insert into  tbl_safetytestcompletion (safetyvideoid, parentid, safetytestscore, safetytestresult,safetytestfinshtime) values
             (#{videoId},#{parentId},#{score},'已完成',#{finshTime});
+
     </insert>
 
 
@@ -189,6 +282,8 @@
 
         select * from tbl_safetyvtq where safetyvideoid =#{safetyVideoId}
         order by safetyvtqid
+
+
     </select>
 
 
@@ -245,7 +340,7 @@
 
         order by ts.safetyvideotime desc
 
-
+        limit #{page},#{limit}
     </select>
 
 
