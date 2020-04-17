@@ -15,6 +15,7 @@ public class TblTertime
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date tertime;
 	private String tertimedate1;
+	private String noon;
 	private String tertimedate2;
 	private Integer tid;
 
@@ -89,6 +90,16 @@ public class TblTertime
 	public void setTattendover(String tattendover)
 	{
 		this.tattendover = tattendover;
+	}
+
+	public String getNoon()
+	{
+		return noon;
+	}
+
+	public void setNoon(String noon)
+	{
+		this.noon = noon;
 	}
 
 	@Override

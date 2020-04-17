@@ -21,6 +21,8 @@ public class TblTeacherAttend
 	private String teachername;
 	private String teacherjob;
 
+	private String classname;
+
 	public Integer getTattendid()
 	{
 		return tattendid;
@@ -89,6 +91,16 @@ public class TblTeacherAttend
 	public void setTeacherid(Integer teacherid)
 	{
 		this.teacherid = teacherid;
+	}
+
+	public String getClassname()
+	{
+		return classname;
+	}
+
+	public void setClassname(String classname)
+	{
+		this.classname = classname;
 	}
 
 	@Override

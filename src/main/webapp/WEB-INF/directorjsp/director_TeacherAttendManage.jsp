@@ -81,6 +81,7 @@
 				, {field: 'tattendover', title: '考勤结束时间', align: 'center', sort: true, width: 180,
 					templet: "<div>{{layui.util.toDateString(d.tattendover,'yyyy-MM-dd')}}</div>"
 				}
+				, {field: 'classname', title: '班级', align: 'center', sort: true, width: 180,hide:true}
 				, {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo'}
 			]]
 		});
@@ -96,42 +97,8 @@
 					layer.open({
 						type: 2,
 						title: '教师考勤信息信息',
-						area: ['50%', '65%'],
-						// btn: ['修改', '取消'],
-						// btn1: function (index, layero) {
-						// 	var src = $("#srcAddress").val();
-						// 	//layer.getChildFrame("form", index)获取iframe的表单
-						// 	//serializeArray jquery方法，将表单对象序列化为数组
-						// 	var formData = serializeObject($, layer.getChildFrame("form", index).serializeArray());
-							//
-							// if (formData.teachername.length == 0) {
-							// 	layer.alert("请输入教师名称", {icon: 2});
-							// } else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(formData.teachername)) {
-							// 	layer.alert('教师名称不能有特殊字符');
-							// }else if(formData.teacherjob=='暂无')
-							// {
-							// 	layer.alert("请选择教师性别！");
-							// } else {
-							// 	$.ajax({
-							// 		url: src + '/director/updateTeacherTable',
-							// 		type: 'post',
-							// 		data: formData,
-							// 		success: function (data) {
-							// 			if(data==="success"){
-							// 				layer.alert("更新教师信息成功！",{icon: 6}, function(){
-							// 					window.location.href = src + "/director/toUrl/director_TeacherManage";
-							// 				});
-							// 			}else{
-							// 				layer.alert("更新教师信息失败！",{icon: 2});
-							// 			}
-							// 			layer.close(index);
-							// 		}, error: function (err) {
-							// 			console.log(err);
-							// 		}
-							// 	});
-							// }
-						// },
-						content: src + '/director/toUrl/director_TeacherAttendDetailmanage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+						area: ['55%', '65%'],
+						content: src + '/director/toUrl/director_TeacherAttendDetailmanage1' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 						, success: function (layero, index) {
 							console.log(layero, index);
 							//	显示
@@ -143,6 +110,8 @@
 							$(window.frames[frameId].document).find("#teacherjob").val(data.teacherjob);
 							$(window.frames[frameId].document).find("#tattendbegin").val(data.tattendbegin);
 							$(window.frames[frameId].document).find("#tattendover").val(data.tattendover);
+							$(window.frames[frameId].document).find("#classname").val(data.classname);
+
 							iframeWindow.layui.form.render(); //更新全部
 						}
 					});

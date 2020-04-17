@@ -164,7 +164,7 @@
                 <label class="layui-form-label">幼儿园</label>
                 <div class="layui-input-block">
                     <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
-                    <input type="text" name="healthername" lay-verify="required" placeholder="请输入用户名" value="智慧幼儿园"
+                    <input type="text" name="kindername" lay-verify="required" placeholder="请输入用户名" value="智慧幼儿园"
                            autocomplete="off" class="layui-input" id="te1">
                 </div>
             </div>
@@ -172,7 +172,7 @@
                 <label class="layui-form-label">密 &nbsp;&nbsp;码</label>
                 <div class="layui-input-inline">
                     <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
-                    <input type="password" name="healtherpwd" required lay-verify="pass" placeholder="请输入6-12位密码"
+                    <input type="password" name="kinderpwd" required lay-verify="pass" placeholder="请输入6-12位密码"
                            value="123456"
                            autocomplete="off" class="layui-input" id="te2">
                 </div>
@@ -181,7 +181,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">验证码</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="code" lay-verify="code" placeholder="请输入验证码"
+                    <input type="text" name="kindercode" lay-verify="code" placeholder="请输入验证码"
                            autocomplete="off" class="layui-input verity">
                 </div>
 
@@ -230,52 +230,52 @@
             pass: [
                 /^[\S]{6,12}$/
                 , '您好，密码必须6~12位，且不能出现空格！'
-            ]
-                // ,
-            // code :function (value) {
-            //     if (value.length != 4) {
-            //         return '您好，验证码是4位数！';
-            //     }
-            // }
+            ],
+            code :function (value) {
+                if (value.length != 4) {
+                    return '您好，验证码是4位数！';
+                }
+            }
             , content: function (value) {
                 layedit.sync(editIndex);
             }
         });
         form.on('submit(formDemo)', function (data) {
 
-            layer.alert("登录成功！", {icon: 6}, function () {
-                location.href = path + "/main/path/main";
-            });
+            $.ajax({
+                url: path + "/main/mainLogin",
+                async: true,
+                type: "post",
+                data: data.field,
+                datatype: "text",
+                success: function (msg) {
+                    if (msg == "success") {
+                        layer.alert("登录成功！", {icon: 6}, function () {
+                            location.href = path + "/main/path/main";
+                        });
+                    } else if (msg == "error") {
+                        layer.alert("登录失败！", {icon: 2});
+                        var code = document.getElementById("code");
+                        code.src = path + "/main/LoginCode?" + Math.random();
+                    } else if (msg == "codeerror") {
+                        layer.alert("验证码错误！", {icon: 2});
+                        var code = document.getElementById("code");
+                        code.src = path + "/main/LoginCode?" + Math.random();
+                    } else if (msg == "notmen") {
+                        layer.alert("该幼儿园已被禁用或者不存在！", {icon: 2});
+                        var code = document.getElementById("code");
+                        code.src = path + "/main/LoginCode?" + Math.random();
 
-            // $.ajax({
-            //     url: path + "/healther/healtherLogin",
-            //     async: true,
-            //     type: "post",
-            //     data: data.field,
-            //     datatype: "text",
-            //     success: function (msg) {
-            //         if (msg == "success") {
-            //             layer.alert("登录成功！", {icon: 6}, function () {
-            //                 location.href = path + "/healther/path/healtherMain";
-            //             });
-            //         } else if (msg == "error") {
-            //             layer.alert("登录失败！", {icon: 2});
-            //             var code = document.getElementById("code");
-            //             code.src = path + "/healther/loginCode?" + Math.random();
-            //         } else if (msg == "codeerror") {
-            //             layer.alert("验证码错误！", {icon: 2});
-            //             var code = document.getElementById("code");
-            //             code.src = path + "/healther/loginCode?" + Math.random();
-            //         } else if (msg == "notmen") {
-            //             layer.alert("该用户已被禁用或者不存在！", {icon: 2});
-            //             var code = document.getElementById("code");
-            //             code.src = path + "/healther/loginCode?" + Math.random();
-            //
-            //         }
-            //     }, error: function (msg) {
-            //         layer.alert("网络繁忙！", {icon: 2});
-            //     }
-            // });
+                    }else if (msg == "notpass") {
+                        layer.alert("该幼儿园未通过审批！", {icon: 2});
+                        var code = document.getElementById("code");
+                        code.src = path + "/main/LoginCode?" + Math.random();
+
+                    }
+                }, error: function (msg) {
+                    layer.alert("网络繁忙！", {icon: 2});
+                }
+            });
         });
 
         $(function () {

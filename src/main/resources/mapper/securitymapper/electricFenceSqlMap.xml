@@ -53,4 +53,43 @@
         </where>
     </select>
 
+
+    <!--    查找幼儿园id，通过幼儿园id与电子围栏坐标绑定，可以判断该幼儿园有没有设置电子围栏-->
+    <select id="findKinderId" resultType="TblKinder" parameterType="java.util.Map">
+        select * from tbl_kinder
+        <where>
+            <if test="kindername != '' and kindername != null ">
+                and kindername = #{kindername}
+            </if>
+        </where>
+    </select>
+
+    <!--    新增电子围栏坐标-->
+    <insert id="addCoordinate" parameterType="java.util.List">
+        insert into
+        tbl_coordinate(lng,lat,kinderid)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.lng},#{i.lat},#{i.kinderid})
+        </foreach>
+    </insert>
+
+    <select id="findCoordinate" resultType="com.great.kindergarten.commons.entity.TblCoordinate" parameterType="java.util.Map">
+        select lng,lat from tbl_coordinate
+        <where>
+            <if test="kinderid != '' and kinderid != null ">
+                and kinderid = #{kinderid}
+            </if>
+        </where>
+    </select>
+
+    <select id="findStuTrack" resultType="com.great.kindergarten.commons.entity.TblStuTrack" parameterType="java.util.Map">
+        select lng,lat from tbl_stutrack
+        <where>
+            <if test="stuid != '' and stuid != null ">
+                and stuid = #{stuid}
+            </if>
+        </where>
+    </select>
+
 </mapper>

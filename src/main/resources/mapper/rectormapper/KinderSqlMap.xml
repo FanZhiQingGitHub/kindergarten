@@ -270,9 +270,9 @@ insert into tbl_kinder(
 
     <!--教师考勤信息...查询和查询次数对应的值-->
     <select id="findTeacherAttendAll" resultType="TblTeacherAttend" parameterType="java.util.HashMap">
-        select tt.*,t.teacherid,t.teachername,t.teacherjob
-        from tbl_teacher t,tbl_teachertest tt
-        <where>t.teacherid = tt.tid
+        select tt.*,t.teacherid,t.teachername,t.teacherjob,c.classname
+        from tbl_teacher t,tbl_teachertest tt,tbl_class c
+        <where> t.teacherid = tt.tid and t.cid=c.classid
             <if test="teachername != null and teachername != ''">
                 and teachername like "%"#{teachername}"%"
             </if>
@@ -284,8 +284,8 @@ insert into tbl_kinder(
     </select>
     <!--    教师搜索界面的设计,查询记录条数-->
     <select id="findTeacherAttendAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
-        select count(*) from tbl_teacher t,tbl_teachertest tt
-        <where>t.teacherid = tt.tid
+        select count(*) from tbl_teacher t,tbl_teachertest tt,tbl_class c
+        <where>t.teacherid = tt.tid and t.cid=c.classid
             <if test="teachername != null and teachername != ''">
                 and teachername like "%"#{teachername}"%"
             </if>

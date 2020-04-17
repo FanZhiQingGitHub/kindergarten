@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.kindergarten.main.MainMapper">
+
+    <resultMap id="kindMap" type="TblKinder">
+        <result column="kinderid" property="kinderid"></result>
+        <result column="kindername" property="kindername"></result>
+        <result column="kinderlp" property="kinderlp"></result>
+        <result column="kinderlpid" property="kinderlpid"></result>
+        <result column="kinderlpadd" property="kinderlpadd"></result>
+        <result column="kinderlpphone" property="kinderlpphone"></result>
+        <result column="schoolpermit" property="schoolpermit"></result>
+        <result column="healthpermit" property="healthpermit"></result>
+        <result column="firepermit" property="firepermit"></result>
+        <result column="grouppermit" property="grouppermit"></result>
+        <result column="registrationpermit" property="registrationpermit"></result>
+        <result column="kinderapptime" property="kinderapptime"></result>
+        <result column="kinderregtime" property="kinderregtime"></result>
+        <result column="kinderstatus" property="kinderstatus"></result>
+        <result column="kinderacount" property="kinderacount"></result>
+        <result column="kinderpwd" property="kinderpwd"></result>
+        <result column="kindercode" property="kindercode"></result>
+    </resultMap>
+
+    <!--    幼儿园状态查询-->
+    <select id="findKinderStatus" resultType="TblKinder" parameterType="java.util.Map">
+        select * from tbl_kinder
+        <where>
+            <if test="kindername != '' and kindername != null ">
+                and kindername = #{kindername}
+            </if>
+        </where>
+    </select>
+
+    <!--    幼儿园登录-->
+    <select id="kinderLogin" resultMap="kindMap" parameterType="java.util.Map">
+        select * from tbl_kinder
+        <where>
+            <if test="kindername != '' and kindername != null ">
+                and kindername = #{kindername}
+            </if>
+            <if test="kinderpwd != '' and kinderpwd != null ">
+                and kinderpwd = #{kinderpwd}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,7 +1,10 @@
 package com.great.kindergarten.parent.controller;
 
+import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.parent.service.ParentService;
+import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
+import com.great.kindergarten.security.util.DateUtil;
 import com.great.kindergarten.util.FaceRecognitionUtils;
 import com.great.kindergarten.util.MD5Utils;
 import javafx.scene.Parent;
@@ -61,7 +64,57 @@ public class ParentController {
 
 
 
-    //	下载文件信息
+
+    @RequestMapping("/showPickUpDetailInfo")
+    @ResponseBody
+    public void showPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Gson g = new Gson();
+        String currentmonday = "1";
+        String currentsonday = "7";
+        String dafultsid = request.getParameter("sid");
+        String startdate = request.getParameter("startdate");//周一日期
+        String enddate = request.getParameter("enddate");//周日日期
+        String sid = request.getParameter("studentid");//学生id
+
+        String mondaydate = null;
+        String sundaydate = null;
+
+        if (null != startdate && null != enddate) {
+            mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(startdate));
+            sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(enddate));
+        } else {
+            mondaydate = DateUtil.getMondayOfThisWeek(Integer.valueOf(currentmonday));
+            sundaydate = DateUtil.getSundayOfThisWeek(Integer.valueOf(currentsonday));
+        }
+        pickUpInfoDetailPage.setMondaydate(mondaydate);
+        pickUpInfoDetailPage.setSundaydate(sundaydate);
+
+        if (null != sid) {
+            pickUpInfoDetailPage.setStudentid(Integer.valueOf(sid));
+        } else {
+            pickUpInfoDetailPage.setStudentid(Integer.valueOf(dafultsid));
+        }
+
+        List<TblStutime> tblDateList = parentService.findPickUpDetailInfo(pickUpInfoDetailPage);
+
+        if (0 != tblDateList.size()) {
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            Object[] info = tblDateList.toArray();
+            String result = g.toJson(info);
+            response.getWriter().print(result);
+        } else {
+            response.getWriter().print("error");
+        }
+    }
+
+
+
+
+
+
+
     @RequestMapping("/download")
     public ResponseEntity<byte[]> download( HttpServletRequest request, HttpServletResponse response) throws IOException
     {
@@ -281,7 +334,7 @@ public class ParentController {
 
 
     @RequestMapping("/loginCode")
-    public void cherkCode(HttpServletRequest request, HttpServletResponse response) {
+    public void checkCode(HttpServletRequest request, HttpServletResponse response) {
         try {
             int width = 60;
             int height = 30;

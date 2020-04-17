@@ -5,7 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * @author JK
+ * @author JK  首页新闻实体类
  */
 public class TblCampus
 {
@@ -16,6 +16,8 @@ public class TblCampus
 	private Date campustime;
 	private String campusinfodetail;
 	private Integer kid;
+
+
 
 	public Integer getCampusinfoid()
 	{

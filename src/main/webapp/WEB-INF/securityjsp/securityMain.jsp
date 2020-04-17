@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 <head>
@@ -131,12 +132,17 @@
                             <a><img style="width: 100%"
                                     src="${pageContext.request.contextPath}/image/healtherimg/img/news.jpg"></a>
                         </div>
-                        <div style=" overflow:auto;">
-                            <a href="javascript:;">新闻一</a><br>
-                            <a href="javascript:;">新闻二</a><br>
-                            <a href="javascript:;">新闻三</a><br>
-                            <a href="javascript:;">新闻四</a><br>
-                            <a href="javascript:;">新闻五</a>
+                        <div style=" overflow:auto;" id="newsInfo">
+                            <c:if test="${not empty tblCampusList}">
+                                <c:forEach items="${tblCampusList}" var="i" step="1">
+                                    <a href="javascript:;" style="font-size: 18px" onclick="showNewsInfo(this)">${i.campusinfoname}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></a><br>
+                                </c:forEach>
+                            </c:if>
+<%--                            <a href="javascript:;">新闻一</a><br>--%>
+<%--                            <a href="javascript:;">新闻二</a><br>--%>
+<%--                            <a href="javascript:;">新闻三</a><br>--%>
+<%--                            <a href="javascript:;">新闻四</a><br>--%>
+<%--                            <a href="javascript:;">新闻五</a>--%>
                         </div>
 
                     </div>

@@ -885,7 +885,6 @@ public class RectorController
 		System.out.println("对应的值是=" + ctid);
 		if (ctid == 0)
 		{
-			System.out.println("进去了=" + ctid);
 			int result = kinderService.addCoursetestInfo(tblCoursetest);
 			ctid = kinderService.findCoursetestID(map);
 		}
@@ -1365,11 +1364,11 @@ public class RectorController
 	{
 		String currentmonday = "1";
 		String currentsonday = "7";
-		String dafultsid = request.getParameter("teacherid");
+		String dafultsid = request.getParameter("tid");
 
-		String startdate = request.getParameter("key1");//周一日期
-		String enddate = request.getParameter("key2");//周日日期
-		String tid = request.getParameter("key3");//教师ID值
+		String startdate = request.getParameter("startdate");//周一日期
+		String enddate = request.getParameter("enddate");//周日日期
+		String tid = request.getParameter("teacherid");//教师ID值
 		String mondaydate = null;
 		String sundaydate = null;
 
@@ -1395,31 +1394,17 @@ public class RectorController
 
 		if (0 != tblTertimeList.size())
 		{
-			dateTable.setCode(0);
-			dateTable.setMsg(" ");
-			dateTable.setCount(5);
-			dateTable.setData(tblTertimeList);
-
-			request.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
-
-			ResponseUtils.outJson(response, dateTable);
+			System.out.println("输出的考勤信息是="+tblTertimeList);
+			ResponseUtils.outJson(response, tblTertimeList);
 		} else
 		{
-			dateTable.setCode(201);
-			dateTable.setMsg("无数据");
-			request.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
-			ResponseUtils.outJson(response, dateTable);
+			ResponseUtils.outHtml(response, "error");
 		}
 
 	}
 
 	//在线聊天的内容显示
-
-//	// 跳转到登录页面
+	// 跳转到登录页面
 //	@RequestMapping(value = "loginpage", method = RequestMethod.GET)
 //	public ModelAndView loginpage()
 //	{
