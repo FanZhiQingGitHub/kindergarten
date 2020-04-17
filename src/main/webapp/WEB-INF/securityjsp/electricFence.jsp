@@ -161,7 +161,7 @@
         // 百度地图API功能
         var map = new BMap.Map('map');
         var poi = new BMap.Point(118.1932, 24.4886);
-        map.centerAndZoom(poi, 21);
+        map.centerAndZoom(poi, 20);
         map.addControl(new BMap.NavigationControl());               // 添加平移缩放控件
         map.addControl(new BMap.ScaleControl());                    // 添加比例尺控件
         map.addControl(new BMap.OverviewMapControl());              //添加缩略地图控件
@@ -281,7 +281,6 @@
                                     }, i*1000);
                                 })(i);
                             }
-
                         }
                     }, error: function (data) {
                         layer.alert("网络繁忙！", {icon: 2});

@@ -22,6 +22,7 @@ public interface HealtherMapper {
 
     public Boolean resetHealtherpwd(Map<String, String> healthermap);
 
+
     public List<TblExamination> findALLExamination(ExaminationPage examinationPage);
 
     public Long findALLExaminationCount(ExaminationPage examinationPage);
@@ -49,7 +50,5 @@ public interface HealtherMapper {
     public Long findAllRecipeInfoCount(Map<String, Integer> mealIdMap);
 
     public Boolean updateRecipeInfo(Integer mid);
-
-    public List<TblCampus> findHealtherNews(Map<String, String> KinderNewsmap);
 
 }

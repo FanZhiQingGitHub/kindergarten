@@ -1,7 +1,6 @@
 package com.great.kindergarten.main;
 
 import com.great.kindergarten.commons.entity.TblKinder;
-import com.great.kindergarten.util.FaceRecognitionUtils;
 import com.great.kindergarten.util.MD5Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -147,5 +146,7 @@ public class MainController {
     public String Error() {
         return "errorjsp/error";
     }
+
+
 
 }

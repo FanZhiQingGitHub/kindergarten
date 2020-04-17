@@ -1,13 +1,9 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Mr.Fan
-  Date: 2020-4-6
-  Time: 14:20
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 <head>
@@ -53,7 +49,7 @@
 </head>
 <body>
 <input type="hidden" value="${pageContext.request.contextPath}" id="path"/>
-<input type="hidden" id="kindername" value="${kindername}">
+
 <!-- header -->
 <div class="header_box">
     <ul class="layui-nav layui-layout-right" style="background-color: white;">
@@ -65,6 +61,7 @@
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0);"  class="personMsg">个人信息</a></dd>
                 <dd><a href="javascript:void(0);"  class="updatePwd">修改密码</a></dd>
+                <dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
             </dl>
         </li>
         <li class="layui-nav-item"><a  href="javascript:void(0); "  id="exit" style="color: black;font-size: 18px">注销</a></li>
@@ -137,7 +134,7 @@
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="classManagement">班<br/>级<br/>管<br/>理</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="classMemberManagement">班<br/>级<br/>成<br/>员<br/>管<br/>理</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="courseManagement">课<br/>程<br/>管<br/>理</button>
-        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn">消<br/>息<br/>通<br/>知</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="messageNotice">消<br/>息<br/>通<br/>知</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="campusBulletinManagement">校<br/>园<br/>公<br/>告</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="chatTeacher">联<br/>系<br/>老<br/>师</button>
     </div>
@@ -225,6 +222,20 @@
                 , success: function (layero, index) {
 		            console.log(layero, index);
 	            }
+            });
+        });
+        //对应显示消息通知的内容
+        $('.schoolMessage').on('click',function () {
+            layer.open({
+                type: 2,
+                title: '校园消息通知',
+                shade: 0.8//表示的是阴影的大小
+                , area: ['55%', '65%'],
+                moveType: 1,//拖拽模式，0或者1
+                content: src + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                , success: function (layero, index) {
+                    console.log(layero, index);
+                }
             });
         });
         //修改密码
@@ -387,6 +398,16 @@
             layer.confirm('您确定要进入到在线聊天中心吗?', {icon: 3, title: '温馨提示'}, function (index) {
                 layer.close(index);
                 window.location.href = src+"/director/toUrl/chatlogin";
+                return true;
+            });
+            return false;
+        });
+
+        //消息通知
+        $("#messageNotice").on('click',function () {
+            layer.confirm('您确定要进入到消息通知进行编辑吗?', {icon: 3, title: '温馨提示'}, function (index) {
+                layer.close(index);
+                window.location.href = src+"/director/toUrl/director_MessageNotice";
                 return true;
             });
             return false;
