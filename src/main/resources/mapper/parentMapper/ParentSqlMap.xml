@@ -45,7 +45,57 @@
 
     <resultMap id="reHomeWork" type="TblWork">
 
+
     </resultMap>
+
+
+
+    <!--    查找宝宝接送详细信息表-->
+    <select id="findPickUpDetailInfo" resultType="com.great.kindergarten.commons.entity.TblStutime"
+            parameterType="com.great.kindergarten.security.resultbean.PickUpInfoDetailPage">
+        select * from tbl_stutimeam am,tbl_stutimepm pm,tbl_student stu,tbl_date da
+        <where>
+            am.pmid = pm.timepmid and stu.studentid= am.sid and am.did = da.dateid
+            <if test="studentid != '' and studentid != null ">
+                and stu.studentid = #{studentid}
+            </if>
+            <if test=" mondaydate != '' and mondaydate != null">
+                <![CDATA[   and DATE_FORMAT(da.monday, '%Y-%m-%d')>=  DATE_FORMAT(#{mondaydate}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" sundaydate != '' and sundaydate != null">
+                <![CDATA[   and DATE_FORMAT(da.sunday, '%Y-%m-%d')<=  DATE_FORMAT(#{sundaydate}, '%Y-%m-%d')   ]]>
+            </if>
+        </where>
+    </select>
+
+
+
+
+
+
+
+
+    <update id="updateWorkUrl" parameterType="TblWork">
+        update tbl_work set workurl=#{workurl} where workreleaseid =#{workreleaseid} and sid = #{sid} and pid = #{pid}
+    </update>
+
+
+    <select id="findSameWorkInsertRecord" parameterType="TblWork" resultType="integer">
+        select count(*) from tbl_work where workreleaseid =#{workreleaseid} and sid = #{sid} and pid = #{pid}
+    </select>
+
+
+    <insert id="uploadHomeWork" parameterType="TblWork" >
+        insert into tbl_work (workname, workreleaseid, workurl, wfinishtime, workresult, workeva, sid, studentname, pid, parentname, cid) VALUES
+            (#{workreleasedetail},#{workreleaseid},#{workurl},#{wfinishtime},#{workresult},#{workeva},#{sid},#{studentname},#{pid},#{parentname},#{cid})
+    </insert>
+
+
+
+
+
+
+
 
 
     <select id="findKisByParentId" resultType="com.great.kindergarten.commons.entity.TblStudent">
@@ -57,7 +107,7 @@
     <select id="findHomeWorkList"  resultMap="reHomeWork">
 
 
-        select twl.* ,tw.* from
+        select twl.* ,tw.workurl,tw.wfinishtime,tw.workresult,tw.workeva,tw.sid,tw.studentname,tw.pid,tw.parentname,tw.cid from
         (
         tbl_workrelease twl  left join tbl_work tw on twl.workreleaseid =tw.workreleaseid
         and tw.pid =#{condition.parentId} and tw.sid=#{condition.status}  and tw.cid=twl.cid =#{cid}
@@ -128,8 +178,8 @@
 
     <insert id="recordScore"  >
 
-        insert into  tbl_safetytestcompletion (safetyvideoid, parentid, safetytestscore, safetytestresult) values
-            (#{videoId},#{parentId},#{score},'已完成');
+        insert into  tbl_safetytestcompletion (safetyvideoid, parentid, safetytestscore, safetytestresult,safetytestfinshtime) values
+            (#{videoId},#{parentId},#{score},'已完成',#{finshTime});
     </insert>
 
 
@@ -194,6 +244,8 @@
         </where>
 
         order by ts.safetyvideotime desc
+
+
     </select>
 
 

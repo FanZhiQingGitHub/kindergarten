@@ -62,9 +62,9 @@
 
 <script type="text/html" id="barDemo" style="width: 300px">
 
-	<button class="layui-btn edit layui-btn-xs" data-method="dialog" lay-event="CheckHomeWork">查看作业</button>
+<%--	<button class="layui-btn edit layui-btn-xs" data-method="dialog" lay-event="CheckHomeWork">查看作业</button>--%>
 
-	<button type="button" class="layui-btn" lay-event="SubmitHomeWork"><i class="layui-icon"></i>提交作业</button>
+	<button  class="layui-btn" lay-event="SubmitHomeWork"><i class="layui-icon"></i>提交作业</button>
 
 	<button class="layui-btn edit layui-btn-xs"  lay-event="DownloadHomeWork">下载作业</button>
 
@@ -77,11 +77,8 @@
 	var kidList;
 
 	layui.use(['table','upload'], function(){
-		var table = layui.table;
-		var upload = layui.upload;
-
-
-
+		var table = layui.table
+		,upload = layui.upload;
 
 		$.ajax({
 			url: path+'/parent/getKids',
@@ -137,6 +134,7 @@
 					]]
 				});
 
+
 			},
 			error:function(msg) {
 				layer.alert("网络繁忙，请您稍后重试")
@@ -144,17 +142,8 @@
 		});
 
 
-		//同时绑定多个元素，并将属性设定在元素上
-		upload.render({
-			elem: '.demoMore'
-			,before: function(){
-				layer.tips('接口地址：'+ this.url, this.item, {tips: 1});
-			}
-			,done: function(res, index, upload){
-				var item = this.item;
-				console.log(item); //获取当前触发上传的元素，layui 2.1.0 新增
-			}
-		});
+
+
 
 		//layui按钮绑定绑定查询事件
 
@@ -194,13 +183,61 @@
 
 			}
 
+			//事件等于提交作业
+			if (layEvent === 'SubmitHomeWork') {
+
+				layer.open({
+					//打开一个窗口播放视频
+					type: 2,
+					area: ['70%', '70%'],
+					offset:['10%','5%'],
+					title:'作业提交',
+					content:path+'/parent/toUrl/HomeWorkSubmit'
+					//直接跳出一页面提交作业
+					,success: function(layero, index){
+						//	显示
+						var body = layer.getChildFrame("body", index);
+						body.find("#workreleaseid").html(data.workreleaseid);
+						body.find("#workreleasedetail").html(data.workreleasedetail);
+						body.find("#workreleasetime").html(data.workreleasetime);
+						body.find("#studentname").html($("#status").html());
+
+						var upLoadMsg = 'sid='+$("#status").val()+'&sName='+body.find("#studentname").html()+"&cid="+data.cid+"&workreleaseid="+data.workreleaseid
+						+"&workName="+data.workreleasedetail;
+						// 给打开的窗口绑定上传
+						upload.render({
+							elem: body.find("#homeWorkSubmitBtn"),
+							accept: 'file'
+							,size:10000 //此处设为最大100M
+							,url: path+'/parent/upload?'+upLoadMsg//上传接口
+							,before: function(obj){
+								layer.load(); //上传loading
+
+							}
+							,done: function(res, index, upload){
+								if (res.code==0){
+									confirm(" 上传成功");
+									layer.close(index);
+									//刷新表格
+									window.location.reload();
+								}
+								//上传完毕回调
+								layer.closeAll('loading'); //关闭loading
+							}
+							,error: function(index, upload){
+								layer.closeAll('loading'); //关闭loading
+							}
+						});
+					}
+				});
+
+			}
 
 
 			//事件等于下载
 			if (layEvent === 'DownloadHomeWork') {
 				var DownloadHomeWorkUlr = data.worklocation;
-
-
+				window.location.href=path+'/parent/download?url='+DownloadHomeWorkUlr
 
 			}
 
@@ -209,8 +246,6 @@
 
 		});
 	});
-
-
 
 	function selectClass() {
 		var kidId =$("#status").val();
@@ -225,8 +260,20 @@
 		}
 	}
 
-	
-	
+
+	//将表单转为js对象数据
+	function serializeObject(array){
+		var obj=new Object();
+
+		$.each(array, function(index,param){
+			if(!(param.name in obj)){
+				obj[param.name]=param.value;
+			}
+		});
+		return obj;
+	}
+
+
 </script>
 
 

@@ -88,6 +88,28 @@
                 (#{i.studentname},#{i.studentpwd},#{i.studentsex},#{i. studentbrith},#{i.studentadd},#{i.studenttime},#{i.studentstatus},#{i.cid},#{i.kid},#{i.rid})
             </foreach>
     </insert>
+    <insert id="addSafetyVideo">
+        insert into
+        tbl_safetyvideo(safetyvideoname, safetyvideotime, safetyfinishtime, safetyvideoplace, mid, videoname, videoadd)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.safetyvideoname},#{i.safetyvideotime},#{i.safetyfinishtime},#{i.safetyvideoplace},#{i.mid},#{i.videoname},#{i.videoadd})
+        </foreach>
+    </insert>
+    <insert id="addTopic">
+        insert into
+            tbl_safetyvtq(safetyvtqname, a, avalue, b, bvalue, c, cvalue, d, dvalue, safetyvideoid)
+            values (#{safetyvtqname},#{a},#{avalue},#{b},#{bvalue},#{c},#{cvalue},#{d},#{dvalue},#{safetyvideoid})
+    </insert>
+    <insert id="addParameter">
+        insert into
+            tbl_parameter(parametername, parameterval, parametertype, stid, svid)
+            values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.parametername},#{i.parameterval},#{i.parametertype},#{i.stid},#{i.svid})
+        </foreach>
+    </insert>
+
 
     <delete id="deleteKinderInfo">
         delete from tbl_kinder where kinderid = #{kinderid}
@@ -127,6 +149,12 @@
     </delete>
     <delete id="deleteSafetyVideoInfo">
         delete from tbl_safetyvideo where safetyvideoid = #{safetyvideoid}
+    </delete>
+    <delete id="deleteTopic">
+        delete from tbl_safetyvtq where safetyvtqid = #{safetyvtqid}
+    </delete>
+    <delete id="deleteParameter">
+        delete from tbl_parameter where parameterid = #{parameterid}
     </delete>
 
 
@@ -488,6 +516,7 @@
         </set>
         where healtherid = #{healtherid}
     </update>
+
     <!--    安防员管理-->
     <update id="updateSecurity">
         update tbl_security
@@ -566,7 +595,57 @@
         </set>
         where studentid = #{studentid}
     </update>
-
+    <update id="updateTopic">
+        update tbl_safetyvtq
+        <set>
+            <if test="safetyvtqname != '' and safetyvtqname != null">
+                safetyvtqname = #{safetyvtqname},
+            </if>
+            <if test="a != '' and a != null">
+                a = #{a},
+            </if>
+            <if test="avalue != null">
+                avalue = #{avalue},
+            </if>
+            <if test="b != '' and b != null">
+                b = #{b},
+            </if>
+            <if test="bvalue != null">
+                bvalue = #{bvalue},
+            </if>
+        </set>
+        where safetyvtqid = #{safetyvtqid}
+    </update>
+    <update id="updateSafetyVideo">
+        update tbl_safetyvideo
+        <set>
+            <if test="safetyvideoname != '' and safetyvideoname != null">
+                safetyvideoname = #{safetyvideoname},
+            </if>
+                safetyvideotime = now(),
+            <if test="videoname != '' and videoname != null">
+                videoname = #{videoname},
+            </if>
+            <if test="videoadd != '' and videoadd != null">
+                videoadd = #{videoadd},
+            </if>
+        </set>
+    </update>
+    <update id="updateParameter">
+        update tbl_parameter where
+        <set>
+            <if test="parametername != '' and parametername != null">
+                parametername = #{parametername},
+            </if>
+            <if test="parametertype != '' and parametertype != null and parametertype != '请选择'">
+                parametertype = #{parametertype},
+            </if>
+            <if test="parameterval != '' and parameterval != null">
+                parameterval = #{parameterval},
+            </if>
+        </set>
+        where parameterid = #{parameterid}
+    </update>
 
     <select id="findAllKinder" resultType="com.great.kindergarten.commons.entity.TblKinder">
         select * from tbl_kinder
@@ -628,16 +707,16 @@
     </select>
 
     <select id="findAllParameter" resultType="com.great.kindergarten.commons.entity.TblParameter">
-        select * from tbl_kinder
+        select * from tbl_parameter
         <where>
             <if test=" parametername != '' and parametername != null">
                 and parametername like concat('%',#{parametername},'%')
             </if>
             <if test=" parametertype != '' and parametertype != null and parametertype !='请选择'">
-                and kinderstatus = #{kinderstatus}
+                and parametertype = #{parametertype}
             </if>
         </where>
-        order by parametertype
+        order by parametertype asc
     </select>
     <select id="findParameterCount" resultType="java.lang.Integer">
         select count(*) from tbl_parameter
@@ -646,10 +725,10 @@
                 and parametername like concat('%',#{parametername},'%')
             </if>
             <if test=" parametertype != '' and parametertype != null and parametertype !='请选择'">
-                and kinderstatus = #{kinderstatus}
+                and parametertype = #{parametertype}
             </if>
         </where>
-        order by parametertype
+        order by parametertype asc
     </select>
     <select id="findParameterInfo" resultType="com.great.kindergarten.commons.entity.TblParameter">
         select * from tbl_parameter;
@@ -1116,22 +1195,22 @@
         order by s.studenttime desc
     </select>
 
-<!--    安全教育管理-->
-    <resultMap id="VideoMap" type="com.great.kindergarten.commons.entity.TblSafetyvideo">
-        <result column="safetyvideoid" property="safetyvideoid"></result>
-        <result column="safetyvideoname" property="safetyvideoname"></result>
-        <result column="safetyvideotime" property="safetyvideotime"></result>
-        <result column="videoname" property="videoname"></result>
-        <result column="videoadd" property="videoadd"></result>
-        <result column="monitorid" property="monitorid"></result>
-        <result column="monitorname" property="monitorname"></result>
-        <result column="mid" property="mid"></result>
-        <association property="tblMonitor" javaType="com.great.kindergarten.commons.entity.TblMonitor">
-            <id property="monitorid" column="monitorid"/>
-            <result property="monitorid" column="monitorid"/>
-            <result property="monitorname" column="monitorname"/>
-        </association>
-    </resultMap>
+<!--&lt;!&ndash;    安全教育管理&ndash;&gt;-->
+<!--    <resultMap id="VideoMap" type="com.great.kindergarten.commons.entity.TblSafetyvideo">-->
+<!--        <result column="safetyvideoid" property="safetyvideoid"></result>-->
+<!--        <result column="safetyvideoname" property="safetyvideoname"></result>-->
+<!--        <result column="safetyvideotime" property="safetyvideotime"></result>-->
+<!--        <result column="videoname" property="videoname"></result>-->
+<!--        <result column="videoadd" property="videoadd"></result>-->
+<!--        <result column="monitorid" property="monitorid"></result>-->
+<!--        <result column="monitorname" property="monitorname"></result>-->
+<!--        <result column="mid" property="mid"></result>-->
+<!--        <association property="tblMonitor" javaType="com.great.kindergarten.commons.entity.TblMonitor">-->
+<!--            <id property="monitorid" column="monitorid"/>-->
+<!--            <result property="monitorid" column="monitorid"/>-->
+<!--            <result property="monitorname" column="monitorname"/>-->
+<!--        </association>-->
+<!--    </resultMap>-->
 
     <select id="findAllSafetyVideoInfo" resultType="com.great.kindergarten.commons.entity.TblSafetyvideo" parameterType="com.great.kindergarten.commons.entity.TblSafetyvideo">
         select m.monitorid,m.monitorname,s.*
@@ -1169,232 +1248,35 @@
             order by s.safetyvideotime asc
     </select>
 
-
-    <!--    &lt;!&ndash;    查找用户类型&ndash;&gt;-->
-<!--    <select id="findUserType" parameterType="java.lang.String" resultMap="userMap">-->
-<!--                select r.roleid,r.rolename from usertable u join roletable r on(u.roleid = r.roleid)-->
-<!--                where u.username = #{username}-->
-<!--            </select>-->
-
-<!--    &lt;!&ndash;    这边这个type是你需要查询返回的对象，id就是select语句的 resultMap&ndash;&gt;-->
-<!--    <resultMap id="userMap" type="RoleTable">-->
-<!--        &lt;!&ndash;   这边填写的是你需要查询的的结果&ndash;&gt;-->
-<!--        <result property="roleid" column="roleid"/>-->
-<!--        <result property="rolename" column="rolename"/>-->
-<!--        &lt;!&ndash;    需要的条件，即where 后面的条件（属于那个实体对象，下面的property就填哪个，column就是实体对象对应数据库表的字段名，-->
-<!--        javaType就是查询条件的实体类）&ndash;&gt;-->
-<!--        <association property="userTable" column="roleid" javaType="UserTable">-->
-<!--            &lt;!&ndash;    根据哪个字段去查&ndash;&gt;-->
-<!--            <result property="username" column="username"/>-->
-<!--        </association>-->
-<!--    </resultMap>-->
-
-<!--    &lt;!&ndash;select * from menutable where menuid in (select r2.mid from roletable r1, rolemenutable r2 where r1.roleid = r2.rid and r1.roleid = #{roleid}) and menusonid = 0&ndash;&gt;-->
-
-<!--    &lt;!&ndash;    查找用户对应的父菜单&ndash;&gt;-->
-<!--    <select id="findMenuIDByName" parameterType="java.lang.Integer" resultType="MenuTable">-->
-<!--        select m.menuid,m.menuname,m.menuurl,m.menusonid,r2.roleid from menutable m,rolemenutable r1,roletable r2 where m.menuid = r1.mid and r1.rid = r2.roleid and r2.roleid = #{roleid} and menusonid = 0;-->
-<!--    </select>-->
-
-<!--    &lt;!&ndash;    查找用户对应的子菜单&ndash;&gt;-->
-<!--    <select id="findMenuNameByID" parameterType="com.example.papersmagboot.javabean.MenuTable" resultType="MenuTable">-->
-<!--        select * from menutable m,rolemenutable r  where  m.menuid = r.mid and   m.menusonid = #{menuid} and r.rid = #{roleid} order by menuid-->
-<!--    </select>-->
-
-<!--    &lt;!&ndash;    查找角色信息&ndash;&gt;-->
-<!--    <select id="findRoleInfo" resultType="com.example.papersmagboot.javabean.RoleTable"-->
-<!--            parameterType="com.example.papersmagboot.javabean.MenuPage">-->
-<!--        select * from roletable-->
-<!--        <where>-->
-<!--            <if test="roleName != '' and roleName != null ">-->
-<!--                and rolename like CONCAT('%',#{roleName},'%')-->
-<!--            </if>-->
-<!--        </where>-->
-<!--    </select>-->
-
-<!--    &lt;!&ndash;    查找角色信息总条数&ndash;&gt;-->
-<!--    <select id="findRoleInfoCount" resultType="java.lang.Long"-->
-<!--            parameterType="com.example.papersmagboot.javabean.MenuPage">-->
-<!--        select count(*) from roletable-->
-<!--        <where>-->
-<!--            <if test="roleName != '' and roleName != null ">-->
-<!--                and rolename like CONCAT('%',#{roleName},'%')-->
-<!--            </if>-->
-<!--        </where>-->
-<!--    </select>-->
-
-
-<!--    &lt;!&ndash;    用户管理信息表&ndash;&gt;-->
-<!--    <select id="findALLUser" resultMap="UserMap" parameterType="com.example.papersmagboot.javabean.UserPage">-->
-<!--        select * from usertable-->
-<!--        <where>-->
-<!--            <if test="uName != '' and uName != null ">-->
-<!--                and username like CONCAT('%',#{uName},'%')-->
-<!--            </if>-->
-<!--            <if test="uSex != '' and uSex != null ">-->
-<!--                and usersex = #{uSex}-->
-<!--            </if>-->
-<!--            <if test="uStatus != '' and uStatus != null ">-->
-<!--                and userstatus = #{uStatus}-->
-<!--            </if>-->
-<!--            <if test="uTime1 != '' and uTime1 != null and uTime2 != '' and uTime2 != null ">-->
-<!--                and userregtime between #{uTime1} and #{uTime2}-->
-<!--            </if>-->
-<!--        </where>-->
-<!--        limit #{page},#{limit}-->
-<!--    </select>-->
-
-<!--    &lt;!&ndash;    用户管理信息表,查询记录条数&ndash;&gt;-->
-<!--    <select id="findUserInfoCount" resultType="java.lang.Long"-->
-<!--            parameterType="com.example.papersmagboot.javabean.UserPage">-->
-<!--        select count(*) from usertable-->
-<!--        <where>-->
-<!--            <if test="uName != '' and uName != null ">-->
-<!--                and username like CONCAT('%',#{uName},'%')-->
-<!--            </if>-->
-<!--            <if test="uSex != '' and uSex != null ">-->
-<!--                and usersex = #{uSex}-->
-<!--            </if>-->
-<!--            <if test="uStatus != '' and uStatus != null ">-->
-<!--                and userstatus = #{uStatus}-->
-<!--            </if>-->
-<!--            <if test="uTime1 != '' and uTime1 != null and uTime2 != '' and uTime2 != null ">-->
-<!--                and userregtime between #{uTime1} and #{uTime2}-->
-<!--            </if>-->
-
-<!--        </where>-->
-<!--    </select>-->
-
-<!--    <update id="updateUserStatus" parameterType="com.example.papersmagboot.javabean.UserTable">-->
-<!--        update usertable-->
-<!--        <trim prefix="set" suffixOverrides=",">-->
-<!--            <if test="userstatus != null ">userstatus = #{userstatus},</if>-->
-<!--        </trim>-->
-<!--        <where>-->
-<!--            userid = #{userid}-->
-<!--        </where>-->
-<!--    </update>-->
-
-<!--    <update id="updateUserInfo" parameterType="com.example.papersmagboot.javabean.UserTable">-->
-<!--        update usertable-->
-<!--        <trim prefix="set" suffixOverrides=",">-->
-<!--            <if test="username != null ">username = #{username},</if>-->
-<!--            <if test="userphone != null ">userphone = #{userphone},</if>-->
-<!--            <if test="useremail != null ">useremail = #{useremail},</if>-->
-<!--        </trim>-->
-<!--        <where>-->
-<!--            userid = #{userid}-->
-<!--        </where>-->
-<!--    </update>-->
-
-<!--    <update id="deleteUser" parameterType="java.lang.String">-->
-<!--        UPDATE usertable SET userstatus = '已删除' where userid = #{userid};-->
-<!--    </update>-->
-
-
-<!--    &lt;!&ndash;    查找用户信息&ndash;&gt;-->
-<!--    <select id="findAllUserInfo" resultType="com.example.papersmagboot.javabean.UserTable" parameterType="java.lang.Integer">-->
-<!--                select * from usertable where userid = #{userid}-->
-<!--            </select>-->
-
-<!--    &lt;!&ndash;    查找用户积分信息&ndash;&gt;-->
-<!--    <select id="findUserScore" resultType="java.lang.Integer" parameterType="java.lang.Integer">-->
-<!--                select userscore from usertable where userid = #{userid}-->
-<!--            </select>-->
-
-<!--    <update id="updateUserScore" parameterType="com.example.papersmagboot.javabean.UserTable">-->
-<!--        update usertable-->
-<!--        <trim prefix="set" suffixOverrides=",">-->
-<!--            <if test="userscore != null ">userscore = #{userscore},</if>-->
-<!--        </trim>-->
-<!--        <where>-->
-<!--            userid = #{userid}-->
-<!--        </where>-->
-<!--    </update>-->
-
-<!--&lt;!&ndash;    用户文档查询&ndash;&gt;-->
-
-<!--    <select id="findUserFile" resultMap="FileMap" parameterType="com.example.papersmagboot.javabean.UserFilePage">-->
-<!--        select f1.fileid,f1.filename,f1.filesize,f1.filetime,f1.fileintegral,f1.fileuploadnum,f2.typename,f1.filestatus from filetable f1 left join filetypetable f2 on f1.ftid = f2.typeid-->
-<!--        <where>-->
-<!--            <if test="fileopname != '' and fileopname != null ">-->
-<!--                and f1.fileopname = #{fileopname}-->
-<!--            </if>-->
-
-<!--            <if test="fileType != '' and fileType != null ">-->
-<!--                and f1.ftid = #{fileType}-->
-<!--            </if>-->
-
-<!--            <if test="filestatus != '' and filestatus != null ">-->
-<!--                and f1.filestatus = #{filestatus}-->
-<!--            </if>-->
-
-<!--            <if test="fileTime1 != '' and fileTime1 != null and fileTime2 != '' and fileTime2 != null ">-->
-<!--                and f1.filetime between #{fileTime1} and #{fileTime2}-->
-<!--            </if>-->
-
-<!--        </where>-->
-<!--        limit #{page},#{limit}-->
-<!--    </select>-->
-
-
-<!--    &lt;!&ndash;    用户文档查询,查询记录条数&ndash;&gt;-->
-<!--    <select id="findUserFileInfoCount" resultType="java.lang.Long" parameterType="com.example.papersmagboot.javabean.UserFilePage">-->
-<!--        select count(*) from filetable f1 left join filetypetable f2 on f1.ftid = f2.typeid-->
-<!--        <where>-->
-
-<!--            <if test="fileopname != '' and fileopname != null ">-->
-<!--                and f1.fileopname = #{fileopname}-->
-<!--            </if>-->
-
-
-<!--            <if test="fileType != '' and fileType != null ">-->
-<!--                and f1.ftid = #{fileType}-->
-<!--            </if>-->
-
-<!--            <if test="filestatus != '' and filestatus != null ">-->
-<!--                and f1.filestatus = #{filestatus}-->
-<!--            </if>-->
-
-<!--            <if test="fileTime1 != '' and fileTime1 != null and fileTime2 != '' and fileTime2 != null ">-->
-<!--                and f1.filetime between #{fileTime1} and #{fileTime2}-->
-<!--            </if>-->
-<!--        </where>-->
-<!--    </select>-->
-
-<!--    &lt;!&ndash;    积分表收入支出表添加&ndash;&gt;-->
-<!--    <insert id="addIntegral" parameterType="java.util.List">-->
-<!--        insert into-->
-<!--        integraltable(integraltype,integralnum,integraltime,uid)-->
-<!--        values-->
-<!--        <foreach collection="list" item="i" index="index" separator=",">-->
-<!--            (#{i.integraltype},#{i.integralnum},#{i.integraltime},#{i.uid})-->
-<!--        </foreach>-->
-<!--    </insert>-->
-
-<!--&lt;!&ndash;    用户积分收支记录查询&ndash;&gt;-->
-<!--    <resultMap id="IntegralMap" type="com.example.papersmagboot.javabean.UserIntegral">-->
-<!--        <result column="integralid" property="integralid"></result>-->
-<!--        <result column="integraltype" property="integraltype"></result>-->
-<!--        <result column="integralnum" property="integralnum"></result>-->
-<!--        <result column="integraltime" property="integraltime"></result>-->
-<!--        <result column="username" property="username"></result>-->
-<!--        <association property="userTable" javaType="com.example.papersmagboot.javabean.UserTable">-->
-<!--            <id property="userid" column="userid"/>-->
-<!--            <result property="username" column="username"/>-->
-<!--        </association>-->
-<!--    </resultMap>-->
-
-<!--    <select id="showUserIntegralInfo" resultMap="IntegralMap" parameterType="com.example.papersmagboot.javabean.UserIntegralPage">-->
-<!--        select in1.integralid,in1.integraltype,in1.integralnum,in1.integraltime,u.username from integraltable in1 left join usertable u on in1.uid = u.userid limit #{page},#{limit}-->
-<!--    </select>-->
-
-<!--    &lt;!&ndash;    用户积分收支记录查询记录条数&ndash;&gt;-->
-<!--    <select id="showUserIntegralInfoCount" resultType="java.lang.Long" parameterType="com.example.papersmagboot.javabean.UserIntegralPage">-->
-<!--        select count(*) from integraltable in1 left join usertable u on in1.uid = u.userid-->
-<!--    </select>-->
-
-
-
+    <select id="findAllSafetyVideoItemsInfo" resultType="com.great.kindergarten.commons.entity.TblSafetyvtq" parameterType="com.great.kindergarten.commons.entity.TblSafetyvtq">
+        select s2.safetyvideoid,s2.safetyvideoname as safetyvideoname,s1.*
+        from tbl_safetyvtq s1,tbl_safetyvideo s2
+        <where>
+            s1.safetyvideoid = s2.safetyvideoid and s2.safetyvideoid = #{safetyvideoid}
+        </where>
+    </select>
+    <select id="findAllVideoQuestionConfigInfo" resultType="com.great.kindergarten.commons.entity.TblSafetyvideo">
+        select m.monitorid,m.monitorname,s.*
+            from tbl_safetyvideo s,tbl_monitor m
+            <where>
+                s.mid = m.monitorid
+                <if test=" time1 != '' and time1 != null">
+                    <![CDATA[   and DATE_FORMAT(safetyvideotime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+                </if>
+                <if test=" time2 != '' and time2 != null">
+                    <![CDATA[   and DATE_FORMAT(safetyvideotime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+                </if>
+                <if test=" safetyvideoname != '' and safetyvideoname != null ">
+                    and safetyvideoname like concat('%',#{safetyvideoname},'%')
+                </if>
+            </where>
+            order by s.safetyvideotime desc
+    </select>
+    <select id="queryTopicById" resultType="com.great.kindergarten.commons.entity.TblSafetyvtq">
+        select * from tbl_safetyvtq where safetyvtqid = #{safetyvtqid}
+    </select>
+    <select id="findAllParameterType" resultType="java.lang.String">
+        select parametertype from tbl_parameter;
+    </select>
 
 </mapper>

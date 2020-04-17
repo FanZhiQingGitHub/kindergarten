@@ -558,4 +558,80 @@ public class AdminService {
 	{
 		return adminMapper.deleteSafetyVideoInfo(safetyVideoId);
 	}
+
+	public List<TblSafetyvtq> findAllSafetyVideoItemsInfo(Integer safetyVideoId)
+	{
+		return adminMapper.findAllSafetyVideoItemsInfo(safetyVideoId);
+	}
+
+	public int addSafetyVideo(List<TblSafetyvideo> tblSafetyvideoList)
+	{
+		return adminMapper.addSafetyVideo(tblSafetyvideoList);
+	}
+
+	public int updateSafetyVideo(TblSafetyvideo tblSafetyvideo)
+	{
+		return adminMapper.updateSafetyVideo(tblSafetyvideo);
+	}
+
+	public List<TblSafetyvideo> findAllVideoQuestionConfigInfo(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findAllVideoQuestionConfigInfo(condition, rowBounds);
+	}
+
+	public int addTopic(TblSafetyvtq tblSafetyvtq)
+	{
+		return adminMapper.addTopic(tblSafetyvtq);
+	}
+
+	public List<TblSafetyvtq> queryTopicById(Integer safetyVideoId)
+	{
+		return adminMapper.queryTopicById(safetyVideoId);
+	}
+
+	public int updateTopic(TblSafetyvtq tblSafetyvtq)
+	{
+		return adminMapper.updateTopic(tblSafetyvtq);
+	}
+
+	public int deleteTopic(TblSafetyvtq tblSafetyvtq)
+	{
+		return adminMapper.deleteTopic(tblSafetyvtq);
+	}
+
+	//参数配置
+	public List<TblParameter> findAllParameter(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findAllParameter(condition, rowBounds);
+	}
+
+	public int findParameterCount(HashMap<String, Object> condition)
+	{
+		return adminMapper.findParameterCount(condition);
+	}
+
+	public List<TblParameter> findParameterInfo()
+	{
+		return adminMapper.findParameterInfo();
+	}
+
+	public List<String> findAllParameterType()
+	{
+		return adminMapper.findAllParameterType();
+	}
+
+	public int addParameter(List<TblParameter> tblParameterList)
+	{
+		return adminMapper.addParameter(tblParameterList);
+	}
+
+	public int updateParameter(TblParameter tblParameter)
+	{
+		return adminMapper.updateParameter(tblParameter);
+	}
+
+	public int deleteParameter(Integer parameterid)
+	{
+		return adminMapper.deleteParameter(parameterid);
+	}
 }

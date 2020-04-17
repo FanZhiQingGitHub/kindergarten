@@ -2,8 +2,10 @@ package com.great.kindergarten.parent.service;
 
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.parent.mapper.ParentMapper;
+import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,7 +23,41 @@ public class ParentService {
     }
 
 
+    /**
+     * 根据条件找到孩子的接送信息
+     * @param pickUpInfoDetailPage
+     * @return
+     */
+    public List<TblStutime> findPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage){
+        return parentMapper.findPickUpDetailInfo(pickUpInfoDetailPage);
+    };
 
+    /**
+     * 更新作业的路径
+     * @param insertHomeWork
+     * @return
+     */
+    public Integer updateWorkUrl(TblWork insertHomeWork){
+        return parentMapper.updateWorkUrl(insertHomeWork);
+    };
+
+    /**
+     * 查询是否已经有记录了
+     * @param insertHomeWork
+     * @return
+     */
+    public Integer findSameWorkInsertRecord(TblWork insertHomeWork){
+        return parentMapper.findSameWorkInsertRecord(insertHomeWork);
+    };
+
+    /**
+     * 根据类插入作业信息
+     * @param insertHomeWork
+     * @return
+     */
+    public Integer uploadHomeWork(TblWork insertHomeWork){
+        return parentMapper.uploadHomeWork(insertHomeWork);
+    };
 
     /**
      * 根据id和条件找到孩子作业列表
@@ -61,7 +97,7 @@ public class ParentService {
         //判断数据是否已经提交
         if (parentMapper.countScore(parentId,videoId)==0){
             //如果没有提交则插入数据
-            parentMapper.recordScore(videoId,parentId,score);
+            parentMapper.recordScore(videoId,parentId,score,new Date());
             return true;
         }
 

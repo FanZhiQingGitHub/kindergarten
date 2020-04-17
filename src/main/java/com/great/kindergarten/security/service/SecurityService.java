@@ -26,6 +26,12 @@ public class SecurityService {
         return securityMapper.findSecurityStatus(securitymap);
     }
 
+    public List<TblCampus> findKinderNews(String kindername){
+        Map<String, String> KinderNewsmap = new LinkedHashMap<>();
+        KinderNewsmap.put("kindername",kindername);
+        return securityMapper.findKinderNews(KinderNewsmap);
+    }
+
     public TblSecurity securityLogin(String securityname,String securitypwd){
         Map<String, String> securitymap = new LinkedHashMap<>();
         securitymap.put("securityname",securityname);
@@ -91,6 +97,28 @@ public class SecurityService {
 
     public Long findAlarmInfoCount(AlarmLogPage alarmLogPage){
         return securityMapper.findAlarmInfoCount(alarmLogPage);
+    }
+
+    public Boolean addCoordinate(List<TblCoordinate> tblCoordinateList){
+        return securityMapper.addCoordinate(tblCoordinateList);
+    }
+
+    public TblKinder findKinderId(String kindername){
+        Map<String, String> KinderIdmap = new LinkedHashMap<>();
+        KinderIdmap.put("kindername",kindername);
+        return securityMapper.findKinderId(KinderIdmap);
+    }
+
+    public List<TblCoordinate> findCoordinate(String kinderid){
+        Map<String, String> KinderIdmap = new LinkedHashMap<>();
+        KinderIdmap.put("kinderid",kinderid);
+        return securityMapper.findCoordinate(KinderIdmap);
+    }
+
+    public List<TblStuTrack> findStuTrack(String stuid){
+        Map<String, String> KinderIdmap = new LinkedHashMap<>();
+        KinderIdmap.put("stuid",stuid);
+        return securityMapper.findStuTrack(KinderIdmap);
     }
 
 

@@ -150,6 +150,16 @@ public class AdminController {
 			                    parentNewList.add(str);
 		                    }
 	                    }
+
+	                    List<String> parameterList = adminService.findAllParameterType();
+	                    List<String> parameterNewList = new ArrayList<String>();
+	                    for (String str : parameterList) {
+		                    if (!parameterNewList.contains(str)) {
+			                    parameterNewList.add(str);
+		                    }
+	                    }
+
+	                    System.out.println("参数类型："+parameterNewList);
 //	                    List<String> healtherList = adminService.findHealtherJob();
 //	                    List<String> healtherNewList = new ArrayList<String>();
 //	                    for (String str : healtherList) {
@@ -157,6 +167,8 @@ public class AdminController {
 //			                    healtherNewList.add(str);
 //		                    }
 //	                    }
+
+	                    req.getSession().setAttribute("parameterNewList", parameterNewList);
 	                    req.getSession().setAttribute("teacherNewList",teacherNewList);
 	                    req.getSession().setAttribute("teacherNewList",teacherNewList);
 //	                    req.getSession().setAttribute("healtherNewList",healtherNewList);
@@ -1594,7 +1606,9 @@ public class AdminController {
 		}
 	}
 
-	//学生管理
+	/**
+	 学生管理
+	 */
 	@RequestMapping("/studentMgrInfo")
 	public void studentMgrInfo(String page, String limit, TblStudent tblStudent, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -1717,6 +1731,7 @@ public class AdminController {
 	}
 
 	//安全教育管理
+
 	@RequestMapping("/safetyEducationInfo")
 	public void safetyEducationInfo(String page, String limit, TblSafetyvideo tblSafetyvideo, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -1761,6 +1776,265 @@ public class AdminController {
 	public void deleteSafetyVideoInfo(TblSafetyvideo tblSafetyvideo,HttpServletRequest request, HttpServletResponse response)
 	{
 		int num = adminService.deleteSafetyVideoInfo(tblSafetyvideo.getSafetyvideoid());
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	//查找试题
+	@RequestMapping("/findAllSafetyVideoItemsInfo")
+	public void findAllSafetyVideoItemsInfo(TblSafetyvideo tblSafetyvideo,HttpServletRequest request,HttpServletResponse response)
+	{
+		System.out.println("当前视频名称"+tblSafetyvideo);
+		List<TblSafetyvtq> tblSafetyvtqList = adminService.findAllSafetyVideoItemsInfo(tblSafetyvideo.getSafetyvideoid());
+		System.out.println("试题"+tblSafetyvtqList);
+		if(tblSafetyvtqList != null)
+		{
+			ResponseUtils.outJson(response,GsonUtils.getgsonUtils().toStr(tblSafetyvtqList));
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+
+	@RequestMapping("/videoQuestionConfiguration")
+	public void videoQuestionConfiguration(String page, String limit, TblSafetyvideo tblSafetyvideo, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null != tblSafetyvideo.getSafetyvideoname() && !"".equals(tblSafetyvideo.getSafetyvideoname().trim())) {
+			condition.put("safetyvideoname",tblSafetyvideo.getSafetyvideoname());
+		}
+
+		if(null != tblSafetyvideo.getTime1() && !"".equals(tblSafetyvideo.getTime1().trim())) {
+			condition.put("time1",tblSafetyvideo.getTime1());
+		}
+
+		if(null != tblSafetyvideo.getTime2() && !"".equals(tblSafetyvideo.getTime2().trim())) {
+			condition.put("time2",tblSafetyvideo.getTime2());
+		}
+
+		int num = adminService.findSafetyVideoInfoCount(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+		List<TblSafetyvideo> tblSafetyVideoList = adminService.findAllVideoQuestionConfigInfo(condition,rowBounds);
+		if(tblSafetyVideoList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(tblSafetyVideoList);
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@AdminSystemLog(operationType = "上传视频",operationName = "管理员上传视频")
+	@RequestMapping("/uploadVideo")
+	public void uploadVideo(@RequestParam("file") MultipartFile file, String safetyVideoName ,String videoName , String videoAdd, TblSafetyvideo tblSafetyvideo, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		System.out.println("file="+file+"视频名称:"+safetyVideoName+"文件名称："+videoName+"文件路径："+videoAdd);
+		String prefix = "";
+		String dateStr = "";
+		//保存上传
+		if(file != null){
+			String originalName = file.getOriginalFilename();
+			prefix = originalName.substring(originalName.lastIndexOf(".")+1);
+			Date date = new Date();
+			String uuid = UUID.randomUUID()+"";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			dateStr = simpleDateFormat.format(date);
+			//			String filepath = "D:\\kindergarten\\src\\main\\webapp\\image\\adminimg\\img\\" + dateStr+"\\"+uuid+"." + prefix;
+			String filepath = "D:\\kindergarten\\src\\main\\webapp\\image\\adminimg\\video\\" + "\\"+originalName;
+			File files = new File(filepath);
+			//打印查看上传路径
+			System.out.println(filepath);
+			if(!files.getParentFile().exists()){
+				files.getParentFile().mkdirs();
+			}
+			tblSafetyvideo.setSafetyvideoname(safetyVideoName);
+			tblSafetyvideo.setVideoadd(videoAdd);
+			tblSafetyvideo.setVideoname(videoName);
+			tblSafetyvideo.setSafetyvideotime(new Date());
+			tblSafetyvideo.setMid(1);
+			List<TblSafetyvideo> tblSafetyVideoList = new ArrayList<>();
+			tblSafetyVideoList.add(tblSafetyvideo);
+			int num = adminService.addSafetyVideo(tblSafetyVideoList);
+			if(num > 0)
+			{
+				file.transferTo(files);
+				response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
+				response.getWriter().flush();
+				response.getWriter().close();
+			}
+		}else{
+			response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+
+	@AdminSystemLog(operationType = "重新上传视频",operationName = "重新上传视频")
+	@RequestMapping("/updateSafetyVideoInfo")
+	public void updateSafetyVideoInfo(@RequestParam("file") MultipartFile file, String safetyVideoName ,String videoName , String videoAdd, TblSafetyvideo tblSafetyvideo, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		System.out.println("file="+file+"视频名称:"+safetyVideoName+"文件名称："+videoName+"文件路径："+videoAdd);
+		String prefix = "";
+		String dateStr = "";
+		//保存上传
+		if(file != null){
+			String originalName = file.getOriginalFilename();
+			prefix = originalName.substring(originalName.lastIndexOf(".")+1);
+			Date date = new Date();
+			String uuid = UUID.randomUUID()+"";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			dateStr = simpleDateFormat.format(date);
+			//			String filepath = "D:\\kindergarten\\src\\main\\webapp\\image\\adminimg\\img\\" + dateStr+"\\"+uuid+"." + prefix;
+			String filepath = "D:\\kindergarten\\src\\main\\webapp\\image\\adminimg\\video\\" + "\\"+originalName;
+			File files = new File(filepath);
+			//打印查看上传路径
+			System.out.println(filepath);
+			if(!files.getParentFile().exists()){
+				files.getParentFile().mkdirs();
+			}
+			tblSafetyvideo.setSafetyvideoname(safetyVideoName);
+			tblSafetyvideo.setVideoadd(videoAdd);
+			tblSafetyvideo.setVideoname(videoName);
+			tblSafetyvideo.setSafetyvideotime(new Date());
+//			List<TblSafetyvideo> tblSafetyVideoList = new ArrayList<>();
+//			tblSafetyVideoList.add(tblSafetyvideo);
+			int num = adminService.updateSafetyVideo(tblSafetyvideo);
+			if(num > 0)
+			{
+				file.transferTo(files);
+				response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
+				response.getWriter().flush();
+				response.getWriter().close();
+			}
+		}else{
+			response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/addTopic")
+	public void addTopic(TblSafetyvtq tblSafetyvtq, HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println("新增试题："+tblSafetyvtq);
+		int num = adminService.addTopic(tblSafetyvtq);
+		if(num > 0)
+		{
+			List<TblSafetyvtq> tblSafetyvtqList = adminService.findAllSafetyVideoItemsInfo(tblSafetyvtq.getSafetyvideoid());
+			ResponseUtils.outJson(response,GsonUtils.getgsonUtils().toStr(tblSafetyvtqList));
+//			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/queryTopic")
+	public void queryTopic(TblSafetyvtq tblSafetyvtq, HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println("题目信息"+tblSafetyvtq);
+		List<TblSafetyvtq> tblSafetyvtqList = adminService.queryTopicById(tblSafetyvtq.getSafetyvtqid());
+		if(tblSafetyvtqList != null)
+		{
+			ResponseUtils.outJson(response,GsonUtils.getgsonUtils().toStr(tblSafetyvtqList));
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/deleteTopic")
+	public void deleteTopic(TblSafetyvtq tblSafetyvtq, String safetyVideoName, HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println("删除题目信息"+tblSafetyvtq+"题型"+safetyVideoName);
+		int num = adminService.deleteTopic(tblSafetyvtq);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/updateTopic")
+	public void updateTopic(TblSafetyvtq tblSafetyvtq, String safetyVideoName, HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println("修改题目信息"+tblSafetyvtq+"题型"+safetyVideoName);
+		int num = adminService.updateTopic(tblSafetyvtq);
+		if(num > 0)
+		{
+			ResponseUtils.outJson(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	//参数配置管理
+	@RequestMapping("/parameterMgrInfo")
+	public void parameterMgrInfo(String page, String limit, TblParameter tblParameter, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null != tblParameter.getParametername() && !"".equals(tblParameter.getParametername().trim())) {
+			condition.put("parametername",tblParameter.getParametername());
+		}
+
+		if(null != tblParameter.getParametertype() && !"".equals(tblParameter.getParametertype().trim())) {
+			condition.put("parametertype",tblParameter.getParametertype());
+		}
+
+		int num = adminService.findParameterCount(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+		List<TblParameter> tblParameterList = adminService.findAllParameter(condition,rowBounds);
+		if(tblParameterList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(tblParameterList);
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/addParameter")
+	public void addParameter(TblParameter tblParameter,HttpServletRequest request, HttpServletResponse response)
+	{
+		List<TblParameter> tblParameterList = new ArrayList<>();
+		tblParameterList.add(tblParameter);
+		int num = adminService.addParameter(tblParameterList);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/deleteParameter")
+	public void deleteParameter(TblParameter tblParameter,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.deleteParameter(tblParameter.getParameterid());
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/updateParameter")
+	public void updateParameter(TblParameter tblParameter, HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.updateParameter(tblParameter);
 		if(num > 0)
 		{
 			ResponseUtils.outHtml(response,"success");
