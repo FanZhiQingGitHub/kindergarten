@@ -1,11 +1,19 @@
 package com.great.kindergarten.commons.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.util.Date;
+
 /**
  * 资讯类型表
  */
 public class TblInfotype {
     private Integer infotypeid;
     private String infotypename;
+    private Integer kid;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    private Date infotypetime;
 
     public TblInfotype() {
     }
@@ -31,11 +39,29 @@ public class TblInfotype {
         this.infotypename = infotypename;
     }
 
+    public Integer getKid()
+    {
+        return kid;
+    }
+
+    public void setKid(Integer kid)
+    {
+        this.kid = kid;
+    }
+
+    public Date getInfotypetime()
+    {
+        return infotypetime;
+    }
+
+    public void setInfotypetime(Date infotypetime)
+    {
+        this.infotypetime = infotypetime;
+    }
+
     @Override
-    public String toString() {
-        return "TblInfotype{" +
-                "infotypeid=" + infotypeid +
-                ", infotypename='" + infotypename + '\'' +
-                '}';
+    public String toString()
+    {
+        return "TblInfotype{" + "infotypeid=" + infotypeid + ", infotypename='" + infotypename + '\'' + ", kid=" + kid + ", infotypetime=" + infotypetime + '}';
     }
 }

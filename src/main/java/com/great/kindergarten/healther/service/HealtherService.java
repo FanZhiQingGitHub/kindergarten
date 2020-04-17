@@ -123,10 +123,4 @@ public class HealtherService {
     public Boolean updateRecipeInfo(Integer mid){
         return healtherMapper.updateRecipeInfo(mid);
     }
-
-    public List<TblCampus> findHealtherNews(String kindername){
-        Map<String, String> KinderNewsmap = new LinkedHashMap<>();
-        KinderNewsmap.put("kindername",kindername);
-        return healtherMapper.findHealtherNews(KinderNewsmap);
-    }
 }

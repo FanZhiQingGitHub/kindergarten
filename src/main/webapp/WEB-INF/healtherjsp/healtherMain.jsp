@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
@@ -23,9 +23,6 @@
             margin: 0;
             padding: 0;
         }
-        .a1:hover{
-            color: #f37d25;
-        }
     </style>
     <!--加载meta IE兼容文件-->
     <!--[if lt IE 9]>
@@ -37,7 +34,6 @@
 </head>
 <body>
 <input type="hidden" id="path" value="<%=path%>">
-<input type="hidden" id="kindername" value="${kindername}">
 <!-- header -->
 <div class="header_box">
 
@@ -49,7 +45,6 @@
             </a>
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0);" id="a1">个人信息</a></dd>
-                <dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
             </dl>
         </li>
         <li class="layui-nav-item"><a href="javascript:void(0);" id="exit" style="color: black;font-size: 18px">注销</a>
@@ -93,7 +88,7 @@
         </div>
     </div>
 
-    <div class="prod-show">
+    <div class="prod-show" >
 
         <div class="img-txt">
             <h3>
@@ -121,21 +116,14 @@
                     <div class="img-txt">
                         <h3 style="text-align: left">园所动态News</h3>
                         <div style=" overflow:auto;">
-                            <a><img style="width: 100%"
-                                    src="${pageContext.request.contextPath}/image/healtherimg/img/news.jpg"></a>
+                            <a><img style="width: 100%" src="${pageContext.request.contextPath}/image/healtherimg/img/news.jpg"></a>
                         </div>
-                        <div style=" overflow:auto;" id="newsInfo">
-
-                            <c:if test="${not empty tblCampuses}">
-                                <c:forEach items="${tblCampuses}" var="i" step="1">
-
-                                    <p><a class="a1" href="javascript:void(0);"
-                                          style="font-size: 15px;width: 200px">${i.campusinfoname}:${i.campusinfodetail}</a><span
-                                            style="font-size: 15px;margin-left: 18%">发布时间：<fmt:formatDate
-                                            value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss'/></span><span></span>
-                                    </p>
-                                </c:forEach>
-                            </c:if>
+                        <div style=" overflow:auto;">
+                            <a href="javascript:;">新闻一</a><br>
+                            <a href="javascript:;">新闻二</a><br>
+                            <a href="javascript:;">新闻三</a><br>
+                            <a href="javascript:;">新闻四</a><br>
+                            <a href="javascript:;">新闻五</a>
                         </div>
 
                     </div>
@@ -144,8 +132,7 @@
                     <div class="img-txt">
                         <h3 style="text-align: left">园所视频Videos</h3>
                         <div style=" overflow:auto;">
-                            <a href="javascript:void(0);" id="playVideos"><img style="width: 100%"
-                                                                               src="${pageContext.request.contextPath}/image/healtherimg/img/2019-nCoV.jpg"></a>
+                            <a href="javascript:void(0);" id="playVideos"><img style="width: 100%" src="${pageContext.request.contextPath}/image/healtherimg/img/2019-nCoV.jpg"></a>
                         </div>
                     </div>
                 </div>
@@ -248,45 +235,21 @@
                     , success: function (layero, index) {
                     }
                 });
-            }), $("#playVideos").click(function () {//点击查看园所视频
+            });
+        })
+
+        //点击查看园所视频
+        $("#playVideos").click(function () {
+            //打开一个窗口播放视频
+            layer.open({
                 //打开一个窗口播放视频
-                layer.open({
-                    //打开一个窗口播放视频
-                    type: 1,
-                    area: ['95%', '80%'],
-                    offset: ['10%', '3%'],
-                    title: '安全乘坐电梯',
-                    content: '<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
-                        '<source src="${pageContext.request.contextPath}/videos/2019-nCoV.mp4" type="video/mp4"></source></video>'
-                    //直接跳出一个标签播放视频
-                });
-            }),$(".a1").click(function () { //点击查看园所新闻
-                var name = $(this).text();
-                var titleInfo = name.split(":")[0];
-                var detailInfo = name.split(":")[1];
-                var kindername = $("#kindername").val();
-                //打开一个窗口播放视频
-                layer.open({
-                    //打开一个窗口播放视频
-                    // area: ['40%', '50%'],
-                    area: 'auto',
-                    // offset:['26%','31%'],
-                    offset:'auto',
-                    title:titleInfo,
-                    content: detailInfo+'------'+kindername,
-                });
-            }), $('.schoolMessage').on('click',function () {
-                layer.open({
-                    type: 2,
-                    title: '校园消息通知',
-                    shade: 0.8//表示的是阴影的大小
-                    , area: ['55%', '65%'],
-                    moveType: 1,//拖拽模式，0或者1
-                    content: src + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-                    , success: function (layero, index) {
-                        console.log(layero, index);
-                    }
-                });
+                type: 1,
+                area: ['95%', '80%'],
+                offset:['10%','3%'],
+                title:'安全乘坐电梯',
+                content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
+                    '<source src="${pageContext.request.contextPath}/videos/2019-nCoV.mp4" type="video/mp4"></source></video>'
+                //直接跳出一个标签播放视频
             });
         });
     });

@@ -324,7 +324,7 @@ public class SecurityController {
         String studentbrith = request.getParameter("studentbrith");
         Gson g = new Gson();
         List<TblStuTrack> tblStuTrackList = securityService.findStuTrack(studentid);//查找所选宝宝轨迹信息
-        System.out.println("tblStuTrackList=" + tblStuTrackList);
+        System.out.println("tblStuTrackList="+tblStuTrackList);
         if (0 != tblStuTrackList.size()) {
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
@@ -351,29 +351,29 @@ public class SecurityController {
 
         String a = lnginfo.split("\\.")[0];
         String b = lnginfo.split("\\.")[1];
-        if (b.length() == 4) {
-            b += 0;
-            lng = a + "." + b;
-        } else {
+        if(b.length() == 4){
+            b+=0;
+            lng = a+"."+b;
+        }else {
             lng = lnginfo;
         }
 
         String c = latinfo.split("\\.")[0];
         String d = latinfo.split("\\.")[1];
-        if (d.length() == 4) {
-            d += 0;
-            lat = c + "." + d;
-        } else {
+        if(d.length() == 4){
+            d+=0;
+            lat = c+"."+d;
+        }else {
             lat = latinfo;
         }
 
-        if (lng.equals("118.192697") && lat.equals("24.488705")) {
+        if(lng.equals("118.192697") && lat.equals("24.488705")){
             alarmlogarea = "西门";
-        } else if (lng.equals("118.192697") && lat.equals("24.48854")) {
+        }else if(lng.equals("118.192697") && lat.equals("24.48854")){
             alarmlogarea = "东门";
-        } else if (lng.equals("118.19320") && lat.equals("24.48892")) {
+        }else if(lng.equals("118.19320") && lat.equals("24.48892")){
             alarmlogarea = "北门";
-        } else if (lng.equals("118.19320") && lat.equals("24.48828")) {
+        }else if(lng.equals("118.19320") && lat.equals("24.48828")){
             alarmlogarea = "南门";
         }
         tblAlarmLog.setAlarmlogarea(alarmlogarea);
@@ -446,46 +446,48 @@ public class SecurityController {
     }
 
     @RequestMapping("/addCoordinate")
-    public void addCoordinate(HttpServletRequest request, HttpServletResponse response) {
+    public void addCoordinate(HttpServletRequest request, HttpServletResponse response){
         Gson g = new Gson();
         String msg = request.getParameter("TblCoordinate");
-        TblCoordinate tblCoordinate = g.fromJson(msg, TblCoordinate.class);
+        TblCoordinate tblCoordinate = g.fromJson(msg,TblCoordinate.class);
         System.out.println(kindername);
 
         TblKinder tblKinder = securityService.findKinderId(kindername);
         List<TblCoordinate> tblCoordinateList = tblCoordinate.getCoordinatelist();
-        for (int i = 0; i < tblCoordinateList.size(); i++) {
+        for(int i =0 ;i<tblCoordinateList.size();i++){
             tblCoordinateList.get(i).setKinderid(tblKinder.getKinderid());
         }
 
         System.out.println(tblCoordinateList);
 
         Boolean flag = securityService.addCoordinate(tblCoordinateList);
-        if (flag) {
-            ResponseUtils.outHtml(response, "success");
-        } else {
-            ResponseUtils.outHtml(response, "error");
+        if(flag){
+            ResponseUtils.outHtml(response,"success");
+        }else {
+            ResponseUtils.outHtml(response,"error");
         }
     }
 
 
     @RequestMapping("/findCoordinate")
-    public void findCoordinate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void findCoordinate(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Gson g = new Gson();
 //        TblKinder tblKinder = securityService.findKinderId(kindername);
         String kinderid = "1";
         List<TblCoordinate> tblCoordinateList = securityService.findCoordinate(kinderid);
 
-        System.out.println("tblCoordinateList2=" + tblCoordinateList);
-        if (0 != tblCoordinateList.size()) {
+        System.out.println("tblCoordinateList2="+tblCoordinateList);
+        if(0 != tblCoordinateList.size()){
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             Object[] info = tblCoordinateList.toArray();
             String result = g.toJson(info);
             response.getWriter().print(result);
-        } else {
+        }else {
             response.getWriter().print("error");
         }
     }
+
+
 }

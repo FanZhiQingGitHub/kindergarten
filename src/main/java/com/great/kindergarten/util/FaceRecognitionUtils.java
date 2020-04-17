@@ -109,6 +109,10 @@ public class FaceRecognitionUtils
 
 
 
+
+
+
+
 	/**
 	 * 把路径下的文件转化成Base64的字符串格式 用来改发送验证图片
 	 * @param filePath
@@ -129,5 +133,6 @@ public class FaceRecognitionUtils
 		}
 		return new String(Base64.encodeBase64(data));
 	}
+
 
 }
