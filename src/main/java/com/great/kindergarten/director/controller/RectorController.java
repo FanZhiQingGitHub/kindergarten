@@ -800,8 +800,6 @@ public class RectorController
 			response.setCharacterEncoding("UTF-8");
 			ResponseUtils.outJson(response, dateTable);
 		}
-
-
 	}
 
 	//课程表-课程名称的修改

@@ -22,9 +22,6 @@
             margin: 0;
             padding: 0;
         }
-        .a1:hover{
-            color: #f37d25;
-        }
     </style>
     <!--加载meta IE兼容文件-->
     <!--[if lt IE 9]>
@@ -36,7 +33,6 @@
 </head>
 <body>
 <input type="hidden" id="path" value="<%=path%>">
-<input type="hidden" id="kindername" value="${kindername}">
 <!-- header -->
 <div class="header_box">
 
@@ -48,6 +44,8 @@
             </a>
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0);" id="a1">个人信息</a></dd>
+                <dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
+
             </dl>
         </li>
         <li class="layui-nav-item"><a href="javascript:void(0);" id="exit" style="color: black;font-size: 18px">注销</a>
@@ -139,9 +137,7 @@
                         <div style=" overflow:auto;" id="newsInfo">
                             <c:if test="${not empty tblCampusList}">
                                 <c:forEach items="${tblCampusList}" var="i" step="1">
-
-                                    <p><a class="a1" href="javascript:void(0);" style="font-size: 15px;width: 200px">${i.campusinfoname}:${i.campusinfodetail}</a><span style="font-size: 15px;margin-left: 18%">发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></span><span></span></p>
-
+                                    <a href="javascript:;" style="font-size: 18px" onclick="showNewsInfo(this)">${i.campusinfoname}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></a><br>
                                 </c:forEach>
                             </c:if>
 <%--                            <a href="javascript:;">新闻一</a><br>--%>
@@ -182,13 +178,14 @@
 </div>
 <!-- end-footer -->
 
+
+
 <script>
 
-    layui.use(['carousel', 'jquery', 'element', 'layer','form'], function () {
+    layui.use(['carousel', 'jquery', 'element', 'layer'], function () {
         var carousel = layui.carousel, $ = layui.$;
         var element = layui.element;
         var layer = layui.layer;
-        var form = layui.form;
         var path = $("#path").val();
 
 
@@ -273,35 +270,37 @@
                 layer.alert('敬请期待', {icon: 6});
             }), $("#bu7").click(function () {
                 layer.alert('敬请期待', {icon: 6});
-            }), $("#playVideos").click(function () {
-                //打开一个窗口播放视频
-                layer.open({
-                    //打开一个窗口播放视频
-                    type: 1,
-                    area: ['95%', '80%'],
-                    offset:['10%','3%'],
-                    title:'安全乘坐电梯',
-                    content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
-                        '<source src="${pageContext.request.contextPath}/videos/Traffic_safety.mp4" type="video/mp4"></source></video>'
-                    //直接跳出一个标签播放视频
-                });
-            }),$(".a1").click(function () { //点击查看园所新闻
-                var name = $(this).text();
-                var titleInfo = name.split(":")[0];
-                var detailInfo = name.split(":")[1];
-                var kindername = $("#kindername").val();
-                //打开一个窗口播放视频
-                layer.open({
-                    //打开一个窗口播放视频
-                    // area: ['40%', '50%'],
-                    area: 'auto',
-                    // offset:['26%','31%'],
-                    offset:'auto',
-                    title:titleInfo,
-                    content: detailInfo+'------'+kindername,
-                });
             });
         })
+//对应显示消息通知的内容
+        $('.schoolMessage').on('click',function () {
+            layer.open({
+                type: 2,
+                title: '校园消息通知',
+                shade: 0.8//表示的是阴影的大小
+                , area: ['55%', '65%'],
+                moveType: 1,//拖拽模式，0或者1
+                content: path + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                , success: function (layero, index) {
+                    console.log(layero, index);
+                }
+            });
+        });
+        //点击查看园所视频
+        $("#playVideos").click(function () {
+            //打开一个窗口播放视频
+            layer.open({
+                //打开一个窗口播放视频
+                type: 1,
+                area: ['95%', '80%'],
+                offset:['10%','3%'],
+                title:'安全乘坐电梯',
+                content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
+                    '<source src="${pageContext.request.contextPath}/videos/Traffic_safety.mp4" type="video/mp4"></source></video>'
+                //直接跳出一个标签播放视频
+            });
+        });
+
     });
 
 </script>

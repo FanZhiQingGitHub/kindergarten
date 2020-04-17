@@ -40,7 +40,10 @@
             </a>
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0)" id="a1">个人信息</a></dd>
+<<<<<<< HEAD
+=======
                 <dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
+>>>>>>> ab490e1bba7e6431f56dff325ffe87d9f48bdc52
 
             </dl>
         </li>
