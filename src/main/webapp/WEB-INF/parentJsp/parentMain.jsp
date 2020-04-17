@@ -40,6 +40,7 @@
             </a>
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0)" id="a1">个人信息</a></dd>
+                <dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
 
             </dl>
         </li>
@@ -272,7 +273,20 @@
                     location.href=path+'/parent/logout';
                 });
             });
-
+            //对应显示消息通知的内容
+            $('.schoolMessage').on('click',function () {
+                layer.open({
+                    type: 2,
+                    title: '校园消息通知',
+                    shade: 0.8//表示的是阴影的大小
+                    , area: ['55%', '65%'],
+                    moveType: 1,//拖拽模式，0或者1
+                    content: src + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                        console.log(layero, index);
+                    }
+                });
+            });
 
             //前往查看宝宝健康
             $("#kidHealth").click(function () {
