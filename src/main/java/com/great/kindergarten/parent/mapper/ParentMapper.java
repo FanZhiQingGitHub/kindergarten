@@ -1,7 +1,6 @@
 package com.great.kindergarten.parent.mapper;
 
 import com.great.kindergarten.commons.entity.*;
-import com.great.kindergarten.healther.resultbean.MealPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,37 +13,6 @@ import java.util.List;
  */
 @Mapper
 public interface ParentMapper {
-
-
-	/**
-	 * 计算孩子体检列表的个数
-	 * @param searchCondition
-	 * @return
-	 */
-	Integer countExaminationByStudentId(SearchCondition searchCondition);
-	/**
-	 * 根据搜索条件找到对应的孩子体检列表
-	 * @param searchCondition
-	 * @return
-	 */
-	List<TblExamination> findExaminationByStudentId(SearchCondition searchCondition);
-	/**
-	 * 根据食谱id找到食谱的所有信息
-	 * @param mealId
-	 * @return
-	 */
-	List<TblRecipe> findAllRecipeInfo(Integer mealId);
-	/**
-	 * 根据页码找到食物历史记录
-	 * @param mealPage
-	 * @return
-	 */
-	List<TblMeal> findAllMealInfo(MealPage mealPage);
-	/**
-	 * 根据条件找到总共有几条食物记录
-	 * @return
-	 */
-	Integer findAllMealInfoCount();
 
 
 	/**

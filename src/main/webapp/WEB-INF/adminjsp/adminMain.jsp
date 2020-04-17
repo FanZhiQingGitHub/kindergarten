@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%String path = request.getContextPath();%>
 <!DOCTYPE html>
 <html>
@@ -22,7 +23,7 @@
 		}
 	</style>
 </head>
-
+<input type="hidden" id="kindername" value="${kindername}">
 <body class="layui-layout-body">
 	<input type="hidden" id="path" value="<%=path%>">
 	<div class="layui-layout layui-layout-admin">

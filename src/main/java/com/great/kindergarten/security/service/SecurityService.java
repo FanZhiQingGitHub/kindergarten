@@ -26,12 +26,6 @@ public class SecurityService {
         return securityMapper.findSecurityStatus(securitymap);
     }
 
-    public List<TblCampus> findKinderNews(String kindername){
-        Map<String, String> KinderNewsmap = new LinkedHashMap<>();
-        KinderNewsmap.put("kindername",kindername);
-        return securityMapper.findKinderNews(KinderNewsmap);
-    }
-
     public TblSecurity securityLogin(String securityname,String securitypwd){
         Map<String, String> securitymap = new LinkedHashMap<>();
         securitymap.put("securityname",securityname);
@@ -119,6 +113,12 @@ public class SecurityService {
         Map<String, String> KinderIdmap = new LinkedHashMap<>();
         KinderIdmap.put("stuid",stuid);
         return securityMapper.findStuTrack(KinderIdmap);
+    }
+
+    public List<TblCampus> findKinderNews(String kindername){
+        Map<String, String> KinderNewsmap = new LinkedHashMap<>();
+        KinderNewsmap.put("kindername",kindername);
+        return securityMapper.findKinderNews(KinderNewsmap);
     }
 
 

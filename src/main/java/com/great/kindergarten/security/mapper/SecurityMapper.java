@@ -40,8 +40,6 @@ public interface SecurityMapper {
 
     public Long findAlarmInfoCount(AlarmLogPage alarmLogPage);
 
-    public List<TblCampus> findKinderNews(Map<String, String> KinderNewsmap);
-
     public Boolean addCoordinate(List<TblCoordinate> tblCoordinateList);
 
     public TblKinder findKinderId(Map<String, String> KinderIdmap);
@@ -50,5 +48,5 @@ public interface SecurityMapper {
 
     public List<TblStuTrack> findStuTrack(Map<String, String> KinderIdmap);
 
-
+    public List<TblCampus> findKinderNews(Map<String, String> KinderNewsmap);
 }

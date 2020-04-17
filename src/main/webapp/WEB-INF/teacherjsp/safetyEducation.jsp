@@ -83,7 +83,7 @@
 	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="SafetyTest">安全试题</a>
 	{{#  } }}
 </script>
-<script  type="text/javascript">
+<script>
 
 	layui.use(['table','laydate','layer','jquery'], function() {
 		var laydate = layui.laydate;
@@ -217,11 +217,15 @@
 				offset: '100px',
 				btnAlign: 'c',
 				btn1: function (index) {
+
 					var classname = $("#selectClass").val();
 					var safetyvideoname = $("#selectVideoName").val();
 					var startDate= $("#startDate").val();
 					var endDate= $("#endDate").val();
-
+					console.log(classname);
+					console.log(safetyvideoname);
+					console.log(startDate);
+					console.log(endDate);
 					if (classname.length ==0 ) {
 						console.log("进来");
 						layer.alert("请选择班级", {icon: 2});
@@ -231,10 +235,7 @@
 						layer.alert("请选择开始时间", {icon: 2});
 					} else if (endDate.length ==0) {
 						layer.alert("请选择结束完成时间", {icon: 2});
-					}else if (endDate<startDate) {
-						layer.alert("结束时间不能小于开始时间", {icon: 2});
-					}
-					else {
+					} else {
 
 						$.ajax({
 							url: path + '/teacher/addSafetyConfig',
