@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 <head>
@@ -52,7 +53,7 @@
 </head>
 <body>
 <input type="hidden" value="${pageContext.request.contextPath}" id="path"/>
-
+<input type="hidden" id="kindername" value="${kindername}">
 <!-- header -->
 <div class="header_box">
     <ul class="layui-nav layui-layout-right" style="background-color: white;">

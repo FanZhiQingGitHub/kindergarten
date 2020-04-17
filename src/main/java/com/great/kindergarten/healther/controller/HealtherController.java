@@ -32,6 +32,7 @@ import java.util.Random;
 public class HealtherController {
     private String healthercode;
     private String healthername;
+    private String kindername;
 
     @Resource
     private HealtherService healtherService;
@@ -105,6 +106,9 @@ public class HealtherController {
                     List<TblHealther> tblHealtherList = new ArrayList<>();
                     tblHealtherList.add(Healther);
                     List<TblClass> tblClassList = healtherService.findAllClass();
+                    kindername = (String) request.getSession().getAttribute("kindername");
+                    List<TblCampus> tblCampuses = healtherService.findHealtherNews(kindername);
+                    request.getSession().setAttribute("tblCampuses", tblCampuses);
                     request.getSession().setAttribute("tblClassList", tblClassList);
                     request.getSession().setAttribute("healthername", healthername);
                     request.getSession().setAttribute("tblHealtherList", tblHealtherList);
@@ -374,4 +378,7 @@ public class HealtherController {
             ResponseUtils.outHtml(response, "error");
         }
     }
+
+
+
 }

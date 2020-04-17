@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 <head>
@@ -28,7 +29,6 @@
     <script src=<%=path + "/layui/layui.js"%>></script>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/mainres/css/main.css">
 
-
     <style type="text/css">
         html, body {
             margin: 0;
@@ -42,9 +42,9 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 
-
 </head>
 <body>
+<input type="hidden" id="path" value="<%=path%>">
 <!-- header -->
 <div class="header_box">
     <div class="header" style="max-width: 80%">
@@ -57,7 +57,7 @@
             <img style="width: 100%;height: 90px;" src="${pageContext.request.contextPath}/image/logo/logo.png">
         </h1>
         <div class="nav" style="visibility: visible">
-            <a href="${pageContext.request.contextPath}/main/path/main" class="active" style="font-size: 18px">首页</a>
+            <a href="${pageContext.request.contextPath}/main/path/main" id="addStuTime" class="active" style="font-size: 18px">首页</a>
             <a href="${pageContext.request.contextPath}/main/parent" class="active" style="font-size: 18px">家长端</a>
             <a href="${pageContext.request.contextPath}/main/teacher" class="active" style="font-size: 18px">教师端</a>
             <a href="${pageContext.request.contextPath}/main/healther" class="active" style="font-size: 18px">保健员端</a>
@@ -189,8 +189,8 @@
 </div>
 <!-- end-footer -->
 <script>
-    layui.use(['carousel', 'jquery', 'element'], function () {
-        var carousel = layui.carousel, $ = layui.$;
+    layui.use(['carousel', 'jquery', 'element','layer'], function () {
+        var carousel = layui.carousel, $ = layui.jquery,layer = layui.layer;
         //建造实例
         carousel.render({
             elem: '#test1'
@@ -208,6 +208,7 @@
             var imgH = $('.imgbox div.layui-this').outerHeight();
             $('.imgH').css('height', imgH + 'px')
         };
+
 
     });
 

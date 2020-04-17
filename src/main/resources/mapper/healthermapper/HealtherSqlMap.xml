@@ -59,4 +59,18 @@
         UPDATE tbl_healther SET healtherpwd = 'e10adc3949ba59abbe56e057f20f883e' where healtherphone = #{healtherphone};
     </update>
 
+    <!--   主页新闻查询-->
+    <select id="findHealtherNews" resultType="com.great.kindergarten.commons.entity.TblCampus" parameterType="java.util.Map">
+        select cam.campusinfoid,cam.campusinfoname,cam.campustime,cam.campusinfodetail,cam.kid from tbl_campusinfo cam , tbl_kinder kin
+
+
+        <where>
+            cam.kid = kin.kinderid
+            <if test="kindername != '' and kindername != null ">
+                and kin.kindername = #{kindername}
+            </if>
+        </where>
+    </select>
+
+
 </mapper>
