@@ -37,7 +37,6 @@ public class TeacherService {
         Map<String,String> teacherMap = new LinkedHashMap<>();
         teacherMap.put("teacherpwd",teacherpwd);
         teacherMap.put("teacherid",teacherid);
-
         return teacherMapper.updateTeacherPwd(teacherMap);
     }
 //    查找班级名称
@@ -45,16 +44,12 @@ public class TeacherService {
 
         return teacherMapper.findClassAll(cid);
     }
-//    根据cid查找课程
-    public List<TblCourse> findCourse(Integer cid){
 
-        return teacherMapper.findCourse(cid);
+    //根据班级id，当前时间查找课程信息
+    public List<TblCourse> findCourseByTodayCid(HashMap<String,Object> dataHashMap){
+        return teacherMapper.findCourseByTodayCid(dataHashMap);
     }
-//    查找课程表数据数量
-    public Integer findCount()
-    {
-        return teacherMapper.findCount();
-    }
+
     //    查找班级所有名称
     public List<TblClass> findClassName()
     {
@@ -71,15 +66,11 @@ public class TeacherService {
     public Boolean addFileInfo(TblWorkrelease tblWorkrelease){
         return teacherMapper.addFileInfo(tblWorkrelease);
     }
-    //   根据班级所有作业数据
-    public TblWork findWork(Integer cid){
 
-        return teacherMapper.findWork(cid);
-    }
     //   根据班级id 发布作业id查作业表
-    public List<TblWork> findWorkTable(TblWork tblWork){
+    public List<TblWork> findWorkTable(HashMap<String,Object> dataHashMap){
 
-        return teacherMapper.findWorkTable(tblWork);
+        return teacherMapper.findWorkTable(dataHashMap);
     }
     //    查找作业数据数量
     public Integer findWorkCount(Integer cid)
@@ -130,5 +121,18 @@ public class TeacherService {
      */
     public List<TblSafetyvtq> findSafetyTestQuestionList(Integer safetyVideoId){
         return teacherMapper.findSafetyTestQuestionList(safetyVideoId);
+    }
+
+    // 查询试题完成情况总数
+
+    public Integer findSafetytqCount(HashMap<String,Object> dataHashMap)
+    {
+        return teacherMapper.findSafetytqCount(dataHashMap);
+    }
+//    查询试题完成情况表
+
+   public List<TblSafetyFinish> findSafetytqTable(HashMap<String,Object> dataHashMap)
+    {
+        return teacherMapper.findSafetytqTable(dataHashMap);
     }
 }

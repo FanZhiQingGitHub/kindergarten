@@ -109,8 +109,12 @@
 				table.render({
 					elem: '#demo'
 					,height: 700
-					,url: path+'/parent/kidHomeWorkList?status='+$selectKis.val()+'&cid='+$kidClass.html() //数据接口
+					,url: path+'/parent/kidHomeWorkList' //数据接口
 					,method:'post'
+					,where:{
+						status:$selectKis.val(),
+						cid:$kidClass.html()
+					}
 					,page: true //开启分页
 					,id: 'demo'
 					,limits:[5,10,20,30]//下拉框中得数量
@@ -199,6 +203,7 @@
 						var body = layer.getChildFrame("body", index);
 						body.find("#workreleaseid").html(data.workreleaseid);
 						body.find("#workreleasedetail").html(data.workreleasedetail);
+						body.find("#workresult").html(data.workresult);
 						body.find("#workreleasetime").html(data.workreleasetime);
 						body.find("#studentname").html($("#status").html());
 
@@ -216,7 +221,7 @@
 							}
 							,done: function(res, index, upload){
 								if (res.code==0){
-									confirm(" 上传成功");
+									layer.alert(" 上传成功");
 									layer.close(index);
 									//刷新表格
 									window.location.reload();
@@ -245,6 +250,8 @@
 
 
 		});
+
+
 	});
 
 	function selectClass() {
@@ -273,6 +280,14 @@
 		return obj;
 	}
 
+	$(function () {
+
+		//前往家长端主页
+		$("#backMain").click(function () {
+			window.location.href=path+"/parent/toUrl/parentMain"
+		})
+
+	});
 
 </script>
 

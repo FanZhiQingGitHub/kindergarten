@@ -272,7 +272,7 @@ insert into tbl_kinder(
     <select id="findTeacherAttendAll" resultType="TblTeacherAttend" parameterType="java.util.HashMap">
         select tt.*,t.teacherid,t.teachername,t.teacherjob,c.classname
         from tbl_teacher t,tbl_teachertest tt,tbl_class c
-        <where> t.teacherid = tt.tid and t.cid=c.classid
+        <where>t.teacherid = tt.tid and t.cid=c.classid
             <if test="teachername != null and teachername != ''">
                 and teachername like "%"#{teachername}"%"
             </if>
@@ -308,6 +308,56 @@ insert into tbl_kinder(
             </if>
             <if test=" tattendover != '' and tattendover != null">
                 <![CDATA[   and DATE_FORMAT(te.tertime, '%Y-%m-%d')<=  DATE_FORMAT(#{tattendover}, '%Y-%m-%d')   ]]>
+            </if>
+        </where>
+    </select>
+
+    <!--消息通知-->
+    <!--查询对应的园所的ID值 -->
+    <select id="selectkinderByName" resultType="integer" parameterType="string">
+        select kinderid from tbl_kinder where kindername = #{kindername};
+    </select>
+    <!-- 添加对应的消息信息到对应的消息表  -->
+    <insert id="addInfoType" parameterType="TblInfotype">
+		insert into tbl_infotype (
+		    infotypename
+			,kid
+			,infotypetime
+		)values(
+		    #{infotypename}
+			,#{kid}
+			,#{infotypetime})
+	</insert>
+
+<!--家长和教师查看查询消息通知-->
+    <select id="findSchoolMessageAll" resultType="TblInfotype" parameterType="java.util.HashMap">
+        select * from tbl_infotype
+        <where> 1=1
+            <if test="infotypename != null and infotypename != ''">
+                and infotypename like "%"#{infotypename}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and infotypetime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and infotypetime &lt; #{overTime}
+            </if>
+        </where>
+        order by infotypetime desc limit #{pageInt},#{limitInt}
+    </select>
+
+    <!--消息通知.....对应消息通知记录值-->
+    <select id="findSchoolMessageAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(*) from tbl_infotype
+        <where> 1=1
+            <if test="infotypename != null and infotypename != ''">
+                and infotypename like "%"#{infotypename}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and infotypetime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and infotypetime &lt; #{overTime}
             </if>
         </where>
     </select>
