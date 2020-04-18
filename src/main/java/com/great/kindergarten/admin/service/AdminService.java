@@ -1,5 +1,6 @@
 package com.great.kindergarten.admin.service;
 
+import com.great.kindergarten.admin.javabean.TblStatistics;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.admin.mapper.AdminMapper;
 import org.apache.ibatis.session.RowBounds;
@@ -633,5 +634,38 @@ public class AdminService {
 	public int deleteParameter(Integer parameterid)
 	{
 		return adminMapper.deleteParameter(parameterid);
+	}
+
+	//幼儿统计
+	public List<TblExamination> findChildrenStatisticsInfo()
+	{
+		return adminMapper.findChildrenStatisticsInfo();
+	}
+
+	//男性
+	public List<TblStatistics> findChildrenMaleInfo()
+	{
+		return adminMapper.findChildrenMaleInfo();
+	}
+
+	//女性
+	public List<TblStatistics> findChildrenFeMaleInfo()
+	{
+		return adminMapper.findChildrenFeMaleInfo();
+	}
+
+	public List<TblStatistics> findChildrenAAgeInfo()
+	{
+		return adminMapper.findChildrenAAgeInfo();
+	}
+
+	public List<TblStatistics> findChildrenBAgeInfo()
+	{
+		return adminMapper.findChildrenBAgeInfo();
+	}
+
+	public List<TblStatistics> findChildrenCAgeInfo()
+	{
+		return adminMapper.findChildrenCAgeInfo();
 	}
 }

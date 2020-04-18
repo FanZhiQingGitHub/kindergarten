@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.great.kindergarten.admin.annotation.AdminSystemLog;
 import com.great.kindergarten.admin.javabean.DataResult;
+import com.great.kindergarten.admin.javabean.TblStatistics;
 import com.great.kindergarten.admin.service.SystemLogService;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.admin.service.AdminService;
@@ -2038,6 +2039,33 @@ public class AdminController {
 		if(num > 0)
 		{
 			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/findChildrenStatisticsInfo")
+	public void findChildrenStatisticsInfo(TblExamination tblExamination, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		List<TblExamination> tblExaminationList = adminService.findChildrenStatisticsInfo();
+		List<TblStatistics> maleList = adminService.findChildrenMaleInfo();
+		List<TblStatistics> feMaleList = adminService.findChildrenFeMaleInfo();
+		List<TblStatistics> aList = adminService.findChildrenAAgeInfo();
+		List<TblStatistics> bList = adminService.findChildrenBAgeInfo();
+		List<TblStatistics> cList = adminService.findChildrenCAgeInfo();
+		if(!tblExaminationList.isEmpty())
+		{
+			response.setCharacterEncoding("utf-8");
+			response.setContentType("text/html;charset=utf-8");
+			String male = GsonUtils.getgsonUtils().toStr(maleList);
+			String feMale = GsonUtils.getgsonUtils().toStr(feMaleList);
+			String a = GsonUtils.getgsonUtils().toStr(aList);
+			String b = GsonUtils.getgsonUtils().toStr(bList);
+			String c = GsonUtils.getgsonUtils().toStr(cList);
+			String res = male+"@"+feMale+"@"+a+"@"+b+"@"+c;
+			response.getWriter().print(res);
+//
+//			ResponseUtils.outJson(response,GsonUtils.getgsonUtils().toStr(tblExaminationList));
 		}else{
 			ResponseUtils.outHtml(response,"error");
 		}

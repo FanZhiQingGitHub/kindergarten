@@ -1279,4 +1279,76 @@
         select parametertype from tbl_parameter;
     </select>
 
+<!--    幼儿统计-->
+    <resultMap id="ChildrenStatisticsMap" type="com.great.kindergarten.commons.entity.TblExamination">
+        <result column="healthstatus" property="healthstatus"></result>
+        <result column="examinationtime" property="examinationtime"></result>
+        <result column="studentid" property="studentid"></result>
+        <result column="studentname" property="studentname"></result>
+        <result column="sid" property="sid"></result>
+        <association property="tblStudent" javaType="com.great.kindergarten.commons.entity.TblStudent">
+            <id property="studentid" column="studentid"/>
+            <result property="studentid" column="studentid"/>
+            <result property="studentname" column="studentname"/>
+            <result property="studentsex" column="studentsex"/>
+            <result property="studentbrith" column="studentbrith"/>
+        </association>
+    </resultMap>
+
+    <select id="findChildrenStatisticsInfo" resultMap="ChildrenStatisticsMap" parameterType="com.great.kindergarten.commons.entity.TblExamination">
+        select s.studentsex,s.studentname,s.studentbrith,e.healthstatus,e.examinationtime
+            from tbl_examination e,tbl_student s
+            <where>
+                e.sid = s.studentid
+            </where>
+            group by s.studentname,s.studentsex,s.studentbrith,e.healthstatus,e.examinationtime
+    </select>
+
+    <select id="findChildrenMaleInfo" parameterType="com.great.kindergarten.commons.entity.TblExamination"
+            resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select date_format(e.examinationtime, '%Y-%m-%d') as time,count(s.studentsex) as maleCount from tbl_student s,tbl_examination e
+            <where>
+                s.studentid = e.sid and s.studentsex = '男'
+            </where>
+            group by time
+    </select>
+    <select id="findChildrenFeMaleInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select date_format(e.examinationtime, '%Y-%m-%d') as time,count(s.studentsex) as feMaleCount from tbl_student s,tbl_examination e
+        <where>
+            s.studentid = e.sid and s.studentsex = '女'
+        </where>
+        group by time
+    </select>
+    <select id="findChildrenAAgeInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select TIMESTAMPDIFF(YEAR,studentbrith,CURDATE()) AS age,
+            date_format(e.examinationtime, '%Y-%m-%d') as time,
+            count(s.studentbrith) aCount
+            from tbl_student s, tbl_examination e
+        <where>
+            s.studentid = e.sid
+        </where>
+            group by time,age having age &lt; 3
+    </select>
+
+    <select id="findChildrenBAgeInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select TIMESTAMPDIFF(YEAR,studentbrith,CURDATE()) AS age,
+            date_format(e.examinationtime, '%Y-%m-%d') as time,
+            count(s.studentbrith) bCount
+            from tbl_student s, tbl_examination e
+            <where>
+                s.studentid = e.sid
+            </where>
+        group by time,age having age &gt;= 3 and age &lt;= 4
+    </select>
+
+    <select id="findChildrenCAgeInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select TIMESTAMPDIFF(YEAR,studentbrith,CURDATE()) AS age,
+            date_format(e.examinationtime, '%Y-%m-%d') as time,
+            count(s.studentbrith) cCount
+            from tbl_student s, tbl_examination e
+            <where>
+                s.studentid = e.sid
+            </where>
+        group by time,age having age &gt; 4 and age &lt;= 6
+    </select>
 </mapper>

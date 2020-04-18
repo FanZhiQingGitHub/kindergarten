@@ -24,6 +24,9 @@ public class TblExamination {
     private TblStudent tblStudent;
     private Integer studentid;
     private String studentname;
+    private String studentsex;
+    private String studentbirth;
+
 
     public TblExamination() {
     }
@@ -137,21 +140,29 @@ public class TblExamination {
         this.studentname = studentname;
     }
 
+    public String getStudentsex()
+    {
+        return studentsex;
+    }
+
+    public void setStudentsex(String studentsex)
+    {
+        this.studentsex = studentsex;
+    }
+
+    public String getStudentbirth()
+    {
+        return studentbirth;
+    }
+
+    public void setStudentbirth(String studentbirth)
+    {
+        this.studentbirth = studentbirth;
+    }
+
     @Override
-    public String toString() {
-        return "TblExamination{" +
-                "examinationid=" + examinationid +
-                ", examinationtime=" + examinationtime +
-                ", skin='" + skin + '\'' +
-                ", height='" + height + '\'' +
-                ", weight='" + weight + '\'' +
-                ", vision='" + vision + '\'' +
-                ", temperature='" + temperature + '\'' +
-                ", healthstatus='" + healthstatus + '\'' +
-                ", sid=" + sid +
-                ", tblStudent=" + tblStudent +
-                ", studentid=" + studentid +
-                ", studentname='" + studentname + '\'' +
-                '}';
+    public String toString()
+    {
+        return "TblExamination{" + "examinationid=" + examinationid + ", examinationtime=" + examinationtime + ", skin='" + skin + '\'' + ", height='" + height + '\'' + ", weight='" + weight + '\'' + ", vision='" + vision + '\'' + ", temperature='" + temperature + '\'' + ", healthstatus='" + healthstatus + '\'' + ", sid=" + sid + ", tblStudent=" + tblStudent + ", studentid=" + studentid + ", studentname='" + studentname + '\'' + ", studentsex='" + studentsex + '\'' + ", studentbirth='" + studentbirth + '\'' + '}';
     }
 }
