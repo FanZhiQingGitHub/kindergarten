@@ -1,6 +1,8 @@
 package com.great.kindergarten.admin.mapper;
 
+import com.great.kindergarten.admin.javabean.TblStatistics;
 import com.great.kindergarten.commons.entity.*;
+import com.great.kindergarten.healther.resultbean.ExaminationPage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
@@ -282,4 +284,19 @@ public interface AdminMapper
 	public int updateTopic(TblSafetyvtq tblSafetyvtq);
 
 	public int deleteTopic(TblSafetyvtq tblSafetyvtq);
+
+	//幼儿统计
+	public List<TblExamination> findChildrenStatisticsInfo();
+
+	//男性
+	public List<TblStatistics> findChildrenMaleInfo();
+
+	//女性
+	public List<TblStatistics> findChildrenFeMaleInfo();
+
+	public List<TblStatistics> findChildrenAAgeInfo();
+
+	public List<TblStatistics> findChildrenBAgeInfo();
+
+	public List<TblStatistics> findChildrenCAgeInfo();
 }
