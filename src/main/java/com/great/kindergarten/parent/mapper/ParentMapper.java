@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Administrator
@@ -138,5 +139,25 @@ public interface ParentMapper {
 	 * @return
 	 */
     Integer	updateParentPwd(String parentPwd,Integer parentId);
+
+
+    //---------------------------孩子考勤新增方法------------------------------
+	/**
+	 * 查找父母亲和孩子的数据
+	 */
+	public List<TblParent> findParentStuInfo(Map<String,String> parentMap);
+
+	public List<TblDate> findDateInfo(Map<String,String> dateMap);
+	public TblStutime findPmTimeId(Map<String,String> dateMap);
+
+	public TblStutime findExistDate(Map<String,String> dateMap);
+
+	public Boolean addDateInfo(List<TblDate> tblDateList);
+	public Boolean addAmAttendance(List<TblStutime> tblStutimeListAm);
+	public Boolean addPmDate(Map<String,String> dateMap);
+	public Boolean addPmAttendance(List<TblStutime> tblStutimeListPm);
+	public Boolean addPmAttendanceAll(List<TblStutime> tblStutimeListPm);
+
+	public Boolean updateAmAttendance(Map<String,String> AmMap);
 
 }

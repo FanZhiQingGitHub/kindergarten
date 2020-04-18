@@ -6,13 +6,12 @@ import com.great.kindergarten.security.resultbean.AlarmLogPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoPage;
 import com.great.kindergarten.security.service.SecurityService;
-import com.great.kindergarten.security.util.DateUtil;
+import com.great.kindergarten.util.DateUtil;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -22,7 +21,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -267,6 +265,7 @@ public class SecurityController {
             pickUpInfoDetailPage.setStudentid(Integer.valueOf(dafultsid));
         }
         List<TblDate> tblDateList = securityService.findALLPickUpDetailInfo(pickUpInfoDetailPage);
+        System.out.println("tblDateList="+tblDateList);
         if (0 != tblDateList.size()) {
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");

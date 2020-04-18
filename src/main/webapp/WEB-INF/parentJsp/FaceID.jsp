@@ -20,7 +20,7 @@
 <div class="layui-fluid">
 
 	<div class="layadmin-user-login-box layadmin-user-login-header">
-		<h2 style="margin-left: 46%">人脸识别界面</h2>
+		<h2 style="margin-left: 47%">人脸识别界面</h2>
 	</div>
 	<div class="layui-inline" style="width:100%;">
 		<hr>
@@ -37,15 +37,15 @@
 	</div>
 
 	<div class="layui-fluid" style="margin-left: 13%">
-		<div class="layui-inline" style="margin-left: 30%;margin-top: 3%">
+		<div class="layui-inline" style="margin-left: 32%;margin-top: 4%">
 			<div class="layui-input-inline">
 				<button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal "
-						style="width: 150px" id="bu2">上课打卡
+						style="width: 330px;height: 60px;font-size: 25px" id="bu2"><i class="layui-icon">&#xe6af;</i>上下课记得点我哦
 				</button>
 
-				<button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm"
-						style="width: 150px" id="bu3">注册人脸
-				</button>
+<%--				<button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm"--%>
+<%--						style="width: 165px;pointer-events: none;" id="bu3"><i class="layui-icon">&#xe654;</i>注册人脸--%>
+<%--				</button>--%>
 			</div>
 		</div>
 	</div>
@@ -122,10 +122,33 @@
 						cache: false,
 						data: {"face":face},
 						success: function(msg) {
-							layer.alert("正常");
+							if(msg == "amsuccess"){
+								layer.alert("早上好，打卡成功！",{icon:6},function () {
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index);//关闭当前页
+								});
+							}else if(msg == "pmsuccess") {
+								layer.alert("打卡成功，祝您一路顺风！", {icon: 6},function () {
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index);//关闭当前页
+								});
+							}else if(msg == "notadd"){
+									layer.alert("亲，今天是周末哦！",{icon:6},function () {
+										var index = parent.layer.getFrameIndex(window.name);
+										parent.layer.close(index);//关闭当前页
+									});
+							}else {
+								layer.alert("亲，不知道哪里出错了！",{icon:2},function () {
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index);//关闭当前页
+								});
+							}
 						},
 						error:function(msg) {
-							layer.alert("网络繁忙，请您稍后重试");
+							layer.alert("网络繁忙，请您稍后重试",{icon:2},function () {
+								var index = parent.layer.getFrameIndex(window.name);
+								parent.layer.close(index);//关闭当前页
+							});
 						}
 					});
 				}

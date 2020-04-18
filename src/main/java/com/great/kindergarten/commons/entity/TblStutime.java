@@ -5,6 +5,7 @@ package com.great.kindergarten.commons.entity;
  */
 public class TblStutime {
     private Integer timeamid;
+    private String weekinfo;
     private String timeamdate;
     private String timeam;
     private String pnameam;
@@ -13,6 +14,7 @@ public class TblStutime {
     private Integer did;
 
     private Integer timepmid;
+    private String timepmdate;
     private String timepm;
     private String pnamepm;
 
@@ -20,8 +22,9 @@ public class TblStutime {
     public TblStutime() {
     }
 
-    public TblStutime(Integer timeamid, String timeamdate, String timeam, String pnameam, Integer pmid, Integer sid, Integer did, Integer timepmid, String timepm, String pnamepm) {
+    public TblStutime(Integer timeamid, String weekinfo, String timeamdate, String timeam, String pnameam, Integer pmid, Integer sid, Integer did, Integer timepmid, String timepmdate, String timepm, String pnamepm) {
         this.timeamid = timeamid;
+        this.weekinfo = weekinfo;
         this.timeamdate = timeamdate;
         this.timeam = timeam;
         this.pnameam = pnameam;
@@ -29,6 +32,7 @@ public class TblStutime {
         this.sid = sid;
         this.did = did;
         this.timepmid = timepmid;
+        this.timepmdate = timepmdate;
         this.timepm = timepm;
         this.pnamepm = pnamepm;
     }
@@ -39,6 +43,14 @@ public class TblStutime {
 
     public void setTimeamid(Integer timeamid) {
         this.timeamid = timeamid;
+    }
+
+    public String getWeekinfo() {
+        return weekinfo;
+    }
+
+    public void setWeekinfo(String weekinfo) {
+        this.weekinfo = weekinfo;
     }
 
     public String getTimeamdate() {
@@ -97,6 +109,14 @@ public class TblStutime {
         this.timepmid = timepmid;
     }
 
+    public String getTimepmdate() {
+        return timepmdate;
+    }
+
+    public void setTimepmdate(String timepmdate) {
+        this.timepmdate = timepmdate;
+    }
+
     public String getTimepm() {
         return timepm;
     }
@@ -117,6 +137,7 @@ public class TblStutime {
     public String toString() {
         return "TblStutime{" +
                 "timeamid=" + timeamid +
+                ", weekinfo='" + weekinfo + '\'' +
                 ", timeamdate='" + timeamdate + '\'' +
                 ", timeam='" + timeam + '\'' +
                 ", pnameam='" + pnameam + '\'' +
@@ -124,6 +145,7 @@ public class TblStutime {
                 ", sid=" + sid +
                 ", did=" + did +
                 ", timepmid=" + timepmid +
+                ", timepmdate='" + timepmdate + '\'' +
                 ", timepm='" + timepm + '\'' +
                 ", pnamepm='" + pnamepm + '\'' +
                 '}';

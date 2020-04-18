@@ -69,18 +69,9 @@
 
 
     <table class="layui-table" id="ta1">
-        <thead>
-        <tr>
-            <th style="text-align: center">项目</th>
-            <th style="text-align: center">星期一</th>
-            <th style="text-align: center">星期二</th>
-            <th style="text-align: center">星期三</th>
-            <th style="text-align: center">星期四</th>
-            <th style="text-align: center">星期五</th>
-        </tr>
+        <thead id="thd">
         </thead>
         <tbody id="tbo">
-
         </tbody>
     </table>
 
@@ -330,10 +321,31 @@
                                 $("#tbo").html(erroroption);
                                 $("#tbo").show();
                             }
+
+                            var table1 = document.getElementById("thd");
+                            var rowNum1 = table1.rows.length;
+                            if (rowNum1 > 0) {
+                                for (i = 0; i < rowNum1; i++) {
+                                    table1.deleteRow(i);
+                                    rowNum1 = rowNum1 - 1;
+                                    i = i - 1;
+                                }
+                            }
                         }else {
                             layer.msg('查询成功');
                             var info = JSON.parse(msg);
                             var option;
+                            var tblhead;
+
+                            //------------------------表头--------------------------------------------
+                            tblhead += "<tr><th style='text-align: center'>项目</th>";
+                            for (var j in info) {
+                                tblhead += "<th style='text-align: center'>" + info[j].weekinfo + "</td>"
+                            }
+                            $("#thd").html(tblhead);
+                            $("#thd").show();
+
+
                             //--------------------------上午接送信息------------------------------------
                             option += "<tr><td style='text-align: center'>日期</td>";
                             for (var j in info) {
@@ -343,7 +355,7 @@
 
                             option += "<tr><td style='text-align: center'>上午</td>";
                             for (var j in info) {
-                                if (info[j].timeam > '8:30') {
+                                if (info[j].timeam > '08:30') {
                                     option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].timeam + "</td>"
                                 } else if (info[j].timeam == '请假') {
                                     option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].timeam + "</td>"
@@ -437,10 +449,29 @@
                                 $("#tbo").html(erroroption);
                                 $("#tbo").show();
                             }
+
+                            var table1 = document.getElementById("thd");
+                            var rowNum1 = table1.rows.length;
+                            if (rowNum1 > 0) {
+                                for (i = 0; i < rowNum1; i++) {
+                                    table1.deleteRow(i);
+                                    rowNum1 = rowNum1 - 1;
+                                    i = i - 1;
+                                }
+                            }
                         }else {
                             layer.msg('查询成功');
                             var info = JSON.parse(msg);
                             var option;
+                            var tblhead;
+
+                            //------------------------表头--------------------------------------------
+                            tblhead += "<tr><th style='text-align: center'>项目</th>";
+                            for (var j in info) {
+                                tblhead += "<th style='text-align: center'>" + info[j].weekinfo + "</td>"
+                            }
+                            $("#thd").html(tblhead);
+                            $("#thd").show();
                             //--------------------------上午接送信息------------------------------------
                             option += "<tr><td style='text-align: center'>日期</td>";
                             for (var j in info) {
@@ -450,7 +481,7 @@
 
                             option += "<tr><td style='text-align: center'>上午</td>";
                             for (var j in info) {
-                                if (info[j].timeam > '8:30') {
+                                if (info[j].timeam > '08:30') {
                                     option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].timeam + "</td>"
                                 } else if (info[j].timeam == '请假') {
                                     option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].timeam + "</td>"
@@ -519,9 +550,28 @@
                     erroroption +="<tr><td style='text-align: center' colspan='6'>亲，目前暂无数据</td>";
                     $("#tbo").html(erroroption);
                     $("#tbo").show();
+
+                    var table1 = document.getElementById("thd");
+                    var rowNum1 = table1.rows.length;
+                    if (rowNum1 > 0) {
+                        for (i = 0; i < rowNum1; i++) {
+                            table1.deleteRow(i);
+                            rowNum1 = rowNum1 - 1;
+                            i = i - 1;
+                        }
+                    }
                 }else {
                     var info = JSON.parse(msg);
                     var option;
+                    var tblhead;
+
+                    //------------------------表头--------------------------------------------
+                    tblhead += "<tr><th style='text-align: center'>项目</th>";
+                    for (var j in info) {
+                        tblhead += "<th style='text-align: center'>" + info[j].weekinfo + "</td>"
+                    }
+                    $("#thd").html(tblhead);
+                    $("#thd").show();
                     //--------------------------上午接送信息------------------------------------
                     option += "<tr><td style='text-align: center'>日期</td>";
                     for (var j in info) {
@@ -531,7 +581,7 @@
 
                     option += "<tr><td style='text-align: center'>上午</td>";
                     for (var j in info) {
-                        if (info[j].timeam > '8:30') {
+                        if (info[j].timeam > '08:30') {
                             option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].timeam + "</td>"
                         } else if (info[j].timeam == '请假') {
                             option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].timeam + "</td>"

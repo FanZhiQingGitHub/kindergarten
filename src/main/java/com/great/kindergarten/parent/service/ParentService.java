@@ -4,9 +4,13 @@ import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.parent.mapper.ParentMapper;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Administrator
@@ -172,8 +176,68 @@ public class ParentService {
         return parentMapper.parentLogin(parentName,parentPwd);
     }
 
+    //---------------------------孩子考勤新增方法------------------------------
+    /**
+     * 查找父母亲和孩子的数据
+     */
+    public List<TblParent> findParentStuInfo(String parentname){
+        Map<String,String> parentMap = new LinkedHashMap<>();
+        parentMap.put("parentname",parentname);
+        return parentMapper.findParentStuInfo(parentMap);
+    }
 
+    /*
+    <!--    查找日期表中是否有本周一和本周日的日期-->
+     */
+    public List<TblDate> findDateInfo(String monday,String sunday){
+        Map<String,String> dateMap = new LinkedHashMap<>();
+        dateMap.put("monday",monday);
+        dateMap.put("sunday",sunday);
+        return parentMapper.findDateInfo(dateMap);
+    }
+    public TblStutime findPmTimeId(String timepmdate){
+        Map<String,String> dateMap = new LinkedHashMap<>();
+        dateMap.put("timepmdate",timepmdate);
+        return  parentMapper.findPmTimeId(dateMap);
+    }
 
+    @Transactional
+    public Boolean addDateInfo(List<TblDate> tblDateList){
+        return parentMapper.addDateInfo(tblDateList);
+    }
+    @Transactional
+    public Boolean addAmAttendance(List<TblStutime> tblStutimeListAm){
+        return parentMapper.addAmAttendance(tblStutimeListAm);
+    }
+    @Transactional
+    public Boolean addPmDate(String timeamdate){
+        Map<String,String> dateMap = new LinkedHashMap<>();
+        dateMap.put("timeamdate",timeamdate);
+        return parentMapper.addPmDate(dateMap);
+    }
+    @Transactional
+    public Boolean addPmAttendance(List<TblStutime> tblStutimeListPm){
+        return parentMapper.addPmAttendance(tblStutimeListPm);
+    }
+
+    @Transactional
+    public Boolean addPmAttendanceAll(List<TblStutime> tblStutimeListPm){
+        return parentMapper.addPmAttendanceAll(tblStutimeListPm);
+    }
+
+    public TblStutime findExistDate(String timeamdate){
+        Map<String,String> dateMap = new LinkedHashMap<>();
+        dateMap.put("timeamdate",timeamdate);
+        return parentMapper.findExistDate(dateMap);
+    }
+
+    public Boolean updateAmAttendance(String timeam,String pnameam,String timeamdate){
+        Map<String,String> AmMap = new LinkedHashMap<>();
+        AmMap.put("timeam",timeam);
+        AmMap.put("pnameam",pnameam);
+        AmMap.put("timeamdate",timeamdate);
+        return parentMapper.updateAmAttendance(AmMap);
+    }
 
 
 }

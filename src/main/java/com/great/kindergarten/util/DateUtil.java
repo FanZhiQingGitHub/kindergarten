@@ -1,4 +1,4 @@
-package com.great.kindergarten.security.util;
+package com.great.kindergarten.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

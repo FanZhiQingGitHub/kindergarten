@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.kindergarten.parent.mapper.ParentMapper">
+
+    <resultMap id="findALLParentAndStuInfo" type="com.great.kindergarten.commons.entity.TblParent">
+        <id column="parentId" property="parentId"></id>
+        <result column="parentName" property="parentName"></result>
+        <result column="parentSon" property="parentSon"></result>
+        <result column="studentid" property="studentid"></result>
+        <result column="studentname" property="studentname"></result>
+        <association property="tblStudent" javaType="com.great.kindergarten.commons.entity.TblStudent">
+            <id column="studentid" property="studentid"></id>
+            <result column="studentid" property="studentid"></result>
+            <result column="studentname" property="studentname"></result>
+        </association>
+    </resultMap>
+
+<!--    查找父母亲和宝宝的信息-->
+    <select id="findParentStuInfo" resultMap="findALLParentAndStuInfo" parameterType="java.util.Map">
+        select pa.parentid as parentId,pa.parentname as parentName,pa.parentson as parentSon,stu.studentid,stu.studentname from tbl_parent pa,tbl_student stu
+        <where>
+            pa.parentid = stu.pid
+            <if test="parentname != '' and parentname != null ">
+                and pa.parentname = #{parentname}
+            </if>
+        </where>
+    </select>
+
+<!--    查找日期表中是否有本周一和本周日的日期-->
+    <resultMap id="findDateId" type="com.great.kindergarten.commons.entity.TblDate">
+        <id column="dateid" property="dateid"></id>
+        <result column="dateid" property="dateid"></result>
+        <result column="monday" property="monday"></result>
+        <result column="sunday" property="sunday"></result>
+    </resultMap>
+
+    <select id="findDateInfo" resultMap="findDateId" parameterType="java.util.Map">
+        select * from tbl_date da
+        <where>
+            <if test="monday != '' and monday != null ">
+                and da.monday = #{monday}
+            </if>
+            <if test="sunday != '' and sunday != null ">
+                and da.sunday = #{sunday}
+            </if>
+        </where>
+    </select>
+
+    <!--    新增日期区间信息,用于查询-->
+    <insert id="addDateInfo" parameterType="java.util.List">
+        insert into
+        tbl_date(monday,sunday)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.monday},#{i.sunday})
+        </foreach>
+    </insert>
+
+    <!--    新增上午考勤信息,并同时新增日期至下午的考勤，以便添加下午考勤的时候能够获取到当天的id，避免新增错误-->
+    <insert id="addAmAttendance" parameterType="java.util.List">
+        insert into
+        tbl_stutimeam(weekinfo,timeamdate,timeam,pnameam,pmid,sid,did)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.weekinfo},#{i.timeamdate},#{i.timeam},#{i.pnameam},#{i.pmid},#{i.sid},#{i.did})
+        </foreach>
+    </insert>
+
+    <insert id="addPmDate" parameterType="java.util.Map">
+        insert into
+        tbl_stutimepm(timepmdate)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.timepmdate})
+        </foreach>
+    </insert>
+
+    <!--    新增下午考勤信息-->
+    <update id="addPmAttendance" parameterType="java.util.List">
+        update tbl_stutimepm stu
+        <foreach collection="list" item="i" index="index" separator=",">
+            set timepm = #{i.timepm},pnamepm = #{i.pnamepm} where stu.timepmdate = #{i.timepmdate}
+        </foreach>
+    </update>
+
+    <!--    如果下午考勤表中不存在日期，则新增下午考勤信息-->
+    <insert id="addPmAttendanceAll" parameterType="java.util.List">
+        insert into
+        tbl_stutimepm(timepmdate,timepm,pnamepm)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.timepmdate},#{i.timepm},#{i.pnamepm})
+        </foreach>
+    </insert>
+
+    <!--    查询当天下午考勤表ID信息-->
+    <select id="findPmTimeId" resultType="com.great.kindergarten.commons.entity.TblStutime" parameterType="java.util.Map">
+        select * from tbl_stutimepm stpm
+        <where>
+            <if test="timepmdate != '' and timepmdate != null ">
+                and stpm.timepmdate = #{timepmdate}
+            </if>
+        </where>
+    </select>
+
+    <!--    查询上午考勤表中是否已经存在当天日期-->
+    <select id="findExistDate" resultType="com.great.kindergarten.commons.entity.TblStutime" parameterType="java.util.Map">
+        select * from tbl_stutimeam
+        <where>
+            <if test="timeamdate != '' and timeamdate != null ">
+                and timeamdate = #{timeamdate}
+            </if>
+        </where>
+    </select>
+
+    <!--    如果上午考勤表中存在当天的日期，则更新上午考勤信息-->
+    <update id="updateAmAttendance" parameterType="java.util.Map">
+        update tbl_stutimeam stuam set stuam.timeam = #{timeam}, stuam.pnameam = #{pnameam}
+        where stuam.timeamdate = #{timeamdate}
+    </update>
+
+</mapper>

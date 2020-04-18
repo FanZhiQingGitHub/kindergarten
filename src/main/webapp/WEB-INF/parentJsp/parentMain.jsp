@@ -12,6 +12,7 @@
 <head>
 
     <title>家长端首页</title>
+    <%String path = request.getContextPath(); %>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/mainres/css/main.css">
     <style type="text/css">
         html, body {
@@ -28,7 +29,8 @@
 
 </head>
 <body>
-
+<input type="hidden" id="path" value="<%=path%>">
+<input type="hidden" id="kindername" value="${kindername}">
 <!-- header -->
 <div class="header_box">
 
@@ -40,11 +42,8 @@
             </a>
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0)" id="a1">个人信息</a></dd>
-<<<<<<< HEAD
-=======
+                <dd><a href="javascript:void(0)" id="addStuTime">上课打卡</a></dd>
                 <dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
->>>>>>> ab490e1bba7e6431f56dff325ffe87d9f48bdc52
-
             </dl>
         </li>
         <li class="layui-nav-item"><a href="javascript:void(0); "  id="exit" style="color: black;font-size: 18px">注销</a></li>
@@ -465,6 +464,28 @@
                 });
             });
 
+            $("#addStuTime").click(function () {
+                var path = $("#path").val();
+                var weekInfo = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+                var week = new Date().getDay();
+                var weekToday = weekInfo[week];
+                console.log(weekToday);
+
+                if(weekToday == "星期六" || weekToday == "星期日"){
+                    layer.alert('亲，现在是周末哦，打卡功能暂时关闭。',{icon:6});
+                }else {
+                    layer.open({
+                        type: 2,
+                        area: ['95%', '81%'],
+                        offset: ['10%', '3%'],
+                        title: '智慧幼儿园-人脸识别界面',
+                        content: path + '/parent/toUrl/FaceID' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                        , success: function (layero, index) {
+                            var body = layer.getChildFrame("body", index);
+                        }
+                    });
+                }
+            });
         });
     });
 

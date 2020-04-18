@@ -25,11 +25,13 @@ public class TblParent
 	private Date parentRegTime;
 	private String parentStatus;
 	private Integer rid;
+
 	private TblStudent tblStudent;
 	private Integer studentid;
 	private String studentname;
 	private String time1;
 	private String time2;
+
 
 	public TblParent()
 	{

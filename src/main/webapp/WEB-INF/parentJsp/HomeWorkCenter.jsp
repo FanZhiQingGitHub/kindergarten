@@ -9,7 +9,7 @@
 <%@ include file="/commons/basejs.jsp" %>
 <html>
 <head>
-	<title>作业中心</title>
+	<title>智慧幼儿园-作业中心</title>
 </head>
 <body>
 
