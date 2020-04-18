@@ -26,7 +26,8 @@
 <!-- 增加搜索条件 -->
 <div class="demoTable">
 	<div style="text-align: center">园所名称：<span>英才幼儿园</span></div>
-	查询条件：
+	<button class="layui-btn" data-type="cancel"><i class="layui-icon">&#xe65c;</i>返回首页</button>
+	&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp查询条件：
 	<br/>
 	教师名称：
 	<div class="layui-inline selects">
@@ -136,7 +137,15 @@
 					}
 				});
 			}
+			if(type === 'cancel'){
+				layer.confirm('您确定退出到园长端首页吗?', {icon: 3, title: '温馨提示'}, function (index) {
+					window.location.href = src+"/director/toUrl/directorMain";
+					return true;
+				});
+				return false;
+			}
 		});
+
 
 		//将表单转为js对象数据
 		function serializeObject($, array) {

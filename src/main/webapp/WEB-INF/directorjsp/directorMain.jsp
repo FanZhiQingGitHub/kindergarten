@@ -4,6 +4,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 <head>
@@ -150,11 +151,11 @@
                                     src="${pageContext.request.contextPath}/image/healtherimg/img/news.jpg"></a>
                         </div>
                         <div style=" overflow:auto;">
-                            <a href="javascript:;">新闻一</a><br>
-                            <a href="javascript:;">新闻二</a><br>
-                            <a href="javascript:;">新闻三</a><br>
-                            <a href="javascript:;">新闻四</a><br>
-                            <a href="javascript:;">新闻五</a>
+                            <c:if test="${not empty tblCampusList}">
+                                <c:forEach items="${tblCampusList}" var="i" step="1">
+                                    <a href="javascript:;" style="font-size: 18px" class="showNewsInfo">${i.campusinfoname}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></a><br>
+                                </c:forEach>
+                            </c:if>
                         </div>
 
                     </div>
@@ -284,6 +285,12 @@
             });
         });
 
+        //查看对应的消息内容
+	   $(".showNewsInfo").on('click',function () {
+		   var shownews = $(this).parents('div').children('a').text();
+			console.log("对应进行显示="+shownews);
+	   });
+
         //退出到首页
 	    $("#exit").on('click',function () {
 		    layer.confirm('您确定退出到园长端登录界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
@@ -407,7 +414,7 @@
         $("#messageNotice").on('click',function () {
             layer.confirm('您确定要进入到消息通知进行编辑吗?', {icon: 3, title: '温馨提示'}, function (index) {
                 layer.close(index);
-                window.location.href = src+"/director/toUrl/director_MessageNotice";
+                window.location.href = src+"/director/toUrl/director_SchoolMessageNotice";
                 return true;
             });
             return false;
@@ -428,6 +435,7 @@
         });
 
     });
+
 </script>
 
 

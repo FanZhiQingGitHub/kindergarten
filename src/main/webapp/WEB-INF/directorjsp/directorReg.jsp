@@ -60,39 +60,12 @@
             font-size: 16px;
         }
 
-        /*.layui-input {*/
-        /*    border-radius: 5px;*/
-        /*    width: 300px;*/
-        /*    height: 38px;*/
-        /*    font-size: 18px;*/
-        /*}*/
-
-        /*.layui-form-item {*/
-        /*    margin-left: 7%;*/
-        /*    margin-top: 3%;*/
-        /*    font-size: 20px;*/
-        /*    color: black;*/
-        /*    width: 140px;*/
-        /*}*/
-
         .layui-input-inline{
             width: 300px;
         }
         .layui-form-label {
-            /*color: white;*/
             width: 140px;
         }
-
-        /*.layui-btn {*/
-        /*    margin-left: -45px;*/
-        /*    border-radius: 5px;*/
-        /*    width: 85%;*/
-        /*    height: 15%;*/
-        /*    font-size: 20px;*/
-        /*}*/
-        /*#bu2 {*/
-        /*    height: 8%;*/
-        /*}*/
 
     </style>
 </head>
@@ -237,7 +210,6 @@
                 if (value.length == 0) {
                     return '您好，账号不能为空！';
                 }
-                ///^[a-zA-Z]([-_a-zA-Z0-9]{6,10})$/
                 if(!new RegExp("^[a-zA-Z]([-_a-zA-Z0-9]{6,10})$").test(value)){
                     return '账号不能有特殊字符，并且只能7—10个字符';
                 }
@@ -282,12 +254,12 @@
                 /^1\d{10}$/
                 , '您好，手机号码必须11位，且不能出现空格！'
             ],
-            ///^[a-zA-Z0-9]{10,20}$/, //组织机构代码证
+            //组织机构代码证
             license: [
                 /^[a-zA-Z0-9]{10,20}$/
                 , '您好，许可证必须10~20位，且不能出现空格！'
             ],
-                content: function (value) {
+            content: function (value) {
                 layedit.sync(editIndex);
             }
 

@@ -6,6 +6,7 @@ import com.great.kindergarten.director.resultbean.DateTable;
 import com.great.kindergarten.director.resultbean.TblScTInfo;
 import com.great.kindergarten.director.service.KinderService;
 import com.great.kindergarten.director.service.RectorService;
+import com.great.kindergarten.security.service.SecurityService;
 import com.great.kindergarten.security.util.DateUtil;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
@@ -39,11 +40,15 @@ import java.util.List;
 public class RectorController
 {
 	private String vcode;
+
 	@Resource
 	private RectorService rectorService;
 
 	@Resource
 	private KinderService kinderService;
+
+	@Resource
+	private SecurityService securityService;
 
 	@Resource
 	TblRector tblRector;
@@ -137,17 +142,26 @@ public class RectorController
 		System.out.println(tblRectors);
 		if (null != tblRectors)
 		{
-			request.getSession().setAttribute("logintblRector", tblRectors);
-			String PicCode = (String) request.getSession().getAttribute("PicCode");
-			code = code.toLowerCase();
-			if (code.equals(PicCode))
-			{
-				System.out.println("前台验证码成功！");
-				ResponseUtils.outHtml(response, "success");
-			} else
-			{
-				System.out.println("前台验证码失败！");
-				ResponseUtils.outHtml(response, "codeerror");
+			String rectorstatus =  tblRectors.getRectorstatus();
+			if(rectorstatus.equals("启用")){
+				request.getSession().setAttribute("logintblRector", tblRectors);
+				String PicCode = (String) request.getSession().getAttribute("PicCode");
+				code = code.toLowerCase();
+				if (code.equals(PicCode))
+				{
+					String kindername = (String) request.getSession().getAttribute("kindername");
+					List<TblCampus> tblCampusList = securityService.findKinderNews(kindername);
+					request.getSession().setAttribute("tblCampusList", tblCampusList);
+					System.out.println("前台验证码成功！");
+					ResponseUtils.outHtml(response, "success");
+				} else
+				{
+					System.out.println("前台验证码失败！");
+					ResponseUtils.outHtml(response, "codeerror");
+				}
+			}else{
+				System.out.println("前台用户是不是启用！");
+				ResponseUtils.outHtml(response, "notmen");
 			}
 		} else
 		{

@@ -27,7 +27,6 @@
 	<div class="con">
     	<div class="inCon">
             <ul class="imgList">
-<%--	           mainres/static/al_img10.jpg--%>
                 <li><img src="${pageContext.request.contextPath}/mainres/static/al_img10.jpg" width="680" height="494" /></li>
                 <li><img src="${pageContext.request.contextPath}/mainres/static/al_img12.jpg" width="680" height="494" /></li>
                 <li><img src="${pageContext.request.contextPath}/mainres/static/al_img6.jpg" width="680" height="494" /></li>

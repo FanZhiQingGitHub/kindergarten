@@ -25,7 +25,8 @@
 <h1 style="text-align:center;font-size: 40px;color: #009688">教师管理</h1>
 <!-- 增加搜索条件 -->
 <div class="demoTable">
-	查询条件：
+	<button class="layui-btn" data-type="cancel"><i class="layui-icon">&#xe65c;</i>返回首页</button>
+	&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp查询条件：
 	<br/>
 	教师名称：
 	<div class="layui-inline selects">
@@ -250,6 +251,13 @@
 						console.log(layero, index);
 					}
 				});
+			}
+			if(type === 'cancel'){
+				layer.confirm('您确定退出到园长端首页吗?', {icon: 3, title: '温馨提示'}, function (index) {
+					window.location.href = src+"/director/toUrl/directorMain";
+					return true;
+				});
+				return false;
 			}
 		});
 
