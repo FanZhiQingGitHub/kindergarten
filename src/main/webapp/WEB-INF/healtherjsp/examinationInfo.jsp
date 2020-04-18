@@ -23,7 +23,7 @@
 
 
     <div class="layadmin-user-login-box layadmin-user-login-header">
-        <h2 style="margin-left: 43%">体检管理</h2>
+        <h2 style="margin-left: 46%">体检管理</h2>
     </div>
     <div class="layui-inline" style="width:100%;">
         <hr>

@@ -23,6 +23,9 @@
             margin: 0;
             padding: 0;
         }
+        .a1:hover{
+            color: #f37d25;
+        }
     </style>
     <!--加载meta IE兼容文件-->
     <!--[if lt IE 9]>
@@ -34,6 +37,7 @@
 </head>
 <body>
 <input type="hidden" id="path" value="<%=path%>">
+<input type="hidden" id="kindername" value="${kindername}">
 <!-- header -->
 <div class="header_box">
 
@@ -120,14 +124,17 @@
                         <div style=" overflow:auto;">
                             <a><img style="width: 100%" src="${pageContext.request.contextPath}/image/healtherimg/img/news.jpg"></a>
                         </div>
-                        <div style=" overflow:auto;">
-                            <a href="javascript:;">新闻一</a><br>
-                            <a href="javascript:;">新闻二</a><br>
-                            <a href="javascript:;">新闻三</a><br>
-                            <a href="javascript:;">新闻四</a><br>
-                            <a href="javascript:;">新闻五</a>
+                        <div style=" overflow:auto;" id="newsInfo">
+                            <c:if test="${not empty tblCampuses}">
+                                <c:forEach items="${tblCampuses}" var="i" step="1">
+                                    <p><a class="a1" href="javascript:void(0);"
+                                          style="font-size: 15px;width: 200px">${i.campusinfoname}:${i.campusinfodetail}</a><span
+                                            style="font-size: 15px;margin-left: 18%">发布时间：<fmt:formatDate
+                                            value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss'/></span><span></span>
+                                    </p>
+                                </c:forEach>
+                            </c:if>
                         </div>
-
                     </div>
                 </div>
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
@@ -237,9 +244,24 @@
                     , success: function (layero, index) {
                     }
                 });
+            }),$(".a1").click(function () { //点击查看园所新闻
+                var name = $(this).text();
+                var titleInfo = name.split(":")[0];
+                var detailInfo = name.split(":")[1];
+                var kindername = $("#kindername").val();
+                //打开一个窗口播放视频
+                layer.open({
+                    //打开一个窗口播放视频
+                    // area: ['40%', '50%'],
+                    area: 'auto',
+                    // offset:['26%','31%'],
+                    offset:'auto',
+                    title:titleInfo,
+                    content: detailInfo+'------'+kindername,
+                });
             });
         })
-//对应显示消息通知的内容
+        //对应显示消息通知的内容
         $('.schoolMessage').on('click',function () {
             layer.open({
                 type: 2,

@@ -43,9 +43,9 @@
 						style="width: 330px;height: 60px;font-size: 25px" id="bu2"><i class="layui-icon">&#xe6af;</i>上下课记得点我哦
 				</button>
 
-<%--				<button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm"--%>
-<%--						style="width: 165px;pointer-events: none;" id="bu3"><i class="layui-icon">&#xe654;</i>注册人脸--%>
-<%--				</button>--%>
+				<button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm"
+						style="width: 170px;" id="bu3"><i class="layui-icon">&#xe654;</i>这边可以请假哦
+				</button>
 			</div>
 		</div>
 	</div>
@@ -61,6 +61,8 @@
 		var form = layui.form;
 		var path = $("#path").val();
 		var video = document.getElementById('webcam');
+
+		layer.msg('温馨提醒：摄像头功能需要使用谷歌浏览器才可以访问！');
 
 		//判断是否支持开启视频(默认开启相机)
 		if (navigator.getUserMedia) {
@@ -154,44 +156,16 @@
 				}
 
 			}),$("#bu3").click(function () {
-				//找到视频显示的位置
-				var video = document.querySelector('video');
-				//canvas 用来保存图片的一个标签
-				var canvasObj = document.querySelector('canvas');
-				//创建一个2d环境的画布
-				var context1 = canvasObj.getContext('2d');
-				//框框的样式颜色
-				context1.fillStyle = "#000000";
-				//填充获取的范围
-				context1.fillRect(0, 0, 400, 400);
-				//绘画的范围 400*400大小
-				context1.drawImage(video, 0, 0, 400, 400);
-
-				//toDataURL()获取的数据有images前缀，要split取后面一部分传给后台，后台直接用
-				var url = canvasObj.toDataURL();
-				//获取到String类型的image信息
-				var face = url.split(",")[1];
-
-				console.log("face="+face)
-
-				if(face == null){
-					layer.alert('您好，请先开启相机拍照后注册！',{icon:2});
-				}else {
-					//用ajax做验证 ,判断是否验证成功
-					$.ajax({
-						url: path+'/parent/regFaceId',
-						type:"post",
-						async: true,
-						cache: false,
-						data: {"face":face},
-						success: function(msg) {
-							layer.alert("正常");
-						},
-						error:function(msg) {
-							layer.alert("网络繁忙，请您稍后重试");
-						}
-					});
-				}
+				var path = $("#path").val();
+				layer.open({
+					type: 2,
+					area: ['400px', '350px'],
+					offset: ['120px', '650px'],
+					title: '新增请假信息',
+					content: path + '/parent/toUrl/addLeaveInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					, success: function (layero, index) {
+					}
+				});
 			});
 		});
 	});

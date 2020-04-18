@@ -92,7 +92,7 @@ public class SecurityController {
     }
 
     @RequestMapping("/securityLogin")
-    public void healtherLogin(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response) {
+    public void securityLogin(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response) {
         securityname = tblSecurity.getSecurityname();
         String securitypwd = MD5Utils.md5(tblSecurity.getSecuritypwd());
         String code = tblSecurity.getCode();

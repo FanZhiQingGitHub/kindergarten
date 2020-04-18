@@ -255,6 +255,19 @@ public class ParentController {
         System.out.println("timeamdate=" + timeamdate);
     }
 
+    //新增请假信息
+    @RequestMapping("/addLeaveInfo")
+    public void addLeaveInfo(HttpServletRequest request, HttpServletResponse response){
+        String studentname = request.getParameter("studentname");
+        String parentname = request.getParameter("parentname");
+        String time = request.getParameter("time");
+
+        System.out.println("studentname="+studentname);
+        System.out.println("parentname="+parentname);
+        System.out.println("time="+time);
+
+    }
+
 
     @RequestMapping("/parentFaceRecognition")
     @ResponseBody

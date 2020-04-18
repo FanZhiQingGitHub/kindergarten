@@ -469,11 +469,10 @@
                 var weekInfo = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
                 var week = new Date().getDay();
                 var weekToday = weekInfo[week];
-                console.log(weekToday);
 
-                if(weekToday == "星期六" || weekToday == "星期日"){
-                    layer.alert('亲，现在是周末哦，打卡功能暂时关闭。',{icon:6});
-                }else {
+                // if(weekToday == "星期六" || weekToday == "星期日"){
+                //     layer.alert('亲，现在是周末哦，打卡功能暂时关闭。',{icon:6});
+                // }else {
                     layer.open({
                         type: 2,
                         area: ['95%', '81%'],
@@ -484,7 +483,7 @@
                             var body = layer.getChildFrame("body", index);
                         }
                     });
-                }
+                // }
             });
         });
     });
