@@ -261,20 +261,20 @@
                             location.href = path + "/teacher/toUrl/teacherMain";
                         });
                     }else if(msg == "error"){
-                        layer.alert("登录失败！", {icon: 2});
+                        layer.msg("登录失败！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/teacher/loginCode?"+Math.random();
                     }else if(msg == "codeerror") {
-                        layer.alert("验证码错误！", {icon: 2});
+                        layer.msg("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/teacher/loginCode?"+Math.random();
                     }else if(msg == "notmen"){
-                        layer.alert("该用户已被禁用或者不存在！", {icon: 2});
+                        layer.msg("该用户已被禁用或者不存在！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/teacher/loginCode?"+Math.random();
                     }
                 }, error: function (msg) {
-                    layer.alert("网络繁忙！", {icon: 2});
+                    layer.msg("网络繁忙！", {icon: 2});
                     var code = document.getElementById("code");
                     code.src = path + "/teacher/loginCode?"+Math.random();
                 }

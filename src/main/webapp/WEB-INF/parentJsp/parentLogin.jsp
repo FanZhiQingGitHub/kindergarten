@@ -269,12 +269,12 @@
                 success: function (result) {
                     if (result.msg=="codeError"){
                     //验证码错误
-                        layer.alert("啊哦，验证码输入错误", {icon: 2});
+                        layer.msg("啊哦，验证码输入错误", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/parent/loginCode?"+Math.random();
                     }else if (result.msg=="loginFailed") {
                     //登陆失败
-                        layer.alert("登陆失败，请检查您输入的账号密码！多次登陆失败请联系园长", {icon: 2});
+                        layer.msg("登陆失败，请检查您输入的账号密码！多次登陆失败请联系园长", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/parent/loginCode?"+Math.random();
                     }
@@ -285,7 +285,7 @@
                         });
                     }
                 }, error: function () {
-                    layer.alert("网络繁忙！", {icon: 2});
+                    layer.msg("网络繁忙！", {icon: 2});
                     var code = document.getElementById("code");
                     code.src = path + "/security/loginCode?"+Math.random();
                 }
