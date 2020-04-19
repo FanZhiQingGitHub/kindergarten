@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.kindergarten.security.mapper.SecurityMapper">
+
+    <resultMap id="monitorInfoMap" type="com.great.kindergarten.commons.entity.TblMonitor">
+        <id property="monitorid" column="monitorid"></id>
+        <result property="monitorname" column="monitorname"></result>
+        <result property="monitorimgurl" column="monitorimgurl"></result>
+        <result property="monitormvurl" column="monitormvurl"></result>
+        <result property="kid" column="kid"></result>
+        <result property="kinderid" column="kinderid"></result>
+        <result property="kindername" column="kindername"></result>
+        <association property="tblKinder" javaType="com.great.kindergarten.commons.entity.TblKinder">
+            <id property="kinderid" column="kinderid"></id>
+            <result property="kinderid" column="kinderid"></result>
+            <result property="kindername" column="kindername"></result>
+        </association>
+    </resultMap>
+
+    <select id="findALLMonitorInfo" resultMap="monitorInfoMap"
+            parameterType="com.great.kindergarten.security.resultbean.MonitorPage">
+        select * from tbl_monitor mo ,tbl_kinder kin where mo.kid = kin.kinderid limit #{page},#{limit}
+    </select>
+
+    <select id="findALLMonitorInfoCount" resultType="java.lang.Long"
+            parameterType="com.great.kindergarten.security.resultbean.MonitorPage">
+         select count(*) from tbl_monitor mo ,tbl_kinder kin where mo.kid = kin.kinderid
+    </select>
+
+</mapper>

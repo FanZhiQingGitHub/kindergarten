@@ -10,7 +10,8 @@
     </select>
 
     <!--    根据宝宝名称和出生日期查找宝宝的坐标信息-->
-    <select id="findStuLngLetInfo" resultType="com.great.kindergarten.commons.entity.TblStudent" parameterType="java.util.Map">
+    <select id="findStuLngLetInfo" resultType="com.great.kindergarten.commons.entity.TblStudent"
+            parameterType="java.util.Map">
         select * from tbl_student where studentid = #{studentid} and studentname = #{studentname} and studentbrith = #{studentbrith}
     </select>
 
@@ -25,8 +26,10 @@
     </insert>
 
     <!--    查找宝宝体检信息表-->
-    <select id="findAlarmInfo" resultType="com.great.kindergarten.commons.entity.TblAlarmLog" parameterType="com.great.kindergarten.security.resultbean.AlarmLogPage">
-        select al.alarmlogid,al.alarmlogname,al.studentname,al.alarmlogarea,al.alarmlogtime from tbl_alarmlog al,tbl_student stu
+    <select id="findAlarmInfo" resultType="com.great.kindergarten.commons.entity.TblAlarmLog"
+            parameterType="com.great.kindergarten.security.resultbean.AlarmLogPage">
+        select al.alarmlogid,al.alarmlogname,al.studentname,al.alarmlogarea,al.alarmlogtime from tbl_alarmlog
+        al,tbl_student stu
         <where>
             al.sid = stu.studentid
             <if test=" time1 != '' and time1 != null">
@@ -40,7 +43,8 @@
     </select>
 
     <!--    查找宝宝体检信息表-->
-    <select id="findAlarmInfoCount" resultType="java.lang.Long" parameterType="com.great.kindergarten.security.resultbean.AlarmLogPage">
+    <select id="findAlarmInfoCount" resultType="java.lang.Long"
+            parameterType="com.great.kindergarten.security.resultbean.AlarmLogPage">
         select count(*) from tbl_alarmlog al,tbl_student stu
         <where>
             al.sid = stu.studentid
@@ -74,7 +78,8 @@
         </foreach>
     </insert>
 
-    <select id="findCoordinate" resultType="com.great.kindergarten.commons.entity.TblCoordinate" parameterType="java.util.Map">
+    <select id="findCoordinate" resultType="com.great.kindergarten.commons.entity.TblCoordinate"
+            parameterType="java.util.Map">
         select lng,lat from tbl_coordinate
         <where>
             <if test="kinderid != '' and kinderid != null ">
@@ -83,7 +88,8 @@
         </where>
     </select>
 
-    <select id="findStuTrack" resultType="com.great.kindergarten.commons.entity.TblStuTrack" parameterType="java.util.Map">
+    <select id="findStuTrack" resultType="com.great.kindergarten.commons.entity.TblStuTrack"
+            parameterType="java.util.Map">
         select lng,lat from tbl_stutrack
         <where>
             <if test="stuid != '' and stuid != null ">
@@ -91,5 +97,24 @@
             </if>
         </where>
     </select>
+
+    <select id="findLngLatInfo" resultType="com.great.kindergarten.commons.entity.TblCoordinate"
+            parameterType="java.util.Map">
+        select * from tbl_coordinate coo,tbl_kinder kin
+        <where>
+            coo.kinderid = kin.kinderid
+            <if test="kindername != '' and kindername != null ">
+                and kin.kindername = #{kindername}
+            </if>
+        </where>
+    </select>
+
+
+
+    <!--    修改幼儿园电子围栏信息-->
+    <delete id="deleteLngLatInfo" parameterType="java.lang.Integer">
+        delete from tbl_coordinate where kinderid = #{kinderid}
+    </delete>
+
 
 </mapper>

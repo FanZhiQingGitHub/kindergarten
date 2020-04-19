@@ -148,6 +148,7 @@ public interface ParentMapper {
 	public List<TblParent> findParentStuInfo(Map<String,String> parentMap);
 
 	public List<TblDate> findDateInfo(Map<String,String> dateMap);
+	public TblStutime findAmTimeId(Map<String,String> dateMap);
 	public TblStutime findPmTimeId(Map<String,String> dateMap);
 
 	public TblStutime findExistDate(Map<String,String> dateMap);
@@ -159,5 +160,8 @@ public interface ParentMapper {
 	public Boolean addPmAttendanceAll(List<TblStutime> tblStutimeListPm);
 
 	public Boolean updateAmAttendance(Map<String,String> AmMap);
+	public Boolean updatePmAttendance(Map<String,String> PmMap);
+
+	public List<TblStudent> findAllStuInfo();
 
 }

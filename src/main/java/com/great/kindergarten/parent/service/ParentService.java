@@ -195,6 +195,11 @@ public class ParentService {
         dateMap.put("sunday",sunday);
         return parentMapper.findDateInfo(dateMap);
     }
+    public TblStutime findAmTimeId(String timeamdate){
+        Map<String,String> dateMap = new LinkedHashMap<>();
+        dateMap.put("timeamdate",timeamdate);
+        return  parentMapper.findAmTimeId(dateMap);
+    }
     public TblStutime findPmTimeId(String timepmdate){
         Map<String,String> dateMap = new LinkedHashMap<>();
         dateMap.put("timepmdate",timepmdate);
@@ -210,9 +215,9 @@ public class ParentService {
         return parentMapper.addAmAttendance(tblStutimeListAm);
     }
     @Transactional
-    public Boolean addPmDate(String timeamdate){
+    public Boolean addPmDate(String timepmdate){
         Map<String,String> dateMap = new LinkedHashMap<>();
-        dateMap.put("timeamdate",timeamdate);
+        dateMap.put("timepmdate",timepmdate);
         return parentMapper.addPmDate(dateMap);
     }
     @Transactional
@@ -230,13 +235,25 @@ public class ParentService {
         dateMap.put("timeamdate",timeamdate);
         return parentMapper.findExistDate(dateMap);
     }
-
+    @Transactional
     public Boolean updateAmAttendance(String timeam,String pnameam,String timeamdate){
         Map<String,String> AmMap = new LinkedHashMap<>();
         AmMap.put("timeam",timeam);
         AmMap.put("pnameam",pnameam);
         AmMap.put("timeamdate",timeamdate);
         return parentMapper.updateAmAttendance(AmMap);
+    }
+    @Transactional
+    public Boolean updatePmAttendance(String timepm,String pnamepm,String timepmdate){
+        Map<String,String> PmMap = new LinkedHashMap<>();
+        PmMap.put("timepm",timepm);
+        PmMap.put("pnamepm",pnamepm);
+        PmMap.put("timepmdate",timepmdate);
+        return parentMapper.updateAmAttendance(PmMap);
+    }
+
+    public List<TblStudent> findAllStuInfo(){
+        return parentMapper.findAllStuInfo();
     }
 
 

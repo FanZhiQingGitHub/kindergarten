@@ -4,6 +4,7 @@ import com.great.kindergarten.admin.mapper.AdminMapper;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.security.mapper.SecurityMapper;
 import com.great.kindergarten.security.resultbean.AlarmLogPage;
+import com.great.kindergarten.security.resultbean.MonitorPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoPage;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,7 @@ public class SecurityService {
         return securityMapper.findSecurityId(securitymap);
     }
 
+    @Transactional
     public Boolean updateSecurityPwd(String securitypwd,String securityid){
         Map<String, String> securitymap = new LinkedHashMap<>();
         securitymap.put("securitypwd",securitypwd);
@@ -81,6 +83,7 @@ public class SecurityService {
         return securityMapper.findStuLngLetInfo(stumap);
     }
 
+    @Transactional
     public Boolean addAlarmLogInfo(List<TblAlarmLog> tblAlarmLogList){
         return securityMapper.addAlarmLogInfo(tblAlarmLogList);
     }
@@ -93,6 +96,7 @@ public class SecurityService {
         return securityMapper.findAlarmInfoCount(alarmLogPage);
     }
 
+    @Transactional
     public Boolean addCoordinate(List<TblCoordinate> tblCoordinateList){
         return securityMapper.addCoordinate(tblCoordinateList);
     }
@@ -119,6 +123,26 @@ public class SecurityService {
         Map<String, String> KinderNewsmap = new LinkedHashMap<>();
         KinderNewsmap.put("kindername",kindername);
         return securityMapper.findKinderNews(KinderNewsmap);
+    }
+
+    public List<TblCoordinate> findLngLatInfo(String kindername){
+        Map<String, String> KinderNameMap = new LinkedHashMap<>();
+        KinderNameMap.put("kindername",kindername);
+        return securityMapper.findLngLatInfo(KinderNameMap);
+    }
+
+    @Transactional
+    public Boolean deleteLngLatInfo(Integer kinderid){
+        return securityMapper.deleteLngLatInfo(kinderid);
+    }
+
+
+    public List<TblMonitor> findALLMonitorInfo(MonitorPage monitorPage){
+        return securityMapper.findALLMonitorInfo(monitorPage);
+    }
+
+    public Long findALLMonitorInfoCount(MonitorPage monitorPage){
+        return securityMapper.findALLMonitorInfoCount(monitorPage);
     }
 
 

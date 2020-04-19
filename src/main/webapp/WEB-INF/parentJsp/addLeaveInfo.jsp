@@ -18,41 +18,52 @@
 </head>
 <body>
 <input type="hidden" id="path" value="<%=path%>">
-<form class="layui-form" onsubmit="return false;">
     <h1 style="margin-left: 29%">新增请假信息</h1>
     <hr style="color: whitesmoke">
 
+    <div class="layui-fluid">
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">宝宝名称</label>
-        <div class="layui-input-block">
-            <input type="text" id="te2" name="studentname" required lay-verify="required" placeholder="请输入宝宝姓名" autocomplete="off"
-                   class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">家长名称</label>
-            <div class="layui-input-inline">
-                <input type="text" id="te3" name="parentname" required lay-verify="required" placeholder="请输入家长姓名" autocomplete="off" class="layui-input">
+            <div class="layui-form-item" style="color: black;width: 330px;margin-top: 5%">
+                <label class="layui-form-label">宝宝名称</label>
+                <div class="layui-input-block">
+                    <select id="te1" style="width:220px;height: 35px"></select>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="layui-form-item">
-        <label class="layui-form-label" style="width: 180px">请假时间段（当日有效）</label>
-        <div class="layui-input-block" style="color: black;">
-            <input type="radio" name="time" value="上午" title="上午">
-            <input type="radio" name="time" value="下午" title="下午">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">家长名称</label>
+                <div class="layui-input-block">
+                    <input type="text" id="te2" name="parentname" required lay-verify="required" placeholder="请输入家长姓名"
+                           autocomplete="off" class="layui-input" value="${onlineParent.parentName}" readonly
+                           style="width: 220px">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">请假日期</label>
+                <div class="layui-input-block"> <!-- 注意：这一层元素并不是必须的 -->
+                    <input type="text" id="te3" class="layui-input" style="width: 220px">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 150px">时间段（当日有效）</label>
+            <div class="layui-input-block" style="color: black;width: 180px">
+                <input type="radio" name="time" value="上午" title="上午" checked>上午
+                <input type="radio" name="time" value="下午" title="下午">下午
+            </div>
+        </div>
+
+        <div class="layui-btn-container" style="margin-left: 38%">
+            <button type="button" class="layui-btn layui-btn-normal" id="addInfo">确认请假</button>
         </div>
     </div>
-
-    <div class="layui-btn-container" style="margin-left: 38%">
-        <button type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="addInfo">确认请假</button>
-    </div>
-
-</form>
 
 <script>
 
@@ -62,60 +73,88 @@
             , layedit = layui.layedit
             , laydate = layui.laydate;
         $ = layui.jquery;
+        var path = $("#path").val();
 
-        form.verify({
-            required: function (value) {
-                if (value.length == 0) {
-                    return '您好，这是必填项！';
-                }
-            },
-            studentname: function (value) {
-                if (value.length > 4) {
-                    return '您好，姓名不得大于4个字！';
-                }
-            },
-            parentname: function (value) {
-                if (value.length > 4) {
-                    return '您好，姓名不得大于4个字！';
-                }
-            },
-            content: function (value) {
-                layedit.sync(editIndex);
-            }
 
+        laydate.render({
+            elem: '#te3' //指定元素
+            , min: minDate()
         });
 
-        form.on('submit(addInfo)', function (data) {
-            var path = $("#path").val();
-            var studentname = $("#te2").val();
-            var parentname = $("#te3").val();
-            var time = $("input[name='time']:checked").val();
+        function minDate() {
+            var now = new Date();
+            return now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+        }
 
-            $.ajax({
-                url: path + "/parent/addLeaveInfo",
-                async: true,
-                type: "post",
-                data: {"studentname":studentname,"parentname":parentname,"time":time},
-                datatype: "text",
-                success: function (msg) {
-                    if(msg == "success"){
-                        layer.alert("请假成功！", {icon: 6},function () {
-                            var index = parent.layer.getFrameIndex(window.name);
-                            parent.layer.close(index);//关闭当前页
-                        });
-                    }else {
-                        layer.alert("请假失败！", {icon: 2},function () {
-                            var index = parent.layer.getFrameIndex(window.name);
-                            parent.layer.close(index);//关闭当前页
-                        });
+        //1、查出宝宝名称下拉框的值
+        $.ajax({
+            url: path + '/parent/findAllStuInfo',
+            async: true,
+            type: 'post',
+            datatype: 'text',
+            success: function (data) {
+                if (data == "error") {
+                    layer.msg("暂无宝宝信息！", {icon: 2});
+                } else {
+                    var stuinfo = JSON.parse(data);
+                    var option;
+                    option += "<option value='请选择'>" + "请选择宝宝名称" + "</option>";
+                    for (var i in stuinfo) {
+                        option += "<option value='" + stuinfo[i].studentid+ "'>" + stuinfo[i].studentname + "</option>";
                     }
-                }, error: function (msg) {
-                    layer.alert("网络繁忙！", {icon: 2},function () {
-                        var index = parent.layer.getFrameIndex(window.name);
-                        parent.layer.close(index);//关闭当前页
-                    });
+                    $("#te1").html(option);
+                    $("#te1").show();
                 }
-            })
+            }, error: function (data) {
+                layer.msg("网络繁忙！", {icon: 2});
+            }
+        });
+
+
+        $(function () {
+           $("#addInfo").click(function () {
+               var studentid = $("#te1").val();
+               var parentname = $("#te2").val();
+               var leaveDate = $("#te3").val()
+               var time = $("input[name='time']:checked").val();
+
+               if(studentid == "请选择"){
+                   layer.msg("请选择宝宝名称！", {icon: 6});
+               }else if(leaveDate.length == 0){
+                   layer.msg("请选择请假日期！", {icon: 6});
+               }else {
+                   $.ajax({
+                       url: path + "/parent/addLeaveInfo",
+                       async: true,
+                       type: "post",
+                       data: {"studentid": studentid, "parentname": parentname, "time": time, "leaveDate": leaveDate},
+                       datatype: "text",
+                       success: function (msg) {
+                           if (msg == "success") {
+                               layer.alert("请假成功！", {icon: 6}, function () {
+                                   var index = parent.layer.getFrameIndex(window.name);
+                                   parent.layer.close(index);//关闭当前页
+                               });
+                           } else if (msg == "notadd") {
+                               layer.msg("今天是周末哦！", {icon: 6}, function () {
+                                   var index = parent.layer.getFrameIndex(window.name);
+                                   parent.layer.close(index);//关闭当前页
+                               });
+                           } else {
+                               layer.msg("请假失败！", {icon: 2}, function () {
+                                   var index = parent.layer.getFrameIndex(window.name);
+                                   parent.layer.close(index);//关闭当前页
+                               });
+                           }
+                       }, error: function (msg) {
+                           layer.msg("网络繁忙！", {icon: 2}, function () {
+                               var index = parent.layer.getFrameIndex(window.name);
+                               parent.layer.close(index);//关闭当前页
+                           });
+                       }
+                   })
+               }
+           });
         });
     });
 

@@ -39,6 +39,7 @@
 <input type="hidden" id="path" value="<%=path%>">
 <input type="hidden" id="studentid">
 <input type="hidden" id="studentbrith" value="<%=path%>">
+<input type="hidden" id="kinder" value="${kindername}">
 
 
 <div class="layui-fluid">
@@ -50,14 +51,13 @@
         <hr>
     </div>
 
-    <div class="layui-fluid" style="margin-left: 13%">
+    <div class="layui-fluid" style="margin-left: 6%">
 
         <div class="layui-inline">
             <div class="layui-form-item" style="color: black;width: 300px;margin-top: 5%">
                 <label class="layui-form-label">宝宝名称：</label>
                 <div class="layui-input-block">
-                    <select name="stuname" id="stuname" style="width:180px;height: 5.3%">
-                    </select>
+                    <select name="stuname" id="stuname" style="width:180px;height: 5.3%"></select>
                 </div>
             </div>
         </div>
@@ -83,8 +83,12 @@
                         style="width: 150px">报警信息
                 </button>
 
-                <button type="button" class="layui-btn layui-btn-radius layui-btn-warm addElectricFence"
+                <button type="button" class="layui-btn layui-btn-radius layui-btn-warm"
                         style="width: 150px" id="bu">绘制电子围栏
+                </button>
+
+                <button type="button" class="layui-btn layui-btn-radius layui-btn-danger"
+                        style="width: 150px" id="bu1">修改电子围栏
                 </button>
             </div>
         </div>
@@ -144,7 +148,7 @@
                 } else {
                     var stuinfo = JSON.parse(data);
                     var option;
-                    option = "<option value='请选择'>" + "请选择宝宝名称" + "</option>";
+                    option += "<option value='请选择'>" + "请选择宝宝名称" + "</option>";
                     for (var i in stuinfo) {
                         option += "<option value='" + stuinfo[i].studentid + "&" + stuinfo[i].studentname + "&" + stuinfo[i].studentbrith + "'>" + stuinfo[i].studentname + "</option>";
                     }
@@ -154,7 +158,7 @@
             }, error: function (data) {
                 layer.alert("网络繁忙！", {icon: 2});
             }
-        })
+        });
 
 
         //电子围栏---------------------------------------------------------------------------------------------------------
@@ -196,8 +200,7 @@
                     }
                     polygon = new BMap.Polygon(polArry, styleOptions);
                     map.addOverlay(polygon);
-                    $("#bu").attr("disabled", true);
-                    $("#bu").css("background-color", "whitesmoke");
+                    $("#bu").hide();
                 }
             }, error: function (msg) {
                 layer.alert("网络繁忙！", {icon: 2});
@@ -266,19 +269,19 @@
 
                             $("#studentname").val(studentname);
 
-                            for(var i = 0; i < info.length; i++) {
-                                (function(e) {
-                                    timer = setTimeout(function() {
-                                        var lngLatNum = new BMap.Point(info[e].lng,info[e].lat);
+                            for (var i = 0; i < info.length; i++) {
+                                (function (e) {
+                                    timer = setTimeout(function () {
+                                        var lngLatNum = new BMap.Point(info[e].lng, info[e].lat);
                                         $("#studentlng").val(info[e].lng);
                                         $("#studentlat").val(info[e].lat);
                                         // if(e == 0 || e == info.length-1 ){
-                                            addMarker([lngLatNum]);
+                                        addMarker([lngLatNum]);
                                         // }
                                         polArry.push(lngLatNum);
                                         var polyline = new BMap.Polyline(polArry, styleOptions);
                                         map.addOverlay(polyline);
-                                    }, i*1000);
+                                    }, i * 1000);
                                 })(i);
                             }
 
@@ -318,16 +321,16 @@
                     url: path + '/security/addAlarmLogInfo',
                     async: true,
                     type: 'post',
-                    data: {"lnginfo": lnginfo, "latinfo": latinfo,"studentid":studentid,"studentname":studentname},
+                    data: {"lnginfo": lnginfo, "latinfo": latinfo, "studentid": studentid, "studentname": studentname},
                     datatype: 'text',
-                    success:function (msg) {
-                        if(msg == "error"){
-                            layer.alert('报警日志新增失败',{icon:2});
-                        }else {
-                            // layer.alert('报警日志新增成功',{icon:6});
+                    success: function (msg) {
+                        if (msg == "error") {
+                            layer.msg('报警日志新增失败', {icon: 2});
+                        } else {
+                            layer.msg('已触发警铃', {icon: 6});
                         }
-                    },error:function (msg) {
-                        layer.alert('网络繁忙',{icon:2});
+                    }, error: function (msg) {
+                        layer.msg('网络繁忙', {icon: 2});
                     }
                 });
                 clearInterval(timer);
@@ -361,6 +364,25 @@
                     var body = layer.getChildFrame("body", index);
                 }
             });
+        });
+
+        $("#bu1").click(function () {
+            var kindername = $("#kinder").val();
+            if (kindername.length == 0) {
+                layer.msg('对不起，您必须登录幼儿园账号才可以进行修改', {icon: 3});
+            } else {
+                layer.open({
+                    type: 2,
+                    area: ['100%', '80%'],
+                    offset: ['0%', '0%'],
+                    title: '修改'+kindername+'电子围栏',
+                    content: path + '/security/path/updateLngLatInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                        var body = layer.getChildFrame("body", index);
+                        body.find("#kinder").val(kindername);
+                    }
+                });
+            }
         });
     });
 

@@ -3,6 +3,7 @@ package com.great.kindergarten.security.controller;
 import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.security.resultbean.AlarmLogPage;
+import com.great.kindergarten.security.resultbean.MonitorPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoPage;
 import com.great.kindergarten.security.service.SecurityService;
@@ -456,9 +457,6 @@ public class SecurityController {
         for (int i = 0; i < tblCoordinateList.size(); i++) {
             tblCoordinateList.get(i).setKinderid(tblKinder.getKinderid());
         }
-
-        System.out.println(tblCoordinateList);
-
         Boolean flag = securityService.addCoordinate(tblCoordinateList);
         if (flag) {
             ResponseUtils.outHtml(response, "success");
@@ -486,5 +484,85 @@ public class SecurityController {
         } else {
             response.getWriter().print("error");
         }
+    }
+
+    //查出幼儿园的电子围栏信息
+    @RequestMapping("/findLngLatInfo")
+    public void findLngLatInfo(DateWrite dateWrite,HttpServletRequest request,HttpServletResponse response) throws Exception {
+        String kindername = request.getParameter("kindername");
+        System.out.println("kindername="+kindername);
+        List<TblCoordinate> tblCoordinateList = securityService.findLngLatInfo(kindername);
+        if(0 != tblCoordinateList.size()){
+            dateWrite.setCode(0);
+            dateWrite.setMsg(" ");
+            dateWrite.setCount(0);
+            dateWrite.setData(tblCoordinateList);
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        }else {
+            dateWrite.setMsg("亲，暂无相关数据");
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        }
+    }
+
+    //修改电子围栏坐标
+    @RequestMapping("/updateMealInfo")
+    public void updateMealInfo(TblCoordinate tblCoordinate,HttpServletRequest request,HttpServletResponse response){
+       //需要幼儿园账号找出ID
+        Gson g = new Gson();
+        String msg = request.getParameter("TblCoordinate");
+        tblCoordinate = g.fromJson(msg,TblCoordinate.class);
+        List<TblCoordinate> tblCoordinateList = tblCoordinate.getCoordinatelist();
+        System.out.println(tblCoordinateList);
+        TblKinder tblKinder = securityService.findKinderId(kindername);//查出幼儿园id
+        Boolean flag = securityService.deleteLngLatInfo(tblKinder.getKinderid());
+        if(flag){
+            Boolean flag1 = securityService.addCoordinate(tblCoordinateList);
+            if (flag1) {
+                ResponseUtils.outHtml(response, "success");
+            } else {
+                ResponseUtils.outHtml(response, "error");
+            }
+        }else {
+            ResponseUtils.outHtml(response, "error");
+        }
+    }
+
+    @RequestMapping("/showMonitorInfo")
+    public void showMonitorInfo(DateWrite dateWrite, MonitorPage monitorPage,HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        Integer page = Integer.valueOf(request.getParameter("page"));
+        Integer limit = Integer.valueOf(request.getParameter("limit"));
+
+        Integer minpage = (page - 1) * limit;
+        Integer maxpage = limit;
+        monitorPage.setPage(minpage);
+        monitorPage.setLimit(maxpage);
+
+        List<TblMonitor> tblMonitorList = securityService.findALLMonitorInfo(monitorPage);
+        System.out.println(tblMonitorList);
+        if (0 != tblMonitorList.size()) {
+            Integer count = securityService.findALLMonitorInfoCount(monitorPage).intValue();
+            dateWrite.setCode(0);
+            dateWrite.setMsg(" ");
+            dateWrite.setCount(count);
+            dateWrite.setData(tblMonitorList);
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        } else {
+            dateWrite.setMsg("亲，暂无相关数据！");
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        }
+
     }
 }

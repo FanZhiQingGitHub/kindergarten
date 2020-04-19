@@ -2,6 +2,7 @@ package com.great.kindergarten.security.mapper;
 
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.security.resultbean.AlarmLogPage;
+import com.great.kindergarten.security.resultbean.MonitorPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoPage;
 import org.apache.ibatis.annotations.Mapper;
@@ -49,4 +50,14 @@ public interface SecurityMapper {
     public List<TblStuTrack> findStuTrack(Map<String, String> KinderIdmap);
 
     public List<TblCampus> findKinderNews(Map<String, String> KinderNewsmap);
+
+    public List<TblCoordinate> findLngLatInfo(Map<String, String> KinderNameMap);
+
+    public Boolean deleteLngLatInfo(Integer kinderid);
+
+    public List<TblMonitor> findALLMonitorInfo(MonitorPage monitorPage);
+
+    public Long findALLMonitorInfoCount(MonitorPage monitorPage);
+
+
 }
