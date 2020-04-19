@@ -18,10 +18,18 @@
             <result property="teachername" column="teachername"/>
         </association>
     </resultMap>
+<!--    查找是不是有重复的幼儿园名称-->
+    <select id="selectKinderName" resultType="TblKinder" parameterType="string">
+        select * from tbl_kinder where kindername = #{kindername}
+    </select>
+    <!--    查找判断对应的园所账号是不是唯一-->
+    <select id="selectKinderAccount" resultType="TblKinder" parameterType="string">
+        select * from tbl_kinder where kinderacount = #{kinderacount}
+    </select>
 
     <!--申请园所-->
     <insert id="addKinderMsg" parameterType="TblKinder">
-insert into tbl_kinder(
+    insert into tbl_kinder(
 			 kindername
 			,kinderlp
 			,kinderlpid
@@ -134,6 +142,11 @@ insert into tbl_kinder(
     <!--班级管理....查找对应的老师的信息下拉框-->
     <select id="findTeacherClassAll" resultType="TblTeacher">
         select * from tbl_teacher where teacherjob='班主任'
+    </select>
+
+    <!--班级管理.查找判断对应的班级是不是唯一-->
+    <select id="selectClassName" resultType="TblClass" parameterType="string">
+        select * from tbl_class where classname = #{classname}
     </select>
 
     <!--班级管理....对应的进行家长的新增-->

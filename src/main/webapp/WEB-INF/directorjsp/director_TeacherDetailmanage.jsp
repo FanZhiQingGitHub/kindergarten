@@ -1,15 +1,13 @@
 <%--
   Created by IntelliJ IDEA.
   User: junlong
-  Date: 2019-11-13
-  Time: 22:25
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>信息修改</title>
+	<title>教师信息修改</title>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/layui/css/layui.css">
 	<script src="${pageContext.request.contextPath}/layui/layui.js"></script>
 </head>
@@ -93,6 +91,29 @@
 		var form = layui.form;
 		$ = layui.$;
 		var layer = layui.layer;
+		$(function () {
+			//教师名字判断是不是重复
+			$("#teachername").on('blur', function () {
+				var teachername = $("#teachername").val();
+				var path = $("#path").val();
+				$.ajax({
+					url: path + "/director/selectTeacherName",
+					async: true,
+					type: "post",
+					data: {"teachername": teachername},
+					dataType: "text",
+					success: function (msg) {
+						if (msg === "success") {
+							layer.msg("教师名称已存在，请更改！");
+							$("#teachername").focus();
+						}
+					},
+					error: function () {
+						layer.alert("网络繁忙");
+					}
+				});
+			});
+		})
 	});
 </script>
 </body>

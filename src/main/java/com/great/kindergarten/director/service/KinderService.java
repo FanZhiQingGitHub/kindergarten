@@ -20,6 +20,16 @@ public class KinderService
 	@Resource
 	private KinderMapper kinderMapper;
 
+	//判断对应的园所名称是不是唯一
+	public TblKinder selectKinderName(String kindername){
+		return kinderMapper.selectKinderName(kindername);
+	}
+
+	//判断对应的园所账号是不是唯一
+	public TblKinder selectKinderAccount(String kinderacount){
+		return kinderMapper.selectKinderAccount(kinderacount);
+	}
+
 	//申请园所
 	@Transactional
 	public int addKinderMsg(TblKinder tblKinder)
@@ -80,7 +90,10 @@ public class KinderService
 	/*
 	 * 班级管理
 	 * */
-	//查询对应的班级有哪些老师
+	//判断对应的班级有哪些老师的名称是不是重复
+	public TblClass selectClassName(String classname){
+		return kinderMapper.selectClassName(classname);
+	}
 
 	//查找对应的所有学生信息
 	public List<TblTeacher> findTeacherClassAll()

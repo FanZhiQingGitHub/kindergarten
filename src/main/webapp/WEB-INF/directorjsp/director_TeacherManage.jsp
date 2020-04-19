@@ -55,7 +55,7 @@
 		//第一个实例
 		table.render({
 			elem: '#demo'
-			, height: 312
+			, height: 332
 			, limit: 5//设置的一页要有几条的记录
 			, limits: [5, 10]//设置的是对应的是有几个内容值
 			, url: src + '/director/selectTeacherManage' //数据接口

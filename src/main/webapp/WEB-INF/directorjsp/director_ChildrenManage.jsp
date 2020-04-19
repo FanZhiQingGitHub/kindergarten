@@ -82,6 +82,7 @@
 					field: 'studenttime', title: '创建时间', align: 'center', width: 180,
 					templet: "<div>{{layui.util.toDateString(d.studenttime,'yyyy-MM-dd HH:mm')}}</div>"
 				}
+				,{field: 'studentadd', title: '地址', sort: true, align: 'center', width: 180}
 				, {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo'}
 			]]
 		});
@@ -138,7 +139,9 @@
 								layer.alert("请选择宝宝性别！");
 							} else if (formData.studentbrith.length == 0) {
 								layer.alert("请选择宝宝出生年月！");
-							} else {
+							}else if(formData.studentadd.length == 0){
+								layer.alert("请输入对应的宝宝的地址信息！");
+							}  else {
 								$.ajax({
 									url: src + '/director/updateChildrenTable',
 									type: 'post',
@@ -170,7 +173,8 @@
 							$(window.frames[frameId].document).find("#studentid").val(data.studentid);
 							$(window.frames[frameId].document).find("#studentname").val(data.studentname);
 							$(window.frames[frameId].document).find("#studentsex").val(data.studentsex).prop("selected", true);
-							$(window.frames[frameId].document).find("#studentbrith").val(studentbirths);
+							$(window.frames[frameId].document).find("#studentbrith").val(data.studentbrith);
+							$(window.frames[frameId].document).find("#studentadd").val(data.studentadd);
 							iframeWindow.layui.form.render(); //更新全部
 						}
 					});

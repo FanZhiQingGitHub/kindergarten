@@ -53,30 +53,30 @@
 		var form = layui.form;
 		$ = layui.$;
 		var layer = layui.layer;
-		//对应的班级ID的删除-正则表达式的判断
-		// var classid = $("#classid").val();
-		// var src = $("#path").val();
-		// if ("" != classid || null != classid) {
-		// 	console.log("对应修改" + classid);
-		// 	$("#classname").on('blur', function () {
-		// 		console.log("点击事件=" + classid);
-		// 		$.ajax({
-		// 			url: src + '/director/selectTeacherByCid',
-		// 			type: 'post'
-		// 			, data: {"classid": classid},
-		// 			dataType: "text",
-		// 			success: function (data) {
-		// 				console.log("--" + data.toString());
-		// 			}, error: function (err) {
-		// 				console.log(err);
-		// 			}
-		// 		});
-		// 	});
-		// }
+		$(function () {
+			//班级名字判断是不是重复
+			$("#classname").on('blur', function () {
+				var classname = $("#classname").val();
+				var path = $("#path").val();
+				$.ajax({
+					url: path + "/director/selectClassName",
+					async: true,
+					type: "post",
+					data: {"classname": classname},
+					dataType: "text",
+					success: function (msg) {
+						if (msg === "success") {
+							layer.msg("该班级名称已存在，请更改！");
+							$("#classname").focus();
+						}
+					},
+					error: function () {
+						layer.alert("网络繁忙");
+					}
+				});
+			});
+		})
 	});
-	// function teacherchange() {
-	// 	console.log("进入方法=");
-	// }
 </script>
 </body>
 </html>

@@ -101,6 +101,29 @@
 		var form = layui.form;
 		$ = layui.$;
 		var layer = layui.layer;
+		$(function () {
+			//教师名字判断是不是重复
+			$("#parentName").on('blur', function () {
+				var parentName = $("#parentName").val();
+				var path = $("#path").val();
+				$.ajax({
+					url: path + "/director/selectParentName",
+					async: true,
+					type: "post",
+					data: {"parentName": parentName},
+					dataType: "text",
+					success: function (msg) {
+						if (msg === "success") {
+							layer.msg("家长名称已存在，请更改！");
+							$("#parentName").focus();
+						}
+					},
+					error: function () {
+						layer.alert("网络繁忙");
+					}
+				});
+			});
+		})
 	});
 </script>
 </body>

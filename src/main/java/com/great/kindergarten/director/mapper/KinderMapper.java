@@ -13,6 +13,12 @@ import java.util.Map;
 @Mapper
 public interface KinderMapper
 {
+	//判断对应的园所是不是唯一
+	public TblKinder selectKinderName(String kindername);
+
+	//判断对应的园所账号是不是唯一
+	public TblKinder selectKinderAccount(String kinderacount);
+
 	//申请园所
 	public int addKinderMsg(TblKinder tblKinder);
 
@@ -37,7 +43,7 @@ public interface KinderMapper
 	//课程管理--添加课程表
 	public int  addTblCourseInfo(List<TblCourse> tblCourseList);
 	//删除--课程表
-	public int delTblCourseInfo(int cid,int ctids);
+	public int delTblCourseInfo(int cid, int ctids);
 
 	//添加对应的课程时间表的内容
 	public int addCoursetestInfo(TblCoursetest tblCoursetest);
@@ -47,7 +53,8 @@ public interface KinderMapper
 	/*
 	 * 班级管理
 	 * */
-	//查询对应的班级有哪些老师
+	//判断对应的班级有哪些老师的名称是不是重复
+	public TblClass selectClassName(String classname);
 
 	//查找对应的所有学生信息
 	public List<TblTeacher> findTeacherClassAll();

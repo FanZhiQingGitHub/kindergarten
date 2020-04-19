@@ -9,7 +9,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>信息修改</title>
+	<title>幼儿信息修改</title>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/layui/css/layui.css">
 	<script src="${pageContext.request.contextPath}/layui/layui.js"></script>
 </head>
@@ -50,7 +50,16 @@
 		<label class="layui-form-label">出生年月：</label>
 		<div class="layui-input-inline">
 			<div class="layui-form" lay-filter="myDiv">
-				<input type="date" class="layui-input" name="studentbrith" id="studentbrith" autocomplete="off">
+				<input type="date" class="layui-input" name="studentbrith" id="studentbrith" placeholder="出生年月" autocomplete="off">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">地址：</label>
+		<div class="layui-input-inline">
+			<div class="layui-form" lay-filter="myDiv">
+				<input type="text" class="layui-input" name="studentadd" id="studentadd"
+				       autocomplete="off">
 			</div>
 		</div>
 	</div>
@@ -62,6 +71,29 @@
 		var form = layui.form;
 		$ = layui.$;
 		var layer = layui.layer;
+		$(function () {
+			//幼儿名字判断是不是重复
+			$("#studentname").on('blur', function () {
+				var studentname = $("#studentname").val();
+				var path = $("#path").val();
+				$.ajax({
+					url: path + "/director/selectStudentName",
+					async: true,
+					type: "post",
+					data: {"studentname": studentname},
+					dataType: "text",
+					success: function (msg) {
+						if (msg === "success") {
+							layer.msg("幼儿名称已存在，请更改！");
+							$("#studentname").focus();
+						}
+					},
+					error: function () {
+						layer.alert("网络繁忙");
+					}
+				});
+			});
+		})
 	});
 </script>
 </body>

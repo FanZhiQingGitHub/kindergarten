@@ -35,6 +35,12 @@ public class RectorService
 		return rectorMapper.updateByIdPwd(tblRector);
 	}
 
+	//更新对应的园长端的密码是不是正确的
+	@Transactional
+	public boolean resetRectorPwd(String rectorphone){
+		return rectorMapper.resetRectorPwd(rectorphone);
+	}
+
 	/* 教师模块设计*/
 	//查询教师对应的信息
 	public List<TblTeacher> findTeacherAll(Map<String, Object> map)
@@ -53,6 +59,11 @@ public class RectorService
 	public int delTeacherTable(int teacherid)
 	{
 		return rectorMapper.delTeacherTable(teacherid);
+	}
+
+	//判断教师的名称是不是重复
+	public TblTeacher selectTeacherName(String teachername){
+		return rectorMapper.selectTeacherName(teachername);
 	}
 
 	//	对应的教师表格信息--更新语句信息
@@ -83,6 +94,11 @@ public class RectorService
 	public Long findChildrenAllCount(Map<String, Object> map)
 	{
 		return rectorMapper.findChildrenAllCount(map);
+	}
+
+	//判断学生的名称是不是重复
+	public TblStudent selectStudentName(String studentname){
+		return rectorMapper.selectStudentName(studentname);
 	}
 
 	//对应的幼儿----新增
@@ -120,6 +136,10 @@ public class RectorService
 		return rectorMapper.findParentAllCount(map);
 	}
 
+	//判断家长的名称是不是重复
+	public TblParent selectParentName(String parentName){
+		return rectorMapper.selectParentName(parentName);
+	}
 
 	//对应的进行家长的新增
 	@Transactional

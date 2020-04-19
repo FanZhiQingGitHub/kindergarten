@@ -68,6 +68,11 @@
         update tbl_rector set rectorpwd = #{rectorpwd} where rectorid = #{rectorid}
     </update>
 
+<!--    忘记密码的重置密码-->
+    <update id="resetRectorPwd" parameterType="string">
+        UPDATE tbl_rector SET rectorpwd = 'e10adc3949ba59abbe56e057f20f883e' where rectorphone = #{rectorphone};
+    </update>
+
     <!--    教师模块设计-->
     <select id="findTeacherAll" resultMap="reTeacher" parameterType="java.util.HashMap">
         select * from tbl_teacher
@@ -88,11 +93,16 @@
         </where>
     </select>
 
-    <!--    对应的教师表格信息的删除-->
+    <!--对应的教师表格信息的删除-->
     <delete id="delTeacherTable" parameterType="int">
         delete from tbl_teacher
         where teacherid = #{teacherid}
     </delete>
+
+    <!--查找判断对应的园所账号是不是唯一-->
+    <select id="selectTeacherName" resultType="TblTeacher" parameterType="string">
+        select * from tbl_teacher where teachername = #{teachername}
+    </select>
 
     <!--对应的教师表格信息....更新语句信息-->
     <update id="updateTeacherById" parameterType="TblTeacher">
@@ -160,17 +170,30 @@
         </where>
     </select>
 
+    <!--查找判断对应的学生账号是不是唯一-->
+    <select id="selectStudentName" resultType="TblStudent" parameterType="string">
+        select * from tbl_student where studentname = #{studentname}
+    </select>
+
     <!--对应的进行幼儿的新增-->
     <insert id="addChildrenForm" parameterType="TblStudent">
 		insert into tbl_student(
 		    studentname
 			,studentsex
 			,studentbrith
+			,studentadd
+			,studentstatus
+			,studentlng
+			,studentlat
 			,studenttime
 		)values(
 		    #{studentname}
 			,#{studentsex}
 			,#{studentbrith}
+			,#{studentadd}
+			,#{studentstatus}
+            ,#{studentlng}
+			,#{studentlat}
 			,#{studenttime})
 	</insert>
 
@@ -186,6 +209,7 @@
         set  studentname = #{studentname}
             ,studentsex = #{studentsex}
             ,studentbrith = #{studentbrith}
+            ,studentadd = #{studentadd}
         where studentid = #{studentid}
     </update>
 
@@ -213,6 +237,11 @@
                 and parentname like "%"#{parentname}"%"
             </if>
         </where>
+    </select>
+
+    <!--查找判断对应的家长账号是不是唯一-->
+    <select id="selectParentName" resultType="TblParent" parameterType="string">
+        select * from tbl_parent where parentName = #{parentName}
     </select>
 
     <!--对应的进行家长的新增-->

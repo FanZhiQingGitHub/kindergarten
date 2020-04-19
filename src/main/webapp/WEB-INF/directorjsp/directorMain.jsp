@@ -50,7 +50,7 @@
 </head>
 <body>
 <input type="hidden" value="${pageContext.request.contextPath}" id="path"/>
-<input type="hidden" id="kindername" value="${kindername}">
+
 <!-- header -->
 <div class="header_box">
     <ul class="layui-nav layui-layout-right" style="background-color: white;">
@@ -286,10 +286,10 @@
         });
 
         //查看对应的消息内容
-	   $(".showNewsInfo").on('click',function () {
-		   var shownews = $(this).parents('div').children('a').text();
-			console.log("对应进行显示="+shownews);
-	   });
+        $(".showNewsInfo").on('click',function () {
+            var shownews = $(this).parents('div').children('a').text();
+            console.log("对应进行显示="+shownews);
+        });
 
         //退出到首页
 	    $("#exit").on('click',function () {

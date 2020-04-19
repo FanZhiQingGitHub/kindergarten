@@ -39,7 +39,7 @@ import java.util.List;
 @RequestMapping("/director")
 public class RectorController
 {
-	private String vcode;
+	//	private String vcode;
 
 	@Resource
 	private RectorService rectorService;
@@ -58,8 +58,7 @@ public class RectorController
 
 	@Resource
 	TblCourse tblCourse;
-	//	@Resource
-	//	TblTeacher tblTeacher;
+
 	//结果集的处理
 	@Resource
 	DateTable dateTable;
@@ -132,7 +131,6 @@ public class RectorController
 	@RequestMapping("/directorLogin")
 	public void loginCode(String username, String userpwd, String code, HttpServletRequest request, HttpServletResponse response)
 	{
-		//        request.getSession().setAttribute("username", username);
 		tblRector.setRectorname(username);
 		String md5pwd = MD5Utils.md5(userpwd);
 		System.out.println("密码是：" + md5pwd);
@@ -142,8 +140,9 @@ public class RectorController
 		System.out.println(tblRectors);
 		if (null != tblRectors)
 		{
-			String rectorstatus =  tblRectors.getRectorstatus();
-			if(rectorstatus.equals("启用")){
+			String rectorstatus = tblRectors.getRectorstatus();
+			if (rectorstatus.equals("启用"))
+			{
 				request.getSession().setAttribute("logintblRector", tblRectors);
 				String PicCode = (String) request.getSession().getAttribute("PicCode");
 				code = code.toLowerCase();
@@ -159,10 +158,25 @@ public class RectorController
 					System.out.println("前台验证码失败！");
 					ResponseUtils.outHtml(response, "codeerror");
 				}
-			}else{
+			} else
+			{
 				System.out.println("前台用户是不是启用！");
 				ResponseUtils.outHtml(response, "notmen");
 			}
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//	重置密码
+	@RequestMapping("/resetRectorPwd")
+	public void resetRectorPwd(String rectorphone, HttpServletResponse response)
+	{
+		boolean result = rectorService.resetRectorPwd(rectorphone);
+		if (result)
+		{
+			ResponseUtils.outHtml(response, "success");
 		} else
 		{
 			ResponseUtils.outHtml(response, "error");
@@ -189,7 +203,7 @@ public class RectorController
 		}
 	}
 
-	//	updatePwd更新密码
+	//更新密码
 	@RequestMapping("/updatePwd")
 	public void updatePwd(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -234,6 +248,38 @@ public class RectorController
 		response.sendRedirect(request.getContextPath() + "/director/toUrl/directorLogin");
 	}
 
+	/*
+	 * 园所审批--判断名称是不是重复
+	 * */
+	@RequestMapping("/selectKinderName")
+	public void selectKinderName(String kindername, HttpServletRequest request, HttpServletResponse response)
+	{
+		TblKinder tblKinder = kinderService.selectKinderName(kindername);
+		if (null != tblKinder)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	/*
+	 * 园所审批--判断账号是不是重复
+	 * */
+	@RequestMapping("/selectKinderAccount")
+	public void selectKinderAccount(String kinderacount, HttpServletRequest request, HttpServletResponse response)
+	{
+		TblKinder tblKinder = kinderService.selectKinderAccount(kinderacount);
+		if (null != tblKinder)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
 	//园所申请审批
 	@RequestMapping("/directorReg")
 	public void directorReg(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response) throws ParseException
@@ -253,7 +299,7 @@ public class RectorController
 		}
 	}
 
-	//对应的是园所教师信息查询和显示selectTeacherManage
+	//教师管理--信息查询和显示selectTeacherManage
 	@RequestMapping("/selectTeacherManage")
 	public void selectTeacherManage(HttpServletRequest request, HttpServletResponse response) throws ParseException, UnsupportedEncodingException
 	{
@@ -305,7 +351,6 @@ public class RectorController
 	}
 
 	//园所-----教师信息----进行对应的删除操作
-	//删除对应表格的内容的值
 	@RequestMapping("/delTeacherTable")
 	public void delTable(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -315,6 +360,20 @@ public class RectorController
 
 		int result = rectorService.delTeacherTable(teacherid);
 		if (result > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//教师管理--判断修改的教师名是不是重复的名字
+	@RequestMapping("/selectTeacherName")
+	public void selectTeacherName(String teachername, HttpServletRequest request, HttpServletResponse response)
+	{
+		TblTeacher tblTeacher = rectorService.selectTeacherName(teachername);
+		if (null != tblTeacher)
 		{
 			ResponseUtils.outHtml(response, "success");
 		} else
@@ -451,11 +510,29 @@ public class RectorController
 		}
 	}
 
+	//幼儿管理--判断修改的幼儿名是不是重复的名字
+	@RequestMapping("/selectStudentName")
+	public void selectStudentName(String studentname, HttpServletRequest request, HttpServletResponse response)
+	{
+		TblStudent tblStudent = rectorService.selectStudentName(studentname);
+		if (null != tblStudent)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
 	//	幼儿信息的增加
 	@RequestMapping("/addChildrenForm")
 	protected void addChildrenForm(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		tblStudent.setStudenttime(new Date());
+		tblStudent.setStudentstatus("启用");
+		tblStudent.setStudentlng("118.19320");
+		tblStudent.setStudentlat("24.48854");
+
 		int result = rectorService.addChildrenForm(tblStudent);
 		if (result > 0)
 		{
@@ -494,11 +571,13 @@ public class RectorController
 		String studentname = request.getParameter("studentname");
 		String studentsex = request.getParameter("studentsex");
 		String studentbrith = request.getParameter("studentbrith");
+		String studentadd = request.getParameter("studentadd");
 
 		tblStudent.setStudentid(studentids);
 		tblStudent.setStudentname(studentname);
 		tblStudent.setStudentsex(studentsex);
 		tblStudent.setStudentbrith(studentbrith);
+		tblStudent.setStudentadd(studentadd);
 
 		System.out.println("内容是=" + tblStudent);
 		int result = rectorService.updateChildrenById(tblStudent);
@@ -577,6 +656,20 @@ public class RectorController
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
 			ResponseUtils.outJson(response, dateTable);
+		}
+	}
+
+	//家长信息--判断修改的家长名是不是重复的名字
+	@RequestMapping("/selectParentName")
+	public void selectParentName(String parentName, HttpServletRequest request, HttpServletResponse response)
+	{
+		TblParent tblParent = rectorService.selectParentName(parentName);
+		if (null != tblParent)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
 		}
 	}
 
@@ -753,7 +846,8 @@ public class RectorController
 		String currentmonday = "1";
 		String currentsonday = "7";
 		String dafultsid = request.getParameter("classid");
-		if(dafultsid!=null&&"" !=dafultsid){
+		if (dafultsid != null && "" != dafultsid)
+		{
 			System.out.println("课程对应的信息：" + dafultsid);
 
 			int classid = Integer.valueOf(dafultsid);
@@ -804,7 +898,7 @@ public class RectorController
 				response.setCharacterEncoding("UTF-8");
 				ResponseUtils.outJson(response, dateTable);
 			}
-		}else
+		} else
 		{
 			System.out.println("输出项目=异常情况");
 			dateTable.setCode(201);
@@ -951,9 +1045,24 @@ public class RectorController
 
 	}
 
+
 	/*
 	 * 班级模块--增删改
 	 * */
+	//判断修改的班级名是不是重复的名字
+	@RequestMapping("/selectClassName")
+	public void selectClassName(String classname, HttpServletRequest request, HttpServletResponse response)
+	{
+		TblClass tblClass = kinderService.selectClassName(classname);
+		if (null != tblClass)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
 	//班级管理的新增记录内容
 	@RequestMapping("/addClassForm")
 	protected void addClassForm(TblClass tblClass, String teachername, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -1419,7 +1528,7 @@ public class RectorController
 
 		if (0 != tblTertimeList.size())
 		{
-			System.out.println("输出的考勤信息是="+tblTertimeList);
+			System.out.println("输出的考勤信息是=" + tblTertimeList);
 			ResponseUtils.outJson(response, tblTertimeList);
 		} else
 		{
@@ -1430,11 +1539,11 @@ public class RectorController
 
 	//在线聊天的内容显示
 	// 跳转到登录页面
-//	@RequestMapping(value = "loginpage", method = RequestMethod.GET)
-//	public ModelAndView loginpage()
-//	{
-//		return new ModelAndView("views/login");
-//	}
+	//	@RequestMapping(value = "loginpage", method = RequestMethod.GET)
+	//	public ModelAndView loginpage()
+	//	{
+	//		return new ModelAndView("views/login");
+	//	}
 
 	// 登录进入聊天主页面
 	@RequestMapping(value = "chatLogin", method = RequestMethod.POST)
@@ -1477,7 +1586,7 @@ public class RectorController
 
 	//---------------消息通知的设置
 	@RequestMapping("/addInfoType")
-	protected void addInfoType(String infotypename,String kindername, TblInfotype tblInfotype,HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	protected void addInfoType(String infotypename, String kindername, TblInfotype tblInfotype, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		Integer kid = kinderService.selectkinderByName(kindername);
 		tblInfotype.setInfotypetime(new Date());

@@ -22,7 +22,6 @@
 	}
 </style>
 <body>
-<%--<input type="hidden" name="rectorid" id="rectorid" value="${logintblRector.rectorid}">--%>
 <form class="layui-form" action="#" lay-filter="test1">
 	<input type="hidden" value="${pageContext.request.contextPath}" id="path"/>
 	<div class="layui-form-item">
@@ -60,7 +59,6 @@
 		var src = $("#path").val();
 		$("#oldpwd").on('blur', function () {
 			var oldpwd = $("#oldpwd").val();
-			console.log("按钮点击");
 			//1.获取密码的值
 			var div = document.getElementById("divoldpassword");
 			div.innerHTML = "";

@@ -186,13 +186,7 @@
 					});
 				}
 			}
-			if(type === 'cancel'){
-				layer.confirm('您确定退出到园长端首页吗?', {icon: 3, title: '温馨提示'}, function (index) {
-					window.location.href = src+"/director/toUrl/directorMain";
-					return true;
-				});
-				return false;
-			}
+
 		});
 
 		var s = $("#demoReload").val();
@@ -269,6 +263,13 @@
 						console.log(layero, index);
 					}
 				});
+			}
+			if(type === 'cancel'){
+				layer.confirm('您确定退出到园长端首页吗?', {icon: 3, title: '温馨提示'}, function (index) {
+					window.location.href = src+"/director/toUrl/directorMain";
+					return true;
+				});
+				return false;
 			}
 		});
 

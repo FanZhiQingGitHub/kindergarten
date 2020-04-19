@@ -19,6 +19,8 @@ public interface RectorMapper
 	//更新密码
 	public int updateByIdPwd(TblRector tblRector);
 
+	//更新对应的园长端的密码是不是正确的
+	public boolean resetRectorPwd(String rectorphone);
 
 	/*
 	 * 教师模块的设计
@@ -31,6 +33,9 @@ public interface RectorMapper
 
 	//对应的教师表格信息的删除
 	public int delTeacherTable(int teacherid);
+
+	//判断教师的名称是不是重复
+	public TblTeacher selectTeacherName(String teachername);
 
 	//	对应的教师表格信息--更新语句信息
 	public int updateTeacherById(TblTeacher tblTeacher);
@@ -46,6 +51,9 @@ public interface RectorMapper
 
 	//幼儿模块--查询记录条数
 	public Long findChildrenAllCount(Map<String, Object> map);
+
+	//判断学生的名称是不是重复
+	public TblStudent selectStudentName(String studentname);
 
 	//对应的进行幼儿的新增
 	public int addChildrenForm(TblStudent tblStudent);
@@ -64,6 +72,9 @@ public interface RectorMapper
 
 	//家长模块--查询家长和学生记录条数
 	public Long findParentAllCount(Map<String, Object> map);
+
+	//判断家长的名称是不是重复
+	public TblParent selectParentName(String parentName);
 
 	//对应的进行幼儿的新增
 	public int addParentForm(TblParent tblParent);

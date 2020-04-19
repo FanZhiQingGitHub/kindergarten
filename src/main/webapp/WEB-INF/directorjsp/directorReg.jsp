@@ -32,21 +32,17 @@
         }
 
         #hh1 {
-            /*color: white;*/
             font-weight: bold;
             font-size: 55px;
-            /*margin-left: 32.3%;*/
             margin-top: 3%;
             text-align: center;
             font-family: 楷体;
         }
 
         .container {
-            position: absolute;
+            position: relative;
             width: 38%;
-            height: 60%;
             min-height: 33%;
-            /*max-height: 33%;*/
             top: 15px;
             left: 0;
             bottom: 0;
@@ -55,18 +51,19 @@
             padding: 8px;
             z-index: 130;
             border-radius: 10px;
-            background-color: rgba(240, 255, 255, 0.2);
+            background-color: rgba(82, 108, 108, 0.2);
             box-shadow: 0 3px 18px rgba(240, 255, 255, 0.2);
             font-size: 16px;
         }
-
-        .layui-input-inline{
+        .layui-form-item .layui-input-inline{
             width: 300px;
         }
         .layui-form-label {
             width: 140px;
         }
-
+        /*.layui-form-item{*/
+        /*    width: 50%;*/
+        /* }*/
     </style>
 </head>
 <body>
@@ -185,7 +182,7 @@
             </div>
 
             <div class="layui-form-item">
-                <div class="layui-input-block">
+                <div class="layui-input-inline" style="margin-left: 25%;">
                     <button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="approval">
                         申请审批
                     </button>
@@ -297,6 +294,50 @@
                     return true;
                 });
                 return false;
+            });
+            //幼儿园名字判断是不是重复
+            $("#kindername").on('blur', function () {
+                var kindername = $("#kindername").val();
+                var path = $("#path").val();
+                $.ajax({
+                    url: path + "/director/selectKinderName",
+                    async: true,
+                    type: "post",
+                    data: {"kindername": kindername},
+                    dataType: "text",
+                    success: function (msg) {
+                        if (msg === "success") {
+                            layer.msg("幼儿园名称已存在，请更改！");
+                            $("#kindername").focus();
+                        }
+                    },
+                    error: function () {
+                        layer.alert("网络繁忙");
+                    }
+                });
+            });
+
+
+            //园所账号判断是不是重复
+            $("#kinderacount").on('blur', function () {
+                var kinderacount = $("#kinderacount").val();
+                var path = $("#path").val();
+                $.ajax({
+                    url: path + "/director/selectKinderAccount",
+                    async: true,
+                    type: "post",
+                    data: {"kinderacount": kinderacount},
+                    dataType: "text",
+                    success: function (msg) {
+                        if (msg === "success") {
+                            layer.msg("幼儿园账号已存在，请更改！");
+                            $("#kinderacount").focus();
+                        }
+                    },
+                    error: function () {
+                        layer.alert("网络繁忙");
+                    }
+                });
             });
         })
     });
