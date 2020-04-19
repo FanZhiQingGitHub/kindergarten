@@ -118,6 +118,23 @@
                 });
             }
         });
+
+
+        //打开监控视频
+        $('body').on('click', '.play', function () {
+            var monitorname = $(this).parents('tr').children('td').eq(1).text();
+            var videoUrl = $(this).parents('tr').children('td').eq(3).text();
+            layer.open({
+                //打开一个窗口播放视频
+                type: 1,
+                area: ['100%', '100%'],
+                offset:['0%','0%'],
+                title:monitorname,
+                content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
+                    '<source src="${pageContext.request.contextPath}/'+videoUrl+'" type="video/mp4"></source></video>'
+                //直接跳出一个标签播放视频
+            });
+        });
     });
 
 </script>

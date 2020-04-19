@@ -59,11 +59,6 @@ public class ParentController {
 
     @RequestMapping("/toUrl/{url}")
     public String toUrl(@PathVariable String url, HttpServletRequest request) {
-//        if (url.equals("FaceID")) {
-//            //查找所有宝宝信息，用于电子围栏宝宝名称下拉框查询
-//            List<TblStudent> tblStudentList = parentService.findAllStuInfo();
-//            request.getSession().setAttribute("tblStudentList", tblStudentList);
-//        }
         return "parentJsp/" + url;
     }
 
