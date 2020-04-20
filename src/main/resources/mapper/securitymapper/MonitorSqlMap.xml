@@ -29,4 +29,18 @@
          select count(*) from tbl_monitor mo ,tbl_kinder kin where mo.kid = kin.kinderid
     </select>
 
+<!--直播权限管理-->
+<!--    查找班级信息-->
+    <select id="findClassInfoInfo" resultType="com.great.kindergarten.commons.entity.TblClass"
+            parameterType="com.great.kindergarten.security.resultbean.ClassPage">
+        select * from tbl_class limit #{page},#{limit}
+    </select>
+
+    <select id="findClassInfoCount" resultType="java.lang.Long"
+            parameterType="com.great.kindergarten.security.resultbean.ClassPage">
+         select count(*) from tbl_class
+    </select>
+
+
+
 </mapper>

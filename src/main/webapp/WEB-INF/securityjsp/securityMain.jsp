@@ -141,7 +141,7 @@
                         <div style=" overflow:auto;" id="newsInfo">
                             <c:if test="${not empty tblCampusList}">
                                 <c:forEach items="${tblCampusList}" var="i" step="1">
-                                    <p><a class="a1" href="javascript:void(0);" style="font-size: 15px;width: 200px">${i.campusinfoname}:${i.campusinfodetail}</a><span style="font-size: 15px;margin-left: 18%">发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></span><span></span></p>
+                                    <p><a class="a1" href="javascript:void(0);" style="font-size: 15px;width: 200px">${i.campusinfoname}:${i.campusinfodetail}</a><span style="font-size: 15px;margin-left: 10%">发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></span><span></span></p>
                                 </c:forEach>
                             </c:if>
 <%--                            <a href="javascript:;">新闻一</a><br>--%>
@@ -181,8 +181,6 @@
     </div>
 </div>
 <!-- end-footer -->
-
-
 
 <script>
 

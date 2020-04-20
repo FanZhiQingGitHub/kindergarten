@@ -509,7 +509,7 @@ public class ParentController {
 
         Date dt = new Date();
         today = DateUtil.getWeekOfDate(dt);
-        if (today.equals("星期六") && today.equals("星期日")) {
+        if (today.equals("星期六") || today.equals("星期日")) {
             System.out.println("不进行新增考勤");
             ResponseUtils.outHtml(response, "notadd");
         } else {
@@ -568,8 +568,11 @@ public class ParentController {
             TblStutime tblStutime1 = parentService.findPmTimeId(timeamdate);
             if (tblStutime1 == null) {
                 System.out.println("下午考勤表中不存在今天的日期");
+                System.out.println("timeamdate="+timeamdate);
                 parentService.addPmDate(timeamdate);
                 TblStutime tblStutime2 = parentService.findPmTimeId(timeamdate);
+
+                System.out.println("tblStutime2=" + tblStutime2);
                 System.out.println("当天下午的考勤id=" + tblStutime2.getTimepmid());
                 tblStutime.setPmid(tblStutime2.getTimepmid());//今天下午的考勤表id
                 tblStutime.setSid(studentid);
@@ -709,7 +712,7 @@ public class ParentController {
         System.out.println("sunday="+sunday);
 
         List<TblDate> tblDateList = parentService.findDateInfo(monday, sunday);//查询是否存在本周一和周日的日期
-        if (today.equals("星期六") && today.equals("星期日")) {
+        if (today.equals("星期六") || today.equals("星期日")) {
             System.out.println("周末不需要进行请假");
             ResponseUtils.outHtml(response, "notadd");
         } else {
