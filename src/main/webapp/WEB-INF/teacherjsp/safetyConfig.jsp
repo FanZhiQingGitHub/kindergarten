@@ -36,34 +36,34 @@
 
 		</div>
 	</div>
-<%--		<div class="layui-form-item" style="display: inline-block;width: 24%;">--%>
-<%--			<label class="layui-form-label">布置时间：</label>--%>
-<%--			<div class="layui-input-inline">--%>
-<%--				<input type="text" class="layui-input" id="startDate" name="${startDate}" placeholder="请选择起始日期">--%>
-<%--			</div>--%>
-<%--		</div>--%>
-<%--		<div class="layui-form-item" style="display: inline-block;width: 24%;">--%>
-<%--			<label class="layui-form-label">完成时间：</label>--%>
-<%--			<div class="layui-input-inline" style="text-align: left;">--%>
-<%--				<input type="text" class="layui-input" id="endDate" name="${endDate}" placeholder="请选择结束日期">--%>
-<%--			</div>--%>
-<%--		</div>--%>
+	<%--		<div class="layui-form-item" style="display: inline-block;width: 24%;">--%>
+	<%--			<label class="layui-form-label">布置时间：</label>--%>
+	<%--			<div class="layui-input-inline">--%>
+	<%--				<input type="text" class="layui-input" id="startDate" name="${startDate}" placeholder="请选择起始日期">--%>
+	<%--			</div>--%>
+	<%--		</div>--%>
+	<%--		<div class="layui-form-item" style="display: inline-block;width: 24%;">--%>
+	<%--			<label class="layui-form-label">完成时间：</label>--%>
+	<%--			<div class="layui-input-inline" style="text-align: left;">--%>
+	<%--				<input type="text" class="layui-input" id="endDate" name="${endDate}" placeholder="请选择结束日期">--%>
+	<%--			</div>--%>
+	<%--		</div>--%>
 
 
-<%--	<div class="layui-upload-list">--%>
-<%--		<table class="layui-table">--%>
-<%--			<thead>--%>
-<%--			<tr>--%>
-<%--				<th>视频名称</th>--%>
-<%--				<th>大小 </th>--%>
-<%--				<th>状态 </th>--%>
-<%--				<th>操作</th>--%>
-<%--			</tr></thead>--%>
-<%--			<tbody id="demoList"></tbody>--%>
-<%--		</table>--%>
-<%--	</div>--%>
-<%--	<button type="button" class="layui-btn" id="testListAction">开始上传</button>--%>
-<%--</div>--%>
+	<%--	<div class="layui-upload-list">--%>
+	<%--		<table class="layui-table">--%>
+	<%--			<thead>--%>
+	<%--			<tr>--%>
+	<%--				<th>视频名称</th>--%>
+	<%--				<th>大小 </th>--%>
+	<%--				<th>状态 </th>--%>
+	<%--				<th>操作</th>--%>
+	<%--			</tr></thead>--%>
+	<%--			<tbody id="demoList"></tbody>--%>
+	<%--		</table>--%>
+	<%--	</div>--%>
+	<%--	<button type="button" class="layui-btn" id="testListAction">开始上传</button>--%>
+	<%--</div>--%>
 </body>
 <script>
 	layui.use(['upload','form','laydate'], function(){
@@ -71,8 +71,8 @@
 		var $ = layui.jquery
 			,upload = layui.upload
 
-		// var startDate=$("#startDate").val();
-		// var	endDate=$("#endDate").val()
+			// var startDate=$("#startDate").val();
+			// var	endDate=$("#endDate").val()
 
 			,path = $("#path").val();
 

@@ -1,8 +1,11 @@
 package com.great.kindergarten.commons.entity;
 
+import org.springframework.stereotype.Component;
+
 /**
  * 相册信息实体类
  */
+@Component
 public class TblPhoto {
     private Integer photoid;
     private String photoname;
