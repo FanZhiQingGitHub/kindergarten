@@ -133,7 +133,7 @@
 
     <!--    查找宝宝的所有信息，作为搜索条件-->
     <select id="findAllStuInfo" resultType="com.great.kindergarten.commons.entity.TblStudent">
-        select * from tbl_student
+        select * from tbl_student stu,tbl_parent pa where stu.pid = pa.parentid where pa.parentName = #{parentName}
     </select>
 
 

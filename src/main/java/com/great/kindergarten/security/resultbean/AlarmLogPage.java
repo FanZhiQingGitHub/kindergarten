@@ -4,6 +4,7 @@ package com.great.kindergarten.security.resultbean;
  * 报警日志信息分页实体类
  */
 public class AlarmLogPage {
+    private String kindername;
     private Object time1;
     private Object time2;
     private Integer page;//从第几条开始
@@ -12,11 +13,20 @@ public class AlarmLogPage {
     public AlarmLogPage() {
     }
 
-    public AlarmLogPage(Object time1, Object time2, Integer page, Integer limit) {
+    public AlarmLogPage(String kindername, Object time1, Object time2, Integer page, Integer limit) {
+        this.kindername = kindername;
         this.time1 = time1;
         this.time2 = time2;
         this.page = page;
         this.limit = limit;
+    }
+
+    public String getKindername() {
+        return kindername;
+    }
+
+    public void setKindername(String kindername) {
+        this.kindername = kindername;
     }
 
     public Object getTime1() {
@@ -54,7 +64,8 @@ public class AlarmLogPage {
     @Override
     public String toString() {
         return "AlarmLogPage{" +
-                "time1=" + time1 +
+                "kindername='" + kindername + '\'' +
+                ", time1=" + time1 +
                 ", time2=" + time2 +
                 ", page=" + page +
                 ", limit=" + limit +

@@ -116,11 +116,6 @@
             ]],
         });
 
-        //新增权限管理
-        $('body').on('click', '.addPowerManager', function () {
-            layer.msg("敬请期待");
-        });
-
         //修改权限管理
         $('body').on('click', '.updatePowerManager', function () {
             var classid = $(this).parents('tr').children('td').eq(0).text();

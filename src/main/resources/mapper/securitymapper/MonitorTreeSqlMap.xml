@@ -38,5 +38,10 @@
         </foreach>
     </insert>
 
+<!--    根据班级id查，看这个班级是否有配置监控查看区域权限-->
+    <select id="findMonitorInfoCont" resultType="java.lang.Long" parameterType="java.lang.Integer">
+        select count(*) from tbl_clamon con where con.cid = #{cid}
+    </select>
+
 
 </mapper>

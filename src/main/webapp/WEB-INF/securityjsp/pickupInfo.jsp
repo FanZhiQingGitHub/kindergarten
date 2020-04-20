@@ -66,7 +66,7 @@
                 </div>
 
 
-                <button type="button" class="layui-btn layui-btn-normal" data-type="reload"><i class="layui-icon">&#xe615;</i>搜索体检信息</button>
+                <button type="button" class="layui-btn layui-btn-normal" data-type="reload"><i class="layui-icon">&#xe615;</i>查询体检信息</button>
 
             </div>
         </div>

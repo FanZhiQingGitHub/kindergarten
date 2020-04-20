@@ -450,7 +450,11 @@ public class ParentController {
     @RequestMapping("/regFaceId")
     public void regFaceId(HttpServletRequest request, HttpServletResponse response) {
         String face = request.getParameter("face");
-        FaceRecognitionUtils.faceRegister(face, "testPhoto1");
+        //String name
+        FaceRecognitionUtils.faceRegister(face, "name");
+
+        //加到数据库
+
         System.out.println("face=" + face);
     }
 

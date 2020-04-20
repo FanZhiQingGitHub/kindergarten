@@ -80,6 +80,7 @@ public class SecurityService {
         return securityMapper.findStuLngLetInfo(stumap);
     }
 
+
     @Transactional
     public Boolean addAlarmLogInfo(List<TblAlarmLog> tblAlarmLogList){
         return securityMapper.addAlarmLogInfo(tblAlarmLogList);
@@ -163,9 +164,21 @@ public class SecurityService {
         return securityMapper.deleteMnId(classid);
     }
 
+    public Long findMonitorInfoCont(Integer cid){
+        return securityMapper.findMonitorInfoCont(cid);
+    }
+
     @Transactional
     public Boolean updateTblClamon(List list){
         return securityMapper.updateTblClamon(list);
+    }
+
+    public List<TblMonitor> findALLMonitorInfoMag(MonitorPage monitorPage){
+        return securityMapper.findALLMonitorInfoMag(monitorPage);
+    }
+
+    public Long findALLMonitorInfoCountMag(MonitorPage monitorPage){
+        return securityMapper.findALLMonitorInfoCountMag(monitorPage);
     }
 
 }

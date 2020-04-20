@@ -15,23 +15,24 @@
         select * from tbl_student where studentid = #{studentid} and studentname = #{studentname} and studentbrith = #{studentbrith}
     </select>
 
+
     <!--    新增报警信息-->
     <insert id="addAlarmLogInfo" parameterType="java.util.List">
         insert into
-        tbl_alarmlog(alarmlogname,alarmlogarea,alarmlogtime,studentname,sid)
+        tbl_alarmlog(alarmlogname,alarmlogarea,alarmlogtime,studentname,sid,kid)
         values
         <foreach collection="list" item="i" index="index" separator=",">
-            (#{i.alarmlogname},#{i.alarmlogarea},#{i.alarmlogtime},#{i.studentname},#{i.sid})
+            (#{i.alarmlogname},#{i.alarmlogarea},#{i.alarmlogtime},#{i.studentname},#{i.sid},#{i.kinderid})
         </foreach>
     </insert>
 
-    <!--    查找宝宝体检信息表-->
+    <!--    查找宝宝报警信息表-->
     <select id="findAlarmInfo" resultType="com.great.kindergarten.commons.entity.TblAlarmLog"
             parameterType="com.great.kindergarten.security.resultbean.AlarmLogPage">
         select al.alarmlogid,al.alarmlogname,al.studentname,al.alarmlogarea,al.alarmlogtime from tbl_alarmlog
-        al,tbl_student stu
+        al,tbl_student stu,tbl_kinder kin
         <where>
-            al.sid = stu.studentid
+            al.sid = stu.studentid and kin.kinderid = al.kid and kin.kindername = #{kindername}
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(al.alarmlogtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -42,12 +43,12 @@
         order by al.alarmlogtime desc limit #{page},#{limit}
     </select>
 
-    <!--    查找宝宝体检信息表-->
+    <!--    查找宝宝报警信息表记录数-->
     <select id="findAlarmInfoCount" resultType="java.lang.Long"
             parameterType="com.great.kindergarten.security.resultbean.AlarmLogPage">
-        select count(*) from tbl_alarmlog al,tbl_student stu
+        select count(*) from tbl_alarmlog al,tbl_student stu ,tbl_kinder kin
         <where>
-            al.sid = stu.studentid
+            al.sid = stu.studentid and kin.kinderid = al.kid and kin.kindername = #{kindername}
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(al.alarmlogtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>

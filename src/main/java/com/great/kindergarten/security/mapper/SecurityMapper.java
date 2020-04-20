@@ -66,7 +66,11 @@ public interface SecurityMapper {
 
     public Boolean deleteMnId(Integer classid);
 
+    public Long findMonitorInfoCont(Integer cid);
+
     public Boolean updateTblClamon(List list);
 
+    public List<TblMonitor> findALLMonitorInfoMag(MonitorPage monitorPage);
 
+    public Long findALLMonitorInfoCountMag(MonitorPage monitorPage);
 }

@@ -57,7 +57,7 @@
 
     <script type="text/html" id="butdiv">
 
-        <button class="layui-btn layui-btn-sm layui-btn-normal play"><i class="layui-icon">&#xe652;</i>播放</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal play"><i class="layui-icon">&#xe652;</i>播放视频</button>
 
     </script>
 

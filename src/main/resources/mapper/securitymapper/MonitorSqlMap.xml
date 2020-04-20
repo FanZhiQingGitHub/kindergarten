@@ -4,52 +4,66 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.great.kindergarten.security.mapper.SecurityMapper">
 
-    <resultMap id="monitorInfoMap" type="com.great.kindergarten.commons.entity.TblMonitor">
-        <id property="monitorid" column="monitorid"></id>
-        <result property="monitorname" column="monitorname"></result>
-        <result property="monitorimgurl" column="monitorimgurl"></result>
-        <result property="monitormvurl" column="monitormvurl"></result>
-        <result property="kid" column="kid"></result>
-        <result property="kinderid" column="kinderid"></result>
-        <result property="kindername" column="kindername"></result>
-        <association property="tblKinder" javaType="com.great.kindergarten.commons.entity.TblKinder">
-            <id property="kinderid" column="kinderid"></id>
-            <result property="kinderid" column="kinderid"></result>
-            <result property="kindername" column="kindername"></result>
-        </association>
-    </resultMap>
-
-    <select id="findALLMonitorInfo" resultMap="monitorInfoMap"
+    <select id="findALLMonitorInfo" resultType="com.great.kindergarten.commons.entity.TblMonitor"
             parameterType="com.great.kindergarten.security.resultbean.MonitorPage">
-        select * from tbl_monitor mo ,tbl_kinder kin where mo.kid = kin.kinderid limit #{page},#{limit}
+        select mo.monitorid,moname.monitorname,mo.monitorimgurl,mo.monitormvurl,mo.kid from tbl_monitor mo ,tbl_kinder kin ,tbl_monitorname moname
+        where mo.kid = kin.kinderid and mo.monid = moname.monitornameid and kin.kindername = #{kindername}
+        limit #{page},#{limit}
     </select>
 
     <select id="findALLMonitorInfoCount" resultType="java.lang.Long"
             parameterType="com.great.kindergarten.security.resultbean.MonitorPage">
-         select count(*) from tbl_monitor mo ,tbl_kinder kin where mo.kid = kin.kinderid
+         select count(*) from tbl_monitor mo ,tbl_kinder kin ,tbl_monitorname moname where mo.kid = kin.kinderid and mo.monid = moname.monitornameid and kin.kindername = #{kindername}
+
     </select>
 
     <!--直播权限管理-->
     <!--    查找班级信息-->
     <select id="findClassInfo" resultType="com.great.kindergarten.commons.entity.TblClass"
             parameterType="com.great.kindergarten.security.resultbean.ClassPage">
-        select * from tbl_class cla ,tbl_kinder kin
-        <where>
-            cla.kid = kin.kinderid
-            <if test="kindername != '' and kindername != null ">
-                and kin.kindername = #{kindername}
-            </if>
-        </where>
+        select * from tbl_class cla ,tbl_kinder kin where cla.kid = kin.kinderid and kin.kindername = #{kindername}
         limit #{page},#{limit}
     </select>
 
     <select id="findClassInfoCount" resultType="java.lang.Long"
             parameterType="com.great.kindergarten.security.resultbean.ClassPage">
-        select count(*) from tbl_class cla ,tbl_kinder kin
+        select count(*) from tbl_class cla ,tbl_kinder kin where cla.kid = kin.kinderid and kin.kindername = #{kindername}
+    </select>
+
+<!--直播视频管理-->
+    <select id="findALLMonitorInfoMag" resultType="com.great.kindergarten.commons.entity.TblMonitor"
+            parameterType="com.great.kindergarten.security.resultbean.MonitorPage">
+        select mo.monitorid,mo.monitormvname, moname.monitorname,mo.monitormvtime,mo.monitormvurl from tbl_monitor mo ,tbl_kinder kin ,tbl_monitorname moname
         <where>
-            cla.kid = kin.kinderid
-            <if test="kindername != '' and kindername != null ">
-                and kin.kindername = #{kindername}
+            mo.kid = kin.kinderid and mo.monid = moname.monitornameid
+            and kin.kindername = #{kindername}
+            <if test="monitormvname != '' and monitormvname != null ">
+                and mo.monitormvname like CONCAT('%',#{monitormvname},'%')
+            </if>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(mo.monitormvtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(mo.monitormvtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+        </where>
+        limit #{page},#{limit}
+    </select>
+
+    <select id="findALLMonitorInfoCountMag" resultType="java.lang.Long"
+            parameterType="com.great.kindergarten.security.resultbean.MonitorPage">
+        select count(*) from tbl_monitor mo ,tbl_kinder kin ,tbl_monitorname moname
+        <where>
+            mo.kid = kin.kinderid and mo.monid = moname.monitornameid
+            and kin.kindername = #{kindername}
+            <if test="monitormvname != '' and monitormvname != null ">
+                and mo.monitormvname = #{monitormvname}
+            </if>
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(mo.monitormvtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(mo.monitormvtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
             </if>
         </where>
     </select>

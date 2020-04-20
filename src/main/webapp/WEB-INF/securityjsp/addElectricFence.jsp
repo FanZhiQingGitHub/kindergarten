@@ -142,7 +142,6 @@
                 strokeOpacity: 0.5
             });  //创建多边形
             map.addOverlay(polygon);
-            console.log(coordinatelist)
             if(coordinatelist.length == 0 ){
                 layer.alert("请绘制围栏",{icon:2});
             }else {
