@@ -73,6 +73,7 @@ public class ParentController {
           Integer readId = Integer.valueOf(request.getParameter("readId"))  ;
         Integer page  = Integer.valueOf(request.getParameter("nowPage"));
             //数据返回
+
 		return parentService.readBook(readId,page);
 	}
 

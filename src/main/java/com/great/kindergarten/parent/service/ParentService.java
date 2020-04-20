@@ -31,6 +31,7 @@ public class ParentService {
 
     public PageBean<TblReadmag> readBook(Integer readId,Integer page){
 
+
         Integer totalRecords=parentMapper.countBookById(readId);
 
         List<TblReadmag> list =  parentMapper.readBookByIdAndPage(readId, page);

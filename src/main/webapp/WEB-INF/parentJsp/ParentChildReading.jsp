@@ -30,7 +30,7 @@
 					<a href="javascript:void(0);" onclick="showDetails(this)">
 						<img src="${path}/${i.photourl}" width="200px" height="200px">
 						<div class="info">
-							<input class="readId" type="hidden" value="${i.readmagid}"/>
+							<input class="readId" type="hidden" value="${i.relatedid}"/>
 							<div class="titleNames">${i.readmagname}</div>
 						</div>
 					</a>
@@ -160,7 +160,7 @@
 				//数据回显
 				var nowPageInfo =pageInfo.list[0];
 
-				$("#pageContent").html(" "+nowPageInfo.readmagdetail);
+				$("#pageContent").html(nowPageInfo.readmagdetail);
 
 				$("#pageImg").attr('src',path+'/'+nowPageInfo.photourl);
 
@@ -177,8 +177,15 @@
 		});
 
 	}
-	
-	
+
+	$(function () {
+
+		//前往家长端主页
+		$("#backMain").click(function () {
+			window.location.href=path+"/parent/toUrl/parentMain"
+		})
+
+	});
 
 	//显示隐藏的详情页面
 	function showDetails(node) {

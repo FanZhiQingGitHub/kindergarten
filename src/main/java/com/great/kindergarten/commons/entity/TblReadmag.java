@@ -18,18 +18,26 @@ public class TblReadmag {
     private Date readmagtime;
     private Integer readmagpage;
     private String photourl;
+    private Integer relatedid;
     private String time1;
     private String time2;
 
     public TblReadmag() {
     }
 
-    public TblReadmag(Integer readmagid, String readmagname, String readmagurl, String readmagdetail, Date readmagtime) {
+
+    public TblReadmag(Integer readmagid, String readmagname, String readmagurl, String readmagdetail, Date readmagtime, Integer readmagpage, String photourl, Integer relatedid, String time1, String time2)
+    {
         this.readmagid = readmagid;
         this.readmagname = readmagname;
         this.readmagurl = readmagurl;
         this.readmagdetail = readmagdetail;
         this.readmagtime = readmagtime;
+        this.readmagpage = readmagpage;
+        this.photourl = photourl;
+        this.relatedid = relatedid;
+        this.time1 = time1;
+        this.time2 = time2;
     }
 
     public Integer getReadmagid() {
@@ -112,9 +120,20 @@ public class TblReadmag {
         this.photourl = photourl;
     }
 
+    public Integer getRelatedid()
+    {
+        return relatedid;
+    }
+
+    public void setRelatedid(Integer relatedid)
+    {
+        this.relatedid = relatedid;
+    }
+
+
     @Override
     public String toString()
     {
-        return "TblReadmag{" + "readmagid=" + readmagid + ", readmagname='" + readmagname + '\'' + ", readmagurl='" + readmagurl + '\'' + ", readmagdetail='" + readmagdetail + '\'' + ", readmagtime=" + readmagtime + ", readmagpage=" + readmagpage + ", photourl='" + photourl + '\'' + ", time1='" + time1 + '\'' + ", time2='" + time2 + '\'' + '}';
+        return "TblReadmag{" + "readmagid=" + readmagid + ", readmagname='" + readmagname + '\'' + ", readmagurl='" + readmagurl + '\'' + ", readmagdetail='" + readmagdetail + '\'' + ", readmagtime=" + readmagtime + ", readmagpage=" + readmagpage + ", photourl='" + photourl + '\'' + ", relatedid=" + relatedid + ", time1='" + time1 + '\'' + ", time2='" + time2 + '\'' + '}';
     }
 }
