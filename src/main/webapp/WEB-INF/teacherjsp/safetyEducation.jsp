@@ -33,9 +33,9 @@
 
 <div class="demoTable" style="padding: 15px">
 	<div class="layui-form-item" style="display: inline-block;width: 10%;">
-	<button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal addSafetyVideo" style="margin-top: 2px">
-		新增
-	</button>
+		<button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal addSafetyVideo" style="margin-top: 2px">
+			新增
+		</button>
 	</div>
 
 	<table id="demo" lay-filter="test">
@@ -47,7 +47,7 @@
 <div id="type-content" style="display: none;">
 	<div class="layui-form-item">
 		<div class="layui-input-block">
-<%--			<label class="layui-form-label" >选择班级：</label>--%>
+			<%--			<label class="layui-form-label" >选择班级：</label>--%>
 			<h5>选择班级：</h5>
 			<select name="selectClass" id="selectClass" lay-verify="required" style="width: 100px">
 				<option value="" selected>请选择班级</option>
@@ -83,7 +83,7 @@
 	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="SafetyTest">安全试题</a>
 	{{#  } }}
 </script>
-<script>
+<script  type="text/javascript">
 
 	layui.use(['table','laydate','layer','jquery'], function() {
 		var laydate = layui.laydate;
@@ -141,7 +141,7 @@
 		});
 
 
-        // 新增安全教育视频
+		// 新增安全教育视频
 		// $("#addSafetyVideo").click(function () {
 		// 	layer.open({
 		// 		type: 2,
@@ -217,15 +217,11 @@
 				offset: '100px',
 				btnAlign: 'c',
 				btn1: function (index) {
-
 					var classname = $("#selectClass").val();
 					var safetyvideoname = $("#selectVideoName").val();
 					var startDate= $("#startDate").val();
 					var endDate= $("#endDate").val();
-					console.log(classname);
-					console.log(safetyvideoname);
-					console.log(startDate);
-					console.log(endDate);
+
 					if (classname.length ==0 ) {
 						console.log("进来");
 						layer.alert("请选择班级", {icon: 2});
@@ -235,7 +231,10 @@
 						layer.alert("请选择开始时间", {icon: 2});
 					} else if (endDate.length ==0) {
 						layer.alert("请选择结束完成时间", {icon: 2});
-					} else {
+					}else if (endDate<startDate) {
+						layer.alert("结束时间不能小于开始时间", {icon: 2});
+					}
+					else {
 
 						$.ajax({
 							url: path + '/teacher/addSafetyConfig',
@@ -279,7 +278,7 @@
 			var data = obj.data //获得当前行数据
 				, layEvent = obj.event; //获得 lay-event 对应的值
 
-             //事件等于做安全试题
+			//事件等于做安全试题
 			if (layEvent === 'SafetyTest') {
 				layer.open({
 					//打开一个窗口做题
@@ -299,7 +298,7 @@
 
 			}
 		});
-		});
+	});
 	//将表单转为js对象数据
 	function serializeObject($, array){
 		var obj=new Object();

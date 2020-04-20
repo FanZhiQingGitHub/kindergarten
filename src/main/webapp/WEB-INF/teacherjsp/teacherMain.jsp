@@ -7,7 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 <head>
@@ -53,7 +52,6 @@
 </head>
 <body>
 <input type="hidden" id="path" value="<%=path%>">
-<input type="hidden" id="kindername" value="${kindername}">
 <!-- header -->
 <div class="header_box">
 
@@ -166,7 +164,7 @@
 	</div>
 </div>
 <!-- end-footer -->
-<script>
+<script >
 
 	layui.use(['carousel', 'jquery', 'element','layer'], function () {
 		var carousel = layui.carousel, $ = layui.jquery;
@@ -286,7 +284,77 @@
 				});
 			});
 
-	});
+			// 安全教育试题完成情况
+			$("#finish").click(function () {
+				layer.open({
+					type: 2,
+					area: ['80%', '80%'],
+					offset: ['10%', '3%'],
+					title:"智慧幼儿园-安全教育试题完成情况",
+					btn1: function (index, layero) {
+						//layer.getChildFrame("form", index)获取iframe的表单
+						//serializeArray jquery方法，将表单对象序列化为数组
+						layer.close(index);
+					},
+					content: path + '/teacher/toUrl/questionFinish' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					, success: function (layero, index) {
+					}
+				});
+			});
+			// 班级考勤
+			$("#attendanceManagement").click(function () {
+				layer.open({
+					type: 2,
+					area: ['80%', '80%'],
+					offset: ['10%', '3%'],
+					title:"智慧幼儿园-班级考勤",
+					btn1: function (index, layero) {
+						//layer.getChildFrame("form", index)获取iframe的表单
+						//serializeArray jquery方法，将表单对象序列化为数组
+						layer.close(index);
+					},
+					content: path + '/teacher/toUrl/classAttendance' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					, success: function (layero, index) {
+					}
+				});
+			});
+
+			// 班级信息
+			$("#classInfo").click(function () {
+				layer.open({
+					type: 2,
+					area: ['80%', '80%'],
+					offset: ['10%', '3%'],
+					title:"智慧幼儿园-班级信息",
+					btn1: function (index, layero) {
+						//layer.getChildFrame("form", index)获取iframe的表单
+						//serializeArray jquery方法，将表单对象序列化为数组
+						layer.close(index);
+					},
+					content: path + '/teacher/toUrl/classInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					, success: function (layero, index) {
+					}
+				});
+			});
+			//班级相册
+
+			$("#classPhoto").click(function () {
+				layer.open({
+					type: 2,
+					area: ['80%', '80%'],
+					offset: ['10%', '3%'],
+					title:"智慧幼儿园-班级相册",
+					btn1: function (index, layero) {
+						//layer.getChildFrame("form", index)获取iframe的表单
+						//serializeArray jquery方法，将表单对象序列化为数组
+						layer.close(index);
+					},
+					content: path + '/teacher/toUrl/classPhoto' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					, success: function (layero, index) {
+					}
+				});
+			});
+		});
 
 	});
 </script>

@@ -175,7 +175,7 @@
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-block">
                     <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
-                    <input type="text" name="teachername" lay-verify="required" placeholder="请输入用户名" value="张三"
+                    <input type="text" name="teachername" lay-verify="required" placeholder="请输入用户名" value=""
                            autocomplete="off" class="layui-input" id="te1">
                 </div>
             </div>
@@ -184,7 +184,7 @@
                 <div class="layui-input-inline">
                     <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
                     <input type="password" name="teacherpwd" required lay-verify="pass" placeholder="请输入6-12位密码"
-                           value="123456"
+                           value=""
                            autocomplete="off" class="layui-input" id="te2">
                 </div>
             </div>
@@ -223,9 +223,9 @@
 
     layui.use(['form', 'layer', 'jquery', 'layedit', 'laydate'], function () {
         var form = layui.form
-            , layer = layui.layer
-            , layedit = layui.layedit
-            , laydate = layui.laydate;
+                , layer = layui.layer
+                , layedit = layui.layedit
+                , laydate = layui.laydate;
         $ = layui.jquery;
         form.verify({
             required: function (value) {
@@ -261,20 +261,20 @@
                             location.href = path + "/teacher/toUrl/teacherMain";
                         });
                     }else if(msg == "error"){
-                        layer.msg("登录失败！", {icon: 2});
+                        layer.alert("登录失败！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/teacher/loginCode?"+Math.random();
                     }else if(msg == "codeerror") {
-                        layer.msg("验证码错误！", {icon: 2});
+                        layer.alert("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/teacher/loginCode?"+Math.random();
                     }else if(msg == "notmen"){
-                        layer.msg("该用户已被禁用或者不存在！", {icon: 2});
+                        layer.alert("该用户已被禁用或者不存在！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/teacher/loginCode?"+Math.random();
                     }
                 }, error: function (msg) {
-                    layer.msg("网络繁忙！", {icon: 2});
+                    layer.alert("网络繁忙！", {icon: 2});
                     var code = document.getElementById("code");
                     code.src = path + "/teacher/loginCode?"+Math.random();
                 }
