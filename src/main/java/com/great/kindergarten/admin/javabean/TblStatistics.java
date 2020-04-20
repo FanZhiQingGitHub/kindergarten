@@ -4,6 +4,8 @@ public class TblStatistics
 {
 	private String studentname;
 	private String studentsex;
+	private String teachersex;
+	private String healthstatus;
 	private Integer age;
 	private String time;
 
@@ -203,9 +205,29 @@ public class TblStatistics
 		this.age = age;
 	}
 
+	public String getTeachersex()
+	{
+		return teachersex;
+	}
+
+	public void setTeachersex(String teachersex)
+	{
+		this.teachersex = teachersex;
+	}
+
+	public String getHealthstatus()
+	{
+		return healthstatus;
+	}
+
+	public void setHealthstatus(String healthstatus)
+	{
+		this.healthstatus = healthstatus;
+	}
+
 	@Override
 	public String toString()
 	{
-		return "TblStatistics{" + "studentname='" + studentname + '\'' + ", studentsex='" + studentsex + '\'' + ", age=" + age + ", time='" + time + '\'' + ", aCount=" + aCount + ", bCount=" + bCount + ", cCount=" + cCount + ", dCount=" + dCount + ", eCount=" + eCount + ", fCount=" + fCount + ", gCount=" + gCount + ", normalCount=" + normalCount + ", wellCount=" + wellCount + ", badCount=" + badCount + ", maleCount=" + maleCount + ", feMaleCount=" + feMaleCount + '}';
+		return "TblStatistics{" + "studentname='" + studentname + '\'' + ", studentsex='" + studentsex + '\'' + ", teachersex='" + teachersex + '\'' + ", healthstatus='" + healthstatus + '\'' + ", age=" + age + ", time='" + time + '\'' + ", aCount=" + aCount + ", bCount=" + bCount + ", cCount=" + cCount + ", dCount=" + dCount + ", eCount=" + eCount + ", fCount=" + fCount + ", gCount=" + gCount + ", normalCount=" + normalCount + ", wellCount=" + wellCount + ", badCount=" + badCount + ", maleCount=" + maleCount + ", feMaleCount=" + feMaleCount + '}';
 	}
 }

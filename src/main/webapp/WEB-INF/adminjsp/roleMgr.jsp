@@ -36,9 +36,9 @@
 					<div class="layui-input-inline">
 						<select name="rolename" id="rolename" lay-filter="mySelect" lay-verify="" >
 							<option value="请选择">请选择</option>
-							<c:if test="${not empty tblRoleList}">
-								<c:forEach items="${tblRoleList}" var="i">
-									<option value="${i.rolename}">${i.rolename}</option>
+							<c:if test="${not empty roleNewList}">
+								<c:forEach items="${roleNewList}" var="i">
+									<option value="${i}">${i}</option>
 								</c:forEach>
 							</c:if>
 						</select>
@@ -91,7 +91,7 @@
 			, limit: 5
 			, limits: [5, 10]
 			, cols: [[ //表头
-				{field: 'roleid', title: '序号', align: 'center', width: 80, sort: true, fixed: 'left'}
+				{field: 'roleid', title: '序号', align: 'center', width: 100, sort: true, fixed: 'left'}
 				,{field: 'rolename', title: '角色名称', align: 'center', width: 100}
 				, {fixed: 'right', title: '操作', align: 'center', width: 268, toolbar: '#barOption'}
 			]]

@@ -221,6 +221,11 @@
 									});
 								}
 							},
+							btn2:function () {
+								$("#name").val("");
+								$("#type").val("");
+								$("#val").val("");
+							}
 						});
 					});
 				}else if(layEvent === 'delete'){
@@ -284,7 +289,13 @@
 							}
 						});
 					}
+				},
+				btn2:function () {
+					$("#name2").val("");
+					$("#selType2").val("");
+					$("#val2").val("");
 				}
+
 			});
 		});
 

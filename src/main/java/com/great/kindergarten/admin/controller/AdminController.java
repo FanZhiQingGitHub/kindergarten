@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.great.kindergarten.admin.annotation.AdminSystemLog;
 import com.great.kindergarten.admin.javabean.DataResult;
+import com.great.kindergarten.admin.javabean.MenuTreeInfo;
 import com.great.kindergarten.admin.javabean.TblStatistics;
 import com.great.kindergarten.admin.service.SystemLogService;
 import com.great.kindergarten.commons.entity.*;
@@ -137,6 +138,7 @@ public class AdminController {
                     tblAdmin = adminService.adminLogin(tblAdmin);
                     if(tblAdmin != null)
                     {
+	                    HashMap<String, List<TblMenu>> menuMap = adminService.findMenus(tblAdmin.getAdminname());
 	                    List<String> teacherList = adminService.findAllJob();
 	                    List<String> teacherNewList = new ArrayList<String>();
 	                    for (String str : teacherList) {
@@ -160,15 +162,15 @@ public class AdminController {
 		                    }
 	                    }
 
-	                    System.out.println("参数类型："+parameterNewList);
-//	                    List<String> healtherList = adminService.findHealtherJob();
-//	                    List<String> healtherNewList = new ArrayList<String>();
-//	                    for (String str : healtherList) {
-//		                    if (!healtherNewList.contains(str)) {
-//			                    healtherNewList.add(str);
-//		                    }
-//	                    }
-
+	                    List<String> tblRoleList = adminService.findAllRoleName();
+	                    List<String> roleNewList = new ArrayList<String>();
+	                    for (String str : tblRoleList) {
+		                    if (!roleNewList.contains(str)) {
+			                    roleNewList.add(str);
+		                    }
+	                    }
+	                    req.getSession().setAttribute("menuMap",menuMap);
+	                    req.getSession().setAttribute("roleNewList",roleNewList);
 	                    req.getSession().setAttribute("parameterNewList", parameterNewList);
 	                    req.getSession().setAttribute("teacherNewList",teacherNewList);
 	                    req.getSession().setAttribute("teacherNewList",teacherNewList);
@@ -622,15 +624,12 @@ public class AdminController {
 		int num = adminService.findRoleCount(condition);
 		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
 		List<TblRole> roleList = adminService.findAllRoleInfo(condition,rowBounds);
-		List<TblRole> tblRoleList = adminService.findAllRoleName();
-		System.out.println("角色："+GsonUtils.getgsonUtils().toStr(tblRoleList));
 		if(roleList != null)
 		{
 			dataResult.setCode(0);
 			dataResult.setMsg("");
 			dataResult.setCount(num);
 			dataResult.setData(roleList);
-			request.getSession().setAttribute("tblRoleList",tblRoleList);
 			response.setContentType("application/json; charset=utf-8");
 			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
 			response.getWriter().flush();
@@ -2053,6 +2052,8 @@ public class AdminController {
 		List<TblStatistics> aList = adminService.findChildrenAAgeInfo();
 		List<TblStatistics> bList = adminService.findChildrenBAgeInfo();
 		List<TblStatistics> cList = adminService.findChildrenCAgeInfo();
+		List<TblStatistics> ageList = adminService.findChildrenAgeInfo();
+		List<TblStatistics> normalList = adminService.findChildrenStatusInfo();
 		if(!tblExaminationList.isEmpty())
 		{
 			response.setCharacterEncoding("utf-8");
@@ -2062,12 +2063,113 @@ public class AdminController {
 			String a = GsonUtils.getgsonUtils().toStr(aList);
 			String b = GsonUtils.getgsonUtils().toStr(bList);
 			String c = GsonUtils.getgsonUtils().toStr(cList);
-			String res = male+"@"+feMale+"@"+a+"@"+b+"@"+c;
+			String d = GsonUtils.getgsonUtils().toStr(normalList);
+			String res = male+"@"+feMale+"@"+a+"@"+b+"@"+c+"@"+d;
 			response.getWriter().print(res);
-//
 //			ResponseUtils.outJson(response,GsonUtils.getgsonUtils().toStr(tblExaminationList));
 		}else{
 			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/findTeacherStatisticsInfo")
+	public void findTeacherStatisticsInfo(TblExamination tblExamination, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		List<TblStatistics> aList = adminService.findTAgeInfo();
+		List<TblStatistics> mList = adminService.findTSexInfo();
+		if(!mList.isEmpty())
+		{
+			response.setCharacterEncoding("utf-8");
+			response.setContentType("text/html;charset=utf-8");
+			String a = GsonUtils.getgsonUtils().toStr(aList);
+			String m = GsonUtils.getgsonUtils().toStr(mList);
+			String res = m+"@"+a;
+			response.getWriter().print(res);
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/permissionAssignmentInfo")
+	public void permissionAssignmentInfo(String page, String limit, TblRole tblRole, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null != tblRole.getRolename() && !"".equals(tblRole.getRolename().trim())) {
+			condition.put("rolename",tblRole.getRolename());
+		}
+		int num = adminService.findRoleCounts(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+		List<TblRole> roleList = adminService.findRoleInfos(condition,rowBounds);
+
+		if(roleList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(roleList);
+
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@RequestMapping("/findAllMenuInfo")
+	public void findAllMenu(TblRole tblRole, HttpServletRequest req , HttpServletResponse res)
+	{
+		System.out.println(tblRole);
+		List<MenuTreeInfo> menuTreeInfos = adminService.findAllMenuInfo();
+		System.out.println("menuTreeInfos="+menuTreeInfos);
+		List<MenuTreeInfo> menuTreeInfos1 = adminService.findMenuByRoleID(tblRole.getRoleid());
+		Map map = new LinkedHashMap();
+
+		map.put("mid",menuTreeInfos1);
+		map.put("menu",menuTreeInfos);
+		if(menuTreeInfos.size() != 0)
+		{
+			ResponseUtils.outJson(res,map);
+		}else{
+			ResponseUtils.outHtml(res,"error");
+		}
+	}
+
+	@RequestMapping("/updateMenu")
+	@ResponseBody
+	//	@Log(operationType = "权限配置",operationName = "用户权限分配")
+	public void updateMenu(@RequestBody String msg, HttpServletRequest req, HttpServletResponse res) throws IOException
+	{
+		System.out.println("菜单信息=="+msg);
+		ObjectMapper mapper = new ObjectMapper();
+		TblMenu menu = mapper.readValue(msg, TblMenu.class);
+		//		Menu menu = JSON.parseObject(msg,Menu.class);
+		System.out.println(menu);
+
+		Integer rid = menu.getRid();
+		ArrayList fatherNodeId = (ArrayList) menu.getFatherNodeId();
+		ArrayList sonNodeId = (ArrayList) menu.getSonNodeId();
+		ArrayList roleMenuList = new ArrayList();
+
+		roleMenuList.addAll(fatherNodeId);
+		roleMenuList.addAll(sonNodeId);
+		List<Map<String,Integer>> list = new ArrayList<>();
+		for(int i = 0; i < roleMenuList.size(); i++)
+		{
+			Map<String,Integer> map = new LinkedHashMap<>();
+			Integer mid = Double.valueOf(roleMenuList.get(i).toString()).intValue();
+			map.put("rid",rid);
+			map.put("mid",mid);
+			list.add(map);
+		}
+		System.out.println("配置的菜单"+list);
+		int num = adminService.deleteMenuId(rid);
+		System.out.println("删除"+num);
+		int num1 = adminService.updateMenu(list);
+		if(num1 > 0)
+		{
+			ResponseUtils.outHtml(res,"success");
+		}else{
+			ResponseUtils.outHtml(res,"error");
 		}
 	}
 }
