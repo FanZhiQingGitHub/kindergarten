@@ -100,7 +100,6 @@ public class SecurityController {
                 if (null != Security) {
                     List<TblSecurity> tblSecurityList = new ArrayList<>();
                     tblSecurityList.add(Security);
-
                     kindername = (String) request.getSession().getAttribute("kindername");
                     List<TblCampus> tblCampusList = securityService.findKinderNews(kindername);
                     request.getSession().setAttribute("tblCampusList", tblCampusList);
@@ -141,6 +140,7 @@ public class SecurityController {
         }
     }
 
+    //重置安防员密码
     @RequestMapping("/resetSecuritypwd")
     public void resetSecuritypwd(TblSecurity tblSecurity, HttpServletResponse response) {
         Boolean flag = securityService.resetSecuritypwd(tblSecurity.getSecurityphone());
@@ -151,6 +151,7 @@ public class SecurityController {
         }
     }
 
+    //查找宝宝班级信息
     @RequestMapping("/findStuClassInfo")
     public void findStuClassInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Gson g = new Gson();
