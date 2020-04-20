@@ -469,9 +469,8 @@
                 var weekInfo = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
                 var week = new Date().getDay();
                 var weekToday = weekInfo[week];
-
                 // if(weekToday == "星期六" || weekToday == "星期日"){
-                //     layer.alert('亲，现在是周末哦，打卡功能暂时关闭。',{icon:6});
+                //     layer.msg('亲，现在是周末哦，打卡功能暂时关闭。',{icon:6});
                 // }else {
                     layer.open({
                         type: 2,

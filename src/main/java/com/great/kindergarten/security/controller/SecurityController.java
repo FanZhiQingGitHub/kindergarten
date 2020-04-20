@@ -469,20 +469,23 @@ public class SecurityController {
     @RequestMapping("/findCoordinate")
     public void findCoordinate(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Gson g = new Gson();
-//        TblKinder tblKinder = securityService.findKinderId(kindername);
-        String kinderid = "1";
-        List<TblCoordinate> tblCoordinateList = securityService.findCoordinate(kinderid);
-
-        System.out.println("tblCoordinateList2=" + tblCoordinateList);
-        if (0 != tblCoordinateList.size()) {
-            request.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            Object[] info = tblCoordinateList.toArray();
-            String result = g.toJson(info);
-            response.getWriter().print(result);
-        } else {
-            response.getWriter().print("error");
+        if(kindername == null){
+            response.getWriter().print("notkindername");
+        }else {
+            TblKinder tblKinder = securityService.findKinderId(kindername);
+//        String kinderid = "1";
+            List<TblCoordinate> tblCoordinateList = securityService.findCoordinate(tblKinder.getKinderid().toString());
+            System.out.println("tblCoordinateList2=" + tblCoordinateList);
+            if (0 != tblCoordinateList.size()) {
+                request.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html");
+                response.setCharacterEncoding("UTF-8");
+                Object[] info = tblCoordinateList.toArray();
+                String result = g.toJson(info);
+                response.getWriter().print(result);
+            } else {
+                response.getWriter().print("error");
+            }
         }
     }
 

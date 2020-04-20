@@ -97,7 +97,7 @@ public class ParentController {
 
         Date dt = new Date();
         today = DateUtil.getWeekOfDate(dt);
-        if (today.equals("星期六") && today.equals("星期日")) {
+        if (today.equals("星期六") || today.equals("星期日")) {
             System.out.println("不进行新增考勤");
             ResponseUtils.outHtml(response, "notadd");
         } else {

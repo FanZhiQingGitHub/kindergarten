@@ -18,7 +18,7 @@ public class PhoneCode {
 
         PhoneCode phoneCode = new PhoneCode();
 
-        System.out.println("Test:"+phoneCode.getPhonemsg("19859150836"));
+        System.out.println("Test:"+phoneCode.getPhonemsg("***********"));
     }
 
 
