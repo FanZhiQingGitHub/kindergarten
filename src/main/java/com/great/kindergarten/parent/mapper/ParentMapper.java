@@ -16,6 +16,12 @@ import java.util.Map;
 @Mapper
 public interface ParentMapper {
 
+
+	/**
+	 * 计算一共有几个记录
+	 * @return
+	 */
+	Integer countReadList();
 	/**
 	 * 根据页码找到对应的阅读数据
 	 * @param page

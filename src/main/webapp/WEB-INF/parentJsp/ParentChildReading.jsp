@@ -160,12 +160,13 @@
 
 	</div>
 	<div class="footer">
+		<table>
 		<tr>
 			<td>
 				<a
-						href="${path}/parent?methodName=getPingGuList&curPage=1&userid=${sessionScope.user.userid}">首页</a>
+						href="${path}/parent/findReadList?&curPage=1">首页</a>
 				<a
-						href="${path}/parent?methodName=getPingGuList&curPage=${pageBean.prePageNum}&userid=${sessionScope.user.userid}">上一页</a>
+						href="${path}/parent/findReadList?&curPage=${pageBean.prePageNum}">上一页</a>
 
 				<span style="margin-right: 50px;margin-left: 50px">
 
@@ -174,11 +175,13 @@
 				</span>
 
 				<a
-						href="${path}/parent?methodName=getPingGuList&curPage=${pageBean.nextPageNum}&userid=${sessionScope.user.userid}">下一页</a>
+						href="${path}/parent/findReadList?&curPage=${pageBean.nextPageNum}">下一页</a>
 				<a
-						href="${path}/parent?methodName=getPingGuList&curPage=${pageBean.totalPageNum}&userid=${sessionScope.user.userid}" >尾页</a>
+						href="${path}/parent/findReadList?&curPage=${pageBean.totalPageNum}" >尾页</a>
 			</td>
 		</tr>
+
+		</table>
 	</div>
 </form>
 

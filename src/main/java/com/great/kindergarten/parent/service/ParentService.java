@@ -36,19 +36,19 @@ public class ParentService {
      */
     public PageBean<TblReadmag> findReadList(Integer page ,Integer limit){
 
-//        Integer startPage = (page-1) *limit;
-//
-////        //按条件计算出有几条用户数据
-////        Integer totalRecords = dataDao.findReportCount(userId).intValue();
-//        //找到记录
-//        List<TblReadmag> list =  parentMapper.findReadList(startPage,limit);
-//
-//        //封装一个新的页面Bean
-//        PageBean<TblReadmag> pageBean = new PageBean<TblReadmag>(page,totalRecords,limit);
-//        //把数据信息放到Bean里面
-//        pageBean.setList(list);
+        Integer startPage = (page-1) *limit;
 
-        return null;
+        //按条件计算出有几条用户数据
+        Integer totalRecords = parentMapper.countReadList();
+        //找到记录
+        List<TblReadmag> list =  parentMapper.findReadList(startPage,limit);
+
+        //封装一个新的页面Bean
+        PageBean<TblReadmag> pageBean = new PageBean<TblReadmag>(page,totalRecords,limit);
+        //把数据信息放到Bean里面
+        pageBean.setList(list);
+
+        return pageBean;
 
 
 

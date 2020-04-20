@@ -65,9 +65,38 @@ public class ParentController {
 
 
 
+
+    @RequestMapping("/findReadList")
+    public String findReadList(HttpServletRequest request){
+
+        //当前页码
+        Integer curPage=null;
+        //判断是否有当前页码
+        if(request.getParameter("curPage")!=null)
+        {
+            curPage= Integer.valueOf(request.getParameter("curPage"));
+        }else {
+            curPage=1;
+        }
+
+        PageBean<TblReadmag> pageBean =parentService.findReadList(curPage,10);
+
+        request.setAttribute("pageBean",pageBean);
+
+        return "parentJsp/ParentChildReading";
+    }
+
+
+
+
+
+
+
+
     @RequestMapping("/findExaminationByStudentId")
     @ResponseBody
     public TableDate findExaminationByStudentId(SearchCondition searchCondition){
+        //根据学生id找到体检信息
         //返回查找的结果
         return parentService.findExaminationByStudentId(searchCondition);
     }

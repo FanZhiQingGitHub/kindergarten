@@ -394,7 +394,7 @@
 
             //前往查看亲子阅读
             $("#Parent-childReading").click(function () {
-                window.location.href=path+"/parent/toUrl/ParentChildReading"
+                window.location.href=path+"/parent/findReadList"
             });
 
 
