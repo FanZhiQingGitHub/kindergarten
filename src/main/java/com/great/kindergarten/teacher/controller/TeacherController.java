@@ -4,11 +4,15 @@ import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.director.resultbean.DateTable;
 import com.great.kindergarten.teacher.resultbean.PickUpInfoDetailPage;
-
 import com.great.kindergarten.teacher.service.TeacherService;
 import com.great.kindergarten.util.DateUtil;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
+import org.apache.commons.io.FileUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -402,6 +406,104 @@ public class TeacherController {
 
 		return null;
 	}
+
+	//下载作业
+//	@RequestMapping(value = "/download")
+//	@ResponseBody
+//	public Map<String,Object> downloadOne(HttpServletRequest req,HttpServletResponse response) throws IOException{
+//        //获取数据库里文件的路径
+//		String fileName = req.getParameter("workUrl");// 设置文件名，根据业务需要替换成要下载的文件名
+//		//分隔符获取路径
+//		String pack = fileName.split("@")[0];
+//		String workreleaseid = fileName.split("@@")[0].split("@")[1];
+//		String dayTime = fileName.split("@@@")[0].split("@@")[1];
+//		String downFileName = fileName.split("@@@")[1];
+//		//获取文件的实际路径
+//		String databasePath =  pack + "/" + workreleaseid + "/" + dayTime + "/" +downFileName ;
+//
+//
+//
+//
+//		String downloadDir = req.getSession().getServletContext().getRealPath("/");
+//		//        String savePath = req.getSession().getServletContext().getRealPath("/") +"download/";
+//		downloadDir=downloadDir.substring(0,downloadDir.length()-1);
+////		downloadDir=downloadDir+"\\";//下载目录
+//		String realPath=downloadDir+databasePath;//
+//		File file = new File(realPath);//下载目录加文件名拼接成realpath
+//		if(file.exists()){ //判断文件父目录是否存在
+//			response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+//
+//			byte[] buffer = new byte[1024];
+//			FileInputStream fis = null; //文件输入流
+//			BufferedInputStream bis = null;
+//
+//			OutputStream os = null; //输出流
+//			try {
+//				os = response.getOutputStream();
+//				fis = new FileInputStream(file);
+//				bis = new BufferedInputStream(fis);
+//				int i = bis.read(buffer);
+//				while(i != -1){
+//					os.write(buffer);
+//					i = bis.read(buffer);
+//				}
+//
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			System.out.println("----------file download" + fileName);
+//			try {
+//				bis.close();
+//				fis.close();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//
+//
+//		return api.returnJson(2,"fail"+realPath+fileName);
+//	}
+	//下载作业
+	@RequestMapping("/download")
+	@ResponseBody
+	public ResponseEntity<byte[]> download(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		//获取数据库里文件的路径
+		String url = request.getParameter("workUrl");
+
+        //分隔符获取路径
+		String pack = url.split("@")[0];
+		String workReleaseId = url.split("@@")[0].split("@")[1];
+		String dayTime = url.split("@@@")[0].split("@@")[1];
+		String downFileName = url.split("@@@")[1];
+		//获取文件的实际路径
+		String databasePath = "/" + pack + "/" + workReleaseId + "/" + dayTime + "/" +downFileName;
+
+		//得到要下载的文件 路径
+		String path=request.getSession().getServletContext().getRealPath(databasePath);
+		System.out.println("path="+path);
+
+		File file = new File(path);
+
+		//设置文件下载头
+		HttpHeaders headers = new HttpHeaders();
+
+		//为了解决中文名称乱码问题
+		String fileName = new String(file.getName().getBytes("UTF-8"), "iso-8859-1");
+		System.out.println("fileName="+fileName);
+		// 文件的属性，也就是文件叫什么
+		headers.setContentDispositionFormData("attachment", fileName);
+		// 内容是字节流
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		System.out.println("headers="+headers);
+		// 开始下载
+		return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
+				headers, HttpStatus.CREATED);
+	}
+
+
+
 	//    打分
 
 	@RequestMapping(value="/workScore")
@@ -833,7 +935,7 @@ public class TeacherController {
 			tblPhoto.setCid(cid);
 			tblPhoto.setPhotodetail(photodetail);
 			tblPhoto.setPhotoname(filename);
-			tblPhoto.setPhotourl("photos@"+className+"@@"+nowDay+"@@@"+filename);
+			tblPhoto.setPhotourl("photos/"+className+"/"+nowDay+"/"+filename);
 			System.out.println("tblPhoto"+tblPhoto);
 
 			Boolean flag = teacherService.uploadPhoto(tblPhoto);

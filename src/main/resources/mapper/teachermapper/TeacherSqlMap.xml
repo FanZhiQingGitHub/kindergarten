@@ -179,23 +179,27 @@
 
     <!--    查作业表-->
     <select id="findWorkTable" resultMap="workMap" parameterType="HashMap">
-    select w.sid,w.studentname,w.parentname,w.workreleaseid,w.workid, b.workreleasetime,w.wfinishtime,w.cid
+    select w.sid,w.studentname,w.parentname,w.workreleaseid,w.workid,w.workurl, b.workreleasetime,w.wfinishtime,w.cid
     from tbl_work w,(select *  from tbl_workrelease ) b where b.cid=w.cid and b.workreleaseid=w.workreleaseid and b.cid = #{cid}
     order by b.workreleasetime desc
     limit #{pageInt},#{limitInt};
     </select>
+
     <!--查询作业数据总数量-->
     <select id="findWorkCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
 			select count(*) from tbl_work where cid = #{cid};
 	</select>
+
     <!--    打分-->
     <update id="workScore" parameterType="java.util.Map">
         UPDATE tbl_work SET workeva = #{score} where sid = #{sid} and workreleaseid=#{workreleaseid};
     </update>
+
     <!--查询安全视频总数量-->
     <select id="findSafetyCount" resultType="java.lang.Integer" parameterType="HashMap" >
 			select count(*) from tbl_safetyconfig where  classid=#{cid};
 	</select>
+
     <!--    查询安全视频表-->
     <select id="findSafetyTable" resultMap="safetyMap" parameterType="HashMap">
         select ts.safetyvideoid,ts.safetyvideoname,ts.safetyvideotime,ts.safetyfinishtime,tbs.classname from tbl_safetyconfig ts,tbl_class tbs where ts.classid=tbs.classid
@@ -203,6 +207,7 @@
          order by ts.safetyvideotime desc
         limit #{pageInt},#{limitInt};
     </select>
+
     <!--    新增安全教育视频-->
     <insert id="uploadVideo" parameterType="TblSafetyvideo">
         insert into tbl_safetyvideo
