@@ -110,6 +110,13 @@
         </foreach>
     </insert>
 
+    <insert id="updateMenu" parameterType="java.util.List">
+        insert into tbl_rolemenu(rid, mid) values
+        <foreach item="i" index="index" collection="list" separator=",">
+            (#{i.rid},#{i.mid})
+        </foreach>
+    </insert>
+
 
     <delete id="deleteKinderInfo">
         delete from tbl_kinder where kinderid = #{kinderid}
@@ -156,7 +163,9 @@
     <delete id="deleteParameter">
         delete from tbl_parameter where parameterid = #{parameterid}
     </delete>
-
+    <delete id="deleteMenuId">
+        delete from tbl_rolemenu where rid = #{roleid}
+    </delete>
 
     <!--    用户状态查询-->
     <select id="findAdminStatus" resultType="java.lang.String" parameterType="java.util.Map">
@@ -797,8 +806,8 @@
         </where>
     </select>
 
-    <select id="findAllRoleName" resultType="com.great.kindergarten.commons.entity.TblRole">
-        select * from tbl_role
+    <select id="findAllRoleName" resultType="java.lang.String">
+        select rolename from tbl_role
     </select>
     <select id="findRoleMenuIdByRid" resultType="com.great.kindergarten.commons.entity.TblRoleMenu">
         select t2.rolemenuid from tbl_role t1,tbl_rolemenu t2 where t1.roleid = t2.rid
@@ -1351,4 +1360,87 @@
             </where>
         group by time,age having age &gt; 4 and age &lt;= 6
     </select>
+
+    <select id="findChildrenAgeInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+      select TIMESTAMPDIFF(YEAR,studentbrith,CURDATE()) AS age,date_format(e.examinationtime,'%Y-%m-%d') as time,count(s.studentbrith) aCount
+        from tbl_student s, tbl_examination e
+        where s.studentid = e.sid
+        group by time,age;
+    </select>
+
+    <select id="findChildrenStatusInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select date_format(e.examinationtime,'%Y-%m-%d') as time,
+        e.healthstatus,
+        count(e.healthstatus) normalCount
+        from tbl_student s, tbl_examination e
+        <where>
+            s.studentid = e.sid
+        </where>
+        group by time,e.healthstatus;
+    </select>
+
+    <select id="findTSexInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select date_format(teacherregtime, '%Y-%m-%d') as time,
+            count(teachersex) as maleCount,teachersex
+            from tbl_teacher
+        group by time,teachersex
+    </select>
+    <select id="findTAgeInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select date_format(teacherregtime, '%Y-%m-%d') as time,
+            count(teacherage) as aCount,teacherage
+            from tbl_teacher
+        group by time,teacherage
+    </select>
+
+    <!--    权限-->
+    <select id="findAllMenuInfo" resultMap="TreeMap1">
+       select * from tbl_menu where menusonid = 0
+    </select>
+
+    <resultMap type="com.great.kindergarten.admin.javabean.MenuTreeInfo" id="TreeMap1">
+        <result column="menuname" property="title"></result>
+        <result column="menuid" property="id"></result>
+        <collection property="children" select="sonMenuByMid" column="menuid" ofType="com.great.kindergarten.admin.javabean.MenuTreeInfo"
+                    javaType="list">
+            <result column="menuname" property="title"/>
+            <result column="menuid" property="id"/>
+        </collection>
+    </resultMap>
+
+    <!--根据父id查找到对应的子id -->
+    <select id="sonMenuByMid" resultMap="Tree1" parameterType="java.lang.Integer">
+		select * from tbl_menu where menusonid = #{menuid};
+    </select>
+
+    <resultMap type="com.great.kindergarten.admin.javabean.MenuTreeInfo" id="Tree1">
+        <result column="menuname" property="title"></result>
+        <result column="menuid" property="id"></result>
+    </resultMap>
+
+    <!--    根据角色id查找出他所对应的菜单id-->
+    <select id="findMenuByRoleID" resultMap="TreeMap2" parameterType="java.lang.Integer">
+        select * from tbl_menu m,tbl_rolemenu r where rid = #{roleid} and m.menusonid != 0 and m.menuid = r.mid
+    </select>
+
+    <resultMap id="TreeMap2" type="com.great.kindergarten.admin.javabean.MenuTreeInfo">
+        <result column="mid" property="id"></result>
+    </resultMap>
+
+    <select id="findRoleInfos" resultType="com.great.kindergarten.commons.entity.TblRole">
+        select * from tbl_role
+        <where>
+            rolename like '%管理员%'
+        </where>
+    </select>
+
+    <select id="findRoleCounts" resultType="java.lang.Integer">
+        select count(*) from tbl_role
+        <where>
+            rolename like '%管理员%'
+        </where>
+    </select>
+
+    <select id="getAllMenu" resultType="com.great.kindergarten.commons.entity.TblMenu">
+		select * from tbl_menu
+	</select>
 </mapper>

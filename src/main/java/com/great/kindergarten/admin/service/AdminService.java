@@ -1,5 +1,6 @@
 package com.great.kindergarten.admin.service;
 
+import com.great.kindergarten.admin.javabean.MenuTreeInfo;
 import com.great.kindergarten.admin.javabean.TblStatistics;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.admin.mapper.AdminMapper;
@@ -48,6 +49,18 @@ public class AdminService {
 		List<TblMenu> rootMenu = new ArrayList<>();
 		rootMenu = adminMapper.findStairMenu();
 		return rootMenu;
+	}
+
+	public HashMap<String, List<TblMenu>> findMenus(String adminname)
+	{
+		List<TblMenu> menuList1 = adminMapper.findMenuByName(adminname);
+		LinkedHashMap<String,List<TblMenu>> menuMap = new LinkedHashMap<>();
+		for (TblMenu tblMenu : menuList1)
+		{
+			List<TblMenu> menuList2 = adminMapper.findMenuBySid(tblMenu.getMenuid());
+			menuMap.put(tblMenu.getMenuname(), menuList2);
+		}
+		return menuMap;
 	}
 
 	public List<TblMenu> findAllMenu(HashMap<String, Object> condition, RowBounds rowBounds)
@@ -196,7 +209,7 @@ public class AdminService {
 		return adminMapper.findRoleCount(condition);
 	}
 
-	public List<TblRole> findAllRoleName()
+	public List<String> findAllRoleName()
 	{
 		return adminMapper.findAllRoleName();
 	}
@@ -667,5 +680,55 @@ public class AdminService {
 	public List<TblStatistics> findChildrenCAgeInfo()
 	{
 		return adminMapper.findChildrenCAgeInfo();
+	}
+
+	public List<TblStatistics> findChildrenAgeInfo()
+	{
+		return adminMapper.findChildrenAgeInfo();
+	}
+
+	public List<TblStatistics> findChildrenStatusInfo()
+	{
+		return adminMapper.findChildrenStatusInfo();
+	}
+
+	public List<TblStatistics> findTSexInfo()
+	{
+		return adminMapper.findTSexInfo();
+	}
+
+	public List<TblStatistics> findTAgeInfo()
+	{
+		return adminMapper.findTAgeInfo();
+	}
+
+	public List<MenuTreeInfo> findAllMenuInfo()
+	{
+		return adminMapper.findAllMenuInfo();
+	}
+
+	public List<MenuTreeInfo> findMenuByRoleID(Integer rid)
+	{
+		return adminMapper.findMenuByRoleID(rid);
+	}
+
+	public int deleteMenuId(Integer rid)
+	{
+		return adminMapper.deleteMenuId(rid);
+	}
+
+	public int updateMenu(List<Map<String, Integer>> mapList)
+	{
+		return adminMapper.updateMenu(mapList);
+	}
+
+	public List<TblRole> findRoleInfos(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findRoleInfos(condition, rowBounds);
+	}
+
+	public int findRoleCounts(HashMap<String, Object> condition)
+	{
+		return adminMapper.findRoleCounts(condition);
 	}
 }
