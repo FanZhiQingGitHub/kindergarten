@@ -68,12 +68,39 @@
     </resultMap>
 
 
+    <select id="countBookById" resultType="integer">
+        select count(*) from tbl_readmag
+        <where>
+            relatedid=#{readId}
+            and readmagpage!=0
+        </where>
+    </select>
 
 
+    <select id="readBookByIdAndPage" resultType="TblReadmag">
+        select * from tbl_readmag
+
+        <where>
+            relatedid=#{readId} and readmagpage =#{page}
+        </where>
+
+    </select>
+
+
+    <select id="countReadList" resultType="integer">
+        select count(*) from tbl_readmag
+        <where>
+            readmagpage=0
+        </where>
+    </select>
 
 
     <select id="findReadList" resultType="TblReadmag">
-        select * from tbl_readmag  where relatedid=0 ;
+        select * from tbl_readmag
+        <where>
+            readmagpage=0
+        </where>
+        limit #{page},#{limit}
     </select>
 
 

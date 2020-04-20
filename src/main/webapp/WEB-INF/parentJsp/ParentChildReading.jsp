@@ -10,129 +10,12 @@
 <html>
 <head>
 	<title>亲子阅读页面</title>
+	<link rel="stylesheet" href="${path}/resources/css/ParentChildReading.css" type="text/css">
+
 </head>
 <body>
 
-<script type="text/css">
-	*{
-		border: 0;
-		margin: 0;
-		padding: 0;
-		text-decoration: none;
-	}
-	body{
-		margin: 0 auto;
-		width: 80%;
-		height: 332px;
-	}
-	form{
-		height: 100%;
-	}
-	.nav_left{
-		margin-bottom: 20px;
-	}
-	.seaeachresult{
-		border: 1px solid #D3D4D3;
-		padding: 20px 0 20px 20px;
-		height: 150%;
-		text-align: center;
-	}
-	.item {
-		float: left;
-		width: 158px;
-		margin: 0 20px 30px 20px;
-		padding: 20px 30px;
-		text-align: center;
-		border: 1px solid #D3D4D3;
-		background-color: #f0e8e8;
-		height: 150px;
-	}
-	.item a{
-		color: #0000FF;
-	}
-	/*    下半部分*/
-	.info{
-		padding: 50px 20px;
-	}
-	.info .title{
-		width: 158px;
-		height: 34px;
-		overflow: hidden;
-		color: #000;
-		margin-top: 5px;
-	}
-	.shopNick{
-		border: 1px solid red;
-		color: #f95b27;
-		margin-left: 30px;
-	}
-	.footer{
-		text-align: center;
-	}
-	.pages{
-		margin-top: 20px;
-		margin-left: 20px;
-		line-height: 30px;
-		text-align: center;
-		width: 100px;
-		color: #eeeeee;
-		border: 0;
-		cursor: pointer;
-	}
-	.pages a{
-		text-decoration: none;
-	}
-	.pages:hover{
-		background-color: #f29ada;
-		color: #aa6798;
-	}
-	.downs,.isCannel,.resetPwd{
-		border: 0;
-		background-color: #884e78;
-		height: 30px;
-		width: 100px;
-		color: #eeeeee;
-		cursor: pointer;
-	}
-	.downs:hover,.isCannel:hover,resetPwd:hover{
-		background-color: #f29ada;
-		color: #7e376e;
-	}
-	.zero{
-		margin-left: 15px;
-		text-decoration: none;
-	}
-
-
-	.black_overlay{
-		display: none;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: black;
-		z-index:1001;
-		-moz-opacity: 0.8;
-		opacity:.80;
-		filter: alpha(opacity=88);
-	}
-	.white_content {
-		display: none;
-		position: absolute;
-		top: 15%;
-		left: 15%;
-		width: 70%;
-		height: 70%;
-		padding: 20px;
-		border: 10px solid orange;
-		background-color: white;
-		z-index: 1002;
-		overflow: auto;
-	}
-
-</script>
-
+<button class="layui-btn" id="backMain" type="button" >返回主页</button>
 
 <form name="form1" >
 
@@ -144,14 +27,11 @@
 		<c:if test="${not empty pageBean}">
 			<c:forEach items="${pageBean.list}" step="1" var="i">
 				<div class="item">
-
 					<a href="javascript:void(0);" onclick="showDetails(this)">
-						<img src="${i.photourl}" width="200px" height="200px">
-
+						<img src="${path}/${i.photourl}" width="200px" height="200px">
 						<div class="info">
-							<input class="readId" type="hidden" value="${i.readmagid}"/>
-	                   <div>${i.readmagname}</div>
-
+							<input class="readId" type="hidden" value="${i.relatedid}"/>
+							<div class="titleNames">${i.readmagname}</div>
 						</div>
 					</a>
 				</div>
@@ -159,13 +39,14 @@
 		</c:if>
 
 	</div>
-	<div class="footer">
+	<div class="footer" align="center">
+		<table >
 		<tr>
 			<td>
 				<a
-						href="${path}/parent?methodName=getPingGuList&curPage=1&userid=${sessionScope.user.userid}">首页</a>
+						href="${path}/parent/findReadList?&curPage=1">首页</a>
 				<a
-						href="${path}/parent?methodName=getPingGuList&curPage=${pageBean.prePageNum}&userid=${sessionScope.user.userid}">上一页</a>
+						href="${path}/parent/findReadList?&curPage=${pageBean.prePageNum}">上一页</a>
 
 				<span style="margin-right: 50px;margin-left: 50px">
 
@@ -174,18 +55,168 @@
 				</span>
 
 				<a
-						href="${path}/parent?methodName=getPingGuList&curPage=${pageBean.nextPageNum}&userid=${sessionScope.user.userid}">下一页</a>
+						href="${path}/parent/findReadList?&curPage=${pageBean.nextPageNum}">下一页</a>
 				<a
-						href="${path}/parent?methodName=getPingGuList&curPage=${pageBean.totalPageNum}&userid=${sessionScope.user.userid}" >尾页</a>
+						href="${path}/parent/findReadList?&curPage=${pageBean.totalPageNum}" >尾页</a>
 			</td>
 		</tr>
+
+		</table>
 	</div>
 </form>
 
 
+<div id="light" class="white_content" >
+
+	<button class="layui-btn" onclick="HideDetails()">返回阅读列表</button>
+
+	<h1 align="center" id="titleName"> </h1>
+
+	<div align="center">
+		<img src="" id="pageImg" style="height: 200px">
+	</div>
+
+
+	<div style="height: 200px;width: 90% " align="center" id="pageContent">
+
+	</div>
+
+
+	<div class="footer" align="center">
+
+		<div class="layadmin-user-login-box layadmin-user-login-header">
+			<div style="padding-bottom: 10px;">
+				<button type="button" class="layui-btn layui-btn-normal" id="upPage" style="width: 200px"><i
+						class="layui-icon"></i>上一页
+				</button>
+
+					<span id="nowPage">1 </span>/<span id="totalPage">1</span>
+
+				<button type="button" class="layui-btn layui-btn-normal" id="nextPage" style="width: 200px;"><i
+						class="layui-icon"></i>下一页
+				</button>
+			</div>
+		</div>
+	</div>
 
 
 
+</div>
+<div id="fade" class="black_overlay"></div>
+
+
+
+
+<script type="text/javascript">
+
+	var readId ;
+	var nowPage =1;
+	var totalPage  =1;
+	var layer;
+	
+	
+	
+	$(function () {
+
+
+		layui.use(['layer', 'form'], function() {
+			layer = layui.layer
+		});
+
+
+		$("#upPage").click(function () {
+
+			if (nowPage==1){
+				layer.msg("已经没有上一页了哦");
+			} else {
+				nowPage-=1;
+				showPageDetail();
+			}
+
+
+		});
+
+		$("#nextPage").click(function () {
+
+			if (nowPage==totalPage){
+				layer.msg("已经没有下一页了哦");
+			} else {
+				nowPage+=1;
+				showPageDetail();
+			}
+		});
+
+	});
+
+	//展示页面内容方法
+	function showPageDetail() {
+
+		$.ajax({
+			url: path + '/parent/readBook',
+			type: 'post',
+			data: {"readId":readId,"nowPage":nowPage},
+			success: function (pageInfo) {
+
+				//数据回显
+				var nowPageInfo =pageInfo.list[0];
+
+				$("#pageContent").html(nowPageInfo.readmagdetail);
+
+				$("#pageImg").attr('src',path+'/'+nowPageInfo.photourl);
+
+				$("#nowPage").html(nowPage);
+
+				$("#totalPage").html(pageInfo.totalRecords);
+
+				totalPage  =pageInfo.totalRecords;
+
+
+			}, error: function (data) {
+				layer.alert("网络繁忙！", {icon: 2});
+			}
+		});
+
+	}
+
+	$(function () {
+
+		//前往家长端主页
+		$("#backMain").click(function () {
+			window.location.href=path+"/parent/toUrl/parentMain"
+		})
+
+	});
+
+	//显示隐藏的详情页面
+	function showDetails(node) {
+
+		nowPage =1;
+		readId = $(node).children("div").children("input").val();
+		//改变你现在在看的标题
+		$("#titleName").html($(node).children("div").children("div").html());
+		//调用显示数据
+		showPageDetail();
+		//界面的显示
+		$("#light").attr("style","display:block");
+		$("#fade").attr("style","display:block");
+
+	}
+
+
+	//隐藏的页面
+	function HideDetails() {
+		//界面的显示
+		$("#light").attr("style","display:none");
+		$("#fade").attr("style","display:none");
+	}
+
+
+
+
+
+
+
+</script>
 
 
 
