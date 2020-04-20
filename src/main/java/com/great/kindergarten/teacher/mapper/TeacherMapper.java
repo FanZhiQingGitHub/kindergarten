@@ -1,8 +1,8 @@
 package com.great.kindergarten.teacher.mapper;
 
 import com.great.kindergarten.commons.entity.*;
+import com.great.kindergarten.teacher.resultbean.PickUpInfoDetailPage;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,27 +10,38 @@ import java.util.Map;
 
 @Mapper
 public interface TeacherMapper {
-
+    //登录
 	public String findTeacherStatus(Map<String, String> teachermap);
 	public TblTeacher findTeacher(TblTeacher tblTeacher);
+
+
 	public Boolean updateTeacherPwd(Map<String, String> teacherMap);
 	public TblTeacher checkPwd(Integer teacherid);
 	public TblClass findClassAll(Integer cid);
-	public List<TblCourse> findCourse(Integer cid);
-	public Integer findCount();
+
+
+	//根据班级id，当前时间查找课程信息
+	public List<TblCourse> findCourseByTodayCid(HashMap<String,Object> dataHashMap);
+
+	public Integer findCount(Integer cid);
 	public List<TblClass> findClassName();
 	public Integer findClassidByName(TblClass tblClass);
+	//查询发布作业表中最后一个id
+	public Integer findFinallyWorkreleaseid();
+	//发布作业
 	public Boolean addFileInfo(TblWorkrelease tblWorkrelease);
-	//   根据查找作业数据
-	public TblWork findWork(Integer cid);
+
 	//   根据班级id 发布作业id查看作业表
-	public List<TblWork> findWorkTable(TblWork tblWork);
+	public List<TblWork> findWorkTable(HashMap<String,Object> dataHashMap);
+
 	//    查找作业数据数量
 	public Integer findWorkCount(Integer cid);
 	//打分
 	public Boolean workScore(Map<String,String> scoreMap);
+
+
 	//    查看视频数量
-	public Integer findSafetyCount();
+	public Integer findSafetyCount(HashMap<String,Object> dataHashMap);
 	//查看视频表
 	public List<TblSafetyConfig> findSafetyTable(HashMap<String,Object> dataHashMap);
 	//新增上传视频
@@ -48,5 +59,33 @@ public interface TeacherMapper {
 	 * @return
 	 */
 	List<TblSafetyvtq> findSafetyTestQuestionList(Integer safetyVideoId);
+	// 查询试题完成情况总数
+
+	public Integer findSafetytqCount(HashMap<String,Object> dataHashMap);
+	//    查询试题完成情况表
+
+	public List<TblSafetyFinish> findSafetytqTable(HashMap<String,Object> dataHashMap);
+	
+	// 根据cid查班级人数
+	public Integer findStudentCount(HashMap<String,Object> dataHashMap);
+	//    根据cid查班级人员数据
+	public List<TblStudent> findStudent(HashMap<String,Object> dataHashMap);
+	
+	/**
+	 * 根据条件找到孩子的接送信息
+	 * @param pickUpInfoDetailPage
+	 * @return
+	 */
+	public List<TblDate> findALLPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage);
+	/**
+	 * 新增照片
+	 * @param tblPhoto
+	 * @return
+	 */
+	public Boolean uploadPhoto(TblPhoto tblPhoto);
+	// 查询班级相册总数
+	public Integer findClassPhotoCount(HashMap<String,Object> dataHashMap);
+	//     查看班级相册数据
+	public List<TblPhoto> findClassPhoto(HashMap<String,Object> dataHashMap);
 
 }

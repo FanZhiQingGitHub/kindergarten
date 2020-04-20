@@ -36,10 +36,10 @@
 	</div>
 
 
-<%--</div>--%>
-<table id="demo" lay-filter="test">
-	<input type="hidden" id="path" value="<%=path%>">
-</table>
+	<%--</div>--%>
+	<table id="demo" lay-filter="test">
+		<input type="hidden" id="path" value="<%=path%>">
+	</table>
 	<div id="type-content" style="display: none;">
 		<div class="layui-form-item">
 			<div class="layui-input-block" id="workeva">
@@ -55,10 +55,11 @@
 		</div>
 
 	</div>
-<script type="text/html" id="barDemo">
-	<a class="layui-btn layui-btn-primary layui-btn-xs detail" >查看作业</a>
-	<a class="layui-btn layui-btn-danger layui-btn-xs score" >打分</a>
-</script>
+
+	<script type="text/html" id="barDemo">
+		<a class="layui-btn layui-btn-primary layui-btn-xs downloadWork" >查看作业</a>
+		<a class="layui-btn layui-btn-danger layui-btn-xs score" >打分</a>
+	</script>
 
 
 </body>
@@ -84,15 +85,21 @@
 				,{field: 'workreleasetime', title: '布置时间', width:200}
 				,{field: 'wfinishtime', title: '完成时间', width:200}
 				,{field: '', title: '操作', toolbar: '#barDemo' , width:200}
+				, {field: 'workreleaseid', title: '发布作业', width: 100, edit: 'text', align: 'center', hide: true}
+				, {field: 'workid', title: '作业id', width: 100, edit: 'text', align: 'center', hide: true}
 			]]
 		});
-        //打分
+		//打分
 		$('body').on('click', '.score', function () {
 			var type = $(this).text();
 			console.log("type=" + type);
 
 			var $td = $(this).parents('tr').children('td');
 			var sid = $td.eq(0).text();//获取点击按钮相对应的id
+			var $td = $(this).parents('tr').children('td');
+			var workreleaseid = $td.eq(6).text();//获取点击按钮相对应的id
+			var $td = $(this).parents('tr').children('td');
+			var workid = $td.eq(7).text();//获取点击按钮相对应的id
 			console.log("sid=" + sid);
 
 			layer.open({
@@ -107,39 +114,93 @@
 					var score = $("#score").val();
 					console.log("score=" + score);
 
-						$.ajax({
-							url: path + '/teacher/workScore',
-							async: true,
-							type: 'post',
-							data: {"score": score,"sid":sid},
-							datatype: 'text',
-							success: function (data) {
-								console.log(data);
-								if (data =="success") {
-									console.log("打分返回");
-									alert("打分成功");
-									$(":input").val(" ");
-									//当你在iframe页面关闭自身时
-									var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-									parent.layer.close(index); //再执行关闭
-									///location.href = "login.html";
-								}
-								else if (data =="error") {
-									console.log("打分失败");
-									layer.msg('打分失败');
-									///location.href = "login.html";
-								}
-								else {
-									layer.msg('修改失败');
-								}
-							}, error: function (data) {
-								layer.alert("网络繁忙！", {icon: 2});
+					$.ajax({
+						url: path + '/teacher/workScore',
+						async: true,
+						type: 'post',
+						data: {"score": score,"sid":sid,"workreleaseid":workreleaseid},
+						datatype: 'text',
+						success: function (data) {
+							console.log(data);
+							if (data =="success") {
+								console.log("打分返回");
+								alert("打分成功");
+								$(":input").val(" ");
+								//当你在iframe页面关闭自身时
+								var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+								parent.layer.close(index); //再执行关闭
+								///location.href = "login.html";
 							}
-						});
+							else if (data =="error") {
+								console.log("打分失败");
+								layer.msg('打分失败');
+								///location.href = "login.html";
+							}
+							else {
+								layer.msg('修改失败');
+							}
+						}, error: function (data) {
+							layer.alert("网络繁忙！", {icon: 2});
+						}
+					});
 
 				}
 			});
 		});
+		//下载作业
+		$('body').on('click', '.downloadWork', function () {
+			var type = $(this).text();
+			console.log("type=" + type);
+
+			var $td = $(this).parents('tr').children('td');
+			var sid = $td.eq(0).text();//获取点击按钮相对应的id
+			var $td = $(this).parents('tr').children('td');
+			var workreleaseid = $td.eq(6).text();//获取点击按钮相对应的id
+			console.log("sid=" + sid);
+
+			layer.open({
+				type: 1,
+				// content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+				title: '下载作业',
+				btn: ['确定', '取消'],
+				offset: '200px',
+				btnAlign: 'c',
+				btn1: function (index) {
+
+					$.ajax({
+						url: path + '/teacher/downloadWork',
+						async: true,
+						type: 'post',
+						data: {"workid":workid},
+						datatype: 'text',
+						success: function (data) {
+							console.log(data);
+							if (data =="success") {
+								console.log("下载返回");
+								alert("下载成功");
+								$(":input").val(" ");
+								//当你在iframe页面关闭自身时
+								var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+								parent.layer.close(index); //再执行关闭
+								///location.href = "login.html";
+							}
+							else if (data =="error") {
+								console.log("下载失败");
+								layer.msg('下载失败');
+								///location.href = "login.html";
+							}
+							else {
+								layer.msg('下载失败');
+							}
+						}, error: function (data) {
+							layer.alert("网络繁忙！", {icon: 2});
+						}
+					});
+
+				}
+			});
+		});
+
 	});
 </script>
 
