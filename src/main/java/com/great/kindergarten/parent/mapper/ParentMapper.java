@@ -18,6 +18,20 @@ public interface ParentMapper {
 
 
 	/**
+	 * 计算这本书一共有几页
+	 * @param readId
+	 * @return
+	 */
+	Integer countBookById(Integer readId);
+	/**
+	 * 根据id和页码读取内容
+	 * @param readId
+	 * @param page
+	 * @return
+	 */
+	List<TblReadmag> readBookByIdAndPage(Integer readId,Integer page);
+
+	/**
 	 * 计算一共有几个记录
 	 * @return
 	 */

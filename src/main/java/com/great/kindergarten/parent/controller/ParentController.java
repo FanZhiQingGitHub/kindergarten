@@ -66,6 +66,18 @@ public class ParentController {
 
 
 
+	@RequestMapping("/readBook")
+	@ResponseBody
+	public PageBean<TblReadmag> readBook(HttpServletRequest request){
+        //获取要读的页面还有哪本书
+          Integer readId = Integer.valueOf(request.getParameter("readId"))  ;
+        Integer page  = Integer.valueOf(request.getParameter("nowPage"));
+            //数据返回
+		return parentService.readBook(readId,page);
+	}
+
+
+
     @RequestMapping("/findReadList")
     public String findReadList(HttpServletRequest request){
 
@@ -85,10 +97,6 @@ public class ParentController {
 
         return "parentJsp/ParentChildReading";
     }
-
-
-
-
 
 
 
@@ -183,10 +191,12 @@ public class ParentController {
 
         String dayTime = url.split("@@@")[0].split("@@")[1];
 
+        String id = url.split("@@@@")[0].split("@@@")[1];
+
         String downFileName = url.split("@@@@")[1];
 
         //获取文件的实际路径
-        String databasePath = "/" + pack + "/" + className + "/" + dayTime + "/" +downFileName ;
+        String databasePath = "/" + pack + "/" + className + "/" + dayTime  +"/" + id+"/" +downFileName ;
 
 
         //路径

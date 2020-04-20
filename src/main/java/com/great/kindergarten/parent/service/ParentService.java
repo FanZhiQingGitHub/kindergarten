@@ -28,6 +28,23 @@ public class ParentService {
     }
 
 
+
+    public PageBean<TblReadmag> readBook(Integer readId,Integer page){
+
+        Integer totalRecords=parentMapper.countBookById(readId);
+
+        List<TblReadmag> list =  parentMapper.readBookByIdAndPage(readId, page);
+
+        //封装一个新的页面Bean
+        PageBean<TblReadmag> pageInfo = new PageBean<TblReadmag>(page,totalRecords,1);
+        //把数据信息放到Bean里面
+        pageInfo.setList(list);
+
+        return pageInfo;
+    }
+
+
+
     /**
      * 根据条件找到阅读列表
      * @param page
@@ -49,9 +66,6 @@ public class ParentService {
         pageBean.setList(list);
 
         return pageBean;
-
-
-
     }
 
 

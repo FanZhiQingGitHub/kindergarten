@@ -143,8 +143,8 @@
 
                             <div class="layui-btn-container" >
                                 <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="Parent-childReading">亲子阅读</button>
-                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="ContactTeacher">
-                                    联系老师
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="ClassAlbum">
+                                    班级相册
                                 </button>
                             </div>
 
@@ -161,6 +161,9 @@
                                 <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="CampusAnnouncement">校园公告</button>
                                 <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="PlatformInformation">
                                     平台资讯
+                                </button>
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="ContactTeacher">
+                                    联系老师
                                 </button>
                             </div>
                         </h3>
@@ -392,6 +395,11 @@
 
 
 
+            //前往查看相册
+            $("#ClassAlbum").click(function () {
+
+            });
+
             //前往查看亲子阅读
             $("#Parent-childReading").click(function () {
                 window.location.href=path+"/parent/findReadList"
@@ -400,7 +408,7 @@
 
             //前往查看联系老师界面
             $("#ContactTeacher").click(function () {
-
+	            window.location.href = path+"/director/toUrl/chatlogin";
             });
 
 
@@ -419,8 +427,6 @@
                         console.log(layero, index);
                     }
                 });
-
-
 
             });
 

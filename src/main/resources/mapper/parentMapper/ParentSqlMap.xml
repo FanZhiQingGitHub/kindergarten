@@ -68,6 +68,21 @@
     </resultMap>
 
 
+    <select id="countBookById" resultType="integer">
+        select count(*) from tbl_readmag
+        <where>
+            relatedid=#{readId}
+        </where>
+    </select>
+
+
+    <select id="readBookByIdAndPage" resultType="TblReadmag">
+        select * from tbl_readmag
+        <where>
+            relatedid=#{readId} and readmagpage =#{page}
+        </where>
+    </select>
+
 
     <select id="countReadList" resultType="integer">
         select count(*) from tbl_readmag
