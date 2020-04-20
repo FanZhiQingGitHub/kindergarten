@@ -66,6 +66,7 @@
 			});
 		});
 	}
+
 	layui.use(['table','laydate','layer'], function(){
 		var laydate = layui.laydate;
 		var layer = layui.layer;
@@ -84,16 +85,40 @@
 				{field: 'photoid', title: '照片编号', width:150, sort: true, fixed: 'left'}
 				,{field: 'photoname', title: '照片名称', width:150}
 				,{field: 'photodetail', title: '照片描述', width:150}
-				,{field: 'photourl', title: '图片', width:200}
+				,{field: 'photourl', title: '图片', width:200,align: 'center'
+					<%--,templet:'<div><img src="${pageContext.request.contextPath}/{{d.photourl}}"></div>'--%>
+					,templet: '<div><img src="${pageContext.request.contextPath}/{{ d.photourl }}" alt="" style="width:80px; height:80px;" onclick="showBigImage(this)"></div>'
+
+
+				}
 				,{field: 'phototime', title: '图片上传时间', width:200}
 
 
 			]]
+
 		});
 
 
 
 	});
+	//显示大图片
+	function showBigImage(e) {
+		var img = new Image();
+		img.src = e.src;
+		var imgHtml = "<img src='" + e.src + "' width='200px' height='200px'/>";
+		layer.open({
+			type: 1,
+			title: false,
+			offset: 'auto',
+			closeBtn: 0,
+			shadeClose: true, //点击阴影关闭
+			area: [ '200px', '200px'], //宽高
+			content: imgHtml,
+			cancel: function () {
+				//layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
+			}
+		});
+	}
 </script>
 
 </html>

@@ -57,7 +57,7 @@
 	</div>
 
 	<script type="text/html" id="barDemo">
-		<a class="layui-btn layui-btn-primary layui-btn-xs downloadWork" >查看作业</a>
+		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="downloadWork">查看下载作业</a>
 		<a class="layui-btn layui-btn-danger layui-btn-xs score" >打分</a>
 	</script>
 
@@ -71,6 +71,7 @@
 		var table = layui.table;
 		var $ = layui.jquery;
 		var path = $("#path").val();
+
 		//第一个实例
 		table.render({
 			elem: '#demo'
@@ -87,6 +88,8 @@
 				,{field: '', title: '操作', toolbar: '#barDemo' , width:200}
 				, {field: 'workreleaseid', title: '发布作业', width: 100, edit: 'text', align: 'center', hide: true}
 				, {field: 'workid', title: '作业id', width: 100, edit: 'text', align: 'center', hide: true}
+				, {field: 'workurl', title: '作业路径', width: 100, edit: 'text', align: 'center', hide: true}
+
 			]]
 		});
 		//打分
@@ -147,61 +150,40 @@
 				}
 			});
 		});
+
+		//layui按钮绑定查询事件
+		$('.layui-btn').click(function () {
+			//获取按钮类型
+			var type = $(this).data('type');
+
+		});
 		//下载作业
-		$('body').on('click', '.downloadWork', function () {
-			var type = $(this).text();
-			console.log("type=" + type);
+		//监听行工具事件
+		table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+			var data = obj.data //获得当前行数据
+				, layEvent = obj.event; //获得 lay-event 对应的值
 
-			var $td = $(this).parents('tr').children('td');
-			var sid = $td.eq(0).text();//获取点击按钮相对应的id
-			var $td = $(this).parents('tr').children('td');
-			var workreleaseid = $td.eq(6).text();//获取点击按钮相对应的id
-			console.log("sid=" + sid);
 
-			layer.open({
-				type: 1,
-				// content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-				title: '下载作业',
-				btn: ['确定', '取消'],
-				offset: '200px',
-				btnAlign: 'c',
-				btn1: function (index) {
-
-					$.ajax({
-						url: path + '/teacher/downloadWork',
-						async: true,
-						type: 'post',
-						data: {"workid":workid},
-						datatype: 'text',
-						success: function (data) {
-							console.log(data);
-							if (data =="success") {
-								console.log("下载返回");
-								alert("下载成功");
-								$(":input").val(" ");
-								//当你在iframe页面关闭自身时
-								var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-								parent.layer.close(index); //再执行关闭
-								///location.href = "login.html";
-							}
-							else if (data =="error") {
-								console.log("下载失败");
-								layer.msg('下载失败');
-								///location.href = "login.html";
-							}
-							else {
-								layer.msg('下载失败');
-							}
-						}, error: function (data) {
-							layer.alert("网络繁忙！", {icon: 2});
-						}
-					});
-
-				}
-			});
+			//事件等于下载
+			if (layEvent === 'downloadWork') {
+				var downloadWorkUlr = data.workurl;
+				console.log(downloadWorkUlr);
+				window.location.href=path+'/teacher/download?workUrl='+downloadWorkUlr
+			}
 		});
 
 	});
+	//将表单转为js对象数据
+	function serializeObject(array){
+		var obj=new Object();
+
+		$.each(array, function(index,param){
+			if(!(param.name in obj)){
+				obj[param.name]=param.value;
+			}
+		});
+		return obj;
+	}
 </script>
 
 </html>
