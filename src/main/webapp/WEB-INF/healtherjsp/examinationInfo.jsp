@@ -162,7 +162,7 @@
             layer.open({
                 type: 2,
                 area: ['400px', '610px'],
-                offset: ['50px', '650px'],
+                offset: ['50px', '670px'],
                 title: '新增体检信息',
                 content: path + '/healther/path/addExamination' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                 , success: function (layero, index) {
