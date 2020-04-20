@@ -43,7 +43,6 @@
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0)" id="a1">个人信息</a></dd>
                 <dd><a href="javascript:void(0)" id="addStuTime">上课打卡</a></dd>
-                <dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
             </dl>
         </li>
         <li class="layui-nav-item"><a href="javascript:void(0); "  id="exit" style="color: black;font-size: 18px">注销</a></li>
@@ -395,8 +394,9 @@
 
             //前往查看亲子阅读
             $("#Parent-childReading").click(function () {
-
+                window.location.href=path+"/parent/toUrl/ParentChildReading"
             });
+
 
             //前往查看联系老师界面
             $("#ContactTeacher").click(function () {
@@ -414,7 +414,7 @@
                     shade: 0.8//表示的是阴影的大小
                     , area: ['55%', '65%'],
                     moveType: 1,//拖拽模式，0或者1
-                    content: src + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    content: path + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                     , success: function (layero, index) {
                         console.log(layero, index);
                     }

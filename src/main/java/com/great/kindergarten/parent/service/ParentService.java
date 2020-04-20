@@ -1,6 +1,7 @@
 package com.great.kindergarten.parent.service;
 
 import com.great.kindergarten.commons.entity.*;
+import com.great.kindergarten.healther.resultbean.MealPage;
 import com.great.kindergarten.parent.mapper.ParentMapper;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,91 @@ public class ParentService {
     public ParentService()
     {
 
+    }
+
+
+    /**
+     * 根据条件找到阅读列表
+     * @param page
+     * @param limit
+     * @return
+     */
+    public PageBean<TblReadmag> findReadList(Integer page ,Integer limit){
+
+//        Integer startPage = (page-1) *limit;
+//
+////        //按条件计算出有几条用户数据
+////        Integer totalRecords = dataDao.findReportCount(userId).intValue();
+//        //找到记录
+//        List<TblReadmag> list =  parentMapper.findReadList(startPage,limit);
+//
+//        //封装一个新的页面Bean
+//        PageBean<TblReadmag> pageBean = new PageBean<TblReadmag>(page,totalRecords,limit);
+//        //把数据信息放到Bean里面
+//        pageBean.setList(list);
+
+        return null;
+
+
+
+    }
+
+
+
+
+    /**
+     *  根据搜索条件找到对应的孩子体检列表
+     * @param searchCondition
+     * @return
+     */
+    public TableDate findExaminationByStudentId(SearchCondition searchCondition){
+
+        Integer startPage = (searchCondition.getPage() -1) *searchCondition.getLimit();
+        searchCondition.setPage(startPage);
+
+        TableDate tableDate = new TableDate();
+        //计算有几个条数
+        tableDate.setCount(parentMapper.countExaminationByStudentId(searchCondition));
+        //放入数据
+        tableDate.setData(parentMapper.findExaminationByStudentId(searchCondition));
+
+        return tableDate;
+    }
+
+
+
+
+    /**
+     * 根据膳食id找到相应的膳食信息
+     * @param mealId
+     * @return
+     */
+    public TableDate findRecipeInfo(Integer mealId){
+        TableDate tableDate = new TableDate();
+        tableDate.setCount(1);
+        tableDate.setData( parentMapper.findAllRecipeInfo(mealId));
+        return tableDate;
+    }
+
+
+
+    /**
+     * 根据id和条件找到孩子作业列表
+     * @param mealPage
+     * @return
+     */
+    public TableDate findAllMealInfo(MealPage mealPage){
+
+        Integer startPage = (mealPage.getPage() -1) *mealPage.getLimit();
+        mealPage.setPage(startPage);
+
+
+        TableDate result = new TableDate();
+        //计算总共的页数
+        result.setCount(parentMapper.findAllMealInfoCount());
+        //放入查询的数据
+        result.setData( parentMapper.findAllMealInfo(mealPage));
+        return result;
     }
 
 
@@ -69,6 +155,10 @@ public class ParentService {
      * @return
      */
     public TableDate kidHomeWorkList(SearchCondition searchCondition,Integer cid){
+
+        Integer startPage = (searchCondition.getPage() -1) *searchCondition.getLimit();
+        searchCondition.setPage(startPage);
+
         TableDate result = new TableDate();
         //计算总共的页数
         result.setCount(parentMapper.countHomeWorkList(searchCondition,cid));
@@ -125,6 +215,10 @@ public class ParentService {
      * @return
      */
     public TableDate parentSafetyTestList(SearchCondition searchCondition){
+
+        Integer startPage = (searchCondition.getPage() -1) *searchCondition.getLimit();
+        searchCondition.setPage(startPage);
+
         TableDate result = new TableDate();
         //计算总共的页数
         result.setCount(parentMapper.countVideoListNumber(searchCondition));
@@ -132,6 +226,7 @@ public class ParentService {
         result.setData( parentMapper.findVideoList(searchCondition));
         return result;
     }
+
 
 
     /**
