@@ -2,10 +2,7 @@ package com.great.kindergarten.security.controller;
 
 import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
-import com.great.kindergarten.security.resultbean.AlarmLogPage;
-import com.great.kindergarten.security.resultbean.MonitorPage;
-import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
-import com.great.kindergarten.security.resultbean.PickUpInfoPage;
+import com.great.kindergarten.security.resultbean.*;
 import com.great.kindergarten.security.service.SecurityService;
 import com.great.kindergarten.util.DateUtil;
 import com.great.kindergarten.util.MD5Utils;
@@ -22,10 +19,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 @Controller
 @RequestMapping("/security")
@@ -566,6 +561,92 @@ public class SecurityController {
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
         }
+    }
 
+    @RequestMapping("/showClassInfo")
+    public void showClassInfo(DateWrite dateWrite, ClassPage classPage, HttpServletRequest request, HttpServletResponse response) throws Exception{
+        Integer page = Integer.valueOf(request.getParameter("page"));
+        Integer limit = Integer.valueOf(request.getParameter("limit"));
+
+        Integer minpage = (page - 1) * limit;
+        Integer maxpage = limit;
+//        classPage.setKindername(kindername);
+        classPage.setKindername("智慧幼儿园");
+        classPage.setPage(minpage);
+        classPage.setLimit(maxpage);
+
+        List<TblClass> tblClassList = securityService.findClassInfo(classPage);
+        if (0 != tblClassList.size()) {
+            Integer count = securityService.findClassInfoCount(classPage).intValue();
+            dateWrite.setCode(0);
+            dateWrite.setMsg(" ");
+            dateWrite.setCount(count);
+            dateWrite.setData(tblClassList);
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        } else {
+            dateWrite.setMsg("亲，暂无相关数据！");
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        }
+    }
+
+    //查找所有的监控区域
+    @RequestMapping("/findAllMonitorCP")
+    public void findAllMonitorCP(MonitorTreeInfo monitorTreeInfo, HttpServletRequest request, HttpServletResponse response) {
+        String classid = request.getParameter("classid");
+
+        List<TblClamon> tblClamonList1 = securityService.findAllMonitorname();
+        List<TblClamon> tblClamonList2 = securityService.findMonitornameByClassID(Integer.valueOf(classid));
+        Map menuMap = new LinkedHashMap();
+        menuMap.put("menu", tblClamonList1);
+        menuMap.put("mid", tblClamonList2);
+        if (0 != menuMap.size()) {
+            ResponseUtils.outJson(response, menuMap);
+        } else {
+            ResponseUtils.outHtml(response, "error");
+        }
+    }
+
+    @RequestMapping("/updateMonitorCP")
+    public void updateMonitorCP(TblMonitorname tblMonitorname,HttpServletRequest request,HttpServletResponse response){
+        Gson g = new Gson();
+        String msg = request.getParameter("TblMonitorname");
+        tblMonitorname = g.fromJson(msg,TblMonitorname.class);
+        List tblMonitornameList = tblMonitorname.getTblMonitornameList();
+        Integer classid = tblMonitorname.getClassid();
+
+        List<Map<String, Integer>> list = new ArrayList();
+
+        for(int i = 0;i<tblMonitornameList.size();i++){
+            Map<String, Integer> menuMap = new LinkedHashMap();
+            Double id = (Double) tblMonitornameList.get(i);
+            String []arr = id.toString().split("\\.");
+            String num = arr[0];
+            menuMap.put("cid", classid);
+            menuMap.put("mnid", Integer.valueOf(num));
+            list.add(menuMap);
+        }
+
+        System.out.println("list="+list);
+
+        Boolean flag = null;
+        flag = securityService.deleteMnId(classid);
+        if(flag){
+            flag = securityService.updateTblClamon(list);
+            if(flag){
+                ResponseUtils.outHtml(response,"success");
+            }else {
+                ResponseUtils.outHtml(response,"error");
+            }
+        }else {
+            ResponseUtils.outHtml(response,"error");
+        }
+        System.out.println("tblMonitornameList="+tblMonitornameList);
+        System.out.println("classid="+classid);
     }
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.kindergarten.security.mapper.SecurityMapper">
+
+    <!--查找所有的监控区域,不区分角色    -->
+    <resultMap type="com.great.kindergarten.security.resultbean.MonitorTreeInfo" id="TreeMap1">
+        <result column="monitornameid" property="id"></result>
+        <result column="monitorname" property="title"></result>
+    </resultMap>
+
+    <select id="findAllMonitorname" resultMap="TreeMap1">
+       select * from tbl_monitorname
+    </select>
+
+
+    <!--    根据班级id查找出他所对应的监控区域id-->
+    <resultMap type="com.great.kindergarten.security.resultbean.MonitorTreeInfo" id="TreeMap2">
+        <result column="mnid" property="id"></result>
+    </resultMap>
+
+    <select id="findMonitornameByClassID" resultMap="TreeMap2" parameterType="java.lang.Integer">
+        select * from tbl_clamon con where con.cid = #{cid}
+    </select>
+
+
+    <!--    先移除该班所拥有的监控位置权限-->
+    <delete id="deleteMnId" parameterType="java.lang.Integer">
+        delete from tbl_clamon where cid = #{classid}
+    </delete>
+
+    <!--    再新增该班的监控位置权限-->
+    <insert id="updateTblClamon" parameterType="java.util.List">
+        insert into tbl_clamon(mnid, cid) values
+        <foreach item="i" index="index" collection="list" separator=",">
+         (#{i.mnid},#{i.cid})
+        </foreach>
+    </insert>
+
+
+</mapper>

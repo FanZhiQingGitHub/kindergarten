@@ -282,7 +282,17 @@
                     }
                 });
             }), $("#bu6").click(function () {
-                layer.alert('敬请期待', {icon: 6});
+                layer.open({
+                    type: 2,
+                    title: '校园消息通知',
+                    shade: 0.8,//表示的是阴影的大小
+                    area: ['95%', '80%'],
+                    offset:['10%','3%'],
+                    moveType: 1,//拖拽模式，0或者1
+                    content: path + '/security/path/livePowerManager' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                    }
+                });
             }), $("#bu7").click(function () {
                 layer.alert('敬请期待', {icon: 6});
             }),$(".a1").click(function () { //点击查看园所新闻

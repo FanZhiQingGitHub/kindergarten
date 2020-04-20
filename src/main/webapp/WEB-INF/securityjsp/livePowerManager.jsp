@@ -29,7 +29,7 @@
         <hr>
     </div>
 
-    <div class="layui-fluid" id="searchTable" style="top:5px;margin-left: 20%">
+    <div class="layui-fluid" id="searchTable" style="top:5px;margin-left: 3%">
         <div class="layadmin-user-login-box layadmin-user-login-header">
             <div style="padding-bottom: 10px;">
 
@@ -50,9 +50,11 @@
                     </div>
                 </div>
 
-                <button type="button" class="layui-btn layui-btn-normal addPowerManager"><i
-                        class="layui-icon">&#xe654;</i>新增直播权限
-                </button>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <p style="width: 700px;height:35px ; margin-top:1% ;text-align: center;font-size: 16px;color: #f37d25">温馨提醒：您可以在配置权限当中新增权限，如果未分配的班级，则默认不会选中任何权限！</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -94,7 +96,7 @@
         //第一个实例
         table.render({
             elem: '#dataTable'
-            , height: 280
+            , height: 550
             , url: path + '/security/showClassInfo' //数据接口
             , page: true //开启分页
             , id: 'searchTable'
@@ -121,7 +123,20 @@
 
         //修改权限管理
         $('body').on('click', '.updatePowerManager', function () {
-            layer.msg("敬请期待");
+            var classid = $(this).parents('tr').children('td').eq(0).text();
+            var classname = $(this).parents('tr').children('td').eq(1).text();
+            layer.open({
+                type: 2,
+                area: ['420px', '620px'],
+                offset: ['8%', '40%'],
+                title: '修改直播权限',
+                content: path + '/security/path/configurePermissions' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                , success: function (layero, index) {
+                    var body = layer.getChildFrame("body", index);
+                    body.find("#classid").val(classid);
+                    body.find("#classname").val(classname+'家长');
+                }
+            });
         });
     });
 

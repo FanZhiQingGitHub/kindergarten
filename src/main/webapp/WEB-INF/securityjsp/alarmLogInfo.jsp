@@ -62,7 +62,7 @@
         //第一个实例
         table.render({
             elem: '#dataTable'
-            , height: 280
+            , height: 550
             , url: path + '/security/showAlarmInfo' //数据接口
             , page: true //开启分页
             , id: 'searchTable'

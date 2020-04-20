@@ -56,9 +56,17 @@ public interface SecurityMapper {
 
     public Long findALLMonitorInfoCount(MonitorPage monitorPage);
 
-    public List<TblClass> findClassInfoInfo(ClassPage classPage);
+    public List<TblClass> findClassInfo(ClassPage classPage);
 
-    public Long findClassInfoInfoCount(ClassPage classPage);
+    public Long findClassInfoCount(ClassPage classPage);
+
+    public List<TblClamon> findAllMonitorname();
+
+    public List<TblClamon> findMonitornameByClassID(Integer classid);
+
+    public Boolean deleteMnId(Integer classid);
+
+    public Boolean updateTblClamon(List list);
 
 
 }

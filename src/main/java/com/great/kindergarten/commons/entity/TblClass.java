@@ -15,6 +15,8 @@ public class TblClass {
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date classregtime;
     private String classstatus;
+    private Integer kid;//园所id
+
     //从表的教师表的值
     private TblTeacher tblTeacher;
     private Integer teacherid;
@@ -23,11 +25,14 @@ public class TblClass {
     public TblClass() {
     }
 
-    public TblClass(Integer classid, String classname, Date classregtime, String classstatus) {
+    public TblClass(Integer classid, String classname, Date classregtime, String classstatus, Integer kid, Integer teacherid, String teachername) {
         this.classid = classid;
         this.classname = classname;
         this.classregtime = classregtime;
         this.classstatus = classstatus;
+        this.kid = kid;
+        this.teacherid = teacherid;
+        this.teachername = teachername;
     }
 
     public Integer getClassid() {
@@ -62,33 +67,35 @@ public class TblClass {
         this.classstatus = classstatus;
     }
 
-    public TblTeacher getTblTeacher()
-    {
+    public Integer getKid() {
+        return kid;
+    }
+
+    public void setKid(Integer kid) {
+        this.kid = kid;
+    }
+
+    public TblTeacher getTblTeacher() {
         return tblTeacher;
     }
 
-    public void setTblTeacher(TblTeacher tblTeacher)
-    {
+    public void setTblTeacher(TblTeacher tblTeacher) {
         this.tblTeacher = tblTeacher;
     }
 
-    public Integer getTeacherid()
-    {
+    public Integer getTeacherid() {
         return teacherid;
     }
 
-    public void setTeacherid(Integer teacherid)
-    {
+    public void setTeacherid(Integer teacherid) {
         this.teacherid = teacherid;
     }
 
-    public String getTeachername()
-    {
+    public String getTeachername() {
         return teachername;
     }
 
-    public void setTeachername(String teachername)
-    {
+    public void setTeachername(String teachername) {
         this.teachername = teachername;
     }
 
@@ -99,6 +106,10 @@ public class TblClass {
                 ", classname='" + classname + '\'' +
                 ", classregtime=" + classregtime +
                 ", classstatus='" + classstatus + '\'' +
+                ", kid=" + kid +
+                ", tblTeacher=" + tblTeacher +
+                ", teacherid=" + teacherid +
+                ", teachername='" + teachername + '\'' +
                 '}';
     }
 }

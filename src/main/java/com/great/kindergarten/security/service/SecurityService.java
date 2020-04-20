@@ -3,10 +3,7 @@ package com.great.kindergarten.security.service;
 import com.great.kindergarten.admin.mapper.AdminMapper;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.security.mapper.SecurityMapper;
-import com.great.kindergarten.security.resultbean.AlarmLogPage;
-import com.great.kindergarten.security.resultbean.MonitorPage;
-import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
-import com.great.kindergarten.security.resultbean.PickUpInfoPage;
+import com.great.kindergarten.security.resultbean.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -145,5 +142,30 @@ public class SecurityService {
         return securityMapper.findALLMonitorInfoCount(monitorPage);
     }
 
+    public List<TblClass> findClassInfo(ClassPage classPage){
+        return securityMapper.findClassInfo(classPage);
+    }
+
+    public Long findClassInfoCount(ClassPage classPage){
+        return securityMapper.findClassInfoCount(classPage);
+    }
+
+    public List<TblClamon> findAllMonitorname(){
+        return securityMapper.findAllMonitorname();
+    }
+
+    public List<TblClamon> findMonitornameByClassID(Integer classid){
+        return securityMapper.findMonitornameByClassID(classid);
+    }
+
+    @Transactional
+    public Boolean deleteMnId(Integer classid){
+        return securityMapper.deleteMnId(classid);
+    }
+
+    @Transactional
+    public Boolean updateTblClamon(List list){
+        return securityMapper.updateTblClamon(list);
+    }
 
 }
