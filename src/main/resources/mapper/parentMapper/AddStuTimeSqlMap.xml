@@ -69,10 +69,7 @@
     </insert>
 
     <insert id="addPmDate" parameterType="java.util.Map">
-        insert into
-        tbl_stutimepm(timepmdate)
-        values
-        (#{i.timepmdate})
+        insert into tbl_stutimepm(timepmdate)values(#{timepmdate})
     </insert>
 
     <!--    新增下午考勤信息-->

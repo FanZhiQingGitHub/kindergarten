@@ -309,12 +309,14 @@ public class ParentService {
     public Boolean addAmAttendance(List<TblStutime> tblStutimeListAm){
         return parentMapper.addAmAttendance(tblStutimeListAm);
     }
+
     @Transactional
     public Boolean addPmDate(String timepmdate){
         Map<String,String> dateMap = new LinkedHashMap<>();
         dateMap.put("timepmdate",timepmdate);
         return parentMapper.addPmDate(dateMap);
     }
+
     @Transactional
     public Boolean addPmAttendance(List<TblStutime> tblStutimeListPm){
         return parentMapper.addPmAttendance(tblStutimeListPm);
