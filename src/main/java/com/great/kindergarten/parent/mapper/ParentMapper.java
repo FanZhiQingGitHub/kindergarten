@@ -198,8 +198,9 @@ public interface ParentMapper {
 	public Boolean addPmAttendanceAll(List<TblStutime> tblStutimeListPm);
 
 	public Boolean updateAmAttendance(Map<String,String> AmMap);
+
 	public Boolean updatePmAttendance(Map<String,String> PmMap);
 
-	public List<TblStudent> findAllStuInfo();
+	public List<TblStudent> findAllStuInfo(Map<String,String> Map);
 
 }

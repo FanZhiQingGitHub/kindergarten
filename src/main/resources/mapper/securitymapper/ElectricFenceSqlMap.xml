@@ -110,8 +110,6 @@
         </where>
     </select>
 
-
-
     <!--    修改幼儿园电子围栏信息-->
     <delete id="deleteLngLatInfo" parameterType="java.lang.Integer">
         delete from tbl_coordinate where kinderid = #{kinderid}

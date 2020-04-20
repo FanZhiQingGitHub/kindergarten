@@ -346,11 +346,13 @@ public class ParentService {
         PmMap.put("timepm",timepm);
         PmMap.put("pnamepm",pnamepm);
         PmMap.put("timepmdate",timepmdate);
-        return parentMapper.updateAmAttendance(PmMap);
+        return parentMapper.updatePmAttendance(PmMap);
     }
 
-    public List<TblStudent> findAllStuInfo(){
-        return parentMapper.findAllStuInfo();
+    public List<TblStudent> findAllStuInfo(String parentName){
+        Map<String,String> Map = new LinkedHashMap<>();
+        Map.put("parentName",parentName);
+        return parentMapper.findAllStuInfo(Map);
     }
 
 

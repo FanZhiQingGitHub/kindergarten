@@ -649,7 +649,7 @@ public class ParentController {
     @RequestMapping("/findAllStuInfo")
     public void findAllStuInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Gson g = new Gson();
-        List<TblStudent> tblStudentList = parentService.findAllStuInfo();//查找所有宝宝信息，用于请假页面宝宝名称下拉框查询
+        List<TblStudent> tblStudentList = parentService.findAllStuInfo(parentname);//查找所有宝宝信息，用于请假页面宝宝名称下拉框查询
         if (0 != tblStudentList.size()) {
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
@@ -725,7 +725,7 @@ public class ParentController {
         if (time.equals("上午")) {
             if (null != tblStutimeAm) {
                 System.out.println("上午考勤表中存在今天的日期");
-                System.out.println("update考勤信息");
+                System.out.println("update上午考勤信息");
                 Boolean flag = parentService.updateAmAttendance("请假", "无", leaveDate);
                 if (flag) {
                     ResponseUtils.outHtml(response, "success");
@@ -733,7 +733,7 @@ public class ParentController {
                     ResponseUtils.outHtml(response, "error");
                 }
             } else {
-                System.out.println("insert考勤信息");
+                System.out.println("insert上午考勤信息");
                 tblStutime.setWeekinfo(today);
                 tblStutime.setTimeamdate(leaveDate);
                 tblStutime.setTimeam("请假");
@@ -773,9 +773,8 @@ public class ParentController {
             }
         } else if (time.equals("下午")) {
             if (null != tblStutimePm) { //下午考勤表中存在今天的日期
-                System.out.println("update考勤信息");
-                tblStutime.setTimeam("请假");
-                tblStutime.setPnameam("无");
+                System.out.println("下午考勤表中存在今天的日期");
+                System.out.println("update下午考勤信息");
                 Boolean flag = parentService.updatePmAttendance("请假", "无", leaveDate);
                 if (flag) {
                     ResponseUtils.outHtml(response, "success");
