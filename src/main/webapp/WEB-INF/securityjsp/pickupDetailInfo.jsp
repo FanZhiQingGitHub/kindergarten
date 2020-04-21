@@ -70,6 +70,11 @@
 
     <table class="layui-table" id="ta1">
         <thead id="thd">
+        <tr>
+            <th style='text-align: center'>项目</th>
+            <th style='text-align: center'></th>
+        </tr>
+
         </thead>
         <tbody id="tbo">
         </tbody>

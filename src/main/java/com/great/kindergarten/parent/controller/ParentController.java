@@ -625,12 +625,24 @@ public class ParentController {
 
         Integer hh = now.get(Calendar.HOUR_OF_DAY);//获取当前是几点
         Integer mm = now.get(Calendar.MINUTE);//获取当前是几点几分钟
-        if (mm < 10) {
-            String nmm = "0" + mm;
-            ct = hh + ":" + nmm;
-        } else {
-            ct = hh + ":" + mm;
+
+        if (hh <10) {
+            if(mm < 10){
+                ct = "0" + hh + ":" +"0"+mm;
+            }else {
+                ct = "0" + hh + ":" +mm;
+            }
+        }else {
+            if(mm <10 ){
+                ct = hh + ":" +"0"+mm;
+            }else {
+                ct = hh + ":" +mm;
+            }
         }
+
+        System.out.println("ct=" + ct);
+        System.out.println("timeamdate=" + timeamdate);
+
         if (ct.compareTo("12:00") < 0) {
 //        if (ct.compareTo("12:00") > 0) {
             timeam = ct;
@@ -741,8 +753,6 @@ public class ParentController {
                 }
             }
         }
-        System.out.println("ct=" + ct);
-        System.out.println("timeamdate=" + timeamdate);
     }
 
     //查找所有宝宝信息

@@ -125,12 +125,12 @@
                     datatype: 'text',
                     success: function (data) {
                         if (data == "error") {
-                            layer.alert("亲，密码与原密码不匹配", {icon: 2});
+                            layer.msg("亲，密码与原密码不匹配", {icon: 2});
                         } else {
-                            layer.alert("亲，密码与原密码匹配", {icon: 6});
+                            layer.msg("亲，密码与原密码匹配", {icon: 6});
                         }
                     }, error: function (data) {
-                        layer.alert("网络繁忙！", {icon: 2});
+                        layer.msg("网络繁忙！", {icon: 2});
                     }
                 });
             }
@@ -145,41 +145,45 @@
                 offset: '130px',
                 btnAlign: 'c',
                 btn1: function (index) {
-                    var securitypwd = $("#securitypwd").val();
-                    var confrimSecuritypwd = $("#confrimSecuritypwd").val();
-                    var oldSecuritypwd = $("#oldSecuritypwd").val();
+                    layer.confirm('您确定要修改吗?', {icon: 3, title:'提示'},function (index) {
+                        var securitypwd = $("#securitypwd").val();
+                        var confrimSecuritypwd = $("#confrimSecuritypwd").val();
+                        var oldSecuritypwd = $("#oldSecuritypwd").val();
 
-                    var pwd = /^[\S]{6,12}$/;
-                    if (oldSecuritypwd.length == 0) {
-                        layer.alert("请输入旧密码", {icon: 2});
-                    } else if (!pwd.test(securitypwd)) {
-                        layer.alert("您好，新密码必须6~12位，且不能出现空格！", {icon: 2});
-                    } else if (!pwd.test(confrimSecuritypwd)) {
-                        layer.alert("请确认密码，必须6~12位，且不能出现空格！", {icon: 2});
-                    } else if (securitypwd != confrimSecuritypwd) {
-                        layer.alert("密码输入不一致", {icon: 2});
-                    } else {
-                        $.ajax({
-                            url: path + '/security/updateSecuritypwd',
-                            async: true,
-                            type: 'post',
-                            data: {
-                                "securitypwd": securitypwd,
-                                "confrimSecuritypwd": confrimSecuritypwd
-                            },
-                            datatype: 'text',
-                            success: function (data) {
-                                if (data == "error") {
-                                    layer.alert("修改失败！", {icon: 2});
-                                } else {
-                                    layer.alert("修改成功", {icon: 6});
-                                    layer.close(index);
+                        var pwd = /^[\S]{6,12}$/;
+                        if (oldSecuritypwd.length == 0) {
+                            layer.msg("请输入旧密码", {icon: 2});
+                        } else if (!pwd.test(securitypwd)) {
+                            layer.msg("您好，新密码必须6~12位，且不能出现空格！", {icon: 2});
+                        } else if (!pwd.test(confrimSecuritypwd)) {
+                            layer.msg("请确认密码，必须6~12位，且不能出现空格！", {icon: 2});
+                        } else if (securitypwd != confrimSecuritypwd) {
+                            layer.msg("密码输入不一致", {icon: 2});
+                        } else {
+                            $.ajax({
+                                url: path + '/security/updateSecuritypwd',
+                                async: true,
+                                type: 'post',
+                                data: {
+                                    "securitypwd": securitypwd,
+                                    "confrimSecuritypwd": confrimSecuritypwd
+                                },
+                                datatype: 'text',
+                                success: function (data) {
+                                    if (data == "error") {
+                                        layer.msg("修改失败！", {icon: 2});
+                                    } else {
+                                        layer.alert("修改成功", {icon: 6});
+                                        layer.close(index);
+                                    }
+                                }, error: function (data) {
+                                    layer.msg("网络繁忙！", {icon: 2});
                                 }
-                            }, error: function (data) {
-                                layer.alert("网络繁忙！", {icon: 2});
-                            }
-                        });
-                    }
+                            });
+                        };
+
+                    });
+
                 },
             });
         });

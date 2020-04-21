@@ -34,13 +34,16 @@ public class TblKinder {
     private String kinderacount;
     private String kinderpwd;
     private String kindercode;
+    private String kinderscale;//规模
+    private String kinderfunds;//注册资金
+
     private String time1;
     private String time2;
 
     public TblKinder() {
     }
 
-    public TblKinder(Integer kinderid, String kindername, String kinderlp, String kinderlpid, String kinderlpadd, String kinderlpphone, String schoolpermit, String healthpermit, String firepermit, String grouppermit, String registrationpermit, Date kinderapptime, Date kinderregtime, String kinderstatus) {
+    public TblKinder(Integer kinderid, String kindername, String kinderlp, String kinderlpid, String kinderlpadd, String kinderlpphone, String schoolpermit, String healthpermit, String firepermit, String grouppermit, String registrationpermit, Date kinderapptime, Date kinderregtime, String kinderstatus, String kinderacount, String kinderpwd, String kindercode, String kinderscale, String kinderfunds,  String time1, String time2) {
         this.kinderid = kinderid;
         this.kindername = kindername;
         this.kinderlp = kinderlp;
@@ -55,6 +58,13 @@ public class TblKinder {
         this.kinderapptime = kinderapptime;
         this.kinderregtime = kinderregtime;
         this.kinderstatus = kinderstatus;
+        this.kinderacount = kinderacount;
+        this.kinderpwd = kinderpwd;
+        this.kindercode = kindercode;
+        this.kinderscale = kinderscale;
+        this.kinderfunds = kinderfunds;
+        this.time1 = time1;
+        this.time2 = time2;
     }
 
     public Integer getKinderid() {
@@ -169,24 +179,44 @@ public class TblKinder {
         this.kinderstatus = kinderstatus;
     }
 
-    public String getKinderacount()
-    {
+    public String getKinderacount() {
         return kinderacount;
     }
 
-    public void setKinderacount(String kinderacount)
-    {
+    public void setKinderacount(String kinderacount) {
         this.kinderacount = kinderacount;
     }
 
-    public String getKindercode()
-    {
+    public String getKinderpwd() {
+        return kinderpwd;
+    }
+
+    public void setKinderpwd(String kinderpwd) {
+        this.kinderpwd = kinderpwd;
+    }
+
+    public String getKindercode() {
         return kindercode;
     }
 
-    public void setKindercode(String kindercode)
-    {
+    public void setKindercode(String kindercode) {
         this.kindercode = kindercode;
+    }
+
+    public String getKinderscale() {
+        return kinderscale;
+    }
+
+    public void setKinderscale(String kinderscale) {
+        this.kinderscale = kinderscale;
+    }
+
+    public String getKinderfunds() {
+        return kinderfunds;
+    }
+
+    public void setKinderfunds(String kinderfunds) {
+        this.kinderfunds = kinderfunds;
     }
 
     public String getTime1() {
@@ -205,19 +235,30 @@ public class TblKinder {
         this.time2 = time2;
     }
 
-    public String getKinderpwd()
-    {
-        return kinderpwd;
-    }
-
-    public void setKinderpwd(String kinderpwd)
-    {
-        this.kinderpwd = kinderpwd;
-    }
-
     @Override
-    public String toString()
-    {
-        return "TblKinder{" + "kinderid=" + kinderid + ", kindername='" + kindername + '\'' + ", kinderlp='" + kinderlp + '\'' + ", kinderlpid='" + kinderlpid + '\'' + ", kinderlpadd='" + kinderlpadd + '\'' + ", kinderlpphone='" + kinderlpphone + '\'' + ", schoolpermit='" + schoolpermit + '\'' + ", healthpermit='" + healthpermit + '\'' + ", firepermit='" + firepermit + '\'' + ", grouppermit='" + grouppermit + '\'' + ", registrationpermit='" + registrationpermit + '\'' + ", kinderapptime=" + kinderapptime + ", kinderregtime=" + kinderregtime + ", kinderstatus='" + kinderstatus + '\'' + ", kinderacount='" + kinderacount + '\'' + ", kinderpwd='" + kinderpwd + '\'' + ", kindercode='" + kindercode + '\'' + ", time1='" + time1 + '\'' + ", time2='" + time2 + '\'' + '}';
+    public String toString() {
+        return "TblKinder{" +
+                "kinderid=" + kinderid +
+                ", kindername='" + kindername + '\'' +
+                ", kinderlp='" + kinderlp + '\'' +
+                ", kinderlpid='" + kinderlpid + '\'' +
+                ", kinderlpadd='" + kinderlpadd + '\'' +
+                ", kinderlpphone='" + kinderlpphone + '\'' +
+                ", schoolpermit='" + schoolpermit + '\'' +
+                ", healthpermit='" + healthpermit + '\'' +
+                ", firepermit='" + firepermit + '\'' +
+                ", grouppermit='" + grouppermit + '\'' +
+                ", registrationpermit='" + registrationpermit + '\'' +
+                ", kinderapptime=" + kinderapptime +
+                ", kinderregtime=" + kinderregtime +
+                ", kinderstatus='" + kinderstatus + '\'' +
+                ", kinderacount='" + kinderacount + '\'' +
+                ", kinderpwd='" + kinderpwd + '\'' +
+                ", kindercode='" + kindercode + '\'' +
+                ", kinderscale='" + kinderscale + '\'' +
+                ", kinderfunds='" + kinderfunds + '\'' +
+                ", time1='" + time1 + '\'' +
+                ", time2='" + time2 + '\'' +
+                '}';
     }
 }

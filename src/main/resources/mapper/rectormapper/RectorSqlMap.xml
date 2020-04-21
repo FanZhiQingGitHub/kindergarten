@@ -248,10 +248,10 @@
     <insert id="addParentForm" parameterType="TblParent">
 		insert into tbl_parent(parentname,parentpwd,parentsex,
 		parentage,parentadd,parentson,parentphone,parentjob,
-		parentregtime,parentstatus,rid)
+		parentregtime,parentstatus,parentBalance,rid)
         values(#{parentName},'e10adc3949ba59abbe56e057f20f883e',
         #{parentSex},#{parentAge},#{parentAdd},#{parentSon},#{parentPhone},
-        #{parentJob},#{parentRegTime},'启用',1);
+        #{parentJob},#{parentRegTime},'启用','0',1);
 	</insert>
     <select id="selectParentByPid" resultType="TblParent" parameterType="string">
         select * from tbl_parent where parentname = #{parentname};

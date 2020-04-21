@@ -44,6 +44,8 @@
             ,kinderstatus
             ,kinderacount
             ,kinderpwd
+            ,kinderscale
+            ,kinderfunds
 		)values(
 			 #{kindername}
 			,#{kinderlp}
@@ -59,6 +61,8 @@
 			,#{kinderstatus}
 			,#{kinderacount}
 			,#{kinderpwd}
+			,#{kinderscale}
+			,#{kinderfunds}
 		)
     </insert>
 
@@ -430,4 +434,5 @@
             </if>
         </where>
     </select>
+
 </mapper>

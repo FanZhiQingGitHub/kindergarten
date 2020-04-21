@@ -63,31 +63,34 @@
 
         $(function () {
             $("#bu1").click(function () {
-                if(coordinatelist.length == 0){
-                    layer.msg("您必须添加相应数据！", {icon: 2});
-                }else {
-                    var msg = {"coordinatelist": coordinatelist};
-                    console.log(coordinatelist);
-                    msg = JSON.stringify(msg);
-                    $.ajax({
-                        url: path + "/security/updateMealInfo",
-                        async: true,
-                        type: "post",
-                        data: "TblCoordinate=" + msg,
-                        datatype: "text",
-                        success: function (msg) {
-                            if (msg == "success") {
-                                layer.alert("修改成功！", {icon: 6}, function (index) {
-                                    window.parent.location.reload();
-                                });
-                            } else {
-                                layer.msg("修改失败！", {icon: 2});
+                layer.confirm('您确定要修改吗?', {icon: 3, title:'提示'},function (index) {
+                    if(coordinatelist.length == 0){
+                        layer.msg("您必须添加相应数据！", {icon: 2});
+                    }else {
+                        var msg = {"coordinatelist": coordinatelist};
+                        msg = JSON.stringify(msg);
+                        $.ajax({
+                            url: path + "/security/updateMealInfo",
+                            async: true,
+                            type: "post",
+                            data: "TblCoordinate=" + msg,
+                            datatype: "text",
+                            success: function (msg) {
+                                if (msg == "success") {
+                                    layer.alert("修改成功！", {icon: 6}, function (index) {
+                                        window.parent.location.reload();
+                                    });
+                                    layer.close(index)
+                                } else {
+                                    layer.msg("修改失败！", {icon: 2});
+                                }
+                            }, error: function (msg) {
+                                layer.msg("网络繁忙！", {icon: 2});
                             }
-                        }, error: function (msg) {
-                            layer.msg("网络繁忙！", {icon: 2});
-                        }
-                    })
-                }
+                        })
+                    }
+                });
+
             });
         })
 
