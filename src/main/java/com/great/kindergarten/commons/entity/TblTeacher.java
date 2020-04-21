@@ -30,6 +30,7 @@ public class TblTeacher
 	private String teacherstatus;
 	private Integer cid;
 	private Integer rid;
+	private Integer kinderid;
 	private String code;
 	private String time1;
 	private String time2;
@@ -217,9 +218,19 @@ public class TblTeacher
 		this.classname = classname;
 	}
 
+	public Integer getKinderid()
+	{
+		return kinderid;
+	}
+
+	public void setKinderid(Integer kinderid)
+	{
+		this.kinderid = kinderid;
+	}
+
 	@Override
 	public String toString()
 	{
-		return "TblTeacher{" + "teacherid=" + teacherid + ", teachername='" + teachername + '\'' + ", teacherpwd='" + teacherpwd + '\'' + ", teachersex='" + teachersex + '\'' + ", teacherage=" + teacherage + ", teacheradd='" + teacheradd + '\'' + ", teacherphone='" + teacherphone + '\'' + ", teacherjob='" + teacherjob + '\'' + ", teacherregtime=" + teacherregtime + ", teacherstatus='" + teacherstatus + '\'' + ", cid=" + cid + ", rid=" + rid + ", code='" + code + '\'' + '}';
+		return "TblTeacher{" + "teacherid=" + teacherid + ", teachername='" + teachername + '\'' + ", teacherpwd='" + teacherpwd + '\'' + ", teachersex='" + teachersex + '\'' + ", teacherage=" + teacherage + ", teacheradd='" + teacheradd + '\'' + ", teacherphone='" + teacherphone + '\'' + ", teacherjob='" + teacherjob + '\'' + ", teacherregtime=" + teacherregtime + ", teacherstatus='" + teacherstatus + '\'' + ", cid=" + cid + ", rid=" + rid + ", kinderid=" + kinderid + ", code='" + code + '\'' + ", time1='" + time1 + '\'' + ", time2='" + time2 + '\'' + ", tblClass=" + tblClass + ", classid=" + classid + ", classname='" + classname + '\'' + '}';
 	}
 }
