@@ -63,6 +63,8 @@
 			</a>
 			<dl class="layui-nav-child">
 				<dd><a href="javascript:void(0);" id="a1" >个人信息</a></dd>
+				<dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
+				<dd><a href="javascript:void(0);"  class="addTeaAttendTime">教师上课打卡</a></dd>
 			</dl>
 		</li>
 		<li class="layui-nav-item"><a href="javascript:void(0);" id="exit" style="color: black;font-size: 18px">注销</a></li>
@@ -145,7 +147,7 @@
 		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="attendanceManagement">考<br/>勤<br/>管<br/>理</button>
 		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="classPhoto">班<br/>级<br/>相<br/>册</button>
 		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="messageInform">消<br/>息<br/>通<br/>知</button>
-		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="parentInform">家<br/>长<br/>通<br/>知</button>
+		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="chatParent">联<br/>系<br/>家<br/>长</button>
 
 	</div>
 </div>
@@ -208,11 +210,13 @@
 					}
 				});
 			});
+			//退出
 			$("#exit").click(function () {
 				layer.confirm('您确定要退出到登录界面吗?', {icon: 3, title:'温馨提示'},function(index){
 					layer.close(index);
-					sessionStorage.clear();//清除session信息
-					location.href = path + "/teacher/toUrl/teacherLogin";
+					// sessionStorage.clear();//清除session信息
+
+					location.href = path + "/teacher/teacherOut";
 				});
 			});
 			// 课程表弹窗
@@ -354,7 +358,54 @@
 					}
 				});
 			});
+
+			//对应显示消息通知的内容
+			$('.schoolMessage').on('click',function () {
+				layer.open({
+					type: 2,
+					title: '校园消息通知',
+					shade: 0.8//表示的是阴影的大小
+					, area: ['55%', '65%'],
+					moveType: 1,//拖拽模式，0或者1
+					content: path + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					, success: function (layero, index) {
+						console.log(layero, index);
+					}
+				});
+			});
+			$(".addTeaAttendTime").click(function () {
+				// var path = $("#path").val();
+				// var weekInfo = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+				// var week = new Date().getDay();
+				// var weekToday = weekInfo[week];
+
+				// if(weekToday == "星期六" || weekToday == "星期日"){
+				//     layer.alert('亲，现在是周末哦，打卡功能暂时关闭。',{icon:6});
+				// }else {
+				layer.open({
+					type: 2,
+					area: ['95%', '81%'],
+					offset: ['10%', '3%'],
+					title: '智慧幼儿园-人脸识别界面',
+					content: path + '/director/toUrl/dirFaceID' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					, success: function (layero, index) {
+						var body = layer.getChildFrame("body", index);
+					}
+				});
+				// }
+			});
 		});
+		// 联系家长  在线聊天
+		$("#chatParent").on('click',function () {
+			layer.confirm('请问您确定要进入到在线聊天中心吗?', {icon: 3, title: '温馨提示'},
+				function (index) {
+				layer.close(index);
+				window.location.href = path+"/director/toUrl/chatlogin";
+				return true;
+			});
+			return false;
+		});
+
 
 	});
 </script>
