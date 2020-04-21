@@ -137,20 +137,28 @@
 							//--------------------------上午接送信息------------------------------------
 							option += "<tr><td style='text-align: center'>日期</td>";
 							for (var j in info) {
-								var d = new Date(info[j].tertime);
-								var datetime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-								option += "<td style='text-align: center'>" + datetime + "</td>"
+								if(info[j].tertime!=null){
+									var d = new Date(info[j].tertime);
+									var datetime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+									option += "<td style='text-align: center'>" + datetime + "</td>"
+								}else{
+									option += "<td style='text-align: center'></td>"
+								}
 							}
 							option += "</tr>";
 
 							option += "<tr><td style='text-align: center'>上午</td>";
 							for (var j in info) {
-								if (info[j].tertimedate1 > '8:30') {
-									option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].tertimedate1 + "</td>"
-								} else if (info[j].tertimedate1 == '请假') {
-									option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].tertimedate1 + "</td>"
-								} else {
-									option += "<td style='text-align: center'>" + info[j].tertimedate1 + "</td>"
+								if(info[j].tertimedate1!=null) {
+									if (info[j].tertimedate1 == '请假') {
+										option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].tertimedate1 + "</td>"
+									}else if (info[j].tertimedate1 > '8:30') {
+										option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].tertimedate1 + "</td>"
+									} else {
+										option += "<td style='text-align: center'>" + info[j].tertimedate1 + "</td>"
+									}
+								}else{
+									option += "<td style='text-align: center'></td>"
 								}
 							}
 							option += "</tr>";
@@ -158,15 +166,26 @@
 //--------------------------中午接送信息------------------------------------
 
 							option += "<tr><td style='text-align: center'>中午</td>";
-							for (var j in info) {
-								var noon1 = info[j].noon.substring(0,5);
-								var noon2 = info[j].noon.substring(5,10);
-								if (noon1 < '12:01' || noon2 > '12:30' ) {
-									option += "<td bgcolor='yellow' style='text-align: center'>" + noon1 +"</br>" +noon2+ "</td>"
-								} else if (info[j].noon == '请假') {
-									option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].noon + "</td>"
-								} else {
-									option += "<td style='text-align: center'>" +noon1 +"</br>" +noon2+ "</td>"
+							// var i = 0; i < data.length; i++
+							for (var j = 0;j<info.length;j++) {
+								console.log(j+"个="+info[j].noon);
+								if(null!=info[j].noon&&info[j].noon!='undefined'){
+									if(info[j].noon!="请假"){
+										console.log("进入到对应的substring"+info[j].noon);
+										var noon1 = info[j].noon.substring(0,5);
+										var noon2 = info[j].noon.substring(5,10);
+										if (noon1 < '12:01' || noon2 > '12:30' ) {
+											option += "<td bgcolor='yellow' style='text-align: center'>" + noon1 +"</br>" +noon2+ "</td>"
+										}else {
+											option += "<td style='text-align: center'>" +noon1 +"</br>" +noon2+ "</td>"
+										}
+									}
+									else if (info[j].noon == '请假') {
+										console.log("未进入的substring");
+										option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].noon + "</td>"
+									}
+								}else{
+									option += "<td style='text-align: center'></td>"
 								}
 							}
 
@@ -174,12 +193,16 @@
 
 							option += "<tr><td style='text-align: center'>下午</td>";
 							for (var j in info) {
-								if (info[j].tertimedate2 < '17:30') {
-									option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].tertimedate2 + "</td>"
-								} else if (info[j].tertimedate2 == '请假') {
-									option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].tertimedate2 + "</td>"
-								} else {
-									option += "<td style='text-align: center'>" + info[j].tertimedate2 + "</td>"
+								if(info[j].tertimedate2!=null) {
+									if (info[j].tertimedate2 == '请假') {
+										option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].tertimedate2 + "</td>"
+									}else if (info[j].tertimedate2 < '17:30') {
+										option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].tertimedate2 + "</td>"
+									}  else {
+										option += "<td style='text-align: center'>" + info[j].tertimedate2 + "</td>"
+									}
+								}else{
+									option += "<td style='text-align: center'></td>"
 								}
 							}
 							option += "</tr>";
@@ -241,36 +264,55 @@
 							//--------------------------上午接送信息------------------------------------
 							option += "<tr><td style='text-align: center'>日期</td>";
 							for (var j in info) {
-								var d = new Date(info[j].tertime);
-								var datetime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-								option += "<td style='text-align: center'>" + datetime + "</td>"
+								if(info[j].tertime!=null){
+									var d = new Date(info[j].tertime);
+									var datetime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+									option += "<td style='text-align: center'>" + datetime + "</td>"
+								}else{
+									option += "<td style='text-align: center'></td>"
+								}
 							}
 							option += "</tr>";
 
 							option += "<tr><td style='text-align: center'>上午</td>";
 							for (var j in info) {
-								if (info[j].tertimedate1 > '8:30') {
-									option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].tertimedate1 + "</td>"
-								} else if (info[j].tertimedate1 == '请假') {
-									option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].tertimedate1 + "</td>"
-								} else {
-									option += "<td style='text-align: center'>" + info[j].tertimedate1 + "</td>"
+								if(info[j].tertimedate1!=null) {
+									if (info[j].tertimedate1 == '请假') {
+										option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].tertimedate1 + "</td>"
+									}else if (info[j].tertimedate1 > '8:30') {
+										option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].tertimedate1 + "</td>"
+									} else {
+										option += "<td style='text-align: center'>" + info[j].tertimedate1 + "</td>"
+									}
+								}else{
+									option += "<td style='text-align: center'></td>"
 								}
 							}
 							option += "</tr>";
 
-							//--------------------------中午接送信息------------------------------------
+//--------------------------中午接送信息------------------------------------
 
 							option += "<tr><td style='text-align: center'>中午</td>";
-							for (var j in info) {
-								var noon1 = info[j].noon.substring(0,5);
-								var noon2 = info[j].noon.substring(5,10);
-								if (noon1 < '12:01' || noon2 > '12:30' ) {
-									option += "<td bgcolor='yellow' style='text-align: center'>" + noon1 +"</br>" +noon2+ "</td>"
-								} else if (info[j].noon == '请假') {
-									option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].noon + "</td>"
-								} else {
-									option += "<td style='text-align: center'>" +noon1 +"</br>" +noon2+ "</td>"
+							// var i = 0; i < data.length; i++
+							for (var j = 0;j<info.length;j++) {
+								console.log(j+"个="+info[j].noon);
+								if(null!=info[j].noon&&info[j].noon!='undefined'){
+									if(info[j].noon!="请假"){
+										console.log("进入到对应的substring"+info[j].noon);
+										var noon1 = info[j].noon.substring(0,5);
+										var noon2 = info[j].noon.substring(5,10);
+										if (noon1 < '12:01' || noon2 > '12:30' ) {
+											option += "<td bgcolor='yellow' style='text-align: center'>" + noon1 +"</br>" +noon2+ "</td>"
+										}else {
+											option += "<td style='text-align: center'>" +noon1 +"</br>" +noon2+ "</td>"
+										}
+									}
+									else if (info[j].noon == '请假') {
+										console.log("未进入的substring");
+										option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].noon + "</td>"
+									}
+								}else{
+									option += "<td style='text-align: center'></td>"
 								}
 							}
 
@@ -278,12 +320,16 @@
 
 							option += "<tr><td style='text-align: center'>下午</td>";
 							for (var j in info) {
-								if (info[j].tertimedate2 < '17:30') {
-									option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].tertimedate2 + "</td>"
-								} else if (info[j].tertimedate2 == '请假') {
-									option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].tertimedate2 + "</td>"
-								} else {
-									option += "<td style='text-align: center'>" + info[j].tertimedate2 + "</td>"
+								if(info[j].tertimedate2!=null) {
+									 if (info[j].tertimedate2 == '请假') {
+										option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].tertimedate2 + "</td>"
+									} else if (info[j].tertimedate2 < '17:30') {
+										option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].tertimedate2 + "</td>"
+									} else {
+										option += "<td style='text-align: center'>" + info[j].tertimedate2 + "</td>"
+									}
+								}else{
+									option += "<td style='text-align: center'></td>"
 								}
 							}
 							option += "</tr>";
@@ -319,36 +365,55 @@
 					//--------------------------上午接送信息------------------------------------
 					option += "<tr><td style='text-align: center'>日期</td>";
 					for (var j in info) {
-						var d = new Date(info[j].tertime);
-						var datetime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-						option += "<td style='text-align: center'>" + datetime + "</td>"
+						if(info[j].tertime!=null){
+							var d = new Date(info[j].tertime);
+							var datetime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+							option += "<td style='text-align: center'>" + datetime + "</td>"
+						}else{
+							option += "<td style='text-align: center'></td>"
+						}
 					}
 					option += "</tr>";
 
 					option += "<tr><td style='text-align: center'>上午</td>";
 					for (var j in info) {
-						if (info[j].tertimedate1 > '8:30') {
-							option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].tertimedate1 + "</td>"
-						} else if (info[j].tertimedate1 == '请假') {
-							option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].tertimedate1 + "</td>"
-						} else {
-							option += "<td style='text-align: center'>" + info[j].tertimedate1 + "</td>"
+						if(info[j].tertimedate1!=null) {
+							if (info[j].tertimedate1 == '请假') {
+								option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].tertimedate1 + "</td>"
+							}else if (info[j].tertimedate1 > '8:30') {
+								option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].tertimedate1 + "</td>"
+							} else {
+								option += "<td style='text-align: center'>" + info[j].tertimedate1 + "</td>"
+							}
+						}else{
+							option += "<td style='text-align: center'></td>"
 						}
 					}
 					option += "</tr>";
 
-					//--------------------------中午接送信息------------------------------------
+//--------------------------中午接送信息------------------------------------
 
 					option += "<tr><td style='text-align: center'>中午</td>";
-					for (var j in info) {
-						var noon1 = info[j].noon.substring(0,5);
-						var noon2 = info[j].noon.substring(5,10);
-						if (noon1 < '12:01' || noon2 > '12:30' ) {
-							option += "<td bgcolor='yellow' style='text-align: center'>" + noon1 +"</br>" +noon2+ "</td>"
-						} else if (info[j].noon == '请假') {
-							option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].noon + "</td>"
-						} else {
-							option += "<td style='text-align: center'>" +noon1 +"</br>" +noon2+ "</td>"
+					// var i = 0; i < data.length; i++
+					for (var j = 0;j<info.length;j++) {
+						console.log(j+"个="+info[j].noon);
+						if(null!=info[j].noon&&info[j].noon!='undefined'){
+							if(info[j].noon!="请假"){
+								console.log("进入到对应的substring"+info[j].noon);
+								var noon1 = info[j].noon.substring(0,5);
+								var noon2 = info[j].noon.substring(5,10);
+								if (noon1 < '12:01' || noon2 > '12:30' ) {
+									option += "<td bgcolor='yellow' style='text-align: center'>" + noon1 +"</br>" +noon2+ "</td>"
+								}else {
+									option += "<td style='text-align: center'>" +noon1 +"</br>" +noon2+ "</td>"
+								}
+							}
+							else if (info[j].noon == '请假') {
+								console.log("未进入的substring");
+								option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].noon + "</td>"
+							}
+						}else{
+							option += "<td style='text-align: center'></td>"
 						}
 					}
 
@@ -356,12 +421,16 @@
 
 					option += "<tr><td style='text-align: center'>下午</td>";
 					for (var j in info) {
-						if (info[j].tertimedate2 < '17:30') {
-							option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].tertimedate2 + "</td>"
-						} else if (info[j].tertimedate2 == '请假') {
-							option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].tertimedate2 + "</td>"
-						} else {
-							option += "<td style='text-align: center'>" + info[j].tertimedate2 + "</td>"
+						if(info[j].tertimedate2!=null) {
+							if (info[j].tertimedate2 == '请假') {
+								option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].tertimedate2 + "</td>"
+							} else if (info[j].tertimedate2 < '17:30') {
+								option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].tertimedate2 + "</td>"
+							} else {
+								option += "<td style='text-align: center'>" + info[j].tertimedate2 + "</td>"
+							}
+						}else{
+							option += "<td style='text-align: center'></td>"
 						}
 					}
 					option += "</tr>";
