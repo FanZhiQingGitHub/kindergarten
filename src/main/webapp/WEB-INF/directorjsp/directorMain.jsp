@@ -63,6 +63,7 @@
                 <dd><a href="javascript:void(0);"  class="personMsg">个人信息</a></dd>
                 <dd><a href="javascript:void(0);"  class="updatePwd">修改密码</a></dd>
                 <dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
+                <dd><a href="javascript:void(0);"  class="addTeaAttendTime">教师上课打卡</a></dd>
             </dl>
         </li>
         <li class="layui-nav-item"><a  href="javascript:void(0); "  id="exit" style="color: black;font-size: 18px">注销</a></li>
@@ -153,11 +154,10 @@
                         <div style=" overflow:auto;">
                             <c:if test="${not empty tblCampusList}">
                                 <c:forEach items="${tblCampusList}" var="i" step="1">
-                                    <a href="javascript:;" style="font-size: 18px" class="showNewsInfo">${i.campusinfoname}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></a><br>
+                                    <a href="javascript:;" style="font-size: 18px" class="showNewsInfo">${i.campusinfoname}<span style="display: none">:${i.campusinfodetail}</span><br/>发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></a><br>
                                 </c:forEach>
                             </c:if>
                         </div>
-
                     </div>
                 </div>
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
@@ -287,8 +287,18 @@
 
         //查看对应的消息内容
         $(".showNewsInfo").on('click',function () {
-            var shownews = $(this).parents('div').children('a').text();
-            console.log("对应进行显示="+shownews);
+            var shownews = $(this).text();
+            var titleInfo = shownews.split(":")[0];
+            var detailInfo = shownews.split(":")[1];
+            console.log("对应进行显示="+titleInfo+"="+detailInfo);
+            //打开一个窗口播放视频
+            layer.open({
+                //打开一个窗口播放视频
+                area: 'auto',
+                offset:'auto',
+                title:titleInfo,
+                content: detailInfo,
+            });
         });
 
         //退出到首页
@@ -409,7 +419,6 @@
             });
             return false;
         });
-
         //消息通知
         $("#messageNotice").on('click',function () {
             layer.confirm('您确定要进入到消息通知进行编辑吗?', {icon: 3, title: '温馨提示'}, function (index) {
@@ -433,7 +442,27 @@
                 //直接跳出一个标签播放视频
             });
         });
+        $(".addTeaAttendTime").click(function () {
+            // var path = $("#path").val();
+            // var weekInfo = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+            // var week = new Date().getDay();
+            // var weekToday = weekInfo[week];
 
+            // if(weekToday == "星期六" || weekToday == "星期日"){
+            //     layer.alert('亲，现在是周末哦，打卡功能暂时关闭。',{icon:6});
+            // }else {
+            layer.open({
+                type: 2,
+                area: ['95%', '81%'],
+                offset: ['10%', '3%'],
+                title: '智慧幼儿园-人脸识别界面',
+                content: src + '/director/toUrl/dirFaceID' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                , success: function (layero, index) {
+                    var body = layer.getChildFrame("body", index);
+                }
+            });
+            // }
+        });
     });
 
 </script>

@@ -18,6 +18,19 @@ public interface ParentMapper {
 
 
 	/**
+	 * 根据班级id找到相册列表
+	 * @param searchCondition
+	 * @return
+	 */
+	List<TblPhoto> findPhotosByCid(SearchCondition searchCondition);
+	/**
+	 * 计算这个班级有几个照片记录
+	 * @param searchCondition
+	 * @return
+	 */
+	Integer countPhotosByCid(SearchCondition searchCondition);
+
+	/**
 	 * 计算这本书一共有几页
 	 * @param readId
 	 * @return

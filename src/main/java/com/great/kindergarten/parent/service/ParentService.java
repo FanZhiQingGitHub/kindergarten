@@ -29,9 +29,42 @@ public class ParentService {
 
 
 
+
+
+    /**
+     *  根据搜索条件找到对应的相册列表
+     * @param searchCondition
+     * @return
+     */
+    public TableDate findPhotosByCid(SearchCondition searchCondition){
+
+        Integer startPage = (searchCondition.getPage() -1) *searchCondition.getLimit();
+        searchCondition.setPage(startPage);
+
+        TableDate tableDate = new TableDate();
+        //计算有几个条数
+        tableDate.setCount(parentMapper.countPhotosByCid(searchCondition));
+        //放入数据
+        tableDate.setData(parentMapper.findPhotosByCid(searchCondition));
+
+        return tableDate;
+    }
+
+
+
+
+
+
+
+
+
+    /**
+     * 根据书本id和页面查询数据返回给页面显示内容
+     * @param readId
+     * @param page
+     * @return
+     */
     public PageBean<TblReadmag> readBook(Integer readId,Integer page){
-
-
         Integer totalRecords=parentMapper.countBookById(readId);
 
         List<TblReadmag> list =  parentMapper.readBookByIdAndPage(readId, page);

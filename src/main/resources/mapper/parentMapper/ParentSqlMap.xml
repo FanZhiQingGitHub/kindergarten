@@ -68,6 +68,67 @@
     </resultMap>
 
 
+
+
+    <select id="findPhotosByCid"  parameterType="SearchCondition" resultType="TblPhoto">
+        select *
+        from tbl_photo
+        <where>
+            1=1
+            <if test="name != '' and name != null ">
+                and photoname = #{name}
+            </if>
+
+            <if test="status != '' and status != null ">
+                and cid = #{status}
+            </if>
+
+            <if test="beginTime != null ">
+                and phototime  &gt;= #{beginTime}
+            </if>
+
+            <if test="endTime != null ">
+                and phototime &lt;= #{endTime}
+            </if>
+        </where>
+        order by phototime desc  limit #{page},#{limit}
+
+    </select>
+
+
+
+
+
+
+    <select id="countPhotosByCid"  parameterType="SearchCondition" resultType="integer">
+        select count(*)
+        from tbl_photo
+        <where>
+            1=1
+            <if test="name != '' and name != null ">
+                and photoname = #{name}
+            </if>
+
+            <if test="status != '' and status != null ">
+                and cid = #{status}
+            </if>
+
+            <if test="beginTime != null ">
+                and phototime  &gt;= #{beginTime}
+            </if>
+
+            <if test="endTime != null ">
+                and phototime &lt;= #{endTime}
+            </if>
+        </where>
+        order by phototime desc
+    </select>
+
+
+
+
+
+
     <select id="countBookById" resultType="integer">
         select count(*) from tbl_readmag
         <where>

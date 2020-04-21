@@ -223,6 +223,64 @@ public class KinderService
 	}
 
 	/*
+	* 显示对应的教师考勤时间表是否有对应的时间
+	* */
+	//（1）对应的时间表的ID值
+	public List<TblTeacherAttend> findTeaAtteByTid(int teacherid){
+		return kinderMapper.findTeaAtteByTid(teacherid);
+	}
+	@Transactional
+	//（2）对应的时间表在没有的时候要进行对应的添加使用
+	public boolean addDateTeaAttend(TblTeacherAttend tblTeacherAttend){
+		return kinderMapper.addDateTeaAttend(tblTeacherAttend);
+	}
+	//（3）对应的时间表要进行更新使用
+	public boolean updateDateTeaAttend(TblTeacherAttend tblTeacherAttend){
+		return kinderMapper.updateDateTeaAttend(tblTeacherAttend);
+	}
+	//（3）查找下午是否有过添加该字段了-如果有的话，就进行对应的
+	public TblTertime findAfternoon(Map<String, Object> map){
+		return kinderMapper.findAfternoon(map);
+	}
+	@Transactional
+	//（4）添加对应的下午的信息--添加到对应的字段
+	public boolean addPmTerTimeMsg(TblTertime tblTertime){
+		return kinderMapper.addPmTerTimeMsg(tblTertime);
+	}
+	@Transactional
+	//（5）更新下午对应的信息--更新对应的下午信息进去
+	public boolean updatePmTerTimeMsg(TblTertime tblTertime){
+		return kinderMapper.updatePmTerTimeMsg(tblTertime);
+	}
+	@Transactional
+	//（6）添加对应的上午的信息--添加到对应的字段
+	public boolean addAmTerTimeMsg(TblTertime tblTertime){
+		return kinderMapper.addAmTerTimeMsg(tblTertime);
+	}
+	@Transactional
+	//（7）更新上午对应的信息--更新对应的上午信息进去
+	public boolean updateAmTerTimeMsg(TblTertime tblTertime){
+		return kinderMapper.updateAmTerTimeMsg(tblTertime);
+	}
+	@Transactional
+	//（8）添加对应的中午的信息--添加到对应的字段
+	public boolean addOmTerTimeMsg(TblTertime tblTertime){
+		return kinderMapper.addOmTerTimeMsg(tblTertime);
+	}
+	@Transactional
+	//（9）更新中午对应的信息--更新对应的上午信息进去
+	public boolean updateOmTerTimeMsg(TblTertime tblTertime){
+		return kinderMapper.updateOmTerTimeMsg(tblTertime);
+	}
+
+	/*
+	* 教师考勤是否请假的原因
+	* */
+
+
+
+
+	/*
 	* 消息通知
 	* */
 	//添加对应的消息信息到对应的消息表----tblInfotype
@@ -239,6 +297,7 @@ public class KinderService
 	public Long findSchoolMessageAllCount(Map<String, Object> map){
 		return kinderMapper.findSchoolMessageAllCount(map);
 	}
+
 
 
 }

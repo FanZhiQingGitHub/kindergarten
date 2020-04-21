@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.healther.resultbean.MealPage;
 import com.great.kindergarten.parent.service.ParentService;
+import com.great.kindergarten.security.resultbean.MonitorPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
+import com.great.kindergarten.security.service.SecurityService;
 import com.great.kindergarten.util.DateUtil;
 import com.great.kindergarten.util.FaceRecognitionUtils;
 import com.great.kindergarten.util.MD5Utils;
@@ -57,6 +59,9 @@ public class ParentController {
 
     @Resource
     private ParentService parentService;
+    @Resource
+    private SecurityService securityService;
+
 
     @RequestMapping("/toUrl/{url}")
     public String toUrl(@PathVariable String url, HttpServletRequest request) {
@@ -65,8 +70,61 @@ public class ParentController {
 
 
 
+    @RequestMapping("/showMonitorInfo")
+    public void showMonitorInfo(DateWrite dateWrite, MonitorPage monitorPage, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-	@RequestMapping("/readBook")
+
+        //取得是谁要进行操作
+        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
+
+        Integer limit = Integer.valueOf(request.getParameter("limit"));
+
+        Integer page = Integer.valueOf(request.getParameter("page"));
+
+
+        Integer maxpage = limit;
+        Integer minpage = (page - 1) * limit;
+
+        monitorPage.setLimit(maxpage);
+        monitorPage.setPage(minpage);
+        monitorPage.setKindername(parent.getKindername());
+
+
+        List<TblMonitor> tblMonitorList = securityService.findALLMonitorInfo(monitorPage);
+        if (0 != tblMonitorList.size()) {
+            Integer count = securityService.findALLMonitorInfoCount(monitorPage).intValue();
+            dateWrite.setMsg(" ");
+            dateWrite.setCode(0);
+            dateWrite.setCount(count);
+            dateWrite.setData(tblMonitorList);
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        } else {
+            if(parent.getKindername() == null){
+                dateWrite.setMsg("亲，您需要登录幼儿园账号后才可以查看该信息！");
+            }else {
+                dateWrite.setMsg("亲，暂无相关数据！");
+            }
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        }
+    }
+
+    @RequestMapping("/findPhotosByCid")
+    @ResponseBody
+    public TableDate findPhotosByCid(SearchCondition searchCondition){
+        //根据根据班级id找到相册信息
+        //返回查找的结果
+        return parentService.findPhotosByCid(searchCondition);
+    }
+
+
+
+    @RequestMapping("/readBook")
 	@ResponseBody
 	public PageBean<TblReadmag> readBook(HttpServletRequest request){
         //获取要读的页面还有哪本书
@@ -226,7 +284,7 @@ public class ParentController {
         String workName = request.getParameter("workName");
         String name = sName.split("</")[0].split(">")[1];
         Integer cid = Integer.valueOf(request.getParameter("cid"));
-        String workreleaseid = request.getParameter("workreleaseid");
+        String workReleaseId = request.getParameter("workreleaseid");
 
         OutputStream os = null;
         InputStream inputStream = null;
@@ -237,7 +295,7 @@ public class ParentController {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String dayTime = df.format(new Date());
 
-        String path = request.getServletContext().getRealPath("/homeWork/" + workreleaseid + "/" + dayTime);
+        String path = request.getServletContext().getRealPath("/homeWork/" + workReleaseId + "/" + dayTime);
 
         UpLoadReturn res = new UpLoadReturn();
         try {
@@ -262,7 +320,7 @@ public class ParentController {
             }
 
             //数据库存储路径
-            String databasePath = "homeWork@" +workreleaseid + "@@" + dayTime + "@@@" + fileName;
+            String databasePath = "homeWork@" +workReleaseId + "@@" + dayTime + "@@@" + fileName;
 
 
             //数据库插入操作
@@ -274,9 +332,9 @@ public class ParentController {
             tblWork.setSid(sid);
             tblWork.setStudentname(name);
             tblWork.setCid(cid);
-            tblWork.setWorkreleaseid(workreleaseid);
-            tblWork.setPid(3);
-            tblWork.setParentname("张飞爸爸");
+            tblWork.setWorkreleaseid(workReleaseId);
+            tblWork.setPid(parent.getParentId());
+            tblWork.setParentname(parent.getParentName());
 
             //判断是要覆盖还是第一次提交
             if (parentService.findSameWorkInsertRecord(tblWork) == 0) {
@@ -463,6 +521,8 @@ public class ParentController {
                     //设置结果为成功 前台用来判断
                     loginResult.setSuccess(true);
                     //session中存储家长信息
+                    List<TblCampus> tblCampusList = securityService.findKinderNews(loginParent.getKindername());
+                    request.getSession().setAttribute("tblCampusList", tblCampusList);
                     request.getSession().setAttribute("onlineParent", loginParent);
                     request.getSession().setAttribute("parentname", parentname);
                     //返回信息给ajax
