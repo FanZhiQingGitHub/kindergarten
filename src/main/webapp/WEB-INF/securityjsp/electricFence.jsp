@@ -51,26 +51,26 @@
         <hr>
     </div>
 
-    <div class="layui-fluid" style="margin-left: 6%">
+    <div class="layui-fluid" style="margin-left: 5.5%">
 
         <div class="layui-inline">
             <div class="layui-form-item" style="color: black;width: 300px;margin-top: 5%">
                 <label class="layui-form-label">宝宝名称：</label>
                 <div class="layui-input-block">
-                    <select name="stuname" id="stuname" style="width:180px;height: 5.3%"></select>
+                    <select name="stuname" id="stuname" style="width:200px;height: 5.3%"></select>
                 </div>
             </div>
         </div>
 
         <div class="layui-inline">
-            <label class="layui-form-label" style="font-size: 16px">幼儿园名称</label>
+            <label class="layui-form-label" style="font-size: 16px;">幼儿园名称</label>
             <div class="layui-input-inline">
-                <input class="layui-input" id="kindername" value="${kindername}" style="width: 300px"
+                <input class="layui-input" id="kindername" value="${kindername}" style="width: 250px"
                        readonly>
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label" style="font-size: 16px">当前时间：</label>
+            <label class="layui-form-label" style="font-size: 16px;">当前时间：</label>
             <div class="layui-input-inline">
                 <p id="dateinfo"
                    style="width: 200px;height:35px ; margin-top:4% ;text-align: center;font-size: 16px"></p>
@@ -146,14 +146,23 @@
                 if (data == "error") {
                     layer.alert("暂无宝宝信息！", {icon: 2});
                 } else {
-                    var stuinfo = JSON.parse(data);
-                    var option;
-                    option += "<option value='请选择'>" + "请选择宝宝名称" + "</option>";
-                    for (var i in stuinfo) {
-                        option += "<option value='" + stuinfo[i].studentid + "&" + stuinfo[i].studentname + "&" + stuinfo[i].studentbrith + "'>" + stuinfo[i].studentname + "</option>";
+                    var kindername = $("#kindername").val();
+                    if (kindername.length == 0) {
+                        // layer.msg('对不起，您必须登录幼儿园账号才可以进行此操作！', {icon: 2});
+                        var option;
+                        option += "<option value='请选择'>" + "您需要登录幼儿园账号" + "</option>";
+                        $("#stuname").html(option);
+                        $("#stuname").show();
+                    } else {
+                        var stuinfo = JSON.parse(data);
+                        var option;
+                        option += "<option value='请选择'>" + "请选择宝宝名称" + "</option>";
+                        for (var i in stuinfo) {
+                            option += "<option value='" + stuinfo[i].studentid + "&" + stuinfo[i].studentname + "&" + stuinfo[i].studentbrith + "'>" + stuinfo[i].studentname + "</option>";
+                        }
+                        $("#stuname").html(option);
+                        $("#stuname").show();
                     }
-                    $("#stuname").html(option);
-                    $("#stuname").show();
                 }
             }, error: function (data) {
                 layer.alert("网络繁忙！", {icon: 2});
@@ -344,7 +353,7 @@
         $('body').on('click', '.alarmLogInfo', function () {
             layer.open({
                 type: 2,
-                area: ['80%', '62%'],
+                area: ['80%', '75%'],
                 offset: ['10%', '9.5%'],
                 title: '报警日志详细信息',
                 content: path + '/security/path/alarmLogInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
@@ -358,7 +367,7 @@
         $('body').on('click', '.addElectricFence', function () {
             var kindername = $("#kinder").val();
             if (kindername.length == 0) {
-                layer.msg('对不起，您必须登录幼儿园账号才可以进行修改', {icon: 2});
+                layer.msg('对不起，您必须登录幼儿园账号才可以进行此操作！', {icon: 2});
             } else {
                 layer.open({
                     type: 2,
@@ -377,7 +386,7 @@
         $('body').on('click', '.updateElectricFence', function () {
             var kindername = $("#kinder").val();
             if (kindername.length == 0) {
-                layer.msg('对不起，您必须登录幼儿园账号才可以进行修改', {icon: 2});
+                layer.msg('对不起，您必须登录幼儿园账号才可以进行此操作！', {icon: 2});
             } else {
                 layer.open({
                     type: 2,

@@ -210,7 +210,7 @@
 				layer.open({
 					type: 2,
 					title: '添加信息',
-					area: ['500px', '500px'],
+					area: ['500px', '550px'],
 					moveType: 1,//拖拽模式，0或者1
 					btn: ['添加', '取消'],
 					btn1: function (index, layero) {

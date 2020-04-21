@@ -45,6 +45,8 @@ public class TblStudent {
     private Integer kinderid;
     private String kindername;
 
+    private String parentBalance;//家长账户余额
+
 
     public TblStudent() {
     }
@@ -313,10 +315,47 @@ public class TblStudent {
         this.kindername = kindername;
     }
 
+    public String getParentBalance() {
+        return parentBalance;
+    }
+
+    public void setParentBalance(String parentBalance) {
+        this.parentBalance = parentBalance;
+    }
+
     @Override
-    public String toString()
-    {
-        return "TblStudent{" + "studentid=" + studentid + ", studentname='" + studentname + '\'' + ", studentpwd='" + studentpwd + '\'' + ", studentsex='" + studentsex + '\'' + ", studentbrith='" + studentbrith + '\'' + ", studentadd='" + studentadd + '\'' + ", studenttime=" + studenttime + ", studentstatus='" + studentstatus + '\'' + ", cid=" + cid + ", pid=" + pid + ", kid=" + kid + ", studentlng='" + studentlng + '\'' + ", studentlat='" + studentlat + '\'' + ", time1='" + time1 + '\'' + ", time2='" + time2 + '\'' + ", tblClass=" + tblClass + ", classid=" + classid + ", classname='" + classname + '\'' + ", tblParent=" + tblParent + ", parentId=" + parentId + ", parentName='" + parentName + '\'' + ", parentSon='" + parentSon + '\'' + ", parentPhone='" + parentPhone + '\'' + ", parentAdd='" + parentAdd + '\'' + ", parentJob='" + parentJob + '\'' + ", tblKinder=" + tblKinder + ", kinderid=" + kinderid + ", kindername='" + kindername + '\'' + '}';
+    public String toString() {
+        return "TblStudent{" +
+                "studentid=" + studentid +
+                ", studentname='" + studentname + '\'' +
+                ", studentpwd='" + studentpwd + '\'' +
+                ", studentsex='" + studentsex + '\'' +
+                ", studentbrith='" + studentbrith + '\'' +
+                ", studentadd='" + studentadd + '\'' +
+                ", studenttime=" + studenttime +
+                ", studentstatus='" + studentstatus + '\'' +
+                ", cid=" + cid +
+                ", pid=" + pid +
+                ", kid=" + kid +
+                ", studentlng='" + studentlng + '\'' +
+                ", studentlat='" + studentlat + '\'' +
+                ", time1='" + time1 + '\'' +
+                ", time2='" + time2 + '\'' +
+                ", tblClass=" + tblClass +
+                ", classid=" + classid +
+                ", classname='" + classname + '\'' +
+                ", tblParent=" + tblParent +
+                ", parentId=" + parentId +
+                ", parentName='" + parentName + '\'' +
+                ", parentSon='" + parentSon + '\'' +
+                ", parentPhone='" + parentPhone + '\'' +
+                ", parentAdd='" + parentAdd + '\'' +
+                ", parentJob='" + parentJob + '\'' +
+                ", tblKinder=" + tblKinder +
+                ", kinderid=" + kinderid +
+                ", kindername='" + kindername + '\'' +
+                ", parentBalance='" + parentBalance + '\'' +
+                '}';
     }
 }
 

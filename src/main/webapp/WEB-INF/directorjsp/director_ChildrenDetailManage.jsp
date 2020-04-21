@@ -23,7 +23,7 @@
 	}
 </style>
 <body>
-
+<input type="hidden" id="kindername" value="${kindername}">
 <form class="layui-form" action="#" lay-filter="test1">
 	<input type="text" name="studentid" id="studentid">
 	<input type="hidden" value="${pageContext.request.contextPath}" id="path"/>
@@ -63,6 +63,16 @@
 			</div>
 		</div>
 	</div>
+
+<%--	<div class="layui-form-item">--%>
+<%--		<label class="layui-form-label">入学学费：</label>--%>
+<%--		<div class="layui-input-inline">--%>
+<%--			<div class="layui-form">--%>
+<%--				<input type="text" class="layui-input" name="kindertuition" id="kindertuition"--%>
+<%--					   autocomplete="off" readonly>--%>
+<%--			</div>--%>
+<%--		</div>--%>
+<%--	</div>--%>
 </form>
 
 <script>
@@ -71,6 +81,31 @@
 		var form = layui.form;
 		$ = layui.$;
 		var layer = layui.layer;
+
+		// var path = $("#path").val();
+		// var kindername = $("#kindername").val();
+		// $.ajax({
+		// 	url: path + "/director/findKindertuition",
+		// 	async: true,
+		// 	type: "post",
+		// 	data: {"kindername": kindername},
+		// 	dataType: "text",
+		// 	success: function (msg) {
+		// 		if(kindername.length == 0){
+		// 			layer.msg('您需要登录幼儿园账号才能显示学费信息！',{icon:3});
+		// 		}else {
+		// 			if (msg == "error") {
+		// 				layer.msg('学费信息显示失败！',{icon:2});
+		// 			}else {
+		// 				$("#kindertuition").val(msg+"元/每月");
+		// 			}
+		// 		}
+		// 	},
+		// 	error: function () {
+		// 		layer.alert("网络繁忙");
+		// 	}
+		// })
+
 		$(function () {
 			//幼儿名字判断是不是重复
 			$("#studentname").on('blur', function () {

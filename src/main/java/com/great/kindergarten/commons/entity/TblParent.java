@@ -225,8 +225,25 @@ public class TblParent
 	}
 
 	@Override
-	public String toString()
-	{
-		return "TblParent{" + "parentId=" + parentId + ", parentName='" + parentName + '\'' + ", parentPwd='" + parentPwd + '\'' + ", parentSex='" + parentSex + '\'' + ", parentAge=" + parentAge + ", parentAdd='" + parentAdd + '\'' + ", parentPhone='" + parentPhone + '\'' + ", parentSon='" + parentSon + '\'' + ", parentJob='" + parentJob + '\'' + ", parentRegTime=" + parentRegTime + ", parentStatus='" + parentStatus + '\'' + ", rid=" + rid + ", tblStudent=" + tblStudent + '}';
+	public String toString() {
+		return "TblParent{" +
+				"parentId=" + parentId +
+				", parentName='" + parentName + '\'' +
+				", parentPwd='" + parentPwd + '\'' +
+				", parentSex='" + parentSex + '\'' +
+				", parentAge=" + parentAge +
+				", parentAdd='" + parentAdd + '\'' +
+				", parentPhone='" + parentPhone + '\'' +
+				", parentSon='" + parentSon + '\'' +
+				", parentJob='" + parentJob + '\'' +
+				", parentRegTime=" + parentRegTime +
+				", parentStatus='" + parentStatus + '\'' +
+				", rid=" + rid +
+				", tblStudent=" + tblStudent +
+				", studentid=" + studentid +
+				", studentname='" + studentname + '\'' +
+				", time1='" + time1 + '\'' +
+				", time2='" + time2 + '\'' +
+				'}';
 	}
 }

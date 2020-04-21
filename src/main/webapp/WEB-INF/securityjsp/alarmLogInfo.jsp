@@ -38,7 +38,7 @@
                     </div>
                 </div>
 
-                <button type="button" class="layui-btn layui-btn-normal" data-type="reload"><i class="layui-icon">&#xe615;</i>查询体检信息
+                <button type="button" class="layui-btn layui-btn-normal" data-type="reload"><i class="layui-icon">&#xe615;</i>查询报警信息
                 </button>
             </div>
         </div>
@@ -62,7 +62,7 @@
         //第一个实例
         table.render({
             elem: '#dataTable'
-            , height: 300
+            , height: 350
             , url: path + '/security/showAlarmInfo' //数据接口
             , page: true //开启分页
             , id: 'searchTable'
