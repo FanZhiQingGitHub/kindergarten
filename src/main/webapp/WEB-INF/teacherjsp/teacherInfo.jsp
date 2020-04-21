@@ -62,19 +62,6 @@
 	</div>
 </div>
 
-<!-- footer -->
-<div class="footer">
-	<div class="line"></div>
-	<p class="copyright">
-		@2020 最后#的小组 版权所有©<br/>
-		E-MAIL:kindergarten@outlook.com<br/>
-		TEL:400-888-888
-	</p>
-	<div class="icon_box">
-		<a href="#"><i class="layui-icon layui-icon-login-wechat weixin-icon"></i></a>
-		<a href="#"><i class="layui-icon layui-icon-login-weibo weibo-icon"></i></a>
-	</div>
-</div>
 
 <div id="type-content" style="display: none;">
 	<div class="layui-form-item">
@@ -85,7 +72,7 @@
 	</div>
 	<div class="layui-form-item">
 		<div class="layui-inline">
-			<input type="password" id="teacherPwd"  placeholder="请输入6-12位密码" value=""
+			<input type="password" id="teacherPwd"  placeholder="请输入6-12位新密码" value=""
 			       autocomplete="off" class="layui-input" style="width: 300px">
 		</div>
 	</div>

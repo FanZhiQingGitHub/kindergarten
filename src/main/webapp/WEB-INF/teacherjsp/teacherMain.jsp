@@ -146,7 +146,7 @@
 		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="classInfo">班<br/>级<br/>信<br/>息</button>
 		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="attendanceManagement">考<br/>勤<br/>管<br/>理</button>
 		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="classPhoto">班<br/>级<br/>相<br/>册</button>
-		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="messageInform">消<br/>息<br/>通<br/>知</button>
+		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="classMessageInform">班<br/>级<br/>通<br/>知</button>
 		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="chatParent">联<br/>系<br/>家<br/>长</button>
 
 	</div>
@@ -373,6 +373,7 @@
 					}
 				});
 			});
+			//个人打卡
 			$(".addTeaAttendTime").click(function () {
 				// var path = $("#path").val();
 				// var weekInfo = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
@@ -401,6 +402,15 @@
 				function (index) {
 				layer.close(index);
 				window.location.href = path+"/director/toUrl/chatlogin";
+				return true;
+			});
+			return false;
+		});
+		//班级通知
+		$("#classMessageInform").on('click',function () {
+			layer.confirm('请问您确定要进入到消息通知进行编辑吗?', {icon: 3, title: '温馨提示'}, function (index) {
+				layer.close(index);
+				window.location.href = path+"/teacher/toUrl/classMessageInform";
 				return true;
 			});
 			return false;

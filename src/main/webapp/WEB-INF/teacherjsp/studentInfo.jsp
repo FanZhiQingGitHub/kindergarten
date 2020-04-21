@@ -45,7 +45,7 @@
 	<div class="container">
 		<h1 id="hh1">宝宝信息</h1>
 		<hr style="color: white">
-		<img src="${pageContext.request.contextPath}/image/healtherimg/img/logo.png">
+		<img src="${pageContext.request.contextPath}/image/logo/head.jpg" style="height: 50px;width: 50px">
 		<div class="layui-form-item">
 			<label class="layui-form-label">宝宝姓名：</label>
 			<div class="layui-input-inline">
@@ -76,7 +76,7 @@
 	<div class="container">
 		<h1 id="hh2">家长信息</h1>
 		<hr style="color: white">
-		<img src="${pageContext.request.contextPath}/image/healtherimg/img/logo.png">
+		<img src="${pageContext.request.contextPath}/image/logo/head.jpg" style="height: 50px;width: 50px">
 		<div class="layui-form-item">
 			<label class="layui-form-label">家长姓名：</label>
 			<div class="layui-input-inline">
