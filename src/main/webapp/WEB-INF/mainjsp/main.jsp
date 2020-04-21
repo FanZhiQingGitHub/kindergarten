@@ -57,6 +57,7 @@
             <img style="width: 100%;height: 90px;" src="${pageContext.request.contextPath}/image/logo/logo.png">
         </h1>
         <div class="nav" style="visibility: visible">
+
             <a href="${pageContext.request.contextPath}/main/path/main" id="addStuTime" class="active" style="font-size: 18px">首页</a>
             <a href="${pageContext.request.contextPath}/main/parent" class="active" style="font-size: 18px">家长端</a>
             <a href="${pageContext.request.contextPath}/main/teacher" class="active" style="font-size: 18px">教师端</a>
@@ -65,16 +66,16 @@
             <a href="${pageContext.request.contextPath}/main/director" class="active" style="font-size: 18px">园长端</a>
             <a href="${pageContext.request.contextPath}/main/admin" class="active" style="font-size: 18px">平台端</a>
             <a href="${pageContext.request.contextPath}/main/path/about" class="active" style="font-size: 18px">关于</a>
+            <a href="javascript:void(0); " class="active" style="font-size: 18px" id="exit">注销</a>
         </div>
     </div>
 </div>
 <!-- end-header -->
 
-
 <!-- content -->
 <div class="content">
     <div class="title">
-<%--        <h5>欢迎您的到来</h5>--%>
+        <%--        <h5>欢迎您的到来</h5>--%>
         <h3>用心呵护孩子的点点滴滴</h3>
         <h4>Take care of your kids.</h4>
     </div>
@@ -173,7 +174,6 @@
 </div>
 
 
-
 <!-- footer -->
 <div class="footer">
     <div class="line"></div>
@@ -189,8 +189,9 @@
 </div>
 <!-- end-footer -->
 <script>
-    layui.use(['carousel', 'jquery', 'element','layer'], function () {
-        var carousel = layui.carousel, $ = layui.jquery,layer = layui.layer;
+    layui.use(['carousel', 'jquery', 'element', 'layer'], function () {
+        var carousel = layui.carousel, $ = layui.jquery, layer = layui.layer;
+        var path = $("#path").val();
         //建造实例
         carousel.render({
             elem: '#test1'
@@ -209,7 +210,15 @@
             $('.imgH').css('height', imgH + 'px')
         };
 
-
+        $(function () {
+           $("#exit").click(function () {
+               layer.confirm('您确定要退出到登录界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
+                   layer.close(index);
+                   sessionStorage.clear();//清除session信息
+                   location.href = path + "/main/path/Login";
+               });
+           });
+        });
     });
 
     //创建和初始化地图函数：
