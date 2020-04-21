@@ -24,7 +24,7 @@
 
 	<%--选择班级--%>
 	<div class="layui-form-item">
-		<button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+		<button type="button" class="layui-btn layui-btn-normal" id="testList">选择文件</button>
 
 		<div class="layui-input-block">
 			<label class="layui-form-label" >选择班级：</label>
@@ -64,27 +64,27 @@
 
 		$(function () {
 			$.ajax({
-               //提交数据的类型 POST GET
+				//提交数据的类型 POST GET
 				type:"POST",
-               //提交的网址
-			    url:path + '/teacher/selectClass',
-               //提交的数据
-               //返回数据的格式
-			   datatype:"json",//“xml”, “html”, “script”, “json”, “jsonp”, “text”.
-			//成功返回之后调用的函数
-			success: function (data) {
-                  console.log(data);
-				var list = "";
-				for(var i=0;i<data.length;i++){
-					list = data[i].classname ;
-					console.log("list="+list);
-					$('#selectClass').append(new Option(list));// 下拉菜单里添加元素
-				}
+				//提交的网址
+				url:path + '/teacher/selectClass',
+				//提交的数据
+				//返回数据的格式
+				datatype:"json",//“xml”, “html”, “script”, “json”, “jsonp”, “text”.
+				//成功返回之后调用的函数
+				success: function (data) {
+					console.log(data);
+					var list = "";
+					for(var i=0;i<data.length;i++){
+						list = data[i].classname ;
+						console.log("list="+list);
+						$('#selectClass').append(new Option(list));// 下拉菜单里添加元素
+					}
 
-			}, error:function () {
-				alert("查询班级失败！！！")
-			}
-		});
+				}, error:function () {
+					alert("查询班级失败！！！")
+				}
+			});
 		});
 
 		//多文件列表示例
@@ -100,8 +100,8 @@
 				classname: function () {
 					return $("#selectClass option:selected").text();
 				}
-			    }
-				,choose: function(obj){
+			}
+			,choose: function(obj){
 				var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
 				//读取本地文件
 				obj.preview(function(index, file, result){

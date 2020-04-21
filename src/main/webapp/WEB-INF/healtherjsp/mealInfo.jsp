@@ -63,10 +63,7 @@
         //第一个实例
         table.render({
             elem: '#dataTable'
-            ,text: { //自定义文本，此处用法--》当返回数据为空时的异常提示
-                none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
-            }
-            , height: 280
+            , height: 550
             , url: path + '/healther/showAllMealInfo' //数据接口
             , page: true //开启分页
             , id: 'searchTable'

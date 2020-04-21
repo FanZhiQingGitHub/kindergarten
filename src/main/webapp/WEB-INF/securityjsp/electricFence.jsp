@@ -83,12 +83,12 @@
                         style="width: 150px">报警信息
                 </button>
 
-                <button type="button" class="layui-btn layui-btn-radius layui-btn-warm"
-                        style="width: 150px" id="bu">绘制电子围栏
+                <button type="button" class="layui-btn layui-btn-radius layui-btn-warm addElectricFence"
+                        style="width: 150px" >绘制电子围栏
                 </button>
 
-                <button type="button" class="layui-btn layui-btn-radius layui-btn-danger"
-                        style="width: 150px" id="bu1">修改电子围栏
+                <button type="button" class="layui-btn layui-btn-radius layui-btn-danger updateElectricFence"
+                        style="width: 150px">修改电子围栏
                 </button>
             </div>
         </div>
@@ -182,7 +182,9 @@
             datatype: 'text',
             success: function (msg) {
                 if (msg == "error") {
-                    layer.alert("您好，电子围栏不存在，请先绘制该幼儿园的电子围栏！", {icon: 2});
+                    layer.msg("您好，电子围栏不存在，请先绘制该幼儿园的电子围栏！", {icon: 2});
+                } else if (msg == "notkindername") {
+                    layer.msg("您好，需要登录幼儿园客户端才可以显示电子围栏！", {icon: 2});
                 } else {
                     var info = JSON.parse(msg);
                     var styleOptions = {
@@ -193,7 +195,6 @@
                         fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
                         strokeStyle: 'solid' //边线的样式，solid或dashed。
                     }
-
                     for (var i in info) {
                         var p = new BMap.Point(info[i].lng, info[i].lat);
                         polArry.push(p);
@@ -203,14 +204,15 @@
                     $("#bu").hide();
                 }
             }, error: function (msg) {
-                layer.alert("网络繁忙！", {icon: 2});
+                layer.msg("网络繁忙！", {icon: 2});
             }
         });
 
 
-        map.addEventListener("click", function (e) {
-            console.log(e.point.lng + "," + e.point.lat);
-        });
+        //添加地图点击监听
+        // map.addEventListener("click", function (e) {
+        //     console.log(e.point.lng + "," + e.point.lat);
+        // });
 
         //2.查出给每个孩子默认的显示位置（即学校位置）
         var studentid;
@@ -352,30 +354,36 @@
             });
         });
 
-        //报警信息页面弹出
+        //绘制电子围栏
         $('body').on('click', '.addElectricFence', function () {
-            layer.open({
-                type: 2,
-                area: ['100%', '100%'],
-                offset: ['0%', '0%'],
-                title: '绘制电子围栏',
-                content: path + '/security/path/addElectricFence' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-                , success: function (layero, index) {
-                    var body = layer.getChildFrame("body", index);
-                }
-            });
-        });
-
-        $("#bu1").click(function () {
             var kindername = $("#kinder").val();
             if (kindername.length == 0) {
-                layer.msg('对不起，您必须登录幼儿园账号才可以进行修改', {icon: 3});
+                layer.msg('对不起，您必须登录幼儿园账号才可以进行修改', {icon: 2});
+            } else {
+                layer.open({
+                    type: 2,
+                    area: ['100%', '100%'],
+                    offset: ['0%', '0%'],
+                    title: '绘制电子围栏',
+                    content: path + '/security/path/addElectricFence' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                        var body = layer.getChildFrame("body", index);
+                    }
+                });
+            }
+        });
+
+        //修改电子围栏
+        $('body').on('click', '.updateElectricFence', function () {
+            var kindername = $("#kinder").val();
+            if (kindername.length == 0) {
+                layer.msg('对不起，您必须登录幼儿园账号才可以进行修改', {icon: 2});
             } else {
                 layer.open({
                     type: 2,
                     area: ['100%', '80%'],
                     offset: ['0%', '0%'],
-                    title: '修改'+kindername+'电子围栏',
+                    title: '修改' + kindername + '电子围栏',
                     content: path + '/security/path/updateLngLatInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                     , success: function (layero, index) {
                         var body = layer.getChildFrame("body", index);

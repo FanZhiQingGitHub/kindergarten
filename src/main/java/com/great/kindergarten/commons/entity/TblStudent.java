@@ -37,6 +37,10 @@ public class TblStudent {
     private TblParent tblParent;
     private Integer parentId;
     private String parentName;
+    private String parentSon;
+    private String parentPhone;
+    private String parentAdd;
+    private String parentJob;
     private TblKinder tblKinder;
     private Integer kinderid;
     private String kindername;
@@ -45,7 +49,8 @@ public class TblStudent {
     public TblStudent() {
     }
 
-    public TblStudent(Integer studentid, String studentname, String studentpwd, String studentsex, String studentbrith, String studentadd, Date studenttime, String studentstatus, Integer cid, Integer pid, Integer kid, String studentlng, String studentlat, String time1, String time2, Integer classid, String classname, TblParent tblParent, Integer parentId, String parentName, Integer kinderid, String kindername) {
+    public TblStudent(Integer studentid, String studentname, String studentpwd, String studentsex, String studentbrith, String studentadd, Date studenttime, String studentstatus, Integer cid, Integer pid, Integer kid, String studentlng, String studentlat, String time1, String time2, TblClass tblClass, Integer classid, String classname, TblParent tblParent, Integer parentId, String parentName, String parentSon, String parentPhone, String parentAdd, String parentJob, TblKinder tblKinder, Integer kinderid, String kindername)
+    {
         this.studentid = studentid;
         this.studentname = studentname;
         this.studentpwd = studentpwd;
@@ -61,13 +66,59 @@ public class TblStudent {
         this.studentlat = studentlat;
         this.time1 = time1;
         this.time2 = time2;
+        this.tblClass = tblClass;
         this.classid = classid;
         this.classname = classname;
         this.tblParent = tblParent;
         this.parentId = parentId;
         this.parentName = parentName;
+        this.parentSon = parentSon;
+        this.parentPhone = parentPhone;
+        this.parentAdd = parentAdd;
+        this.parentJob = parentJob;
+        this.tblKinder = tblKinder;
         this.kinderid = kinderid;
         this.kindername = kindername;
+    }
+
+    public String getParentSon()
+    {
+        return parentSon;
+    }
+
+    public void setParentSon(String parentSon)
+    {
+        this.parentSon = parentSon;
+    }
+
+    public String getParentPhone()
+    {
+        return parentPhone;
+    }
+
+    public void setParentPhone(String parentPhone)
+    {
+        this.parentPhone = parentPhone;
+    }
+
+    public String getParentAdd()
+    {
+        return parentAdd;
+    }
+
+    public void setParentAdd(String parentAdd)
+    {
+        this.parentAdd = parentAdd;
+    }
+
+    public String getParentJob()
+    {
+        return parentJob;
+    }
+
+    public void setParentJob(String parentJob)
+    {
+        this.parentJob = parentJob;
     }
 
     public Integer getStudentid() {
@@ -263,33 +314,9 @@ public class TblStudent {
     }
 
     @Override
-    public String toString() {
-        return "TblStudent{" +
-                "studentid=" + studentid +
-                ", studentname='" + studentname + '\'' +
-                ", studentpwd='" + studentpwd + '\'' +
-                ", studentsex='" + studentsex + '\'' +
-                ", studentbrith='" + studentbrith + '\'' +
-                ", studentadd='" + studentadd + '\'' +
-                ", studenttime=" + studenttime +
-                ", studentstatus='" + studentstatus + '\'' +
-                ", cid=" + cid +
-                ", pid=" + pid +
-                ", kid=" + kid +
-                ", studentlng='" + studentlng + '\'' +
-                ", studentlat='" + studentlat + '\'' +
-                ", time1='" + time1 + '\'' +
-                ", time2='" + time2 + '\'' +
-                ", tblClass=" + tblClass +
-                ", classid=" + classid +
-                ", classname='" + classname + '\'' +
-                ", tblParent=" + tblParent +
-                ", parentId=" + parentId +
-                ", parentName='" + parentName + '\'' +
-                ", tblKinder=" + tblKinder +
-                ", kinderid=" + kinderid +
-                ", kindername='" + kindername + '\'' +
-                '}';
+    public String toString()
+    {
+        return "TblStudent{" + "studentid=" + studentid + ", studentname='" + studentname + '\'' + ", studentpwd='" + studentpwd + '\'' + ", studentsex='" + studentsex + '\'' + ", studentbrith='" + studentbrith + '\'' + ", studentadd='" + studentadd + '\'' + ", studenttime=" + studenttime + ", studentstatus='" + studentstatus + '\'' + ", cid=" + cid + ", pid=" + pid + ", kid=" + kid + ", studentlng='" + studentlng + '\'' + ", studentlat='" + studentlat + '\'' + ", time1='" + time1 + '\'' + ", time2='" + time2 + '\'' + ", tblClass=" + tblClass + ", classid=" + classid + ", classname='" + classname + '\'' + ", tblParent=" + tblParent + ", parentId=" + parentId + ", parentName='" + parentName + '\'' + ", parentSon='" + parentSon + '\'' + ", parentPhone='" + parentPhone + '\'' + ", parentAdd='" + parentAdd + '\'' + ", parentJob='" + parentJob + '\'' + ", tblKinder=" + tblKinder + ", kinderid=" + kinderid + ", kindername='" + kindername + '\'' + '}';
     }
 }
 

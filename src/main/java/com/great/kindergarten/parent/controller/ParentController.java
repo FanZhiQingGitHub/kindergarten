@@ -2,8 +2,11 @@ package com.great.kindergarten.parent.controller;
 
 import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
+import com.great.kindergarten.healther.resultbean.MealPage;
 import com.great.kindergarten.parent.service.ParentService;
+import com.great.kindergarten.security.resultbean.MonitorPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
+import com.great.kindergarten.security.service.SecurityService;
 import com.great.kindergarten.util.DateUtil;
 import com.great.kindergarten.util.FaceRecognitionUtils;
 import com.great.kindergarten.util.MD5Utils;
@@ -56,371 +59,139 @@ public class ParentController {
 
     @Resource
     private ParentService parentService;
+    @Resource
+    private SecurityService securityService;
+
 
     @RequestMapping("/toUrl/{url}")
     public String toUrl(@PathVariable String url, HttpServletRequest request) {
         return "parentJsp/" + url;
     }
 
-    //-------------人脸识别考勤---------------
-    //注册人脸
-    @RequestMapping("/regFaceId")
-    public void regFaceId(HttpServletRequest request, HttpServletResponse response) {
-        String face = request.getParameter("face");
-        FaceRecognitionUtils.faceRegister(face, "testPhoto1");
-        System.out.println("face=" + face);
-    }
 
-    //新增考勤-------------------------------------------------------------------------------------------
-     /*
-    1.日期
-    2.家长类型（妈妈或者爸爸）
-    3.当前时间段：如8:30
-    4.需要判断是上午还是下午
-    5.需要pmid
-    6.需要孩子id
-    7.需要日期区间id（需要添加本周一到本周日） --完成
-    8.如果下午或上午没打卡的话默认要插入请假或者其它默认数据
-     */
-    @RequestMapping("/addStuTime")
-    public void addStuTime(TblDate tblDate, TblStutime tblStutime, HttpServletRequest request, HttpServletResponse response) throws ParseException {
 
-        String face = request.getParameter("face");
-        FaceRecognitionUtils.identify(face, null);
+    @RequestMapping("/showMonitorInfo")
+    public void showMonitorInfo(DateWrite dateWrite, MonitorPage monitorPage, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式（当天日期）
-        timeamdate = date.format(new Date());
-        //本周日期
-        monday = DateUtil.getMondayOfThisWeek(1);
-        sunday = DateUtil.getSundayOfThisWeek(7);
-        List<TblDate> tblDateList = parentService.findDateInfo(monday, sunday);//查询是否存在本周一和周日的日期
 
-        Date dt = new Date();
-        today = DateUtil.getWeekOfDate(dt);
-        if (today.equals("星期六") && today.equals("星期日")) {
-            System.out.println("不进行新增考勤");
-            ResponseUtils.outHtml(response, "notadd");
-        } else {
-            if (0 == tblDateList.size()) { //如果不存在本周一和周日的日期
-                System.out.println("不存在本周一和周日的日期");
-                tblDate.setMonday(date.parse(monday));
-                tblDate.setSunday(date.parse(sunday));
-                List<TblDate> dateList = new ArrayList<>();
-                flagDate = parentService.addDateInfo(dateList);
-                if (flagDate) {
-                    System.out.println("日期区间新增成功");
-                    addStudentTime(tblDate, tblStutime, request, response);//新增考勤
-                } else {
-                    System.out.println("日期区间新增失败");
-                    ResponseUtils.outHtml(response, "errorinfo");
-                }
-            } else {
-                System.out.println("存在本周一和周日的日期");
-                addStudentTime(tblDate, tblStutime, request, response);//新增考勤
-            }
-        }
-    }
+        //取得是谁要进行操作
+        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
 
-    private void addStudentTime(TblDate tblDate, TblStutime tblStutime, HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("新增考勤信息");
-        Calendar now = Calendar.getInstance();//获取时间段
-        List<TblDate> DateList = parentService.findDateInfo(monday, sunday);//查询本周日期区间的id
-        for (TblDate tbldate : DateList) {
-            dateid = tbldate.getDateid();//日期id
-            System.out.println("日期区间的id=" + dateid);
-        }
+        Integer limit = Integer.valueOf(request.getParameter("limit"));
 
-        List<TblParent> tblParentList = parentService.findParentStuInfo(parentname);//查询父母亲的信息和宝宝id
-        for (int i = 0; i < tblParentList.size(); i++) {
-            parentname = tblParentList.get(i).getParentName();
-            studentid = tblParentList.get(i).getStudentid();
-        }
+        Integer page = Integer.valueOf(request.getParameter("page"));
 
-        Integer hh = now.get(Calendar.HOUR_OF_DAY);//获取当前是几点
-        Integer mm = now.get(Calendar.MINUTE);//获取当前是几点几分钟
-        if (mm < 10) {
-            String nmm = "0" + mm;
-            ct = hh + ":" + nmm;
-        } else {
-            ct = hh + ":" + mm;
-        }
-        if (ct.compareTo("12:00") < 0) {
-//        if (ct.compareTo("12:00") > 0) {
-            timeam = ct;
-            System.out.println("上午打卡的时间段=" + timeam);//上午打卡的时候同时新增当天日期
-            tblStutime.setWeekinfo(today);
-            tblStutime.setTimeamdate(timeamdate);
-            tblStutime.setTimeam(timeam);
-            tblStutime.setPnameam(parentname);
 
-            TblStutime tblStutime1 = parentService.findPmTimeId(timeamdate);
-            if (tblStutime1 == null) {
-                System.out.println("下午考勤表中不存在今天的日期");
-                parentService.addPmDate(timeamdate);
-                TblStutime tblStutime2 = parentService.findPmTimeId(timeamdate);
-                System.out.println("当天下午的考勤id=" + tblStutime2.getTimepmid());
-                tblStutime.setPmid(tblStutime2.getTimepmid());//今天下午的考勤表id
-                tblStutime.setSid(studentid);
-                tblStutime.setDid(dateid);
-                System.out.println("上午tblStutime1=" + tblStutime);
+        Integer maxpage = limit;
+        Integer minpage = (page - 1) * limit;
 
-                List<TblStutime> AmList = new ArrayList<>();
-                AmList.add(tblStutime);
-                TblStutime tblStutime3 = parentService.findExistDate(timeamdate);//查询是否今天有打过卡（即查上午考勤表中有没有今天的日期）
-                if (null != tblStutime3) {
-                    System.out.println("今天上午已经打过卡了");
-                    System.out.println("AmList=" + AmList);
-                    Boolean flag = parentService.updateAmAttendance(timeam, parentname, timeamdate);
-                    if (flag) {
-                        ResponseUtils.outHtml(response, "amsuccess");
-                    } else {
-                        ResponseUtils.outHtml(response, "errorinfo");
-                    }
-                } else {
-                    flagAm = parentService.addAmAttendance(AmList);
-                    if (flagAm) {
-                        ResponseUtils.outHtml(response, "amsuccess");
-                    } else {
-                        ResponseUtils.outHtml(response, "errorinfo");
-                    }
-                }
-            } else {
-                System.out.println("下午考勤表中存在今天的日期");
-                TblStutime tblStutime2 = parentService.findPmTimeId(timeamdate);
-                System.out.println("当天下午的考勤id=" + tblStutime2.getTimepmid());
-                tblStutime.setPmid(tblStutime2.getTimepmid());//今天下午的考勤表id
-                tblStutime.setSid(studentid);
-                tblStutime.setDid(dateid);
-                System.out.println("上午tblStutime2=" + tblStutime);
-                List<TblStutime> AmList = new ArrayList<>();
-                AmList.add(tblStutime);
+        monitorPage.setLimit(maxpage);
+        monitorPage.setPage(minpage);
+        monitorPage.setKindername(parent.getKindername());
 
-                TblStutime tblStutime3 = parentService.findExistDate(timeamdate);//查询是否今天有打过卡（即查上午考勤表中有没有今天的日期）
-                if (null != tblStutime3) {
-                    System.out.println("今天上午已经打过卡了");
-                    System.out.println("AmList=" + AmList);
-                    Boolean flag = parentService.updateAmAttendance(timeam, parentname, timeamdate);
-                    if (flag) {
-                        ResponseUtils.outHtml(response, "amsuccess");
-                    } else {
-                        ResponseUtils.outHtml(response, "errorinfo");
-                    }
-                } else {
-                    flagAm = parentService.addAmAttendance(AmList);
-                    if (flagAm) {
-                        ResponseUtils.outHtml(response, "amsuccess");
-                    } else {
-                        ResponseUtils.outHtml(response, "errorinfo");
-                    }
-                }
-            }
-        } else {
-            TblStutime tblStutime1 = parentService.findPmTimeId(timeamdate);
-            if (tblStutime1 == null) {
-                System.out.println("下午考勤表中不存在今天的日期");
-                timepm = ct;
-                System.out.println("下午打卡的时间段=" + timepm);
-                tblStutime.setTimepmdate(timeamdate);
-                tblStutime.setTimepm(timepm);
-                tblStutime.setPnamepm(parentname);
-                System.out.println("下午tblStutime3=" + tblStutime);
-                List<TblStutime> PmList = new ArrayList<>();
-                PmList.add(tblStutime);
-                flagPm = parentService.addPmAttendanceAll(PmList);
-                if (flagPm) {
-                    ResponseUtils.outHtml(response, "pmsuccess");
-                } else {
-                    ResponseUtils.outHtml(response, "errorinfo");
-                }
-            } else {
-                System.out.println("下午考勤表中存在今天的日期");
-                System.out.println("今天下午已经打过卡了");
-                timepm = ct;
-                System.out.println("下午打卡的时间段=" + timepm);
-                tblStutime.setTimepmdate(timeamdate);
-                tblStutime.setTimepm(timepm);
-                tblStutime.setPnamepm(parentname);
-                System.out.println("下午tblStutime3=" + tblStutime);
-                List<TblStutime> PmList = new ArrayList<>();
-                PmList.add(tblStutime);
-                flagPm = parentService.addPmAttendance(PmList);
-                if (flagPm) {
-                    ResponseUtils.outHtml(response, "pmsuccess");
-                } else {
-                    ResponseUtils.outHtml(response, "errorinfo");
-                }
-            }
-        }
-        System.out.println("ct=" + ct);
-        System.out.println("timeamdate=" + timeamdate);
-    }
 
-    //查找所有宝宝信息
-    @RequestMapping("/findAllStuInfo")
-    public void findAllStuInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Gson g = new Gson();
-        List<TblStudent> tblStudentList = parentService.findAllStuInfo();//查找所有宝宝信息，用于请假页面宝宝名称下拉框查询
-        if (0 != tblStudentList.size()) {
+        List<TblMonitor> tblMonitorList = securityService.findALLMonitorInfo(monitorPage);
+        if (0 != tblMonitorList.size()) {
+            Integer count = securityService.findALLMonitorInfoCount(monitorPage).intValue();
+            dateWrite.setMsg(" ");
+            dateWrite.setCode(0);
+            dateWrite.setCount(count);
+            dateWrite.setData(tblMonitorList);
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
-            Object[] info = tblStudentList.toArray();
-            String result = g.toJson(info);
-            response.getWriter().print(result);
+            ResponseUtils.outJson(response, dateWrite);
         } else {
-            response.getWriter().print("error");
-        }
-    } //查找所有学生信息
-
-    //新增请假信息
-    @RequestMapping("/addLeaveInfo")
-    public void addLeaveInfo(TblDate tblDate, TblStutime tblStutime, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String studentid = request.getParameter("studentid");
-        String parentname = request.getParameter("parentname");
-        String leaveDate = request.getParameter("leaveDate");
-        String time = request.getParameter("time");
-
-        System.out.println("studentid=" + studentid);
-        System.out.println("parentname=" + parentname);
-        System.out.println("leaveDate=" + leaveDate);
-        System.out.println("time=" + time);
-
-        SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式（当天日期）
-        Date dt = new Date();
-        String today = DateUtil.getWeekOfDate(dt);//获取今天是星期几
-        String date = DateUtil.getMondaySundayByDate(leaveDate);//获取请假日期所在周的周一和周日的日期
-        String[] arr = date.split("&");
-        String monday = arr[0];//周一
-        String sunday = arr[arr.length - 1];//周日
-
-        System.out.println("monday="+monday);
-        System.out.println("sunday="+sunday);
-
-        List<TblDate> tblDateList = parentService.findDateInfo(monday, sunday);//查询是否存在本周一和周日的日期
-        if (today.equals("星期六") && today.equals("星期日")) {
-            System.out.println("周末不需要进行请假");
-            ResponseUtils.outHtml(response, "notadd");
-        } else {
-            if (0 == tblDateList.size()) { //如果不存在本周一和周日的日期
-                System.out.println("不存在本周一和周日的日期");
-                tblDate.setMonday(dft.parse(monday));
-                tblDate.setSunday(dft.parse(sunday));
-                List<TblDate> dateList = new ArrayList<>();
-                flagDate = parentService.addDateInfo(dateList);
-                if (flagDate) {
-                    System.out.println("日期区间新增成功");
-                    addStuLeaveInfo(tblDate, tblStutime, leaveDate, time, monday ,sunday,request, response);
-                } else {
-                    System.out.println("日期区间新增失败");
-                    ResponseUtils.outHtml(response, "error");
-                }
-            } else {
-                System.out.println("存在本周一和周日的日期");
-                addStuLeaveInfo(tblDate, tblStutime, leaveDate, time, monday ,sunday,request, response);
+            if(parent.getKindername() == null){
+                dateWrite.setMsg("亲，您需要登录幼儿园账号后才可以查看该信息！");
+            }else {
+                dateWrite.setMsg("亲，暂无相关数据！");
             }
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
         }
     }
 
-    private void addStuLeaveInfo(TblDate tblDate, TblStutime tblStutime, String leaveDate, String time,  String monday , String sunday,HttpServletRequest request, HttpServletResponse response) {
-        //日期区间新增成功或者查出存在的话，查出该区间的id
-        List<TblDate> DateList = parentService.findDateInfo(monday, sunday);//查询本周日期区间的id
-        for (TblDate tbldate : DateList) {
-            dateid = tbldate.getDateid();//日期id
-        }
-        System.out.println("日期区间的id=" + dateid);
-
-        TblStutime tblStutimeAm = parentService.findAmTimeId(leaveDate);//查看下午考勤表中是否存在今天的日期
-        TblStutime tblStutimePm = parentService.findPmTimeId(leaveDate);//查看下午考勤表中是否存在今天的日期
-
-        if (time.equals("上午")) {
-            if (null != tblStutimeAm) {
-                System.out.println("上午考勤表中存在今天的日期");
-                System.out.println("update考勤信息");
-                Boolean flag = parentService.updateAmAttendance("请假", "无", leaveDate);
-                if (flag) {
-                    ResponseUtils.outHtml(response, "success");
-                } else {
-                    ResponseUtils.outHtml(response, "error");
-                }
-            } else {
-                System.out.println("insert考勤信息");
-                tblStutime.setWeekinfo(today);
-                tblStutime.setTimeamdate(leaveDate);
-                tblStutime.setTimeam("请假");
-                tblStutime.setPnameam("无");
-                if (null == tblStutimePm) {
-                    System.out.println("下午考勤表中不存在今天的日期");
-                    parentService.addPmDate(leaveDate);
-                    TblStutime tblStutime1 = parentService.findPmTimeId(leaveDate);
-                    System.out.println("当天下午的考勤id=" + tblStutime1.getTimepmid());
-                    tblStutime.setPmid(tblStutime1.getTimepmid());
-                    tblStutime.setSid(Integer.valueOf(studentid));
-                    tblStutime.setDid(dateid);
-                    List<TblStutime> AmList = new ArrayList<>();
-                    AmList.add(tblStutime);
-                    flagAm = parentService.addAmAttendance(AmList);
-                    if (flagAm) {
-                        ResponseUtils.outHtml(response, "success");
-                    } else {
-                        ResponseUtils.outHtml(response, "error");
-                    }
-                }else {
-                    System.out.println("下午考勤表中存在今天的日期");
-                    TblStutime tblStutime1 = parentService.findPmTimeId(leaveDate);
-                    System.out.println("当天下午的考勤id=" + tblStutime1.getTimepmid());
-                    tblStutime.setPmid(tblStutime1.getTimepmid());
-                    tblStutime.setSid(Integer.valueOf(studentid));
-                    tblStutime.setDid(dateid);
-                    List<TblStutime> AmList = new ArrayList<>();
-                    AmList.add(tblStutime);
-                    flagAm = parentService.addAmAttendance(AmList);
-                    if (flagAm) {
-                        ResponseUtils.outHtml(response, "success");
-                    } else {
-                        ResponseUtils.outHtml(response, "error");
-                    }
-                }
-            }
-        } else if (time.equals("下午")) {
-            if (null != tblStutimePm) { //下午考勤表中存在今天的日期
-                System.out.println("update考勤信息");
-                tblStutime.setTimeam("请假");
-                tblStutime.setPnameam("无");
-                Boolean flag = parentService.updatePmAttendance("请假", "无", leaveDate);
-                if (flag) {
-                    ResponseUtils.outHtml(response, "success");
-                } else {
-                    ResponseUtils.outHtml(response, "error");
-                }
-            } else {
-                System.out.println("insert考勤信息");
-                tblStutime.setTimepmdate(leaveDate);
-                tblStutime.setTimepm("请假");
-                tblStutime.setPnamepm("无");
-                List<TblStutime> PmList = new ArrayList<>();
-                PmList.add(tblStutime);
-                Boolean flag = parentService.addPmAttendanceAll(PmList);
-                if (flag) {
-                    ResponseUtils.outHtml(response, "success");
-                } else {
-                    ResponseUtils.outHtml(response, "error");
-                }
-            }
-        }
-    }
-
-
-
-    @RequestMapping("/parentFaceRecognition")
+    @RequestMapping("/findPhotosByCid")
     @ResponseBody
-    public Result parentFaceRecognition(String face) {
-        //人脸识别调用 (可根据id单张图片比较)
-        Result result = new Result();
-
-        FaceRecognitionUtils.identify(face, null);
-
-        return result;
+    public TableDate findPhotosByCid(SearchCondition searchCondition){
+        //根据根据班级id找到相册信息
+        //返回查找的结果
+        return parentService.findPhotosByCid(searchCondition);
     }
+
+
+
+    @RequestMapping("/readBook")
+	@ResponseBody
+	public PageBean<TblReadmag> readBook(HttpServletRequest request){
+        //获取要读的页面还有哪本书
+          Integer readId = Integer.valueOf(request.getParameter("readId"))  ;
+        Integer page  = Integer.valueOf(request.getParameter("nowPage"));
+            //数据返回
+
+		return parentService.readBook(readId,page);
+	}
+
+
+
+    @RequestMapping("/findReadList")
+    public String findReadList(HttpServletRequest request){
+
+        //当前页码
+        Integer curPage=null;
+        //判断是否有当前页码
+        if(request.getParameter("curPage")!=null)
+        {
+            curPage= Integer.valueOf(request.getParameter("curPage"));
+        }else {
+            curPage=1;
+        }
+
+        PageBean<TblReadmag> pageBean =parentService.findReadList(curPage,10);
+
+        request.setAttribute("pageBean",pageBean);
+
+        return "parentJsp/ParentChildReading";
+    }
+
+
+
+
+    @RequestMapping("/findExaminationByStudentId")
+    @ResponseBody
+    public TableDate findExaminationByStudentId(SearchCondition searchCondition){
+        //根据学生id找到体检信息
+        //返回查找的结果
+        return parentService.findExaminationByStudentId(searchCondition);
+    }
+
+
+
+
+
+    @RequestMapping("/findRecipeInfo")
+    @ResponseBody
+    public TableDate findRecipeInfo(String mealId){
+        //找到食谱信息并返回
+        Integer id = Integer.valueOf(mealId);
+        //返回查找的结果
+        return parentService.findRecipeInfo(id);
+    }
+
+
+
+
+    @RequestMapping("/findAllMealInfo")
+    @ResponseBody
+    public TableDate findAllMealInfo(MealPage mealPage){
+        //找到所有的食谱
+        //返回查找的结果
+        return parentService.findAllMealInfo(mealPage);
+    }
+
 
 
     @RequestMapping("/showPickUpDetailInfo")
@@ -473,14 +244,18 @@ public class ParentController {
         //设置下载的文件名
         String url = request.getParameter("url");
 
-        String workreleaseid = url.split("@@")[0];
+        String pack = url.split("@")[0];
 
-        String dayTime = url.split("@@")[1].split("@@@")[0];
+        String className = url.split("@@")[0].split("@")[1];
 
-        String downFileName = url.split("@@@")[1];
+        String dayTime = url.split("@@@")[0].split("@@")[1];
+
+        String id = url.split("@@@@")[0].split("@@@")[1];
+
+        String downFileName = url.split("@@@@")[1];
 
         //获取文件的实际路径
-        String databasePath = "/homeWork/" + workreleaseid + "/" + dayTime + "/" + downFileName;
+        String databasePath = "/" + pack + "/" + className + "/" + dayTime  +"/" + id+"/" +downFileName ;
 
 
         //路径
@@ -509,7 +284,7 @@ public class ParentController {
         String workName = request.getParameter("workName");
         String name = sName.split("</")[0].split(">")[1];
         Integer cid = Integer.valueOf(request.getParameter("cid"));
-        String workreleaseid = request.getParameter("workreleaseid");
+        String workReleaseId = request.getParameter("workreleaseid");
 
         OutputStream os = null;
         InputStream inputStream = null;
@@ -520,8 +295,7 @@ public class ParentController {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String dayTime = df.format(new Date());
 
-
-        String path = request.getServletContext().getRealPath("/homeWork/" + workreleaseid + "/" + dayTime);
+        String path = request.getServletContext().getRealPath("/homeWork/" + workReleaseId + "/" + dayTime);
 
         UpLoadReturn res = new UpLoadReturn();
         try {
@@ -546,7 +320,7 @@ public class ParentController {
             }
 
             //数据库存储路径
-            String databasePath = workreleaseid + "@@" + dayTime + "@@@" + fileName;
+            String databasePath = "homeWork@" +workReleaseId + "@@" + dayTime + "@@@" + fileName;
 
 
             //数据库插入操作
@@ -558,9 +332,9 @@ public class ParentController {
             tblWork.setSid(sid);
             tblWork.setStudentname(name);
             tblWork.setCid(cid);
-            tblWork.setWorkreleaseid(workreleaseid);
-            tblWork.setPid(3);
-            tblWork.setParentname("张飞爸爸");
+            tblWork.setWorkreleaseid(workReleaseId);
+            tblWork.setPid(parent.getParentId());
+            tblWork.setParentname(parent.getParentName());
 
             //判断是要覆盖还是第一次提交
             if (parentService.findSameWorkInsertRecord(tblWork) == 0) {
@@ -747,6 +521,8 @@ public class ParentController {
                     //设置结果为成功 前台用来判断
                     loginResult.setSuccess(true);
                     //session中存储家长信息
+                    List<TblCampus> tblCampusList = securityService.findKinderNews(loginParent.getKindername());
+                    request.getSession().setAttribute("tblCampusList", tblCampusList);
                     request.getSession().setAttribute("onlineParent", loginParent);
                     request.getSession().setAttribute("parentname", parentname);
                     //返回信息给ajax
@@ -767,5 +543,359 @@ public class ParentController {
         return loginResult;
     }
 
+
+
+    //-------------人脸识别考勤---------------
+    //注册人脸
+    @RequestMapping("/regFaceId")
+    public void regFaceId(HttpServletRequest request, HttpServletResponse response) {
+        String face = request.getParameter("face");
+        //String name
+        FaceRecognitionUtils.faceRegister(face, "name");
+
+        //加到数据库
+
+        System.out.println("face=" + face);
+    }
+
+    //新增考勤-------------------------------------------------------------------------------------------
+     /*
+    1.日期
+    2.家长类型（妈妈或者爸爸）
+    3.当前时间段：如8:30
+    4.需要判断是上午还是下午
+    5.需要pmid
+    6.需要孩子id
+    7.需要日期区间id（需要添加本周一到本周日） --完成
+    8.如果下午或上午没打卡的话默认要插入请假或者其它默认数据
+     */
+    @RequestMapping("/addStuTime")
+    public void addStuTime(TblDate tblDate, TblStutime tblStutime, HttpServletRequest request, HttpServletResponse response) throws ParseException {
+
+        String face = request.getParameter("face");
+        FaceRecognitionUtils.identify(face, null);
+
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式（当天日期）
+        timeamdate = date.format(new Date());
+        //本周日期
+        monday = DateUtil.getMondayOfThisWeek(1);
+        sunday = DateUtil.getSundayOfThisWeek(7);
+        List<TblDate> tblDateList = parentService.findDateInfo(monday, sunday);//查询是否存在本周一和周日的日期
+
+        Date dt = new Date();
+        today = DateUtil.getWeekOfDate(dt);
+        if (today.equals("星期六") || today.equals("星期日")) {
+            System.out.println("不进行新增考勤");
+            ResponseUtils.outHtml(response, "notadd");
+        } else {
+            if (0 == tblDateList.size()) { //如果不存在本周一和周日的日期
+                System.out.println("不存在本周一和周日的日期");
+                tblDate.setMonday(date.parse(monday));
+                tblDate.setSunday(date.parse(sunday));
+                List<TblDate> dateList = new ArrayList<>();
+                flagDate = parentService.addDateInfo(dateList);
+                if (flagDate) {
+                    System.out.println("日期区间新增成功");
+                    addStudentTime(tblDate, tblStutime, request, response);//新增考勤
+                } else {
+                    System.out.println("日期区间新增失败");
+                    ResponseUtils.outHtml(response, "errorinfo");
+                }
+            } else {
+                System.out.println("存在本周一和周日的日期");
+                addStudentTime(tblDate, tblStutime, request, response);//新增考勤
+            }
+        }
+    }
+
+    private void addStudentTime(TblDate tblDate, TblStutime tblStutime, HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("新增考勤信息");
+        Calendar now = Calendar.getInstance();//获取时间段
+        List<TblDate> DateList = parentService.findDateInfo(monday, sunday);//查询本周日期区间的id
+        for (TblDate tbldate : DateList) {
+            dateid = tbldate.getDateid();//日期id
+            System.out.println("日期区间的id=" + dateid);
+        }
+
+        List<TblParent> tblParentList = parentService.findParentStuInfo(parentname);//查询父母亲的信息和宝宝id
+        for (int i = 0; i < tblParentList.size(); i++) {
+            parentname = tblParentList.get(i).getParentName();
+            studentid = tblParentList.get(i).getStudentid();
+        }
+
+        Integer hh = now.get(Calendar.HOUR_OF_DAY);//获取当前是几点
+        Integer mm = now.get(Calendar.MINUTE);//获取当前是几点几分钟
+        if (mm < 10) {
+            String nmm = "0" + mm;
+            ct = hh + ":" + nmm;
+        } else {
+            ct = hh + ":" + mm;
+        }
+        if (ct.compareTo("12:00") < 0) {
+//        if (ct.compareTo("12:00") > 0) {
+            timeam = ct;
+            System.out.println("上午打卡的时间段=" + timeam);//上午打卡的时候同时新增当天日期
+            tblStutime.setWeekinfo(today);
+            tblStutime.setTimeamdate(timeamdate);
+            tblStutime.setTimeam(timeam);
+            tblStutime.setPnameam(parentname);
+
+            TblStutime tblStutime1 = parentService.findPmTimeId(timeamdate);
+            if (tblStutime1 == null) {
+                System.out.println("下午考勤表中不存在今天的日期");
+                System.out.println("timeamdate="+timeamdate);
+                parentService.addPmDate(timeamdate);
+                TblStutime tblStutime2 = parentService.findPmTimeId(timeamdate);
+
+                System.out.println("tblStutime2=" + tblStutime2);
+                System.out.println("当天下午的考勤id=" + tblStutime2.getTimepmid());
+                tblStutime.setPmid(tblStutime2.getTimepmid());//今天下午的考勤表id
+                tblStutime.setSid(studentid);
+                tblStutime.setDid(dateid);
+                System.out.println("上午tblStutime1=" + tblStutime);
+
+                List<TblStutime> AmList = new ArrayList<>();
+                AmList.add(tblStutime);
+                TblStutime tblStutime3 = parentService.findExistDate(timeamdate);//查询是否今天有打过卡（即查上午考勤表中有没有今天的日期）
+                if (null != tblStutime3) {
+                    System.out.println("今天上午已经打过卡了");
+                    System.out.println("AmList=" + AmList);
+                    Boolean flag = parentService.updateAmAttendance(timeam, parentname, timeamdate);
+                    if (flag) {
+                        ResponseUtils.outHtml(response, "amsuccess");
+                    } else {
+                        ResponseUtils.outHtml(response, "errorinfo");
+                    }
+                } else {
+                    flagAm = parentService.addAmAttendance(AmList);
+                    if (flagAm) {
+                        ResponseUtils.outHtml(response, "amsuccess");
+                    } else {
+                        ResponseUtils.outHtml(response, "errorinfo");
+                    }
+                }
+            } else {
+                System.out.println("下午考勤表中存在今天的日期");
+                TblStutime tblStutime2 = parentService.findPmTimeId(timeamdate);
+                System.out.println("当天下午的考勤id=" + tblStutime2.getTimepmid());
+                tblStutime.setPmid(tblStutime2.getTimepmid());//今天下午的考勤表id
+                tblStutime.setSid(studentid);
+                tblStutime.setDid(dateid);
+                System.out.println("上午tblStutime2=" + tblStutime);
+                List<TblStutime> AmList = new ArrayList<>();
+                AmList.add(tblStutime);
+
+                TblStutime tblStutime3 = parentService.findExistDate(timeamdate);//查询是否今天有打过卡（即查上午考勤表中有没有今天的日期）
+                if (null != tblStutime3) {
+                    System.out.println("今天上午已经打过卡了");
+                    System.out.println("AmList=" + AmList);
+                    Boolean flag = parentService.updateAmAttendance(timeam, parentname, timeamdate);
+                    if (flag) {
+                        ResponseUtils.outHtml(response, "amsuccess");
+                    } else {
+                        ResponseUtils.outHtml(response, "errorinfo");
+                    }
+                } else {
+                    flagAm = parentService.addAmAttendance(AmList);
+                    if (flagAm) {
+                        ResponseUtils.outHtml(response, "amsuccess");
+                    } else {
+                        ResponseUtils.outHtml(response, "errorinfo");
+                    }
+                }
+            }
+        } else {
+            TblStutime tblStutime1 = parentService.findPmTimeId(timeamdate);
+            if (tblStutime1 == null) {
+                System.out.println("下午考勤表中不存在今天的日期");
+                timepm = ct;
+                System.out.println("下午打卡的时间段=" + timepm);
+                tblStutime.setTimepmdate(timeamdate);
+                tblStutime.setTimepm(timepm);
+                tblStutime.setPnamepm(parentname);
+                System.out.println("下午tblStutime3=" + tblStutime);
+                List<TblStutime> PmList = new ArrayList<>();
+                PmList.add(tblStutime);
+                flagPm = parentService.addPmAttendanceAll(PmList);
+                if (flagPm) {
+                    ResponseUtils.outHtml(response, "pmsuccess");
+                } else {
+                    ResponseUtils.outHtml(response, "errorinfo");
+                }
+            } else {
+                System.out.println("下午考勤表中存在今天的日期");
+                System.out.println("今天下午已经打过卡了");
+                timepm = ct;
+                System.out.println("下午打卡的时间段=" + timepm);
+                tblStutime.setTimepmdate(timeamdate);
+                tblStutime.setTimepm(timepm);
+                tblStutime.setPnamepm(parentname);
+                System.out.println("下午tblStutime3=" + tblStutime);
+                List<TblStutime> PmList = new ArrayList<>();
+                PmList.add(tblStutime);
+                flagPm = parentService.addPmAttendance(PmList);
+                if (flagPm) {
+                    ResponseUtils.outHtml(response, "pmsuccess");
+                } else {
+                    ResponseUtils.outHtml(response, "errorinfo");
+                }
+            }
+        }
+        System.out.println("ct=" + ct);
+        System.out.println("timeamdate=" + timeamdate);
+    }
+
+    //查找所有宝宝信息
+    @RequestMapping("/findAllStuInfo")
+    public void findAllStuInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Gson g = new Gson();
+        List<TblStudent> tblStudentList = parentService.findAllStuInfo(parentname);//查找所有宝宝信息，用于请假页面宝宝名称下拉框查询
+        if (0 != tblStudentList.size()) {
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            Object[] info = tblStudentList.toArray();
+            String result = g.toJson(info);
+            response.getWriter().print(result);
+        } else {
+            response.getWriter().print("error");
+        }
+    } //查找所有学生信息
+
+    //新增请假信息
+    @RequestMapping("/addLeaveInfo")
+    public void addLeaveInfo(TblDate tblDate, TblStutime tblStutime, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String studentid = request.getParameter("studentid");
+        String parentname = request.getParameter("parentname");
+        String leaveDate = request.getParameter("leaveDate");
+        String time = request.getParameter("time");
+
+        System.out.println("studentid=" + studentid);
+        System.out.println("parentname=" + parentname);
+        System.out.println("leaveDate=" + leaveDate);
+        System.out.println("time=" + time);
+
+        SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式（当天日期）
+        Date dt = new Date();
+        String today = DateUtil.getWeekOfDate(dt);//获取今天是星期几
+        String date = DateUtil.getMondaySundayByDate(leaveDate);//获取请假日期所在周的周一和周日的日期
+        String[] arr = date.split("&");
+        String monday = arr[0];//周一
+        String sunday = arr[arr.length - 1];//周日
+
+        System.out.println("monday="+monday);
+        System.out.println("sunday="+sunday);
+
+        List<TblDate> tblDateList = parentService.findDateInfo(monday, sunday);//查询是否存在本周一和周日的日期
+        if (today.equals("星期六") || today.equals("星期日")) {
+            System.out.println("周末不需要进行请假");
+            ResponseUtils.outHtml(response, "notadd");
+        } else {
+            if (0 == tblDateList.size()) { //如果不存在本周一和周日的日期
+                System.out.println("不存在本周一和周日的日期");
+                tblDate.setMonday(dft.parse(monday));
+                tblDate.setSunday(dft.parse(sunday));
+                List<TblDate> dateList = new ArrayList<>();
+                flagDate = parentService.addDateInfo(dateList);
+                if (flagDate) {
+                    System.out.println("日期区间新增成功");
+                    addStuLeaveInfo(tblDate, tblStutime, leaveDate, time, monday ,sunday,request, response);
+                } else {
+                    System.out.println("日期区间新增失败");
+                    ResponseUtils.outHtml(response, "error");
+                }
+            } else {
+                System.out.println("存在本周一和周日的日期");
+                addStuLeaveInfo(tblDate, tblStutime, leaveDate, time, monday ,sunday,request, response);
+            }
+        }
+    }
+
+    private void addStuLeaveInfo(TblDate tblDate, TblStutime tblStutime, String leaveDate, String time,  String monday , String sunday,HttpServletRequest request, HttpServletResponse response) {
+        //日期区间新增成功或者查出存在的话，查出该区间的id
+        List<TblDate> DateList = parentService.findDateInfo(monday, sunday);//查询本周日期区间的id
+        for (TblDate tbldate : DateList) {
+            dateid = tbldate.getDateid();//日期id
+        }
+        System.out.println("日期区间的id=" + dateid);
+
+        TblStutime tblStutimeAm = parentService.findAmTimeId(leaveDate);//查看下午考勤表中是否存在今天的日期
+        TblStutime tblStutimePm = parentService.findPmTimeId(leaveDate);//查看下午考勤表中是否存在今天的日期
+
+        if (time.equals("上午")) {
+            if (null != tblStutimeAm) {
+                System.out.println("上午考勤表中存在今天的日期");
+                System.out.println("update上午考勤信息");
+                Boolean flag = parentService.updateAmAttendance("请假", "无", leaveDate);
+                if (flag) {
+                    ResponseUtils.outHtml(response, "success");
+                } else {
+                    ResponseUtils.outHtml(response, "error");
+                }
+            } else {
+                System.out.println("insert上午考勤信息");
+                tblStutime.setWeekinfo(today);
+                tblStutime.setTimeamdate(leaveDate);
+                tblStutime.setTimeam("请假");
+                tblStutime.setPnameam("无");
+                if (null == tblStutimePm) {
+                    System.out.println("下午考勤表中不存在今天的日期");
+                    parentService.addPmDate(leaveDate);
+                    TblStutime tblStutime1 = parentService.findPmTimeId(leaveDate);
+                    System.out.println("当天下午的考勤id=" + tblStutime1.getTimepmid());
+                    tblStutime.setPmid(tblStutime1.getTimepmid());
+                    tblStutime.setSid(Integer.valueOf(studentid));
+                    tblStutime.setDid(dateid);
+                    List<TblStutime> AmList = new ArrayList<>();
+                    AmList.add(tblStutime);
+                    flagAm = parentService.addAmAttendance(AmList);
+                    if (flagAm) {
+                        ResponseUtils.outHtml(response, "success");
+                    } else {
+                        ResponseUtils.outHtml(response, "error");
+                    }
+                }else {
+                    System.out.println("下午考勤表中存在今天的日期");
+                    TblStutime tblStutime1 = parentService.findPmTimeId(leaveDate);
+                    System.out.println("当天下午的考勤id=" + tblStutime1.getTimepmid());
+                    tblStutime.setPmid(tblStutime1.getTimepmid());
+                    tblStutime.setSid(Integer.valueOf(studentid));
+                    tblStutime.setDid(dateid);
+                    List<TblStutime> AmList = new ArrayList<>();
+                    AmList.add(tblStutime);
+                    flagAm = parentService.addAmAttendance(AmList);
+                    if (flagAm) {
+                        ResponseUtils.outHtml(response, "success");
+                    } else {
+                        ResponseUtils.outHtml(response, "error");
+                    }
+                }
+            }
+        } else if (time.equals("下午")) {
+            if (null != tblStutimePm) { //下午考勤表中存在今天的日期
+                System.out.println("下午考勤表中存在今天的日期");
+                System.out.println("update下午考勤信息");
+                Boolean flag = parentService.updatePmAttendance("请假", "无", leaveDate);
+                if (flag) {
+                    ResponseUtils.outHtml(response, "success");
+                } else {
+                    ResponseUtils.outHtml(response, "error");
+                }
+            } else {
+                System.out.println("insert考勤信息");
+                tblStutime.setTimepmdate(leaveDate);
+                tblStutime.setTimepm("请假");
+                tblStutime.setPnamepm("无");
+                List<TblStutime> PmList = new ArrayList<>();
+                PmList.add(tblStutime);
+                Boolean flag = parentService.addPmAttendanceAll(PmList);
+                if (flag) {
+                    ResponseUtils.outHtml(response, "success");
+                } else {
+                    ResponseUtils.outHtml(response, "error");
+                }
+            }
+        }
+    }
 
 }

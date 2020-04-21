@@ -69,10 +69,7 @@
     </insert>
 
     <insert id="addPmDate" parameterType="java.util.Map">
-        insert into
-        tbl_stutimepm(timepmdate)
-        values
-        (#{i.timepmdate})
+        insert into tbl_stutimepm(timepmdate)values(#{timepmdate})
     </insert>
 
     <!--    新增下午考勤信息-->
@@ -124,19 +121,18 @@
 
     <!--    如果上午考勤表中存在当天的日期，则更新上午考勤信息-->
     <update id="updateAmAttendance" parameterType="java.util.Map">
-        update tbl_stutimeam stuam set stuam.timeam = #{timeam}, stuam.pnameam = #{pnameam}
+        update tbl_stutimeam stuam set stuam.timeam = #{timeam},stuam.pnameam = #{pnameam}
         where stuam.timeamdate = #{timeamdate}
     </update>
 
-    <!--    如果下午考勤表中存在当天的日期，则更新上午考勤信息-->
+    <!--    如果下午考勤表中存在当天的日期，则更新下午考勤信息-->
     <update id="updatePmAttendance" parameterType="java.util.Map">
-        update tbl_stutimepm stupm set stupm.timepm = #{timepm}, stupm.pnamepm = #{pnamepm}
-        where stupm.timepmdate = #{timepmdate}
+        update tbl_stutimepm pm set pm.timepm = #{timepm},pm.pnamepm = #{pnamepm} where pm.timepmdate = #{timepmdate}
     </update>
 
     <!--    查找宝宝的所有信息，作为搜索条件-->
-    <select id="findAllStuInfo" resultType="com.great.kindergarten.commons.entity.TblStudent">
-        select * from tbl_student
+    <select id="findAllStuInfo" resultType="com.great.kindergarten.commons.entity.TblStudent" parameterType="java.util.Map">
+        select * from tbl_student stu,tbl_parent pa where stu.pid = pa.parentid and pa.parentname = #{parentName}
     </select>
 
 

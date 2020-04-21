@@ -79,7 +79,7 @@
         //第一个实例
         table.render({
             elem: '#dataTable'
-            , height: 280
+            , height: 550
             , url: path + '/healther/showALLExamination' //数据接口
             , page: true //开启分页
             , id: 'searchTable'
@@ -162,7 +162,7 @@
             layer.open({
                 type: 2,
                 area: ['400px', '610px'],
-                offset: ['50px', '650px'],
+                offset: ['50px', '670px'],
                 title: '新增体检信息',
                 content: path + '/healther/path/addExamination' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                 , success: function (layero, index) {

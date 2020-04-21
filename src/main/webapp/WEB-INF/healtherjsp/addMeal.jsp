@@ -127,25 +127,22 @@
             , range: '~'
             , isInitValue: false
             , min: minDate()
-            // , max: maxDate()
+            , max: maxDate()
         });
 
         function minDate() {
             var now = new Date();
-            return now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+            var today = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+            return today;
         }
 
-        // function maxDate() {
-        //     var date = new Date();
-        //     // 将字符串转为标准时间格式
-        //     var w = date.getDay();//周几
-        //     if (w === 0) {
-        //         w = 7;
-        //     }
-        //     var week = Math.ceil((date.getDate() + 6 - w) / 7) - 1;
-        //     console.log(week);
-        //     return week;
-        // }
+        function maxDate() {
+            var now = new Date();
+            var day = now.getDay();
+            var fridaydate = new Date((5 - day) * (3600 * 24 * 1000) + now.getTime()).getDate();
+            var friday = now.getFullYear() + "-" + (now.getMonth() + 1) + "-"+fridaydate;
+            return friday;
+        }
 
     });
 

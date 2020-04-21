@@ -16,11 +16,12 @@ public class TblAlarmLog {
     private Integer sid;
     private Integer studentid;
     private String studentname;
+    private Integer kinderid;
 
     public TblAlarmLog() {
     }
 
-    public TblAlarmLog(Integer alarmlogid, String alarmlogname, String alarmlogarea, Date alarmlogtime, Integer sid, Integer studentid, String studentname) {
+    public TblAlarmLog(Integer alarmlogid, String alarmlogname, String alarmlogarea, Date alarmlogtime, Integer sid, Integer studentid, String studentname, Integer kinderid) {
         this.alarmlogid = alarmlogid;
         this.alarmlogname = alarmlogname;
         this.alarmlogarea = alarmlogarea;
@@ -28,6 +29,7 @@ public class TblAlarmLog {
         this.sid = sid;
         this.studentid = studentid;
         this.studentname = studentname;
+        this.kinderid = kinderid;
     }
 
     public Integer getAlarmlogid() {
@@ -86,6 +88,14 @@ public class TblAlarmLog {
         this.studentname = studentname;
     }
 
+    public Integer getKinderid() {
+        return kinderid;
+    }
+
+    public void setKinderid(Integer kinderid) {
+        this.kinderid = kinderid;
+    }
+
     @Override
     public String toString() {
         return "TblAlarmLog{" +
@@ -96,6 +106,7 @@ public class TblAlarmLog {
                 ", sid=" + sid +
                 ", studentid=" + studentid +
                 ", studentname='" + studentname + '\'' +
+                ", kinderid=" + kinderid +
                 '}';
     }
 }

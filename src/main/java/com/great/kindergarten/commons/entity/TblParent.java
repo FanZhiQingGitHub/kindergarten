@@ -32,12 +32,13 @@ public class TblParent
 	private String time1;
 	private String time2;
 
+	private String kindername;
 
 	public TblParent()
 	{
 	}
 
-	public TblParent(Integer parentId, String parentName, String parentPwd, String parentSex, Integer parentAge, String parentAdd, String parentPhone, String parentSon, String parentJob, Date parentRegTime, String parentStatus, Integer rid, TblStudent tblStudent)
+	public TblParent(Integer parentId, String parentName, String parentPwd, String parentSex, Integer parentAge, String parentAdd, String parentPhone, String parentSon, String parentJob, Date parentRegTime, String parentStatus, Integer rid, TblStudent tblStudent, Integer studentid, String studentname, String time1, String time2, String kindername)
 	{
 		this.parentId = parentId;
 		this.parentName = parentName;
@@ -52,6 +53,22 @@ public class TblParent
 		this.parentStatus = parentStatus;
 		this.rid = rid;
 		this.tblStudent = tblStudent;
+		this.studentid = studentid;
+		this.studentname = studentname;
+		this.time1 = time1;
+		this.time2 = time2;
+		this.kindername = kindername;
+	}
+
+
+	public String getKindername()
+	{
+		return kindername;
+	}
+
+	public void setKindername(String kindername)
+	{
+		this.kindername = kindername;
 	}
 
 	public Integer getParentId()
@@ -227,6 +244,6 @@ public class TblParent
 	@Override
 	public String toString()
 	{
-		return "TblParent{" + "parentId=" + parentId + ", parentName='" + parentName + '\'' + ", parentPwd='" + parentPwd + '\'' + ", parentSex='" + parentSex + '\'' + ", parentAge=" + parentAge + ", parentAdd='" + parentAdd + '\'' + ", parentPhone='" + parentPhone + '\'' + ", parentSon='" + parentSon + '\'' + ", parentJob='" + parentJob + '\'' + ", parentRegTime=" + parentRegTime + ", parentStatus='" + parentStatus + '\'' + ", rid=" + rid + ", tblStudent=" + tblStudent + '}';
+		return "TblParent{" + "parentId=" + parentId + ", parentName='" + parentName + '\'' + ", parentPwd='" + parentPwd + '\'' + ", parentSex='" + parentSex + '\'' + ", parentAge=" + parentAge + ", parentAdd='" + parentAdd + '\'' + ", parentPhone='" + parentPhone + '\'' + ", parentSon='" + parentSon + '\'' + ", parentJob='" + parentJob + '\'' + ", parentRegTime=" + parentRegTime + ", parentStatus='" + parentStatus + '\'' + ", rid=" + rid + ", tblStudent=" + tblStudent + ", studentid=" + studentid + ", studentname='" + studentname + '\'' + ", time1='" + time1 + '\'' + ", time2='" + time2 + '\'' + ", kindername='" + kindername + '\'' + '}';
 	}
 }

@@ -8,9 +8,9 @@ public class TblMonitor {
     private String monitorname;
     private String monitorimgurl;
     private String monitormvurl;
+    private String monitormvname;
+    private String monitormvtime;
     private Integer kid;
-
-    private TblKinder tblKinder;
     private Integer kinderid;
     private String kindername;
 
@@ -18,11 +18,13 @@ public class TblMonitor {
     public TblMonitor() {
     }
 
-    public TblMonitor(Integer monitorid, String monitorname, String monitorimgurl, String monitormvurl, Integer kid, Integer kinderid, String kindername) {
+    public TblMonitor(Integer monitorid, String monitorname, String monitorimgurl, String monitormvurl, String monitormvname, String monitormvtime, Integer kid, Integer kinderid, String kindername) {
         this.monitorid = monitorid;
         this.monitorname = monitorname;
         this.monitorimgurl = monitorimgurl;
         this.monitormvurl = monitormvurl;
+        this.monitormvname = monitormvname;
+        this.monitormvtime = monitormvtime;
         this.kid = kid;
         this.kinderid = kinderid;
         this.kindername = kindername;
@@ -60,20 +62,28 @@ public class TblMonitor {
         this.monitormvurl = monitormvurl;
     }
 
+    public String getMonitormvname() {
+        return monitormvname;
+    }
+
+    public void setMonitormvname(String monitormvname) {
+        this.monitormvname = monitormvname;
+    }
+
+    public String getMonitormvtime() {
+        return monitormvtime;
+    }
+
+    public void setMonitormvtime(String monitormvtime) {
+        this.monitormvtime = monitormvtime;
+    }
+
     public Integer getKid() {
         return kid;
     }
 
     public void setKid(Integer kid) {
         this.kid = kid;
-    }
-
-    public TblKinder getTblKinder() {
-        return tblKinder;
-    }
-
-    public void setTblKinder(TblKinder tblKinder) {
-        this.tblKinder = tblKinder;
     }
 
     public Integer getKinderid() {
@@ -99,8 +109,9 @@ public class TblMonitor {
                 ", monitorname='" + monitorname + '\'' +
                 ", monitorimgurl='" + monitorimgurl + '\'' +
                 ", monitormvurl='" + monitormvurl + '\'' +
+                ", monitormvname='" + monitormvname + '\'' +
+                ", monitormvtime='" + monitormvtime + '\'' +
                 ", kid=" + kid +
-                ", tblKinder=" + tblKinder +
                 ", kinderid=" + kinderid +
                 ", kindername='" + kindername + '\'' +
                 '}';

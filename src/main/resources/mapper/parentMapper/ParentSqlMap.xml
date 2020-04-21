@@ -48,6 +48,196 @@
 
     </resultMap>
 
+    <resultMap id="ExaminationMap" type="com.great.kindergarten.commons.entity.TblExamination">
+        <result column="examinationid" property="examinationid"/>
+        <result column="height" property="height"/>
+        <result column="weight" property="weight"/>
+        <result column="vision" property="vision"/>
+        <result column="temperature" property="temperature"/>
+        <result column="skin" property="skin"/>
+        <result column="healthstatus" property="healthstatus"/>
+        <result column="examinationtime" property="examinationtime"/>
+        <result column="studentid" property="studentid"/>
+        <result column="studentname" property="studentname"/>
+        <result column="sid" property="sid"/>
+        <association property="tblStudent" javaType="com.great.kindergarten.commons.entity.TblStudent">
+            <id property="studentid" column="studentid"/>
+            <result property="studentid" column="studentid"/>
+            <result property="studentname" column="studentname"/>
+        </association>
+    </resultMap>
+
+
+
+
+    <select id="findPhotosByCid"  parameterType="SearchCondition" resultType="TblPhoto">
+        select *
+        from tbl_photo
+        <where>
+            1=1
+            <if test="name != '' and name != null ">
+                and photoname = #{name}
+            </if>
+
+            <if test="status != '' and status != null ">
+                and cid = #{status}
+            </if>
+
+            <if test="beginTime != null ">
+                and phototime  &gt;= #{beginTime}
+            </if>
+
+            <if test="endTime != null ">
+                and phototime &lt;= #{endTime}
+            </if>
+        </where>
+        order by phototime desc  limit #{page},#{limit}
+
+    </select>
+
+
+
+
+
+
+    <select id="countPhotosByCid"  parameterType="SearchCondition" resultType="integer">
+        select count(*)
+        from tbl_photo
+        <where>
+            1=1
+            <if test="name != '' and name != null ">
+                and photoname = #{name}
+            </if>
+
+            <if test="status != '' and status != null ">
+                and cid = #{status}
+            </if>
+
+            <if test="beginTime != null ">
+                and phototime  &gt;= #{beginTime}
+            </if>
+
+            <if test="endTime != null ">
+                and phototime &lt;= #{endTime}
+            </if>
+        </where>
+        order by phototime desc
+    </select>
+
+
+
+
+
+
+    <select id="countBookById" resultType="integer">
+        select count(*) from tbl_readmag
+        <where>
+            relatedid=#{readId}
+            and readmagpage!=0
+        </where>
+    </select>
+
+
+    <select id="readBookByIdAndPage" resultType="TblReadmag">
+        select * from tbl_readmag
+
+        <where>
+            relatedid=#{readId} and readmagpage =#{page}
+        </where>
+
+    </select>
+
+
+    <select id="countReadList" resultType="integer">
+        select count(*) from tbl_readmag
+        <where>
+            readmagpage=0
+        </where>
+    </select>
+
+
+    <select id="findReadList" resultType="TblReadmag">
+        select * from tbl_readmag
+        <where>
+            readmagpage=0
+        </where>
+        limit #{page},#{limit}
+    </select>
+
+
+
+
+    <!--    查找宝宝体检信息表-->
+    <select id="countExaminationByStudentId"  parameterType="SearchCondition" resultType="integer">
+        select count(*)
+        from tbl_examination e,tbl_student s ,tbl_class c
+        <where>
+            e.sid = s.studentid and s.cid = c.classid
+            <if test="name != '' and name != null ">
+                and s.studentid = #{name}
+            </if>
+
+            <if test="beginTime != null ">
+                and e.examinationtime  &gt;= #{beginTime}
+            </if>
+
+            <if test="endTime != null ">
+                and e.examinationtime &lt;= #{endTime}
+            </if>
+        </where>
+        order by e.examinationtime desc
+    </select>
+
+
+    <!--    查找宝宝体检信息表-->
+    <select id="findExaminationByStudentId" resultMap="ExaminationMap" parameterType="SearchCondition">
+        select s.studentid,s.studentname,e.*
+        from tbl_examination e,tbl_student s ,tbl_class c
+        <where>
+            e.sid = s.studentid and s.cid = c.classid
+            <if test="name != '' and name != null ">
+                and s.studentid = #{name}
+            </if>
+
+            <if test="beginTime != null ">
+                and e.examinationtime  &gt;= #{beginTime}
+            </if>
+
+            <if test="endTime != null ">
+                and e.examinationtime &lt;= #{endTime}
+            </if>
+        </where>
+        order by e.examinationtime desc limit #{page},#{limit}
+    </select>
+
+
+
+    <!--    查询食谱信息-->
+    <select id="findAllRecipeInfo" resultType="com.great.kindergarten.commons.entity.TblRecipe" >
+        select r.* from tbl_meal m,tbl_recipe r where m.mealid = r.mid and m.mealid = #{mealId}
+    </select>
+
+
+
+
+    <!--    查询膳食表信息-->
+    <select id="findAllMealInfo" resultType="com.great.kindergarten.commons.entity.TblMeal"
+            parameterType="com.great.kindergarten.healther.resultbean.MealPage">
+        select * from tbl_meal
+        <where>
+
+        </where>
+        order by mealstarttime desc limit #{page},#{limit}
+    </select>
+
+    <!--    查询膳食表信息记录条数-->
+    <select id="findAllMealInfoCount" resultType="integer">
+        select count(*) from tbl_meal
+    </select>
+
+
+
+
 
 
     <!--    查找宝宝接送详细信息表-->
@@ -66,10 +256,8 @@
                 <![CDATA[   and DATE_FORMAT(da.sunday, '%Y-%m-%d')<=  DATE_FORMAT(#{sundaydate}, '%Y-%m-%d')   ]]>
             </if>
         </where>
+
     </select>
-
-
-
 
 
 
@@ -87,7 +275,7 @@
 
     <insert id="uploadHomeWork" parameterType="TblWork" >
         insert into tbl_work (workname, workreleaseid, workurl, wfinishtime, workresult, workeva, sid, studentname, pid, parentname, cid) VALUES
-            (#{workreleasedetail},#{workreleaseid},#{workurl},#{wfinishtime},#{workresult},#{workeva},#{sid},#{studentname},#{pid},#{parentname},#{cid})
+        (#{workreleasedetail},#{workreleaseid},#{workurl},#{wfinishtime},#{workresult},#{workeva},#{sid},#{studentname},#{pid},#{parentname},#{cid})
     </insert>
 
 
@@ -132,6 +320,8 @@
         </where>
 
         order by twl.workreleasetime desc
+
+        limit #{condition.page},#{condition.limit}
 
     </select>
 
@@ -180,6 +370,7 @@
 
         insert into  tbl_safetytestcompletion (safetyvideoid, parentid, safetytestscore, safetytestresult,safetytestfinshtime) values
             (#{videoId},#{parentId},#{score},'已完成',#{finshTime});
+
     </insert>
 
 
@@ -189,6 +380,8 @@
 
         select * from tbl_safetyvtq where safetyvideoid =#{safetyVideoId}
         order by safetyvtqid
+
+
     </select>
 
 
@@ -196,7 +389,7 @@
     <select id="countVideoListNumber" resultType="integer" parameterType="SearchCondition">
         select count(*) from
         (tbl_safetyvideo ts  left join tbl_safetytestcompletion tsc on ts.safetyvideoid=tsc.safetyvideoid
-            and tsc.parentid=#{parentId}
+        and tsc.parentid=#{parentId}
         )
 
         <where>
@@ -221,14 +414,14 @@
     <select id="findVideoList" resultMap="reVideo" parameterType="SearchCondition" >
 
         select ts.*,tsc.safetytestscore,tsc.safetytestresult from
-         (
-          tbl_safetyvideo ts  left join tbl_safetytestcompletion tsc on ts.safetyvideoid=tsc.safetyvideoid
-            and tsc.parentid=#{parentId}
-             )
+        (
+        tbl_safetyvideo ts  left join tbl_safetytestcompletion tsc on ts.safetyvideoid=tsc.safetyvideoid
+        and tsc.parentid=#{parentId}
+        )
 
         <where>
 
-             1=1
+            1=1
             <if test=" name != null and name != ''">
                 and ts.safetyvideoname like "%"#{name}"%"
             </if>
@@ -245,7 +438,7 @@
 
         order by ts.safetyvideotime desc
 
-
+        limit #{page},#{limit}
     </select>
 
 
@@ -256,21 +449,21 @@
     <!--   家长端登陆-->
     <select id="parentLogin" resultMap="reParent" >
 
-    select * from tbl_parent
-    where parentname=#{parentName} and parentPwd=#{parentPwd} and parentstatus='启用'
+        select * from tbl_parent
+        where parentname=#{parentName} and parentPwd=#{parentPwd} and parentstatus='启用'
 
     </select>
-<!--    判断家长旧密码是否输入正确-->
+    <!--    判断家长旧密码是否输入正确-->
     <select id="countOldParentPwd" resultType="integer">
 
-    select count(*) from tbl_parent where parentpwd =#{oldParentPwd} and parentid =#{parentId}
+        select count(*) from tbl_parent where parentpwd =#{oldParentPwd} and parentid =#{parentId}
 
     </select>
 
-<!--  更新家长的旧密码 换成输入的新密码-->
+    <!--  更新家长的旧密码 换成输入的新密码-->
     <update id="updateParentPwd"  >
 
-    update tbl_parent set parentpwd =#{parentPwd} where parentid=#{parentId}
+        update tbl_parent set parentpwd =#{parentPwd} where parentid=#{parentId}
 
     </update>
 

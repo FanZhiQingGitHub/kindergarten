@@ -43,7 +43,6 @@
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0)" id="a1">个人信息</a></dd>
                 <dd><a href="javascript:void(0)" id="addStuTime">上课打卡</a></dd>
-                <dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
             </dl>
         </li>
         <li class="layui-nav-item"><a href="javascript:void(0); "  id="exit" style="color: black;font-size: 18px">注销</a></li>
@@ -93,7 +92,6 @@
                     <div class="img-txt">
                         <h3>
                             <button type="button"  class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">幼儿中心</button>
-
                             <div class="layui-btn-container"  >
                                 <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="kidHealth">幼儿保健</button>
                                 <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="kidAttendance">
@@ -111,7 +109,7 @@
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
                         <h3>
-                            <button type="button"   class="layui-btn layui-btn-lg layui-btn-warm" style="width: 100%;height: 100%;font-size: 20px">作业中心</button>
+                            <button type="button"   class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">作业中心</button>
                             <div class="layui-btn-container"  >
                                 <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="homeWorkCenter">查看作业</button>
                             </div>
@@ -132,6 +130,18 @@
                 </div>
 
 
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
+                    <div class="img-txt">
+                        <h3>
+                            <button type="button"  class="layui-btn layui-btn-lg layui-btn-normal" style="width: 100%;height: 100%;font-size: 20px">直播中心</button>
+                            <div class="layui-btn-container"  >
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="LiveList">直播列表</button>
+                            </div>
+
+                        </h3>
+                    </div>
+                </div>
+
             </div>
 
 
@@ -144,8 +154,8 @@
 
                             <div class="layui-btn-container" >
                                 <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="Parent-childReading">亲子阅读</button>
-                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="ContactTeacher">
-                                    联系老师
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="ClassAlbum">
+                                    班级相册
                                 </button>
                             </div>
 
@@ -160,8 +170,9 @@
 
                             <div class="layui-btn-container" >
                                 <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="CampusAnnouncement">校园公告</button>
-                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="PlatformInformation">
-                                    平台资讯
+
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="ContactTeacher">
+                                    联系老师
                                 </button>
                             </div>
                         </h3>
@@ -182,12 +193,11 @@
                         <h3 style="text-align: left">园所动态News</h3>
                         <div  style=" overflow:auto;" >
 
-                            <a href="javascript:;">新闻一</a><br>
-                            <a href="javascript:;">新闻二</a><br>
-                            <a href="javascript:;">新闻三</a><br>
-                            <a href="javascript:;">新闻四</a><br>
-                            <a href="javascript:;">新闻五</a>
-
+                            <c:if test="${not empty tblCampusList}">
+                                <c:forEach items="${tblCampusList}" var="i" step="1">
+                                    <p><a class="a1" href="javascript:void(0);" style="font-size: 15px;width: 200px">${i.campusinfoname}:${i.campusinfodetail}</a><span style="font-size: 15px;margin-left: 10%">发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></span><span></span></p>
+                                </c:forEach>
+                            </c:if>
                         </div>
 
                     </div>
@@ -392,15 +402,26 @@
             });
 
 
+            //前往查看相册
+            $("#LiveList").click(function () {
+                window.location.href=path+"/parent/toUrl/LiveList"
+            });
+
+
+            //前往查看相册
+            $("#ClassAlbum").click(function () {
+                window.location.href=path+"/parent/toUrl/PhotoAlbum"
+            });
 
             //前往查看亲子阅读
             $("#Parent-childReading").click(function () {
-
+                window.location.href=path+"/parent/findReadList"
             });
+
 
             //前往查看联系老师界面
             $("#ContactTeacher").click(function () {
-
+	            window.location.href = path+"/director/toUrl/chatlogin";
             });
 
 
@@ -414,20 +435,14 @@
                     shade: 0.8//表示的是阴影的大小
                     , area: ['55%', '65%'],
                     moveType: 1,//拖拽模式，0或者1
-                    content: src + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    content: path + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                     , success: function (layero, index) {
                         console.log(layero, index);
                     }
                 });
 
-
-
             });
 
-            //前往查看平台资讯
-            $("#PlatformInformation").click(function () {
-
-            });
 
 
 
@@ -469,10 +484,9 @@
                 var weekInfo = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
                 var week = new Date().getDay();
                 var weekToday = weekInfo[week];
-
-                // if(weekToday == "星期六" || weekToday == "星期日"){
-                //     layer.alert('亲，现在是周末哦，打卡功能暂时关闭。',{icon:6});
-                // }else {
+                if(weekToday == "星期六" || weekToday == "星期日"){
+                    layer.msg('亲，现在是周末哦，打卡功能暂时关闭。',{icon:6});
+                }else {
                     layer.open({
                         type: 2,
                         area: ['95%', '81%'],
@@ -483,7 +497,7 @@
                             var body = layer.getChildFrame("body", index);
                         }
                     });
-                // }
+                }
             });
         });
     });

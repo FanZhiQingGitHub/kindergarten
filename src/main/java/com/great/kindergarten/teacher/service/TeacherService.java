@@ -1,7 +1,9 @@
 package com.great.kindergarten.teacher.service;
 
 import com.great.kindergarten.commons.entity.*;
+
 import com.great.kindergarten.teacher.mapper.TeacherMapper;
+import com.great.kindergarten.teacher.resultbean.PickUpInfoDetailPage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,24 +39,19 @@ public class TeacherService {
         Map<String,String> teacherMap = new LinkedHashMap<>();
         teacherMap.put("teacherpwd",teacherpwd);
         teacherMap.put("teacherid",teacherid);
-
         return teacherMapper.updateTeacherPwd(teacherMap);
     }
-//    查找班级名称
+    //    查找班级名称
     public TblClass findClassAll(Integer cid){
 
         return teacherMapper.findClassAll(cid);
     }
-//    根据cid查找课程
-    public List<TblCourse> findCourse(Integer cid){
 
-        return teacherMapper.findCourse(cid);
+    //根据班级id，当前时间查找课程信息
+    public List<TblCourse> findCourseByTodayCid(HashMap<String,Object> dataHashMap){
+        return teacherMapper.findCourseByTodayCid(dataHashMap);
     }
-//    查找课程表数据数量
-    public Integer findCount()
-    {
-        return teacherMapper.findCount();
-    }
+
     //    查找班级所有名称
     public List<TblClass> findClassName()
     {
@@ -66,20 +63,24 @@ public class TeacherService {
     {
         return teacherMapper.findClassidByName(tblClass);
     }
+
+    //查询发布作业表中最后一个id
+
+    public Integer findFinallyWorkreleaseid()
+    {
+        return teacherMapper.findFinallyWorkreleaseid();
+    }
+
     //新增发布作业信息
     @Transactional
     public Boolean addFileInfo(TblWorkrelease tblWorkrelease){
         return teacherMapper.addFileInfo(tblWorkrelease);
     }
-    //   根据班级所有作业数据
-    public TblWork findWork(Integer cid){
 
-        return teacherMapper.findWork(cid);
-    }
     //   根据班级id 发布作业id查作业表
-    public List<TblWork> findWorkTable(TblWork tblWork){
+    public List<TblWork> findWorkTable(HashMap<String,Object> dataHashMap){
 
-        return teacherMapper.findWorkTable(tblWork);
+        return teacherMapper.findWorkTable(dataHashMap);
     }
     //    查找作业数据数量
     public Integer findWorkCount(Integer cid)
@@ -89,16 +90,17 @@ public class TeacherService {
     //打分
 
     @Transactional
-    public Boolean workScore(String score,String sid){
+    public Boolean workScore(String score,String sid,String workreleaseid ){
         Map<String,String> scoreMap = new LinkedHashMap<>();
         scoreMap.put("score",score);
         scoreMap.put("sid",sid);
+        scoreMap.put("workreleaseid",workreleaseid);
         return teacherMapper.workScore(scoreMap);
     }
     //    查看视频数量
-    public Integer findSafetyCount()
+    public Integer findSafetyCount(HashMap<String,Object> dataHashMap)
     {
-        return teacherMapper.findSafetyCount();
+        return teacherMapper.findSafetyCount(dataHashMap);
     }
     //查看视频表
     public List<TblSafetyConfig> findSafetyTable(HashMap<String,Object> dataHashMap)
@@ -108,7 +110,7 @@ public class TeacherService {
     //新增上传视频
     @Transactional
     public Boolean uploadVideo(TblSafetyvideo tblSafetyvideo){
-	    return teacherMapper.uploadVideo(tblSafetyvideo);
+        return teacherMapper.uploadVideo(tblSafetyvideo);
     }
     //查找所有安全视频名称
     public List<TblSafetyvideo> findVideoName(){
@@ -130,5 +132,65 @@ public class TeacherService {
      */
     public List<TblSafetyvtq> findSafetyTestQuestionList(Integer safetyVideoId){
         return teacherMapper.findSafetyTestQuestionList(safetyVideoId);
+    }
+
+    // 查询试题完成情况总数
+
+    public Integer findSafetytqCount(HashMap<String,Object> dataHashMap)
+    {
+        return teacherMapper.findSafetytqCount(dataHashMap);
+    }
+    //    查询试题完成情况表
+
+    public List<TblSafetyFinish> findSafetytqTable(HashMap<String,Object> dataHashMap)
+    {
+        return teacherMapper.findSafetytqTable(dataHashMap);
+    }
+
+    // 根据cid查班级人数
+
+    public Integer findStudentCount(HashMap<String,Object> dataHashMap)
+    {
+        return teacherMapper.findStudentCount(dataHashMap);
+    }
+    //    根据cid查班级人员数据
+
+    public List<TblStudent> findStudent(HashMap<String,Object> dataHashMap)
+    {
+        return teacherMapper.findStudent(dataHashMap);
+    }
+
+
+    /**
+     * 根据条件找到孩子的接送信息
+     * @param pickUpInfoDetailPage
+     * @return
+     */
+    public List<TblDate> findALLPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage){
+        return teacherMapper.findALLPickUpDetailInfo(pickUpInfoDetailPage);
+    }
+
+
+    //    新增照片
+
+    /**
+     * 新增照片
+     * @param tblPhoto
+     * @return
+     */
+    @Transactional
+    public Boolean uploadPhoto(TblPhoto tblPhoto){
+        return teacherMapper.uploadPhoto(tblPhoto);
+    }
+
+    // 查询班级相册总数
+    public Integer findClassPhotoCount(HashMap<String,Object> dataHashMap)
+    {
+        return teacherMapper.findClassPhotoCount(dataHashMap);
+    }
+    //     查看班级相册数据
+    public List<TblPhoto> findClassPhoto(HashMap<String,Object> dataHashMap)
+    {
+        return teacherMapper.findClassPhoto(dataHashMap);
     }
 }

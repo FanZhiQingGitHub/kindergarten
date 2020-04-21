@@ -141,7 +141,7 @@
                         <div style=" overflow:auto;" id="newsInfo">
                             <c:if test="${not empty tblCampusList}">
                                 <c:forEach items="${tblCampusList}" var="i" step="1">
-                                    <p><a class="a1" href="javascript:void(0);" style="font-size: 15px;width: 200px">${i.campusinfoname}:${i.campusinfodetail}</a><span style="font-size: 15px;margin-left: 18%">发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></span><span></span></p>
+                                    <p><a class="a1" href="javascript:void(0);" style="font-size: 15px;width: 200px">${i.campusinfoname}:${i.campusinfodetail}</a><span style="font-size: 15px;margin-left: 10%">发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></span><span></span></p>
                                 </c:forEach>
                             </c:if>
 <%--                            <a href="javascript:;">新闻一</a><br>--%>
@@ -181,8 +181,6 @@
     </div>
 </div>
 <!-- end-footer -->
-
-
 
 <script>
 
@@ -284,9 +282,32 @@
                     }
                 });
             }), $("#bu6").click(function () {
-                layer.alert('敬请期待', {icon: 6});
+                layer.open({
+                    type: 2,
+                    title: '校园消息通知',
+                    shade: 0.8,//表示的是阴影的大小
+                    area: ['95%', '80%'],
+                    offset:['10%','3%'],
+                    moveType: 1,//拖拽模式，0或者1
+                    content: path + '/security/path/livePowerManager' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                    }
+                });
             }), $("#bu7").click(function () {
-                layer.alert('敬请期待', {icon: 6});
+                layer.open({
+                    type: 2,
+                    area: ['95%', '80%'],
+                    offset: ['10%', '3%'],
+                    title: '智慧幼儿园-直播视频管理',
+                    btn1: function (index, layero) {
+                        //layer.getChildFrame("form", index)获取iframe的表单
+                        //serializeArray jquery方法，将表单对象序列化为数组
+                        layer.close(index);
+                    },
+                    content: path + '/security/path/VideosMagInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                    }
+                });
             }),$(".a1").click(function () { //点击查看园所新闻
                 var name = $(this).text();
                 var titleInfo = name.split(":")[0];

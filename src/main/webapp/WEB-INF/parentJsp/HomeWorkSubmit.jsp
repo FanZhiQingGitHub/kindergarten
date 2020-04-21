@@ -20,23 +20,23 @@
 <table>
 
 	<tr>
-		<td>
+		<td width="100px">
 			作业ID：
 		</td>
 
-		<td>
+		<td width="300px">
 			作业名称：
 		</td>
 
-		<td>
+		<td width="300px">
 			发布时间：
 		</td>
 
-		<td>
+		<td width="200px">
 			完成情况：
 		</td>
 
-		<td>
+		<td width="100px">
 			宝宝昵称：
 		</td>
 

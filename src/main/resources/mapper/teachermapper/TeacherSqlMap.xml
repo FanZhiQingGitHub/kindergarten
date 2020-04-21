@@ -81,7 +81,31 @@
         <result column="dvalue" property="dvalue"/>
     </resultMap>
 
+    <resultMap id="safetyFinishMap" type="TblSafetyFinish">
+        <result column="studentid" property="studentid"></result>
+        <result column="studentname" property="studentname"></result>
+        <result column="parentname" property="parentname"></result>
+        <result column="safetyvideoname" property="safetyvideoname"></result>
+        <result column="safetyfinishtime" property="safetyfinishtime"></result>
+        <result column="safetytestscore" property="safetytestscore"></result>
+        <result column="safetytestresult" property="safetytestresult"></result>
+        <result column="safetytestfinshtime" property="safetytestfinshtime"></result>
+    </resultMap>
+    <resultMap id="studentMap" type="TblStudent">
+        <result column="studentid" property="studentid"></result>
+        <result column="studentname" property="studentname"></result>
+        <result column="studentsex" property="studentsex"></result>
+        <result column="studentbrith" property="studentbrith"></result>
+        <result column="studentadd" property="studentadd"></result>
+        <result column="studenttime" property="studenttime"></result>
 
+        <result column="parentname" property="parentName"></result>
+        <result column="parentson" property="parentSon"></result>
+        <result column="parentphone" property="parentPhone"></result>
+        <result column="parentadd" property="parentAdd"></result>
+        <result column="parentjob" property="parentJob"></result>
+
+    </resultMap>
 
     <!--用户状态查询-->
     <select id="findTeacherStatus" resultType="java.lang.String" parameterType="java.util.Map">
@@ -90,7 +114,7 @@
 
     <!--用户登录查询-->
     <select id="findTeacher" resultMap="teacherMap" parameterType="TblTeacher">
-		select * from tbl_teacher
+        select * from tbl_teacher
         <where>
             <if test="teachername!='' and teachername!=null">
                 and teachername = #{teachername}
@@ -99,8 +123,8 @@
                 and teacherpwd = #{teacherpwd}
             </if>
         </where>
-	</select>
-<!--       根据id查信息-->
+    </select>
+    <!--       根据id查信息-->
     <select id="checkPwd" resultMap="teacherMap" parameterType="java.lang.Integer">
         select * from tbl_teacher where teacherid = #{teacherid};
     </select>
@@ -108,25 +132,43 @@
     <update id="updateTeacherPwd" parameterType="java.util.Map">
         UPDATE tbl_teacher SET teacherpwd = #{teacherpwd} where teacherid = #{teacherid};
     </update>
-<!--    根据cid查班级名称-->
+    <!--    根据cid查班级名称-->
     <select id="findClassAll" resultMap="classMap" parameterType="java.lang.Integer">
         select * from tbl_class where classid = #{cid};
     </select>
-    <!--    根据cid查班级课程-->
-    <select id="findCourse" resultMap="courseMap" parameterType="java.lang.Integer">
-        select * from tbl_course where cid = #{cid};
+
+
+    <!--    根据班级id，当前时间查找课程信息-->
+    <select id="findCourseByTodayCid" resultType="TblCourse" parameterType="HashMap">
+        select * from tbl_course c,tbl_coursetest ct
+        <where>c.ctids=ct.ctid and c.cid = #{cid}
+            <if test=" mondaydate != '' and mondaydate != null">
+                <![CDATA[ and DATE_FORMAT(ct.mondaydate, '%Y-%m-%d')>=  DATE_FORMAT(#{mondaydate}, '%Y-%m-%d') ]]>
+            </if>
+            <if test=" sundaydate != '' and sundaydate != null">
+                <![CDATA[ and DATE_FORMAT(ct.sundaydate, '%Y-%m-%d')<=  DATE_FORMAT(#{sundaydate}, '%Y-%m-%d') ]]>
+            </if>
+        </where>
+        order by c.coursenum
     </select>
-    <!--查询数据总数量-->
-    <select id="findCount" resultType="java.lang.Integer" >
-			select count(*) from tbl_course
-	</select>
-<!--    查班级所有名称-->
+
+
+
+
+
+    <!--    查班级所有名称-->
     <select id="findClassName" resultMap="classMap" >
         select * from tbl_class;
     </select>
-<!--    根据班级名查找id-->
+    <!--    根据班级名查找id-->
     <select id="findClassidByName" resultType="java.lang.Integer" parameterType="TblClass">
 			select classid from tbl_class where classname=#{classname};
+	</select>
+
+    <!--    查询发布作业表中最后一个id-->
+
+    <select id="findFinallyWorkreleaseid" resultType="java.lang.Integer" >
+			select workreleaseid from tbl_workrelease order by workreleaseid DESC limit 1;
 	</select>
     <!--    作业文件上传记录-->
     <insert id="addFileInfo" parameterType="TblWorkrelease">
@@ -134,34 +176,39 @@
         (workreleasedetail,worklocation,workreleasetime,cid)
         values (#{workreleasedetail},#{worklocation},now(),#{cid});
     </insert>
-<!--    查找班级所有作业信息-->
-    <select id="findWork" resultType="TblWork" parameterType="java.lang.Integer">
-        select * from tbl_work where cid = #{cid};
-    </select>
+
     <!--    查作业表-->
-    <select id="findWorkTable" resultMap="workMap" parameterType="TblWork">
-    select w.sid,w.studentname,w.parentname,b.workreleasetime,w.wfinishtime
-    from tbl_work w,(select workreleasetime from tbl_workrelease where workreleaseid=#{workreleaseid}) b where cid = #{cid};
+    <select id="findWorkTable" resultMap="workMap" parameterType="HashMap">
+    select w.sid,w.studentname,w.parentname,w.workreleaseid,w.workid,w.workurl, b.workreleasetime,w.wfinishtime,w.cid
+    from tbl_work w,(select *  from tbl_workrelease ) b where b.cid=w.cid and b.workreleaseid=w.workreleaseid and b.cid = #{cid}
+    order by b.workreleasetime desc
+    limit #{pageInt},#{limitInt};
     </select>
+
     <!--查询作业数据总数量-->
     <select id="findWorkCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
 			select count(*) from tbl_work where cid = #{cid};
 	</select>
-<!--    打分-->
+
+    <!--    打分-->
     <update id="workScore" parameterType="java.util.Map">
-        UPDATE tbl_work SET workeva = #{score} where sid = #{sid};
+        UPDATE tbl_work SET workeva = #{score} where sid = #{sid} and workreleaseid=#{workreleaseid};
     </update>
+
     <!--查询安全视频总数量-->
-    <select id="findSafetyCount" resultType="java.lang.Integer" >
-			select count(*) from tbl_safetyconfig ;
+    <select id="findSafetyCount" resultType="java.lang.Integer" parameterType="HashMap" >
+			select count(*) from tbl_safetyconfig where  classid=#{cid};
 	</select>
-<!--    查询安全视频表-->
+
+    <!--    查询安全视频表-->
     <select id="findSafetyTable" resultMap="safetyMap" parameterType="HashMap">
         select ts.safetyvideoid,ts.safetyvideoname,ts.safetyvideotime,ts.safetyfinishtime,tbs.classname from tbl_safetyconfig ts,tbl_class tbs where ts.classid=tbs.classid
+        and ts.classid=#{cid}
          order by ts.safetyvideotime desc
-        limit #{pageInt},#{limitInt}
+        limit #{pageInt},#{limitInt};
     </select>
-<!--    新增安全教育视频-->
+
+    <!--    新增安全教育视频-->
     <insert id="uploadVideo" parameterType="TblSafetyvideo">
         insert into tbl_safetyvideo
         (safetyvideoname,safetyvideotime,safetyfinishtime,videoadd)
@@ -169,15 +216,17 @@
     </insert>
 
 
-<!--    查找安全视频所有名称-->
+    <!--    查找安全视频所有名称-->
     <select id="findVideoName" resultMap="safetyVideoName" >
         select * from tbl_safetyvideo
 
     </select>
+
     <!--    根据视频名名查找id-->
     <select id="findSafetyvideoidByName" resultType="java.lang.Integer" parameterType="TblSafetyvideo">
 			select safetyvideoid from tbl_safetyvideo where safetyvideoname=#{safetyvideoname};
 	</select>
+
     <!--    新增安全配置-->
     <insert id="addSafetyConfig" parameterType="TblSafetyConfig">
         insert into tbl_safetyconfig
@@ -185,9 +234,129 @@
         values (#{safetyvideoid},#{safetyvideoname},#{safetyvideotime},#{safetyfinishtime},#{classid});
     </insert>
 
+    <!--    查看配置试题-->
     <select id="findSafetyTestQuestionList" resultMap="reVideoQuestion" parameterType="integer" >
 
         select * from tbl_safetyvtq where safetyvideoid =#{safetyVideoId}
         order by safetyvtqid
     </select>
+
+    <!--    查看试题完成情况数量-->
+    <select id="findSafetytqCount" resultType="java.lang.Integer" parameterType="HashMap">
+        select count(*)  from  (select t.*,tbls.safetytestfinshtime, tbls.safetytestscore,tbls.safetytestresult
+        from (select ts.studentid,ts.studentname,ts.pid,tb.parentname,tbs.safetyvideoname
+        ,tbs.safetyfinishtime,tbs.safetyvideoid,tbs.safetyconfigid
+        from tbl_student ts left join  tbl_parent tb on ts.pid=tb.parentid
+        left join  tbl_safetyconfig tbs on ts.cid=tbs.classid
+        where   ts.cid=#{cid}) t left join tbl_safetytestcompletion tbls on
+        t.safetyvideoid=tbls.safetyvideoid and t.pid=tbls.parentid and tbls.safetyconfigid=t.safetyconfigid
+        <where>
+            <if test="startDate != '' and startDate != null">
+                and safetytestfinshtime &gt;= #{startDate}
+            </if>
+            <if test="endDate != '' and endDate != null">
+                and safetytestfinshtime &lt;= #{endDate}
+            </if>
+            <if test="finishStatus != '' and finishStatus != null">
+                and  safetytestresult =#{finishStatus}
+            </if>
+        </where>
+        order by t.safetyfinishtime desc,t.studentid
+        )c;
+
+        <!--        select count(*)  from  (select t.*,tbls.safetytestfinshtime, tbls.safetytestscore,-->
+        <!--        tbls.safetytestresult from (select ts.studentid,ts.studentname,ts.pid,tb.parentname,-->
+        <!--        tbs.safetyvideoname,tbs.safetyfinishtime,tbs.safetyvideoid,tbs.safetyconfigid-->
+        <!--        from tbl_student ts left join  tbl_parent tb on ts.pid=tb.parentid-->
+        <!--        left join  tbl_safetyconfig tbs on ts.cid=tbs.classid-->
+        <!--        where   ts.cid=1) t left join tbl_safetytestcompletion tbls on-->
+        <!--        t.safetyvideoid=tbls.safetyvideoid and t.pid=tbls.parentid and tbls.safetyconfigid=t.safetyconfigid-->
+        <!--        where safetytestfinshtime >='2020-04-15 15:01:40' and safetytestfinshtime <='2020-04-17 15:01:40' -->
+        <!--        and safetytestresult ='已完成' order by safetyfinishtime desc,studentid limit 0,10-->
+        <!--        ) c-->
+
+    </select>
+
+    <!--     查询试题完成情况表-->
+    <select id="findSafetytqTable" resultMap="safetyFinishMap" parameterType="HashMap">
+        select t.*,tbls.safetytestfinshtime, tbls.safetytestscore,tbls.safetytestresult from
+        (select ts.studentid,ts.studentname,ts.pid,tb.parentname,tbs.safetyvideoname
+        ,tbs.safetyfinishtime,tbs.safetyvideoid,tbs.safetyconfigid
+        from tbl_student ts left join  tbl_parent tb on ts.pid=tb.parentid
+        left join  tbl_safetyconfig tbs on ts.cid=tbs.classid
+        where   ts.cid=#{cid}) t left join tbl_safetytestcompletion tbls on
+        t.safetyvideoid=tbls.safetyvideoid and  t.pid=tbls.parentid and tbls.safetyconfigid=t.safetyconfigid
+        <where>
+            <if test="startDate != '' and startDate != null">
+                and tbls.safetytestfinshtime &gt;= #{startDate}
+            </if>
+            <if test="endDate != '' and endDate != null">
+                and tbls.safetytestfinshtime &lt;= #{endDate}
+            </if>
+            <if test="finishStatus != '' and finishStatus != null">
+                and  tbls.safetytestresult =#{finishStatus}
+            </if>
+        </where>
+        order by t.safetyfinishtime desc,t.studentid
+        limit #{pageInt},#{limitInt};
+    </select>
+
+    <!--      根据cid查班级人数-->
+    <select id="findStudentCount" resultType="java.lang.Integer" parameterType="HashMap">
+			select count(*) from tbl_student where cid = #{cid};
+
+	</select>
+    <!--    根据cid查班级人员数据-->
+    <select id="findStudent" resultMap="studentMap" parameterType="HashMap">
+        select * from tbl_student t join tbl_parent tb on
+        t.pid=tb.parentid and t.cid = #{cid}
+        <where>
+            <if test="studentname!='' and studentname!=null">
+                and t.studentname = #{studentname}
+            </if>
+            <if test="startDate != '' and startDate != null">
+                and t.studenttime &gt;= #{startDate}
+            </if>
+            <if test="endDate != '' and endDate != null">
+                and t.studenttime &lt;= #{endDate}
+            </if>
+        </where>
+        order by studenttime desc
+        limit #{pageInt},#{limitInt};
+    </select>
+
+    <!--    查找宝宝接送详细信息表-->
+    <select id="findALLPickUpDetailInfo" resultType="com.great.kindergarten.commons.entity.TblStutime"
+            parameterType="com.great.kindergarten.teacher.resultbean.PickUpInfoDetailPage">
+        select * from tbl_stutimeam am,tbl_stutimepm pm,tbl_student stu,tbl_date da
+        <where>
+            am.pmid = pm.timepmid and stu.studentid= am.sid and am.did = da.dateid
+            <if test="studentid != '' and studentid != null ">
+                and stu.studentid = #{studentid}
+            </if>
+            <if test=" mondaydate != '' and mondaydate != null">
+                <![CDATA[   and DATE_FORMAT(da.monday, '%Y-%m-%d')>=  DATE_FORMAT(#{mondaydate}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" sundaydate != '' and sundaydate != null">
+                <![CDATA[   and DATE_FORMAT(da.sunday, '%Y-%m-%d')<=  DATE_FORMAT(#{sundaydate}, '%Y-%m-%d')   ]]>
+            </if>
+        </where>
+    </select>
+
+    <!--    新增照片-->
+    <insert id="uploadPhoto" parameterType="TblPhoto">
+        insert into tbl_photo
+        (photoname,photodetail,photourl,phototime,cid)
+        values (#{photoname},#{photodetail},#{photourl},now(),#{cid});
+    </insert>
+
+    <!--      根据cid查班级相册总数-->
+    <select id="findClassPhotoCount" resultType="java.lang.Integer" parameterType="HashMap">
+			select count(*) from tbl_photo where cid = #{cid};
+	</select>
+    <!--      根据cid查班级相册数据-->
+    <select id="findClassPhoto" resultType="TblPhoto" parameterType="HashMap">
+			select * from tbl_photo where cid = #{cid}
+			limit #{pageInt},#{limitInt};
+	</select>
 </mapper>

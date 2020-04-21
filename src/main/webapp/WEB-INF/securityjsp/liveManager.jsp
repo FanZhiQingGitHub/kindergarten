@@ -57,7 +57,7 @@
 
     <script type="text/html" id="butdiv">
 
-        <button class="layui-btn layui-btn-sm layui-btn-normal play"><i class="layui-icon">&#xe652;</i>播放</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal play"><i class="layui-icon">&#xe652;</i>播放视频</button>
 
     </script>
 
@@ -88,7 +88,7 @@
         //第一个实例
         table.render({
             elem: '#dataTable'
-            , height: 280
+            , height: 550
             , url: path + '/security/showMonitorInfo' //数据接口
             , page: true //开启分页
             , id: 'searchTable'

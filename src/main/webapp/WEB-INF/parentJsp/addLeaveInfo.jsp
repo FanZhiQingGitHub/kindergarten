@@ -76,15 +76,6 @@
         var path = $("#path").val();
 
 
-        laydate.render({
-            elem: '#te3' //指定元素
-            , min: minDate()
-        });
-
-        function minDate() {
-            var now = new Date();
-            return now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
-        }
 
         //1、查出宝宝名称下拉框的值
         $.ajax({
@@ -156,6 +147,19 @@
                }
            });
         });
+
+
+        laydate.render({
+            elem: '#te3' //指定元素
+            , min: minDate()
+        });
+
+        function minDate() {
+            var now = new Date();
+            return now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+        }
+
+
     });
 
 </script>

@@ -1,10 +1,7 @@
 package com.great.kindergarten.security.mapper;
 
 import com.great.kindergarten.commons.entity.*;
-import com.great.kindergarten.security.resultbean.AlarmLogPage;
-import com.great.kindergarten.security.resultbean.MonitorPage;
-import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
-import com.great.kindergarten.security.resultbean.PickUpInfoPage;
+import com.great.kindergarten.security.resultbean.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -59,5 +56,21 @@ public interface SecurityMapper {
 
     public Long findALLMonitorInfoCount(MonitorPage monitorPage);
 
+    public List<TblClass> findClassInfo(ClassPage classPage);
 
+    public Long findClassInfoCount(ClassPage classPage);
+
+    public List<TblClamon> findAllMonitorname();
+
+    public List<TblClamon> findMonitornameByClassID(Integer classid);
+
+    public Boolean deleteMnId(Integer classid);
+
+    public Long findMonitorInfoCont(Integer cid);
+
+    public Boolean updateTblClamon(List list);
+
+    public List<TblMonitor> findALLMonitorInfoMag(MonitorPage monitorPage);
+
+    public Long findALLMonitorInfoCountMag(MonitorPage monitorPage);
 }

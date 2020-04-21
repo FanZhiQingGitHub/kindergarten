@@ -1,5 +1,6 @@
 package com.great.kindergarten.admin.mapper;
 
+import com.great.kindergarten.admin.javabean.MenuTreeInfo;
 import com.great.kindergarten.admin.javabean.TblStatistics;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.healther.resultbean.ExaminationPage;
@@ -77,7 +78,7 @@ public interface AdminMapper
 
 	public int findRoleCount(HashMap<String, Object> condition);
 
-	public List<TblRole> findAllRoleName();
+	public List<String> findAllRoleName();
 
 	public int updateRoleInfo(TblRole tblRole);
 
@@ -272,8 +273,8 @@ public interface AdminMapper
 	public int addSafetyVideo(List<TblSafetyvideo> tblSafetyvideoList);
 
 	//试题配置管理
-	public List<TblSafetyvtq> findAllSafetyVideoItemsInfo(Integer safetyVideoId);
 
+	public List<TblSafetyvtq> findAllSafetyVideoItemsInfo(Integer safetyVideoId);
 
 	public List<TblSafetyvideo> findAllVideoQuestionConfigInfo(HashMap<String, Object> condition, RowBounds rowBounds);
 
@@ -299,4 +300,27 @@ public interface AdminMapper
 	public List<TblStatistics> findChildrenBAgeInfo();
 
 	public List<TblStatistics> findChildrenCAgeInfo();
+
+	public List<TblStatistics> findChildrenAgeInfo();
+
+	public List<TblStatistics> findChildrenStatusInfo();
+
+	public List<TblStatistics> findTSexInfo();
+
+	public List<TblStatistics> findTAgeInfo();
+
+	//权限
+	public List<MenuTreeInfo> findAllMenuInfo();
+
+	public List<MenuTreeInfo> findMenuByRoleID(Integer rid);
+
+	public int deleteMenuId(Integer rid);
+
+	public int updateMenu(List<Map<String, Integer>> mapList);
+
+	public List<TblRole> findRoleInfos(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public int findRoleCounts(HashMap<String, Object> condition);
+
+	public List<TblMenu> getAllMenu();
 }
