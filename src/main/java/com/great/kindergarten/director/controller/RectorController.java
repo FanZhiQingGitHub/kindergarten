@@ -1668,18 +1668,12 @@ public class RectorController
 	//新增教师考勤-------------------------------------------------------------------------------------------
 	/*
 	 * 对应的教师考勤的新增
+	 * 1.日期
+   2.当前时间段：如8:30
+   3.需要判断是上午还是下午
+   4.需要日期区间id（需要添加本周一到本周日）--对应到教师ID --完成
+   5.如果下午或上午没打卡的话默认要插入请假或者其它默认数据
 	 * */
-
-	/*
-   1.日期
-   2.家长类型（妈妈或者爸爸）
-   3.当前时间段：如8:30
-   4.需要判断是上午还是下午
-   5.需要pmid
-   6.需要孩子id
-   7.需要日期区间id（需要添加本周一到本周日） --完成
-   8.如果下午或上午没打卡的话默认要插入请假或者其它默认数据
-	*/
 	@RequestMapping("/addTeaAttendTime")
 	public void addTeaAttendTime(TblTeacherAttend tblTeacherAttend, TblTertime tblTertime, HttpServletRequest request, HttpServletResponse response) throws ParseException
 	{
@@ -1698,8 +1692,9 @@ public class RectorController
 		String sunday = DateUtil.getSundayOfThisWeek(7);
 		//查找是不是有对应的教师的ID存在对应的表里面
 		//（1）根据教师端登录的时候--获取到对应的教师iD值
-		//		Integer teacherid = (Integer) request.getSession().getAttribute("teacherid");
-		Integer teacherid = 1;
+		TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher1");
+
+		Integer teacherid = tblTeacher1.getTeacherid();
 		//（2）查询对应的表里面有没有该字段
 		List<TblTeacherAttend> tblTeaAttList = kinderService.findTeaAtteByTid(teacherid);
 
@@ -1831,83 +1826,6 @@ public class RectorController
 					ResponseUtils.outHtml(response, "errorinfo");
 				}
 			}
-
-
-			//			TblStutime tblStutime1 = parentService.findPmTimeId(timeamdate);
-			//			if (tblStutime1 == null)
-			//			{
-			//				System.out.println("下午考勤表中不存在今天的日期");
-			//				parentService.addPmDate(timeamdate);
-			//				TblStutime tblStutime2 = parentService.findPmTimeId(timeamdate);
-			//				System.out.println("当天下午的考勤id=" + tblStutime2.getTimepmid());
-			//				tblStutime.setPmid(tblStutime2.getTimepmid());//今天下午的考勤表id
-			//				tblStutime.setSid(studentid);
-			//				tblStutime.setDid(dateid);
-			//				System.out.println("上午tblStutime1=" + tblStutime);
-			//
-			//				List<TblStutime> AmList = new ArrayList<>();
-			//				AmList.add(tblStutime);
-			//				TblStutime tblStutime3 = parentService.findExistDate(timeamdate);//查询是否今天有打过卡（即查上午考勤表中有没有今天的日期）
-			//				if (null != tblStutime3)
-			//				{
-			//					System.out.println("今天上午已经打过卡了");
-			//					System.out.println("AmList=" + AmList);
-			//					Boolean flag = parentService.updateAmAttendance(timeam, parentname, timeamdate);
-			//					if (flag)
-			//					{
-			//						ResponseUtils.outHtml(response, "amsuccess");
-			//					} else
-			//					{
-			//						ResponseUtils.outHtml(response, "errorinfo");
-			//					}
-			//				} else
-			//				{
-			//					boolean flagAm = parentService.addAmAttendance(AmList);
-			//					if (flagAm)
-			//					{
-			//						ResponseUtils.outHtml(response, "amsuccess");
-			//					} else
-			//					{
-			//						ResponseUtils.outHtml(response, "errorinfo");
-			//					}
-			//				}
-			//			} else
-			//			{
-			//				System.out.println("下午考勤表中存在今天的日期");
-			//				TblStutime tblStutime2 = parentService.findPmTimeId(timeamdate);
-			//				System.out.println("当天下午的考勤id=" + tblStutime2.getTimepmid());
-			//				tblStutime.setPmid(tblStutime2.getTimepmid());//今天下午的考勤表id
-			//				tblStutime.setSid(studentid);
-			//				tblStutime.setDid(dateid);
-			//				System.out.println("上午tblStutime2=" + tblStutime);
-			//				List<TblStutime> AmList = new ArrayList<>();
-			//				AmList.add(tblStutime);
-			//
-			//				TblStutime tblStutime3 = parentService.findExistDate(timeamdate);//查询是否今天有打过卡（即查上午考勤表中有没有今天的日期）
-			//				if (null != tblStutime3)
-			//				{
-			//					System.out.println("今天上午已经打过卡了");
-			//					System.out.println("AmList=" + AmList);
-			//					Boolean flag = parentService.updateAmAttendance(timeam, parentname, timeamdate);
-			//					if (flag)
-			//					{
-			//						ResponseUtils.outHtml(response, "amsuccess");
-			//					} else
-			//					{
-			//						ResponseUtils.outHtml(response, "errorinfo");
-			//					}
-			//				} else
-			//				{
-			//					flagAm = parentService.addAmAttendance(AmList);
-			//					if (flagAm)
-			//					{
-			//						ResponseUtils.outHtml(response, "amsuccess");
-			//					} else
-			//					{
-			//						ResponseUtils.outHtml(response, "errorinfo");
-			//					}
-			//				}
-			//			}
 		}
 		//中午的打卡
 		else if (hm.compareTo("12:00") > 0 && hm.compareTo("13:40") < 0)
@@ -2026,8 +1944,9 @@ public class RectorController
 		//		String sunday = DateUtil.getSundayOfThisWeek(7);
 		//查找是不是有对应的教师的ID存在对应的表里面
 		//（1）根据教师端登录的时候--获取到对应的教师iD值
-		//		Integer teacherid = (Integer) request.getSession().getAttribute("teacherid");
-		Integer teacherid = 1;
+		TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher1");
+
+		Integer teacherid = tblTeacher1.getTeacherid();
 		//（2）查询对应的表里面有没有该字段
 		List<TblTeacherAttend> tblTeaAttList = kinderService.findTeaAtteByTid(teacherid);
 
