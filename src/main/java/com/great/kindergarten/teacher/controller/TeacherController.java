@@ -24,6 +24,7 @@ import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -123,45 +124,44 @@ public class TeacherController {
 			e.printStackTrace();
 		}
 	}
-
+    //登录
 	@RequestMapping(value="/teacherLogin")
 	@ResponseBody
 	public  String teacherMain(TblTeacher tblTeacher,HttpServletRequest request){
-		System.out.println("tblTeacher="+tblTeacher);
+
 		String str=null;
 		//        密码加密
 		String teacherpwd = MD5Utils.md5(tblTeacher.getTeacherpwd());
 		tblTeacher.setTeacherpwd(teacherpwd);
-		System.out.println("teacherpwd="+teacherpwd);
+
 		//        获取验证码
 		String code = tblTeacher.getCode();
 		//        验证码判定是否一致
 		Boolean confirm = code.equalsIgnoreCase(vcode);
-		System.out.println("验证码是否一致="+confirm);
+
 		if (confirm) {
-			//            获取名字查询状态
-			System.out.println("教师="+tblTeacher.getTeachername());
+			//  获取名字查询状态
+
 			String teacherStatus = teacherService.findTeacherStatus(tblTeacher.getTeachername());
-			System.out.println("状态teacherStatus="+teacherStatus);
+
 			if (teacherStatus.equals("启用")){
-				System.out.println("登录="+teacherStatus);
-				//                登录 获取全部信息
+
+				// 登录 获取全部信息
 				tblTeacher1 = teacherService.findTeacher(tblTeacher);
-				//        根据cid 查找班级名称信息
+				// 根据cid 查找班级名称信息
 				cid=tblTeacher1.getCid();
-				System.out.println("cid="+cid);
+
 				tblClass = teacherService.findClassAll(cid);
 
-				System.out.println("tblClass="+tblClass);
 				List<TblTeacher> tblTeacherList=new ArrayList<>();
 
 				if (null!=tblTeacher1){
 
 					request.getSession().setAttribute("teachername",tblTeacher1.getTeachername());
-					//                    存信息到页面显示
+					// 存信息到页面显示
 					request.getSession().setAttribute("classname",tblClass.getClassname());
 					tblTeacherList.add(tblTeacher1);
-					System.out.println("tblTeacherList个人信息="+tblTeacherList);
+
 					request.getSession().setAttribute("tblTeacher1",tblTeacher1);
 					request.getSession().setAttribute("tblTeacherList",tblTeacherList);
 
@@ -179,7 +179,18 @@ public class TeacherController {
 		}
 		return str;
 	}
-	//修改密码
+	//退出登录
+	@RequestMapping(value="/teacherOut")
+	public String teacherOut( HttpServletRequest request){
+//		消除session信息
+		HttpSession session = request.getSession();
+		session.invalidate();
+		return "teacherjsp/teacherLogin";
+	}
+
+
+
+		//修改密码
 	@RequestMapping(value="/updateTeacherPwd")
 	@ResponseBody
 	public String updateTeacherPwd(String oldTeacherPwd, String teacherPwd, HttpServletRequest request){
@@ -191,8 +202,9 @@ public class TeacherController {
 		//        根据教师id 查找信息
 		int teacherid=tblTeacher1.getTeacherid();
 		TblTeacher tblTeacher2 = teacherService.checkPwd(teacherid);
+		//判断旧密码是否一致
 		if(oldTeachererPwd1.equals(tblTeacher2.getTeacherpwd())){
-			//            根据id 修改密码
+			//根据id 修改密码
 			String teacherid1 = Integer.toString(teacherid);
 			Boolean flag=teacherService.updateTeacherPwd(teacherPwd1,teacherid1);
 			if(flag){
