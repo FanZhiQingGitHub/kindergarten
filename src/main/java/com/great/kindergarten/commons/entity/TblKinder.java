@@ -36,6 +36,7 @@ public class TblKinder {
     private String kindercode;
     private String kinderscale;//规模
     private String kinderfunds;//注册资金
+    private Integer recid;//对应的园长ID外键
 
     private String time1;
     private String time2;
@@ -233,6 +234,16 @@ public class TblKinder {
 
     public void setTime2(String time2) {
         this.time2 = time2;
+    }
+
+    public Integer getRecid()
+    {
+        return recid;
+    }
+
+    public void setRecid(Integer recid)
+    {
+        this.recid = recid;
     }
 
     @Override

@@ -146,6 +146,7 @@ public class RectorController
 				if (code.equals(PicCode))
 				{
 					String kindername = (String) request.getSession().getAttribute("kindername");
+					//查看对应的校园公告内容
 					List<TblCampus> tblCampusList = securityService.findKinderNews(kindername);
 					request.getSession().setAttribute("tblCampusList", tblCampusList);
 					System.out.println("前台验证码成功！");
@@ -281,10 +282,15 @@ public class RectorController
 	@RequestMapping("/directorReg")
 	public void directorReg(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response) throws ParseException
 	{
+		//添加园所所有信息--补充信息
 		tblKinder.setKinderstatus("未审批");
 		tblKinder.setKinderregtime(new Date());
 		String md5pwd = MD5Utils.md5(tblKinder.getKinderpwd());
 		tblKinder.setKinderpwd(md5pwd);
+		//添加园长的ID到园所
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
+		tblKinder.setRecid(tblR.getRectorid());
+
 		System.out.println("园所申请审批：" + tblKinder);
 		int result = kinderService.addKinderMsg(tblKinder);
 		if (result > 0)
@@ -296,9 +302,9 @@ public class RectorController
 		}
 	}
 
-	//教师管理--信息查询和显示selectTeacherManage
+	//教师管理--信息查询和显示
 	@RequestMapping("/selectTeacherManage")
-	public void selectTeacherManage(HttpServletRequest request, HttpServletResponse response) throws ParseException, UnsupportedEncodingException
+	public void selectTeacherManage(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException
 	{
 		//前端传过来的值通过-json里面去查看
 		String page = request.getParameter("page");
@@ -1598,7 +1604,7 @@ public class RectorController
 		}
 	}
 
-	//查询对应的额消息信息显示
+	//查询对应的消息信息显示
 	@RequestMapping("/selectSchoolMessage")
 	public void selectSchoolMessage(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
