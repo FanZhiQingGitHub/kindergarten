@@ -285,7 +285,7 @@
             });
         });
 
-        //查看对应的消息内容
+        //查看主页校园公告内容
         $(".showNewsInfo").on('click',function () {
             var shownews = $(this).text();
             var titleInfo = shownews.split(":")[0];
