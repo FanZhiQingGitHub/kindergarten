@@ -3,6 +3,7 @@ package com.great.kindergarten.director.mapper;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.director.resultbean.TblScTInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -119,6 +120,29 @@ public interface KinderMapper
 	//教师考勤对应的显示--考勤信息值
 	public List<TblTertime> findALLTeacherAttendDetail(TblTeacherAttend tblTeacherAttend);
 
+	/*
+	 * 显示对应的教师考勤时间表是否有对应的时间
+	 * */
+	//（1）对应的时间表的ID值
+	public List<TblTeacherAttend> findTeaAtteByTid(int teacherid);
+	//（2）对应的时间表在没有的时候要进行对应的添加使用
+	public boolean addDateTeaAttend(TblTeacherAttend tblTeacherAttend);
+	//（3）对应的时间表要进行更新使用
+	public boolean updateDateTeaAttend(TblTeacherAttend tblTeacherAttend);
+	//（3）查找下午是否有过添加该字段了-如果有的话，就进行对应的
+	public TblTertime findAfternoon(Map<String, Object> map);
+	//（4）添加对应的下午的信息--添加到对应的字段
+	public boolean addPmTerTimeMsg(TblTertime tblTertime);
+	//（5）更新下午对应的信息--更新对应的下午信息进去
+	public boolean updatePmTerTimeMsg(TblTertime tblTertime);
+	//（6）添加对应的上午的信息--添加到对应的字段
+	public boolean addAmTerTimeMsg(TblTertime tblTertime);
+	//（7）更新上午对应的信息--更新对应的上午信息进去
+	public boolean updateAmTerTimeMsg(TblTertime tblTertime);
+	//（8）添加对应的中午的信息--添加到对应的字段
+	public boolean addOmTerTimeMsg(TblTertime tblTertime);
+	//（9）更新中午对应的信息--更新对应的上午信息进去
+	public boolean updateOmTerTimeMsg(TblTertime tblTertime);
 	/*
 	* 消息通知
 	* */

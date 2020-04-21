@@ -11,13 +11,13 @@ import java.util.Date;
 public class TblTertime
 {
 	private Integer tertimeid;
-	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date tertime;
 	private String tertimedate1;
 	private String noon;
 	private String tertimedate2;
-	private Integer tid;
+	private Integer taid;
 
 	private String tattendbegin;
 	private String tattendover;
@@ -62,14 +62,14 @@ public class TblTertime
 		this.tertimedate2 = tertimedate2;
 	}
 
-	public Integer getTid()
+	public Integer getTaid()
 	{
-		return tid;
+		return taid;
 	}
 
-	public void setTid(Integer tid)
+	public void setTaid(Integer taid)
 	{
-		this.tid = tid;
+		this.taid = taid;
 	}
 
 	public String getTattendbegin()
@@ -105,6 +105,6 @@ public class TblTertime
 	@Override
 	public String toString()
 	{
-		return "TblTertime{" + "tertimeid=" + tertimeid + ", tertime=" + tertime + ", tertimedate1='" + tertimedate1 + '\'' + ", tertimedate2='" + tertimedate2 + '\'' + ", tid=" + tid + '}';
+		return "TblTertime{" + "tertimeid=" + tertimeid + ", tertime=" + tertime + ", tertimedate1='" + tertimedate1 + '\'' + ", noon='" + noon + '\'' + ", tertimedate2='" + tertimedate2 + '\'' + ", taid=" + taid + ", tattendbegin='" + tattendbegin + '\'' + ", tattendover='" + tattendover + '\'' + '}';
 	}
 }

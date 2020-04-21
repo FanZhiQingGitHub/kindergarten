@@ -221,7 +221,7 @@
 							}
 							,done: function(res, index, upload){
 								if (res.code==0){
-									layer.alert(" 上传成功");
+									layer.config(" 上传成功");
 									layer.close(index);
 									//刷新表格
 									window.location.reload();
