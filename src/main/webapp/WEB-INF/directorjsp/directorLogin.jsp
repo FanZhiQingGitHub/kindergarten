@@ -399,7 +399,7 @@
                         var rectorname = $("#rectorname").val();
                         var rectorphone = $("#rectorphone").val();
                         var num = /^1\d{10}$/;
-                        if (rectorname.length < 0) {
+                        if (rectorname.length == 0) {
                             layer.msg("您好，用户名不能为空！", {icon: 2});
                         } else if (!num.test(rectorphone)) {
                             layer.msg("您好，手机号码必须11位，且不能出现空格！", {icon: 2});

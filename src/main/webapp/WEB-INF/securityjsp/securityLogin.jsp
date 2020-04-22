@@ -314,7 +314,9 @@
                         var securityname = $("#securityname").val();
                         var securityphone = $("#securityphone").val();
                         var num = /^1\d{10}$/;
-                        if (!num.test(securityphone)) {
+                        if(securityname.length == 0){
+                            layer.msg("您好，用户名不能为空！", {icon: 2});
+                        }else if (!num.test(securityphone)) {
                             layer.alert("您好，手机号码必须11位，且不能出现空格！", {icon: 2});
                         } else {
                             $.ajax({
