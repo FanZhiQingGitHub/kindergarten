@@ -155,12 +155,12 @@
 				, limits: [5, 10]
 				, cols: [[ //表头
 					{field: 'safetyvideoid', title: '视频编号', align: 'center', width: 120, sort: true, fixed: 'left'}
-					, {field: 'safetyvideoname', title: '视频名称', align: 'center', width: 120}
-					, {field: 'videoname', title: '文件名称', align: 'center', width: 120}
+					, {field: 'safetyvideoname', title: '视频名称', align: 'center', width: 135}
+					, {field: 'videoname', title: '文件名称', align: 'center', width: 190}
 					, {field: 'videoadd', title: '文件地址', align: 'center', width: 260}
 					, {field: 'safetyvideotime', title: '上传时间', align: 'center', width: 180
 					   ,templet:"<div>{{layui.util.toDateString(d.safetyvideotime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
-					, {fixed: 'right', title: '操作', align: 'center', width: 260, toolbar: '#barOption'}
+					, {fixed: 'right', title: '操作', align: 'center', width: 255, toolbar: '#barOption'}
 				]]
 				, id: 'educationTable'
 				, parseData: function (res) { //res 即为原始返回的数据
@@ -179,7 +179,6 @@
 					data = obj.data; //获得当前行数据
 					var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 					if(layEvent === 'reUpload'){
-						layer.confirm("确定要重新上传？",{icon:3,title:'温馨提示'},function (index) {
 							layer.close(index);
 							parent.layer.open({
 								type: 2,
@@ -226,7 +225,6 @@
 								// 		});
 								// 	}
 								// },
-							});
 						});
 					}else if(layEvent === 'delete'){
 						layer.confirm("确定要删除该视频信息？",{icon:3,title:'温馨提示'},function (index) {
@@ -254,7 +252,7 @@
 			$("#btn-add").click(function () {
 				parent.layer.open({
 					type: 2,
-					area: ['40%', '60%'],
+					area: ['35%', '56%'],
 					// content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
 					content: path+"/admin/toUrl/uploadVideoInfo",
 					title: '上传视频',

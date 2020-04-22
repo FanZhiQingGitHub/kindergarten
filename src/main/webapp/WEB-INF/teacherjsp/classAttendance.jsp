@@ -115,12 +115,11 @@
 					content: path + '/teacher/toUrl/studentAttendance?studentid='+data.studentid+",studentname="+data.studentname+",studentsex="+data.studentsex //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 					, success: function (layero, index) {
 						var body = layer.getChildFrame("body", index);
-
 						//	显示
 						// 弹出一个页面的时候，下拉框赋值但不能刷新到选定的值。需要做如下调整:红色部分
 						var iframeWindow = layero.find("iframe")[0].contentWindow;
 						var frameId = $(layero).find("iframe").attr('id');
-						$(window.frames[frameId].document).find("#studentid").val(data.studentid);
+						// $(window.frames[frameId].document).find("#studentid").val(data.studentid);
 						$(window.frames[frameId].document).find("#studentname").val(data.studentname);
 						$(window.frames[frameId].document).find("#studentsex").val(data.studentsex);
 

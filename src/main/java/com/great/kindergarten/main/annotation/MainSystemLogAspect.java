@@ -1,5 +1,8 @@
-package com.great.kindergarten.security.annotation;
+package com.great.kindergarten.main.annotation;
 
+
+import com.great.kindergarten.commons.entity.TblSyslog;
+import com.great.kindergarten.main.MainService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -8,20 +11,22 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
+import java.util.Date;
 
 /**
- * 报警日志切点类
+ * 切点类
  */
 @Aspect
 @Component
-public class AlarmLogAspect {
-    //注入Service用于把日志保存数据库
+public class MainSystemLogAspect {
+//注入Service用于把日志保存数据库
 
-//    @Resource  //这里我用resource注解
-//    private UserService userService;
+    @Resource  //这里我用resource注解
+    private MainService mainService;
 
 
     //这里的zxtest要和log4j.properties里的配置一致，否则写不到文件中
@@ -29,7 +34,7 @@ public class AlarmLogAspect {
 
     //Controller层切点
     //匹配当前包下所有类中所有方法（不包括子包）&& 只匹配带PmLog注解的方法
-    @Pointcut("within(com.great.kindergarten.security.controller.*) && @annotation(com.great.kindergarten.security.annotation.AlarmLog)")
+    @Pointcut("within(com.great.kindergarten.main.*) && @annotation(com.great.kindergarten.main.annotation.MainSystemLog)")
     public void controllerAspect() {
 
     }
@@ -87,7 +92,7 @@ public class AlarmLogAspect {
         HttpSession session = request.getSession();
 
         //读取session中的用户
-        String username = (String) session.getAttribute("username");
+        String kindername = (String) session.getAttribute("kindername");
         //请求的IP
         String ip = request.getRemoteAddr();
         if(ip.equals("0:0:0:0:0:0:0:1")){
@@ -107,8 +112,8 @@ public class AlarmLogAspect {
                 if (method.getName().equals(methodName)) {
                     Class[] clazzs = method.getParameterTypes();
                     if (clazzs.length == arguments.length) {
-                        operationType = method.getAnnotation(SecuritySystemLog.class).operationType();
-                        operationName = method.getAnnotation(SecuritySystemLog.class).operationName();
+                        operationType = method.getAnnotation(MainSystemLog.class).operationType();
+                        operationName = method.getAnnotation(MainSystemLog.class).operationName();
                         break;
                     }
                 }
@@ -117,28 +122,32 @@ public class AlarmLogAspect {
             System.out.println("=====controller后置通知开始=====");
             System.out.println("请求方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()") + "." + operationType);
             System.out.println("方法描述:" + operationName);
-            System.out.println("请求人:" + username);
+            System.out.println("请求人:" + kindername);
             System.out.println("请求IP:" + ip);
             //*========数据库日志=========*//
-//            LogTable logTable = new LogTable();
-//            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-//            String logtime = df.format(new Date());//获取当前时间
-//
-//            logTable.setOperateor(username);
-//            logTable.setOperatetype(operationType);
-//            logTable.setOperatedetail(operationName);
-//            logTable.setOperatedate(logtime);
-//            logTable.setOperateresult("正常");
-//            logTable.setOperateip(ip);
-//            List<LogTable> logTableList = new ArrayList<>();
-//            logTableList.add(logTable);
-//
-//            //保存数据库
-//            Boolean flag = userService.addSysLogInfo(logTableList);
-//            if(flag){
-//                System.out.println(logTable);
-//                System.out.println("=====controller后置通知结束=====");
-//            }
+            TblSyslog log = new TblSyslog();
+            log.setOperatedetail(operationName);
+            log.setOperatetype(operationType);
+            log.setOperateip(ip);
+            log.setOperateresult("正常");
+            if(kindername != null)
+            {
+                log.setOperateor(kindername);
+            }else{
+                log.setOperateor("无");
+            }
+            System.out.println("日志记录时间"+new Date());
+            log.setOperatetime(new Date());
+
+            //保存数据库
+            Integer num = mainService.addLog(log);
+            if(num>0){
+                System.out.println(log);
+                System.out.println("=====controller后置通知结束=====");
+            }else {
+                System.out.println(log);
+                System.out.println("=====controller后置通知异常=====");
+            }
         } catch (Exception e) {
             //记录本地异常日志
             logger.error("==后置通知异常==");
@@ -201,8 +210,8 @@ public class AlarmLogAspect {
                 if (method.getName().equals(methodName)) {
                     Class[] clazzs = method.getParameterTypes();
                     if (clazzs.length == arguments.length) {
-                        operationType = method.getAnnotation(SecuritySystemLog.class).operationType();
-                        operationName = method.getAnnotation(SecuritySystemLog.class).operationName();
+                        operationType = method.getAnnotation(MainSystemLog.class).operationType();
+                        operationName = method.getAnnotation(MainSystemLog.class).operationName();
                         break;
                     }
                 }
@@ -242,4 +251,5 @@ public class AlarmLogAspect {
 //        logger.error("异常方法:{}异常代码:{}异常信息:{}参数:{}-----"+joinPoint.getTarget().getClass().getName() + joinPoint.getSignature().getName(), e.getClass().getName(), e.getMessage(), params);
 
     }
+
 }

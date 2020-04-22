@@ -15,179 +15,218 @@
     <script src=<%=path + "/layui/layui.js"%>></script>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/mainres/css/main.css">
     <link rel="stylesheet" type="text/css" href=<%=path+"/image/adminimg/css/main.css"%>>
-
+	<style>
+		#hh1 {
+			font-weight: bold;
+			font-size: 35px;
+			margin-top: 1%;
+			text-align: center;
+			font-family: 楷体;
+		}
+		label{
+			font-size: 110%;
+		}
+		input{
+			font-size: 110%;
+		}
+	</style>
 </head>
 <body>
-<input type="hidden" id="path" value="<%=path%>">
-<input type="hidden" id="adminid" name="adminid">
-<div class="header">
-    <h1 class="logo">
-        <a>
-            <span>个人信息</span>
-            <img src="${pageContext.request.contextPath}/image/adminimg/img/logo.png">
-        </a>
-    </h1>
-    <div class="nav">
-        <a style="font-size: 18px">welcome to <span class="name" style="color: darkorchid">&nbsp;${adminname}&nbsp;</span> home !!!</a>
-    </div>
-    <p class="welcome-text">
-        <button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal updateAdminpwd" style="margin-top: 48%" >
-            修改密码
-        </button>
-    </p>
-</div>
+	<input type="hidden" id="path" value="<%=path%>">
+	<input type="hidden" id="adminid" name="adminid">
+	<form class="layui-form" method="post" enctype="multipart/form-data">
+		<div id="alldiv">
+			<h1 id="hh1">个人信息</h1>
+			<hr style="color: white">
+			<div class="container">
 
-<div class="about-content">
-    <div class="w1000">
-        <div class="item info">
-            <div class="title">
-                <h3>我的介绍</h3>
-            </div>
-            <div class="cont">
-                <img src="${pageContext.request.contextPath}/image/adminimg/img/logo.jpg">
-                <div class="per-info">
-                    <ul style="font-size: 18px">
-                        <c:if test="${not empty tblAdminList}">
-                            <c:forEach items="${tblAdminList}" var="i" step="1">
-                                <li >姓名：${i.adminname}</li><br/>
-<%--                                <li >性别：${i.healthersex}</li><br/>--%>
-<%--                                <li >年龄：${i.healtherage}</li><br/>--%>
-<%--                                <li >地址：${i.healtheradd}</li><br/>--%>
-<%--                                <li >电话：${i.healtherphone}</li><br/>--%>
-                            </c:forEach>
-                        </c:if>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">我的角色：</label>
+					<div class="layui-input-inline">
+						<input type="text" name="rolename" id="rolename" lay-verify="rolename" placeholder="" autocomplete="off"
+						       class="layui-input" readonly style="width: 140%">
+					</div>
+					<span class="layui-form-label" style="width:18%;margin-left: 3%">当前角色不可更改为其他角色</span>
+				</div>
 
-<!-- footer -->
-<div class="footer">
-    <div class="line"></div>
-    <p class="copyright">
-        @2020 最后#的小组 版权所有©<br/>
-        E-MAIL:kindergarten@outlook.com<br/>
-        TEL:400-888-888
-    </p>
-    <div class="icon_box">
-        <a href="#"><i class="layui-icon layui-icon-login-wechat weixin-icon"></i></a>
-        <a href="#"><i class="layui-icon layui-icon-login-weibo weibo-icon"></i></a>
-    </div>
-</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">用户名：</label>
+					<div class="layui-input-inline">
+						<input type="text" name="adminname" id="adminname" lay-verify="adminname" placeholder="" autocomplete="off"
+						       class="layui-input" readonly style="width: 140%">
+					</div>
+					<span class="layui-form-label" style="width:10%;margin-left: 3.5%">用户名不可更改</span>
+				</div>
 
-<div id="type-content" style="display: none;">
-	<div class="layui-form-item">
-		<label class="layui-form-label">旧   密   码</label>
-		<div class="layui-inline">
-			<input type="text" id="oldadminpwd" placeholder="请输入6-12位旧密码"
-			       autocomplete="off" class="layui-input" style="width: 270px" >
+				<div class="layui-form-item">
+					<label class="layui-form-label">性别：</label>
+					<div class="layui-input-inline" style="margin-top: 1%;">
+						<input type="radio" id="ra1" name="adminsex" class="adminsex" value="男" title="男" >
+						<input type="radio" id="ra2" name="adminsex" class="adminsex" value="女" title="女" style="margin-left: 10%;">
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">头像：</label>
+					<div class="layui-input-inline">
+						<input type="text" name="adminheadurl" id="adminheadurl" lay-verify="adminheadurl" placeholder="请输入头像url信息" autocomplete="off"
+						       class="layui-input" style="width: 140%" readonly>
+					</div>
+					<button type="button" class="layui-btn layui-btn-normal" name="file" id="uploadImg" style="margin-left: 10%;" ><i class="layui-icon">&#xe67c;上传图片</i></button>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">手机号：</label>
+					<div class="layui-input-inline">
+						<input type="tel" name="adminphone" id="adminphone" lay-verify="adminphone" placeholder="请输入11位手机号" autocomplete="off"
+						       class="layui-input" style="width: 140%">
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-input-inline" style="margin-left: 10%;">
+						<button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="updateAdminInfo">
+							确认修改
+						</button>
+						<button type="button" class="layui-btn layui-btn-primary" id="bu3" style="margin-left: 10%">返回</button>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
-	<div class="layui-form-item">
-		<label class="layui-form-label">新   密   码</label>
-		<div class="layui-inline">
-			<input type="password" id="adminpwd" placeholder="请输入6-12位密码" value=""
-			       autocomplete="off" class="layui-input" style="width: 270px">
-		</div>
-	</div>
-	<div class="layui-form-item">
-		<label class="layui-form-label">确认密码</label>
-		<div class="layui-inline">
-			<input type="password" id="confrimAdminpwd" placeholder="请确认密码" value=""
-			       autocomplete="off" class="layui-input" style="width: 270px">
-		</div>
-	</div>
-</div>
+	</form>
 
 <script>
-    layui.use(['jquery','layer'], function () {
-        var $ = layui.jquery,
-	        layer = layui.layer;
+    layui.use(['jquery','layer','form','layedit','upload'], function () {
+	    var $ = layui.jquery,
+		    layer = layui.layer
+		    , form = layui.form
+		    , layedit = layui.layedit
+		    ,upload = layui.upload;
 	    var path = $("#path").val();
-        $('body').on('click', '.updateAdminpwd', function () {
-	        layer.confirm("确定修改密码？",{icon:3,title:'温馨提示'},function (index) {
-		        layer.close(index);
-	        	layer.open({
-			        type: 1,
-			        area: ['35%', '55%'],
-			        content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-			        title: '修改管理员密码',
-			        btn: ['确定', '取消'],
-			        offset: '100px',
-			        btnAlign: 'c',
-			        btn1: function (index) {
-				        var oldadminpwd = $("#oldadminpwd").val();
-				        var adminpwd = $("#adminpwd").val();
-				        var confrimAdminpwd = $("#confrimAdminpwd").val();
 
-				        if (oldadminpwd.length == 0) {
-					        layer.alert("请输入旧密码", {icon: 2});
-				        } else if (adminpwd.length < 6) {
-					        layer.alert("新密码长度低于6位", {icon: 2});
-				        } else if (adminpwd.length > 12) {
-					        layer.alert("新密码长度大于12位", {icon: 2});
-				        } else if (adminpwd.length == 0) {
-					        layer.alert("新密码不能为空", {icon: 2});
-				        } else if (confrimAdminpwd.length == 0) {
-					        layer.alert("请确认密码", {icon: 2});
-				        } else if (adminpwd != confrimAdminpwd) {
-					        layer.alert("密码输入不一致", {icon: 2});
-				        } else {
-					        $.ajax({
-						        url: path + '/admin/updateAdminpwd',
-						        async: true,
-						        type: 'post',
-						        data: {
-						        	"adminid":$("#adminid").val(),
-							        "oldadminpwd": oldadminpwd,
-							        "adminpwd": adminpwd,
-							        "confrimAdminpwd": confrimAdminpwd
-						        },
-						        datatype: 'text',
-						        success: function (data) {
-							        if (data == "error") {
-								        layer.alert("修改失败！", {icon: 2});
-							        } else if (data == "pwderror") {
-								        layer.alert("旧密码输入错误", {icon: 2});
-							        } else {
-								        layer.alert("修改成功", {icon: 6});
-								        layer.close(index);
-							        }
-						        }, error: function (data) {
-							        layer.alert("网络繁忙！", {icon: 2});
-						        }
-					        });
-				        }
-			        },
-		        });
-	        });
-        });
+	    //验证规则
+	    form.verify({
+		    adminheadurl: function (value) {
+			    if (value.length < 3) {
+				    return '您好，地址不能为空，且至少3个字符！';
+			    }
+		    },
+		    adminphone: [
+			    /^1\d{10}$/
+			    , '您好，手机号码必须11位，以1开头且不能出现空格！'
+		    ],
+		    content: function (value) {
+			    layedit.sync(editIndex);
+		    }
+	    });
+	    $(function () {
+		    $("#adminphone").blur(function () {
+			    var adminphone = $("#adminphone").val();
+			    if (adminphone == 0) {
+				    layer.msg("手机号不能为空", {icon: 2});
+				    $('#bu2').attr('disabled',"disabled");
+			    } else if (!/^1\d{10}$/.test(adminphone)) {
+				    layer.msg("您好，手机号码必须11位，以1开头且不能出现空格！", {icon: 2});
+				    $('#bu2').attr('disabled',"disabled");
+			    } else {
+				    $('#bu2').removeAttr('disabled');
+			    }
+		    });
+	    });
+
+	    upload.render({
+		    elem: '#uploadImg' //绑定元素
+		    ,url: path+"/admin/uploadAdminHeadImg" //上传接口
+		    ,auto: false
+		    ,accept: 'images'
+		    ,acceptMime: 'image/*'
+		    ,bindAction: '#bu2'
+		    ,choose:function(obj){//选择文件的回调，obj为选中的文件
+			    var files = obj.pushFile();
+			    obj.preview(function(index,file,result){
+				    $("#adminheadurl").val("image/adminimg/img/"+file.name);
+			    });
+		    }
+		    ,before: function(obj){
+			    this.data = {
+				    rolename: $("#rolename").val()
+				    ,adminname: $("#adminname").val()
+				    ,adminheadurl: $("#adminheadurl").val()
+				    ,adminsex: $('input[name="adminsex"]:checked').val()
+				    ,adminphone:  $("#adminphone").val()
+			    }
+		    }
+		    ,done: function(res){
+			    if(res.code > 0){
+				    return layer.msg('个人信息修改失败');
+			    }
+			    layer.alert("个人信息修改成功！",{icon:6});
+			    setTimeout(function () {
+				    parent.location.href = path + "/admin/toUrl/adminMain"; //再执行关闭
+			    }, 3000);
+		    }
+		    ,error: function(){
+			    //请求异常回调
+			    layer.alert("个人信息修改失败！",{icon:2});
+		    }
+	    });
+
+	    // form.on('submit(updateAdminInfo)', function (data) {
+	    //     var path = $("#path").val();
+	    //     $.ajax({
+	    // 	    url: path + "/admin/addKinder",
+	    // 	    async: true,
+	    // 	    type: "post",
+	    // 	    data: data.field,
+	    // 	    datatype: "text",
+	    // 	    success: function (msg) {
+	    // 		    if(msg == "success"){
+	    // 			    layer.alert("新增园所成功！", {icon: 6},function () {
+	    // 				    location.href = path + "/admin/toUrl/kinderMgr";
+	    // 			    });
+	    // 		    }else {
+	    // 			    layer.alert("新增园所失败！", {icon: 2});
+	    // 		    }
+	    // 	    }, error: function (msg) {
+	    // 		    layer.alert("网络繁忙！", {icon: 2});
+	    // 	    }
+	    //     })
+	    // });
 
 	    $(function () {
-		    $("#oldadminpwd").blur(function () {
-			    var reg = /^[\w]{6,12}$/;
-			    var oldadminpwd = $(this).val();
-			    $.ajax({
-				    url:path+"/admin/checkOldPwd",
-				    type:'post',
-				    dataType:'text',
-				    data:{"oldadminpwd": oldadminpwd},
-				    //验证旧密码是否输入正确
-				    success:function(msg){
-					    if (msg == "success" && oldadminpwd != 0 && ($('#oldadminpwd').val().match(reg))) {
-						    layer.msg('输入旧密码正确',{icon:1});
-					    } else if(oldadminpwd == 0 || !($('#oldadminpwd').val().match(reg)))
-					    {
-						    layer.msg('请输入6-12位字符! ')
-					    }
-					    else {
-						    layer.msg('输入旧密码错误! ')
-					    }
-				    }
+		    $("#bu3").click(function () {
+			    layer.confirm('您确定返回到后台管理主页面吗?', {icon: 3, title: '温馨提示'}, function (index) {
+				    var path = $("#path").val();
+				    parent.location.href = path + "/admin/toUrl/adminMain";
+				    return true;
 			    });
+			    return false;
 		    });
+
+		    $.ajax({
+			    url: path + "/admin/selectAdminInfo",
+			    type: 'post',
+			    datatype: 'json',
+			    success: function (data) {
+				    var adminInfo = eval(data);
+				    for (i in adminInfo) {
+					    $("#rolename").val(adminInfo[i].rolename);
+					    $("#adminname").val(adminInfo[i].adminname);
+					    $("#adminheadurl").val(adminInfo[i].adminheadurl);
+					    $("#adminphone").val(adminInfo[i].adminphone);
+					    if (adminInfo[i].adminsex == "男") {
+						    $("#ra1").attr("checked", "checked");
+					    } else {
+						    $("#ra2").attr("checked", "checked");
+					    }
+					    $("input[name=adminsex][value=男]").attr("checked", adminInfo[i].adminsex == "男" ? true : false);
+					    $("input[name=adminsex][value=女]").attr("checked", adminInfo[i].adminsex == "女" ? true : false);
+					    form.render();
+				    }
+			    }, error: function (data) {
+				    layer.alert("网络繁忙！", {icon: 2});
+			    }
+		    })
 	    })
     })
 </script>

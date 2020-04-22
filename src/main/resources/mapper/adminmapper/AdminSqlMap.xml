@@ -14,10 +14,10 @@
     </resultMap>
     <insert id="addKinder" parameterType="java.util.List">
         insert into
-        tbl_kinder(kindername,kinderregtime,kinderstatus,kinderacount,kindercode)
+        tbl_kinder(kindername,kinderlp,kinderlpid,kinderlpadd,kinderlpphone,schoolpermit,healthpermit,firepermit,grouppermit,registrationpermit,kinderapptime,kinderregtime,kinderstatus,kinderacount,kindercode,kinderpwd)
         values
         <foreach collection="list" item="i" index="index" separator=",">
-            (#{i.kindername},#{i.kinderregtime},#{i.kinderstatus},#{i.kinderacount},#{i.kindercode})
+            (#{i.kindername},#{i.kinderlp},#{i.kinderlpid},#{i.kinderlpadd},#{i.kinderlpphone},#{i.schoolpermit},#{i.healthpermit},#{i.firepermit},#{i.grouppermit},#{i.registrationpermit},#{i.kinderapptime},#{i.kinderregtime},#{i.kinderstatus},#{i.kinderacount},#{i.kindercode},#{i.kinderpwd})
         </foreach>
     </insert>
     <insert id="addMenuInfo">
@@ -116,6 +116,11 @@
             (#{i.rid},#{i.mid})
         </foreach>
     </insert>
+    <insert id="addAdminInfos">
+        insert into tbl_admin
+            (adminname, adminpwd, adminsex, adminphone, adminheadurl, createtime, adminstatus, rid)
+            values(#{adminname},#{adminpwd},#{adminsex},#{adminphone},#{adminheadurl},#{createtime},#{adminstatus},#{rid})
+    </insert>
 
 
     <delete id="deleteKinderInfo">
@@ -166,6 +171,9 @@
     <delete id="deleteMenuId">
         delete from tbl_rolemenu where rid = #{roleid}
     </delete>
+    <delete id="deleteAdmin">
+        delete from tbl_admin where adminid = #{adminid}
+    </delete>
 
     <!--    用户状态查询-->
     <select id="findAdminStatus" resultType="java.lang.String" parameterType="java.util.Map">
@@ -211,8 +219,31 @@
     <select id="findRoleByRid" resultType="java.lang.String">
         select rolename from tbl_role where roleid = #{roleid}
     </select>
-    <select id="findAdminByName" resultType="com.great.kindergarten.commons.entity.TblAdmin">
-        select * from tbl_admin where adminname = #{adminname}
+
+    <resultMap id="AdminInfoMap" type="com.great.kindergarten.commons.entity.TblAdmin">
+        <result column="adminid" property="adminid"></result>
+        <result column="adminname" property="adminname"></result>
+        <result column="adminpwd" property="adminpwd"></result>
+        <result column="adminsex" property="adminsex"></result>
+        <result column="adminphone" property="adminphone"></result>
+        <result column="adminheadurl" property="adminheadurl"></result>
+        <result column="adminstatus" property="adminstatus"></result>
+        <result column="roleid" property="roleid"></result>
+        <result column="rolename" property="rolename"></result>
+        <result column="rid" property="rid"></result>
+        <association property="tblRole" javaType="com.great.kindergarten.commons.entity.TblRole">
+            <id property="roleid" column="roleid"/>
+            <result property="roleid" column="roleid"/>
+            <result property="rolename" column="rolename"/>
+        </association>
+    </resultMap>
+
+    <select id="findAdminByName" resultMap="AdminInfoMap" parameterType="com.great.kindergarten.commons.entity.TblAdmin">
+        select a.* ,r.rolename from tbl_admin a,tbl_role r
+        <where>
+            a.rid = r.roleid and a.adminname = #{adminname}
+        </where>
+
     </select>
 
     <select id="findTblAdminByName" resultType="com.great.kindergarten.commons.entity.TblAdmin">
@@ -641,7 +672,7 @@
         </set>
     </update>
     <update id="updateParameter">
-        update tbl_parameter where
+        update tbl_parameter
         <set>
             <if test="parametername != '' and parametername != null">
                 parametername = #{parametername},
@@ -655,6 +686,49 @@
         </set>
         where parameterid = #{parameterid}
     </update>
+    <update id="updateAdminInfo">
+        update tbl_admin
+        <set>
+            <if test="adminsex != '' and adminsex != null">
+                adminsex = #{adminsex},
+            </if>
+            <if test="adminheadurl != '' and adminheadurl != null ">
+                adminheadurl = #{adminheadurl},
+            </if>
+            <if test="adminphone != '' and adminphone != null">
+                adminphone = #{adminphone},
+            </if>
+        </set>
+        where adminid = #{adminid}
+    </update>
+    <update id="updateAdminInfos">
+        update tbl_admin
+        <set>
+            <if test="adminsex != '' and adminsex != null">
+                adminsex = #{adminsex},
+            </if>
+            <if test="adminheadurl != '' and adminheadurl != null ">
+                adminheadurl = #{adminheadurl},
+            </if>
+            <if test="adminphone != '' and adminphone != null">
+                adminphone = #{adminphone},
+            </if>
+            <if test="adminpwd != '' and adminpwd != null">
+                adminpwd = #{adminpwd},
+            </if>
+        </set>
+        where adminid = #{adminid}
+    </update>
+    <update id="updateAdminStatus">
+        update tbl_admin
+        <set>
+            <if test="adminstatus != '' and adminstatus != null">
+                adminstatus = #{adminstatus},
+            </if>
+        </set>
+        where adminid = #{adminid}
+    </update>
+
 
     <select id="findAllKinder" resultType="com.great.kindergarten.commons.entity.TblKinder">
         select * from tbl_kinder
@@ -871,10 +945,10 @@
                 <![CDATA[   and DATE_FORMAT(platforminfotime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
             <if test=" time2 != '' and time2 != null">
-                <![CDATA[   and DATE_FORMAT(platforminfo, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+                <![CDATA[   and DATE_FORMAT(platforminfotime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
             </if>
             <if test=" platforminfoname != '' and platforminfoname != null">
-                and platforminfo like concat('%',#{platforminfo},'%')
+                and platforminfoname like concat('%',#{platforminfoname},'%')
             </if>
         </where>
         order by platforminfotime asc
@@ -886,10 +960,10 @@
                 <![CDATA[   and DATE_FORMAT(platforminfotime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
             <if test=" time2 != '' and time2 != null">
-                <![CDATA[   and DATE_FORMAT(platforminfo, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+                <![CDATA[   and DATE_FORMAT(platforminfotime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
             </if>
             <if test=" platforminfoname != '' and platforminfoname != null">
-                and platforminfo like concat('%',#{platforminfo},'%')
+                and platforminfoname like concat('%',#{platforminfoname},'%')
             </if>
         </where>
         order by platforminfotime asc
@@ -1063,7 +1137,7 @@
                 and healthername like concat('%',#{healthername},'%')
             </if>
             <if test=" healtherstatus != '' and healtherstatus != null and healtherstatus != '请选择'">
-                and phealtherstatus = #{healtherstatus}
+                and healtherstatus = #{healtherstatus}
             </if>
         </where>
         order by healtherregtime desc
@@ -1204,28 +1278,28 @@
         order by s.studenttime desc
     </select>
 
-<!--&lt;!&ndash;    安全教育管理&ndash;&gt;-->
-<!--    <resultMap id="VideoMap" type="com.great.kindergarten.commons.entity.TblSafetyvideo">-->
-<!--        <result column="safetyvideoid" property="safetyvideoid"></result>-->
-<!--        <result column="safetyvideoname" property="safetyvideoname"></result>-->
-<!--        <result column="safetyvideotime" property="safetyvideotime"></result>-->
-<!--        <result column="videoname" property="videoname"></result>-->
-<!--        <result column="videoadd" property="videoadd"></result>-->
-<!--        <result column="monitorid" property="monitorid"></result>-->
-<!--        <result column="monitorname" property="monitorname"></result>-->
-<!--        <result column="mid" property="mid"></result>-->
-<!--        <association property="tblMonitor" javaType="com.great.kindergarten.commons.entity.TblMonitor">-->
-<!--            <id property="monitorid" column="monitorid"/>-->
-<!--            <result property="monitorid" column="monitorid"/>-->
-<!--            <result property="monitorname" column="monitorname"/>-->
-<!--        </association>-->
-<!--    </resultMap>-->
+<!--    安全教育管理-->
+    <resultMap id="VideoMap" type="com.great.kindergarten.commons.entity.TblSafetyvideo">
+        <result column="safetyvideoid" property="safetyvideoid"></result>
+        <result column="safetyvideoname" property="safetyvideoname"></result>
+        <result column="safetyvideotime" property="safetyvideotime"></result>
+        <result column="videoname" property="videoname"></result>
+        <result column="videoadd" property="videoadd"></result>
+        <result column="monitornameid" property="monitornameid"></result>
+        <result column="monitorname" property="monitorname"></result>
+        <result column="mid" property="mid"></result>
+        <association property="tblMonitorname" javaType="com.great.kindergarten.commons.entity.TblMonitorname">
+            <id property="monitornameid" column="monitornameid"/>
+            <result property="monitornameid" column="monitornameid"/>
+            <result property="monitorname" column="monitorname"/>
+        </association>
+    </resultMap>
 
-    <select id="findAllSafetyVideoInfo" resultType="com.great.kindergarten.commons.entity.TblSafetyvideo" parameterType="com.great.kindergarten.commons.entity.TblSafetyvideo">
-        select m.monitorid,m.monitorname,s.*
-            from tbl_safetyvideo s,tbl_monitor m
+    <select id="findAllSafetyVideoInfo" resultMap="VideoMap" parameterType="com.great.kindergarten.commons.entity.TblSafetyvideo">
+        select m.monitornameid,m.monitorname,s.*
+            from tbl_safetyvideo s,tbl_monitorname m
             <where>
-                s.mid = m.monitorid
+                s.mid = m.monitornameid
                 <if test=" time1 != '' and time1 != null">
                     <![CDATA[   and DATE_FORMAT(safetyvideotime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
                 </if>
@@ -1241,9 +1315,9 @@
 
     <select id="findSafetyVideoInfoCount" resultType="java.lang.Integer">
         select count(*)
-            from tbl_safetyvideo s,tbl_monitor m
+            from tbl_safetyvideo s,tbl_monitorname m
             <where>
-                s.mid = m.monitorid
+                s.mid = m.monitornameid
                 <if test=" time1 != '' and time1 != null">
                     <![CDATA[   and DATE_FORMAT(safetyvideotime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
                 </if>
@@ -1264,11 +1338,13 @@
             s1.safetyvideoid = s2.safetyvideoid and s2.safetyvideoid = #{safetyvideoid}
         </where>
     </select>
-    <select id="findAllVideoQuestionConfigInfo" resultType="com.great.kindergarten.commons.entity.TblSafetyvideo">
-        select m.monitorid,m.monitorname,s.*
-            from tbl_safetyvideo s,tbl_monitor m
+
+<!--    试题配置-->
+    <select id="findAllVideoQuestionConfigInfo" resultMap="VideoMap">
+        select m.monitornameid,m.monitorname,s.*
+            from tbl_safetyvideo s,tbl_monitorname m
             <where>
-                s.mid = m.monitorid
+                s.mid = m.monitornameid
                 <if test=" time1 != '' and time1 != null">
                     <![CDATA[   and DATE_FORMAT(safetyvideotime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
                 </if>
@@ -1281,6 +1357,7 @@
             </where>
             order by s.safetyvideotime desc
     </select>
+
     <select id="queryTopicById" resultType="com.great.kindergarten.commons.entity.TblSafetyvtq">
         select * from tbl_safetyvtq where safetyvtqid = #{safetyvtqid}
     </select>
@@ -1443,4 +1520,59 @@
     <select id="getAllMenu" resultType="com.great.kindergarten.commons.entity.TblMenu">
 		select * from tbl_menu
 	</select>
+
+    <select id="findIdByKinderName" resultType="java.lang.Integer">
+        select kinderid from tbl_kinder where kindername = #{kindername}
+    </select>
+
+    <select id="findIdByKinderAccount" resultType="java.lang.Integer">
+        select kinderid from tbl_kinder where kinderacount = #{kinderacount}
+    </select>
+
+    <select id="selectKinderInfo" resultType="com.great.kindergarten.commons.entity.TblKinder">
+        select * from tbl_kinder where kinderid = #{kinderid}
+    </select>
+
+    <select id="findAllAdmin" resultMap="AdminInfoMap" parameterType="com.great.kindergarten.commons.entity.TblAdmin">
+        select a.* ,r.rolename from tbl_admin a,tbl_role r
+        <where>
+            a.rid = r.roleid
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(a.createtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(a.createtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" adminname != '' and adminname != null ">
+                and a.adminname like concat('%',#{adminname},'%')
+            </if>
+            <if test=" adminstatus != '' and adminstatus != null and adminstatus != '请选择'">
+                and a.adminstatus = #{adminstatus}
+            </if>
+        </where>
+        order by a.createtime desc
+    </select>
+    <select id="findAdminCount" resultType="java.lang.Integer">
+        select count(*) from tbl_admin a,tbl_role r
+        <where>
+            a.rid = r.roleid
+            <if test=" time1 != '' and time1 != null">
+                <![CDATA[   and DATE_FORMAT(a.createtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" time2 != '' and time2 != null">
+                <![CDATA[   and DATE_FORMAT(a.createtime, '%Y-%m-%d')<=  DATE_FORMAT(#{time2}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test=" adminname != '' and adminname != null ">
+                and a.adminname like concat('%',#{adminname},'%')
+            </if>
+            <if test=" adminstatus != '' and adminstatus != null and adminstatus != '请选择'">
+                and a.adminstatus = #{adminstatus}
+            </if>
+        </where>
+        order by a.createtime desc
+    </select>
+    <select id="checkAdminName" resultType="com.great.kindergarten.commons.entity.TblAdmin">
+        select * from tbl_admin where adminname = #{adminname}
+    </select>
+
 </mapper>

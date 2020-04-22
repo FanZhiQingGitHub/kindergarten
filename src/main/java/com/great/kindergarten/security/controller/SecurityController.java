@@ -2,6 +2,7 @@ package com.great.kindergarten.security.controller;
 
 import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
+import com.great.kindergarten.security.annotation.SecuritySystemLog;
 import com.great.kindergarten.security.resultbean.*;
 import com.great.kindergarten.security.service.SecurityService;
 import com.great.kindergarten.util.DateUtil;
@@ -42,8 +43,7 @@ public class SecurityController {
         try {
             int width = 60;
             int height = 30;
-//            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
-            String data = "0000";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
+            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
             Random random = new Random();//随机类
             //1 创建图片数据缓存区域（核心类）
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);//创建一个彩色的图片
@@ -87,6 +87,7 @@ public class SecurityController {
         }
     }
 
+    @SecuritySystemLog(operationType = "登录", operationName = "安防员登录")
     @RequestMapping("/securityLogin")
     public void securityLogin(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response) {
         securityname = tblSecurity.getSecurityname();
@@ -127,6 +128,7 @@ public class SecurityController {
         }
     }
 
+    @SecuritySystemLog(operationType = "修改", operationName = "安防员修改密码")
     @RequestMapping("/updateSecuritypwd")
     public void updateHealtherpwd(HttpServletRequest request, HttpServletResponse response) {
         TblSecurity tblSecurity = securityService.findSecurityId(securityname);
@@ -141,6 +143,7 @@ public class SecurityController {
     }
 
     //重置安防员密码
+    @SecuritySystemLog(operationType = "修改", operationName = "安防员重置密码")
     @RequestMapping("/resetSecuritypwd")
     public void resetSecuritypwd(TblSecurity tblSecurity, HttpServletResponse response) {
         Boolean flag = securityService.resetSecuritypwd(tblSecurity.getSecurityphone());
@@ -262,7 +265,6 @@ public class SecurityController {
             pickUpInfoDetailPage.setStudentid(Integer.valueOf(dafultsid));
         }
         List<TblDate> tblDateList = securityService.findALLPickUpDetailInfo(pickUpInfoDetailPage);
-        System.out.println("tblDateList="+tblDateList);
         if (0 != tblDateList.size()) {
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
@@ -333,6 +335,7 @@ public class SecurityController {
     }
 
     //记录学生越界报警信息
+    @SecuritySystemLog(operationType = "增加", operationName = "宝宝越界报警信息记录")
     @RequestMapping("/addAlarmLogInfo")
     public void addAlarmLogInfo(TblAlarmLog tblAlarmLog, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String studentid = request.getParameter("studentid");
@@ -446,6 +449,7 @@ public class SecurityController {
     }
 
     //新增电子围栏
+    @SecuritySystemLog(operationType = "新增", operationName = "安防员新增幼儿园电子围栏")
     @RequestMapping("/addCoordinate")
     public void addCoordinate(HttpServletRequest request, HttpServletResponse response) {
         Gson g = new Gson();
@@ -514,6 +518,7 @@ public class SecurityController {
     }
 
     //修改电子围栏坐标
+    @SecuritySystemLog(operationType = "修改", operationName = "安防员修改幼儿园电子围栏")
     @RequestMapping("/updateMealInfo")
     public void updateMealInfo(TblCoordinate tblCoordinate,HttpServletRequest request,HttpServletResponse response){
        //需要幼儿园账号找出ID
@@ -521,7 +526,6 @@ public class SecurityController {
         String msg = request.getParameter("TblCoordinate");
         tblCoordinate = g.fromJson(msg,TblCoordinate.class);
         List<TblCoordinate> tblCoordinateList = tblCoordinate.getCoordinatelist();
-        System.out.println(tblCoordinateList);
         TblKinder tblKinder = securityService.findKinderId(kindername);//查出幼儿园id
         Boolean flag = securityService.deleteLngLatInfo(tblKinder.getKinderid());
         if(flag){
@@ -624,6 +628,7 @@ public class SecurityController {
         }
     }
 
+    @SecuritySystemLog(operationType = "修改", operationName = "安防员配置班级家长直播权限")
     @RequestMapping("/updateMonitorCP")
     public void updateMonitorCP(TblMonitorname tblMonitorname,HttpServletRequest request,HttpServletResponse response){
         Gson g = new Gson();

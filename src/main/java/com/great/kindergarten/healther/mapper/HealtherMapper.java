@@ -52,4 +52,6 @@ public interface HealtherMapper {
 
     public List<TblCampus> findHealtherNews(Map<String, String> KinderNewsmap);
 
+    public int addLog(TblSyslog log);//系统日志
+
 }

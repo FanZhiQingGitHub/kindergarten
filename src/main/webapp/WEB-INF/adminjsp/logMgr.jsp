@@ -76,11 +76,11 @@
 				, limit: 5
 				, limits: [5, 10]
 				, cols: [[ //表头
-					{field: 'syslogid', title: '序号', align: 'center', width: 80, sort: true, fixed: 'left'}
-					, {field: 'operateor', title: '操作人', align: 'center', width: 120}
-					, {field: 'operatetime', title: '操作时间', align: 'center', width: 180
+					{field: 'syslogid', title: '序号', align: 'center', width: 144, sort: true, fixed: 'left'}
+					, {field: 'operateor', title: '操作人', align: 'center', width: 223}
+					, {field: 'operatetime', title: '操作时间', align: 'center', width: 362
 						,templet:"<div>{{layui.util.toDateString(d.operatetime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
-					, {field: 'operatetype', title: '操作事项', align: 'center', width: 120}
+					, {field: 'operatetype', title: '操作事项', align: 'center', width: 414}
 				]]
 				, id: 'demotable'
 				, parseData: function (res) { //res 即为原始返回的数据

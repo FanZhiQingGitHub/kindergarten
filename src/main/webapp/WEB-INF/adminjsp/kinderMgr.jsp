@@ -19,16 +19,11 @@
 			margin-top: 1%;
 		}
 		#selName{
-			/*margin-left: -50%;*/
 			margin-top: 5%;
 			width: 168%;
 			height: 30%;
 		}
-		#selNames{
-			margin-top: 5%;
-			width: 168%;
-			height: 30%;
-		}
+
 	</style>
 </head>
 <body>
@@ -61,7 +56,7 @@
 							</select>
 						</div>
 					</div>
-					<button class="layui-btn" data-type="reload" style="margin-left: -15%"><i class="layui-icon">&#xe615;查询</i></button>
+					<button class="layui-btn" data-type="reload" style="margin-left: -4%"><i class="layui-icon">&#xe615;查询</i></button>
 				</div>
 				<div class="layui-form-item" style="margin-left: 6%;">
 					<div class="layui-inline">
@@ -70,7 +65,7 @@
 							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" style="width: 82%;margin-top: 3% ">
 						</div>
 					</div>
-					<button class="layui-btn btn-add btn-default" id="btn-add" style="margin-left:45%"><i class="layui-icon">&#xe624;新增</i></button>
+					<button class="layui-btn btn-add btn-default" id="btn-add" style="margin-left:56%"><i class="layui-icon">&#xe624;新增</i></button>
 				</div>
 			</div>
 		</form>
@@ -100,54 +95,61 @@
 	</div>
 
 	<div id="type-content2" style="display: none;">
-		<div class="layui-form-item">
-			<label class="layui-form-label">园所名称：</label>
-			<div class="layui-inline">
-				<select name="selNames" id="selNames" lay-filter="selectNames" lay-verify="" >
-					<option value="请选择">请选择</option>
-					<c:if test="${not empty kinderList}">
-						<c:forEach items="${kinderList}" var="u">
-							<option value="${u.kindername}">${u.kindername}</option>
-						</c:forEach>
-					</c:if>
-				</select>
+		<div class="layui-form-item" style="margin-top: 2%">
+			<label class="layui-form-label" style="width: 24%">幼儿园名称：</label>
+			<div class="layui-input-inline">
+				<input type="text" name="selNames" id="selNames" placeholder="请输入幼儿园名称" autocomplete="off"
+				       class="layui-input" style="width: 132%">
 			</div>
 		</div>
+<%--		<div class="layui-form-item">--%>
+<%--			<label class="layui-form-label">园所名称：</label>--%>
+<%--			<div class="layui-inline">--%>
+<%--				<select name="selNames" id="selNames" lay-filter="selectNames" lay-verify="" >--%>
+<%--					<option value="请选择">请选择</option>--%>
+<%--					<c:if test="${not empty kinderList}">--%>
+<%--						<c:forEach items="${kinderList}" var="u">--%>
+<%--							<option value="${u.kindername}">${u.kindername}</option>--%>
+<%--						</c:forEach>--%>
+<%--					</c:if>--%>
+<%--				</select>--%>
+<%--			</div>--%>
+<%--		</div>--%>
 		<div class="layui-form-item">
-			<label class="layui-form-label">账号：</label>
+			<label class="layui-form-label" style="width: 24%">账号：</label>
 			<div class="layui-inline">
 				<input type="text" id="accounts" placeholder="请输入园所账号" value=""
-				       autocomplete="off" class="layui-input" style="width: 120%">
+				       autocomplete="off" class="layui-input" style="width: 160%">
 			</div>
 		</div>
-<%--		<div class="layui-form-item">--%>
-<%--			<label class="layui-form-label">法人：</label>--%>
-<%--			<div class="layui-inline">--%>
-<%--				<input type="text" id="kinderlp" placeholder="请输入法人名字" value=""--%>
-<%--				       autocomplete="off" class="layui-input" style="width: 120%">--%>
-<%--			</div>--%>
-<%--		</div>--%>
-<%--		<div class="layui-form-item">--%>
-<%--			<label class="layui-form-label">法人身份证号：</label>--%>
-<%--			<div class="layui-inline">--%>
-<%--				<input type="text" id="kinderlpid" placeholder="请输入法人身份证号" value=""--%>
-<%--				       autocomplete="off" class="layui-input" style="width: 120%">--%>
-<%--			</div>--%>
-<%--		</div>--%>
-<%--		<div class="layui-form-item">--%>
-<%--			<label class="layui-form-label">法人住址：</label>--%>
-<%--			<div class="layui-inline">--%>
-<%--				<input type="text" id="kinderlpadd" placeholder="请输入法人住址" value=""--%>
-<%--				       autocomplete="off" class="layui-input" style="width: 120%">--%>
-<%--			</div>--%>
-<%--		</div>--%>
-<%--		<div class="layui-form-item">--%>
-<%--			<label class="layui-form-label">法人手机号：</label>--%>
-<%--			<div class="layui-inline">--%>
-<%--				<input type="text" id="kinderlpphone" placeholder="请输入法人手机号" value=""--%>
-<%--				       autocomplete="off" class="layui-input" style="width: 120%">--%>
-<%--			</div>--%>
-<%--		</div>--%>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: 24%">法人：</label>
+			<div class="layui-inline">
+				<input type="text" id="kinderlp" placeholder="请输入法人名字" value=""
+				       autocomplete="off" class="layui-input" style="width: 160%">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: 24%">法人身份证号：</label>
+			<div class="layui-inline">
+				<input type="text" id="kinderlpid" placeholder="请输入法人身份证号" value=""
+				       autocomplete="off" class="layui-input" style="width: 160%">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: 24%">法人住址：</label>
+			<div class="layui-inline">
+				<input type="text" id="kinderlpadd" placeholder="请输入法人住址" value=""
+				       autocomplete="off" class="layui-input" style="width: 160%">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: 24%">法人手机号：</label>
+			<div class="layui-inline">
+				<input type="text" id="kinderlpphone" placeholder="请输入法人手机号" value=""
+				       autocomplete="off" class="layui-input" style="width: 160%">
+			</div>
+		</div>
 	</div>
 	<script type="text/html" id="barOption">
 		{{#  if(d.kindercode == '启用'){ }}
@@ -189,11 +191,11 @@
 				, limit: 5
 				, limits: [5, 10]
 				, cols: [[ //表头
-					{field: 'kinderid', title: '序号', align: 'center', width: 120, sort: true, fixed: 'left'}
-					, {field: 'kindername', title: '园所名称', align: 'center', width: 120}
-					, {field: 'kinderapptime', title: '审批时间', align: 'center', width: 180
+					{field: 'kinderid', title: '序号', align: 'center', width: 185, sort: true, fixed: 'left'}
+					, {field: 'kindername', title: '园所名称', align: 'center', width: 210}
+					, {field: 'kinderapptime', title: '审批时间', align: 'center', width: 265
 					   ,templet:"<div>{{layui.util.toDateString(d.kinderapptime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
-					, {fixed: 'right', title: '操作', align: 'center', width: 400, toolbar: '#barOption'}
+					, {fixed: 'right', title: '操作', align: 'center', width: 482, toolbar: '#barOption'}
 				]]
 				, id: 'kinderTable'
 				, parseData: function (res) { //res 即为原始返回的数据
@@ -269,16 +271,35 @@
 								});
 							});
 						}else if(layEvent === 'update'){
-							layer.confirm("确定要修改？",{icon:3,title:'温馨提示'},function (index) {
-								layer.close(index);
 								layer.open({
 									type: 1,
-									area: ['30%', '40%'],
+									// area: ['30%', '40%'],
+									area: ['40%', '88%'],
 									content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
 									title: '修改园所',
 									btn: ['保存', '取消'],
-									offset: '100px',
+									offset: '30px',
 									btnAlign: 'c',
+									success:function(){
+										$.ajax({
+											url: path + "/admin/selectKinderInfo",
+											type: "post",
+											data: {"kinderid": data.kinderid},
+											dataType: "json",
+											success: function (result) {
+												var kinderInfo = eval(result);
+												for(i in kinderInfo)
+												{
+													$("#selNames").val(kinderInfo[i].kindername);
+													$("#accounts").val(kinderInfo[i].kinderacount);
+													$("#kinderlp").val(kinderInfo[i].kinderlp);
+													$("#kinderlpid").val(kinderInfo[i].kinderlpid);
+													$("#kinderlpadd").val(kinderInfo[i].kinderlpadd);
+													$("#kinderlpphone").val(kinderInfo[i].kinderlpphone);
+												}
+											}
+										});
+									},
 									btn1: function (index) {
 										$("#selNames").find("option[value="+data.kinderid+"]").prop("selected",true);
 										var kindername = $("#selNames").val();
@@ -298,13 +319,12 @@
 														layer.alert("修改园所信息成功！", {icon: 6});
 														tableIns.reload();
 													}else{
-														layer.alert("修改园所信失败！", {icon: 2});
+														layer.alert("修改园所信息失败！", {icon: 2});
 													}
 												}
 											});
 										}
-									},
-								});
+									}
 							});
 						}else if(layEvent === 'delete'){
 						layer.confirm("确定要删除该园所信息？",{icon:3,title:'温馨提示'},function (index) {
@@ -329,45 +349,87 @@
 				});
 			});
 
-				$("#btn-add").click(function () {
-					layer.open({
-						type: 1,
-						area: ['30%', '40%'],
-						content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-						title: '新增园所',
-						btn: ['保存', '取消'],
-						offset: '100px',
-						btnAlign: 'c',
-						btn1: function (index) {
-							var kindername = $("#selName").val();
-							var kinderacount = $("#account").val();
-							if (kinderacount.length == 0) {
-								layer.alert("请输入园所账号", {icon: 2});
-							}  else {
-								$.ajax({
-									url: path + '/admin/addKinder',
-									async: true,
-									type: 'post',
-									data: {
-										"kindername": kindername,
-										"kinderacount": kinderacount,},
-									datatype: 'text',
-									success: function (data) {
-										if (data == "success") {
-											layer.alert("新增成功！", {icon: 6});
-											layer.close(index);
-											tableIns.reload();
-										} else {
-											layer.alert("新增失败", {icon: 2});
-										}
-									}, error: function (data) {
-										layer.alert("网络繁忙！", {icon: 2});
-									}
-								});
-							}
-						},
-					});
-				});
+				// $("#btn-add").click(function () {
+				// 	layer.open({
+				// 		type: 1,
+				// 		area: ['30%', '40%'],
+				// 		content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+				// 		title: '新增园所',
+				// 		btn: ['保存', '取消'],
+				// 		offset: '100px',
+				// 		btnAlign: 'c',
+				// 		btn1: function (index) {
+				// 			var kindername = $("#selName").val();
+				// 			var kinderacount = $("#account").val();
+				// 			if (kinderacount.length == 0) {
+				// 				layer.alert("请输入园所账号", {icon: 2});
+				// 			}  else {
+				// 				$.ajax({
+				// 					url: path + '/admin/addKinder',
+				// 					async: true,
+				// 					type: 'post',
+				// 					data: {
+				// 						"kindername": kindername,
+				// 						"kinderacount": kinderacount},
+				// 					datatype: 'text',
+				// 					success: function (data) {
+				// 						if (data == "success") {
+				// 							layer.alert("新增成功！", {icon: 6});
+				// 							layer.close(index);
+				// 							tableIns.reload();
+				// 						} else {
+				// 							layer.alert("新增失败", {icon: 2});
+				// 						}
+				// 					}, error: function (data) {
+				// 						layer.alert("网络繁忙！", {icon: 2});
+				// 					}
+				// 				});
+				// 			}
+				// 		}
+				// 	});
+				// });
+
+			$("#btn-add").click(function () {
+
+				location.href = path+"/admin/toUrl/addKinder";
+				// layer.open({
+				// 	type: 2,
+				// 	area: ['30%', '40%'],
+				// 	content: path+"/admin/toUrl/addKinder", //数组第二项即吸附元素选择器或者DOM
+				// 	title: '新增园所',
+				// 	btn: ['保存', '取消'],
+				// 	offset: '100px',
+				// 	btnAlign: 'c',
+				// 	btn1: function (index) {
+				// 		var kindername = $("#selName").val();
+				// 		var kinderacount = $("#account").val();
+				// 		if (kinderacount.length == 0) {
+				// 			layer.alert("请输入园所账号", {icon: 2});
+				// 		}  else {
+				// 			$.ajax({
+				// 				url: path + '/admin/addKinder',
+				// 				async: true,
+				// 				type: 'post',
+				// 				data: {
+				// 					"kindername": kindername,
+				// 					"kinderacount": kinderacount},
+				// 				datatype: 'text',
+				// 				success: function (data) {
+				// 					if (data == "success") {
+				// 						layer.alert("新增成功！", {icon: 6});
+				// 						layer.close(index);
+				// 						tableIns.reload();
+				// 					} else {
+				// 						layer.alert("新增失败", {icon: 2});
+				// 					}
+				// 				}, error: function (data) {
+				// 					layer.alert("网络繁忙！", {icon: 2});
+				// 				}
+				// 			});
+				// 		}
+				// 	}
+				// });
+			});
 
 				$("#selName").change(function () {
 					var kindername = $("#selName").val();

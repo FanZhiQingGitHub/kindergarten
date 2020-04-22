@@ -44,8 +44,7 @@ public interface TeacherMapper {
 	public Integer findSafetyCount(HashMap<String,Object> dataHashMap);
 	//查看视频表
 	public List<TblSafetyConfig> findSafetyTable(HashMap<String,Object> dataHashMap);
-	//新增上传视频
-	public Boolean uploadVideo(TblSafetyvideo tblSafetyvideo);
+
 	//查找所有安全视频名称
 	public List<TblSafetyvideo> findVideoName();
 	//根据视频名查id
@@ -87,5 +86,12 @@ public interface TeacherMapper {
 	public Integer findClassPhotoCount(HashMap<String,Object> dataHashMap);
 	//     查看班级相册数据
 	public List<TblPhoto> findClassPhoto(HashMap<String,Object> dataHashMap);
+
+	/**
+	 * 班级通知
+	 * @param tblClamsg
+	 * @return
+	 */
+	public Boolean addClassMsg(TblClamsg tblClamsg);
 
 }

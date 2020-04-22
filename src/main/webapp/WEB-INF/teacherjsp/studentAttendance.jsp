@@ -110,7 +110,8 @@
 				$.ajax({
 					url: path + '/teacher/showPickUpDetailInfo',
 					type: 'post',
-					data: {'studentid': studentid,'startdate':startdate,'enddate':enddate},
+					// data: {'studentid': studentid,'startdate':startdate,'enddate':enddate},
+					data: {'startdate':startdate,'enddate':enddate},
 					datatype: 'text',
 					success:function (msg) {
 						if(msg == "error"){
@@ -217,7 +218,8 @@
 					url: path + '/teacher/showPickUpDetailInfo',
 					async: true,
 					type: 'post',
-					data: {'studentid': studentid,'startdate':startdate,'enddate':enddate},
+					data: {'startdate':startdate,'enddate':enddate},
+					// data: {'studentid': studentid,'startdate':startdate,'enddate':enddate},
 					datatype: 'text',
 					success:function (msg) {
 						if(msg == "error"){
@@ -311,7 +313,7 @@
 				url: path + '/teacher/showPickUpDetailInfo',
 				async: true,
 				type: 'post',
-				data: {'sid': $("#studentid").val()},
+				// data: {'sid': $("#studentid").val()},   //出bug
 				datatype: 'text',
 				success: function (msg) {
 					if(msg == "error"){

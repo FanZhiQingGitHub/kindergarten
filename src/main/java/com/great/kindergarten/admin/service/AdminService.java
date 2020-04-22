@@ -25,10 +25,45 @@ public class AdminService {
         return adminMapper.adminLogin(tblAdmin);
     }
 
-    public List<TblAdmin> findAdminByName(String name)
+    public List<TblAdmin> findAdminByName(String adminname)
     {
-        return adminMapper.findAdminByName(name);
+        return adminMapper.findAdminByName(adminname);
     }
+
+	public List<TblAdmin> findAllAdmin(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findAllAdmin(condition,rowBounds);
+	}
+
+	public int findAdminCount(HashMap<String, Object> condition)
+	{
+		return adminMapper.findAdminCount(condition);
+	}
+
+	public int addAdminInfos(TblAdmin tblAdmin)
+	{
+		return adminMapper.addAdminInfos(tblAdmin);
+	}
+
+	public int updateAdminInfos(TblAdmin tblAdmin)
+	{
+		return adminMapper.updateAdminInfos(tblAdmin);
+	}
+
+	public int updateAdminStatus(TblAdmin tblAdmin)
+	{
+		return adminMapper.updateAdminStatus(tblAdmin);
+	}
+
+	public int deleteAdmin(Integer adminid)
+	{
+		return adminMapper.deleteAdmin(adminid);
+	}
+
+	public List<TblAdmin> checkAdminName(String adminname)
+	{
+		return adminMapper.checkAdminName(adminname);
+	}
 
     public List<TblMenu> findMenuByName(String adminname)
     {
@@ -157,6 +192,21 @@ public class AdminService {
     {
         return adminMapper.findTblKinderById(kinderid);
     }
+
+	public Integer findIdByKinderName(String kinderName)
+	{
+		return adminMapper.findIdByKinderName(kinderName);
+	}
+
+	public Integer findIdByKinderAccount(String kinderAccount)
+	{
+		return adminMapper.findIdByKinderAccount(kinderAccount);
+	}
+
+	public List<TblKinder> selectKinderInfo(Integer kinderId)
+	{
+		return adminMapper.selectKinderInfo(kinderId);
+	}
 
     public List<TblKinder> findKinder()
     {
@@ -730,5 +780,11 @@ public class AdminService {
 	public int findRoleCounts(HashMap<String, Object> condition)
 	{
 		return adminMapper.findRoleCounts(condition);
+	}
+
+	//管理员个人信息修改
+	public int updateAdminInfo(TblAdmin tblAdmin)
+	{
+		return adminMapper.updateAdminInfo(tblAdmin);
 	}
 }

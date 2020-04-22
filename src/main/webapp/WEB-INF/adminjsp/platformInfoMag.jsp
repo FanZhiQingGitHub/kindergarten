@@ -48,7 +48,7 @@
 							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 2% 0 0 -5%">
 						</div>
 					</div>
-					<button class="layui-btn" data-type="reload" style="margin-left: -12%"><i class="layui-icon">&#xe615;查询</i></button>
+					<button class="layui-btn" data-type="reload" style="margin-left: -3%"><i class="layui-icon">&#xe615;查询</i></button>
 					<button class="layui-btn btn-add btn-default" id="btn-add" ><i class="layui-icon">&#xe624;新增</i></button>
 				</div>
 				<div class="layui-form-item">
@@ -68,13 +68,13 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label" style="">资讯名称：</label>
 				<div class="layui-input-inline">
-					<input type="text" class="layui-input" name="platformInfoName2" id="platformInfoName2" value="" placeholder="" style="width: 122%;margin-top: 1%">
+					<input type="text" class="layui-input" name="platformInfoName2" id="platformInfoName2" value="" placeholder="" style="width: 160%;margin-top: 1%">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">资讯内容：</label>
 				<div class="layui-input-inline">
-					<textarea type="text" id="platformInfoDetail2" name="platformInfoDetail2" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="width: 122%"></textarea>
+					<textarea type="text" id="platformInfoDetail2" name="platformInfoDetail2" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="width: 210%;height: 70%"></textarea>
 				</div>
 			</div>
 		</form>
@@ -85,13 +85,13 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label" style="">资讯名称：</label>
 				<div class="layui-input-inline">
-					<input type="text" class="layui-input" name="platformInfoName3" id="platformInfoName3" value="" placeholder="请输入资讯名称" style="width: 122%;margin-top: 1%">
+					<input type="text" class="layui-input" name="platformInfoName3" id="platformInfoName3" value="" placeholder="请输入资讯名称" style="width: 160%;margin-top: 1%">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">资讯内容：</label>
 				<div class="layui-input-inline">
-					<textarea type="text" id="platformInfoDetail3" name="platformInfoDetail3" required lay-verify="required" placeholder="请输入资讯内容" autocomplete="off" class="layui-input" style="width: 122%"></textarea>
+					<textarea type="text" id="platformInfoDetail3" name="platformInfoDetail3" required lay-verify="required" placeholder="请输入资讯内容" autocomplete="off" class="layui-input" style="width: 210%;height: 70%"></textarea>
 				</div>
 			</div>
 		</form>
@@ -129,8 +129,8 @@
 			, limits: [5, 10]
 			, cols: [[ //表头
 				{field: 'platforminfoid', title: '资讯编号', align: 'center', width: 120, sort: true, fixed: 'left'}
-				, {field: 'platforminfoname', title: '资讯名称', align: 'center', width: 120}
-				, {field: 'platforminfodetail', title: '资讯内容', align: 'center', width: 280}
+				, {field: 'platforminfoname', title: '资讯名称', align: 'center', width: 142}
+				, {field: 'platforminfodetail', title: '资讯内容', align: 'center', width: 300}
 				, {field: 'platforminfotime', title: '创建时间', align: 'center', width: 180
 					, templet:"<div>{{layui.util.toDateString(d.platforminfotime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
 				, {fixed: 'right', title: '操作', align: 'center', width: 400, toolbar: '#barOption'}
@@ -156,11 +156,11 @@
 				if (layEvent === 'update') {
 					layer.open({
 						type: 1,
-						area: ['35%', '40%'],
+						area: ['50%', '80%'],
 						content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
 						title: '修改资讯',
 						btn: ['保存','取消'],
-						offset: '100px',
+						offset: '50px',
 						btnAlign: 'c',
 						success : function(layero, index) {
 							$("#platformInfoName2").val(data.platforminfoname);
@@ -306,11 +306,11 @@
 		$("#btn-add").click(function () {
 			layer.open({
 				type: 1,
-				area: ['35%', '40%'],
+				area: ['50%', '80%'],
 				content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
 				title: '新增资讯',
 				btn: ['保存','取消'],
-				offset: '100px',
+				offset: '50px',
 				btnAlign: 'c',
 				success : function(layero, index) {
 				},
@@ -344,7 +344,7 @@
 		});
 
 		//搜索功能的实现
-		$('.platform .layui-btn').on('click', function () {
+		$('.platformTable .layui-btn').on('click', function () {
 			var type = $(this).data('type');
 			active[type] ? active[type].call(this) : '';
 		});

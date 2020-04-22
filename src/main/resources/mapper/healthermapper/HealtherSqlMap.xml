@@ -72,5 +72,24 @@
         </where>
     </select>
 
+    <!--日志记录-->
+    <insert id="addLog" parameterType="com.great.kindergarten.commons.entity.TblSyslog">
+		insert into tbl_syslog(
+			 operateor,
+			 operatetype,
+			 operatedetail,
+			 operatetime,
+			 operateresult,
+			 operateip
+		)values
+			(
+				#{operateor}
+				,#{operatetype}
+				,#{operatedetail}
+				,#{operatetime}
+				,#{operateresult}
+				,#{operateip}
+			)
+	</insert>
 
 </mapper>

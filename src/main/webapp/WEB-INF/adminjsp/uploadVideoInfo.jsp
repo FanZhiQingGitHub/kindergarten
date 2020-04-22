@@ -17,14 +17,13 @@
 		body{
 			overflow:hidden;
 		}
-		#uploadImg{
-			margin: 1% 0 0 -6%;
-		}
-		#demo1{
-			width: 50px;
-			height: 50px;
-		}
 		#save{margin-left: 30%;}
+		div{
+			margin: 2% 4%;
+		}
+		.layui-input{
+			margin: -2% -9%;
+		}
 	</style>
 </head>
 <body>
@@ -37,46 +36,24 @@
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">视频名称：</label>
-				<div class="layui-inline">
-					<input type="text" class="layui-input" name="safetyVideoName" id="safetyVideoName" placeholder="请输入视频名称" style="width: 160%;">
+				<div class="layui-input-inline">
+					<input type="text" class="layui-input" name="safetyVideoName" id="safetyVideoName" placeholder="请输入视频名称" style="width: 140%;">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">文件名称：</label>
-				<div class="layui-inline">
+				<div class="layui-input-inline">
 					<input type="text" id="videoName" name="videoName" placeholder="请输入文件名称" value=""
-					       autocomplete="off" class="layui-input" style="width: 160%">
+					       autocomplete="off" class="layui-input" style="width: 140%" readonly>
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">文件地址：</label>
-				<div class="layui-inline">
+				<div class="layui-input-inline">
 					<input type="text" id="videoAdd" name="videoAdd" placeholder="请输入文件地址" value=""
-					       autocomplete="off" class="layui-input" style="width: 160%">
+					       autocomplete="off" class="layui-input" style="width: 140%" readonly>
 				</div>
 			</div>
-
-<%--			<div class="layui-form-item">--%>
-<%--				<label class="layui-form-label">图片信息：</label>--%>
-<%--				<div class="layui-input-inline">--%>
-<%--					<img class="layui-upload-img" id="demo1">--%>
-<%--				</div>--%>
-<%--				<button type="button" class="layui-btn layui-btn-normal" name="file" id="uploadImg"><i class="layui-icon">&#xe67c;上传图片</i></button>--%>
-<%--			</div>--%>
-<%--			<div class="layui-form-item">--%>
-<%--				<label class="layui-form-label">内容信息：</label>--%>
-<%--				<div class="layui-input-inline">--%>
-<%--					<textarea type="text" name="contentInfo" id="contentInfo" lay-verify="title" autocomplete="off" placeholder="请输入绘本信息" class="layui-input" style="width: 300px;height: 80px"></textarea>--%>
-<%--				</div>--%>
-<%--			</div>--%>
-<%--			<div class="layui-form-item">--%>
-<%--				<label class="layui-form-label">页数：</label>--%>
-<%--				<div class="layui-input-inline">--%>
-<%--					<input type="text" name="pageNum" id="pageNum" lay-verify="title" autocomplete="off"--%>
-<%--					       class="layui-input"style="width: 300px">--%>
-<%--				</div>--%>
-<%--			</div>--%>
-<%--			<input type="hidden" id="readMagName1" name="readMagName1">--%>
 			<div class="demoTable">
 				<div style="padding-bottom: 10px;">
 					<div class="layui-upload">
@@ -110,28 +87,8 @@
 			,choose:function(obj){//选择文件的回调，obj为选中的文件
 			//将每次选择的文件追加到文件队列
 			var files = obj.pushFile();
-			console.log(obj);
-			console.log(files);
-			console.log(1);
 			//预览选中的文件（本地文件）
 			obj.preview(function(index,file,result){
-				// $('#demo1').attr('src', result);
-				console.log(index);
-				console.log(result);
-				console.log(file);
-
-				// $("#uploadVideo").live('change',function () {
-				// 	var file1 = this.file[0];
-				// 	if(window.FileReader)
-				// 	{
-				// 		var reader = new FileReader();
-				// 		reader.readAsDataURL(file1);
-				// 		reader.onloadend = function (e) {
-				// 			$("#videoAdd").val(e.target.result);
-				// 		}
-				// 	}
-				// });
-
 				$("#videoName").val(file.name);
 				$("#videoAdd").val("videos/"+file.name);
 			});

@@ -107,11 +107,7 @@ public class TeacherService {
     {
         return teacherMapper.findSafetyTable(dataHashMap);
     }
-    //新增上传视频
-    @Transactional
-    public Boolean uploadVideo(TblSafetyvideo tblSafetyvideo){
-        return teacherMapper.uploadVideo(tblSafetyvideo);
-    }
+
     //查找所有安全视频名称
     public List<TblSafetyvideo> findVideoName(){
         return teacherMapper.findVideoName();
@@ -193,4 +189,10 @@ public class TeacherService {
     {
         return teacherMapper.findClassPhoto(dataHashMap);
     }
+    //班级通知
+    @Transactional
+    public Boolean addClassMsg(TblClamsg tblClamsg){
+        return teacherMapper.addClassMsg(tblClamsg);
+    }
+
 }

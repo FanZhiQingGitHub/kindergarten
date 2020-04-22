@@ -173,7 +173,7 @@
 			, cols: [[ //表头
 				{field: 'securityid', title: '编号', align: 'center', width: 120, sort: true, fixed: 'left'}
 				, {field: 'securityname', title: '姓名', align: 'center', width: 90}
-				, {field: 'securityadd', title: '住址', align: 'center', width: 160}
+				, {field: 'securityadd', title: '住址', align: 'center', width: 194}
 				, {field: 'securityphone', title: '手机号', align: 'center', width: 120}
 				, {
 					field: 'securityregtime', title: '注册时间', align: 'center', width: 180
@@ -257,47 +257,44 @@
 						});
 					});
 				}else if(layEvent === 'update'){
-					layer.confirm("确定要修改？",{icon:3,title:'温馨提示'},function (index) {
-						layer.close(index);
-						layer.open({
-							type: 1,
-							area: ['30%', '60%'],
-							content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-							title: '修改安防员信息',
-							btn: ['保存', '取消'],
-							offset: '100px',
-							btnAlign: 'c',
-							success:function(){
-								$("#name").val(data.securityname);
-								$("#securityAdd").val(data.securityadd);
-								$("#phone").val(data.securityphone);
-							},
-							btn1: function (index) {
-								var name = $("#name").val();
-								var add = $("#securityAdd").val();
-								var phone = $("#phone").val();
-								if (name.length == 0) {
-									layer.alert("请输入安防员名称", {icon: 2});
-								}  else {
-									$.ajax({
-										url: path + "/admin/updateSecurity",
-										type: "post",
-										data: {"securityid": data.securityid,"securityname":name,"securityadd":add,"securityphone":phone},
-										dataType: "text",
-										success: function (result) {
-											if(result == "success")
-											{
-												layer.close(index);
-												layer.alert("修改安防员信息成功！", {icon: 6});
-												tableIns.reload();
-											}else{
-												layer.alert("修改安防员信失败！", {icon: 2});
-											}
+					layer.open({
+						type: 1,
+						area: ['30%', '60%'],
+						content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+						title: '修改安防员信息',
+						btn: ['保存', '取消'],
+						offset: '100px',
+						btnAlign: 'c',
+						success:function(){
+							$("#name").val(data.securityname);
+							$("#securityAdd").val(data.securityadd);
+							$("#phone").val(data.securityphone);
+						},
+						btn1: function (index) {
+							var name = $("#name").val();
+							var add = $("#securityAdd").val();
+							var phone = $("#phone").val();
+							if (name.length == 0) {
+								layer.alert("请输入安防员名称", {icon: 2});
+							}  else {
+								$.ajax({
+									url: path + "/admin/updateSecurity",
+									type: "post",
+									data: {"securityid": data.securityid,"securityname":name,"securityadd":add,"securityphone":phone},
+									dataType: "text",
+									success: function (result) {
+										if(result == "success")
+										{
+											layer.close(index);
+											layer.alert("修改安防员信息成功！", {icon: 6});
+											tableIns.reload();
+										}else{
+											layer.alert("修改安防员信失败！", {icon: 2});
 										}
-									});
-								}
-							},
-						});
+									}
+								});
+							}
+						}
 					});
 				}else if(layEvent === 'delete'){
 					layer.confirm("确定要删除该安防员信息？",{icon:3,title:'温馨提示'},function (index) {

@@ -19,8 +19,8 @@
 		}
 
 		.layui-table-cell {
-			height: 40px;
-			line-height: 40px;
+			height: 38px;
+			line-height: 38px;
 		}
 		#sel{
 			width: 62%;
@@ -50,7 +50,7 @@
 				<button class="layui-btn" data-type="reload" style="margin-left: -2%"><i class="layui-icon">&#xe615;查询</i></button>
 				<button class="layui-btn btn-add  layui-btn-disabled" id="btn-add" ><i class="layui-icon">&#xe624;新增</i></button>
 			</div>
-			<div class="layui-form-item">
+			<div class="layui-form-item" style="margin-top: -1%">
 				<div class="layui-inline">
 					<span class="layui-form-label" style="margin-left: 11%">家长名称：</span>
 					<div class="layui-input-inline">
@@ -84,7 +84,7 @@
 		</div>
 	</form>
 	</div>
-	<table id="parent" lay-filter="test" class="layui-table-cell"></table>
+	<table id="parent" lay-filter="test" class="layui-table-cell" style="margin-top: -2%"></table>
 
 	<div id="type-content" style="display: none;">
 		<div class="layui-form-item">
@@ -186,10 +186,10 @@
 			, limits: [5, 10]
 			, cols: [[ //表头
 				{field: 'parentId', title: '家长编号', align: 'center', width: 120, sort: true, fixed: 'left'}
-				, {field: 'parentName', title: '家长名称', align: 'center', width: 90}
-				, {field: 'parentAdd', title: '住址', align: 'center', width: 160}
+				, {field: 'parentName', title: '家长名称', align: 'center', width: 102}
+				, {field: 'parentAdd', title: '住址', align: 'center', width: 210}
 				, {field: 'parentPhone', title: '手机号', align: 'center', width: 120}
-				, {field: 'parentJob', title: '职业', align: 'center', width: 80}
+				, {field: 'parentJob', title: '职业', align: 'center', width: 100}
 				, {
 					field: 'parentRegTime', title: '注册时间', align: 'center', width: 180
 					, templet: "<div>{{layui.util.toDateString(d.parentRegTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
@@ -273,49 +273,46 @@
 						});
 					});
 				}else if(layEvent === 'update'){
-					layer.confirm("确定要修改？",{icon:3,title:'温馨提示'},function (index) {
-						layer.close(index);
-						layer.open({
-							type: 1,
-							area: ['30%', '60%'],
-							content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-							title: '修改家长信息',
-							btn: ['保存', '取消'],
-							offset: '100px',
-							btnAlign: 'c',
-							success:function(){
-								$("#name").val(data.parentname);
-								$("#parentAdd").val(data.parentadd);
-								$("#phone").val(data.parentphone);
-								$("#job").val(data.parentjob);
-							},
-							btn1: function (index) {
-								var name = $("#name").val();
-								var add = $("#parentAdd").val();
-								var phone = $("#phone").val();
-								var job = $("#job").val();
-								if (name.length == 0) {
-									layer.alert("请输入家长名称", {icon: 2});
-								}  else {
-									$.ajax({
-										url: path + "/admin/updateParent",
-										type: "post",
-										data: {"parentId": data.parentId,"parentName":name,"parentAdd":add,"parentPhone":phone,"parentJob":job},
-										dataType: "text",
-										success: function (result) {
-											if(result == "success")
-											{
-												layer.close(index);
-												layer.alert("修改家长信息成功！", {icon: 6});
-												tableIns.reload();
-											}else{
-												layer.alert("修改家长信失败！", {icon: 2});
-											}
+					layer.open({
+						type: 1,
+						area: ['30%', '60%'],
+						content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+						title: '修改家长信息',
+						btn: ['保存', '取消'],
+						offset: '100px',
+						btnAlign: 'c',
+						success:function(layero,index){
+							$("#name").val(data.parentName);
+							$("#parentAdd").val(data.parentAdd);
+							$("#phone").val(data.parentPhone);
+							$("#job").val(data.parentJob);
+						},
+						btn1: function (index) {
+							var name = $("#name").val();
+							var add = $("#parentAdd").val();
+							var phone = $("#phone").val();
+							var job = $("#job").val();
+							if (name.length == 0) {
+								layer.alert("请输入家长名称", {icon: 2});
+							}  else {
+								$.ajax({
+									url: path + "/admin/updateParent",
+									type: "post",
+									data: {"parentId": data.parentId,"parentName":name,"parentAdd":add,"parentPhone":phone,"parentJob":job},
+									dataType: "text",
+									success: function (result) {
+										if(result == "success")
+										{
+											layer.close(index);
+											layer.alert("修改家长信息成功！", {icon: 6});
+											tableIns.reload();
+										}else{
+											layer.alert("修改家长信失败！", {icon: 2});
 										}
-									});
-								}
-							},
-						});
+									}
+								});
+							}
+						}
 					});
 				}else if(layEvent === 'delete'){
 					layer.confirm("确定要删除该家长信息？",{icon:3,title:'温馨提示'},function (index) {

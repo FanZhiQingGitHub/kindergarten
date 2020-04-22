@@ -40,9 +40,10 @@ import java.util.*;
 public class TeacherController {
 	private String vcode;
 	private TblTeacher tblTeacher1;
-	private  int cid;
+	private int cid;
 	private TblWork tblWork;
-	private  TblClass tblClass;
+	private TblClass tblClass;
+
 	//    private TblWorkrelease tblWorkrelease;
 	@Resource
 	private TeacherService teacherService;
@@ -61,6 +62,8 @@ public class TeacherController {
 	DateTable dateTable;
 	@Resource
 	private TblPhoto tblPhoto;
+	@Resource
+	private TblClamsg tblClamsg;
 
 	@RequestMapping(value="/main")
 	public String showMainView(){
@@ -567,89 +570,89 @@ public class TeacherController {
 
 		return null;
 	}
-	//上传视频
 
-	@RequestMapping(value="/uploadVideo")
-	@ResponseBody
-	public Map<String, Object> uploadVideo(@RequestParam("file") MultipartFile file,String classname, HttpServletRequest request,HttpServletResponse response)
-	{
-		System.out.println("上传视频进来");
-		String startDate1=request.getParameter("startDate");
-		String endDate1=request.getParameter("endDate");
-		//
-		System.out.println("startDate="+startDate1);
-		System.out.println("endDate="+endDate1);
-		//	    String时间格式转化为date
-		//创建DateFormat的对象，在构造器中传入跟要转换的String字符串相同格式的
-		//	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date startDate = null;
-		Date endDate=null;
-		try {
-			//转换的过程中可能会抛出ParseException，必须抛出或者捕获处理
-			startDate = dateFormat.parse(startDate1);
-			endDate = dateFormat.parse(endDate1);
-
-			System.out.println("转换后的startDate类型=" + startDate);
-			System.out.println("转换后的endDate类型=" + endDate);
-			tblSafetyvideo.setSafetyvideotime(startDate);
-			tblSafetyvideo.setSafetyfinishtime(endDate);
-			System.out.println("tblSafetyvideo1="+tblSafetyvideo);
-		} catch (ParseException e) {}
-		try
-		{
-			//		    String path1  = request.getContextPath();
-			String path1 = request.getRealPath("/") ;
-			System.out.println("path1="+path1);
-			//是得到上传时的文件名。
-			String filename = file.getOriginalFilename().toString();
-			System.out.println("filename="+filename);
-			//		    //获取当前时间
-			//		    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-			//		    String filetime = df.format(new Date());
-			//通过切割文件名，拿到扩展名即 .docx
-			String[] arr = filename.split("\\.");
-			System.out.println("arr="+arr);
-			String filetype = "." + arr[arr.length - 1];
-			System.out.println("filetype="+filetype);
-			Long size = file.getSize();
-			Long maxsize = 107374182400L;
-			if(size > maxsize) {
-				//            ResponseUtils.outHtml(response, "文件过大");
-			}else {
-				//文件存放位置
-				//			  path1=path1+"Videos/";
-				String path=path1+filename;
-				System.out.println("path="+path);
-				//			    上传文件
-				file.transferTo(new File(path));
-				//添加数据到数据表
-				tblSafetyvideo.setSafetyvideoname(filename);
-				tblSafetyvideo.setVideoadd("Videos/"+filename);
-
-				System.out.println("tblSafetyvideo="+tblSafetyvideo);
-				Boolean flag = teacherService.uploadVideo(tblSafetyvideo);
-				System.out.println("上传成功="+flag);
-				if(flag){
-					//upload要求返回的数据格式
-					Map<String, Object> uploadData = new HashMap<String, Object>();
-
-					uploadData.put("code", "0");
-					uploadData.put("msg", "");
-					//将文件路径返回
-					uploadData.put("data", "{}");
-					System.out.println(uploadData);
-					ResponseUtils.outJson(response,uploadData);
-					//                        return uploadData;
-				}
-			}
-
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		return null;
-	}
+//	//上传视频
+//	@RequestMapping(value="/uploadVideo")
+//	@ResponseBody
+//	public Map<String, Object> uploadVideo(@RequestParam("file") MultipartFile file,String classname, HttpServletRequest request,HttpServletResponse response)
+//	{
+//		System.out.println("上传视频进来");
+//		String startDate1=request.getParameter("startDate");
+//		String endDate1=request.getParameter("endDate");
+//		//
+//		System.out.println("startDate="+startDate1);
+//		System.out.println("endDate="+endDate1);
+//		//	    String时间格式转化为date
+//		//创建DateFormat的对象，在构造器中传入跟要转换的String字符串相同格式的
+//		//	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		Date startDate = null;
+//		Date endDate=null;
+//		try {
+//			//转换的过程中可能会抛出ParseException，必须抛出或者捕获处理
+//			startDate = dateFormat.parse(startDate1);
+//			endDate = dateFormat.parse(endDate1);
+//
+//			System.out.println("转换后的startDate类型=" + startDate);
+//			System.out.println("转换后的endDate类型=" + endDate);
+//			tblSafetyvideo.setSafetyvideotime(startDate);
+//			tblSafetyvideo.setSafetyfinishtime(endDate);
+//			System.out.println("tblSafetyvideo1="+tblSafetyvideo);
+//		} catch (ParseException e) {}
+//		try
+//		{
+//			//		    String path1  = request.getContextPath();
+//			String path1 = request.getSession().getServletContext().getRealPath("/") ;
+//			System.out.println("path1="+path1);
+//			//是得到上传时的文件名。
+//			String filename = file.getOriginalFilename().toString();
+//			System.out.println("filename="+filename);
+//			//		    //获取当前时间
+//			//		    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+//			//		    String filetime = df.format(new Date());
+//			//通过切割文件名，拿到扩展名即 .docx
+//			String[] arr = filename.split("\\.");
+//			System.out.println("arr="+arr);
+//			String filetype = "." + arr[arr.length - 1];
+//			System.out.println("filetype="+filetype);
+//			Long size = file.getSize();
+//			Long maxsize = 107374182400L;
+//			if(size > maxsize) {
+//				//            ResponseUtils.outHtml(response, "文件过大");
+//			}else {
+//				//文件存放位置
+//				//			  path1=path1+"Videos/";
+//				String path=path1+filename;
+//				System.out.println("path="+path);
+//				//			    上传文件
+//				file.transferTo(new File(path));
+//				//添加数据到数据表
+//				tblSafetyvideo.setSafetyvideoname(filename);
+//				tblSafetyvideo.setVideoadd("Videos/"+filename);
+//
+//				System.out.println("tblSafetyvideo="+tblSafetyvideo);
+//				Boolean flag = teacherService.uploadVideo(tblSafetyvideo);
+//				System.out.println("上传成功="+flag);
+//				if(flag){
+//					//upload要求返回的数据格式
+//					Map<String, Object> uploadData = new HashMap<String, Object>();
+//
+//					uploadData.put("code", "0");
+//					uploadData.put("msg", "");
+//					//将文件路径返回
+//					uploadData.put("data", "{}");
+//					System.out.println(uploadData);
+//					ResponseUtils.outJson(response,uploadData);
+//					//                        return uploadData;
+//				}
+//			}
+//
+//		} catch (IOException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
 
 	//新增安全教育配置
 
@@ -705,6 +708,7 @@ public class TeacherController {
 		}
 		return string;
 	}
+
 	//查看配置试题
 	@RequestMapping(value="/SafetyTestQuestion")
 	public String playVideo(HttpServletRequest request){
@@ -718,6 +722,7 @@ public class TeacherController {
 		//转发
 		return "parentJsp/SafetyTestQuestion";
 	}
+
 	//问题完成情况
 	@RequestMapping(value="/questionFinishTable")
 	@ResponseBody
@@ -765,8 +770,8 @@ public class TeacherController {
 		}
 		return null;
 	}
-	//班级考勤
 
+	//班级考勤
 	@RequestMapping(value="/classAttendanceTable")
 	@ResponseBody
 	public CourseTable classAttendanceTable(HttpServletRequest request, HttpServletResponse response){
@@ -782,7 +787,6 @@ public class TeacherController {
 		if (null != studentname && !"".equals(studentname.trim())) {
 			dataHashMap.put("studentname", studentname);
 		}
-
 		dataHashMap.put("pageInt",pageInt);
 		dataHashMap.put("limitInt",limitInt);
 		//查找班级id
@@ -811,11 +815,12 @@ public class TeacherController {
 	//	孩子详细接送信息，含考勤
 	@RequestMapping(value="/showPickUpDetailInfo")
 	//	    @ResponseBody
-	public void showPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage, DateWrite dateWrite, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void showPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Gson g = new Gson();
 		String currentmonday = "1";
 		String currentsonday = "7";
-		String dafultsid = request.getParameter("sid");//本周学生id
+
+//		String dafultsid = request.getParameter("studentid");//本周学生id
 		String startdate = request.getParameter("startdate");//周一日期
 		String enddate = request.getParameter("enddate");//周日日期
 		String sid = request.getParameter("studentid");//上下周 学生id
@@ -835,9 +840,11 @@ public class TeacherController {
 
 		if (null != sid) {
 			pickUpInfoDetailPage.setStudentid(Integer.valueOf(sid));
-		} else {
-			pickUpInfoDetailPage.setStudentid(Integer.valueOf(dafultsid));
 		}
+			//		else {
+//			pickUpInfoDetailPage.setStudentid(Integer.valueOf(dafultsid));
+//		}
+//
 		List<TblDate> tblDateList = teacherService.findALLPickUpDetailInfo(pickUpInfoDetailPage);
 		if (0 != tblDateList.size()) {
 			request.setCharacterEncoding("UTF-8");
@@ -1000,5 +1007,27 @@ public class TeacherController {
 		return null;
 	}
 
+	//班级通知
+	@RequestMapping(value="/addClassMsg")
+	@ResponseBody
+	public String addClassMsg(HttpServletRequest request){
+		//获取通知消息内容
+		String claMsgDetail=request.getParameter("claMsgDetail");
+		//添加数据
+		tblClamsg.setCid(cid);
+		tblClamsg.setClamsgdetail(claMsgDetail);
+		tblClamsg.setSendmsgtime(new Date());
+		boolean flag=teacherService.addClassMsg(tblClamsg);
+		String str=null;
+		if(flag){
+			str="success";
+		}else{
+			str="error";
+		}
+		return str;
 
-}
+	}
+
+
+
+	}

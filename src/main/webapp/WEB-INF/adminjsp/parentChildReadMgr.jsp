@@ -14,15 +14,13 @@
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
-		/*body{*/
-		/*	overscroll-behavior-x: auto;*/
-		/*}*/
+
 		h2 {
 			text-align: center;
 		}
 		.layui-table-cell{
-			height:40px;
-			line-height: 40px;
+			height:38px;
+			line-height: 38px;
 			white-space:normal;
 		}
 	</style>
@@ -47,7 +45,7 @@
 							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 2% 0 0 -5%">
 						</div>
 					</div>
-					<button class="layui-btn" data-type="reload" style="margin-left: -12%"><i class="layui-icon">&#xe615;查询</i></button>
+					<button class="layui-btn" data-type="reload" style="margin-left: -8%"><i class="layui-icon">&#xe615;查询</i></button>
 					<button class="layui-btn btn-add btn-default" id="btn-add" ><i class="layui-icon">&#xe681;上传绘本</i></button>
 				</div>
 				<div class="layui-form-item">
@@ -61,7 +59,7 @@
 			</div>
 		</form>
 	</div>
-	<table id="read" lay-filter="test" class="layui-table-cell"></table>
+	<table id="read" lay-filter="test" class="layui-table-cell" style="margin-top: -2%"></table>
 	<div id="type-content" style="display: none;">
 		<form class="layui-form" action="">
 			<div class="layui-form-item">
@@ -120,7 +118,7 @@
 			, cols: [[ //表头
 				{field: 'readmagid', title: '绘本编号', align: 'center', width: 120, sort: true, fixed: 'left'}
 				, {field: 'readmagname', title: '绘本名称', align: 'center', width: 120}
-				, {field: 'readmagurl', title: '文件夹地址', align: 'center', width: 120}
+				, {field: 'readmagurl', title: '文件夹地址', align: 'center', width: 202}
 				, {field: 'photourl', title: '图片地址', align: 'center', width: 120
 					, templet: function (d) { return '<div><img src="'+path+'/'+d.photourl+'" style="width: 40px;height: 40px"></div>' }
 				}

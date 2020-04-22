@@ -208,14 +208,6 @@
         limit #{pageInt},#{limitInt};
     </select>
 
-    <!--    新增安全教育视频-->
-    <insert id="uploadVideo" parameterType="TblSafetyvideo">
-        insert into tbl_safetyvideo
-        (safetyvideoname,safetyvideotime,safetyfinishtime,videoadd)
-        values (#{safetyvideoname},#{safetyvideotime},#{safetyfinishtime},#{videoadd});
-    </insert>
-
-
     <!--    查找安全视频所有名称-->
     <select id="findVideoName" resultMap="safetyVideoName" >
         select * from tbl_safetyvideo
@@ -354,9 +346,17 @@
     <select id="findClassPhotoCount" resultType="java.lang.Integer" parameterType="HashMap">
 			select count(*) from tbl_photo where cid = #{cid};
 	</select>
+
     <!--      根据cid查班级相册数据-->
     <select id="findClassPhoto" resultType="TblPhoto" parameterType="HashMap">
 			select * from tbl_photo where cid = #{cid}
 			limit #{pageInt},#{limitInt};
 	</select>
+
+    <!--    班级通知-->
+    <insert id="addClassMsg" parameterType="TblClamsg">
+        insert into tbl_clamsg
+        (clamsgdetail,cid,sendmsgtime)
+        values (#{clamsgdetail},#{cid},#{sendmsgtime});
+    </insert>
 </mapper>
