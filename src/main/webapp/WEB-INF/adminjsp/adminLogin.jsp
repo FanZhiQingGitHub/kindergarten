@@ -156,7 +156,7 @@
     <div id="alldiv">
         <div class="container">
 
-            <div style="margin-left: 10%;margin-top: -3%">
+            <div style="margin-left: 3%;margin-top: -10%">
                 <img src="${pageContext.request.contextPath}/image/logo/hs-word.png"/>
             </div>
 
@@ -196,7 +196,7 @@
                     <label class="layui-form-label">验证码</label>
                     <div class="layui-input-inline">
                         <input type="text" name="code" lay-verify="code" placeholder="请输入验证码"
-                               autocomplete="off" class="layui-input verity">
+                               autocomplete="off" class="layui-input verity" value="">
                     </div>
 
                     <div id="codediv">

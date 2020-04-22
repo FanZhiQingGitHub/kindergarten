@@ -28,6 +28,7 @@
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
 	<h2>亲子阅读管理</h2>
+	<hr style="color: whitesmoke">
 	<div class="layui-row" >
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="readTable">
@@ -360,7 +361,8 @@
 		$("#btn-add").click(function () {
 			layer.open({
 				type: 2,
-				area: ['70%', '90%'],
+				area: ['70%', '80%'],
+				offset:['80px'],
 				content: path+"/admin/toUrl/uploadPictureBooks", //数组第二项即吸附元素选择器或者DOM
 				title: '上传绘本',
 				btn: ['保存', '取消'],

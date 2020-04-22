@@ -12,129 +12,176 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<title>智慧幼儿园-平台端</title>
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/layui/css/layui.css">
-	<script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
-	<script src="${pageContext.request.contextPath}/layui/layui.js"></script>
-	<style>
-		#exit{
-			background: #040404;
-		}
-		#title{
-			padding: 2%;
-			font-size: 18px;
-			line-height: 120%;
-		}
-		.menu_div_item{
-			font-size: 16px;
-			color: #8f9199;
-			padding: 2%;
-			line-height: 180%;
-		}
-	</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>智慧幼儿园-平台端</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/layui/css/layui.css">
+    <script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
+    <script src="${pageContext.request.contextPath}/layui/layui.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        #exit {
+            background: #040404;
+        }
+
+        .title {
+            font-size: 16px;
+        }
+
+        .layui-nav {
+            font-size: 18px;
+        }
+
+        .bu:hover {
+            color: white;
+        }
+
+        .bu {
+            background-color: transparent;
+            border: none;
+            color: #D9D9D9;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        #exit {
+            background-color: transparent;
+        }
+    </style>
 </head>
 <body class="layui-layout-body close-footer">
-	<input type="hidden" id="kindername" value="${kindername}">
-	<input type="hidden" id="path" value="<%=path%>">
-	<div class="layui-layout layui-layout-admin">
-		<div class="layui-header">
-			<div class="layui-logo" >智慧幼儿园平台端管理系统</div>
-				<ul class="layui-nav layui-layout-right">
-					<li class="layui-nav-item">
-						<a href="javascript:;">
-							<img id="adminheadurl" class="layui-nav-img" style="width: 30px;height: 30px">
-							<%
-								String adminname = (String) request.getSession().getAttribute("adminname");
-								String rolename = (String) request.getSession().getAttribute("rolename");
-							%>欢迎你,<%=adminname%><%=rolename%>
-						</a>
-						<dl class="layui-nav-child">
-							<dd><a href="javascript:void(0);" title="${pageContext.request.contextPath}/admin/toUrl/adminInfo"  onclick="changeSrc(this)">个人信息</a></dd>
-							<dd><a href="javascript:void(0);" title="${pageContext.request.contextPath}/admin/toUrl/updateAdminPwd"  onclick="changeSrc(this)">修改密码</a></dd>
-						</dl>
-					</li>
-					<button type="button" class="layui-btn layui-btn-normal" style="background-color: transparent" id="exit" lay-submit lay-filter="logout">
-						退出
-					</button>
-				</ul>
-		</div>
+<input type="hidden" id="kindername" value="${kindername}">
+<input type="hidden" id="path" value="<%=path%>">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header" style="height: 100px">
+        <div class="layui-logo" style="width:500px;font-size: 36px;margin-left: 10px;text-align: left;top:15px">
+            智慧幼儿园平台端管理系统
+        </div>
+        <ul class="layui-nav layui-layout-right" style="top: 18px">
+            <li class="layui-nav-item">
+                <a href="javascript:;" style="font-size: 16px;">
+                    <img id="adminheadurl" class="layui-nav-img" style="width: 30px;height: 30px;">
+                    <%
+                        String adminname = (String) request.getSession().getAttribute("adminname");
+                        String rolename = (String) request.getSession().getAttribute("rolename");
+                    %>欢迎你,<%=adminname%><%=rolename%>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:void(0);" title="${pageContext.request.contextPath}/admin/toUrl/adminInfo"
+                           onclick="changeSrc(this)" >个人信息</a></dd>
+                    <dd><a href="javascript:void(0);"
+                           title="${pageContext.request.contextPath}/admin/toUrl/updateAdminPwd"
+                           onclick="changeSrc(this)">修改密码</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="bu" id="exit">注销
+            </button>
+            </li>
+        </ul>
+    </div>
 
-		<div id="index-commonmenu" class="layui-side layui-bg-black">
-			<div class="layui-side-scroll">
-<%--				<ul class="layui-nav layui-nav-tree" lay-filter="demo" ></ul>--%>
-				<c:if test="${not empty menuMap}">
-					<c:forEach items="${menuMap}" var="i">
-						<div onclick="showOrHide(this)" id="title">
-								${i.key}
-						</div>
-						<ul class="menu_ul" style="display: none">
-							<c:forEach items="${i.value}" var="j">
-								<li>
-									<a href="javascript:void(0)" title="${pageContext.request.contextPath}/${j.menuurl}" onclick="changeSrc(this)" class="menu_div_item">${j.menuname}</a>
-								</li>
-							</c:forEach>
-						</ul>
-					</c:forEach>
-				</c:if>
-			</div>
-		</div>
-		<!-- 内容主体区域 -->
-		<div class="layui-body">
-			<iframe id="iframeMain" name="iframeMain" src="" style="width: 100%" height="100%" ></iframe>
-		</div>
-	</div>
+    <div class="layui-side layui-bg-black" style="top: 100px">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <c:if test="${not empty menuMap}">
+                    <c:forEach items="${menuMap}" var="i" step="1">
+                        <li class="layui-nav-item">
+                            <a href="javascript:void(0);" class="title" onclick="showOrHide(this)">${i.key}</a>
+                            <dl class="layui-nav-child">
+                                <c:forEach items="${i.value}" var="j">
+                                    <dd><a href="javascript:void(0);" style="font-size: 16px;"
+                                           title="<%=request.getContextPath()%>/${j.menuurl}"
+                                           onclick="changeSrc(this)">${j.menuname}</a></dd>
+                                </c:forEach>
+                            </dl>
+                        </li>
+                    </c:forEach>
+                </c:if>
+            </ul>
+        </div>
+    </div>
 
-	<script>
-		layui.use(['element', 'layer', 'jquery'], function(){
-			var $ = layui.jquery,
-				element = layui.element,
-				path = $("#path").val(),
-				layer = layui.layer;
-			$(function () {
-				$("#exit").click(function () {
-					layer.confirm("您确定要退出？",{icon:3,title: '温馨提示'},function (index) {
-						layer.close(index);
-						sessionStorage.clear();//清除session信息
-						location.href = path+"/admin/logout";
-					})
-				});
-				$("#perInfo").click(function () {
-					parent.location.href = path+"/admin/toUrl/adminInfo";
-				});
-			});
+    <!-- 内容主体区域 -->
+    <div class="layui-body" style="overflow: auto;top:100px">
+        <iframe id="iframeMain" name="iframeMain" src="" style="width: 100%;height: 100%;border: none"></iframe>
+    </div>
 
-			$.ajax({
-				url: path + "/admin/selectAdminInfo",
-				type: 'post',
-				datatype: 'json',
-				success: function (data) {
-					var adminInfo = eval(data);
-					for (i in adminInfo) {
-						$("#adminheadurl").attr("src", path+"/"+adminInfo[i].adminheadurl);
-					}
-				}, error: function (data) {
-					layer.alert("网络繁忙！", {icon: 2});
-				}
-			});
-		});
+    <div class="layui-footer">
+        <p style="font-size: 16px"> @2020 最后#的小组 版权所有© - 智慧幼儿园后台管理系统</p>
+    </div>
 
-		var src;
-		function changeSrc(node)
-		{
-			var iframeNode = document.getElementById('iframeMain');
-			iframeNode.src = node.title;
-		}
-		function showOrHide(node)
-		{
-			var menuNodes = $(".menu_ul");
-			for(var i = 0; i< menuNodes.length;i++)
-			{
-				$(menuNodes[i].style.display = "none");
-			}
-			$(node).next().slideToggle("slow");
-		}
-	</script>
+    <p id="time" style="color: black;font-size: 16px;margin-left: 85%;margin-top: 42.2%;position: absolute"></p>
+
+</div>
+
+<script>
+    layui.use(['element', 'layer', 'jquery'], function () {
+        var $ = layui.jquery,
+            element = layui.element,
+            path = $("#path").val(),
+            layer = layui.layer;
+        $(function () {
+            $("#exit").click(function () {
+                layer.confirm("您确定要退出？", {icon: 3, title: '温馨提示'}, function (index) {
+                    layer.close(index);
+                    sessionStorage.clear();//清除session信息
+                    location.href = path + "/admin/logout";
+                })
+            });
+            $("#perInfo").click(function () {
+                parent.location.href = path + "/admin/toUrl/adminInfo";
+            });
+        });
+
+        $.ajax({
+            url: path + "/admin/selectAdminInfo",
+            type: 'post',
+            datatype: 'json',
+            success: function (data) {
+                var adminInfo = eval(data);
+                for (i in adminInfo) {
+                    $("#adminheadurl").attr("src", path + "/" + adminInfo[i].adminheadurl);
+                }
+            }, error: function (data) {
+                layer.alert("网络繁忙！", {icon: 2});
+            }
+        });
+    });
+
+    var src;
+
+    function changeSrc(node) {
+        var iframeNode = document.getElementById('iframeMain');
+        iframeNode.src = node.title;
+    }
+
+    function showOrHide(node) {
+        var menuNodes = $(".menu_ul");
+        for (var i = 0; i < menuNodes.length; i++) {
+            $(menuNodes[i].style.display = "none");
+        }
+        $(node).next().slideToggle("slow");
+    }
+
+    function timeTimer() {
+        var d = new Date();//实例化日期对象
+        var a = d.toLocaleTimeString();//获取日期
+        var b = d.toLocaleDateString();//获取时间
+        document.getElementById("time").innerHTML = "平台时间：" + b + "&nbsp" + "&nbsp" + "&nbsp" + a;//.innerHTML是dom里面的方法（获取对象的内容  或  向对象插入内容，可以直接在网页上显示）
+    }
+
+    setInterval(function () {
+        timeTimer()
+    }, 1000);
+</script>
 </body>
 </html>

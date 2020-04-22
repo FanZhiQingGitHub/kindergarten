@@ -33,6 +33,7 @@
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
 	<h2 >安 全 教 育 管 理</h2>
+	<hr style="color: whitesmoke">
 	<div class="layui-row" >
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="educationTable">

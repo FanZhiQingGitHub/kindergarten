@@ -37,6 +37,7 @@
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
 	<h2 >菜 单 管 理</h2>
+	<hr style="color: whitesmoke">
 	<div class="layui-row" style="margin-top: 20px;">
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="menuTable" style="margin-left: 5%;">

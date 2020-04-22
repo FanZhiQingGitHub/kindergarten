@@ -30,6 +30,7 @@
 <body>
 <input type="hidden" id="path" value="<%=path%>">
 	<h2>园长管理</h2>
+	<hr style="color: whitesmoke">
 	<div class="layui-row" >
 	<form class="layui-form" action="" onsubmit="return false;" >
 		<div class="rectorTable">

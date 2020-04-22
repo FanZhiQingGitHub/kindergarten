@@ -217,7 +217,7 @@
     <div id="alldiv">
         <div class="container">
 
-            <div style="margin-left: 10%;margin-top: -3%">
+            <div style="margin-left: 3%;margin-top: -10%">
                 <img src="${pageContext.request.contextPath}/image/logo/hs-word.png"/>
             </div>
 
