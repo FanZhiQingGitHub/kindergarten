@@ -39,7 +39,7 @@
 	<h2 >菜 单 管 理</h2>
 	<div class="layui-row" style="margin-top: 20px;">
 		<form class="layui-form" action="" onsubmit="return false;" >
-			<div class="menuTable">
+			<div class="menuTable" style="margin-left: 5%;">
 				<div class="layui-block">查询条件：</div>
 				<div class="layui-inline">
 					<span class="layui-form-label">菜单名称：</span>
@@ -176,8 +176,8 @@
 			, limits: [5, 10]
 			, cols: [[ //表头
 				{field: 'menuid', title: '序号', align: 'center', width: 120, sort: true, fixed: 'left'}
-				, {field: 'menuname', title: '菜单名称', align: 'center', width: 120}
-				, {field: 'menuurl', title: 'URL', align: 'center', width: 180
+				, {field: 'menuname', title: '菜单名称', align: 'center', width: 160}
+				, {field: 'menuurl', title: 'URL', align: 'center', width: 260
 					,templet:function(d){
 						return d.menuurl == null ? '无':d.menuurl;
 					}}
@@ -206,46 +206,43 @@
 				data = obj.data; //获得当前行数据
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if(layEvent === 'update'){
-					layer.confirm("确定要修改？",{icon:3,title:'温馨提示'},function (index) {
-						layer.close(index);
-						layer.open({
-							type: 1,
-							area: ['30%', '65%'],
-							content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
-							title: '修改菜单',
-							btn: ['保存', '取消'],
-							offset: '100px',
-							btnAlign: 'c',
-							success : function(layero, index) {
-								$("#menuName2").val(data.menuname);
-								console.log(data.supMenu);
-								$("#pName2 option[value='" + data.supMenu + "']").attr("selected", "selected");
-								$("#menuUrl2").val(data.menuurl);
-								$("#sort2").val(data.sort);
-							},
-							btn1: function (index) {
-								var menuName = $('#menuName2').val();
-								var pName = $('#pName2').val();
-								var sort = $('#sort2').val();
-								var menuUrl = $('#menuUrl2').val();
-								$.ajax({
-									url: path + "/admin/updateMenuInfo",
-									type: "post",
-									data: {"menuname": menuName, "menuurl":menuUrl, "pName": pName,"sort":sort,"menuid":data.menuid},
-									dataType: "text",
-									success: function (result) {
-										if(result == "success")
-										{
-											layer.close(index);
-											layer.alert("修改菜单信息成功！", {icon: 6});
-											tableIns.reload();
-										}else{
-											layer.alert("修改菜单信息失败！", {icon: 2});
-										}
+					layer.open({
+						type: 1,
+						area: ['30%', '65%'],
+						content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
+						title: '修改菜单',
+						btn: ['保存', '取消'],
+						offset: '100px',
+						btnAlign: 'c',
+						success : function(layero, index) {
+							$("#menuName2").val(data.menuname);
+							console.log(data.supMenu);
+							$("#pName2 option[value='" + data.supMenu + "']").attr("selected", "selected");
+							$("#menuUrl2").val(data.menuurl);
+							$("#sort2").val(data.sort);
+						},
+						btn1: function (index) {
+							var menuName = $('#menuName2').val();
+							var pName = $('#pName2').val();
+							var sort = $('#sort2').val();
+							var menuUrl = $('#menuUrl2').val();
+							$.ajax({
+								url: path + "/admin/updateMenuInfo",
+								type: "post",
+								data: {"menuname": menuName, "menuurl":menuUrl, "pName": pName,"sort":sort,"menuid":data.menuid},
+								dataType: "text",
+								success: function (result) {
+									if(result == "success")
+									{
+										layer.close(index);
+										layer.alert("修改菜单信息成功！", {icon: 6});
+										tableIns.reload();
+									}else{
+										layer.alert("修改菜单信息失败！", {icon: 2});
 									}
-								});
-							},
-						});
+								}
+							});
+						}
 					});
 				}else if(layEvent === 'delete'){
 					layer.confirm("确定要删除该菜单信息？",{icon:3,title:'温馨提示'},function (index) {

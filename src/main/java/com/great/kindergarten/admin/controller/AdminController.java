@@ -169,15 +169,17 @@ public class AdminController {
 			                    roleNewList.add(str);
 		                    }
 	                    }
+	                    List<TblMenu> stairMenuList = adminService.findStairMenu();
+	                    req.getSession().setAttribute("stairMenuList",stairMenuList);
+	                    req.getSession().setAttribute("parentNewList",parentNewList);
 	                    req.getSession().setAttribute("menuMap",menuMap);
 	                    req.getSession().setAttribute("roleNewList",roleNewList);
 	                    req.getSession().setAttribute("parameterNewList", parameterNewList);
 	                    req.getSession().setAttribute("teacherNewList",teacherNewList);
 	                    req.getSession().setAttribute("teacherNewList",teacherNewList);
-//	                    req.getSession().setAttribute("healtherNewList",healtherNewList);
 	                    String rolename = adminService.findRoleByRid(tblAdmin.getRid());
-                        List<TblAdmin> tblAdminList = adminService.findAdminByName(tblAdmin.getAdminname());
-                        req.getSession().setAttribute("tblAdminList",tblAdminList);
+
+//                        req.getSession().setAttribute("tblAdminList",tblAdminList);
                         req.getSession().setAttribute("rolename",rolename);
                         req.getSession().setAttribute("tblAdmin",tblAdmin);
                         req.getSession().setAttribute("adminname",tblAdmin.getAdminname());
@@ -196,14 +198,154 @@ public class AdminController {
         }
     }
 
+	@RequestMapping("/selectAdminInfo")
+	public void selectAdminInfo(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		String adminname = (String) request.getSession().getAttribute("adminname");
+		List<TblAdmin> tblAdminList = adminService.findAdminByName(adminname);
+		if(tblAdminList != null)
+		{
+			ResponseUtils.outJson(response,GsonUtils.getgsonUtils().toStr(tblAdminList));
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/adminMgrInfo")
+	public void adminMgrInfo(String page, String limit, TblAdmin tblAdmin, DataResult dataResult, HttpServletRequest req, HttpServletResponse res) throws IOException
+	{
+		HashMap<String,Object> condition = new HashMap<>();
+		if(null != tblAdmin.getAdminname() && !"".equals(tblAdmin.getAdminname().trim())) {
+			condition.put("adminname",tblAdmin.getAdminname());
+		}
+
+		if(null != tblAdmin.getAdminstatus() && !"".equals(tblAdmin.getAdminstatus().trim())) {
+			condition.put("adminstatus",tblAdmin.getAdminstatus());
+		}
+
+		if(null != tblAdmin.getTime1() && !"".equals(tblAdmin.getTime1().trim())) {
+			condition.put("time1",tblAdmin.getTime1());
+		}
+
+		if(null != tblAdmin.getTime2() && !"".equals(tblAdmin.getTime2().trim())) {
+			condition.put("time2",tblAdmin.getTime2());
+		}
+
+		int num = adminService.findAdminCount(condition);
+
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page)-1)*Integer.valueOf(limit),Integer.valueOf(limit));
+
+		List<TblAdmin> tblMenuList = adminService.findAllAdmin(condition,rowBounds);
+
+		if(tblMenuList != null)
+		{
+			Gson gson = new GsonBuilder().serializeNulls().create();
+			dataResult.setCode(0);
+			dataResult.setCount(num);
+			dataResult.setMsg("");
+			dataResult.setData(tblMenuList);
+			res.setContentType("application/json; charset=utf-8");
+			res.getWriter().write(gson.toJson(dataResult));
+			res.getWriter().flush();
+			res.getWriter().close();
+		}
+	}
+
+	//新增管理员
+	@RequestMapping("/addAdminInfos")
+	public void addAdminInfos(TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		System.out.println("新增管理员"+tblAdmin);
+		if(tblAdmin != null)
+		{
+			tblAdmin.setAdminstatus("启用");
+			tblAdmin.setCreatetime(new Date());
+			tblAdmin.setAdminheadurl("image/adminimg/img/head.jpg");
+			tblAdmin.setAdminpwd(MD5Utils.md5("123456"));
+			int num = adminService.addAdminInfos(tblAdmin);
+			if( num >0)
+			{
+				ResponseUtils.outHtml(response,"success");
+			}else{
+				ResponseUtils.outHtml(response,"error");
+			}
+		}
+	}
+
+	@RequestMapping("/updateAdminInfos")
+	public void updateAdminInfos(TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		System.out.println("修改管理员"+tblAdmin);
+		if(tblAdmin != null)
+		{
+			tblAdmin.setAdminpwd(MD5Utils.md5(tblAdmin.getAdminpwd()));
+			int num = adminService.updateAdminInfos(tblAdmin);
+			if( num >0)
+			{
+				ResponseUtils.outHtml(response,"success");
+			}else{
+				ResponseUtils.outHtml(response,"error");
+			}
+		}
+	}
+
+	@RequestMapping("/deleteAdmin")
+	public void deleteAdmin(TblAdmin tblAdmin,HttpServletRequest request, HttpServletResponse response)
+	{
+		int num = adminService.deleteAdmin(tblAdmin.getAdminid());
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/checkAdminName")
+	public void checkAdminName(TblAdmin tblAdmin,HttpServletRequest request, HttpServletResponse response)
+	{
+		List<TblAdmin> tblAdminList = adminService.checkAdminName(tblAdmin.getAdminname());
+		if(tblAdminList.isEmpty())
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/forbiddenAdmin")
+	public void forbiddenAdmin(TblAdmin tblAdmin,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblAdmin.setAdminstatus("禁用");
+		int num = adminService.updateAdminStatus(tblAdmin);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	@RequestMapping("/openAdmin")
+	public void openAdmin(TblAdmin tblAdmin,HttpServletRequest request, HttpServletResponse response)
+	{
+		tblAdmin.setAdminstatus("启用");
+		int num = adminService.updateAdminStatus(tblAdmin);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+
 	@RequestMapping("/treeMenu")
 	public void treeDemo(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String adminname = (String) request.getSession().getAttribute("adminname");
 		List<TblMenu> list = adminService.findMenuByName(adminname);
-        List<TblMenu> stairMenuList = adminService.findStairMenu();
 		response.setContentType("application/json; charset=utf-8");
-		request.getSession().setAttribute("stairMenuList",stairMenuList);
 		response.getWriter().write(GsonUtils.getgsonUtils().toStr(list));
 		response.getWriter().flush();
 		response.getWriter().close();
@@ -359,9 +501,9 @@ public class AdminController {
         }
     }
 
-    @RequestMapping("/updateAdminpwd")
-    @AdminSystemLog(operationType = "修改",operationName = "修改管理员密码")
-    public void updateAdminpwd(HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping("/updateAdminPwd")
+//    @AdminSystemLog(operationType = "修改",operationName = "修改管理员密码")
+    public void updateAdminPwd(HttpServletRequest request, HttpServletResponse response)
     {
         String oldadminpwd = MD5Utils.md5(request.getParameter("oldadminpwd"));
         String adminname = (String) request.getSession().getAttribute("adminname");
@@ -369,6 +511,7 @@ public class AdminController {
         if(tblAdmin.getAdminpwd().equals(oldadminpwd))
         {
             String adminpwd = MD5Utils.md5(request.getParameter("adminpwd"));
+	        System.out.println("旧密码"+request.getParameter("oldadminpwd")+"新密码"+adminpwd);
             int num = adminService.updateAdminPwd(adminpwd,tblAdmin.getAdminid().toString());
             if(num > 0)
             {
@@ -503,7 +646,7 @@ public class AdminController {
         int kinderid = Integer.valueOf(request.getParameter("kinderid"));
         if(tblKinder != null)
         {
-            kinderstatus = "未通过";
+            kinderstatus = "不通过";
             int num = adminService.checkQualify(kinderstatus,kinderid,sf.format(new Date()));
             if(num > 0)
             {
@@ -549,6 +692,54 @@ public class AdminController {
             ResponseUtils.outHtml(response,"error");
         }
     }
+
+	@RequestMapping("/selectKinderName")
+	public void selectKinderName(TblKinder tblKinder,HttpServletRequest request, HttpServletResponse response)
+	{
+		if(tblKinder.getKindername() != null)
+		{
+			Integer kinderId = adminService.findIdByKinderName(tblKinder.getKindername());
+			if(kinderId != null)
+			{
+				ResponseUtils.outHtml(response,"success");
+			}else{
+				ResponseUtils.outHtml(response,"error");
+			}
+		}
+	}
+
+	@RequestMapping("/selectKinderAccount")
+	public void selectKinderAccount(TblKinder tblKinder,HttpServletRequest request, HttpServletResponse response)
+	{
+		if(tblKinder.getKinderacount() != null)
+		{
+			Integer kinderId = adminService.findIdByKinderAccount(tblKinder.getKinderacount());
+			System.out.println("园所id"+kinderId);
+			if(kinderId != null)
+			{
+
+				ResponseUtils.outHtml(response,"success");
+			}else{
+				ResponseUtils.outHtml(response,"error");
+			}
+		}
+	}
+
+	@RequestMapping("/selectKinderInfo")
+	public void selectKinderInfo(TblKinder tblKinder,HttpServletRequest request, HttpServletResponse response)
+	{
+		if(tblKinder.getKinderid() != null)
+		{
+			List<TblKinder> tblKinderList = adminService.selectKinderInfo(tblKinder.getKinderid());
+			if(tblKinderList != null)
+			{
+//				ResponseUtils.outHtml(response,"success");
+				ResponseUtils.outJson(response,GsonUtils.getgsonUtils().toStr(tblKinderList));
+			}else{
+				ResponseUtils.outHtml(response,"error");
+			}
+		}
+	}
 
     @RequestMapping("/forbiddenAccount")
     public void forbiddenAccount(TblKinder tblKinder,HttpServletRequest request, HttpServletResponse response)
@@ -738,6 +929,48 @@ public class AdminController {
 		}
 	}
 
+	@RequestMapping("/uploadAdminHeadImg")
+	public void uploadAdminHeadImg(@RequestParam("file") MultipartFile file, String rolename ,String adminname ,String adminheadurl, String adminphone, String adminsex, TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		System.out.println("file="+file+"角色"+rolename+"用户名"+adminname+"头像地址"+adminheadurl+"手机号"+adminphone+"性别"+adminsex);
+		String prefix = "";
+		String dateStr = "";
+		if(file != null){
+			String originalName = file.getOriginalFilename();
+			prefix = originalName.substring(originalName.lastIndexOf(".")+1);
+			Date date = new Date();
+			String uuid = UUID.randomUUID()+"";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			dateStr = simpleDateFormat.format(date);
+			String filepath = "D:\\kindergarten\\src\\main\\webapp\\image\\adminimg\\img\\" + "\\"+originalName;
+			File files = new File(filepath);
+			//打印查看上传路径
+			System.out.println(filepath);
+			if(!files.getParentFile().exists()){
+				files.getParentFile().mkdirs();
+			}
+			TblAdmin tblAdmin1 = adminService.findTblAdminByName(adminname);
+			tblAdmin.setAdminid(tblAdmin1.getAdminid());
+			tblAdmin.setAdminheadurl(adminheadurl);
+			tblAdmin.setAdminsex(adminsex);
+			tblAdmin.setAdminphone(adminphone);
+			int num = adminService.updateAdminInfo(tblAdmin);
+			if(num > 0)
+			{
+				file.transferTo(files);
+				response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
+				response.getWriter().flush();
+				response.getWriter().close();
+			}
+
+		}else{
+			response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+
 	@RequestMapping("/uploadImg")
 	public void upload(@RequestParam("file") MultipartFile file, String contentInfo ,String pageNum , String reamagname1, TblReadmag tblReadmag, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -800,25 +1033,11 @@ public class AdminController {
 	{
 		List<TblRole> tblRoleList = adminService.findRoleInfo();
 		System.out.println("角色"+tblRoleList);
-//		Map map = null;
-//		for(int i = 0; i < tblRoleList.size() ; i++)
-//		{
-//			map = new LinkedHashMap();
-//			map.put("roleid",tblRoleList.get(i).getRoleid());
-//			map.put("title",tblRoleList.get(i).getRolename());
-//		}
-
 		List<HashMap<String, Object>> result = new ArrayList<>();
 		response.setContentType("application/json; charset=utf-8");
 		response.getWriter().write(GsonUtils.getgsonUtils().toStr(fun(tblRoleList,result)));
 		response.getWriter().flush();
 		response.getWriter().close();
-//		if(map != null)
-//		{
-//			ResponseUtils.outJson(response,GsonUtils.getgsonUtils().toStr(map));
-//		}else{
-//			ResponseUtils.outHtml(response,"error");
-//		}
 	}
 
 	private Object fun(List<TblRole> list, List<HashMap<String, Object>> result) {
@@ -826,10 +1045,7 @@ public class AdminController {
 			HashMap<String, Object> map = new HashMap<>();
 			//id，title，spread等的命名是layui需要的，所以需要把获取到的list重新遍历一遍并命名成layui需要的字段名称
 			map.put("id", tblRole.getRoleid());
-//			if("管理员".equals(tblRole.getRolename()))
-//			{
-				map.put("title", tblRole.getRolename());
-//			}
+			map.put("title", tblRole.getRolename());
 			//设置是否展开
 			map.put("spread", false);
 			result.add(map);
@@ -859,27 +1075,6 @@ public class AdminController {
 
 	}
 
-//	private List<TblMenu> getChildNodes(Integer id, List<TblMenu> parentMenuList) throws Exception {
-//		// 子节点
-//		List<TblMenu> childList = new ArrayList<>();
-//		// 把sid=mid的子节点放到对应mid的父节点上
-//		for (TblMenu tblMenu : parentMenuList) {
-//			if (tblMenu.getMenusonid() != 0) {
-//				if (tblMenu.getMenusonid() == id) {
-//					childList.add(tblMenu);
-//				}
-//			}
-//		}
-//		if (childList.size() == 0) {
-//			return null;
-//		}
-//		// Look up it's child node and fill
-//		for (TblMenu tblMenu : childList) {
-//			tblMenu.setChildrenList(getChildNodes(tblMenu.getMenuid(), parentMenuList));
-//		}
-//		return childList;
-//	}
-
 	private Object fun2(List<TblMenu> list, List<HashMap<String, Object>> result) {
 		for(TblMenu d : list){
 			HashMap<String, Object> map = new HashMap<>();
@@ -893,10 +1088,6 @@ public class AdminController {
 			if(d.getChildrenList() != null){
 				//下级菜单
 				List<TblMenu> children = d.getChildrenList();
-				//这里可以根据自己需求判断节点默认选中
-				//				if(d.getPmid() != null || d.getChildNodes().size() == 0){
-				//					map.put("checked", true);    //设置为选中状态
-				//				}
 				map.put("children", fun2(children, result1));
 			}
 			result.add(map);
@@ -910,6 +1101,7 @@ public class AdminController {
 	public void platformInfoMag(String page, String limit, TblPlatforminfo tblPlatforminfo, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 		HashMap<String,Object> condition = new HashMap<>();
+		System.out.println("平台资讯"+tblPlatforminfo);
 		if(null != tblPlatforminfo.getPlatforminfoname() && !"".equals(tblPlatforminfo.getPlatforminfoname().trim())) {
 			condition.put("platforminfoname",tblPlatforminfo.getPlatforminfoname());
 		}
@@ -1376,10 +1568,6 @@ public class AdminController {
 			condition.put("healtherstatus",tblHealther.getHealtherstatus());
 		}
 
-//		if(null != tblHealther.getHealtherjob() && !"".equals(tblHealther.getHealtherjob().trim())) {
-//			condition.put("Healtherjob",tblHealther.getHealtherjob());
-//		}
-
 		if(null != tblHealther.getTime1() && !"".equals(tblHealther.getTime1().trim())) {
 			condition.put("time1",tblHealther.getTime1());
 		}
@@ -1496,10 +1684,6 @@ public class AdminController {
 		if(null != tblSecurity.getSecuritystatus() && !"".equals(tblSecurity.getSecuritystatus().trim())) {
 			condition.put("securitystatus",tblSecurity.getSecuritystatus());
 		}
-
-		//		if(null != tblHealther.getHealtherjob() && !"".equals(tblHealther.getHealtherjob().trim())) {
-		//			condition.put("Healtherjob",tblHealther.getHealtherjob());
-		//		}
 
 		if(null != tblSecurity.getTime1() && !"".equals(tblSecurity.getTime1().trim())) {
 			condition.put("time1",tblSecurity.getTime1());
@@ -1621,10 +1805,6 @@ public class AdminController {
 			condition.put("studentstatus",tblStudent.getStudentstatus());
 		}
 
-		//		if(null != tblHealther.getHealtherjob() && !"".equals(tblHealther.getHealtherjob().trim())) {
-		//			condition.put("Healtherjob",tblHealther.getHealtherjob());
-		//		}
-
 		if(null != tblStudent.getTime1() && !"".equals(tblStudent.getTime1().trim())) {
 			condition.put("time1",tblStudent.getTime1());
 		}
@@ -1739,14 +1919,6 @@ public class AdminController {
 		if(null != tblSafetyvideo.getSafetyvideoname() && !"".equals(tblSafetyvideo.getSafetyvideoname().trim())) {
 			condition.put("safetyvideoname",tblSafetyvideo.getSafetyvideoname());
 		}
-
-//		if(null != tblSafetyvideo.getStudentstatus() && !"".equals(tblStudent.getStudentstatus().trim())) {
-//			condition.put("studentstatus",tblStudent.getStudentstatus());
-//		}
-
-		//		if(null != tblHealther.getHealtherjob() && !"".equals(tblHealther.getHealtherjob().trim())) {
-		//			condition.put("Healtherjob",tblHealther.getHealtherjob());
-		//		}
 
 		if(null != tblSafetyvideo.getTime1() && !"".equals(tblSafetyvideo.getTime1().trim())) {
 			condition.put("time1",tblSafetyvideo.getTime1());

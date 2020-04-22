@@ -14,8 +14,16 @@ public class TblAdmin
 	@DateTimeFormat(pattern ="yyyy-MM-dd")
 	private Date createtime;
 	private String adminstatus;
+	private String adminsex;
+	private String adminphone;
+	private String adminheadurl;
 	private Integer rid;
 	private String code;
+	private TblRole tblRole;
+	private Integer roleid;
+	private String rolename;
+	private String time1;
+	private String time2;
 
 	public TblAdmin()
 	{
@@ -91,9 +99,89 @@ public class TblAdmin
 		this.code = code;
 	}
 
+	public String getAdminsex()
+	{
+		return adminsex;
+	}
+
+	public void setAdminsex(String adminsex)
+	{
+		this.adminsex = adminsex;
+	}
+
+	public String getAdminphone()
+	{
+		return adminphone;
+	}
+
+	public void setAdminphone(String adminphone)
+	{
+		this.adminphone = adminphone;
+	}
+
+	public String getAdminheadurl()
+	{
+		return adminheadurl;
+	}
+
+	public void setAdminheadurl(String adminheadurl)
+	{
+		this.adminheadurl = adminheadurl;
+	}
+
+	public TblRole getTblRole()
+	{
+		return tblRole;
+	}
+
+	public void setTblRole(TblRole tblRole)
+	{
+		this.tblRole = tblRole;
+	}
+
+	public Integer getRoleid()
+	{
+		return roleid;
+	}
+
+	public void setRoleid(Integer roleid)
+	{
+		this.roleid = roleid;
+	}
+
+	public String getRolename()
+	{
+		return rolename;
+	}
+
+	public void setRolename(String rolename)
+	{
+		this.rolename = rolename;
+	}
+
+	public String getTime1()
+	{
+		return time1;
+	}
+
+	public void setTime1(String time1)
+	{
+		this.time1 = time1;
+	}
+
+	public String getTime2()
+	{
+		return time2;
+	}
+
+	public void setTime2(String time2)
+	{
+		this.time2 = time2;
+	}
+
 	@Override
 	public String toString()
 	{
-		return "TblAdmin{" + "adminid=" + adminid + ", adminname='" + adminname + '\'' + ", adminpwd='" + adminpwd + '\'' + ", createtime=" + createtime + ", adminstatus='" + adminstatus + '\'' + ", rid=" + rid + ", code='" + code + '\'' + '}';
+		return "TblAdmin{" + "adminid=" + adminid + ", adminname='" + adminname + '\'' + ", adminpwd='" + adminpwd + '\'' + ", createtime=" + createtime + ", adminstatus='" + adminstatus + '\'' + ", adminsex='" + adminsex + '\'' + ", adminphone='" + adminphone + '\'' + ", adminheadurl='" + adminheadurl + '\'' + ", rid=" + rid + ", code='" + code + '\'' + ", tblRole=" + tblRole + ", roleid=" + roleid + ", rolename='" + rolename + '\'' + ", time1='" + time1 + '\'' + ", time2='" + time2 + '\'' + '}';
 	}
 }

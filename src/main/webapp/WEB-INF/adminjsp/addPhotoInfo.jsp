@@ -75,7 +75,7 @@
 			, $ = layui.jquery
 			,upload = layui.upload;
 		var path = $("#path").val();
-		var uploadInst = upload.render({
+		upload.render({
 			elem: '#uploadImg' //绑定元素
 			,url: path+"/admin/uploadImg" //上传接口
 			,auto: false
@@ -113,38 +113,6 @@
 				layer.alert("上传失败！",{icon:2});
 			}
 		});
-
-		// $(function () {
-		// 	$("#cancel").click(function () {
-		// 		layer.closeAll();
-		// 	})
-		// })
-		
-		//搜索功能的实现
-		// $('.demoTable .layui-btn').on('click', function () {
-		// 	var type = $(this).data('type');
-		// 	active[type] ? active[type].call(this) : '';
-		// });
-
-		// var $ = layui.$, active = {
-		// 	reload: function () {
-		// 		//执行重载
-		// 		table.reload('demotable', {
-		// 			where: {
-		// 				time1: $('#time1').val()
-		// 				, time2: $('#time2').val()
-		// 			}
-		// 			, page: {
-		// 				curr: 1
-		// 			}
-		// 		});
-		// 	}
-		// };
-
-		// // 刷新表格
-		// $('#btn-refresh').on('click', function () {
-		// 	tableIns.reload();
-		// });
 	});
 </script>
 </html>

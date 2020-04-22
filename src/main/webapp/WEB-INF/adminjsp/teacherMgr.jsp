@@ -273,49 +273,46 @@
 						});
 					});
 				}else if(layEvent === 'update'){
-					layer.confirm("确定要修改？",{icon:3,title:'温馨提示'},function (index) {
-						layer.close(index);
-						layer.open({
-							type: 1,
-							area: ['30%', '60%'],
-							content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-							title: '修改教师信息',
-							btn: ['保存', '取消'],
-							offset: '100px',
-							btnAlign: 'c',
-							success:function(){
-								$("#name").val(data.teachername);
-								$("#teacherAdd").val(data.teacheradd);
-								$("#phone").val(data.teacherphone);
-								$("#job").val(data.teacherjob);
-							},
-							btn1: function (index) {
-								var name = $("#name").val();
-								var add = $("#teacherAdd").val();
-								var phone = $("#phone").val();
-								var job = $("#job").val();
-								if (name.length == 0) {
-									layer.alert("请输入教师名称", {icon: 2});
-								}  else {
-									$.ajax({
-										url: path + "/admin/updateTeacher",
-										type: "post",
-										data: {"teacherid": data.teacherid,"teachername":name,"teacheradd":add,"teacherphone":phone,"teacherjob":job},
-										dataType: "text",
-										success: function (result) {
-											if(result == "success")
-											{
-												layer.close(index);
-												layer.alert("修改教师信息成功！", {icon: 6});
-												tableIns.reload();
-											}else{
-												layer.alert("修改教师信失败！", {icon: 2});
-											}
+					layer.open({
+						type: 1,
+						area: ['30%', '60%'],
+						content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+						title: '修改教师信息',
+						btn: ['保存', '取消'],
+						offset: '100px',
+						btnAlign: 'c',
+						success:function(){
+							$("#name").val(data.teachername);
+							$("#teacherAdd").val(data.teacheradd);
+							$("#phone").val(data.teacherphone);
+							$("#job").val(data.teacherjob);
+						},
+						btn1: function (index) {
+							var name = $("#name").val();
+							var add = $("#teacherAdd").val();
+							var phone = $("#phone").val();
+							var job = $("#job").val();
+							if (name.length == 0) {
+								layer.alert("请输入教师名称", {icon: 2});
+							}  else {
+								$.ajax({
+									url: path + "/admin/updateTeacher",
+									type: "post",
+									data: {"teacherid": data.teacherid,"teachername":name,"teacheradd":add,"teacherphone":phone,"teacherjob":job},
+									dataType: "text",
+									success: function (result) {
+										if(result == "success")
+										{
+											layer.close(index);
+											layer.alert("修改教师信息成功！", {icon: 6});
+											tableIns.reload();
+										}else{
+											layer.alert("修改教师信失败！", {icon: 2});
 										}
-									});
-								}
-							},
-						});
+									}
+								});
+							}
+						}
 					});
 				}else if(layEvent === 'delete'){
 					layer.confirm("确定要删除该教师信息？",{icon:3,title:'温馨提示'},function (index) {

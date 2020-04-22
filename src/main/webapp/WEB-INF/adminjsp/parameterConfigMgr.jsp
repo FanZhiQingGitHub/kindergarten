@@ -157,10 +157,10 @@
 			, limit: 5
 			, limits: [5, 10]
 			, cols: [[ //表头
-				{field: 'parameterid', title: '序号', align: 'center', width: 120, sort: true, fixed: 'left'}
-				, {field: 'parametername', title: '参数名称', align: 'center', width: 90}
-				, {field: 'parametertype', title: '参数类型', align: 'center', width: 120}
-				, {field: 'parameterval', title: '参数值', align: 'center', width: 120}
+				{field: 'parameterid', title: '序号', align: 'center', width: 122, sort: true, fixed: 'left'}
+				, {field: 'parametername', title: '参数名称', align: 'center', width: 160}
+				, {field: 'parametertype', title: '参数类型', align: 'center', width: 200}
+				, {field: 'parameterval', title: '参数值', align: 'center', width: 300}
 				, {fixed: 'right', title: '操作', align: 'center', width: 360, toolbar: '#barOption'}
 			]]
 			, id: 'parameterTable'
@@ -181,52 +181,49 @@
 				data = obj.data; //获得当前行数据
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if(layEvent === 'update'){
-					layer.confirm("确定要修改？",{icon:3,title:'温馨提示'},function (index) {
-						layer.close(index);
-						layer.open({
-							type: 1,
-							area: ['30%', '60%'],
-							content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-							title: '修改参数信息',
-							btn: ['保存', '取消'],
-							offset: '100px',
-							btnAlign: 'c',
-							success:function(){
-								$("#name").val(data.parametername);
-								$("#type").val(data.parametertype);
-								$("#val").val(data.parameterval);
-							},
-							btn1: function (index) {
-								var name = $("#name").val();
-								var type = $("#type").val();
-								var val = $("#val").val();
-								if (name.length == 0) {
-									layer.alert("请输入参数名称", {icon: 2});
-								}  else {
-									$.ajax({
-										url: path + "/admin/updateParameter",
-										type: "post",
-										data: {"parameterid": data.parameterid,"parametername":name,"parametertype":type,"parameterval":val},
-										dataType: "text",
-										success: function (result) {
-											if(result == "success")
-											{
-												layer.close(index);
-												layer.alert("修改参数信息成功！", {icon: 6});
-												tableIns.reload();
-											}else{
-												layer.alert("修改参数信失败！", {icon: 2});
-											}
+					layer.open({
+						type: 1,
+						area: ['30%', '60%'],
+						content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+						title: '修改参数信息',
+						btn: ['保存', '取消'],
+						offset: '100px',
+						btnAlign: 'c',
+						success:function(){
+							$("#name").val(data.parametername);
+							$("#type").val(data.parametertype);
+							$("#val").val(data.parameterval);
+						},
+						btn1: function (index) {
+							var name = $("#name").val();
+							var type = $("#type").val();
+							var val = $("#val").val();
+							if (name.length == 0) {
+								layer.alert("请输入参数名称", {icon: 2});
+							}  else {
+								$.ajax({
+									url: path + "/admin/updateParameter",
+									type: "post",
+									data: {"parameterid": data.parameterid,"parametername":name,"parametertype":type,"parameterval":val},
+									dataType: "text",
+									success: function (result) {
+										if(result == "success")
+										{
+											layer.close(index);
+											layer.alert("修改参数信息成功！", {icon: 6});
+											tableIns.reload();
+										}else{
+											layer.alert("修改参数信失败！", {icon: 2});
 										}
-									});
-								}
-							},
-							btn2:function () {
-								$("#name").val("");
-								$("#type").val("");
-								$("#val").val("");
+									}
+								});
 							}
-						});
+						},
+						btn2:function () {
+							$("#name").val("");
+							$("#type").val("");
+							$("#val").val("");
+						}
 					});
 				}else if(layEvent === 'delete'){
 					layer.confirm("确定要删除该参数信息？",{icon:3,title:'温馨提示'},function (index) {

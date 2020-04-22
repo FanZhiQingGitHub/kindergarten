@@ -21,6 +21,9 @@ public class TblSafetyvideo {
     private Date safetyfinishtime;
     private String safetyvideoplace;
     private Integer mid;
+    private TblMonitorname tblMonitorname;
+    private Integer monitornameid;
+    private String monitorname;
     private String videoname;
     private String videoadd;
     private String safetytestscore;
@@ -174,9 +177,39 @@ public class TblSafetyvideo {
         this.safetytestresult = safetytestresult;
     }
 
+    public TblMonitorname getTblMonitorname()
+    {
+        return tblMonitorname;
+    }
+
+    public void setTblMonitorname(TblMonitorname tblMonitorname)
+    {
+        this.tblMonitorname = tblMonitorname;
+    }
+
+    public Integer getMonitornameid()
+    {
+        return monitornameid;
+    }
+
+    public void setMonitornameid(Integer monitornameid)
+    {
+        this.monitornameid = monitornameid;
+    }
+
+    public String getMonitorname()
+    {
+        return monitorname;
+    }
+
+    public void setMonitorname(String monitorname)
+    {
+        this.monitorname = monitorname;
+    }
+
     @Override
     public String toString()
     {
-        return "TblSafetyvideo{" + "safetyvideoid=" + safetyvideoid + ", safetyvideoname='" + safetyvideoname + '\'' + ", safetyvideotime=" + safetyvideotime + ", safetyfinishtime=" + safetyfinishtime + ", safetyvideoplace='" + safetyvideoplace + '\'' + ", mid=" + mid + ", videoname='" + videoname + '\'' + ", videoadd='" + videoadd + '\'' + ", safetytestscore='" + safetytestscore + '\'' + ", safetytestresult='" + safetytestresult + '\'' + '}';
+        return "TblSafetyvideo{" + "safetyvideoid=" + safetyvideoid + ", safetyvideoname='" + safetyvideoname + '\'' + ", safetyvideotime=" + safetyvideotime + ", safetyfinishtime=" + safetyfinishtime + ", safetyvideoplace='" + safetyvideoplace + '\'' + ", mid=" + mid + ", tblMonitorname=" + tblMonitorname + ", monitornameid=" + monitornameid + ", monitorname='" + monitorname + '\'' + ", videoname='" + videoname + '\'' + ", videoadd='" + videoadd + '\'' + ", safetytestscore='" + safetytestscore + '\'' + ", safetytestresult='" + safetytestresult + '\'' + ", time1='" + time1 + '\'' + ", time2='" + time2 + '\'' + '}';
     }
 }

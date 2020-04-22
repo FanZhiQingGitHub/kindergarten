@@ -49,7 +49,6 @@
         var rid = null;
         $('body').on('click', '.showTree', function () {
             rid = $("#rid").val();
-            alert(rid);
             var MenuId = [];
             $.ajax({
                 url: path + '/admin/findAllMenuInfo',
@@ -86,7 +85,6 @@
 
         $('body').on('click', '.confirm', function () {//确认修改按钮监听
             var checkData = tree.getChecked('checkId');//获取选中的id
-            console.log(checkData);
             var fatherNodeId = [];//定义父级菜单id数组
             var objectData = [];//定义object数组拿来装选中id的其它值，因为checkData里面包含有选中的子id，需要先装一下这个子id的数组
             var sonNodeId = [];//定义子级菜单id数组

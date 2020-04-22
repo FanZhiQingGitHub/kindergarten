@@ -47,9 +47,9 @@
 						<div class="layui-input-inline" style="margin-left: -18%;">
 							<select name="sel" id="sel" lay-filter="mySelect" lay-verify="" >
 								<option value="请选择" >请选择</option>
-								<option value="未审核" >未审核</option>
+								<option value="未审核" >未审批</option>
 								<option value="通过" >通过</option>
-								<option value="未通过" >未通过</option>
+								<option value="未通过" >不通过</option>
 							</select>
 						</div>
 					</div>
@@ -68,7 +68,15 @@
 	</div>
 	<table id="qualify" lay-filter="test"></table>
 	<script type="text/html" id="barOption">
-		<a type="button" class="layui-btn layui-btn-xs" lay-event="approve" style="width: 25%;height: 75%">审批</a>
+		{{#  if(d.kinderstatus == '通过'){ }}
+		<a type="button" class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="" style="width: 35%;height: 75%" >审批完成</a>
+		{{#  } }}
+		{{#  if(d.kinderstatus == '未审批'){ }}
+		<a type="button" class="layui-btn layui-btn-xs" lay-event="approve" style="width: 25%;height: 75%" >审批</a>
+		{{#  } }}
+		{{#  if(d.kinderstatus == '不通过'){ }}
+		<a type="button" class="layui-btn layui-btn-xs" lay-event="approve" style="width: 25%;height: 75%" >审批</a>
+		{{#  } }}
 	</script>
 </body>
 <script>
@@ -91,10 +99,10 @@
 			, limits: [5, 10]
 			, cols: [[ //表头
 				{field: 'kinderid', title: '序号', align: 'center', width: 120, sort: true, fixed: 'left'}
-				, {field: 'kindername', title: '园所名称', align: 'center', width: 120}
-				, {field: 'kinderregtime', title: '申请时间', align: 'center', width: 180
+				, {field: 'kindername', title: '园所名称', align: 'center', width: 220}
+				, {field: 'kinderregtime', title: '申请时间', align: 'center', width: 240
 					,templet:"<div>{{layui.util.toDateString(d.kinderregtime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
-				, {field: 'kinderapptime', title: '审批时间', align: 'center', width: 180
+				, {field: 'kinderapptime', title: '审批时间', align: 'center', width: 240
 				   ,templet:"<div>{{layui.util.toDateString(d.kinderapptime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
 				, {field: 'kinderstatus', title: '状态', align: 'center', width: 120}
 				, {fixed: 'right', title: '操作', align: 'center', width: 200, toolbar: '#barOption'}
@@ -115,8 +123,7 @@
 			table.on('tool(test)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 				data = obj.data; //获得当前行数据
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-				var tr = obj.tr; //获得当前行 tr 的DOM对象
-				if (layEvent === 'approve') { //审核通过
+				if (layEvent === 'approve') {
 					$.ajax({
 						url:path+"/admin/findTblKinderById",
 						type:'POST',
@@ -128,9 +135,9 @@
 					layer.open({
 						type:2
 						,title:"园所审批"
-						,area:['38%','100%']
+						,area:['40%','100%']
 						,btn:['允许','拒绝']
-						// ,shadeClose: false //点击遮罩不会关闭
+						,btnAlign: 'c'
 						,content:path+"/admin/toUrl/gardenApproval"
 						,success : function(layero, index) {
 						}
@@ -164,7 +171,6 @@
 								dataType:'text',
 								data:{"kinderid":data.kinderid},
 								success:function (result,index) {
-									console.log(result);
 									if (result == 'success')
 									{
 										layer.alert('审核成功！');

@@ -32,9 +32,25 @@ public interface AdminMapper
 	 */
 	public TblAdmin adminLogin(TblAdmin tblAdmin);
 
-	public List<TblAdmin> findAdminByName(String name);
+	public List<TblAdmin> findAdminByName(String adminname);
 
 	public TblAdmin findTblAdminByName(String name);
+
+	public int updateAdminInfo(TblAdmin tblAdmin);
+
+	public List<TblAdmin> findAllAdmin(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public int findAdminCount(HashMap<String, Object> condition);
+
+	public int addAdminInfos(TblAdmin tblAdmin);
+
+	public int updateAdminInfos(TblAdmin tblAdmin);
+
+	public int updateAdminStatus(TblAdmin tblAdmin);
+
+	public int deleteAdmin(Integer adminid);
+
+	public List<TblAdmin> checkAdminName(String adminname);
 
 	//树形菜单
 	public List<TblMenu> findMenuByName(String name);
@@ -97,6 +113,12 @@ public interface AdminMapper
 	public List<TblKinder> findAllKinder(HashMap<String, Object> condition, RowBounds rowBounds);
 
 	public int findAllCount(HashMap<String, Object> condition);
+
+	public Integer findIdByKinderName(String kinderName);
+
+	public Integer findIdByKinderAccount(String kinderAccount);
+
+	public List<TblKinder> selectKinderInfo(Integer kinderId);
 
 	//资质审批
 	public int checkQualify(String kinderstatus, Integer kinderid, String kinderapptime);

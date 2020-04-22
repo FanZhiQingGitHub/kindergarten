@@ -174,13 +174,13 @@
 				{field: 'studentid', title: '编号', align: 'center', width: 100, sort: true, fixed: 'left'}
 				, {field: 'studentname', title: '姓名', align: 'center', width: 90}
 				, {field: 'studentadd', title: '住址', align: 'center', width: 160}
-				, {field: 'studentbirth', title: '出生日期', align: 'center', width: 120
+				, {field: 'studentbirth', title: '出生日期', align: 'center', width: 170
 					, templet: "<div>{{layui.util.toDateString(d.studentbirth,'yyyy-MM-dd HH:mm:ss')}}</div>"}
 				, {
 					field: 'studenttime', title: '注册时间', align: 'center', width: 180
 					, templet: "<div>{{layui.util.toDateString(d.studenttime,'yyyy-MM-dd HH:mm:ss')}}</div>"
 				}
-				, {field: 'parentName', title: '父母', align: 'center', width: 80}
+				, {field: 'parentName', title: '父母', align: 'center', width: 95}
 				, {field: 'classname', title: '班级', align: 'center', width: 90}
 				, {field: 'kindername', title: '园所', align: 'center', width: 120}
 				, {field: 'studentstatus', title: '状态', align: 'center', width: 60}
@@ -261,47 +261,44 @@
 						});
 					});
 				}else if(layEvent === 'update'){
-					layer.confirm("确定要修改？",{icon:3,title:'温馨提示'},function (index) {
-						layer.close(index);
-						layer.open({
-							type: 1,
-							area: ['30%', '60%'],
-							content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-							title: '修改学生信息',
-							btn: ['保存', '取消'],
-							offset: '100px',
-							btnAlign: 'c',
-							success:function(){
-								$("#name").val(data.studentname);
-								$("#studentAdd").val(data.studentadd);
-								// $("#phone").val(data.securityphone);
-							},
-							btn1: function (index) {
-								var name = $("#name").val();
-								var add = $("#studentAdd").val();
-								// var phone = $("#phone").val();
-								if (name.length == 0) {
-									layer.alert("请输入学生名称", {icon: 2});
-								}  else {
-									$.ajax({
-										url: path + "/admin/updateStudent",
-										type: "post",
-										data: {"studentid": data.studentid,"studentname":name,"studentadd":add},
-										dataType: "text",
-										success: function (result) {
-											if(result == "success")
-											{
-												layer.close(index);
-												layer.alert("修改学生信息成功！", {icon: 6});
-												tableIns.reload();
-											}else{
-												layer.alert("修改学生信失败！", {icon: 2});
-											}
+					layer.open({
+						type: 1,
+						area: ['30%', '60%'],
+						content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+						title: '修改学生信息',
+						btn: ['保存', '取消'],
+						offset: '100px',
+						btnAlign: 'c',
+						success:function(){
+							$("#name").val(data.studentname);
+							$("#studentAdd").val(data.studentadd);
+							// $("#phone").val(data.securityphone);
+						},
+						btn1: function (index) {
+							var name = $("#name").val();
+							var add = $("#studentAdd").val();
+							// var phone = $("#phone").val();
+							if (name.length == 0) {
+								layer.alert("请输入学生名称", {icon: 2});
+							}  else {
+								$.ajax({
+									url: path + "/admin/updateStudent",
+									type: "post",
+									data: {"studentid": data.studentid,"studentname":name,"studentadd":add},
+									dataType: "text",
+									success: function (result) {
+										if(result == "success")
+										{
+											layer.close(index);
+											layer.alert("修改学生信息成功！", {icon: 6});
+											tableIns.reload();
+										}else{
+											layer.alert("修改学生信失败！", {icon: 2});
 										}
-									});
-								}
-							},
-						});
+									}
+								});
+							}
+						}
 					});
 				}else if(layEvent === 'delete'){
 					layer.confirm("确定要删除该学生信息？",{icon:3,title:'温馨提示'},function (index) {

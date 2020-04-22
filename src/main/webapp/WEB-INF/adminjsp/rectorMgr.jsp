@@ -19,8 +19,8 @@
 		}
 
 		.layui-table-cell {
-			height: 40px;
-			line-height: 40px;
+			height: 38px;
+			line-height: 38px;
 		}
 		#sel{
 			width: 62%;
@@ -71,7 +71,7 @@
 		</div>
 	</form>
 	</div>
-	<table id="rector" lay-filter="test" class="layui-table-cell"></table>
+	<table id="rector" lay-filter="test" class="layui-table-cell" style="margin-top: -1%"></table>
 
 	<div id="type-content" style="display: none;">
 		<div class="layui-form-item">
@@ -154,10 +154,10 @@
 			, cols: [[ //表头
 				{field: 'rectorid', title: '园长编号', align: 'center', width: 120, sort: true, fixed: 'left'}
 				, {field: 'rectorname', title: '园长名称', align: 'center', width: 90}
-				, {field: 'rectoradd', title: '园长住址', align: 'center', width: 160}
+				, {field: 'rectoradd', title: '园长住址', align: 'center', width: 190}
 				, {field: 'rectorphone', title: '手机号', align: 'center', width: 120}
 				, {
-					field: 'rectorregtime', title: '入职时间', align: 'center', width: 180
+					field: 'rectorregtime', title: '入职时间', align: 'center', width: 200
 					, templet: "<div>{{layui.util.toDateString(d.rectorregtime,'yyyy-MM-dd HH:mm:ss')}}</div>"
 				}
 				, {field: 'rectorstatus', title: '状态', align: 'center', width: 60}
