@@ -422,8 +422,21 @@
         //消息通知
         $("#messageNotice").on('click',function () {
             layer.confirm('您确定要进入到消息通知进行编辑吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
-                window.location.href = src+"/director/toUrl/director_SchoolMessageNotice";
+                $.ajax({
+                    url: src + "/director/selectInfoType",
+                    async: true,
+                    type: "post",
+                    success: function (msg) {
+                        if (msg == "success") {
+                                layer.close(index);
+                                window.location.href = src+"/director/toUrl/director_SchoolMessageNotice";
+                        } else {
+                            layer.alert("该账户未申请园所或未通过审批，请先操作后再进入!!!", {icon: 2});
+                        }
+                    }, error: function (msg) {
+                        layer.alert("网络繁忙！", {icon: 2});
+                    }
+                });
                 return true;
             });
             return false;

@@ -154,8 +154,8 @@ public class KinderService
 		return kinderMapper.findClassMemberAllCount(map);
 	}
 	//对应的查询班级
-	public List<TblClass> findAllClassAll(){
-		return kinderMapper.findAllClassAll();
+	public List<TblClass> findAllClassAll(Integer kid){
+		return kinderMapper.findAllClassAll(kid);
 	}
 	//添加对应的班级成员信息
 	@Transactional
@@ -272,12 +272,6 @@ public class KinderService
 	public boolean updateOmTerTimeMsg(TblTertime tblTertime){
 		return kinderMapper.updateOmTerTimeMsg(tblTertime);
 	}
-
-	/*
-	* 教师考勤是否请假的原因
-	* */
-
-
 
 
 	/*

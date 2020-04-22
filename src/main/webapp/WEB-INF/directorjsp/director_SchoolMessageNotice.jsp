@@ -37,7 +37,7 @@
 	<div class="layui-form-item">
 		<label class="layui-form-label">校园名称：</label>
 		<div class="layui-input-inline" style="margin-top: 1%;">
-			<input type="text" name="kindername" id="kindername" value="智慧幼儿园" readonly>
+			<input type="text" name="kindername" id="kindername" value="${kindernameInfo}" readonly>
 		</div>
 	</div>
 	<div class="layui-form-item">

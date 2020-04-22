@@ -41,6 +41,11 @@ public class RectorService
 		return rectorMapper.resetRectorPwd(rectorphone);
 	}
 
+	//查询对应的园长是不是有园所
+	public TblKinder selectkinderId(Integer recid){
+		return rectorMapper.selectkinderId(recid);
+	}
+
 	/* 教师模块设计*/
 	//查询教师对应的信息
 	public List<TblTeacher> findTeacherAll(Map<String, Object> map)
@@ -158,9 +163,9 @@ public class RectorService
 	}
 
 	//查找对应的所有学生信息
-	public List<TblStudent> findChildrenParentAll()
+	public List<TblStudent> findChildrenParentAll(Integer kid)
 	{
-		return rectorMapper.findChildrenParentAll();
+		return rectorMapper.findChildrenParentAll(kid);
 	}
 
 	/*

@@ -77,10 +77,11 @@ public class RectorController
 	@RequestMapping("/loginCode")
 	public void cherkCode(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
-		try {
+		try
+		{
 			int width = 60;
 			int height = 30;
-//            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
+			//            String data = "QWERTYUOPASDFGHJKLZXCVBNMqwertyuopasdfghjkzxcvbnm023456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
 			String data = "0000";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
 			Random random = new Random();//随机类
 			//1 创建图片数据缓存区域（核心类）
@@ -98,7 +99,8 @@ public class RectorController
 			//5 随机生成4个字符
 			//设置字体颜色
 			g.setFont(new Font("宋体", Font.BOLD & Font.ITALIC, 20));
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < 4; i++)
+			{
 				//随机颜色
 				g.setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
 				//随机字符
@@ -110,7 +112,8 @@ public class RectorController
 				g.drawString(str, (width / 6) * (i + 1), 20);
 			}
 			//给图中绘制噪音点，让图片不那么好辨别
-			for (int j = 0, n = random.nextInt(100); j < n; j++) {
+			for (int j = 0, n = random.nextInt(100); j < n; j++)
+			{
 				g.setColor(Color.RED);
 				g.fillRect(random.nextInt(width), random.nextInt(height), 1, 1);//随机噪音点
 			}
@@ -120,10 +123,12 @@ public class RectorController
 			//.. 生成图片发送到浏览器 --相当于下载
 			ImageIO.write(image, "jpg", response.getOutputStream());
 			response.getOutputStream().flush();
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			e.printStackTrace();
 		}
 	}
+
 	//登录判断
 	@RequestMapping("/directorLogin")
 	public void loginCode(String username, String userpwd, String code, HttpServletRequest request, HttpServletResponse response)
@@ -306,51 +311,72 @@ public class RectorController
 	@RequestMapping("/selectTeacherManage")
 	public void selectTeacherManage(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException
 	{
-		//前端传过来的值通过-json里面去查看
-		String page = request.getParameter("page");
-		String limit = request.getParameter("limit");
-		String teachername = request.getParameter("teachername");
-		int pageInt = Integer.valueOf(page);
-		int limitInt = Integer.valueOf(limit);
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
 
-		System.out.println("教师名是=" + teachername);
-		//		获取对应的id值
-		Map<String, Object> map = new HashMap<>();
-		if (null != teachername && "" != teachername)
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
-			map.put("teachername", teachername);
-		}
-		int pages = (pageInt - 1) * limitInt;
-		int limits = limitInt;
-		map.put("pageInt", pages);
-		map.put("limitInt", limits);
+			//前端传过来的值通过-json里面去查看
+			String page = request.getParameter("page");
+			String limit = request.getParameter("limit");
+			String teachername = request.getParameter("teachername");
+			int pageInt = Integer.valueOf(page);
+			int limitInt = Integer.valueOf(limit);
 
-		System.out.println("用户信息=" + map);
-		List<TblTeacher> tblTeachers = rectorService.findTeacherAll(map);
-		System.out.println("输出成功" + tblTeachers.toString());
+			System.out.println("教师名是=" + teachername);
 
-		if (0 != tblTeachers.size())
-		{
-			Integer count = rectorService.findTeacherAllCount(map).intValue();
-			System.out.println("输出次数：" + count);
-			dateTable.setCode(0);
-			dateTable.setMsg(" ");
-			dateTable.setCount(count);
-			dateTable.setData(tblTeachers);
-			request.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
-			//			request.getSession().setAttribute("cName", cName);
-			ResponseUtils.outJson(response, dateTable);
+			//获取对应的id值
+			Map<String, Object> map = new HashMap<>();
+			if (null != teachername && "" != teachername)
+			{
+				map.put("teachername", teachername);
+			}
+			if (0 != tblKinder.getKinderid())
+			{
+				map.put("kinderid", tblKinder.getKinderid());
+			}
+			int pages = (pageInt - 1) * limitInt;
+			int limits = limitInt;
+			map.put("pageInt", pages);
+			map.put("limitInt", limits);
+
+			System.out.println("用户信息=" + map);
+			List<TblTeacher> tblTeachers = rectorService.findTeacherAll(map);
+			System.out.println("输出成功" + tblTeachers.toString());
+
+			if (0 != tblTeachers.size())
+			{
+				Integer count = rectorService.findTeacherAllCount(map).intValue();
+				System.out.println("输出次数：" + count);
+				dateTable.setCode(0);
+				dateTable.setMsg(" ");
+				dateTable.setCount(count);
+				dateTable.setData(tblTeachers);
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			} else
+			{
+				dateTable.setCode(201);
+				dateTable.setMsg("无数据");
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			}
 		} else
 		{
 			dateTable.setCode(201);
-			dateTable.setMsg("无数据");
+			dateTable.setMsg("该账户未申请园所或未通过审批，请先操作后再进入!!!");
 			request.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
 			ResponseUtils.outJson(response, dateTable);
 		}
+
 	}
 
 	//园所-----教师信息----进行对应的删除操作
@@ -426,25 +452,37 @@ public class RectorController
 	@RequestMapping("/addTeacherForm")
 	protected void addTeacherForm(TblTeacher tblTeacher, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		String teacherjob = tblTeacher.getTeacherjob();
-		if (teacherjob.equals("班主任"))
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
+
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
-			tblTeacher.setRid(4);
-		} else if (teacherjob.equals("安防员"))
-		{
-			tblTeacher.setRid(5);
-		} else if (teacherjob.equals("保健员"))
-		{
-			tblTeacher.setRid(6);
-		}
-		//使用的密码是默认的密码
-		String md5pwd = MD5Utils.md5("123456");
-		tblTeacher.setTeacherpwd(md5pwd);
-		System.out.println("申请教师=" + tblTeacher);
-		int result = rectorService.addTeacherForm(tblTeacher);
-		if (result > 0)
-		{
-			ResponseUtils.outHtml(response, "success");
+			String teacherjob = tblTeacher.getTeacherjob();
+			if (teacherjob.equals("班主任"))
+			{
+				tblTeacher.setRid(4);
+			} else if (teacherjob.equals("安防员"))
+			{
+				tblTeacher.setRid(5);
+			} else if (teacherjob.equals("保健员"))
+			{
+				tblTeacher.setRid(6);
+			}
+			//使用的密码是默认的密码
+			String md5pwd = MD5Utils.md5("123456");
+			tblTeacher.setTeacherpwd(md5pwd);
+			tblTeacher.setKinderid(tblKinder.getKinderid());
+			System.out.println("申请教师=" + tblTeacher);
+			int result = rectorService.addTeacherForm(tblTeacher);
+			if (result > 0)
+			{
+				ResponseUtils.outHtml(response, "success");
+			} else
+			{
+				ResponseUtils.outHtml(response, "error");
+			}
 		} else
 		{
 			ResponseUtils.outHtml(response, "error");
@@ -458,54 +496,73 @@ public class RectorController
 	@RequestMapping("/selectChildrenManagement")
 	public void selectChildrenManagement(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
-		String page = request.getParameter("page");
-		String limit = request.getParameter("limit");
-		String studentname = request.getParameter("studentname");
-		String beginTime = request.getParameter("beginTime");
-		String overTime = request.getParameter("overTime");
-		int pageInt = Integer.valueOf(page);
-		int limitInt = Integer.valueOf(limit);
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
 
-		System.out.println("用户名是=" + studentname);
-		//		获取对应的id值
-		Map<String, Object> map = new HashMap<>();
-		if (null != studentname && "" != studentname)
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
-			map.put("studentname", studentname);
-		}
-		if (null != beginTime && "" != beginTime)
-		{
-			map.put("beginTime", beginTime);
-		}
-		if (null != overTime && "" != overTime)
-		{
-			map.put("overTime", overTime);
-		}
-		int pages = (pageInt - 1) * limitInt;
-		int limits = limitInt;
-		map.put("pageInt", pages);
-		map.put("limitInt", limits);
+			String page = request.getParameter("page");
+			String limit = request.getParameter("limit");
+			String studentname = request.getParameter("studentname");
+			String beginTime = request.getParameter("beginTime");
+			String overTime = request.getParameter("overTime");
+			int pageInt = Integer.valueOf(page);
+			int limitInt = Integer.valueOf(limit);
 
-		System.out.println("用户信息=" + map);
-		List<TblStudent> tblStudents = rectorService.findChildrenAll(map);
+			System.out.println("用户名是=" + studentname);
+			//		获取对应的id值
+			Map<String, Object> map = new HashMap<>();
+			if (null != studentname && "" != studentname)
+			{
+				map.put("studentname", studentname);
+			}
+			if (null != beginTime && "" != beginTime)
+			{
+				map.put("beginTime", beginTime);
+			}
+			if (null != overTime && "" != overTime)
+			{
+				map.put("overTime", overTime);
+			}
+			if (0 != tblKinder.getKinderid())
+			{
+				map.put("kid", tblKinder.getKinderid());
+			}
+			int pages = (pageInt - 1) * limitInt;
+			int limits = limitInt;
+			map.put("pageInt", pages);
+			map.put("limitInt", limits);
 
-		if (0 != tblStudents.size())
-		{
-			Integer count = rectorService.findChildrenAllCount(map).intValue();
-			System.out.println("输出幼儿次数：" + count);
-			dateTable.setCode(0);
-			dateTable.setMsg(" ");
-			dateTable.setCount(count);
-			dateTable.setData(tblStudents);
-			request.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
-			//			request.getSession().setAttribute("cName", cName);
-			ResponseUtils.outJson(response, dateTable);
+			System.out.println("用户信息=" + map);
+			List<TblStudent> tblStudents = rectorService.findChildrenAll(map);
+
+			if (0 != tblStudents.size())
+			{
+				Integer count = rectorService.findChildrenAllCount(map).intValue();
+				System.out.println("输出幼儿次数：" + count);
+				dateTable.setCode(0);
+				dateTable.setMsg(" ");
+				dateTable.setCount(count);
+				dateTable.setData(tblStudents);
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			} else
+			{
+				dateTable.setCode(201);
+				dateTable.setMsg("无数据");
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			}
 		} else
 		{
 			dateTable.setCode(201);
-			dateTable.setMsg("无数据");
+			dateTable.setMsg("该账户未申请园所或未通过审批，请先操作后再进入!!!");
 			request.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
@@ -531,15 +588,27 @@ public class RectorController
 	@RequestMapping("/addChildrenForm")
 	protected void addChildrenForm(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		tblStudent.setStudenttime(new Date());
-		tblStudent.setStudentstatus("启用");
-		tblStudent.setStudentlng("118.19320");
-		tblStudent.setStudentlat("24.48854");
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
 
-		int result = rectorService.addChildrenForm(tblStudent);
-		if (result > 0)
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
-			ResponseUtils.outHtml(response, "success");
+			tblStudent.setStudenttime(new Date());
+			tblStudent.setStudentstatus("启用");
+			tblStudent.setStudentlng("118.19320");
+			tblStudent.setStudentlat("24.48854");
+			tblStudent.setKid(tblKinder.getKinderid());
+
+			int result = rectorService.addChildrenForm(tblStudent);
+			if (result > 0)
+			{
+				ResponseUtils.outHtml(response, "success");
+			} else
+			{
+				ResponseUtils.outHtml(response, "error");
+			}
 		} else
 		{
 			ResponseUtils.outHtml(response, "error");
@@ -600,61 +669,76 @@ public class RectorController
 	@RequestMapping("/selectParentManagement")
 	public void selectParentManagement(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
-		String page = request.getParameter("page");
-		String limit = request.getParameter("limit");
-		String parentname = request.getParameter("parentname");
-		String beginTime = request.getParameter("beginTime");
-		String overTime = request.getParameter("overTime");
-		int pageInt = Integer.valueOf(page);
-		int limitInt = Integer.valueOf(limit);
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
 
-		System.out.println("家长名是=" + parentname);
-		//		获取对应的id值
-		Map<String, Object> map = new HashMap<>();
-		if (null != parentname && "" != parentname)
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
-			map.put("parentname", parentname);
-		}
-		if (null != beginTime && "" != beginTime)
-		{
-			map.put("beginTime", beginTime);
-		}
-		if (null != overTime && "" != overTime)
-		{
-			map.put("overTime", overTime);
-		}
-		int pages = (pageInt - 1) * limitInt;
-		int limits = limitInt;
-		map.put("pageInt", pages);
-		map.put("limitInt", limits);
+			String page = request.getParameter("page");
+			String limit = request.getParameter("limit");
+			String parentname = request.getParameter("parentname");
+			String beginTime = request.getParameter("beginTime");
+			String overTime = request.getParameter("overTime");
+			int pageInt = Integer.valueOf(page);
+			int limitInt = Integer.valueOf(limit);
 
-		System.out.println("家长信息=" + map);
-		List<TblParent> tblParents = rectorService.findParentAll(map);
+			System.out.println("家长名是=" + parentname);
+			//		获取对应的id值
+			Map<String, Object> map = new HashMap<>();
+			if (null != parentname && "" != parentname)
+			{
+				map.put("parentname", parentname);
+			}
+			if (null != beginTime && "" != beginTime)
+			{
+				map.put("beginTime", beginTime);
+			}
+			if (null != overTime && "" != overTime)
+			{
+				map.put("overTime", overTime);
+			}
+			map.put("kid", tblKinder.getKinderid());
+			int pages = (pageInt - 1) * limitInt;
+			int limits = limitInt;
+			map.put("pageInt", pages);
+			map.put("limitInt", limits);
 
-		System.out.println("家长输出=" + tblParents);
-		if (0 != tblParents.size())
-		{
-			Integer count = rectorService.findParentAllCount(map).intValue();
-			System.out.println("输出家长次数：" + count);
-			dateTable.setCode(0);
-			dateTable.setMsg(" ");
-			dateTable.setCount(count);
-			dateTable.setData(tblParents);
-			request.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
+			System.out.println("家长信息=" + map);
+			List<TblParent> tblParents = rectorService.findParentAll(map);
 
-			//查找对应的幼儿园的孩子信息--下拉框的显示
-			//			List<TblStudent> tblStudentList = rectorService.findChildren(map);
+			System.out.println("家长输出=" + tblParents);
+			if (0 != tblParents.size())
+			{
+				Integer count = rectorService.findParentAllCount(map).intValue();
+				System.out.println("输出家长次数：" + count);
+				dateTable.setCode(0);
+				dateTable.setMsg(" ");
+				dateTable.setCount(count);
+				dateTable.setData(tblParents);
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
 
-			List<TblStudent> tblStudentList = rectorService.findChildrenParentAll();
-			System.out.println("请获取孩子的信息：" + tblStudentList);
-			request.getSession().setAttribute("tblStudentList", tblStudentList);
-			ResponseUtils.outJson(response, dateTable);
+				//查找对应的幼儿园的孩子信息--下拉框的显示
+				List<TblStudent> tblStudentList = rectorService.findChildrenParentAll(tblKinder.getKinderid());
+				System.out.println("请获取孩子的信息：" + tblStudentList);
+				request.getSession().setAttribute("tblStudentList", tblStudentList);
+				ResponseUtils.outJson(response, dateTable);
+			} else
+			{
+				dateTable.setCode(201);
+				dateTable.setMsg("无数据");
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			}
 		} else
 		{
 			dateTable.setCode(201);
-			dateTable.setMsg("无数据");
+			dateTable.setMsg("该账户未申请园所或未通过审批，请先操作后再进入!!!");
 			request.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
@@ -680,32 +764,45 @@ public class RectorController
 	@RequestMapping("/addParentForm")
 	protected void addParentForm(TblParent tblParent, String studentname, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		System.out.println("家长的添加信息显示：" + tblParent + studentname);
-		if (tblParent.getParentSon().equals("爸爸"))
-		{
-			tblParent.setParentSex("男");
-		} else if (tblParent.getParentSon().equals("妈妈"))
-		{
-			tblParent.setParentSex("女");
-		}
-		tblParent.setParentRegTime(new Date());
-		int result = rectorService.addParentForm(tblParent);
-		if (result > 0)
-		{
-			TblParent tblParentByPid = rectorService.selectParentByPid(tblParent.getParentName());
-			//修改对应的学生表的家长的外键
-			Map<String, Object> map = new HashMap<>();
-			if (null != studentname && "" != studentname)
-			{
-				map.put("studentname", studentname);
-			}
-			if (0 != tblParentByPid.getParentId())
-			{
-				map.put("pid", tblParentByPid.getParentId());
-			}
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
 
-			int result0 = rectorService.updateChildrenByPid(map);
-			ResponseUtils.outHtml(response, "success");
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
+		{
+			System.out.println("家长的添加信息显示：" + tblParent + studentname);
+			if (tblParent.getParentSon().equals("爸爸"))
+			{
+				tblParent.setParentSex("男");
+			} else if (tblParent.getParentSon().equals("妈妈"))
+			{
+				tblParent.setParentSex("女");
+			}
+			tblParent.setParentRegTime(new Date());
+			tblParent.setKid(tblKinder.getKinderid());
+			tblParent.setKindername(tblKinder.getKindername());
+			int result = rectorService.addParentForm(tblParent);
+			if (result > 0)
+			{
+				TblParent tblParentByPid = rectorService.selectParentByPid(tblParent.getParentName());
+				//修改对应的学生表的家长的外键
+				Map<String, Object> map = new HashMap<>();
+				if (null != studentname && "" != studentname)
+				{
+					map.put("studentname", studentname);
+				}
+				if (0 != tblParentByPid.getParentId())
+				{
+					map.put("pid", tblParentByPid.getParentId());
+				}
+
+				int result0 = rectorService.updateChildrenByPid(map);
+				ResponseUtils.outHtml(response, "success");
+			} else
+			{
+				ResponseUtils.outHtml(response, "error");
+			}
 		} else
 		{
 			ResponseUtils.outHtml(response, "error");
@@ -782,59 +879,76 @@ public class RectorController
 	@RequestMapping("/selectCourseManagement")
 	public void selectCourseManagement(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
-		String page = request.getParameter("page");
-		String limit = request.getParameter("limit");
-		String classname = request.getParameter("classname");
-		String beginTime = request.getParameter("beginTime");
-		String overTime = request.getParameter("overTime");
-		int pageInt = Integer.valueOf(page);
-		int limitInt = Integer.valueOf(limit);
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
 
-		System.out.println("班级名是=" + classname);
-		//		获取对应的id值
-		Map<String, Object> map = new HashMap<>();
-		if (null != classname && "" != classname)
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
-			map.put("classname", classname);
-		}
-		if (null != beginTime && "" != beginTime)
-		{
-			map.put("beginTime", beginTime);
-		}
-		if (null != overTime && "" != overTime)
-		{
-			map.put("overTime", overTime);
-		}
-		int pages = (pageInt - 1) * limitInt;
-		int limits = limitInt;
-		map.put("pageInt", pages);
-		map.put("limitInt", limits);
+			String page = request.getParameter("page");
+			String limit = request.getParameter("limit");
+			String classname = request.getParameter("classname");
+			String beginTime = request.getParameter("beginTime");
+			String overTime = request.getParameter("overTime");
+			int pageInt = Integer.valueOf(page);
+			int limitInt = Integer.valueOf(limit);
 
-		System.out.println("班级信息=" + map);
-		List<TblTeacher> tblTeachers = kinderService.findClassTeacherAll(map);
+			System.out.println("班级名是=" + classname);
+			//		获取对应的id值
+			Map<String, Object> map = new HashMap<>();
+			if (null != classname && "" != classname)
+			{
+				map.put("classname", classname);
+			}
+			if (null != beginTime && "" != beginTime)
+			{
+				map.put("beginTime", beginTime);
+			}
+			if (null != overTime && "" != overTime)
+			{
+				map.put("overTime", overTime);
+			}
+			map.put("kid", tblKinder.getKinderid());
+			int pages = (pageInt - 1) * limitInt;
+			int limits = limitInt;
+			map.put("pageInt", pages);
+			map.put("limitInt", limits);
 
-		System.out.println("班级输出=" + tblTeachers);
-		if (0 != tblTeachers.size())
-		{
-			Integer count = kinderService.findClassTeacherAllCount(map).intValue();
-			System.out.println("输出班级次数：" + count);
-			dateTable.setCode(0);
-			dateTable.setMsg(" ");
-			dateTable.setCount(count);
-			dateTable.setData(tblTeachers);
-			request.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
+			System.out.println("班级信息=" + map);
+			List<TblTeacher> tblTeachers = kinderService.findClassTeacherAll(map);
 
-			//查找对应的教师的班级信息--下拉框的显示
-			List<TblTeacher> tblTeacherList = kinderService.findTeacherClassAll();
-			System.out.println("请获取班主任的信息：" + tblTeacherList);
-			request.getSession().setAttribute("tblTeacherList", tblTeacherList);
-			ResponseUtils.outJson(response, dateTable);
+			System.out.println("班级输出=" + tblTeachers);
+			if (0 != tblTeachers.size())
+			{
+				Integer count = kinderService.findClassTeacherAllCount(map).intValue();
+				System.out.println("输出班级次数：" + count);
+				dateTable.setCode(0);
+				dateTable.setMsg(" ");
+				dateTable.setCount(count);
+				dateTable.setData(tblTeachers);
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+
+				//查找对应的教师的班级信息--下拉框的显示
+				List<TblTeacher> tblTeacherList = kinderService.findTeacherClassAll();
+				System.out.println("请获取班主任的信息：" + tblTeacherList);
+				request.getSession().setAttribute("tblTeacherList", tblTeacherList);
+				ResponseUtils.outJson(response, dateTable);
+			} else
+			{
+				dateTable.setCode(201);
+				dateTable.setMsg("无数据");
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			}
 		} else
 		{
 			dateTable.setCode(201);
-			dateTable.setMsg("无数据");
+			dateTable.setMsg("该账户未申请园所或未通过审批，请先操作后再进入!!!");
 			request.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
@@ -972,7 +1086,7 @@ public class RectorController
 		}
 	}
 
-	//课程表-新增对应的额课程表信息
+	//课程表-新增对应的课程表信息
 	@RequestMapping("/addCourseInfo")
 	public void addCourseInfo(TblCoursetest tblCoursetest, HttpServletRequest request, HttpServletResponse response) throws ParseException
 	{
@@ -1160,73 +1274,90 @@ public class RectorController
 		}
 	}
 
-	//班级成员管理
+	//班级成员管理--查询显示
 	@RequestMapping("/selectClassMemberManagement")
 	public void selectClassMemberManagement(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
-		String page = request.getParameter("page");
-		String limit = request.getParameter("limit");
-		String studentname = request.getParameter("studentname");
-		String classname = request.getParameter("classname");
-		String beginTime = request.getParameter("beginTime");
-		String overTime = request.getParameter("overTime");
-		int pageInt = Integer.valueOf(page);
-		int limitInt = Integer.valueOf(limit);
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
 
-		System.out.println("班级成员名是=" + studentname + "=" + classname);
-		//		获取对应的id值
-		Map<String, Object> map = new HashMap<>();
-		if (null != studentname && "" != studentname)
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
-			map.put("studentname", studentname);
-		}
-		if (null != classname && "" != classname)
-		{
-			map.put("classname", classname);
-		}
-		if (null != beginTime && "" != beginTime)
-		{
-			map.put("beginTime", beginTime);
-		}
-		if (null != overTime && "" != overTime)
-		{
-			map.put("overTime", overTime);
-		}
-		int pages = (pageInt - 1) * limitInt;
-		int limits = limitInt;
-		map.put("pageInt", pages);
-		map.put("limitInt", limits);
+			String page = request.getParameter("page");
+			String limit = request.getParameter("limit");
+			String studentname = request.getParameter("studentname");
+			String classname = request.getParameter("classname");
+			String beginTime = request.getParameter("beginTime");
+			String overTime = request.getParameter("overTime");
+			int pageInt = Integer.valueOf(page);
+			int limitInt = Integer.valueOf(limit);
 
-		System.out.println("班级成员信息=" + map);
-		List<TblScTInfo> tblScTInfoList = kinderService.findClassMemberAll(map);
+			System.out.println("班级成员名是=" + studentname + "=" + classname);
+			//		获取对应的id值
+			Map<String, Object> map = new HashMap<>();
+			if (null != studentname && "" != studentname)
+			{
+				map.put("studentname", studentname);
+			}
+			if (null != classname && "" != classname)
+			{
+				map.put("classname", classname);
+			}
+			if (null != beginTime && "" != beginTime)
+			{
+				map.put("beginTime", beginTime);
+			}
+			if (null != overTime && "" != overTime)
+			{
+				map.put("overTime", overTime);
+			}
+			map.put("kid", tblKinder.getKinderid());
+			int pages = (pageInt - 1) * limitInt;
+			int limits = limitInt;
+			map.put("pageInt", pages);
+			map.put("limitInt", limits);
 
-		System.out.println("班级成员输出=" + tblScTInfoList);
-		if (0 != tblScTInfoList.size())
-		{
-			Integer count = kinderService.findClassMemberAllCount(map).intValue();
-			System.out.println("输出班级成员次数：" + count);
-			dateTable.setCode(0);
-			dateTable.setMsg(" ");
-			dateTable.setCount(count);
-			dateTable.setData(tblScTInfoList);
-			request.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
+			System.out.println("班级成员信息=" + map);
+			List<TblScTInfo> tblScTInfoList = kinderService.findClassMemberAll(map);
 
-			//			查找对应的班级的班级信息--下拉框的显示
-			List<TblClass> tblClassList = kinderService.findAllClassAll();
-			System.out.println("请获取班级的信息：" + tblClassList);
-			request.getSession().setAttribute("tblClassList", tblClassList);
+			System.out.println("班级成员输出=" + tblScTInfoList);
+			if (0 != tblScTInfoList.size())
+			{
+				Integer count = kinderService.findClassMemberAllCount(map).intValue();
+				System.out.println("输出班级成员次数：" + count);
+				dateTable.setCode(0);
+				dateTable.setMsg(" ");
+				dateTable.setCount(count);
+				dateTable.setData(tblScTInfoList);
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
 
-			//查找对应的幼儿园的孩子信息--下拉框的显示
-			List<TblStudent> tblStudentList = rectorService.findChildrenParentAll();
-			System.out.println("请获取孩子的信息：" + tblStudentList);
-			request.getSession().setAttribute("tblStudentList", tblStudentList);
-			ResponseUtils.outJson(response, dateTable);
+				//			查找对应的班级的班级信息--下拉框的显示
+				List<TblClass> tblClassList = kinderService.findAllClassAll(tblKinder.getKinderid());
+				System.out.println("请获取班级的信息：" + tblClassList);
+				request.getSession().setAttribute("tblClassList", tblClassList);
+
+				//查找对应的幼儿园的孩子信息--下拉框的显示
+				List<TblStudent> tblStudentList = rectorService.findChildrenParentAll(tblKinder.getKinderid());
+				System.out.println("请获取孩子的信息：" + tblStudentList);
+				request.getSession().setAttribute("tblStudentList", tblStudentList);
+				ResponseUtils.outJson(response, dateTable);
+			} else
+			{
+				dateTable.setCode(201);
+				dateTable.setMsg("无数据");
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			}
 		} else
 		{
 			dateTable.setCode(201);
-			dateTable.setMsg("无数据");
+			dateTable.setMsg("该账户未申请园所或未通过审批，请先操作后再进入!!!");
 			request.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
@@ -1266,10 +1397,6 @@ public class RectorController
 	@RequestMapping("/delClassMemberTable")
 	public void delClassMemberTable(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
-		//		String id = request.getParameter("studentid");
-		System.out.println("删除班级成员=" + tblStudent);
-		//		int studentid = Integer.valueOf(id);
-
 		Map<String, Object> map = new HashMap<>();
 		if (null != tblStudent.getStudentname() && "" != tblStudent.getStudentname())
 		{
@@ -1290,13 +1417,6 @@ public class RectorController
 	@RequestMapping("/updateClassMemberTable")
 	public void updateClassMemberTable(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
-		//先删除对应的cid的内容
-		//		TblTeacher tblTeachera = kinderService.selectTeacherByTeacherId(tblStudent.getStudentid());
-
-		//		Map<String, Object> map = new HashMap<>();
-		//		map.put("teachername", tblTeachera.getTeachername());
-		//		map.put("cid", null);
-		//		int result0 = kinderService.updateTeacherByCid(map);
 		//再进行对应的改变值
 		String classname = request.getParameter("classname");
 
@@ -1327,54 +1447,71 @@ public class RectorController
 	@RequestMapping("/selectCampusBulletin")
 	public void selectCampusBulletin(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
-		String page = request.getParameter("page");
-		String limit = request.getParameter("limit");
-		String campusinfoname = request.getParameter("campusinfoname");
-		String beginTime = request.getParameter("beginTime");
-		String overTime = request.getParameter("overTime");
-		int pageInt = Integer.valueOf(page);
-		int limitInt = Integer.valueOf(limit);
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
 
-		System.out.println("校园公告名是=" + campusinfoname);
-		//		获取对应的id值
-		Map<String, Object> map = new HashMap<>();
-		if (null != campusinfoname && "" != campusinfoname)
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
-			map.put("campusinfoname", campusinfoname);
-		}
-		if (null != beginTime && "" != beginTime)
-		{
-			map.put("beginTime", beginTime);
-		}
-		if (null != overTime && "" != overTime)
-		{
-			map.put("overTime", overTime);
-		}
-		int pages = (pageInt - 1) * limitInt;
-		int limits = limitInt;
-		map.put("pageInt", pages);
-		map.put("limitInt", limits);
+			String page = request.getParameter("page");
+			String limit = request.getParameter("limit");
+			String campusinfoname = request.getParameter("campusinfoname");
+			String beginTime = request.getParameter("beginTime");
+			String overTime = request.getParameter("overTime");
+			int pageInt = Integer.valueOf(page);
+			int limitInt = Integer.valueOf(limit);
 
-		System.out.println("校园公告信息=" + map);
-		List<TblCampus> tblCampusinfoList = kinderService.findCampusBulletinAll(map);
+			System.out.println("校园公告名是=" + campusinfoname);
+			//		获取对应的id值
+			Map<String, Object> map = new HashMap<>();
+			if (null != campusinfoname && "" != campusinfoname)
+			{
+				map.put("campusinfoname", campusinfoname);
+			}
+			if (null != beginTime && "" != beginTime)
+			{
+				map.put("beginTime", beginTime);
+			}
+			if (null != overTime && "" != overTime)
+			{
+				map.put("overTime", overTime);
+			}
+			map.put("kid", tblKinder.getKinderid());
+			int pages = (pageInt - 1) * limitInt;
+			int limits = limitInt;
+			map.put("pageInt", pages);
+			map.put("limitInt", limits);
 
-		System.out.println("校园公告输出=" + tblCampusinfoList);
-		if (0 != tblCampusinfoList.size())
-		{
-			Integer count = kinderService.findCampusBulletinAllCount(map).intValue();
-			System.out.println("输出校园公告次数：" + count);
-			dateTable.setCode(0);
-			dateTable.setMsg(" ");
-			dateTable.setCount(count);
-			dateTable.setData(tblCampusinfoList);
-			request.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
-			ResponseUtils.outJson(response, dateTable);
+			System.out.println("校园公告信息=" + map);
+			List<TblCampus> tblCampusinfoList = kinderService.findCampusBulletinAll(map);
+
+			System.out.println("校园公告输出=" + tblCampusinfoList);
+			if (0 != tblCampusinfoList.size())
+			{
+				Integer count = kinderService.findCampusBulletinAllCount(map).intValue();
+				System.out.println("输出校园公告次数：" + count);
+				dateTable.setCode(0);
+				dateTable.setMsg(" ");
+				dateTable.setCount(count);
+				dateTable.setData(tblCampusinfoList);
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			} else
+			{
+				dateTable.setCode(201);
+				dateTable.setMsg("无数据");
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			}
 		} else
 		{
 			dateTable.setCode(201);
-			dateTable.setMsg("无数据");
+			dateTable.setMsg("该账户未申请园所或未通过审批，请先操作后再进入!!!");
 			request.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
@@ -1386,18 +1523,30 @@ public class RectorController
 	@RequestMapping("/addCampusBulletin")
 	protected void addCampusBulletin(TblCampus tblCampus, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		tblCampus.setCampustime(new Date());
-		int result = kinderService.addCampusBulletin(tblCampus);
-		if (result > 0)
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
+
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
-			ResponseUtils.outHtml(response, "success");
+			tblCampus.setCampustime(new Date());
+			tblCampus.setKid(tblKinder.getKinderid());
+			int result = kinderService.addCampusBulletin(tblCampus);
+			if (result > 0)
+			{
+				ResponseUtils.outHtml(response, "success");
+			} else
+			{
+				ResponseUtils.outHtml(response, "error");
+			}
 		} else
 		{
 			ResponseUtils.outHtml(response, "error");
 		}
 	}
 
-	//园所----幼儿信息进行对应的删除操作delTeacherTable
+	//校园公告删除
 	@RequestMapping("/delCampusBulletin")
 	public void delCampusBulletin(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -1415,7 +1564,7 @@ public class RectorController
 		}
 	}
 
-	//园所-----幼儿信息----更新对应表格的内容的值
+	//校园公告-更新对应表格
 	@RequestMapping("/updateCampusBulletin")
 	public void updateCampusBulletin(TblCampus tblCampus, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -1444,50 +1593,69 @@ public class RectorController
 	@RequestMapping("/selectTeacherAttendManage")
 	public void selectTeacherAttendManage(HttpServletRequest request, HttpServletResponse response) throws ParseException, UnsupportedEncodingException
 	{
-		//前端传过来的值通过-json里面去查看
-		String page = request.getParameter("page");
-		String limit = request.getParameter("limit");
-		String teachername = request.getParameter("teachername");
-		String teacherjob = request.getParameter("teacherjob");
-		int pageInt = Integer.valueOf(page);
-		int limitInt = Integer.valueOf(limit);
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
 
-		System.out.println("教师考勤是=" + teachername + "还有" + teacherjob);
-		//		获取对应的id值
-		Map<String, Object> map = new HashMap<>();
-		if (null != teachername && "" != teachername)
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
-			map.put("teachername", teachername);
-		}
-		if (null != teacherjob && "" != teacherjob && !teacherjob.equals("暂无"))
-		{
-			map.put("teacherjob", teacherjob);
-		}
-		int pages = (pageInt - 1) * limitInt;
-		int limits = limitInt;
-		map.put("pageInt", pages);
-		map.put("limitInt", limits);
+			request.getSession().setAttribute("kindername", tblKinder.getKindername());
 
-		System.out.println("教师考勤信息=" + map);
-		List<TblTeacherAttend> tblTeacherAttendList = kinderService.findTeacherAttendAll(map);
-		System.out.println("教师考勤输出成功" + tblTeacherAttendList.toString());
+			//前端传过来的值通过-json里面去查看
+			String page = request.getParameter("page");
+			String limit = request.getParameter("limit");
+			String teachername = request.getParameter("teachername");
+			String teacherjob = request.getParameter("teacherjob");
+			int pageInt = Integer.valueOf(page);
+			int limitInt = Integer.valueOf(limit);
 
-		if (0 != tblTeacherAttendList.size())
-		{
-			Integer count = kinderService.findTeacherAttendAllCount(map).intValue();
-			System.out.println("教师考勤输出次数：" + count);
-			dateTable.setCode(0);
-			dateTable.setMsg(" ");
-			dateTable.setCount(count);
-			dateTable.setData(tblTeacherAttendList);
-			request.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
-			ResponseUtils.outJson(response, dateTable);
+			System.out.println("教师考勤是=" + teachername + "还有" + teacherjob);
+			//		获取对应的id值
+			Map<String, Object> map = new HashMap<>();
+			if (null != teachername && "" != teachername)
+			{
+				map.put("teachername", teachername);
+			}
+			if (null != teacherjob && "" != teacherjob && !teacherjob.equals("暂无"))
+			{
+				map.put("teacherjob", teacherjob);
+			}
+			map.put("kid", tblKinder.getKinderid());
+			int pages = (pageInt - 1) * limitInt;
+			int limits = limitInt;
+			map.put("pageInt", pages);
+			map.put("limitInt", limits);
+
+			System.out.println("教师考勤信息=" + map);
+			List<TblTeacherAttend> tblTeacherAttendList = kinderService.findTeacherAttendAll(map);
+			System.out.println("教师考勤输出成功" + tblTeacherAttendList.toString());
+
+			if (0 != tblTeacherAttendList.size())
+			{
+				Integer count = kinderService.findTeacherAttendAllCount(map).intValue();
+				System.out.println("教师考勤输出次数：" + count);
+				dateTable.setCode(0);
+				dateTable.setMsg(" ");
+				dateTable.setCount(count);
+				dateTable.setData(tblTeacherAttendList);
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			} else
+			{
+				dateTable.setCode(201);
+				dateTable.setMsg("无数据");
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			}
 		} else
 		{
 			dateTable.setCode(201);
-			dateTable.setMsg("无数据");
+			dateTable.setMsg("该账户未申请园所或未通过审批，请先操作后再进入!!!");
 			request.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
@@ -1588,9 +1756,28 @@ public class RectorController
 	}
 
 	//---------------消息通知的设置
+	@RequestMapping("/selectInfoType")
+	protected void selectInfoType(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
+
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
+		{
+			request.getSession().setAttribute("kindernameInfo", tblKinder.getKindername());
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
 	@RequestMapping("/addInfoType")
 	protected void addInfoType(String infotypename, String kindername, TblInfotype tblInfotype, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		System.out.println("消息添加的时候=" + kindername);
 		Integer kid = kinderService.selectkinderByName(kindername);
 		tblInfotype.setInfotypetime(new Date());
 		tblInfotype.setKid(kid);
@@ -1609,55 +1796,71 @@ public class RectorController
 	public void selectSchoolMessage(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 		//记得在前面要加上对应的园所ID的值
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
 
-		String page = request.getParameter("page");
-		String limit = request.getParameter("limit");
-		String infotypename = request.getParameter("infotypename");
-		String beginTime = request.getParameter("beginTime");
-		String overTime = request.getParameter("overTime");
-		int pageInt = Integer.valueOf(page);
-		int limitInt = Integer.valueOf(limit);
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
+		{
+			String page = request.getParameter("page");
+			String limit = request.getParameter("limit");
+			String infotypename = request.getParameter("infotypename");
+			String beginTime = request.getParameter("beginTime");
+			String overTime = request.getParameter("overTime");
+			int pageInt = Integer.valueOf(page);
+			int limitInt = Integer.valueOf(limit);
 
-		System.out.println("消息通知是=" + infotypename);
-		//		获取对应的id值
-		Map<String, Object> map = new HashMap<>();
-		if (null != infotypename && "" != infotypename)
-		{
-			map.put("infotypename", infotypename);
-		}
-		if (null != beginTime && "" != beginTime)
-		{
-			map.put("beginTime", beginTime);
-		}
-		if (null != overTime && "" != overTime)
-		{
-			map.put("overTime", overTime);
-		}
-		int pages = (pageInt - 1) * limitInt;
-		int limits = limitInt;
-		map.put("pageInt", pages);
-		map.put("limitInt", limits);
+			System.out.println("消息通知是=" + infotypename);
+			//		获取对应的id值
+			Map<String, Object> map = new HashMap<>();
+			if (null != infotypename && "" != infotypename)
+			{
+				map.put("infotypename", infotypename);
+			}
+			if (null != beginTime && "" != beginTime)
+			{
+				map.put("beginTime", beginTime);
+			}
+			if (null != overTime && "" != overTime)
+			{
+				map.put("overTime", overTime);
+			}
+			map.put("kid",tblKinder.getKinderid());
+			int pages = (pageInt - 1) * limitInt;
+			int limits = limitInt;
+			map.put("pageInt", pages);
+			map.put("limitInt", limits);
 
-		System.out.println("消息通知信息=" + map);
-		List<TblInfotype> tblInfotypeList = kinderService.findSchoolMessageAll(map);
+			System.out.println("消息通知信息=" + map);
+			List<TblInfotype> tblInfotypeList = kinderService.findSchoolMessageAll(map);
 
-		System.out.println("消息通知输出=" + tblInfotypeList);
-		if (0 != tblInfotypeList.size())
-		{
-			Integer count = kinderService.findSchoolMessageAllCount(map).intValue();
-			System.out.println("输出消息通知次数：" + count);
-			dateTable.setCode(0);
-			dateTable.setMsg(" ");
-			dateTable.setCount(count);
-			dateTable.setData(tblInfotypeList);
-			request.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
-			ResponseUtils.outJson(response, dateTable);
+			System.out.println("消息通知输出=" + tblInfotypeList);
+			if (0 != tblInfotypeList.size())
+			{
+				Integer count = kinderService.findSchoolMessageAllCount(map).intValue();
+				System.out.println("输出消息通知次数：" + count);
+				dateTable.setCode(0);
+				dateTable.setMsg(" ");
+				dateTable.setCount(count);
+				dateTable.setData(tblInfotypeList);
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			} else
+			{
+				dateTable.setCode(201);
+				dateTable.setMsg("无数据");
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			}
 		} else
 		{
 			dateTable.setCode(201);
-			dateTable.setMsg("无数据");
+			dateTable.setMsg("该账户未申请园所或未通过审批，请先操作后再进入!!!");
 			request.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
@@ -1670,10 +1873,10 @@ public class RectorController
 	/*
 	 * 对应的教师考勤的新增
 	 * 1.日期
-   2.当前时间段：如8:30
-   3.需要判断是上午还是下午
-   4.需要日期区间id（需要添加本周一到本周日）--对应到教师ID --完成
-   5.如果下午或上午没打卡的话默认要插入请假或者其它默认数据
+        2.当前时间段：如8:30
+        3.需要判断是上午还是下午
+        4.需要日期区间id（需要添加本周一到本周日）--对应到教师ID
+        5.如果下午或上午没打卡的话默认要插入请假或者其它默认数据
 	 * */
 	@RequestMapping("/addTeaAttendTime")
 	public void addTeaAttendTime(TblTeacherAttend tblTeacherAttend, TblTertime tblTertime, HttpServletRequest request, HttpServletResponse response) throws ParseException
@@ -2031,7 +2234,7 @@ public class RectorController
 				System.out.println("上午考勤信息中不存在今天的日期");
 				//上午打卡的时候同时新增当天日期
 				System.out.println("上午打卡的时间段=" + time);
-//				DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+				//				DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 				tblTertime.setTertime(format1.parse(leaveDate));
 				tblTertime.setTertimedate1("请假");
 				tblTertime.setTaid(dateid);
@@ -2050,15 +2253,16 @@ public class RectorController
 				System.out.println("今天上午已经打过卡了");
 				System.out.println("上午打卡的时间段=" + time);
 				//如果下午请过假了，上午再请假的话，---默认中午也是请假的过程
-				if(tblTertime1.getTertimedate2().equals("请假")){
-//					DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+				if (tblTertime1.getTertimedate2().equals("请假"))
+				{
+					//					DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 					tblTertime.setTertime(format1.parse(leaveDate));
 					tblTertime.setNoon("请假");
 					tblTertime.setTaid(dateid);
 					System.out.println("中午tblTertime=" + tblTertime);
 					boolean flag = kinderService.updateOmTerTimeMsg(tblTertime);
 				}
-//				DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+				//				DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 				tblTertime.setTertime(format1.parse(leaveDate));
 				tblTertime.setTertimedate1("请假");
 				tblTertime.setTaid(dateid);
@@ -2075,63 +2279,65 @@ public class RectorController
 				}
 			}
 		}
-	//下午的打卡
-		else {
-		//（3）查找下午是否有过添加该字段了-
-		// ---如果有的话，就进行对应的修改
-		//---没有的话，就进行对应的添加
-		//			Map<String,Object> map = new HashMap<>();
-		//			map.put("tertime",timePmdate);
-		//			map.put("taid",dateid);
-		//			TblTertime tblTertime1 = kinderService.findAfternoon(map);
-		//			System.out.println(timePmdate+"是否有值="+tblTertime1);
-		if (tblTertime1 == null)
+		//下午的打卡
+		else
 		{
-			System.out.println("下午考勤信息中不存在今天的日期");
-			System.out.println("下午打卡的时间段=" + time);
-//			DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-			tblTertime.setTertime(format1.parse(leaveDate));
-			tblTertime.setTertimedate2("请假");
-			tblTertime.setTaid(dateid);
-			System.out.println("下午tblStutime3=" + tblTertime);
-			boolean flag = kinderService.addPmTerTimeMsg(tblTertime);
-			if (flag)
+			//（3）查找下午是否有过添加该字段了-
+			// ---如果有的话，就进行对应的修改
+			//---没有的话，就进行对应的添加
+			//			Map<String,Object> map = new HashMap<>();
+			//			map.put("tertime",timePmdate);
+			//			map.put("taid",dateid);
+			//			TblTertime tblTertime1 = kinderService.findAfternoon(map);
+			//			System.out.println(timePmdate+"是否有值="+tblTertime1);
+			if (tblTertime1 == null)
 			{
-				ResponseUtils.outHtml(response, "success");
-			} else
-			{
-				ResponseUtils.outHtml(response, "error");
-			}
-		} else
-		{
-			System.out.println("下午考勤表中存在今天的日期");
-			System.out.println("今天下午已经打过卡了");
-			System.out.println("下午打卡的时间段=" + time);
-			if(tblTertime1.getTertimedate1().equals("请假")){
-				//					DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+				System.out.println("下午考勤信息中不存在今天的日期");
+				System.out.println("下午打卡的时间段=" + time);
+				//			DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 				tblTertime.setTertime(format1.parse(leaveDate));
-				tblTertime.setNoon("请假");
+				tblTertime.setTertimedate2("请假");
 				tblTertime.setTaid(dateid);
-				System.out.println("中午tblTertime2=" + tblTertime);
-				boolean flag = kinderService.updateOmTerTimeMsg(tblTertime);
-			}
-//			DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-			tblTertime.setTertime(format1.parse(leaveDate));
-			tblTertime.setTertimedate2("请假");
-			tblTertime.setTaid(dateid);
-			System.out.println("下午tblTertime3=" + tblTertime);
-			//对应的表字段进行更新
-			boolean flagPm = kinderService.updatePmTerTimeMsg(tblTertime);
-			if (flagPm)
-			{
-				ResponseUtils.outHtml(response, "success");
+				System.out.println("下午tblStutime3=" + tblTertime);
+				boolean flag = kinderService.addPmTerTimeMsg(tblTertime);
+				if (flag)
+				{
+					ResponseUtils.outHtml(response, "success");
+				} else
+				{
+					ResponseUtils.outHtml(response, "error");
+				}
 			} else
 			{
-				ResponseUtils.outHtml(response, "error");
+				System.out.println("下午考勤表中存在今天的日期");
+				System.out.println("今天下午已经打过卡了");
+				System.out.println("下午打卡的时间段=" + time);
+				if (tblTertime1.getTertimedate1().equals("请假"))
+				{
+					//					DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+					tblTertime.setTertime(format1.parse(leaveDate));
+					tblTertime.setNoon("请假");
+					tblTertime.setTaid(dateid);
+					System.out.println("中午tblTertime2=" + tblTertime);
+					boolean flag = kinderService.updateOmTerTimeMsg(tblTertime);
+				}
+				//			DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+				tblTertime.setTertime(format1.parse(leaveDate));
+				tblTertime.setTertimedate2("请假");
+				tblTertime.setTaid(dateid);
+				System.out.println("下午tblTertime3=" + tblTertime);
+				//对应的表字段进行更新
+				boolean flagPm = kinderService.updatePmTerTimeMsg(tblTertime);
+				if (flagPm)
+				{
+					ResponseUtils.outHtml(response, "success");
+				} else
+				{
+					ResponseUtils.outHtml(response, "error");
+				}
 			}
 		}
 	}
-}
 
 
 }
