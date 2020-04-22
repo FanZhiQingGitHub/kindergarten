@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
 import java.util.Date;
 
 /**
@@ -94,11 +95,8 @@ public class SecuritySystemLogAspect {
         //读取session中的用户
         String securityname = (String) session.getAttribute("securityname");
         //请求的IP
-        String ip = request.getRemoteAddr();
-        if(ip.equals("0:0:0:0:0:0:0:1")){
-            ip = "127.0.0.1";
-        }
-
+        InetAddress addr = InetAddress.getLocalHost();
+        String ip = addr.getHostAddress();
         try {
 
             String targetName = joinPoint.getTarget().getClass().getName();
@@ -178,18 +176,11 @@ public class SecuritySystemLogAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session = request.getSession();
         //读取session中的用户
-        String username = (String) session.getAttribute("username");
+        String securityname = (String) session.getAttribute("securityname");
         //请求的IP
-        String ip = request.getRemoteAddr();
-
-        if(ip.equals("0:0:0:0:0:0:0:1")){
-            ip = "127.0.0.1";
-        }
-
+        InetAddress addr = InetAddress.getLocalHost();
+        String ip = addr.getHostAddress();
         System.out.println("异常通知开始------------------------------------------");
-
-
-
         String params = "";
         if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0) {
             for (int i = 0; i < joinPoint.getArgs().length; i++) {
@@ -221,27 +212,32 @@ public class SecuritySystemLogAspect {
             System.out.println("=====controller后置通知开始=====");
             System.out.println("请求方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()") + "." + operationType);
             System.out.println("方法描述:" + operationName);
-            System.out.println("请求人:" + username);
+            System.out.println("请求人:" + securityname);
             System.out.println("请求IP:" + ip);
             //*========数据库日志=========*//
-//            LogTable logTable = new LogTable();
-//            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-//            String logtime = df.format(new Date());//获取当前时间
-//
-//            logTable.setOperateor(username);
-//            logTable.setOperatetype(operationType);
-//            logTable.setOperatedetail(operationName);
-//            logTable.setOperatedate(logtime);
-//            logTable.setOperateresult("异常");
-//            logTable.setOperateip(ip);
-//            List<LogTable> logTableList = new ArrayList<>();
-//            logTableList.add(logTable);
-//            //保存数据库
-//            Boolean flag = userService.addSysLogInfo(logTableList);
-//            if(flag){
-//                System.out.println(logTable);
-//                System.out.println("=====异常通知结束=====");
-//            }
+            TblSyslog log = new TblSyslog();
+            log.setOperatedetail(operationName);
+            log.setOperatetype(operationType);
+            log.setOperateip(ip);
+            log.setOperateresult("异常");
+            if(securityname != null)
+            {
+                log.setOperateor(securityname);
+            }else{
+                log.setOperateor("无");
+            }
+            System.out.println("日志记录时间"+new Date());
+            log.setOperatetime(new Date());
+
+            //保存数据库
+            Integer num = securityService.addLog(log);
+            if(num>0){
+                System.out.println(log);
+                System.out.println("=====controller后置通知结束=====");
+            }else {
+                System.out.println(log);
+                System.out.println("=====controller后置通知异常=====");
+            }
         } catch (Exception ex) {
             //记录本地异常日志
             logger.error("==异常通知异常==");

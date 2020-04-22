@@ -15,6 +15,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Date;
 
 /**
@@ -86,11 +88,8 @@ public class AdminSystemLogAspect {
         //读取session中的用户
         TblAdmin tblAdmin = (TblAdmin) session.getAttribute("tblAdmin");
         //请求的IP
-        String ip = request.getRemoteAddr();
-	    if("0:0:0:0:0:0:0:1".equals(ip)&&!ip.equals(null))
-	    {
-		    ip = "127.0.0.1";
-	    }
+        InetAddress addr = InetAddress.getLocalHost();
+        String ip = addr.getHostAddress();
 	    try {
 	    	    String methodName = joinPoint.getSignature().getName();
                 String targetName = joinPoint.getTarget().getClass().getName();
@@ -145,18 +144,15 @@ public class AdminSystemLogAspect {
      */
 
      @AfterThrowing(pointcut = "controllerAspect()", throwing="e")
-     public  void doAfterThrowing(JoinPoint joinPoint, Throwable e)
-     {
+     public  void doAfterThrowing(JoinPoint joinPoint, Throwable e) throws Exception {
          HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
          HttpSession session = request.getSession();
         //读取session中的用户
          TblAdmin tblAdmin = (TblAdmin) session.getAttribute("tblAdmin");
         //获取请求ip
-         String ip = request.getRemoteAddr();
-         if("0:0:0:0:0:0:0:1".equals(ip)&&!ip.equals(null))
-         {
-         	ip = "127.0.0.1";
-         }
+         InetAddress addr = InetAddress.getLocalHost();
+         String ip = addr.getHostAddress();
+
         //获取用户请求方法的参数并序列化为JSON格式字符串
          System.out.println("异常通知开始------------------------------------------");
          String params = "";
