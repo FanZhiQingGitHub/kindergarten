@@ -80,6 +80,27 @@ public class TeacherController {
 		return "teacherjsp/" + path;
 	}
 
+	//重置密码
+	@RequestMapping("/resetTeacherpwd")
+	public void resetTeacherpwd(HttpServletRequest request, HttpServletResponse response) {
+		String teachername = request.getParameter("teachername");
+		String teacherphone = request.getParameter("teacherphone");
+		request.getSession().setAttribute("teachername",teachername);//存这个是因为没有登录，没有用户名，所以需要存一下，记录系统日志
+		Integer num = teacherService.findExistTeacherName(teachername);
+		if(num > 0){
+			Boolean flag = teacherService.resetTeacherpwd(teachername,teacherphone);
+			if(flag){
+				request.getSession().removeAttribute("teachername");//重置成功后清除掉
+				ResponseUtils.outHtml(response,"success");
+			}else {
+				ResponseUtils.outHtml(response,"error");
+			}
+		}else {
+			ResponseUtils.outHtml(response,"notmen");
+		}
+	}
+
+
 	@RequestMapping(value="/loginCode")
 	public void cherkCode(HttpServletRequest request, HttpServletResponse response) {
 		try {

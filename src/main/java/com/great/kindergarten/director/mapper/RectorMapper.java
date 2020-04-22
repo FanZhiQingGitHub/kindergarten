@@ -20,7 +20,8 @@ public interface RectorMapper
 	public int updateByIdPwd(TblRector tblRector);
 
 	//更新对应的园长端的密码是不是正确的
-	public boolean resetRectorPwd(String rectorphone);
+	public Integer findExistRectorName(Map<String,String> rectorMap);
+	public boolean resetRectorPwd(Map<String,String> rectorMap);
 
 	//查询对应的园长是不是有园所
 	public TblKinder selectkinderId(Integer recid);

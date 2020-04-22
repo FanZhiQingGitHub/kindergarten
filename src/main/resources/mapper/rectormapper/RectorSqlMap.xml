@@ -69,8 +69,13 @@
     </update>
 
 <!--忘记密码的重置密码-->
-    <update id="resetRectorPwd" parameterType="string">
-        UPDATE tbl_rector SET rectorpwd = 'e10adc3949ba59abbe56e057f20f883e' where rectorphone = #{rectorphone};
+<!--    先查是不是有这个人-->
+    <select id="findExistRectorName" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) from tbl_rector where rectorname = #{rectorname}
+    </select>
+
+    <update id="resetRectorPwd" parameterType="java.util.Map">
+        UPDATE tbl_rector SET rectorpwd = 'e10adc3949ba59abbe56e057f20f883e' where rectorname = #{rectorname} and rectorphone = #{rectorphone};
     </update>
 
 <!--查询对应的园长是不是有园所-->

@@ -203,4 +203,17 @@ public class TeacherService {
         return teacherMapper.addClassMsg(tblClamsg);
     }
 
+    public Integer findExistTeacherName(String teachername){
+        Map<String,String> teachermap = new LinkedHashMap<>();
+        teachermap.put("teachername",teachername);
+        return teacherMapper.findExistTeacherName(teachermap);
+    }
+
+    public Boolean resetTeacherpwd(String teachername,String teacherphone){
+        Map<String,String> teachermap = new LinkedHashMap<>();
+        teachermap.put("teachername",teachername);
+        teachermap.put("teacherphone",teacherphone);
+        return teacherMapper.resetTeacherpwd(teachermap);
+    }
+
 }

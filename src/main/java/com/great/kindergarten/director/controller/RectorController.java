@@ -174,15 +174,22 @@ public class RectorController
 
 	//	重置密码
 	@RequestMapping("/resetRectorPwd")
-	public void resetRectorPwd(String rectorphone, HttpServletResponse response)
+	public void resetRectorPwd(String rectorname,String rectorphone,HttpServletRequest request, HttpServletResponse response)
 	{
-		boolean result = rectorService.resetRectorPwd(rectorphone);
-		if (result)
-		{
-			ResponseUtils.outHtml(response, "success");
-		} else
-		{
-			ResponseUtils.outHtml(response, "error");
+		request.getSession().setAttribute("rectorname",rectorname);//存这个是因为没有登录，没有用户名，所以需要存一下，记录系统日志
+		Integer num = rectorService.findExistRectorName(rectorname);
+		if(num>0){
+			boolean result = rectorService.resetRectorPwd(rectorname,rectorphone);
+			if (result)
+			{
+				request.getSession().removeAttribute("rectorname");//重置成功后清除掉
+				ResponseUtils.outHtml(response, "success");
+			} else
+			{
+				ResponseUtils.outHtml(response, "error");
+			}
+		}else {
+			ResponseUtils.outHtml(response,"notmen");
 		}
 	}
 

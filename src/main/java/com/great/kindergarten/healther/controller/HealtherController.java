@@ -123,14 +123,22 @@ public class HealtherController {
         }
     }
 
+
     @HealtherSystemLog(operationType = "重置密码", operationName = "保健员重置密码")
     @RequestMapping("/resetHealtherpwd")
     public void resetHealtherpwd(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
-        Boolean flag = healtherService.resetHealtherpwd(tblHealther.getHealtherphone());
-        if(flag){
-            ResponseUtils.outHtml(response,"success");
+        request.getSession().setAttribute("healthername",tblHealther.getHealthername());
+        Integer num = healtherService.findExistHealtherName(tblHealther.getHealthername());
+        if(num > 0){
+            Boolean flag = healtherService.resetHealtherpwd(tblHealther.getHealthername(),tblHealther.getHealtherphone());
+            if(flag){
+                request.getSession().removeAttribute("healthername");//重置成功后清除掉
+                ResponseUtils.outHtml(response,"success");
+            }else {
+                ResponseUtils.outHtml(response,"error");
+            }
         }else {
-            ResponseUtils.outHtml(response,"error");
+            ResponseUtils.outHtml(response,"notmen");
         }
     }
 

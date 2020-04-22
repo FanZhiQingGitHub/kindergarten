@@ -55,8 +55,13 @@
         UPDATE tbl_healther SET healtherpwd = #{healtherpwd} where healtherid = #{healtherid};
     </update>
 
+    <!--    重置密码先查是否有这个人-->
+    <select id="findExistHealtherName" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) from tbl_healther where healthername = #{healthername}
+    </select>
+
     <update id="resetHealtherpwd" parameterType="java.util.Map">
-        UPDATE tbl_healther SET healtherpwd = 'e10adc3949ba59abbe56e057f20f883e' where healtherphone = #{healtherphone};
+        UPDATE tbl_healther SET healtherpwd = 'e10adc3949ba59abbe56e057f20f883e' where healthername = #{healthername} and healtherphone = #{healtherphone};
     </update>
 
     <!--   主页新闻查询-->

@@ -45,9 +45,16 @@ public class SecurityService {
         return securityMapper.updateSecurityPwd(securitymap);
     }
 
-    @Transactional
-    public Boolean resetSecuritypwd(String securityphone){
+    public Integer findExistSecurityName(String securityname){
         Map<String,String> securitymap = new LinkedHashMap<>();
+        securitymap.put("securityname",securityname);
+        return securityMapper.findExistSecurityName(securitymap);
+    }
+
+    @Transactional
+    public Boolean resetSecuritypwd(String securityname,String securityphone){
+        Map<String,String> securitymap = new LinkedHashMap<>();
+        securitymap.put("securityname",securityname);
         securitymap.put("securityphone",securityphone);
         return securityMapper.resetSecuritypwd(securitymap);
     }

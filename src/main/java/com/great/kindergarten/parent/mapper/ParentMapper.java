@@ -236,4 +236,8 @@ public interface ParentMapper {
 
 	public List<TblStudent> findAllStuInfo(Map<String,String> Map);
 
+	public Integer findExistParentName(Map<String, String> parentmap);
+
+	public Boolean resetParentpwd(Map<String, String> parentmap);
+
 }

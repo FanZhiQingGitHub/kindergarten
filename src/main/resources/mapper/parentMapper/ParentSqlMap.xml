@@ -467,7 +467,14 @@
 
     </update>
 
+    <!--    重置密码先查是否有这个人-->
+    <select id="findExistParentName" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) from tbl_parent where parentname = #{parentname}
+    </select>
 
-
+    <!--    重置密码-->
+    <update id="resetParentpwd" parameterType="java.util.Map">
+        UPDATE tbl_parent SET parentpwd = 'e10adc3949ba59abbe56e057f20f883e' where parentname = #{parentname} and parentphone = #{parentphone} ;
+    </update>
 
 </mapper>

@@ -96,17 +96,18 @@
         #bu3 {
             width: 30%;
             height: 8%;
-            margin-left: 18%;
+            margin-left: 15%;
             font-size: 13px;
             background-color: transparent;
             color: black;
         }
 
-        #bu4 {
+        #bu5 {
             position: absolute;
             width: 30%;
             height: 8%;
             font-size: 13px;
+            margin-left: 9%;
             background-color: transparent;
             color: black;
         }
@@ -119,9 +120,6 @@
         }
 
         #bu3:hover{
-            color: cyan;
-        }
-        #bu4:hover{
             color: cyan;
         }
         #bu5:hover{
@@ -211,8 +209,21 @@
             </div>
 
             <div id="butdiv">
-<%--                <button type="button" class="layui-btn" id="bu3">忘记密码？</button>--%>
-                <button type="button" class="layui-btn" id="bu4">点击此处返回首页</button>
+                <button type="button" class="layui-btn" id="bu3">忘记密码？重置一下</button>
+                <button type="button" class="layui-btn" id="bu5">点击此处返回首页</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="type-content" style="display: none;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <input type="text" id="teachername" placeholder="请输入您的登录用户名"
+                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
+            </div>
+            <div class="layui-inline">
+                <input type="text" id="teacherphone" placeholder="请输入11位手机号码"
+                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
             </div>
         </div>
     </div>
@@ -227,6 +238,7 @@
                 , layedit = layui.layedit
                 , laydate = layui.laydate;
         $ = layui.jquery;
+        var path = $("#path").val();
         form.verify({
             required: function (value) {
                 if (value.length < 2) {
@@ -291,12 +303,72 @@
                 var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/teacher/loginCode?"+Math.random();
-
             }),$("#bu3").click(function () {
-                layer.alert("该功能尚未开放！", {icon: 6});
-            }),$("#bu4").click(function () {
+                layer.open({
+                    type: 1,
+                    content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+                    title: '个人密码重置',
+                    btn: ['确定', '取消'],
+                    area: ['20%', '35%'],
+                    offset: ['30%'],
+                    btnAlign: 'c',
+                    btn1: function (index) {
+                        var teachername = $("#teachername").val();
+                        var teacherphone = $("#teacherphone").val();
+                        var num = /^1\d{10}$/;
+                        if (teachername.length == 0) {
+                            layer.msg("您好，用户名不能为空！", {icon: 2});
+                        } else if (!num.test(teacherphone)) {
+                            layer.msg("您好，手机号码必须11位，且不能出现空格！", {icon: 2});
+                        } else {
+                            $.ajax({
+                                url: path + '/teacher/resetTeacherpwd',
+                                async: true,
+                                type: 'post',
+                                data: {
+                                    "teachername": teachername,
+                                    "teacherphone": teacherphone
+                                },
+                                datatype: 'text',
+                                success: function (data) {
+                                    if (data == "error") {
+                                        layer.msg("重置失败！", {icon: 2});
+                                    } else {
+                                        layer.alert("重置成功，新密码为：'123456' ", {icon: 6});
+                                        $("#teachername").val("");
+                                        $("#teacherphone").val("");
+                                        layer.close(index);
+                                    }
+                                }, error: function (data) {
+                                    layer.msg("网络繁忙！", {icon: 2});
+                                }
+                            });
+                        }
+                    }
+                });
+            }),$("#bu5").click(function () {
                 var path = $("#path").val();
                 location.href = path + "/main/path/main";
+            }), $("#teachername").blur(function () {
+                var teachername = $("#teachername").val();
+                $.ajax({
+                    url: path + '/teacher/resetTeacherpwd',
+                    async: true,
+                    type: 'post',
+                    data: {
+                        "teachername": teachername
+                    },
+                    datatype: 'text',
+                    success: function (data) {
+                        if (data == "notmen") {
+                            layer.msg("对不起，不存在该用户！", {icon: 2});
+                        }else {
+                            layer.msg("存在该用户！", {icon: 6});
+                        }
+                    }, error: function (data) {
+                        layer.msg("网络繁忙！", {icon: 2});
+                    }
+                });
             });
         })
     });

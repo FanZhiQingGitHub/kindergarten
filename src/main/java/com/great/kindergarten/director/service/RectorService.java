@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,9 +37,19 @@ public class RectorService
 	}
 
 	//更新对应的园长端的密码是不是正确的
+	//重置前查下有没有这个人
+	public Integer findExistRectorName(String rectorname){
+		Map<String,String> rectorMap = new LinkedHashMap<>();
+		rectorMap.put("rectorname",rectorname);
+		return rectorMapper.findExistRectorName(rectorMap);
+	}
+	//根据用户名和手机号码重置
 	@Transactional
-	public boolean resetRectorPwd(String rectorphone){
-		return rectorMapper.resetRectorPwd(rectorphone);
+	public boolean resetRectorPwd(String rectorname,String rectorphone){
+		Map<String,String> rectorMap = new LinkedHashMap<>();
+		rectorMap.put("rectorname",rectorname);
+		rectorMap.put("rectorphone",rectorphone);
+		return rectorMapper.resetRectorPwd(rectorMap);
 	}
 
 	//查询对应的园长是不是有园所

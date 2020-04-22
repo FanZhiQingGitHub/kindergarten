@@ -95,4 +95,8 @@ public interface TeacherMapper {
 	 */
 	public Boolean addClassMsg(TblClamsg tblClamsg);
 
+	public Integer findExistTeacherName(Map<String, String> teachermap);
+
+	public Boolean resetTeacherpwd(Map<String, String> teachermap);
+
 }

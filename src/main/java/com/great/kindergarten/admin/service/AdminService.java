@@ -787,4 +787,17 @@ public class AdminService {
 	{
 		return adminMapper.updateAdminInfo(tblAdmin);
 	}
+
+	//管理员重置密码
+	public Integer findExistAdminName(String adminname){
+		Map<String,String> adminMap = new LinkedHashMap<>();
+		adminMap.put("adminname",adminname);
+		return adminMapper.findExistAdminName(adminMap);
+	}
+	public boolean resetAdminPwd(String adminname,String adminphone){
+		Map<String,String> adminMap = new LinkedHashMap<>();
+		adminMap.put("adminname",adminname);
+		adminMap.put("adminphone",adminphone);
+		return adminMapper.resetAdminPwd(adminMap);
+	}
 }

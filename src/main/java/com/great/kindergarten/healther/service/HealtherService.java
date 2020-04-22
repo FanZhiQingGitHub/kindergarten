@@ -47,9 +47,16 @@ public class HealtherService {
         return healtherMapper.updateHealtherPwd(healthermap);
     }
 
-    @Transactional
-    public Boolean resetHealtherpwd(String healtherphone){
+    public Integer findExistHealtherName(String healthername){
         Map<String,String> healthermap = new LinkedHashMap<>();
+        healthermap.put("healthername",healthername);
+        return healtherMapper.findExistHealtherName(healthermap);
+    }
+
+    @Transactional
+    public Boolean resetHealtherpwd(String healthername,String healtherphone){
+        Map<String,String> healthermap = new LinkedHashMap<>();
+        healthermap.put("healthername",healthername);
         healthermap.put("healtherphone",healtherphone);
         return healtherMapper.resetHealtherpwd(healthermap);
     }

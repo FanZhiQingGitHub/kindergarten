@@ -1575,4 +1575,15 @@
         select * from tbl_admin where adminname = #{adminname}
     </select>
 
+    <!--忘记密码的重置密码-->
+    <!--    先查是不是有这个人-->
+    <select id="findExistAdminName" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) from tbl_admin where adminname = #{adminname}
+    </select>
+
+    <update id="resetAdminPwd" parameterType="java.util.Map">
+        UPDATE tbl_admin SET adminpwd = 'e10adc3949ba59abbe56e057f20f883e' where adminname = #{adminname} and adminphone = #{adminphone};
+    </update>
+
+
 </mapper>

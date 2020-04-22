@@ -345,4 +345,7 @@ public interface AdminMapper
 	public int findRoleCounts(HashMap<String, Object> condition);
 
 	public List<TblMenu> getAllMenu();
+
+	public Integer findExistAdminName(Map<String,String> adminMap);
+	public boolean resetAdminPwd(Map<String,String> adminMap);
 }

@@ -202,8 +202,8 @@
             width: 30%;
             height: 8%;
             margin-left: 68%;
-            margin-top: -20%;
-            font-size: 16px;
+            margin-top: -16%;
+            font-size: 15px;
             background-color: transparent;
             color: black;
         }
@@ -273,7 +273,7 @@
                                 lay-filter="formDemo">
                             立即登录
                         </button>
-                        <button type="button" class="layui-btn" id="bu3">忘记密码？</button>
+                        <button type="button" class="layui-btn" id="bu3">忘记密码？重置一下</button>
                     </div>
                 </div>
             </div>
@@ -282,6 +282,10 @@
 
     <div id="type-content" style="display: none;">
         <div class="layui-form-item" style="margin-left: 50px;">
+            <div class="layui-inline">
+                <input type="text" id="rectorname" placeholder="请输入您的登录用户名"
+                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
+            </div>
             <div class="layui-inline">
                 <input type="text" id="rectorphone" placeholder="请输入11位手机号码" value=""
                        autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
@@ -306,6 +310,7 @@
             , layedit = layui.layedit
             , laydate = layui.laydate;
         $ = layui.jquery;
+        var path = $("#path").val();
         form.verify({
             required: function (value) {
                 if (value.length < 2) {
@@ -337,7 +342,6 @@
 
         });
         form.on('submit(formDemo)', function (data) {
-            var path = $("#path").val();
             $.ajax({
                 url: path + "/director/directorLogin",
                 async: true,
@@ -373,44 +377,46 @@
         $(function () {
             $("#code").click(function () {
                 var time = new Date();
-                var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/director/loginCode?" + time;
             });
             $("#bu1").click(function () {
                 var time = new Date();
-                var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/director/loginCode?" + time;
 
             });
             $("#bu3").click(function () {
-                var path = $("#path").val();
                 layer.open({
                     type: 1,
                     content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
                     title: '个人密码重置',
                     btn: ['确定', '取消'],
-                    area: ['26%', '28%'],
+                    area: ['23%', '35%'],
                     offset: ['30%'],
                     btnAlign: 'c',
                     btn1: function (index) {
+                        var rectorname = $("#rectorname").val();
                         var rectorphone = $("#rectorphone").val();
                         var num = /^1\d{10}$/;
-                        if (!num.test(rectorphone)) {
-                            layer.alert("您好，手机号码必须11位，且不能出现空格！", {icon: 2});
+                        if (rectorname.length < 0) {
+                            layer.msg("您好，用户名不能为空！", {icon: 2});
+                        } else if (!num.test(rectorphone)) {
+                            layer.msg("您好，手机号码必须11位，且不能出现空格！", {icon: 2});
                         } else {
                             $.ajax({
                                 url: path + '/director/resetRectorPwd',
                                 async: true,
                                 type: 'post',
-                                data: {"rectorphone": rectorphone},
+                                data: {"rectorname": rectorname,"rectorphone": rectorphone},
                                 datatype: 'text',
                                 success: function (data) {
                                     if (data == "error") {
                                         layer.alert("重置失败！", {icon: 2});
                                     } else {
                                         layer.alert("重置成功，新密码为：'123456' ", {icon: 6});
+                                        $("#rectorname").val("");
+                                        $("#rectorphone").val("");
                                         layer.close(index);
                                     }
                                 }, error: function (data) {
@@ -418,6 +424,27 @@
                                 }
                             });
                         }
+                    }
+                });
+            });
+            $("#rectorname").blur(function () {
+                var rectorname = $("#rectorname").val();
+                $.ajax({
+                    url: path + '/director/resetRectorPwd',
+                    async: true,
+                    type: 'post',
+                    data: {
+                        "rectorname": rectorname
+                    },
+                    datatype: 'text',
+                    success: function (data) {
+                        if (data == "notmen") {
+                            layer.msg("对不起，不存在该用户！", {icon: 2});
+                        }else {
+                            layer.msg("存在该用户！", {icon: 6});
+                        }
+                    }, error: function (data) {
+                        layer.msg("网络繁忙！", {icon: 2});
                     }
                 });
             });

@@ -385,4 +385,14 @@
         values (#{clamsgdetail},#{cid},#{sendmsgtime});
     </insert>
 
+    <!--    重置密码先查是否有这个人-->
+    <select id="findExistTeacherName" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) from tbl_teacher where teachername =#{teachername}
+    </select>
+
+    <!--    重置密码-->
+    <update id="resetTeacherpwd" parameterType="java.util.Map">
+        UPDATE tbl_teacher SET teacherpwd = 'e10adc3949ba59abbe56e057f20f883e' where teachername = #{teachername} and teacherphone = #{teacherphone} ;
+    </update>
+
 </mapper>

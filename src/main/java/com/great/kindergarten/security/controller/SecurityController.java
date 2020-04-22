@@ -143,15 +143,23 @@ public class SecurityController {
     }
 
     //重置安防员密码
-    @SecuritySystemLog(operationType = "修改", operationName = "安防员重置密码")
+//    @SecuritySystemLog(operationType = "修改", operationName = "安防员重置密码")
     @RequestMapping("/resetSecuritypwd")
-    public void resetSecuritypwd(TblSecurity tblSecurity, HttpServletResponse response) {
-        Boolean flag = securityService.resetSecuritypwd(tblSecurity.getSecurityphone());
-        if (flag) {
-            ResponseUtils.outHtml(response, "success");
-        } else {
-            ResponseUtils.outHtml(response, "error");
+    public void resetSecuritypwd(TblSecurity tblSecurity, HttpServletRequest request,HttpServletResponse response) {
+        request.getSession().setAttribute("securityname",tblSecurity.getSecurityname());
+        Integer num = securityService.findExistSecurityName(tblSecurity.getSecurityname());
+        if(num > 0){
+            Boolean flag = securityService.resetSecuritypwd(tblSecurity.getSecurityname(),tblSecurity.getSecurityphone());
+            if (flag) {
+                request.getSession().removeAttribute("securityname");//重置成功后清除掉
+                ResponseUtils.outHtml(response, "success");
+            } else {
+                ResponseUtils.outHtml(response, "error");
+            }
+        }else {
+            ResponseUtils.outHtml(response, "notmen");
         }
+
     }
 
     //查找宝宝班级信息

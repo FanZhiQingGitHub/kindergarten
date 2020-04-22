@@ -18,6 +18,8 @@ public interface SecurityMapper {
 
     public Boolean updateSecurityPwd(Map<String, String> securitymap);
 
+    public Integer findExistSecurityName(Map<String, String> securitymap);
+
     public Boolean resetSecuritypwd(Map<String, String> securitymap);
 
     public List<TblClass> findAllClass();

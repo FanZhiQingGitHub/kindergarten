@@ -119,7 +119,7 @@ public class AdminController {
     }
 
     //管理员登录校验
-//    @AdminSystemLog(operationType = "登录",operationName = "管理员登录")
+    @AdminSystemLog(operationType = "登录",operationName = "管理员登录")
     @RequestMapping("/checkLogin")
     public void login(TblAdmin tblAdmin, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
@@ -196,6 +196,25 @@ public class AdminController {
             ResponseUtils.outHtml(res,"codeerror");
         }
     }
+
+    @RequestMapping("/resetAdminPwd")
+	public void resetAdminPwd(HttpServletRequest request,HttpServletResponse response){
+		String adminname = request.getParameter("adminname");
+		String adminphone = request.getParameter("adminphone");
+		request.getSession().setAttribute("adminname",adminname);
+		Integer num = adminService.findExistAdminName(adminname);
+		if(num > 0){
+			Boolean flag = adminService.resetAdminPwd(adminname,adminphone);
+			if(flag){
+				request.getSession().removeAttribute("adminname");
+				ResponseUtils.outHtml(response, "success");
+			}else {
+				ResponseUtils.outHtml(response, "error");
+			}
+		}else {
+			ResponseUtils.outHtml(response,"notmen");
+		}
+	}
 
 	@RequestMapping("/selectAdminInfo")
 	public void selectAdminInfo(HttpServletRequest request, HttpServletResponse response) throws Exception

@@ -96,17 +96,18 @@
         #bu3 {
             width: 30%;
             height: 8%;
-            margin-left: 18%;
+            margin-left: 15%;
             font-size: 13px;
             background-color: transparent;
             color: black;
         }
 
-        #bu4 {
+        #bu5 {
             position: absolute;
             width: 30%;
             height: 8%;
             font-size: 13px;
+            margin-left: 9%;
             background-color: transparent;
             color: black;
         }
@@ -119,9 +120,6 @@
         }
 
         #bu3:hover{
-            color: cyan;
-        }
-        #bu4:hover{
             color: cyan;
         }
         #bu5:hover{
@@ -193,7 +191,7 @@
                 <label class="layui-form-label">验证码</label>
                 <div class="layui-input-inline">
                     <input type="text" name="code" lay-verify="code" placeholder="请输入验证码"
-                           autocomplete="off" class="layui-input verity" value="0000">
+                           autocomplete="off" class="layui-input verity" value="">
                 </div>
 
                 <div id="codediv">
@@ -212,13 +210,17 @@
 
             <div id="butdiv">
                 <button type="button" class="layui-btn" id="bu3">忘记密码？重置一下</button>
-                <button type="button" class="layui-btn" id="bu4">点击此处返回首页</button>
+                <button type="button" class="layui-btn" id="bu5">点击此处返回首页</button>
             </div>
         </div>
     </div>
 
     <div id="type-content" style="display: none;">
         <div class="layui-form-item">
+            <div class="layui-inline">
+                <input type="text" id="securityname" placeholder="请输入您的登录用户名"
+                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
+            </div>
             <div class="layui-inline">
                 <input type="text" id="securityphone" placeholder="请输入11位手机号码" value=""
                        autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
@@ -236,6 +238,7 @@
             , layedit = layui.layedit
             , laydate = layui.laydate;
         $ = layui.jquery;
+        var path = $("#path").val();
         form.verify({
             required: function (value) {
                 if (value.length < 2) {
@@ -257,7 +260,6 @@
 
         });
         form.on('submit(formDemo)', function (data) {
-            var path = $("#path").val();
             $.ajax({
                 url: path + "/security/securityLogin",
                 async: true,
@@ -292,26 +294,24 @@
 
         $(function () {
             $("#code").click(function () {
-                var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/security/loginCode?"+Math.random();
 
             }),$("#bu1").click(function () {
-                var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/security/loginCode?"+Math.random();
 
             }),$("#bu3").click(function () {
-                var path = $("#path").val();
                 layer.open({
                     type: 1,
                     content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
                     title: '个人密码重置',
                     btn: ['确定', '取消'],
-                    area: ['20%', '22%'],
+                    area: ['20%', '35%'],
                     offset: ['30%'],
                     btnAlign: 'c',
                     btn1: function (index) {
+                        var securityname = $("#securityname").val();
                         var securityphone = $("#securityphone").val();
                         var num = /^1\d{10}$/;
                         if (!num.test(securityphone)) {
@@ -322,26 +322,48 @@
                                 async: true,
                                 type: 'post',
                                 data: {
-                                    "securityphone": securityphone,
+                                    "securityname": securityname,
+                                    "securityphone": securityphone
                                 },
                                 datatype: 'text',
                                 success: function (data) {
                                     if (data == "error") {
-                                        layer.alert("重置失败！", {icon: 2});
+                                        layer.msg("重置失败！", {icon: 2});
                                     } else {
                                         layer.alert("重置成功，新密码为：'123456' ", {icon: 6});
+                                        $("#securityname").val("");
+                                        $("#securityphone").val("");
                                         layer.close(index);
                                     }
                                 }, error: function (data) {
-                                    layer.alert("网络繁忙！", {icon: 2});
+                                    layer.msg("网络繁忙！", {icon: 2});
                                 }
                             });
                         }
                     }
                 });
-            }),$("#bu4").click(function () {
-                var path = $("#path").val();
+            }),$("#bu5").click(function () {
                 location.href = path + "/main/path/main";
+            }),$("#securityname").blur(function () {
+                var securityname = $("#securityname").val();
+                $.ajax({
+                    url: path + '/security/resetSecuritypwd',
+                    async: true,
+                    type: 'post',
+                    data: {
+                        "securityname": securityname
+                    },
+                    datatype: 'text',
+                    success: function (data) {
+                        if (data == "notmen") {
+                            layer.msg("对不起，不存在该用户！", {icon: 2});
+                        }else {
+                            layer.msg("存在该用户！", {icon: 6});
+                        }
+                    }, error: function (data) {
+                        layer.msg("网络繁忙！", {icon: 2});
+                    }
+                });
             });
         })
     });

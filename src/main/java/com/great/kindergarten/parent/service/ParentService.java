@@ -404,4 +404,18 @@ public class ParentService {
     }
 
 
+    public Integer findExistParentName(String parentname){
+        Map<String,String> parentmap = new LinkedHashMap<>();
+        parentmap.put("parentname",parentname);
+        return parentMapper.findExistParentName(parentmap);
+    }
+
+    @Transactional
+    public Boolean resetParentpwd(String parentname,String parentphone){
+        Map<String,String> parentmap = new LinkedHashMap<>();
+        parentmap.put("parentname",parentname);
+        parentmap.put("parentphone",parentphone);
+        return parentMapper.resetParentpwd(parentmap);
+    }
+
 }

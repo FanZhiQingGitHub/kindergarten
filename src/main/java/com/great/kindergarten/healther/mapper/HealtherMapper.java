@@ -20,6 +20,8 @@ public interface HealtherMapper {
 
     public Boolean updateHealtherPwd(Map<String, String> healthermap);
 
+    public Integer findExistHealtherName(Map<String, String> healthermap);
+
     public Boolean resetHealtherpwd(Map<String, String> healthermap);
 
     public List<TblExamination> findALLExamination(ExaminationPage examinationPage);

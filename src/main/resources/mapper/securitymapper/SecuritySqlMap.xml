@@ -55,11 +55,14 @@
     </update>
 
 
+    <!--    重置密码先查是否有这个人-->
+    <select id="findExistSecurityName" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) from tbl_security where securityname=#{securityname}
+    </select>
+
     <update id="resetSecuritypwd" parameterType="java.util.Map">
-        UPDATE tbl_security SET securitypwd = 'e10adc3949ba59abbe56e057f20f883e' where securityphone = #{securityphone};
+        UPDATE tbl_security SET securitypwd = 'e10adc3949ba59abbe56e057f20f883e' where securityname = #{securityname} and securityphone = #{securityphone}
     </update>
-
-
 
 
     <!--   主页新闻查询-->

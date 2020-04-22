@@ -68,6 +68,25 @@ public class ParentController {
         return "parentJsp/" + url;
     }
 
+    //重置密码
+    @RequestMapping("/resetParentpwd")
+    public void resetParentpwd(HttpServletRequest request, HttpServletResponse response) {
+        String parentname = request.getParameter("parentname");
+        String parentphone = request.getParameter("parentphone");
+        request.getSession().setAttribute("parentname",parentname);//存这个是因为没有登录，没有用户名，所以需要存一下，记录系统日志
+        Integer num = parentService.findExistParentName(parentname);
+        if(num > 0){
+            Boolean flag = parentService.resetParentpwd(parentname,parentphone);
+            if(flag){
+                request.getSession().removeAttribute("parentname");//重置成功后清除掉
+                ResponseUtils.outHtml(response,"success");
+            }else {
+                ResponseUtils.outHtml(response,"error");
+            }
+        }else {
+            ResponseUtils.outHtml(response,"notmen");
+        }
+    }
 
 
     @RequestMapping("/showMonitorInfo")
