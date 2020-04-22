@@ -195,29 +195,15 @@
         }
 
         #bu3:hover {
-            color: #00FFFF;
-        }
-
-        #bu4:hover {
-            color: #00FFFF;
+            color: #009688;
         }
 
         #bu3 {
             width: 30%;
             height: 8%;
             margin-left: 68%;
-            margin-top: -10%;
-            font-size: 13px;
-            background-color: transparent;
-            color: black;
-        }
-
-        #bu4 {
-            width: 30%;
-            height: 8%;
-            margin-left: 68%;
-            margin-top: 5%;
-            font-size: 13px;
+            margin-top: -20%;
+            font-size: 16px;
             background-color: transparent;
             color: black;
         }
@@ -288,9 +274,17 @@
                             立即登录
                         </button>
                         <button type="button" class="layui-btn" id="bu3">忘记密码？</button>
-                        <button type="button" class="layui-btn" id="bu4">点击此处返回首页</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="type-content" style="display: none;">
+        <div class="layui-form-item" style="margin-left: 50px;">
+            <div class="layui-inline">
+                <input type="text" id="rectorphone" placeholder="请输入11位手机号码" value=""
+                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
             </div>
         </div>
     </div>
@@ -426,11 +420,6 @@
                         }
                     }
                 });
-            });
-
-            $("#bu4").click(function () {
-                var path = $("#path").val();
-                location.href = path + "/main/path/main";
             });
         })
     });

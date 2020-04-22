@@ -1,6 +1,8 @@
 package com.great.kindergarten.healther.annotation;
 
 
+import com.great.kindergarten.commons.entity.TblSyslog;
+import com.great.kindergarten.healther.service.HealtherService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -9,9 +11,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
+import java.util.Date;
 
 /**
  * 切点类
@@ -21,8 +25,8 @@ import java.lang.reflect.Method;
 public class HealtherSystemLogAspect {
 //注入Service用于把日志保存数据库
 
-//    @Resource  //这里我用resource注解
-//    private UserService userService;
+    @Resource  //这里我用resource注解
+    private HealtherService healtherService;
 
 
     //这里的zxtest要和log4j.properties里的配置一致，否则写不到文件中
@@ -88,7 +92,7 @@ public class HealtherSystemLogAspect {
         HttpSession session = request.getSession();
 
         //读取session中的用户
-        String username = (String) session.getAttribute("username");
+        String healthername = (String) session.getAttribute("healthername");
         //请求的IP
         String ip = request.getRemoteAddr();
         if(ip.equals("0:0:0:0:0:0:0:1")){
@@ -118,28 +122,33 @@ public class HealtherSystemLogAspect {
             System.out.println("=====controller后置通知开始=====");
             System.out.println("请求方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()") + "." + operationType);
             System.out.println("方法描述:" + operationName);
-            System.out.println("请求人:" + username);
+            System.out.println("请求人:" + healthername);
             System.out.println("请求IP:" + ip);
             //*========数据库日志=========*//
-//            LogTable logTable = new LogTable();
-//            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-//            String logtime = df.format(new Date());//获取当前时间
-//
-//            logTable.setOperateor(username);
-//            logTable.setOperatetype(operationType);
-//            logTable.setOperatedetail(operationName);
-//            logTable.setOperatedate(logtime);
-//            logTable.setOperateresult("正常");
-//            logTable.setOperateip(ip);
-//            List<LogTable> logTableList = new ArrayList<>();
-//            logTableList.add(logTable);
-//
-//            //保存数据库
-//            Boolean flag = userService.addSysLogInfo(logTableList);
-//            if(flag){
-//                System.out.println(logTable);
-//                System.out.println("=====controller后置通知结束=====");
-//            }
+
+            TblSyslog log = new TblSyslog();
+            log.setOperatedetail(operationName);
+            log.setOperatetype(operationType);
+            log.setOperateip(ip);
+            log.setOperateresult("正常");
+            if(healthername != null)
+            {
+                log.setOperateor(healthername);
+            }else{
+                log.setOperateor("无");
+            }
+            System.out.println("日志记录时间"+new Date());
+            log.setOperatetime(new Date());
+
+            //保存数据库
+            Integer num = healtherService.addLog(log);
+            if(num>0){
+                System.out.println(log);
+                System.out.println("=====controller后置通知结束=====");
+            }else {
+                System.out.println(log);
+                System.out.println("=====controller后置通知异常=====");
+            }
         } catch (Exception e) {
             //记录本地异常日志
             logger.error("==后置通知异常==");

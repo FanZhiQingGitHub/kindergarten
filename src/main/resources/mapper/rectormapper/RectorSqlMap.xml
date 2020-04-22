@@ -68,15 +68,20 @@
         update tbl_rector set rectorpwd = #{rectorpwd} where rectorid = #{rectorid}
     </update>
 
-<!--    忘记密码的重置密码-->
+<!--忘记密码的重置密码-->
     <update id="resetRectorPwd" parameterType="string">
         UPDATE tbl_rector SET rectorpwd = 'e10adc3949ba59abbe56e057f20f883e' where rectorphone = #{rectorphone};
     </update>
 
+<!--查询对应的园长是不是有园所-->
+    <select id="selectkinderId" resultType="TblKinder" parameterType="integer">
+    select * from tbl_kinder where recid = #{recid}
+    </select>
+
     <!--    教师模块设计-->
     <select id="findTeacherAll" resultMap="reTeacher" parameterType="java.util.HashMap">
         select * from tbl_teacher
-        <where>1=1
+        <where> 1=1 and kinderid = #{kinderid}
             <if test="teachername != null and teachername != ''">
                 and teachername like "%"#{teachername}"%"
             </if>
@@ -86,7 +91,7 @@
     <!--    教师搜索界面的设计,查询记录条数-->
     <select id="findTeacherAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
         select count(*) from tbl_teacher
-        <where>1=1
+        <where>1=1 and kinderid = #{kinderid}
             <if test="teachername != null and teachername != ''">
                 and teachername like "%"#{teachername}"%"
             </if>
@@ -129,6 +134,7 @@
 			,teacheradd
 			,teacherphone
 			,rid
+			,kinderid
 		)values(
 			 #{teachername}
 			,#{teacherjob}
@@ -139,15 +145,15 @@
 			,#{teacheradd}
 			,#{teacherphone}
 			,#{rid}
+			,#{kinderid}
 		)
 	</insert>
-
 
     <!--幼儿管理-->
     <!--查询幼儿对应的信息-->
     <select id="findChildrenAll" resultType="TblStudent" parameterType="java.util.HashMap">
         select * from tbl_student
-        <where>1=1
+        <where>1=1 and kid = #{kid}
             <if test="studentname != null and studentname != ''">
                 and studentname like "%"#{studentname}"%"
             </if>
@@ -163,7 +169,7 @@
     <!--幼儿模块....查询记录条数-->
     <select id="findChildrenAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
         select count(*) from tbl_student
-        <where>1=1
+        <where>1=1 and kid = #{kid}
             <if test="studentname != null and studentname != ''">
                 and studentname like "%"#{studentname}"%"
             </if>
@@ -186,6 +192,7 @@
 			,studentlng
 			,studentlat
 			,studenttime
+			,kid
 		)values(
 		    #{studentname}
 			,#{studentsex}
@@ -194,7 +201,8 @@
 			,#{studentstatus}
             ,#{studentlng}
 			,#{studentlat}
-			,#{studenttime})
+			,#{studenttime}
+			,#{kid})
 	</insert>
 
     <!--对应的幼儿表格信息....删除语句信息-->
@@ -216,7 +224,7 @@
     <!--家长和学生的对应的表格的显示-->
     <select id="findParentAll" resultMap="tbl_ParentStudent" parameterType="java.util.HashMap">
         select p.*,s.studentid,s.studentname from tbl_student s,tbl_parent p
-        <where> s.pid=p.parentid
+        <where> s.pid=p.parentid and kid = #{kid}
             <if test="parentname != null and parentname != ''">
                 and p.parentname like "%"#{parentname}"%"
             </if>
@@ -232,7 +240,7 @@
     <!--家长模块....查询记录条数-->
     <select id="findParentAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
         select count(*) from tbl_student s,tbl_parent p
-        <where>s.pid=p.parentid
+        <where> s.pid=p.parentid and kid = #{kid}
             <if test="parentname != null and parentname != ''">
                 and parentname like "%"#{parentname}"%"
             </if>
@@ -247,11 +255,15 @@
     <!--对应的进行家长的新增-->
     <insert id="addParentForm" parameterType="TblParent">
 		insert into tbl_parent(parentname,parentpwd,parentsex,
-		parentage,parentadd,parentson,parentphone,parentjob,
-		parentregtime,parentstatus,parentBalance,rid)
-        values(#{parentName},'e10adc3949ba59abbe56e057f20f883e',
-        #{parentSex},#{parentAge},#{parentAdd},#{parentSon},#{parentPhone},
-        #{parentJob},#{parentRegTime},'启用','0',1);
+		parentage,parentadd,parentson,
+		parentphone,parentjob,
+		parentregtime,parentstatus,
+		rid,kid,kindername)
+        values(#{parentName},'e10adc3949ba59abbe56e057f20f883e',#{parentSex},
+        #{parentAge},#{parentAdd},#{parentSon},
+        #{parentPhone},#{parentJob},
+        #{parentRegTime},'启用',
+        1,#{kid},#{kindername});
 	</insert>
     <select id="selectParentByPid" resultType="TblParent" parameterType="string">
         select * from tbl_parent where parentname = #{parentname};
@@ -260,8 +272,8 @@
         update tbl_student set pid = #{pid} where studentname = #{studentname};
     </update>
 <!--    查找所有对应的学生表的学生信息-->
-    <select id="findChildrenParentAll" resultType="TblStudent">
-        select * from tbl_student
+    <select id="findChildrenParentAll" resultType="TblStudent" parameterType="integer">
+        select * from tbl_student where kid = #{kid}
     </select>
 
     <!--家长的删除操作-->
@@ -269,10 +281,7 @@
         delete from tbl_parent
         where parentid = #{parentId}
     </delete>
-<!--&lt;!&ndash;    家长对应的信息进行修改操作&ndash;&gt;-->
-<!--    <update id="updateChildrenByPidDown" parameterType="java.util.HashMap">-->
-<!--        update tbl_student set studentname = #{studentname} where pid = #{pid};-->
-<!--    </update>-->
+
 <!--    查询是否有这个对应的ID值，然后进行删除-->
     <select id="selectStudentByStudentId" resultType="TblStudent" parameterType="int">
         select * from tbl_student where pid = #{pid};

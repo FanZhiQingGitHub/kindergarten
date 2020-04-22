@@ -73,4 +73,6 @@ public interface SecurityMapper {
     public List<TblMonitor> findALLMonitorInfoMag(MonitorPage monitorPage);
 
     public Long findALLMonitorInfoCountMag(MonitorPage monitorPage);
+
+    public int addLog(TblSyslog log);//系统日志
 }

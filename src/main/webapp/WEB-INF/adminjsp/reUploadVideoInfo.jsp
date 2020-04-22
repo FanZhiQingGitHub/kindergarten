@@ -17,13 +17,6 @@
 		body{
 			overflow:hidden;
 		}
-		#uploadImg{
-			margin: 1% 0 0 -6%;
-		}
-		#demo1{
-			width: 50px;
-			height: 50px;
-		}
 		#save{margin-left: 30%;}
 	</style>
 </head>
@@ -45,14 +38,14 @@
 				<label class="layui-form-label">文件名称：</label>
 				<div class="layui-inline">
 					<input type="text" id="videoName3" name="videoName3" placeholder="请输入文件名称" value=""
-					       autocomplete="off" class="layui-input" style="width: 160%">
+					       autocomplete="off" class="layui-input" style="width: 160%" readonly>
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">文件地址：</label>
 				<div class="layui-inline">
 					<input type="text" id="videoAdd3" name="videoAdd3" placeholder="请输入文件地址" value=""
-					       autocomplete="off" class="layui-input" style="width: 160%">
+					       autocomplete="off" class="layui-input" style="width: 160%" readonly>
 				</div>
 			</div>
 
@@ -89,18 +82,10 @@
 			,choose:function(obj){//选择文件的回调，obj为选中的文件
 			//将每次选择的文件追加到文件队列
 			var files = obj.pushFile();
-			console.log(obj);
-			console.log(files);
-			console.log(1);
 			//预览选中的文件（本地文件）
 			obj.preview(function(index,file,result){
-				// $('#demo1').attr('src', result);
-				console.log(index);
-				console.log(result);
-				console.log(file);
-
 				$("#videoName3").val(file.name);
-				// $("#videoAdd").val();
+				$("#videoAdd3").val("videos/"+file.name);
 			});
 			}
 			,before: function(obj){

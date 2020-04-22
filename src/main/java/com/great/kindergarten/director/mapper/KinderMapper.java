@@ -87,7 +87,7 @@ public interface KinderMapper
 	public Long findClassMemberAllCount(Map<String, Object> map);
 
 	//对应的查询班级
-	public List<TblClass> findAllClassAll();
+	public List<TblClass> findAllClassAll(Integer kid);
 
 	//添加对应的班级成员信息
 	public int updateStudentByCid(Map<String, Object> map);

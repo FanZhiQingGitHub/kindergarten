@@ -22,6 +22,9 @@ public interface RectorMapper
 	//更新对应的园长端的密码是不是正确的
 	public boolean resetRectorPwd(String rectorphone);
 
+	//查询对应的园长是不是有园所
+	public TblKinder selectkinderId(Integer recid);
+
 	/*
 	 * 教师模块的设计
 	 * */
@@ -84,7 +87,7 @@ public interface RectorMapper
 	public int updateChildrenByPid(Map<String, Object> map);
 
 	//查找对应的所有学生信息
-	public List<TblStudent> findChildrenParentAll();
+	public List<TblStudent> findChildrenParentAll(Integer kid);
 
 	/*家长的删除*/
 	public int delParentTable(int parentId);

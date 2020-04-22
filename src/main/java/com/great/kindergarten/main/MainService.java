@@ -1,7 +1,9 @@
 package com.great.kindergarten.main;
 
 import com.great.kindergarten.commons.entity.TblKinder;
+import com.great.kindergarten.commons.entity.TblSyslog;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.LinkedHashMap;
@@ -24,6 +26,12 @@ public class MainService {
         kindermap.put("kindername",kindername);
         kindermap.put("kinderpwd",kinderpwd);
         return mainMapper.kinderLogin(kindermap);
+    }
+
+    @Transactional
+    public int addLog(TblSyslog log)
+    {
+        return mainMapper.addLog(log);
     }
 
 }

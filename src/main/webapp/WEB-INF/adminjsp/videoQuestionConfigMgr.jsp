@@ -256,12 +256,12 @@
 				, limit: 5
 				, limits: [5, 10]
 				, cols: [[ //表头
-					{field: 'safetyvideoid', title: '视频编号', align: 'center', width: 120, sort: true, fixed: 'left'}
-					, {field: 'safetyvideoname', title: '视频名称', align: 'center', width: 120}
-					, {field: 'videoname', title: '文件名称', align: 'center', width: 120}
-					, {field: 'safetyvideotime', title: '上传时间', align: 'center', width: 180
+					{field: 'safetyvideoid', title: '视频编号', align: 'center', width: 160, sort: true, fixed: 'left'}
+					, {field: 'safetyvideoname', title: '视频名称', align: 'center', width: 200}
+					, {field: 'videoname', title: '文件名称', align: 'center', width: 260}
+					, {field: 'safetyvideotime', title: '上传时间', align: 'center', width: 240
 					   ,templet:"<div>{{layui.util.toDateString(d.safetyvideotime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
-					, {fixed: 'right', title: '操作', align: 'center', width: 260, toolbar: '#barOption'}
+					, {fixed: 'right', title: '操作', align: 'center', width: 282, toolbar: '#barOption'}
 				]]
 				, id: 'videoQuestionTable'
 				, parseData: function (res) { //res 即为原始返回的数据
@@ -281,18 +281,13 @@
 					var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 					if(layEvent === 'configItems') {
 						var data2 = "";
-						layer.confirm("确定要配置试题吗？", {icon: 3, title: '温馨提示'}, function (index) {
-							layer.close(index);
-							// location.href = path+"/admin/toUrl/configItemsMgr";
-							// var index1 = parent.layer.open({
-							var index1 = layer.open({
+							layer.open({
 								type: 1,
 								area: ['70%', '90%'],
 								// content: path+"/admin/toUrl/configItemsMgr", //数组第二项即吸附元素选择器或者DOM
 								content: $("#type-content3"),
 								title: '配置试题',
 								btn: ['保存', '取消'],
-								// offset: ['60px','300px'],
 								offset: ['30px','200px'],
 								btnAlign: 'c',
 								success:function (layero, index) {
@@ -326,8 +321,6 @@
 													"<td colspan='4' id='td1' style='font-size: 90%;'>" +
 													"<input type='radio' class='rad' name='answer" + safetyvtqid + "' value='" + bvalue + "' >" + b + "</td>" +
 													"</tr>";
-
-												// console.log(data2[i].safetyvtqname + " " + data2[i].safetyvtqid + " " + data2[i].safetyvideoname);
 											}
 											$("#configItems").append(opt);
 											$("#title").val(data.safetyvideoname);
@@ -340,34 +333,6 @@
 									window.location.reload();
 								}
 							});
-							// $.ajax({
-							// 		url: path + "/admin/findAllSafetyVideoItemsInfo",
-							// 		type: "post",
-							// 		data: {"safetyvideoid": data.safetyvideoid,},
-							// 		dataType: "json",
-							// 		success: function (result) {
-							// 			console.log(result);
-							// 			var data2 = eval(result);
-							// 			var opt = "";
-							// 			for(var i in data2)
-							// 			{
-							// 				var safetyvtqid = data2[i].safetyvtqid;
-							// 				var safetyvtqname = data2[i].safetyvtqname;
-							// 				var a = data2[i].a;
-							// 				var avalue = data2[i].avalue;
-							// 				var b = data2[i].b;
-							// 				var bvalue = data2[i].bvalue;
-							// 				opt += "<tr><td colspan='4' id='top' style='font-size: 75%;' >" + safetyvtqid + "." + safetyvtqname + "</td></tr>";
-							// 				opt += "<tr><td colspan='4' id='td1' style='font-size: 75%'><input type='radio' class='rad' name='answer" + safetyvtqid + "' value='" + avalue + "' >" + a + "</td><td colspan='4' id='td1' style='font-size: 75%'><input type='radio' class='rad' name='answer" + safetyvtqid + "' value='" + bvalue + "' >" + b + "</td></tr>";
-							//
-							// 				// console.log(data2[i].safetyvtqname + " " + data2[i].safetyvtqid + " " + data2[i].safetyvideoname);
-							// 			}
-							// 			console.log(opt);
-							// 			$("#configItems").after(opt);
-							// 			$("#configItems").show();
-							// 		}
-							// 	});
-						});
 					}
 				});
 			});
@@ -388,8 +353,6 @@
 					},
 					success : function(layero, index) {
 						var id = $("#id").val();
-						layer.alert(id);
-						var body = layer.getChildFrame('body',index);
 						$("#safetyVideoId").val(id);
 					},
 					btn1: function (index) {
@@ -451,7 +414,6 @@
 												"</tr>";
 										}
 										$("#configItems").append(opt);
-										// $("#title").val(data.safetyvideoname);
 										tableIns.reload();
 									}
 								}, error: function (data) {
@@ -528,34 +490,7 @@
 					title: '上传视频',
 					// btn: ['保存', '取消'],
 					offset: '100px',
-					btnAlign: 'c',
-					// btn1: function (index) {
-					// 	var safetyVideoName = $("#safetyVideoName").val();
-					// 	var videoName = $("#videoName").val();
-					// 	var videoAdd = $("#videoAdd").val();
-					// 	if (safetyVideoName.length == 0) {
-					// 		layer.alert("请输入视频名称", {icon: 2});
-					// 	}  else {
-					// 		$.ajax({
-					// 			url: path + '/admin/addSafetyVideo',
-					// 			async: true,
-					// 			type: 'post',
-					// 			data: {"safetyvideoname":safetyVideoName,"videoname":videoName,"videoadd":videoAdd},
-					// 			datatype: 'text',
-					// 			success: function (data) {
-					// 				if (data == "success") {
-					// 					layer.alert("新增成功！", {icon: 6});
-					// 					layer.close(index);
-					// 					tableIns.reload();
-					// 				} else {
-					// 					layer.alert("新增失败", {icon: 2});
-					// 				}
-					// 			}, error: function (data) {
-					// 				layer.alert("网络繁忙！", {icon: 2});
-					// 			}
-					// 		});
-					// 	}
-					// },
+					btnAlign: 'c'
 				});
 			});
 
@@ -586,16 +521,6 @@
 				tableIns.reload();
 			});
 
-			// $(function () {
-			// 	$("#btn1").click(function (node) {
-			// 		var topName = $(node).parent().parent('tr').text();
-			// 		alert(topName);
-			// 	});
-			// 	// function deleteTopic(node){
-			// 	// 	var topName = $(node).parent().parent('tr').text();
-			// 	// 	alert(topName);
-			// 	// }
-			// })
 		});
 		var path = $("#path").val();
 		function deleteTopic(node){
@@ -635,11 +560,9 @@
 					data: {"safetyvtqname":topName.split(".")[1],"safetyvtqid":topName.split(".")[0]},
 					dataType: "json",
 					success: function (msg) {
-						console.log(msg);
 						if (msg == "error") {
 							layer.alert("无相关记录",{icon:2})
 						} else {
-							// var param = JSON.parse(msg);
 							for(var i in eval(msg))
 							{
 								$("#safetyvtqid").val(eval(msg)[i].safetyvtqid);
@@ -669,7 +592,6 @@
 					success : function(layero, index) {
 						$("#safetyVideoName5").val($("#title").val());
 						$("#topicName2").val(topName.split(".")[1]);
-						console.log($("#safetyVideoName5").val($("#title").val()));
 					},
 					btn1: function (index) {
 						var safetyvtqid = $("#safetyvtqid").val()
@@ -694,7 +616,7 @@
 										layer.alert("修改成功！", {icon: 6});
 										setTimeout(function () {
 											location.reload(); //再执行关闭
-										}, 6000);
+										}, 3000);
 									} else {
 										layer.alert("修改失败", {icon: 2});
 									}

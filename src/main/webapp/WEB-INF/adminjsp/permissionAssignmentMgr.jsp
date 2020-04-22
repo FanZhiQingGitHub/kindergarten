@@ -26,7 +26,7 @@
 </head>
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
-	<h2>角色信息</h2>
+	<h2>权限管理</h2>
 	<table id="roleInfo" lay-filter="role" class="layui-table-cell"></table>
 	<script type="text/html" id="barOption">
 		<button type="button" class="layui-btn layui-btn-normal" lay-event="update" style="text-align: -moz-center"><i class="layui-icon">&#xe642;权限分配</i></button>
@@ -57,9 +57,9 @@
 			, limit: 5
 			, limits: [5, 10]
 			, cols: [[ //表头
-				{field: 'roleid', title: '序号', align: 'center', width: 100, sort: true, fixed: 'left'}
-				,{field: 'rolename', title: '角色名称', align: 'center', width: 100}
-				, {fixed: 'right', title: '操作', align: 'center', width: 268, toolbar: '#barOption'}
+				{field: 'roleid', title: '序号', align: 'center', width: 128, sort: true, fixed: 'left'}
+				,{field: 'rolename', title: '角色名称', align: 'center', width: 431}
+				, {fixed: 'right', title: '操作', align: 'center', width: 586, toolbar: '#barOption'}
 			]]
 			, id: 'role'
 			, parseData: function (res) { //res 即为原始返回的数据
@@ -79,21 +79,17 @@
 				data = obj.data; //获得当前行数据
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if (layEvent === 'update') {
-					layer.confirm("确定要重新配置权限？", {icon: 3, title: '温馨提示'}, function (index) {
-						layer.close(index);
-						layer.open({
-							type:2
-							,title:"权限分配"
-							,area:['35%','80%']
-							,shade:0.3
-							,offset:'5%'
-							// ,shadeClose: true //点击遮罩不会关闭
-							,content:path+"/admin/toUrl/menuPortion"
-							,success : function(layero, index) {
-								var body = layer.getChildFrame('body',index);
-								body.find("#rid").val(data.roleid);
-							}
-						});
+					layer.open({
+						type:2
+						,title:"权限分配"
+						,area:['35%','80%']
+						,shade:0.3
+						,offset:'5%'
+						,content:path+"/admin/toUrl/menuPortion"
+						,success : function(layero, index) {
+							var body = layer.getChildFrame('body',index);
+							body.find("#rid").val(data.roleid);
+						}
 					});
 				}
 			});

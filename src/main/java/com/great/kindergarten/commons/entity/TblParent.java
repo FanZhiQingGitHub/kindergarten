@@ -32,6 +32,7 @@ public class TblParent
 	private String time1;
 	private String time2;
 
+	private Integer kid;
 	private String kindername;
 
 	public TblParent()
@@ -239,6 +240,16 @@ public class TblParent
 	public void setTime2(String time2)
 	{
 		this.time2 = time2;
+	}
+
+	public Integer getKid()
+	{
+		return kid;
+	}
+
+	public void setKid(Integer kid)
+	{
+		this.kid = kid;
 	}
 
 	@Override

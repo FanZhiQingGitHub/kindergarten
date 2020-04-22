@@ -5,6 +5,7 @@ import com.great.kindergarten.admin.mapper.SystemLogMapper;
 import com.great.kindergarten.commons.entity.TblSyslog;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class SystemLogService
 	@Resource
 	private SystemLogMapper systemLogMapper;
 
+	@Transactional
 	public int addLog(TblSyslog log)
 	{
 		return systemLogMapper.addLog(log);

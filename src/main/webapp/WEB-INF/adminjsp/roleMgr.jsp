@@ -29,7 +29,7 @@
 	<h2>角色信息</h2>
 	<div class="layui-row" style="margin-top: 20px;">
 		<form class="layui-form" action="" onsubmit="return false;" >
-			<div class="roleTable">
+			<div class="roleTable" style="margin-left: 5%;">
 				<div class="layui-block">查询条件：</div>
 				<div class="layui-inline" >
 					<label class="layui-form-label">角色名称：</label>
@@ -91,9 +91,9 @@
 			, limit: 5
 			, limits: [5, 10]
 			, cols: [[ //表头
-				{field: 'roleid', title: '序号', align: 'center', width: 100, sort: true, fixed: 'left'}
-				,{field: 'rolename', title: '角色名称', align: 'center', width: 100}
-				, {fixed: 'right', title: '操作', align: 'center', width: 268, toolbar: '#barOption'}
+				{field: 'roleid', title: '序号', align: 'center', width: 128, sort: true, fixed: 'left'}
+				,{field: 'rolename', title: '角色名称', align: 'center', width: 431}
+				, {fixed: 'right', title: '操作', align: 'center', width: 586, toolbar: '#barOption'}
 			]]
 			, id: 'role'
 			, parseData: function (res) { //res 即为原始返回的数据
@@ -111,35 +111,31 @@
 			//监听工具条
 			table.on('tool(role)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 				data = obj.data; //获得当前行数据
-				console.log(data);
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if (layEvent === 'update') {
-					layer.confirm("确定要修改？", {icon: 3, title: '温馨提示'}, function (index) {
-						layer.close(index);
-						layer.prompt({
-								formType: 0,
-								id: "remarksPrompt",
-								value: '',
-								title: '修改角色名字信息'
-							},
-							function (value, index, elem) {
-								layer.close(index);
-								//向服务端发送修改指令
-								$.ajax({
-									url: path + "/admin/updateRoleInfo",
-									type: "post",
-									data: {"roleid": data.roleid, "rolename": value},
-									dataType: "text",
-									success: function (result) {
-										if (result == "success") {
-											layer.alert('角色名字修改成功！',{icon: 6});
-										} else {
-											layer.alert('角色名字修改失败！',{icon: 2});
-										}
-										tableIns.reload();    //状态修改之后,刷新表格
+					layer.prompt({
+							formType: 0,
+							id: "remarksPrompt",
+							value: '',
+							title: '修改角色名字信息'
+						},
+						function (value, index, elem) {
+							layer.close(index);
+							//向服务端发送修改指令
+							$.ajax({
+								url: path + "/admin/updateRoleInfo",
+								type: "post",
+								data: {"roleid": data.roleid, "rolename": value},
+								dataType: "text",
+								success: function (result) {
+									if (result == "success") {
+										layer.alert('角色名字修改成功！',{icon: 6});
+									} else {
+										layer.alert('角色名字修改失败！',{icon: 2});
 									}
-								});
-							});
+									tableIns.reload();    //状态修改之后,刷新表格
+								}
+						});
 					});
 				}else if(layEvent === 'delete'){
 					layer.confirm("确定要删除该角色信息？",{icon:3,title:'温馨提示'},function (index) {

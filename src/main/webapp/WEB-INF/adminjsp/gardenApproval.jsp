@@ -14,12 +14,18 @@
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/layui/css/layui.css"/>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/image/adminimg/css/gardenApproval.css"/>
 	<script src="${pageContext.request.contextPath}/layui/layui.js"></script>
+	<style>
+		div{
+			margin-left: 10%;
+		}
+		.layui-input{
+			width: 120%;
+		}
+	</style>
 </head>
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
-	<div class="layui-main garden">
-	<form id="garden" class="layui-form layui-from-pane" action="${pageContext.request.contextPath}/updateServlet" lay-filter="test1" style="margin-top:20px" method="post">
-
+	<form id="garden" class="layui-form layui-from-pane" action="" lay-filter="test1" style="margin-top:20px" method="post">
 		<div class="layui-form-item">
 			<label class="layui-form-label">幼儿园名称</label>
 			<div class="layui-input-inline">
@@ -92,10 +98,9 @@
 <%--		<div class="layui-form-item" style="margin-top:20px">--%>
 <%--			<div class="layui-input-block">--%>
 <%--				<button class="layui-btn " lay-filter="demo11">允许</button>--%>
-<%--				<button class="layui-btn layui-btn-normal">拒绝</button>--%>
+<%--				<button class="layui-btn layui-btn-normal" lay-filter="demo12">拒绝</button>--%>
 <%--			</div>--%>
 <%--		</div>--%>
 	</form>
-	</div>
 </body>
 </html>
