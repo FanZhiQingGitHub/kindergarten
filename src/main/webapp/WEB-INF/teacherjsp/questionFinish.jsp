@@ -40,10 +40,10 @@
 	</div>
 	<div class="layui-input-block" >
 		<label class="layui-form-label" >完成状态：</label>
-		<select name="finishStatus" id="finishStatus" lay-verify="required" style="height: 30px">
-			<option value="" >请选择完成状态</option>
-			<option value="已完成" selected>已完成</option>
-			<option value="未完成" selected>未完成</option>
+		<select name="finishStatus" id="finishStatus" lay-verify="required" style="height: 30px" >
+			<option value="" selected="selected">请选择完成状态</option>
+			<option value="已完成" >已完成</option>
+			<option value="未完成" >未完成</option>
 		</select>
 	</div>
 	<div class="layui-form-item" style="text-align: right;padding-right: 10%;">
@@ -136,6 +136,7 @@
 		// 查询
 		$('.demoTable .layui-btn').on('click', function () {
 			console.log("查询进来");
+			console.log($('#finishStatus').val());
 			var type = $(this).data('type');
 			if (type == 'reload') {
 

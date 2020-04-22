@@ -34,6 +34,14 @@ public class TeacherService {
 
         return teacherMapper.checkPwd(teacherid);
     }
+    //获取园所动态news
+    public List<TblCampus> findKinderNews(Integer kinderid){
+        Map<String, Object> KinderNewsmap = new LinkedHashMap<>();
+        KinderNewsmap.put("kinderid",kinderid);
+        return teacherMapper.findKinderNews(KinderNewsmap);
+    }
+
+    //修改密码
     @Transactional
     public Boolean updateTeacherPwd(String teacherpwd,String teacherid){
         Map<String,String> teacherMap = new LinkedHashMap<>();

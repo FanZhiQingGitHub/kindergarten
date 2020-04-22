@@ -18,7 +18,8 @@ public interface TeacherMapper {
 	public Boolean updateTeacherPwd(Map<String, String> teacherMap);
 	public TblTeacher checkPwd(Integer teacherid);
 	public TblClass findClassAll(Integer cid);
-
+	//获取园所动态news
+	public List<TblCampus> findKinderNews(Map<String, Object> KinderNewsmap);
 
 	//根据班级id，当前时间查找课程信息
 	public List<TblCourse> findCourseByTodayCid(HashMap<String,Object> dataHashMap);

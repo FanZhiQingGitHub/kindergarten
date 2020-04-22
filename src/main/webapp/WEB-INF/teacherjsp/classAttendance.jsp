@@ -111,8 +111,8 @@
 					type: 2,
 					area: ['80%', '80%'],
 					offset: ['10%', '9.5%'],
-					title: '智慧幼儿园-宝宝考勤以及详细接送信息',
-					content: path + '/teacher/toUrl/studentAttendance?studentid='+data.studentid+",studentname="+data.studentname+",studentsex="+data.studentsex //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					title: '智慧幼儿园-宝宝考勤以及详细接送信息'
+					,content: path + '/teacher/studentAttendance?studentid='+data.studentid //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 					, success: function (layero, index) {
 						var body = layer.getChildFrame("body", index);
 						//	显示
@@ -123,12 +123,12 @@
 						$(window.frames[frameId].document).find("#studentname").val(data.studentname);
 						$(window.frames[frameId].document).find("#studentsex").val(data.studentsex);
 
-
-
-
-
 					}
+
+
+
 				});
+
 
 			}
 		});

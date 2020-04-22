@@ -124,10 +124,24 @@
             </if>
         </where>
     </select>
+
+    <!--   查找园所动态news-->
+    <select id="findKinderNews" resultType="com.great.kindergarten.commons.entity.TblCampus" parameterType="java.util.Map">
+        select cam.campusinfoid,cam.campusinfoname,cam.campustime,cam.campusinfodetail,cam.kid from tbl_campusinfo cam , tbl_kinder kin
+
+        <where>
+            cam.kid = kin.kinderid
+            <if test="kinderid != '' and kinderid != null ">
+                and kin.kinderid = #{kinderid}
+            </if>
+        </where>
+    </select>
+
     <!--       根据id查信息-->
     <select id="checkPwd" resultMap="teacherMap" parameterType="java.lang.Integer">
         select * from tbl_teacher where teacherid = #{teacherid};
     </select>
+
     <!--修改密码-->
     <update id="updateTeacherPwd" parameterType="java.util.Map">
         UPDATE tbl_teacher SET teacherpwd = #{teacherpwd} where teacherid = #{teacherid};
@@ -249,9 +263,15 @@
             <if test="endDate != '' and endDate != null">
                 and safetytestfinshtime &lt;= #{endDate}
             </if>
-            <if test="finishStatus != '' and finishStatus != null">
-                and  safetytestresult =#{finishStatus}
+            <if test="finishStatus == '已完成' and finishStatus != '' and finishStatus != null">
+                and  tbls.safetytestresult =#{finishStatus}
             </if>
+
+            <if test="finishStatus == '未完成' and finishStatus != '' and finishStatus != null">
+                and  tbls.safetytestresult is null
+            </if>
+
+
         </where>
         order by t.safetyfinishtime desc,t.studentid
         )c;
@@ -285,8 +305,13 @@
             <if test="endDate != '' and endDate != null">
                 and tbls.safetytestfinshtime &lt;= #{endDate}
             </if>
-            <if test="finishStatus != '' and finishStatus != null">
+
+            <if test="finishStatus == '已完成' and finishStatus != '' and finishStatus != null">
                 and  tbls.safetytestresult =#{finishStatus}
+            </if>
+
+            <if test="finishStatus == '未完成' and finishStatus != '' and finishStatus != null">
+                and  tbls.safetytestresult is null
             </if>
         </where>
         order by t.safetyfinishtime desc,t.studentid
@@ -359,4 +384,5 @@
         (clamsgdetail,cid,sendmsgtime)
         values (#{clamsgdetail},#{cid},#{sendmsgtime});
     </insert>
+
 </mapper>

@@ -47,6 +47,7 @@ public class TeacherController {
 	//    private TblWorkrelease tblWorkrelease;
 	@Resource
 	private TeacherService teacherService;
+
 	@Resource
 	private TblCourse tblCourse;
 	@Resource
@@ -84,7 +85,7 @@ public class TeacherController {
 		try {
 			int width = 60;
 			int height = 30;
-			String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
+			String data = "QWERTYUIOPASDFGHJKZXCVBNMqwertyuiopasdfghjkzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
 			Random random = new Random();//随机类
 			//1 创建图片数据缓存区域（核心类）
 			BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);//创建一个彩色的图片
@@ -159,12 +160,13 @@ public class TeacherController {
 				List<TblTeacher> tblTeacherList=new ArrayList<>();
 
 				if (null!=tblTeacher1){
-
+                    //查找园所动态news
+					List<TblCampus> tblCampusList = teacherService.findKinderNews(tblTeacher1.getKinderid());
+					request.getSession().setAttribute("tblCampusList", tblCampusList);
 					request.getSession().setAttribute("teachername",tblTeacher1.getTeachername());
 					// 存信息到页面显示
 					request.getSession().setAttribute("classname",tblClass.getClassname());
 					tblTeacherList.add(tblTeacher1);
-
 					request.getSession().setAttribute("tblTeacher1",tblTeacher1);
 					request.getSession().setAttribute("tblTeacherList",tblTeacherList);
 
@@ -294,6 +296,7 @@ public class TeacherController {
 		System.out.println("所有tblClassList="+tblClassList);
 		return tblClassList;
 	}
+
 	//查找所有安全视频名称
 	@RequestMapping(value="/selectVideoName")
 	@ResponseBody
@@ -720,7 +723,7 @@ public class TeacherController {
 		//给请求加上题目
 		request.setAttribute("subject",subject);
 		//转发
-		return "parentJsp/SafetyTestQuestion";
+		return "teacherjsp/SafetyTestQuestion";
 	}
 
 	//问题完成情况
@@ -747,6 +750,7 @@ public class TeacherController {
 		}
 		if (null != finishStatus && !"".equals(finishStatus.trim())) {
 			dataHashMap.put("finishStatus", finishStatus);
+			System.out.println("选择完成状态="+finishStatus);
 		}
 		dataHashMap.put("pageInt",pageInt);
 		dataHashMap.put("limitInt",limitInt);
@@ -811,6 +815,20 @@ public class TeacherController {
 		}
 		return null;
 	}
+	//显示学生考勤页面
+
+	@RequestMapping(value="/studentAttendance")
+	public String studentAttendance(HttpServletRequest request){
+		System.out.println("学生考勤进去");
+//		获取学生id
+		String studentid = request.getParameter("studentid");//本周学生id
+		System.out.println("studentid1="+studentid);
+		//对学生考勤页面隐藏input 赋值
+
+		request.getSession().setAttribute("studentid",studentid);
+		//转发
+		return "teacherjsp/studentAttendance";
+	}
 	//学生考勤
 	//	孩子详细接送信息，含考勤
 	@RequestMapping(value="/showPickUpDetailInfo")
@@ -824,7 +842,7 @@ public class TeacherController {
 		String startdate = request.getParameter("startdate");//周一日期
 		String enddate = request.getParameter("enddate");//周日日期
 		String sid = request.getParameter("studentid");//上下周 学生id
-
+        System.out.println("学生考勤学生id="+sid);
 		String mondaydate = null;
 		String sundaydate = null;
 
@@ -943,7 +961,7 @@ public class TeacherController {
 			// 重命名文件,获取路径
 			String path=path2+"/"+filename;
 			System.out.println("path="+path);
-			//创建文件
+			//文件是否存在  如果没有就新建一个
 			File tempFile=new File(path);
 			if(!tempFile.exists()){
 				tempFile.mkdirs();

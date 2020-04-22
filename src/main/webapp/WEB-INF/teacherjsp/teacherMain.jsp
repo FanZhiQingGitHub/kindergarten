@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 <head>
@@ -149,6 +150,39 @@
 		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="classMessageInform">班<br/>级<br/>通<br/>知</button>
 		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="chatParent">联<br/>系<br/>家<br/>长</button>
 
+	</div>
+	<div class="prod-show" style="max-width: 80%;">
+		<div class="layui-fluid">
+			<div class="row layui-col-space12 layui-clear">
+				<div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
+					<div class="img-txt">
+						<h3 style="text-align: left">园所动态News</h3>
+						<div style=" overflow:auto;">
+							<a><img style="width: 100%"
+							        src="${pageContext.request.contextPath}/image/healtherimg/img/news.jpg"></a>
+						</div>
+						<div style=" overflow:auto;">
+							<c:if test="${not empty tblCampusList}">
+								<c:forEach items="${tblCampusList}" var="i" step="1">
+									<a href="javascript:;" style="font-size: 18px" class="showNewsInfo">${i.campusinfoname}:  ${i.campusinfodetail}
+										<br/>
+										发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></a><br>
+								</c:forEach>
+							</c:if>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
+					<div class="img-txt">
+						<h3 style="text-align: left">园所视频Videos</h3>
+						<div style=" overflow:auto;">
+							<a href="javascript:void(0);" id="playVideos">
+								<img style="width: 100%" src="${pageContext.request.contextPath}/image/photos/directorvideo.png"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -373,7 +407,7 @@
 					}
 				});
 			});
-			//个人打卡
+			//个人打卡  人脸识别
 			$(".addTeaAttendTime").click(function () {
 				// var path = $("#path").val();
 				// var weekInfo = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
@@ -415,7 +449,19 @@
 			});
 			return false;
 		});
-
+		//点击查看园所视频
+		$("#playVideos").click(function () {
+			//打开一个窗口播放视频
+			layer.open({
+				//打开一个窗口播放视频
+				type: 1,
+				area: ['75%', '85%'],
+				title:'园所宣传视频',
+				content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
+					'<source src="${pageContext.request.contextPath}/videos/farmPropaganda.mp4" type="video/mp4"></source></video>'
+				//直接跳出一个标签播放视频
+			});
+		});
 
 	});
 </script>

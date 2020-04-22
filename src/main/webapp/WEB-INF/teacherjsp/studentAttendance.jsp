@@ -21,7 +21,7 @@
 
 <input type="hidden" id="start" value="1">
 <input type="hidden" id="end" value="7">
-<input type="hidden" name="studentid" id="studentid">
+<input type="hidden" name="studentid" id="studentid" value="${studentid}">
 <div class="layui-fluid">
 
 
@@ -110,8 +110,8 @@
 				$.ajax({
 					url: path + '/teacher/showPickUpDetailInfo',
 					type: 'post',
-					// data: {'studentid': studentid,'startdate':startdate,'enddate':enddate},
-					data: {'startdate':startdate,'enddate':enddate},
+					data: {'studentid': studentid,'startdate':startdate,'enddate':enddate},
+
 					datatype: 'text',
 					success:function (msg) {
 						if(msg == "error"){
@@ -218,8 +218,8 @@
 					url: path + '/teacher/showPickUpDetailInfo',
 					async: true,
 					type: 'post',
-					data: {'startdate':startdate,'enddate':enddate},
-					// data: {'studentid': studentid,'startdate':startdate,'enddate':enddate},
+
+					data: {'studentid': studentid,'startdate':startdate,'enddate':enddate},
 					datatype: 'text',
 					success:function (msg) {
 						if(msg == "error"){
@@ -313,7 +313,7 @@
 				url: path + '/teacher/showPickUpDetailInfo',
 				async: true,
 				type: 'post',
-				// data: {'sid': $("#studentid").val()},   //出bug
+				data: {'studentid': $("#studentid").val()},
 				datatype: 'text',
 				success: function (msg) {
 					if(msg == "error"){

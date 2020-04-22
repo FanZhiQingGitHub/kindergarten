@@ -211,7 +211,7 @@
             </div>
 
             <div id="butdiv">
-                <button type="button" class="layui-btn" id="bu3">忘记密码？</button>
+<%--                <button type="button" class="layui-btn" id="bu3">忘记密码？</button>--%>
                 <button type="button" class="layui-btn" id="bu4">点击此处返回首页</button>
             </div>
         </div>
