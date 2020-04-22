@@ -1,6 +1,7 @@
 package com.great.kindergarten.main;
 
 import com.great.kindergarten.commons.entity.TblKinder;
+import com.great.kindergarten.main.annotation.MainSystemLog;
 import com.great.kindergarten.util.FaceRecognitionUtils;
 import com.great.kindergarten.util.MD5Utils;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,7 @@ public class MainController {
         return "mainjsp/Login";
     }
 
+    @MainSystemLog(operationType = "登录", operationName = "幼儿园登录")
     @RequestMapping("/mainLogin")
     public void mainLogin(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response) {
         kindername = tblKinder.getKindername();

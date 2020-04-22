@@ -181,4 +181,10 @@ public class SecurityService {
         return securityMapper.findALLMonitorInfoCountMag(monitorPage);
     }
 
+    @Transactional
+    public int addLog(TblSyslog log)
+    {
+        return securityMapper.addLog(log);
+    }
+
 }

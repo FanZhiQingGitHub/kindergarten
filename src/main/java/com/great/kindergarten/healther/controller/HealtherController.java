@@ -2,6 +2,7 @@ package com.great.kindergarten.healther.controller;
 
 import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
+import com.great.kindergarten.healther.annotation.HealtherSystemLog;
 import com.great.kindergarten.healther.resultbean.ExaminationPage;
 import com.great.kindergarten.healther.resultbean.MealPage;
 import com.great.kindergarten.healther.service.HealtherService;
@@ -47,8 +48,7 @@ public class HealtherController {
         try {
             int width = 60;
             int height = 30;
-//            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
-            String data = "0000";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
+            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
             Random random = new Random();//随机类
             //1 创建图片数据缓存区域（核心类）
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);//创建一个彩色的图片
@@ -92,6 +92,7 @@ public class HealtherController {
         }
     }
 
+    @HealtherSystemLog(operationType = "登录", operationName = "保健员登录")
     @RequestMapping("/healtherLogin")
     public void healtherLogin(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
         healthername = tblHealther.getHealthername();
@@ -122,6 +123,7 @@ public class HealtherController {
         }
     }
 
+    @HealtherSystemLog(operationType = "重置密码", operationName = "保健员重置密码")
     @RequestMapping("/resetHealtherpwd")
     public void resetHealtherpwd(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
         Boolean flag = healtherService.resetHealtherpwd(tblHealther.getHealtherphone());
@@ -144,6 +146,7 @@ public class HealtherController {
         }
     }
 
+    @HealtherSystemLog(operationType = "修改", operationName = "保健员修改密码")
     @RequestMapping("/updateHealtherpwd")
     public void updateHealtherpwd(HttpServletRequest request, HttpServletResponse response) {
         TblHealther tblHealther = healtherService.findHealtherId(healthername);
@@ -191,6 +194,7 @@ public class HealtherController {
         }
     }
 
+    @HealtherSystemLog(operationType = "修改", operationName = "保健员修改体检信息")
     @RequestMapping("/updateExaminationInfo")
     public void updateExaminationInfo(TblExamination tblExamination, HttpServletResponse response) {
         Boolean flag = healtherService.updateExaminationInfo(tblExamination);
@@ -201,6 +205,7 @@ public class HealtherController {
         }
     }
 
+    @HealtherSystemLog(operationType = "增加", operationName = "保健员新增体检信息")
     @RequestMapping("/addExaminationInfo")
     public void addExaminationInfo(TblExamination tblExamination, HttpServletResponse response) throws ParseException {
         Integer studentid = healtherService.findStudentId(tblExamination.getStudentname());
@@ -208,11 +213,7 @@ public class HealtherController {
             ResponseUtils.outHtml(response, "notname");
         } else {
             tblExamination.setSid(studentid);
-
-
             tblExamination.setExaminationtime(new Date());
-
-            System.out.println("tblExamination=" + tblExamination);
             List<TblExamination> tblExaminationList = new ArrayList<>();
             tblExaminationList.add(tblExamination);
             Boolean flag = healtherService.addExaminationInfo(tblExaminationList);
@@ -253,6 +254,7 @@ public class HealtherController {
         }
     }
 
+    @HealtherSystemLog(operationType = "增加", operationName = "保健员新增食谱信息")
     @RequestMapping("/addMealInfo")
     public void addMealInfo(TblMeal tblMeal, TblRecipe tblRecipe, HttpServletRequest request, HttpServletResponse response) throws ParseException {
         String msg = request.getParameter("TblRecipe");
@@ -335,6 +337,7 @@ public class HealtherController {
         }
     }
 
+    @HealtherSystemLog(operationType = "修改", operationName = "保健员修改食谱信息")
     @RequestMapping("/updateMealInfo")
     public void updateMealInfo(TblMeal tblMeal, TblRecipe tblRecipe, HttpServletRequest request, HttpServletResponse response) throws ParseException {
         String msg = request.getParameter("TblRecipe");

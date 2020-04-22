@@ -129,4 +129,10 @@ public class HealtherService {
         KinderNewsmap.put("kindername",kindername);
         return healtherMapper.findHealtherNews(KinderNewsmap);
     }
+
+    @Transactional
+    public int addLog(TblSyslog log)
+    {
+        return healtherMapper.addLog(log);
+    }
 }
