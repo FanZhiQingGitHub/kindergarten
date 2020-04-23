@@ -20,6 +20,7 @@
 			line-height: 40px;
 		}
 		h2{
+			margin-top: 2%;
 			text-align: center;
 		}
 	</style>
@@ -27,7 +28,6 @@
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
 	<h2>权限管理</h2>
-	<hr style="color: whitesmoke">
 	<table id="roleInfo" lay-filter="role" class="layui-table-cell"></table>
 	<script type="text/html" id="barOption">
 		<button type="button" class="layui-btn layui-btn-normal" lay-event="update" style="text-align: -moz-center"><i class="layui-icon">&#xe642;权限分配</i></button>

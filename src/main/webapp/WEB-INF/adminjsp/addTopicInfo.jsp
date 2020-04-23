@@ -18,16 +18,11 @@
 			text-align: center;
 		}
 
-		.layui-table-cell {
-			height: 40px;
-			line-height: 40px;
-		}
 	</style>
 </head>
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
 	<input type="hidden" id="safetyVideoId" name="safetyVideoId">
-	<%--	<h3>新增题目</h3>--%>
 	<div class="layui-form-item">
 		<label class="layui-form-label">题目：</label>
 		<div class="layui-inline">

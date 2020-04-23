@@ -104,45 +104,13 @@
 				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
 				setTimeout(function () {
 					parent.layer.close(index); //再执行关闭
-				}, 6000);
+				}, 3000);
 			}
 			,error: function(){
 				//请求异常回调
 				layer.alert("上传失败！",{icon:2});
 			}
 		});
-
-		// $(function () {
-		// 	$("#cancel").click(function () {
-		// 		layer.closeAll();
-		// 	})
-		// })
-		
-		//搜索功能的实现
-		// $('.demoTable .layui-btn').on('click', function () {
-		// 	var type = $(this).data('type');
-		// 	active[type] ? active[type].call(this) : '';
-		// });
-
-		// var $ = layui.$, active = {
-		// 	reload: function () {
-		// 		//执行重载
-		// 		table.reload('demotable', {
-		// 			where: {
-		// 				time1: $('#time1').val()
-		// 				, time2: $('#time2').val()
-		// 			}
-		// 			, page: {
-		// 				curr: 1
-		// 			}
-		// 		});
-		// 	}
-		// };
-
-		// // 刷新表格
-		// $('#btn-refresh').on('click', function () {
-		// 	tableIns.reload();
-		// });
 	});
 </script>
 </html>

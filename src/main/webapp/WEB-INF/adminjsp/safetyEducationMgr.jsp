@@ -33,7 +33,6 @@
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
 	<h2 >安 全 教 育 管 理</h2>
-	<hr style="color: whitesmoke">
 	<div class="layui-row" >
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="educationTable">
@@ -156,7 +155,8 @@
 				, limits: [5, 10]
 				, cols: [[ //表头
 					{field: 'safetyvideoid', title: '视频编号', align: 'center', width: 120, sort: true, fixed: 'left'}
-					, {field: 'safetyvideoname', title: '视频名称', align: 'center', width: 135}
+					, {field: 'safetyvideoname', title: '视频名称', align: 'center', width: 135,
+						templet: '<div ><a href="${pageContext.request.contextPath}/{{d.videoadd}}" class="layui-table-link">{{d.safetyvideoname}}</a></div>'}
 					, {field: 'videoname', title: '文件名称', align: 'center', width: 190}
 					, {field: 'videoadd', title: '文件地址', align: 'center', width: 260}
 					, {field: 'safetyvideotime', title: '上传时间', align: 'center', width: 180
@@ -196,36 +196,7 @@
 									body.find("#safetyVideoName3").val(data.safetyvideoname);
 									body.find("#videoName3").val(data.videoname);
 									body.find("#videoAdd3").val(data.videoadd);
-									// $("#sid").val(data.safetyvideoid);
-									// $("#safetyVideoName").val(data.safetyvideoname);
-									// $("#videoName").val(data.videoname);
-									// $("#videoAdd").val(data.videoadd);
 								}
-								// btn1: function (index) {
-								// 	var safetyVideoName = $("#safetyVideoName").val();
-								// 	var videoName = $("#videoName").val();
-								// 	var videoAdd = $("#videoAdd").val();
-								// 	if (safetyVideoName.length == 0) {
-								// 		layer.alert("请输入视频名称", {icon: 2});
-								// 	}  else {
-								// 		$.ajax({
-								// 			url: path + "/admin/updateSafetyVideoInfo",
-								// 			type: "post",
-								// 			data: {"safetyvideoid": data.safetyvideoid,"safetyvideoname":safetyVideoName,"videoname":videoName,"videoadd":videoAdd},
-								// 			dataType: "text",
-								// 			success: function (result) {
-								// 				if(result == "success")
-								// 				{
-								// 					layer.close(index);
-								// 					layer.alert("重新上传信息成功！", {icon: 6});
-								// 					tableIns.reload();
-								// 				}else{
-								// 					layer.alert("重新上传信失败！", {icon: 2});
-								// 				}
-								// 			}
-								// 		});
-								// 	}
-								// },
 						});
 					}else if(layEvent === 'delete'){
 						layer.confirm("确定要删除该视频信息？",{icon:3,title:'温馨提示'},function (index) {
@@ -260,48 +231,8 @@
 					// btn: ['保存', '取消'],
 					offset: '100px',
 					btnAlign: 'c'
-					// btn1: function (index) {
-					// 	var safetyVideoName = $("#safetyVideoName").val();
-					// 	var videoName = $("#videoName").val();
-					// 	var videoAdd = $("#videoAdd").val();
-					// 	if (safetyVideoName.length == 0) {
-					// 		layer.alert("请输入视频名称", {icon: 2});
-					// 	}  else {
-					// 		$.ajax({
-					// 			url: path + '/admin/addSafetyVideo',
-					// 			async: true,
-					// 			type: 'post',
-					// 			data: {"safetyvideoname":safetyVideoName,"videoname":videoName,"videoadd":videoAdd},
-					// 			datatype: 'text',
-					// 			success: function (data) {
-					// 				if (data == "success") {
-					// 					layer.alert("新增成功！", {icon: 6});
-					// 					layer.close(index);
-					// 					tableIns.reload();
-					// 				} else {
-					// 					layer.alert("新增失败", {icon: 2});
-					// 				}
-					// 			}, error: function (data) {
-					// 				layer.alert("网络繁忙！", {icon: 2});
-					// 			}
-					// 		});
-					// 	}
-					// },
 				});
 			});
-
-				// $("#selName").change(function () {
-				// 	var kindername = $("#selName").val();
-				// 	$.ajax({
-				// 		url: path + "/admin/kinderAccount",
-				// 		type: "post",
-				// 		data: {"kindername": kindername},
-				// 		dataType: "text",
-				// 		success: function (result) {
-				// 			$("#account").val(result);
-				// 		}
-				// 	});
-				// });
 
 			//搜索功能的实现
 			$('.educationTable .layui-btn').on('click', function () {

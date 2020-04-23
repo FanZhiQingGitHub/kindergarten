@@ -30,7 +30,6 @@
 <body>
 <input type="hidden" id="path" value="<%=path%>">
 	<h2>学生管理</h2>
-	<hr style="color: whitesmoke">
 	<div class="layui-row" >
 	<form class="layui-form" action="" onsubmit="return false;" >
 		<div class="studentTable">
@@ -68,19 +67,6 @@
 						</select>
 					</div>
 				</div>
-<%--				<div class="layui-inline">--%>
-<%--					<span class="layui-form-label" style="margin-left: -25%;">职业：</span>--%>
-<%--					<div class="layui-inline">--%>
-<%--						<select name="healtherJob" id="healtherJob" lay-filter="selectName" lay-verify="" >--%>
-<%--							<option value="请选择">请选择</option>--%>
-<%--							<c:if test="${not empty healtherNewList}">--%>
-<%--								<c:forEach items="${healtherNewList}" var="u">--%>
-<%--									<option value="${u}">${u}</option>--%>
-<%--								</c:forEach>--%>
-<%--							</c:if>--%>
-<%--						</select>--%>
-<%--					</div>--%>
-<%--				</div>--%>
 			</div>
 		</div>
 	</form>
@@ -137,14 +123,14 @@
 
 	<script type="text/html" id="barOption">
 		{{#  if(d.studentstatus == '启用'){ }}
-		<button type="button" class="layui-btn layui-btn-danger" lay-event="forbidden" >禁用</button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="forbidden" >禁用</button>
 		{{#  } }}
 		{{#  if(d.studentstatus == '禁用'){ }}
-		<button type="button" class="layui-btn layui-btn-danger" lay-event="open" >启用</button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="open" >启用</button>
 		{{#  } }}
-		<button type="button" class="layui-btn " lay-event="restPwd" >重置密码</button>
-		<button type="button" class="layui-btn " lay-event="update" >修改</button>
-		<button type="button" class="layui-btn " lay-event="delete" >删除</button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="restPwd" >重置密码</button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="update" >修改</button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="delete" >删除</button>
 	</script>
 </body>
 <script>

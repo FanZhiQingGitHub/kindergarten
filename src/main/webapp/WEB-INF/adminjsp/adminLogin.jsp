@@ -133,15 +133,27 @@
         .footer_r{ float:right}
 
         #bu3:hover{
-            color: #009688;
+            color: #00FFFF;
+        }
+        #bu4:hover{
+            color: #00FFFF;
         }
 
         #bu3 {
             width: 30%;
             height: 8%;
             margin-left: 68%;
-            margin-top: -16%;
-            font-size: 15px;
+            margin-top: -10%;
+            font-size: 13px;
+            background-color: transparent;
+            color: black;
+        }
+        #bu4 {
+            width: 30%;
+            height: 8%;
+            margin-left: 68%;
+            margin-top: 5%;
+            font-size: 13px;
             background-color: transparent;
             color: black;
         }
@@ -156,7 +168,7 @@
     <div id="alldiv">
         <div class="container">
 
-            <div style="margin-left: 3%;margin-top: -10%">
+            <div style="margin-left: 10%;margin-top: -3%">
                 <img src="${pageContext.request.contextPath}/image/logo/hs-word.png"/>
             </div>
 
@@ -196,7 +208,7 @@
                     <label class="layui-form-label">验证码</label>
                     <div class="layui-input-inline">
                         <input type="text" name="code" lay-verify="code" placeholder="请输入验证码"
-                               autocomplete="off" class="layui-input verity" value="">
+                               autocomplete="off" class="layui-input verity">
                     </div>
 
                     <div id="codediv">
@@ -210,22 +222,10 @@
                         <button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="formDemo">
                             立即登录
                         </button>
-                        <button type="button" class="layui-btn" id="bu3">忘记密码？重置一下</button>
+                        <button type="button" class="layui-btn" id="bu3">忘记密码？</button>
+                        <button type="button" class="layui-btn" id="bu4">点击此处返回首页</button>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="type-content" style="display: none;">
-        <div class="layui-form-item" style="margin-left: 50px;">
-            <div class="layui-inline">
-                <input type="text" id="adminname" placeholder="请输入您的登录用户名"
-                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
-            </div>
-            <div class="layui-inline">
-                <input type="text" id="adminphone" placeholder="请输入11位手机号码" value=""
-                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
             </div>
         </div>
     </div>
@@ -247,7 +247,6 @@
             , layedit = layui.layedit
             , laydate = layui.laydate;
         $ = layui.jquery;
-        var path = $("#path").val();
         form.verify({
             required: function (value) {
                 if (value.length < 2) {
@@ -269,6 +268,7 @@
 
         });
         form.on('submit(formDemo)', function (data) {
+            var path = $("#path").val();
             $.ajax({
                 url: path + "/admin/checkLogin",
                 async: true,
@@ -276,7 +276,6 @@
                 data: data.field,
                 datatype: "text",
                 success: function (msg) {
-                	console.log(msg);
                     if (msg == "success") {
                         layer.alert("登录成功！", {icon: 6}, function () {
                             location.href = path + "/admin/toUrl/adminMain";
@@ -308,72 +307,20 @@
 
         $(function () {
             $("#code").click(function () {
+                var path = $("#path").val();
                 var code = document.getElementById("code");
                 code.src = path + "/admin/loginCode?"+Math.random();
-            }),$("#bu1").click(function () {
-                var code = document.getElementById("code");
-                code.src = path + "/admin/loginCode?"+Math.random();
-            }),$("#bu3").click(function () {
-                layer.open({
-                    type: 1,
-                    content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-                    title: '个人密码重置',
-                    btn: ['确定', '取消'],
-                    area: ['23%', '35%'],
-                    offset: ['30%'],
-                    btnAlign: 'c',
-                    btn1: function (index) {
-                        var adminname = $("#adminname").val();
-                        var adminphone = $("#adminphone").val();
-                        var num = /^1\d{10}$/;
 
-                        if (adminname.length == 0) {
-                            layer.msg("您好，用户名不能为空！", {icon: 2});
-                        } else if (!num.test(adminphone)) {
-                            layer.msg("您好，手机号码必须11位，且不能出现空格！", {icon: 2});
-                        } else {
-                            $.ajax({
-                                url: path + '/admin/resetAdminPwd',
-                                async: true,
-                                type: 'post',
-                                data: {"adminname": adminname,"adminphone": adminphone},
-                                datatype: 'text',
-                                success: function (data) {
-                                    if (data == "error") {
-                                        layer.alert("重置失败！", {icon: 2});
-                                    } else {
-                                        layer.alert("重置成功，新密码为：'123456' ", {icon: 6});
-                                        $("#adminname").val("");
-                                        $("#adminphone").val("");
-                                        layer.close(index);
-                                    }
-                                }, error: function (data) {
-                                    layer.alert("网络繁忙！", {icon: 2});
-                                }
-                            });
-                        }
-                    }
-                });
-            }),$("#adminname").blur(function () {
-                var adminname = $("#adminname").val();
-                $.ajax({
-                    url: path + '/admin/resetAdminPwd',
-                    async: true,
-                    type: 'post',
-                    data: {
-                        "adminname": adminname
-                    },
-                    datatype: 'text',
-                    success: function (data) {
-                        if (data == "notmen") {
-                            layer.msg("对不起，不存在该用户！", {icon: 2});
-                        }else {
-                            layer.msg("存在该用户！", {icon: 6});
-                        }
-                    }, error: function (data) {
-                        layer.msg("网络繁忙！", {icon: 2});
-                    }
-                });
+            }),$("#bu1").click(function () {
+                var path = $("#path").val();
+                var code = document.getElementById("code");
+                code.src = path + "/admin/loginCode?"+Math.random();
+
+            }),$("#bu3").click(function () {
+                layer.alert("该功能尚未开放！", {icon: 6});
+            }),$("#bu4").click(function () {
+                var path = $("#path").val();
+                location.href = path + "/main/path/main";
             });
         })
     });

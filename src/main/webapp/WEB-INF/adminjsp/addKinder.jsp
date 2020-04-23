@@ -29,6 +29,13 @@
             width: 100%;
             height: 100%;
         }
+        #hh1 {
+            font-weight: bold;
+            font-size: 20px;
+            margin-top: 1%;
+            text-align: center;
+            font-family: 楷体;
+        }
 
         .container {
             position: relative;
@@ -62,8 +69,9 @@
 <body background="${pageContext.request.contextPath}/image/adminimg/img/add.jpg" style="width: 100%;height: 100%">
     <form class="layui-form" method="post">
         <input type="hidden" id="path" value="<%=path%>">
-        <hr style="color: white">
         <div id="alldiv">
+            <h1 id="hh1">新增园所</h1>
+            <hr style="color: white">
             <div class="container">
                 <div class="layui-form-item">
                     <label class="layui-form-label">幼儿园名称：</label>

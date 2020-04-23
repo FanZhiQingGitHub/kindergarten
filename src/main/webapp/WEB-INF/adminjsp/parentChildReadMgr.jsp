@@ -12,6 +12,7 @@
 <head>
 	<title>智慧幼儿园平台端-亲子阅读管理</title>
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
+	<script src=<%=path + "/js/jquery-3.4.1.js"%>></script>
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
 
@@ -19,16 +20,26 @@
 			text-align: center;
 		}
 		.layui-table-cell{
+			/*margin-top: 3%;*/
 			height:38px;
 			line-height: 38px;
-			white-space:normal;
+			/*white-space:normal;*/
+			/*display:table-cell;*/
+			/*vertical-align: middle;*/
+			/*height:auto;*/
+			/*overflow:visible;*/
+			/*text-overflow:inherit;*/
 		}
+
+		/*#readImg{*/
+		/*	height: 100px;*/
+		/*}*/
+
 	</style>
 </head>
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
 	<h2>亲子阅读管理</h2>
-	<hr style="color: whitesmoke">
 	<div class="layui-row" >
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="readTable">
@@ -92,14 +103,51 @@
 		</form>
 	</div>
 
+	<div id="type-content2" style="display: none;">
+		<button class="layui-btn" style="margin-top: 3%" id="reback">返回亲子阅读管理</button>
+		<h1 align="center" id="titleName" > </h1>
+
+		<div align="center">
+			<img src="" id="pageImg" style="height: 150px">
+		</div>
+
+		<div style="height: 100px;width: 90% " align="center" id="pageContent">
+
+		</div>
+
+
+		<div class="footer" align="center">
+
+			<div class="layadmin-user-login-box layadmin-user-login-header">
+				<div style="padding-bottom: 10px;">
+					<button type="button" class="layui-btn layui-btn-normal" id="upPage" ><i
+							class="layui-icon"></i>上一页
+					</button>
+
+					<span id="nowPage">1 </span>/<span id="totalPage">1</span>
+
+					<button type="button" class="layui-btn layui-btn-normal" id="nextPage" ><i
+							class="layui-icon"></i>下一页
+					</button>
+				</div>
+			</div>
+		</div>
+<%--		<div id="demo4"></div>--%>
+<%--		<table id="readImg" lay-filter="test" class="layui-table-cell" style="margin-top: -35%;"></table>--%>
+	</div>
+
 	<script type="text/html" id="barOption">
-		<button type="button" class="layui-btn layui-btn-normal" lay-event="detail" style="text-align: -moz-center"><i class="layui-icon">&#xe642;查看</i></button>
-		<button type="button" class="layui-btn layui-btn-normal" lay-event="reUpload" style="text-align: -moz-center"><i class="layui-icon">&#xe642;重新上传</i></button>
-		<button type="button" class="layui-btn layui-btn-normal" lay-event="delete" ><i class="layui-icon">&#xe640;删除</i></button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="detail" style="text-align: -moz-center"><i class="layui-icon">&#xe642;查看绘本</i></button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="reUpload" style="text-align: -moz-center"><i class="layui-icon">&#xe642;重新上传</i></button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="delete" ><i class="layui-icon">&#xe640;删除</i></button>
 	</script>
 </body>
 <script>
-	layui.use(['form', 'layer', 'jquery', 'layedit', 'laydate', 'element', 'tree', 'table'], function () {
+	var nowPage =1;
+	var totalPage  =1;
+	var readmagid;
+	var path;
+	layui.use(['form', 'layer', 'jquery', 'laypage', 'layedit', 'laydate', 'element', 'tree', 'table'], function () {
 		var form = layui.form
 			, layer = layui.layer
 			, layedit = layui.layedit
@@ -107,8 +155,9 @@
 			, element = layui.element
 			, tree = layui.tree
 			, table = layui.table
+			, laypage = layui.laypage
 			, $ = layui.jquery;
-		var path = $("#path").val();
+		path = $("#path").val();
 		var tableIns = table.render({
 			elem: '#read'
 			, height: 350
@@ -118,12 +167,13 @@
 			, limits: [5, 10]
 			, cols: [[ //表头
 				{field: 'readmagid', title: '绘本编号', align: 'center', width: 120, sort: true, fixed: 'left'}
-				, {field: 'readmagname', title: '绘本名称', align: 'center', width: 120}
-				, {field: 'readmagurl', title: '文件夹地址', align: 'center', width: 202}
+				, {field: 'readmagname', title: '绘本名称', align: 'center', width: 120,
+					templet: '<div ><a href="${pageContext.request.contextPath}/{{d.readmagurl}}" class="layui-table-link">{{d.readmagname}}</a></div>'}
+				, {field: 'readmagurl', title: '文件夹地址', align: 'center', width: 202
+				}
 				, {field: 'photourl', title: '图片地址', align: 'center', width: 120
 					, templet: function (d) { return '<div><img src="'+path+'/'+d.photourl+'" style="width: 40px;height: 40px"></div>' }
 				}
-				, {field: 'readmagpage', title: '页数', align: 'center', width: 120}
 				, {
 					field: 'readmagtime', title: '上传时间', align: 'center', width: 180
 					, templet: "<div>{{layui.util.toDateString(d.readmagtime,'yyyy-MM-dd HH:mm:ss')}}</div>"
@@ -146,55 +196,47 @@
 			//监听工具条
 			table.on('tool(test)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 				data = obj.data; //获得当前行数据
-				console.log(data);
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if (layEvent === 'detail') {
 					layer.open({
-						type: 2,
-						area: ['35%', '80%'],
-						content: path+"/admin/toUrl/pictureBookInfo", //数组第二项即吸附元素选择器或者DOM
+						type: 1,
+						area: ['50%', '85%'],
+						// content: path+"/admin/toUrl/pictureBookInfo", //数组第二项即吸附元素选择器或者DOM
+						content: $("#type-content2"),
 						title: '绘本详情',
-						btn: ['返回'],
-						offset: '100px',
+						// btn: ['返回'],
+						offset: '10px',
 						btnAlign: 'c',
+						closeBtn :0,
 						success : function(layero, index) {
+							readmagid = data.readmagid;
 							//方式二
-							var body = layer.getChildFrame('body',index);
-							body.find("#readMagName").val(data.readmagname);
-							body.find("#readMagUrl").val(data.readmagurl);
-							body.find("#readMagTime").val(data.readmagtime);
-							body.find("#readMagPic").val(data.photourl);
-							<%--var img = "";--%>
-							<%--	img += "<img src='${pageContext.request.contextPath}/"+data.photourl+"' style='width: 60px;height: 60px'>";--%>
-							<%--	$("#readMagPic").val(img);--%>
-							<%--$("#readMagPic").show();--%>
-							// $("#test1").attr("src",""+path+"/"+data.photourl+"");
-						//
+							$.ajax({
+								url: path + '/admin/readBookInfo',
+								async: true,
+								type: 'post',
+								data: {"readmagid":readmagid,"nowPage":nowPage},
+								// datatype: 'json',
+								success: function (data) {
+									console.log(data);
+									var nowPageInfo = data.list[0];
+									console.log(nowPageInfo);
+									$("#titleName").html(nowPageInfo.readmagname);
+
+									$("#pageContent").html(nowPageInfo.readmagdetail);
+
+									$("#pageImg").attr('src',path+'/'+nowPageInfo.photourl);
+
+									$("#nowPage").html(nowPage);
+
+									$("#totalPage").html(data.totalRecords);
+
+									totalPage  = data.totalRecords;
+								}, error: function (data) {
+									layer.alert("网络繁忙！", {icon: 2});
+								}
+							});
 						}
-						// btn1: function (index) {
-						// 	var menuName = $('#menuName').val();
-						// 	var pName = $('#supName').val();
-						// 	var menuUrl = $('#menuUrl').val();
-						// 	var sort = $('#sort').val();
-						// 	$.ajax({
-						// 		url: path + '/admin/addMenuItems',
-						// 		async: true,
-						// 		type: 'post',
-						// 		data: {"menuname": menuName, "pName": pName,"menuurl":menuUrl,"sort":sort},
-						// 		datatype: 'text',
-						// 		success: function (data) {
-						// 			if (data == "success") {
-						// 				layer.alert("新增菜单成功！", {icon: 6});
-						// 				layer.close(index);
-						// 				tableIns.reload();
-						// 			} else {
-						// 				layer.alert("新增菜单失败", {icon: 2});
-						// 			}
-						// 		}, error: function (data) {
-						// 			layer.alert("网络繁忙！", {icon: 2});
-						// 		}
-						// 	});
-						// },
 					});
 				}else if(layEvent === 'delete'){
 					layer.confirm("确定要删除该绘本信息？",{icon:3,title:'温馨提示'},function (index) {
@@ -233,12 +275,6 @@
 							$("#readMagUrl").val(data.readmagurl);
 							$("#readMagPic").val(data.photourl);
 							$("#readMagPage").val(data.readmagpage);
-							// var body = layer.getChildFrame('body',index);
-							// body.find("#readMagName").val(data.readmagname);
-							// body.find("#readMagUrl").val(data.readmagurl);
-							// // body.find("#readMagTime").val(data.readmagtime);
-							// body.find("#readMagPic").val(data.photourl);
-							// body.find("#readMagPage").val(data.readmagpage);
 						},
 						btn1:function (index) {
 							var readMagName = $("#readMagName2").val();
@@ -286,36 +322,6 @@
 			});
 		});
 
-		// function setFormValue(obj,data){
-		// 	form.on('submit(test1)', function(massage) {
-		// 		// $('#updateUser').serialize();
-		// 		var formData=$("#reUploads").serializeObject();   //这个把表单按对象类型序列化
-		// 		console.log(formData);
-		// 		$.ajax({
-		// 			url:path+"/admin/reUploadBook",
-		// 			type:'POST',
-		// 			dataType:'text',
-		// 			data:JSON.stringify(formData),
-		// 			contentType : 'application/json;charset=utf-8',
-		// 			async: true,
-		// 			success:function (msg) {
-		// 				console.log(msg);
-		// 				// //取得返回数据（Sting类型的字符串）的信息进行取值判断
-		// 				if(msg != null){
-		// 				// 	// var index = parent.layer.getFrameIndex(window.name);
-		// 				// 	// setTimeout(function(){parent.layer.close(index)}, 1000);
-		// 				// 	var index = parent.layer.getFrameIndex(window.name);//获得index
-		// 				// 	setTimeout(function () { parent.layer.close(index) }, 100);//延迟
-		// 				// 	tableIns.reload();
-		// 				}else{
-		// 					layer.msg("修改失败", {icon: 5});
-		// 				}
-		// 			}
-		// 		});
-		// 		return false;
-		// 	})
-		// }
-
 		$(function () {
 			$('#readMagName').blur(function () {
 				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
@@ -361,8 +367,7 @@
 		$("#btn-add").click(function () {
 			layer.open({
 				type: 2,
-				area: ['70%', '80%'],
-				offset:['80px'],
+				area: ['70%', '90%'],
 				content: path+"/admin/toUrl/uploadPictureBooks", //数组第二项即吸附元素选择器或者DOM
 				title: '上传绘本',
 				btn: ['保存', '取消'],
@@ -370,7 +375,7 @@
 				btnAlign: 'c',
 				success:function(){
 
-				},
+				}
 				// btn1: function (index) {
 				// 	var roleName2 = $('#roleName2').val();
 				// 	$.ajax({
@@ -399,6 +404,9 @@
 			});
 		});
 
+		$("#reback").click(function () {
+			location.href = path+"/admin/toUrl/parentChildReadMgr"
+		});
 		//搜索功能的实现
 		$('.readTable .layui-btn').on('click', function () {
 			var type = $(this).data('type');
@@ -426,5 +434,57 @@
 			tableIns.reload();
 		});
 	});
+	$(function () {
+		$("#upPage").click(function () {
+
+			if (nowPage == 1){
+				layer.msg("已经是第一页了哦");
+			} else {
+				nowPage -= 1;
+				showPageDetail();
+			}
+
+
+		});
+
+		$("#nextPage").click(function () {
+
+			if (nowPage == totalPage){
+				layer.msg("已经是最后一页了哦");
+			} else {
+				nowPage += 1;
+				showPageDetail();
+			}
+		});
+	});
+
+	function showPageDetail() {
+		$.ajax({
+			url: path + '/admin/readBookInfo',
+			type: 'post',
+			data: {"readmagid":readmagid,"nowPage":nowPage},
+			success: function (pageInfo) {
+
+				//数据回显
+				var nowPageInfo =pageInfo.list[0];
+
+				$("#pageContent").html(nowPageInfo.readmagdetail);
+
+				$("#pageImg").attr('src',path+'/'+nowPageInfo.photourl);
+
+				$("#nowPage").html(nowPage);
+
+				$("#totalPage").html(pageInfo.totalRecords);
+
+				totalPage  = pageInfo.totalRecords;
+
+
+			}, error: function (data) {
+				layer.alert("网络繁忙！", {icon: 2});
+			}
+		});
+
+	}
+
 </script>
 </html>
