@@ -157,15 +157,18 @@ public class RectorController
 				if (code.equals(PicCode))
 				{
 					TblKinder tblKinder = rectorService.selectkinderId(tblRectors.getRectorid());
-					//查看对应的校园公告内容
-					Map<String, Object> map = new HashMap<>();
-					map.put("kid", tblKinder.getKinderid());
-					map.put("pageInt", 0);
-					map.put("limitInt", 5);
+					if (null != tblKinder)
+					{
+						//查看对应的校园公告内容
+						Map<String, Object> map = new HashMap<>();
+						map.put("kid", tblKinder.getKinderid());
+						map.put("pageInt", 0);
+						map.put("limitInt", 5);
 
-					System.out.println("校园公告信息=" + map);
-					List<TblCampus> tblCampusinfoList = kinderService.findCampusBulletinAll(map);
-					request.getSession().setAttribute("tblCampusList", tblCampusinfoList);
+						System.out.println("校园公告信息=" + map);
+						List<TblCampus> tblCampusinfoList = kinderService.findCampusBulletinAll(map);
+						request.getSession().setAttribute("tblCampusList", tblCampusinfoList);
+					}
 					System.out.println("前台验证码成功！");
 					ResponseUtils.outHtml(response, "success");
 				} else
@@ -536,6 +539,7 @@ public class RectorController
 			String md5pwd = MD5Utils.md5("123456");
 			tblTeacher.setTeacherpwd(md5pwd);
 			tblTeacher.setKinderid(tblKinder.getKinderid());
+			tblTeacher.setTeacherstatus("启用");
 			System.out.println("申请教师=" + tblTeacher);
 			int result = rectorService.addTeacherForm(tblTeacher);
 			if (result > 0)
@@ -2420,5 +2424,323 @@ public class RectorController
 		}
 	}
 
+	//	保健员管理--信息查询和显示
+	@RequestMapping("/selectHealtherManage")
+	public void selectHealtherManage(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException
+	{
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
+
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
+		{
+			//前端传过来的值通过-json里面去查看
+			String page = request.getParameter("page");
+			String limit = request.getParameter("limit");
+			String healthername = request.getParameter("healthername");
+			int pageInt = Integer.valueOf(page);
+			int limitInt = Integer.valueOf(limit);
+
+			System.out.println("保健员名是=" + healthername);
+
+			//获取对应的id值
+			Map<String, Object> map = new HashMap<>();
+			if (null != healthername && "" != healthername)
+			{
+				map.put("healthername", healthername);
+			}
+			if (0 != tblKinder.getKinderid())
+			{
+				map.put("kid", tblKinder.getKinderid());
+			}
+			int pages = (pageInt - 1) * limitInt;
+			int limits = limitInt;
+			map.put("pageInt", pages);
+			map.put("limitInt", limits);
+
+			System.out.println("用户信息=" + map);
+			List<TblHealther> tblHealthers = rectorService.findHealtherAll(map);
+			System.out.println("输出成功" + tblHealthers.toString());
+
+			if (0 != tblHealthers.size())
+			{
+				Integer count = rectorService.findHealtherAllCount(map).intValue();
+				System.out.println("输出次数：" + count);
+				dateTable.setCode(0);
+				dateTable.setMsg(" ");
+				dateTable.setCount(count);
+				dateTable.setData(tblHealthers);
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			} else
+			{
+				dateTable.setCode(201);
+				dateTable.setMsg("无数据");
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			}
+		} else
+		{
+			dateTable.setCode(201);
+			dateTable.setMsg("该账户未申请园所或未通过审批，请先操作后再进入!!!");
+			request.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+			ResponseUtils.outJson(response, dateTable);
+		}
+
+	}
+
+	//园所-----保健员信息----进行对应的删除操作
+	@RequestMapping("/delHealtherTable")
+	public void delHealtherTable(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String id = request.getParameter("healtherid");
+		System.out.println("删除servlet" + id);
+		int healtherid = Integer.valueOf(id);
+
+		int result = rectorService.delHealtherTable(healtherid);
+		if (result > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//保健员管理--判断修改的保健员是不是重复的名字
+	@RequestMapping("/selectHealtherName")
+	public void selectHealtherName(String healthername, HttpServletRequest request, HttpServletResponse response)
+	{
+		TblHealther tblHealther = rectorService.selectHealtherName(healthername);
+		if (null != tblHealther)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//园所-----保健员信息----更新对应表格的内容的值
+	@RequestMapping("/updateHealtherTable")
+	public void updateHealtherTable(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String healtherid = request.getParameter("healtherid");
+		System.out.println("内容是=" + healtherid);
+		int healtherids = Integer.valueOf(healtherid);
+		System.out.println("servlet=" + healtherids);
+		String healthername = request.getParameter("healthername");
+
+		tblHealther.setHealtherid(healtherids);
+		tblHealther.setHealthername(healthername);
+
+		System.out.println("内容是=" + tblHealther);
+		int result = rectorService.updateHealtherById(tblHealther);
+		if (result > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//园所-----保健员信息----添加对应的表格的信息
+	@RequestMapping("/addHealtherForm")
+	protected void addHealtherForm(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
+
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
+		{
+			//使用的密码是默认的密码
+			String md5pwd = MD5Utils.md5("123456");
+			tblHealther.setHealtherpwd(md5pwd);
+			tblHealther.setKid(tblKinder.getKinderid());
+			tblHealther.setHealtherstatus("启用");
+			tblHealther.setRid(6);
+			System.out.println("申请教师=" + tblHealther);
+			int result = rectorService.addHealtherForm(tblHealther);
+			if (result > 0)
+			{
+				ResponseUtils.outHtml(response, "success");
+			} else
+			{
+				ResponseUtils.outHtml(response, "error");
+			}
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//安防员管理--信息查询和显示
+	@RequestMapping("/selectSecurityManage")
+	public void selectSecurityManage(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException
+	{
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
+
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
+		{
+			//前端传过来的值通过-json里面去查看
+			String page = request.getParameter("page");
+			String limit = request.getParameter("limit");
+			String securityname = request.getParameter("securityname");
+			int pageInt = Integer.valueOf(page);
+			int limitInt = Integer.valueOf(limit);
+
+			System.out.println("安防员名是=" + securityname);
+
+			//获取对应的id值
+			Map<String, Object> map = new HashMap<>();
+			if (null != securityname && "" != securityname)
+			{
+				map.put("securityname", securityname);
+			}
+			if (0 != tblKinder.getKinderid())
+			{
+				map.put("kid", tblKinder.getKinderid());
+			}
+			int pages = (pageInt - 1) * limitInt;
+			int limits = limitInt;
+			map.put("pageInt", pages);
+			map.put("limitInt", limits);
+
+			System.out.println("用户信息=" + map);
+			List<TblSecurity> tblSecurities = rectorService.findSecurityAll(map);
+			System.out.println("输出成功" + tblSecurities.toString());
+
+			if (0 != tblSecurities.size())
+			{
+				Integer count = rectorService.findSecurityAllCount(map).intValue();
+				System.out.println("输出次数：" + count);
+				dateTable.setCode(0);
+				dateTable.setMsg(" ");
+				dateTable.setCount(count);
+				dateTable.setData(tblSecurities);
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			} else
+			{
+				dateTable.setCode(201);
+				dateTable.setMsg("无数据");
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			}
+		} else
+		{
+			dateTable.setCode(201);
+			dateTable.setMsg("该账户未申请园所或未通过审批，请先操作后再进入!!!");
+			request.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+			ResponseUtils.outJson(response, dateTable);
+		}
+
+	}
+
+	//园所-----安防员信息----进行对应的删除操作
+	@RequestMapping("/delSecurityTable")
+	public void delSecurityTable(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String id = request.getParameter("securityid");
+		System.out.println("删除servlet" + id);
+		int securityid = Integer.valueOf(id);
+
+		int result = rectorService.delSecurityTable(securityid);
+		if (result > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//安防员管理--判断修改的安防员名是不是重复的名字
+	@RequestMapping("/selectSecurityName")
+	public void selectSecurityName(String securityname, HttpServletRequest request, HttpServletResponse response)
+	{
+		TblSecurity tblSecurity = rectorService.selectSecurityName(securityname);
+		if (null != tblSecurity)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//园所-----安防员信息----更新对应表格的内容的值
+	@RequestMapping("/updateSecurityTable")
+	public void updateSecurityTable(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String securityid = request.getParameter("securityid");
+		System.out.println("内容是=" + securityid);
+		int securityids = Integer.valueOf(securityid);
+		System.out.println("servlet=" + securityids);
+		String securityname = request.getParameter("securityname");
+		tblSecurity.setSecurityid(securityids);
+		tblSecurity.setSecurityname(securityname);
+
+		System.out.println("内容是=" + tblSecurity);
+		int result = rectorService.updateSecurityById(tblSecurity);
+		if (result > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
+
+	//园所-----安防员信息----添加对应的表格的信息
+	@RequestMapping("/addSecurityForm")
+	protected void addSecurityForm(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
+
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
+		{
+			//使用的密码是默认的密码
+			String md5pwd = MD5Utils.md5("123456");
+			tblSecurity.setSecuritypwd(md5pwd);
+			tblSecurity.setKid(tblKinder.getKinderid());
+			tblSecurity.setSecuritystatus("启用");
+			tblSecurity.setRid(5);
+			System.out.println("申请安防员=" + tblSecurity);
+			int result = rectorService.addSecurityForm(tblSecurity);
+			if (result > 0)
+			{
+				ResponseUtils.outHtml(response, "success");
+			} else
+			{
+				ResponseUtils.outHtml(response, "error");
+			}
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
 
 }

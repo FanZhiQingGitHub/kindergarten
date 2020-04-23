@@ -15,6 +15,7 @@ public class TblSecurity {
     private String securityregtime;
     private String securitystatus;
     private Integer rid;
+    private Integer kid;
 
     private String code;
     private String time1;
@@ -142,6 +143,16 @@ public class TblSecurity {
     public void setTime2(String time2)
     {
         this.time2 = time2;
+    }
+
+    public Integer getKid()
+    {
+        return kid;
+    }
+
+    public void setKid(Integer kid)
+    {
+        this.kid = kid;
     }
 
     @Override
