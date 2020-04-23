@@ -30,7 +30,7 @@
         }
         .getbtn{
             height: 240px;
-            width: 8%;
+            width: 6.8%;
             font-weight: bold;
             font-size: 18px;
             background: #FF5722;
@@ -130,6 +130,8 @@
     <div class="nav_btn">
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="approvalGarden">园<br/>所<br/>审<br/>批</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="teachersManagement">教<br/>师<br/>管<br/>理</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="healtherManagement">保<br/>健<br/>员<br/>管<br/>理</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="securityManagement">安<br/>防<br/>员<br/>管<br/>理</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="teachersAttendManagement">教<br/>师<br/>考<br/>勤</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="childrenManagement">幼<br/>儿<br/>管<br/>理</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="parentManagement">家<br/>长<br/>管<br/>理</button>
@@ -139,6 +141,7 @@
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="messageNotice">消<br/>息<br/>通<br/>知</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="campusBulletinManagement">校<br/>园<br/>公<br/>告</button>
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="chatTeacher">联<br/>系<br/>老<br/>师</button>
+
     </div>
 
     <div class="prod-show" style="max-width: 80%;">
@@ -421,6 +424,16 @@
             });
             return false;
         });
+        //保健员管理
+        $("#healtherManagement").on('click',function () {
+                window.location.href = src+"/director/toUrl/director_HealtherManage";
+        });
+
+        //安防员管理
+        $("#securityManagement").on('click',function () {
+                window.location.href = src+"/director/toUrl/director_SecurityManage";
+        });
+
         //消息通知
         $("#messageNotice").on('click',function () {
             layer.confirm('您确定要进入到消息通知进行编辑吗?', {icon: 3, title: '温馨提示'}, function (index) {
