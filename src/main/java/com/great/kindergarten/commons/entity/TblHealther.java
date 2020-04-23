@@ -22,9 +22,8 @@ public class TblHealther {
    private Date healtherregtime;
    private String healtherstatus;
    private Integer rid;
-   private Integer kid;
 
-   private String kindername;
+   private Integer kid;
 
    private String code;
    private String time1;
@@ -33,7 +32,7 @@ public class TblHealther {
     public TblHealther() {
     }
 
-    public TblHealther(Integer healtherid, String healthername, String healtherpwd, String healthersex, Integer healtherage, String healtheradd, String healtherphone, Date healtherregtime, String healtherstatus, Integer rid,Integer kid,String kindername) {
+    public TblHealther(Integer healtherid, String healthername, String healtherpwd, String healthersex, Integer healtherage, String healtheradd, String healtherphone, Date healtherregtime, String healtherstatus, Integer rid) {
         this.healtherid = healtherid;
         this.healthername = healthername;
         this.healtherpwd = healtherpwd;
@@ -44,8 +43,6 @@ public class TblHealther {
         this.healtherregtime = healtherregtime;
         this.healtherstatus = healtherstatus;
         this.rid = rid;
-        this.kid = kid;
-        this.kindername = kindername;
     }
 
     public Integer getHealtherid() {
@@ -156,20 +153,14 @@ public class TblHealther {
         this.time2 = time2;
     }
 
-    public Integer getKid() {
+    public Integer getKid()
+    {
         return kid;
     }
 
-    public void setKid(Integer kid) {
+    public void setKid(Integer kid)
+    {
         this.kid = kid;
-    }
-
-    public String getKindername() {
-        return kindername;
-    }
-
-    public void setKindername(String kindername) {
-        this.kindername = kindername;
     }
 
     @Override
@@ -185,11 +176,7 @@ public class TblHealther {
                 ", healtherregtime=" + healtherregtime +
                 ", healtherstatus='" + healtherstatus + '\'' +
                 ", rid=" + rid +
-                ", kid=" + kid +
-                ", kindername='" + kindername + '\'' +
                 ", code='" + code + '\'' +
-                ", time1='" + time1 + '\'' +
-                ", time2='" + time2 + '\'' +
                 '}';
     }
 }

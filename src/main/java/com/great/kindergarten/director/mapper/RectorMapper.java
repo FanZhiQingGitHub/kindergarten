@@ -102,7 +102,6 @@ public interface RectorMapper
 	public TblStudent selectStudentByStudentId(int pid);
 	//	public int updateChildrenByPidDown(Map<String, Object> map);
 
-
 	/*
 	 * 保健员模块的设计
 	 * */
@@ -146,5 +145,4 @@ public interface RectorMapper
 
 	//对应的进行安防员的新增
 	public int addSecurityForm(TblSecurity tblSecurity);
-
 }

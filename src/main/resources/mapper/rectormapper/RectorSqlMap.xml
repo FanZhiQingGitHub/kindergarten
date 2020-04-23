@@ -138,6 +138,7 @@
 			,teacherage
 			,teacheradd
 			,teacherphone
+			,teacherstatus
 			,rid
 			,kinderid
 		)values(
@@ -149,6 +150,7 @@
 			,#{teacherage}
 			,#{teacheradd}
 			,#{teacherphone}
+			,#{teacherstatus}
 			,#{rid}
 			,#{kinderid}
 		)
@@ -302,9 +304,8 @@
         where parentId = #{parentId}
     </update>
 
-<!--.......................................................................................................-->
+    <!--.......................................................................................................-->
     <!--    保健员模块设计-->
-
     <resultMap id="reHealther" type="com.great.kindergarten.commons.entity.TblHealther">
         <result column="healtherid" property="healtherid"/>
         <result column="healthername" property="healthername"/>
@@ -321,7 +322,7 @@
 
     <select id="findHealtherAll" resultMap="reHealther" parameterType="java.util.HashMap">
         select * from tbl_healther
-        <where> 1=1 and healtherid = #{healtherid}
+        <where> 1=1 and kid = #{kid}
             <if test="healthername != null and healthername != ''">
                 and healthername like "%"#{healthername}"%"
             </if>
@@ -332,7 +333,7 @@
     <!--    保健员搜索界面的设计,查询记录条数-->
     <select id="findHealtherAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
         select count(*) from tbl_healther
-        <where>1=1 and healtherid = #{healtherid}
+        <where>1=1 and kid = #{kid}
             <if test="healthername != null and healthername != ''">
                 and healthername like "%"#{healthername}"%"
             </if>
@@ -364,7 +365,7 @@
 
     <!--对应的进行教师的新增-->
     <insert id="addHealtherForm" parameterType="com.great.kindergarten.commons.entity.TblHealther">
-		insert into tbl_teacher(
+		insert into tbl_healther(
 			 healthername
 			,healtherpwd
 			,healthersex
@@ -391,7 +392,6 @@
 
     <!--.......................................................................................................-->
     <!--    安防员模块设计-->
-
     <resultMap id="reSecurity" type="com.great.kindergarten.commons.entity.TblSecurity">
         <result column="securityid" property="securityid"/>
         <result column="securityname" property="securityname"/>
@@ -408,7 +408,7 @@
 
     <select id="findSecurityAll" resultMap="reSecurity" parameterType="java.util.HashMap">
         select * from tbl_security
-        <where> 1=1 and securityid = #{securityid}
+        <where> 1=1 and kid = #{kid}
             <if test="securityname != null and securityname != ''">
                 and securityname like "%"#{securityname}"%"
             </if>
@@ -419,7 +419,7 @@
     <!--    保健员搜索界面的设计,查询记录条数-->
     <select id="findSecurityAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
         select count(*) from tbl_security
-        <where>1=1 and securityid = #{securityid}
+        <where>1=1 and kid = #{kid}
             <if test="securityname != null and securityname != ''">
                 and securityname like "%"#{securityname}"%"
             </if>
@@ -451,7 +451,7 @@
 
     <!--对应的进行安防员的新增-->
     <insert id="addSecurityForm" parameterType="com.great.kindergarten.commons.entity.TblSecurity">
-		insert into tbl_teacher(
+		insert into tbl_security(
 			 securityname
 			,securitypwd
 			,securitysex
