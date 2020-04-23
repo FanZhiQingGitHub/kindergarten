@@ -10,7 +10,7 @@ import java.util.Map;
 @Mapper
 public interface SecurityMapper {
 
-    public String findSecurityStatus(Map<String, String> securitymap);
+    public TblSecurity findSecurityStatus(Map<String, String> securitymap);
 
     public TblSecurity securityLogin(Map<String, String> securitymap);
 

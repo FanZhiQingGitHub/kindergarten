@@ -101,7 +101,7 @@ public class HealtherController {
         Boolean confirm = code.equalsIgnoreCase(healthercode);
         if (confirm) {
             String healtherstatus = healtherService.findHealtherStatus(healthername);
-            if (healtherstatus.equals("启用")) {
+            if ("启用".equals(healtherstatus)) {
                 TblHealther Healther = healtherService.healtherLogin(healthername, healtherpwd);
                 if (null != Healther) {
                     List<TblHealther> tblHealtherList = new ArrayList<>();

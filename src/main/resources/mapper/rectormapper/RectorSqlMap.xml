@@ -302,4 +302,178 @@
         where parentId = #{parentId}
     </update>
 
+<!--.......................................................................................................-->
+    <!--    保健员模块设计-->
+
+    <resultMap id="reHealther" type="com.great.kindergarten.commons.entity.TblHealther">
+        <result column="healtherid" property="healtherid"/>
+        <result column="healthername" property="healthername"/>
+        <result column="healtherpwd" property="healtherpwd"/>
+        <result column="healthersex" property="healthersex"/>
+        <result column="healtherage" property="healtherage"/>
+        <result column="healtheradd" property="healtheradd"/>
+        <result column="healtherphone" property="healtherphone"/>
+        <result column="healtherregtime" property="healtherregtime"/>
+        <result column="healtherstatus" property="healtherstatus"/>
+        <result column="rid" property="rid"/>
+        <result column="kid" property="kid"/>
+    </resultMap>
+
+    <select id="findHealtherAll" resultMap="reHealther" parameterType="java.util.HashMap">
+        select * from tbl_healther
+        <where> 1=1 and healtherid = #{healtherid}
+            <if test="healthername != null and healthername != ''">
+                and healthername like "%"#{healthername}"%"
+            </if>
+        </where>
+        order by healtherregtime desc limit #{pageInt},#{limitInt}
+    </select>
+
+    <!--    保健员搜索界面的设计,查询记录条数-->
+    <select id="findHealtherAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(*) from tbl_healther
+        <where>1=1 and healtherid = #{healtherid}
+            <if test="healthername != null and healthername != ''">
+                and healthername like "%"#{healthername}"%"
+            </if>
+        </where>
+    </select>
+
+    <!--对应的保健员表格信息的删除-->
+    <delete id="delHealtherTable" parameterType="int">
+        delete from tbl_healther
+        where healtherid = #{healtherid}
+    </delete>
+
+    <!--查找判断对应的园所账号是不是唯一-->
+    <select id="selectHealtherName" resultType="com.great.kindergarten.commons.entity.TblHealther" parameterType="string">
+        select * from tbl_healther where healthername = #{healthername}
+    </select>
+
+    <!--对应的保健员表格信息....更新语句信息-->
+    <update id="updateHealtherById" parameterType="com.great.kindergarten.commons.entity.TblHealther">
+        update tbl_healther
+        set  healthername = #{healthername}
+            ,healthersex = #{healthersex}
+            ,healtherage = #{healtherage}
+			,healtheradd = #{healtheradd}
+			,healtherphone = #{healtherphone}
+			,rid = #{rid}
+        where healtherid = #{healtherid}
+    </update>
+
+    <!--对应的进行教师的新增-->
+    <insert id="addHealtherForm" parameterType="com.great.kindergarten.commons.entity.TblHealther">
+		insert into tbl_teacher(
+			 healthername
+			,healtherpwd
+			,healthersex
+			,healtherage
+			,healtheradd
+			,healtherphone
+			,healtherregtime
+			,healtherstatus
+			,rid
+			,kid
+		)values(
+			 #{healthername}
+			,#{healtherpwd}
+			,#{healthersex}
+			,#{healtherage}
+			,#{healtheradd}
+			,#{healtherphone}
+			,now()
+			,#{healtherstatus}
+			,#{rid}
+			,#{kid}
+		)
+	</insert>
+
+    <!--.......................................................................................................-->
+    <!--    安防员模块设计-->
+
+    <resultMap id="reSecurity" type="com.great.kindergarten.commons.entity.TblSecurity">
+        <result column="securityid" property="securityid"/>
+        <result column="securityname" property="securityname"/>
+        <result column="securitypwd" property="securitypwd"/>
+        <result column="securitysex" property="securitysex"/>
+        <result column="securityage" property="securityage"/>
+        <result column="securityadd" property="securityadd"/>
+        <result column="securityphone" property="securityphone"/>
+        <result column="securityregtime" property="securityregtime"/>
+        <result column="securitystatus" property="securitystatus"/>
+        <result column="rid" property="rid"/>
+        <result column="kid" property="kid"/>
+    </resultMap>
+
+    <select id="findSecurityAll" resultMap="reSecurity" parameterType="java.util.HashMap">
+        select * from tbl_security
+        <where> 1=1 and securityid = #{securityid}
+            <if test="securityname != null and securityname != ''">
+                and securityname like "%"#{securityname}"%"
+            </if>
+        </where>
+        order by securityregtime desc limit #{pageInt},#{limitInt}
+    </select>
+
+    <!--    保健员搜索界面的设计,查询记录条数-->
+    <select id="findSecurityAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+        select count(*) from tbl_security
+        <where>1=1 and securityid = #{securityid}
+            <if test="securityname != null and securityname != ''">
+                and securityname like "%"#{securityname}"%"
+            </if>
+        </where>
+    </select>
+
+    <!--对应的安防员表格信息的删除-->
+    <delete id="delSecurityTable" parameterType="int">
+        delete from tbl_security
+        where securityid = #{securityid}
+    </delete>
+
+    <!--查找判断对应的安防员账号是不是唯一-->
+    <select id="selectSecurityName" resultType="com.great.kindergarten.commons.entity.TblSecurity" parameterType="string">
+        select * from tbl_security where securityname = #{securityname}
+    </select>
+
+    <!--对应的安防员表格信息....更新语句信息-->
+    <update id="updateSecurityById" parameterType="com.great.kindergarten.commons.entity.TblSecurity">
+        update tbl_security
+        set  securityname = #{securityname}
+            ,securitysex = #{securitysex}
+            ,securityage = #{securityage}
+			,securityadd = #{securityadd}
+			,securityphone = #{securityphone}
+			,rid = #{rid}
+        where securityid = #{securityid}
+    </update>
+
+    <!--对应的进行安防员的新增-->
+    <insert id="addSecurityForm" parameterType="com.great.kindergarten.commons.entity.TblSecurity">
+		insert into tbl_teacher(
+			 securityname
+			,securitypwd
+			,securitysex
+			,securityage
+			,securityadd
+			,securityphone
+			,securityregtime
+			,securitystatus
+			,rid
+			,kid
+		)values(
+			 #{securityname}
+			,#{securitypwd}
+			,#{securitysex}
+			,#{securityage}
+			,#{securityadd}
+			,#{securityphone}
+			,now()
+			,#{securitystatus}
+			,#{rid}
+			,#{kid}
+		)
+	</insert>
+
 </mapper>

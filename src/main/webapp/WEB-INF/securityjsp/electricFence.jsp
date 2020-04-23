@@ -222,9 +222,9 @@
 
 
         //添加地图点击监听
-        // map.addEventListener("click", function (e) {
-        //     console.log(e.point.lng + "," + e.point.lat);
-        // });
+        map.addEventListener("click", function (e) {
+            console.log(e.point.lng + "," + e.point.lat);
+        });
 
         //2.查出给每个孩子默认的显示位置（即学校位置）
         var studentid;

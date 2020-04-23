@@ -95,8 +95,8 @@ public class SecurityController {
         String code = tblSecurity.getCode();
         Boolean confirm = code.equalsIgnoreCase(securitycode);
         if (confirm) {
-            String securitystatus = securityService.findSecurityStatus(securityname);
-            if (securitystatus.equals("启用")) {
+            TblSecurity securitystatus = securityService.findSecurityStatus(securityname);
+            if ("启用".equals(securitystatus.getSecuritystatus())) {
                 TblSecurity Security = securityService.securityLogin(securityname, securitypwd);
                 if (null != Security) {
                     List<TblSecurity> tblSecurityList = new ArrayList<>();

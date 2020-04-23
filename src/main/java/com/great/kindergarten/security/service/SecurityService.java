@@ -18,7 +18,7 @@ public class SecurityService {
     @Resource
     private SecurityMapper securityMapper;
 
-    public String findSecurityStatus(String securityname){
+    public TblSecurity findSecurityStatus(String securityname){
         Map<String, String> securitymap = new LinkedHashMap<>();
         securitymap.put("securityname",securityname);
         return securityMapper.findSecurityStatus(securitymap);

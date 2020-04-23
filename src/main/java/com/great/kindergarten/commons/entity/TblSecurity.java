@@ -1,5 +1,10 @@
 package com.great.kindergarten.commons.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 /**
  * 安保员信息实体类
  */
@@ -12,7 +17,9 @@ public class TblSecurity {
     private Integer securityage;
     private String securityadd;
     private String securityphone;
-    private String securityregtime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    private Date securityregtime;
     private String securitystatus;
     private Integer rid;
     private Integer kid;
@@ -24,7 +31,7 @@ public class TblSecurity {
     public TblSecurity() {
     }
 
-    public TblSecurity(Integer securityid, String securityname, String securitypwd, String securitysex, Integer securityage, String securityadd, String securityphone, String securityregtime, String securitystatus, Integer rid, Integer kid) {
+    public TblSecurity(Integer securityid, String securityname, String securitypwd, String securitysex, Integer securityage, String securityadd, String securityphone, Date securityregtime, String securitystatus, Integer rid, Integer kid) {
         this.securityid = securityid;
         this.securityname = securityname;
         this.securitypwd = securitypwd;
@@ -94,11 +101,11 @@ public class TblSecurity {
         this.securityphone = securityphone;
     }
 
-    public String getSecurityregtime() {
+    public Date getSecurityregtime() {
         return securityregtime;
     }
 
-    public void setSecurityregtime(String securityregtime) {
+    public void setSecurityregtime(Date securityregtime) {
         this.securityregtime = securityregtime;
     }
 
@@ -118,6 +125,14 @@ public class TblSecurity {
         this.rid = rid;
     }
 
+    public Integer getKid() {
+        return kid;
+    }
+
+    public void setKid(Integer kid) {
+        this.kid = kid;
+    }
+
     public String getCode() {
         return code;
     }
@@ -126,32 +141,20 @@ public class TblSecurity {
         this.code = code;
     }
 
-    public String getTime1()
-    {
+    public String getTime1() {
         return time1;
     }
 
-    public void setTime1(String time1)
-    {
+    public void setTime1(String time1) {
         this.time1 = time1;
     }
 
-    public String getTime2()
-    {
+    public String getTime2() {
         return time2;
     }
 
-    public void setTime2(String time2)
-    {
+    public void setTime2(String time2) {
         this.time2 = time2;
-    }
-
-    public Integer getKid() {
-        return kid;
-    }
-
-    public void setKid(Integer kid) {
-        this.kid = kid;
     }
 
     @Override
@@ -164,7 +167,7 @@ public class TblSecurity {
                 ", securityage=" + securityage +
                 ", securityadd='" + securityadd + '\'' +
                 ", securityphone='" + securityphone + '\'' +
-                ", securityregtime='" + securityregtime + '\'' +
+                ", securityregtime=" + securityregtime +
                 ", securitystatus='" + securitystatus + '\'' +
                 ", rid=" + rid +
                 ", kid=" + kid +
