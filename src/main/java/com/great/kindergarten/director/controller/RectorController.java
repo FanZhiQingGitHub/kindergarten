@@ -159,15 +159,17 @@ public class RectorController
 				if (code.equals(PicCode))
 				{
 					TblKinder tblKinder = rectorService.selectkinderId(tblRectors.getRectorid());
-					//查看对应的校园公告内容
-					Map<String, Object> map = new HashMap<>();
-					map.put("kid", tblKinder.getKinderid());
-					map.put("pageInt", 0);
-					map.put("limitInt", 5);
+					if(null!=tblKinder){
+						//查看对应的校园公告内容
+						Map<String, Object> map = new HashMap<>();
+						map.put("kid", tblKinder.getKinderid());
+						map.put("pageInt", 0);
+						map.put("limitInt", 5);
 
-					System.out.println("校园公告信息=" + map);
-					List<TblCampus> tblCampusinfoList = kinderService.findCampusBulletinAll(map);
-					request.getSession().setAttribute("tblCampusList", tblCampusinfoList);
+						System.out.println("校园公告信息=" + map);
+						List<TblCampus> tblCampusinfoList = kinderService.findCampusBulletinAll(map);
+						request.getSession().setAttribute("tblCampusList", tblCampusinfoList);
+					}
 					System.out.println("前台验证码成功！");
 					ResponseUtils.outHtml(response, "success");
 				} else
