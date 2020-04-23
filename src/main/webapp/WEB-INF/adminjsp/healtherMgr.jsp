@@ -30,7 +30,6 @@
 <body>
 <input type="hidden" id="path" value="<%=path%>">
 	<h2>保健员管理</h2>
-	<hr style="color: whitesmoke">
 	<div class="layui-row" >
 	<form class="layui-form" action="" onsubmit="return false;" >
 		<div class="healtherTable">
@@ -68,19 +67,6 @@
 						</select>
 					</div>
 				</div>
-<%--				<div class="layui-inline">--%>
-<%--					<span class="layui-form-label" style="margin-left: -25%;">职业：</span>--%>
-<%--					<div class="layui-inline">--%>
-<%--						<select name="healtherJob" id="healtherJob" lay-filter="selectName" lay-verify="" >--%>
-<%--							<option value="请选择">请选择</option>--%>
-<%--							<c:if test="${not empty healtherNewList}">--%>
-<%--								<c:forEach items="${healtherNewList}" var="u">--%>
-<%--									<option value="${u}">${u}</option>--%>
-<%--								</c:forEach>--%>
-<%--							</c:if>--%>
-<%--						</select>--%>
-<%--					</div>--%>
-<%--				</div>--%>
 			</div>
 		</div>
 	</form>
@@ -394,16 +380,7 @@
 					layer.msg("输入合法",{icon:6});
 				}
 			});
-			// $("#job").blur(function () {
-			// 	var job = $("#job").val();
-			// 	var reg = /^[\u4e00-\u9fa5]{2,20}$/;
-			// 	if(!$('#job').val().match(reg)||job == 0)
-			// 	{
-			// 		layer.msg("请输入至少2位中文字符", {icon: 2});
-			// 	}else{
-			// 		layer.msg("输入合法",{icon:6});
-			// 	}
-			// });
+
 			$("#name2").blur(function () {
 				var name = $("#name2").val();
 				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
@@ -434,16 +411,6 @@
 					layer.msg("输入合法",{icon:6});
 				}
 			});
-			// $("#job2").blur(function () {
-			// 	var job = $("#job2").val();
-			// 	var reg = /^[\u4e00-\u9fa5]{2,20}$/;
-			// 	if(!$('#job2').val().match(reg)||job == 0)
-			// 	{
-			// 		layer.msg("请输入至少2位中文字符", {icon: 2});
-			// 	}else{
-			// 		layer.msg("输入合法",{icon:6});
-			// 	}
-			// });
 
 		});
 

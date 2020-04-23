@@ -30,7 +30,6 @@
 <body>
 <input type="hidden" id="path" value="<%=path%>">
 	<h2>教师管理</h2>
-	<hr style="color: whitesmoke">
 	<div class="layui-row" >
 	<form class="layui-form" action="" onsubmit="return false;" >
 		<div class="teacherTable">
@@ -452,7 +451,7 @@
 				}else{
 					layer.msg("输入合法",{icon:6});
 				}
-			})
+			});
 			$("#job2").blur(function () {
 				var job = $("#job2").val();
 				var reg = /^[\u4e00-\u9fa5]{2,20}$/;

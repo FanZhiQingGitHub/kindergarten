@@ -30,7 +30,6 @@
 <body>
 <input type="hidden" id="path" value="<%=path%>">
 	<h2>参数配置</h2>
-	<hr style="color: whitesmoke">
 	<div class="layui-row" >
 	<form class="layui-form" action="" onsubmit="return false;" >
 		<div class="parameterTable">
@@ -320,7 +319,6 @@
 			});
 			$("#val").blur(function () {
 				var val = $("#val2").val();
-				// var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
 				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
 				if(!$('#val').val().match(reg)|| val == 0)
 				{

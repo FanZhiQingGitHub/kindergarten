@@ -2,33 +2,34 @@ package com.great.kindergarten.admin.service;
 
 import com.great.kindergarten.admin.javabean.MenuTreeInfo;
 import com.great.kindergarten.admin.javabean.TblStatistics;
-import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.admin.mapper.AdminMapper;
+import com.great.kindergarten.commons.entity.*;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import java.util.*;
 
 @Service
 public class AdminService {
 
-    @Resource
-    private AdminMapper adminMapper;
+	@Resource
+	private AdminMapper adminMapper;
 
-    public String findAdminStatus(String adminname)
-    {
-        return adminMapper.findAdminStatus(adminname);
-    }
+	public String findAdminStatus(String adminname)
+	{
+		return adminMapper.findAdminStatus(adminname);
+	}
 
-    public TblAdmin adminLogin(TblAdmin tblAdmin)
-    {
-        return adminMapper.adminLogin(tblAdmin);
-    }
+	public TblAdmin adminLogin(TblAdmin tblAdmin)
+	{
+		return adminMapper.adminLogin(tblAdmin);
+	}
 
-    public List<TblAdmin> findAdminByName(String adminname)
-    {
-        return adminMapper.findAdminByName(adminname);
-    }
+	public List<TblAdmin> findAdminByName(String adminname)
+	{
+		return adminMapper.findAdminByName(adminname);
+	}
 
 	public List<TblAdmin> findAllAdmin(HashMap<String, Object> condition, RowBounds rowBounds)
 	{
@@ -65,18 +66,18 @@ public class AdminService {
 		return adminMapper.checkAdminName(adminname);
 	}
 
-    public List<TblMenu> findMenuByName(String adminname)
-    {
-        //获取主菜单
-        List<TblMenu> rootMenu = new ArrayList<>();
-        rootMenu = adminMapper.findMenuByName(adminname);
-        //获取子菜单
-        for (TblMenu menu : rootMenu)
-        {
-            menu.setChildrenList(adminMapper.findMenuBySid(menu.getMenuid()));
-        }
-        return rootMenu;
-    }
+	public List<TblMenu> findMenuByName(String adminname)
+	{
+		//获取主菜单
+		List<TblMenu> rootMenu = new ArrayList<>();
+		rootMenu = adminMapper.findMenuByName(adminname);
+		//获取子菜单
+		for (TblMenu menu : rootMenu)
+		{
+			menu.setChildrenList(adminMapper.findMenuBySid(menu.getMenuid()));
+		}
+		return rootMenu;
+	}
 
 	public List<TblMenu> findStairMenu()
 	{
@@ -148,50 +149,50 @@ public class AdminService {
 		return adminMapper.findMenuCount(condition);
 	}
 
-    public String findRoleByRid(Integer rid)
-    {
-        return adminMapper.findRoleByRid(rid);
-    }
+	public String findRoleByRid(Integer rid)
+	{
+		return adminMapper.findRoleByRid(rid);
+	}
 
-    public TblAdmin findTblAdminByName(String name)
-    {
-        return adminMapper.findTblAdminByName(name);
-    }
+	public TblAdmin findTblAdminByName(String name)
+	{
+		return adminMapper.findTblAdminByName(name);
+	}
 
 	public Integer checkMenuName(String menuName)
 	{
 		return adminMapper.checkMenuName(menuName);
 	}
 
-    //修改管理员密码
-    public int updateAdminPwd(String adminpwd,String adminid)
-    {
-        Map<String,String> adminMap = new LinkedHashMap<>();
-        adminMap.put("adminpwd",adminpwd);
-        adminMap.put("adminid",adminid);
-        return adminMapper.updateAdminPwd(adminMap);
-    }
+	//修改管理员密码
+	public int updateAdminPwd(String adminpwd,String adminid)
+	{
+		Map<String,String> adminMap = new LinkedHashMap<>();
+		adminMap.put("adminpwd",adminpwd);
+		adminMap.put("adminid",adminid);
+		return adminMapper.updateAdminPwd(adminMap);
+	}
 
-    //园所管理
-    public List<TblKinder> findAllKinder(HashMap<String, Object> condition, RowBounds rowBounds)
-    {
-        return adminMapper.findAllKinder(condition,rowBounds);
-    }
+	//园所管理
+	public List<TblKinder> findAllKinder(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findAllKinder(condition,rowBounds);
+	}
 
-    public int findAllCount(HashMap<String, Object> condition)
-    {
-        return adminMapper.findAllCount(condition);
-    }
+	public int findAllCount(HashMap<String, Object> condition)
+	{
+		return adminMapper.findAllCount(condition);
+	}
 
-    public int checkQualify(String kinderstatus,Integer kinderid, String kinderapptime)
-    {
-        return adminMapper.checkQualify(kinderstatus,kinderid, kinderapptime);
-    }
+	public int checkQualify(String kinderstatus,Integer kinderid, String kinderapptime)
+	{
+		return adminMapper.checkQualify(kinderstatus,kinderid, kinderapptime);
+	}
 
-    public TblKinder findTblKinderById(Integer kinderid)
-    {
-        return adminMapper.findTblKinderById(kinderid);
-    }
+	public TblKinder findTblKinderById(Integer kinderid)
+	{
+		return adminMapper.findTblKinderById(kinderid);
+	}
 
 	public Integer findIdByKinderName(String kinderName)
 	{
@@ -208,10 +209,10 @@ public class AdminService {
 		return adminMapper.selectKinderInfo(kinderId);
 	}
 
-    public List<TblKinder> findKinder()
-    {
-        return adminMapper.findKinder();
-    }
+	public List<TblKinder> findKinder()
+	{
+		return adminMapper.findKinder();
+	}
 
 	public String findAccountByName(String kindername)
 	{
@@ -327,10 +328,10 @@ public class AdminService {
 		List<TblMenu> rootMenu = new ArrayList<>();
 		rootMenu = adminMapper.findMenuByRid(roleid);
 		//获取子菜单
-//		for (TblMenu menu : rootMenu)
-//		{
-//			menu.setChildrenList(adminMapper.findMenuBySid(menu.getMenuid()));
-//		}
+		//		for (TblMenu menu : rootMenu)
+		//		{
+		//			menu.setChildrenList(adminMapper.findMenuBySid(menu.getMenuid()));
+		//		}
 		return rootMenu;
 	}
 
@@ -566,10 +567,10 @@ public class AdminService {
 		return adminMapper.addSecurity(tblSecurityList);
 	}
 
-//	public List<String> findHealtherJob()
-//	{
-//		return adminMapper.findHealtherJob();
-//	}
+	//	public List<String> findHealtherJob()
+	//	{
+	//		return adminMapper.findHealtherJob();
+	//	}
 
 	//学生管理
 	public List<TblStudent> findAllStudentInfo(HashMap<String, Object> condition, RowBounds rowBounds)
@@ -788,16 +789,26 @@ public class AdminService {
 		return adminMapper.updateAdminInfo(tblAdmin);
 	}
 
-	//管理员重置密码
-	public Integer findExistAdminName(String adminname){
-		Map<String,String> adminMap = new LinkedHashMap<>();
-		adminMap.put("adminname",adminname);
-		return adminMapper.findExistAdminName(adminMap);
+	public List<TblReadmag> findReadInfoById(Integer curPage, Integer pageSize, Integer readmagid)
+	{
+		return adminMapper.findReadInfoById(curPage,pageSize,readmagid);
 	}
-	public boolean resetAdminPwd(String adminname,String adminphone){
-		Map<String,String> adminMap = new LinkedHashMap<>();
-		adminMap.put("adminname",adminname);
-		adminMap.put("adminphone",adminphone);
-		return adminMapper.resetAdminPwd(adminMap);
+
+	public int findReadCountById(Integer readmagid)
+	{
+		return adminMapper.findReadCountById(readmagid);
+	}
+
+	public PageBean<TblReadmag> findReadBookByPage(Integer curPage, Integer pageSize, Integer readmagid)
+	{
+		Integer totalRerords = adminMapper.findReadCountById(readmagid);
+
+		List<TblReadmag> list = adminMapper.findReadInfoById(curPage,pageSize,readmagid);
+
+		PageBean<TblReadmag> readBookPageBean = new PageBean<TblReadmag>(curPage,totalRerords,pageSize);
+
+		readBookPageBean.setList(list);
+
+		return readBookPageBean;
 	}
 }

@@ -106,7 +106,7 @@
 				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
 				setTimeout(function () {
 					parent.layer.close(index); //再执行关闭
-				}, 6000);
+				}, 3000);
 			}
 			,error: function(){
 				//请求异常回调

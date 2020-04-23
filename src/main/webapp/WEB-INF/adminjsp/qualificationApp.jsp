@@ -17,15 +17,11 @@
 			text-align: center;
 			margin-top: 1%;
 		}
-		/*#sel{*/
-		/*	margin-left: -30%;*/
-		/*}*/
 	</style>
 </head>
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
 	<h2 >资 质 审 批</h2>
-	<hr style="color: whitesmoke">
 	<div class="layui-row" >
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="qualifyTable">
@@ -136,8 +132,7 @@
 					layer.open({
 						type:2
 						,title:"园所审批"
-						,area:['40%','83%']
-						,offset:['80']
+						,area:['40%','100%']
 						,btn:['允许','拒绝']
 						,btnAlign: 'c'
 						,content:path+"/admin/toUrl/gardenApproval"

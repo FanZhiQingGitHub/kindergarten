@@ -22,15 +22,10 @@
 			line-height: 70px;
 			white-space:normal;
 		}
-		/*.layui-table-cell{*/
-		/*	height:auto!important;*/
-		/*	*/
-		/*}*/
 		#mName{
 			margin: -24% 0 0 155%;
 		}
 		#btn-add{
-			/*margin-left: 20%;*/
 			margin: -5% 0 0 60%;
 		}
 	</style>
@@ -69,32 +64,6 @@
 			, $ = layui.jquery
 			, upload = layui.upload;
 		var path = $("#path").val();
-		// var tableIns = table.render({
-		// 	elem: '#upload'
-		// 	, height: 300
-		// 	, url: path + "/admin/readMgrInfo"//数据接口
-		// 	, page: true //开启分页
-		// 	, limit: 2
-		// 	, limits: [2, 5]
-		// 	, cols: [[ //表头
-		// 		{field: 'readmagpage', title: '页数', align: 'center', width: 100, sort: true, fixed: 'left'}
-		// 		, {field: 'readmagdetail', title: '故事内容', align: 'center', width: 120 }
-		// 		, {
-		// 			field: 'photourl', title: '图片', align: 'center', width: 240
-		// 			, templet: function (d) { return '<div><img src="'+path+'/'+d.photourl+'" style="width: 60px;height: 60px"></div>' }
-		// 		}
-		// 		, {fixed: 'right', title: '操作', align: 'center', width: 300, toolbar: '#barOption'}
-		// 	]]
-		// 	, id: 'uploadTable'
-		// 	, parseData: function (res) { //res 即为原始返回的数据
-		// 		return {
-		// 			"code": res.code, //解析接口状态
-		// 			"msg": res.msg, //解析提示文本
-		// 			"count": res.count, //解析数据长度
-		// 			"data": res.data //解析数据列表
-		// 		};
-		// 	}
-		// });
 
 		$(function () {
 			$("#mName").blur(function () {
@@ -142,7 +111,6 @@
 
 		$("#btn-add").click(function () {
 			var readMagName = $("#mName").val();
-			console.log(readMagName);
 			layer.open({
 				type: 2,
 				area: ['60%', '80%'],
@@ -155,69 +123,7 @@
 					layero.find('.layui-layer-btn0').id('test9');
 					var body = layer.getChildFrame('body',index);
 					body.find("#readMagName1").val(readMagName);
-					console.log(1);
-				},
-				// yes: function (index) {
-				// 	var uploadInst = upload.render({
-				// 		elem: '#uploadImg' //绑定元素
-				// 		,url: path+"/admin/uploadImg" //上传接口
-				// 		,auto: false
-				// 		,accept: 'images'
-				// 		,acceptMime: 'image/*'
-				// 		,bindAction: '#test9'
-				// 		,choose:function(obj){//选择文件的回调，obj为选中的文件
-				// 			//将每次选择的文件追加到文件队列
-				// 			var files = obj.pushFile();
-				// 			//预览选中的文件（本地文件）
-				// 			obj.preview(function(index,file,result){
-				// 				$('#demo1').attr('src', result);
-				// 			});
-				// 		}
-				// 		,before: function(obj){
-				// 			this.data = {
-				// 				contentInfo: $("#contentInfo").val()
-				// 				,pageNum: $("#pageNum").val()
-				// 				,readMagName1: $("#readMagName1").val()
-				// 			}
-				// 		}
-				// 		,done: function(res){
-				// 			//上传完毕回调
-				// 			if(res.code > 0){
-				// 				return layer.msg('上传失败');
-				// 			}
-				// 			layer.alert("上传成功！",{icon:6});
-				// 		}
-				// 		,error: function(){
-				// 			//请求异常回调
-				// 			layer.alert("上传失败！",{icon:2});
-				// 		}
-				// 	});
-				//
-				// 	// var roleName2 = $('#roleName2').val();
-				// 	// $.ajax({
-				// 	// 	url: path + '/admin/addRoleItems',
-				// 	// 	async: true,
-				// 	// 	type: 'post',
-				// 	// 	data: {"rolename": roleName2},
-				// 	// 	datatype: 'text',
-				// 	// 	success: function (data) {
-				// 	// 		if (data == "success") {
-				// 	// 			layer.alert("新增角色成功！", {icon: 6});
-				// 	// 			layer.close(index);
-				// 	// 			tableIns.reload();
-				// 	// 		} else {
-				// 	// 			layer.alert("新增角色失败", {icon: 2});
-				// 	// 		}
-				// 	// 	}, error: function (data) {
-				// 	// 		layer.alert("网络繁忙！", {icon: 2});
-				// 	// 	}
-				// 	// });
-				// },
-				// btn2:function(index){
-				// 	layer.close(index);
-				// 	$('#contentInfo').val("");
-				// 	$('#pageNum').val("");
-				// }
+				}
 			});
 		});
 

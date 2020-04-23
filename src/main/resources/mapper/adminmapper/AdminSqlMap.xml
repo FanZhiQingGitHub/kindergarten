@@ -893,9 +893,11 @@
         select menuid from tbl_menu where menuname = #{menuname}
     </select>
 
+    <!--    亲子阅读-->
     <select id="findAllReadInfo" resultType="com.great.kindergarten.commons.entity.TblReadmag">
         select * from tbl_readmag
         <where>
+            readmagpage = 0
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(readmagtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -911,6 +913,7 @@
     <select id="findReadCount" resultType="java.lang.Integer">
         select count(*) from tbl_readmag
         <where>
+            readmagpage = 0
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(readmagtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -922,6 +925,23 @@
             </if>
         </where>
     </select>
+
+    <select id="findReadInfoById" resultType="com.great.kindergarten.commons.entity.TblReadmag">
+        select * from tbl_readmag
+        <where>
+            relatedid=#{readmagid}
+
+        </where>
+        order by readmagpage asc limit #{curPage},#{pageSize}
+    </select>
+    <select id="findReadCountById" resultType="java.lang.Integer">
+        select count(*) from tbl_readmag
+        <where>
+            relatedid=#{readmagid}
+            and readmagpage != 0
+        </where>
+    </select>
+
     <select id="findRoleInfo" resultType="com.great.kindergarten.commons.entity.TblRole">
         select roleid, rolename from tbl_role where rolename like '%管理员%';
     </select>
