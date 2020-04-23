@@ -3,10 +3,10 @@ package com.great.kindergarten.admin.mapper;
 import com.great.kindergarten.admin.javabean.MenuTreeInfo;
 import com.great.kindergarten.admin.javabean.TblStatistics;
 import com.great.kindergarten.commons.entity.*;
-import com.great.kindergarten.healther.resultbean.ExaminationPage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -171,6 +171,17 @@ public interface AdminMapper
 	public List<TblRole> findRoleInfo();
 
 	public List<TblMenu> findMenuByRid(Integer roleid);
+
+
+	/**
+	 * 查看绘本
+	 * @param readmagid
+	 * @param curPage
+	 * @return
+	 */
+	public List<TblReadmag> findReadInfoById(Integer curPage, Integer pageSize, Integer readmagid);
+
+	public int findReadCountById(Integer readmagid);
 
 	//平台资讯
 	public List<TblPlatforminfo> findAllPlatFormInfo(HashMap<String, Object> condition, RowBounds rowBounds);

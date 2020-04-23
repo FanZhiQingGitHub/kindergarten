@@ -37,7 +37,6 @@
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
 	<h2 >菜 单 管 理</h2>
-	<hr style="color: whitesmoke">
 	<div class="layui-row" style="margin-top: 20px;">
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="menuTable" style="margin-left: 5%;">
@@ -362,7 +361,6 @@
 					{
 						layer.msg("输入不合法，斜杠后必须是字母，请输入如格式：admin/toUrl/**", {icon: 2});
 					}else{
-						// console.log(arr[1].match(reg));
 					}
 				}else{
 					layer.msg("输入不合法，斜杠后必须是字母，请输入如格式：admin/toUrl/**", {icon: 2});

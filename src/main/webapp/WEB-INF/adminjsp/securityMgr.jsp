@@ -30,7 +30,6 @@
 <body>
 <input type="hidden" id="path" value="<%=path%>">
 	<h2>安防员管理</h2>
-	<hr style="color: whitesmoke">
 	<div class="layui-row" >
 	<form class="layui-form" action="" onsubmit="return false;" >
 		<div class="securityTable">
@@ -68,19 +67,6 @@
 						</select>
 					</div>
 				</div>
-<%--				<div class="layui-inline">--%>
-<%--					<span class="layui-form-label" style="margin-left: -25%;">职业：</span>--%>
-<%--					<div class="layui-inline">--%>
-<%--						<select name="healtherJob" id="healtherJob" lay-filter="selectName" lay-verify="" >--%>
-<%--							<option value="请选择">请选择</option>--%>
-<%--							<c:if test="${not empty healtherNewList}">--%>
-<%--								<c:forEach items="${healtherNewList}" var="u">--%>
-<%--									<option value="${u}">${u}</option>--%>
-<%--								</c:forEach>--%>
-<%--							</c:if>--%>
-<%--						</select>--%>
-<%--					</div>--%>
-<%--				</div>--%>
 			</div>
 		</div>
 	</form>

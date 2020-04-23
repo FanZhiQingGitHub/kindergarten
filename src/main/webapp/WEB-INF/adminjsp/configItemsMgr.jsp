@@ -39,8 +39,6 @@
 		</form>
 	</div>
 	<table id="configItems" lay-filter="test" class=""></table>
-<%--	<button class="layui-btn btn-add btn-default" id="save" style="">保存</button>--%>
-<%--	<button class="layui-btn btn-add btn-default" id="cancel" style="">取消</button>--%>
 
 </body>
 <script>
@@ -63,10 +61,6 @@
 			, $ = layui.jquery;
 		var path = $("#path").val();
 
-		// $("#cancel").click(function () {
-		// 	location.href = path + "/admin/toUrl/videoQuestionConfigMgr"
-		// });
-
 		$("#btn-add").click(function () {
 			var index = parent.layer.open({
 				type: 2,
@@ -76,7 +70,7 @@
 				title: '新增题目',
 				btn: ['保存', '取消'],
 				offset: ['60px','300px'],
-				btnAlign: 'c',
+				btnAlign: 'c'
 				// maxmin: true
 				// btn1: function (index) {
 				// 	var safetyVideoName = $("#safetyVideoName").val();

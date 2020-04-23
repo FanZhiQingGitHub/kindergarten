@@ -95,12 +95,6 @@
 			</div>
 		</div>
 
-<%--		<div class="layui-form-item" style="margin-top:20px">--%>
-<%--			<div class="layui-input-block">--%>
-<%--				<button class="layui-btn " lay-filter="demo11">允许</button>--%>
-<%--				<button class="layui-btn layui-btn-normal" lay-filter="demo12">拒绝</button>--%>
-<%--			</div>--%>
-<%--		</div>--%>
 	</form>
 </body>
 </html>

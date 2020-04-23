@@ -14,9 +14,6 @@
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
-		/*body{*/
-		/*	overscroll-behavior-x: auto;*/
-		/*}*/
 		h2 {
 			text-align: center;
 		}
@@ -31,7 +28,6 @@
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
 	<h2>平台资讯</h2>
-	<hr style="color: whitesmoke">
 	<div class="layui-row" >
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="platformTable">
@@ -99,15 +95,14 @@
 	</div>
 
 	<script type="text/html" id="barOption">
-		<button type="button" class="layui-btn layui-btn-normal" lay-event="update" style="text-align: -moz-center"><i class="layui-icon">&#xe642;修改</i></button>
-		<button type="button" class="layui-btn layui-btn-normal" lay-event="delete" style="text-align: -moz-center"><i class="layui-icon">&#xe640;删除</i></button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="update" style="text-align: -moz-center"><i class="layui-icon">&#xe642;修改</i></button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="delete" style="text-align: -moz-center"><i class="layui-icon">&#xe640;删除</i></button>
 		{{#  if(d.platforminfostatus == '已发布'){ }}
-		<button  type="button" class="layui-btn layui-btn" lay-event="cancel" >取消发布</button>
+		<button  type="button" class="layui-btn layui-btn-sm" lay-event="cancel" >取消发布</button>
 		{{#  } }}
 		{{#  if(d.platforminfostatus == '未发布'){ }}
-		<button type="button" class="layui-btn layui-btn" lay-event="release" >发布</button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="release" >发布</button>
 		{{#  } }}
-<%--		<button type="button" class="layui-btn layui-btn-normal" lay-event="delete" ><i class="layui-icon">&#xe667;发布</i></button>--%>
 	</script>
 </body>
 <script>
@@ -152,7 +147,6 @@
 			//监听工具条
 			table.on('tool(test)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 				data = obj.data; //获得当前行数据
-				console.log(data);
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if (layEvent === 'update') {
 					layer.open({

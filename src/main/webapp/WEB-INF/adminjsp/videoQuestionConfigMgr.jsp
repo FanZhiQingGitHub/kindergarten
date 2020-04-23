@@ -34,7 +34,6 @@
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
 	<h2 >视频试题配置</h2>
-	<hr style="color: whitesmoke">
 	<div class="layui-row" >
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="videoQuestionTable">
@@ -286,6 +285,7 @@
 								type: 1,
 								area: ['70%', '90%'],
 								// content: path+"/admin/toUrl/configItemsMgr", //数组第二项即吸附元素选择器或者DOM
+								closeBtn :0,
 								content: $("#type-content3"),
 								title: '配置试题',
 								btn: ['保存', '取消'],
@@ -342,6 +342,7 @@
 				layer.open({
 					type: 1,
 					area: ['40%', '80%'],
+					closeBtn :0,
 					// content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
 					// content: path+"/admin/toUrl/addTopicInfo",
 					content:$("#type-content4"),

@@ -115,25 +115,18 @@
 			click: function(obj){
 				var data = obj.data; //获取当前点击的节点数据
 				layer.msg('状态：'+ obj.state + '<br>节点数据：' + data.title+'<br>'+JSON.stringify(data));
-
 				$.ajax({
 					url: $("#path").val()+"/admin/findMenuByRoleName",    //后台数据请求地址
-					// data: {'data':JSON.stringify(data)},
 					data: {'data':data.id},
 					type: "post",
 					async: true,
 					success: function(result){
-						// layer.alert("成功",{icon:6})
-						console.log(result);
 						menuInfo = result;
-						// menuInfo.push(result);
 						transfer.render({
 							elem: '#test1'  //绑定元素
 							,title: ['已分配','未分配']
 							,data: menuInfo
 							,parseData: function(res){
-								console.log(res.children);
-								var d = [];
 								return {
 									"value": res.id //数据值
 									,"title": [res.title,"children"[{"value":res.children.id,"title":res.children.title,"disabled": "", "checked": ""}]] //数据标题
@@ -148,20 +141,6 @@
 				});
 			}
 		});
-
-		// //渲染穿梭框
-		// console.log(menuInfo);
-		// transfer.render({
-		// 	elem: '#test1'  //绑定元素
-		// 	,title:['已分配','未分配']
-		// 	,data: menu
-		// 	// ,data: [
-		// 	// 	{"value": "1", "title": "李白", "disabled": "", "checked": ""}
-		// 	// 	,{"value": "2", "title": "杜甫", "disabled": "", "checked": ""}
-		// 	// 	,{"value": "3", "title": "贤心", "disabled": "", "checked": ""}
-		// 	// ]
-		// 	,id: 'demo1' //定义索引
-		// });
 
 		//搜索功能的实现
 		$('.demoTable .layui-btn').on('click', function () {
