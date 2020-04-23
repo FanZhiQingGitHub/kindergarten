@@ -12,6 +12,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
 
 /**
  * 切点类
@@ -88,12 +89,10 @@ public class ParentSystemLogAspect {
         HttpSession session = request.getSession();
 
         //读取session中的用户
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute("onlineParent");
         //请求的IP
-        String ip = request.getRemoteAddr();
-        if(ip.equals("0:0:0:0:0:0:0:1")){
-            ip = "127.0.0.1";
-        }
+        InetAddress addr = InetAddress.getLocalHost();
+        String ip = addr.getHostAddress();
 
         try {
 
