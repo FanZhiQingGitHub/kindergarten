@@ -229,7 +229,7 @@
     <!--家长和学生的对应的表格的显示-->
     <select id="findParentAll" resultMap="tbl_ParentStudent" parameterType="java.util.HashMap">
         select p.*,s.studentid,s.studentname from tbl_student s,tbl_parent p
-        <where> s.pid=p.parentid and kid = #{kid}
+        <where> s.pid=p.parentid and s.kid = #{kid}
             <if test="parentname != null and parentname != ''">
                 and p.parentname like "%"#{parentname}"%"
             </if>
@@ -245,7 +245,7 @@
     <!--家长模块....查询记录条数-->
     <select id="findParentAllCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
         select count(*) from tbl_student s,tbl_parent p
-        <where> s.pid=p.parentid and kid = #{kid}
+        <where> s.pid=p.parentid and s.kid = #{kid}
             <if test="parentname != null and parentname != ''">
                 and parentname like "%"#{parentname}"%"
             </if>

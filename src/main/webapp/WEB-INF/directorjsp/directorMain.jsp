@@ -151,12 +151,14 @@
                             <a><img style="width: 100%"
                                     src="${pageContext.request.contextPath}/image/healtherimg/img/news.jpg"></a>
                         </div>
-                        <div style=" overflow:auto;">
-                            <c:if test="${not empty tblCampusList}">
-                                <c:forEach items="${tblCampusList}" var="i" step="1">
-                                    <a href="javascript:;" style="font-size: 18px" class="showNewsInfo">${i.campusinfoname}<span style="display: none">:${i.campusinfodetail}</span><br/>发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></a><br>
-                                </c:forEach>
-                            </c:if>
+                        <div id="demo">
+                            <div style=" overflow:auto;">
+                                <c:if test="${not empty tblCampusList}">
+                                    <c:forEach items="${tblCampusList}" var="i" step="1">
+                                        <a href="javascript:;" style="font-size: 18px" class="showNewsInfo">${i.campusinfoname}<span style="display: none">:${i.campusinfodetail}</span><br/>发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></a><br>
+                                    </c:forEach>
+                                </c:if>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -456,14 +458,6 @@
             });
         });
         $(".addTeaAttendTime").click(function () {
-            // var path = $("#path").val();
-            // var weekInfo = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
-            // var week = new Date().getDay();
-            // var weekToday = weekInfo[week];
-
-            // if(weekToday == "星期六" || weekToday == "星期日"){
-            //     layer.alert('亲，现在是周末哦，打卡功能暂时关闭。',{icon:6});
-            // }else {
             layer.open({
                 type: 2,
                 area: ['95%', '81%'],
@@ -474,7 +468,17 @@
                     var body = layer.getChildFrame("body", index);
                 }
             });
-            // }
+
+        });
+
+        $(document).ready(function(){
+            $.ajax({
+                url: src + "/director/selectCampus",
+                async: true,
+                type: "post",
+                success: function (msg) {
+                }
+            });
         });
     });
 

@@ -146,8 +146,8 @@
     </select>
 
     <!--班级管理....查找对应的老师的信息下拉框-->
-    <select id="findTeacherClassAll" resultType="TblTeacher">
-        select * from tbl_teacher where teacherjob='班主任'
+    <select id="findTeacherClassAll" resultType="TblTeacher" parameterType="integer">
+        select * from tbl_teacher where teacherjob='班主任' and kinderid = #{kinderid}
     </select>
 
     <!--班级管理.查找判断对应的班级是不是唯一-->
@@ -157,8 +157,8 @@
 
     <!--班级管理....对应的进行家长的新增-->
     <insert id="addClassForm" parameterType="TblClass">
-		insert into tbl_class(classname,classregtime,classstatus)
-        values(#{classname},#{classregtime},'启用');
+		insert into tbl_class(classname,classregtime,classstatus,kid)
+        values(#{classname},#{classregtime},'启用',#{kid});
 	</insert>
     <select id="selectClassByCid" resultType="TblClass" parameterType="string">
         select * from tbl_class where classname = #{classname};

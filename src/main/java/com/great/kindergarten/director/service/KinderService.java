@@ -96,9 +96,9 @@ public class KinderService
 	}
 
 	//查找对应的所有学生信息
-	public List<TblTeacher> findTeacherClassAll()
+	public List<TblTeacher> findTeacherClassAll(Integer kinderid)
 	{
-		return kinderMapper.findTeacherClassAll();
+		return kinderMapper.findTeacherClassAll(kinderid);
 	}
 
 	//新增对应的班级

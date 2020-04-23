@@ -43,15 +43,12 @@
 		</select>
 	</div>
 	<button class="layui-btn" data-type="reload"><i class="layui-icon">&#xe615;</i>查询</button>
-<%--	<button class="layui-btn" data-type="addTeacher"><i class="layui-icon">&#xe654;</i>新增</button>--%>
 </div>
 <input type="hidden" value="${pageContext.request.contextPath}" id="srcAddress"/>
 
 <table id="demo" lay-filter="test"></table>
 <script type="text/html" id="barDemo">
 	<a class="layui-btn edit layui-btn-xs" data-method="dialog" lay-event="edit"><i class="layui-icon">&#xe642;</i>考勤信息</a>
-<%--	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon">&#xe67e;</i>删除</a>--%>
-
 </script>
 
 <script src="${pageContext.request.contextPath}/layui/layui.js"></script>
