@@ -141,6 +141,28 @@
         <button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="chatTeacher">联<br/>系<br/>老<br/>师</button>
     </div>
 
+    <div class="prod-show" >
+
+        <div class="img-txt">
+            <h3>
+                <button type="button" id="bu1" class="layui-btn layui-btn-lg layui-btn-normal"
+                        style="width: 100%;height: 100%;font-size: 20px">保健员管理
+                </button>
+            </h3>
+        </div>
+
+        <div class="img-txt">
+            <h3>
+                <button type="button" id="bu2" class="layui-btn layui-btn-lg layui-btn-warm"
+                        style="width: 100%;height: 100%;font-size: 20px">安防员管理
+                </button>
+            </h3>
+        </div>
+
+    </div>
+
+
+
     <div class="prod-show" style="max-width: 80%;">
         <div class="layui-fluid">
             <div class="row layui-col-space12 layui-clear">
@@ -479,6 +501,42 @@
                 success: function (msg) {
                 }
             });
+        });
+
+        $(function () {
+           $("#bu1").click(function () {
+               layer.open({
+                   type: 2,
+                   area: ['95%', '80%'],
+                   offset: ['10%', '3%'],
+                   title: '智慧幼儿园-保健员管理',
+                   btn1: function (index, layero) {
+                       //layer.getChildFrame("form", index)获取iframe的表单
+                       //serializeArray jquery方法，将表单对象序列化为数组
+                       layer.close(index);
+                   },
+                   content: src + '/director/toUrl/director_HealtherManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                   , success: function (layero, index) {
+                   }
+               });
+
+           }),$("#bu2").click(function () {
+               layer.open({
+                   type: 2,
+                   area: ['95%', '80%'],
+                   offset: ['10%', '3%'],
+                   title: '智慧幼儿园-安防员管理',
+                   btn1: function (index, layero) {
+                       //layer.getChildFrame("form", index)获取iframe的表单
+                       //serializeArray jquery方法，将表单对象序列化为数组
+                       layer.close(index);
+                   },
+                   content: src + '/director/toUrl/director_SecurityManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                   , success: function (layero, index) {
+                   }
+               });
+
+           })
         });
     });
 

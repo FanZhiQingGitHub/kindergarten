@@ -109,6 +109,20 @@
             color: red;
         }
 
+        #a1{
+            color: #9F9F9F
+        }
+        #a2{
+            color: #9F9F9F
+        }
+
+        #a1:hover{
+           color: #f37d25;
+        }
+        #a2:hover{
+            color: #f37d25;
+        }
+
         .admin-icon {
             position: absolute;
             margin-left: 280px;
@@ -128,7 +142,7 @@
         .main_r_up .pp{ float:left;height:74px; line-height:74px; font-size:18px; color:#333; padding-left:20px;letter-spacing:9px;}
 
         .footer{ width:100%; height:60px; line-height:60px; position:fixed; bottom:0; background:url(${pageContext.request.contextPath}/loginres/images/footerBg.png);background-color: transparent;}
-        .footer0{ width:1200px; height:60px; margin:0 auto; font-size:14px; color:#adacac}
+        .footer0{ width:1200px; height:60px; margin:0 auto; font-size:14px; color: #9F9F9F}
         .footer_l{ float:left}
         .footer_r{ float:right}
 
@@ -164,7 +178,7 @@
                 <label class="layui-form-label">幼儿园</label>
                 <div class="layui-input-block">
                     <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
-                    <input type="text" name="kindername" lay-verify="required" placeholder="请输入用户名" value="智慧幼儿园"
+                    <input type="text" name="kindername" lay-verify="required" placeholder="请输入用户名" value=""
                            autocomplete="off" class="layui-input" id="te1">
                 </div>
             </div>
@@ -173,7 +187,7 @@
                 <div class="layui-input-inline">
                     <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
                     <input type="password" name="kinderpwd" required lay-verify="pass" placeholder="请输入6-12位密码"
-                           value="123456"
+                           value=""
                            autocomplete="off" class="layui-input" id="te2">
                 </div>
             </div>
@@ -205,7 +219,7 @@
 
     <div class="footer">
         <div class="footer0">
-            <div class="footer_l">使用条款 | 隐私保护</div>
+            <div class="footer_l"><a href="javascript:void(0);" id="a1">使用条款</a> | <a href="javascript:void(0);" id="a2">隐私保护</a></div>
             <div class="footer_r">@2020 最后#的小组 版权所有© &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E-MAIL:kindergarten@outlook.com </div>
         </div>
     </div>
@@ -241,7 +255,6 @@
             }
         });
         form.on('submit(formDemo)', function (data) {
-
             $.ajax({
                 url: path + "/main/mainLogin",
                 async: true,
@@ -270,7 +283,6 @@
                         layer.msg("该幼儿园未通过审批！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/main/LoginCode?" + Math.random();
-
                     }
                 }, error: function (msg) {
                     layer.msg("网络繁忙！", {icon: 2});
@@ -286,8 +298,27 @@
             }), $("#bu1").click(function () {
                 var code = document.getElementById("code");
                 code.src = path + "/main/LoginCode?" + Math.random();
-            })
-        })
+            }), $("#a1").click(function () {
+                layer.open({
+                    title: '使用条款'
+                    ,content: '本应用深知个人信息对您的重要性，并会尽全力保护您的个人信息安全可靠。我们致力于维持您对我们的信任，恪守以下原则，保护您的个人信息：权责一致原则、目的明确原则、选择同意原则、最少够用原则、确保安全原则、主体参与原则、公开透明原则等。同时，我们承诺，我们将按业界成熟的安全标准，采取相应的安全保护措施来保护您的个人信息。 请在使用我们的产品（或服务）前，仔细阅读并了解本《隐私权政策》。\n' +
+                        '\n' +
+                        '作者：最后#的小组\n' +
+                        '著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。'
+                });
+            }), $("#a2").click(function () {
+                layer.open({
+                    title: '隐私保护'
+                    ,content: '' +
+                        '感谢您的支持，我们会重视您在体验中的个人隐私。同时您在使用我们的产品时，我们可能会收集和使用您的相关信息。我们希望通过本《隐私政策》向您说明，在使用我们的服务时，我们如何收集、使用、储存这些信息，以及我们为您提供的访问、更新、控制和保护这些信息的方式。本《隐私政策》与您所使用的本产品服务息息相关，希望您仔细阅读，在需要时，按照本《隐私政策》的指引，作出您认为适当的选择。本《隐私政策》中涉及的相关技术词汇，我们尽量以简明扼要的表述，以便您的理解。\n' +
+                        '\n' +
+                        '如对本《隐私政策》或相关事宜有任何问题，请通过kindergarten@outlook.com与我们联系。\n' +
+                        '\n' +
+                        '作者：最后#的小组\n' +
+                        '著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。'
+                });
+            });
+        });
     });
 </script>
 

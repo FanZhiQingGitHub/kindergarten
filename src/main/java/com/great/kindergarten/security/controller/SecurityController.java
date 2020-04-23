@@ -142,24 +142,28 @@ public class SecurityController {
         }
     }
 
-    //重置安防员密码
-//    @SecuritySystemLog(operationType = "修改", operationName = "安防员重置密码")
-    @RequestMapping("/resetSecuritypwd")
-    public void resetSecuritypwd(TblSecurity tblSecurity, HttpServletRequest request,HttpServletResponse response) {
-        request.getSession().setAttribute("securityname",tblSecurity.getSecurityname());
+    @RequestMapping("/findExistSecurityName")
+    public void findExistSecurityName(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response) {
         Integer num = securityService.findExistSecurityName(tblSecurity.getSecurityname());
-        if(num > 0){
-            Boolean flag = securityService.resetSecuritypwd(tblSecurity.getSecurityname(),tblSecurity.getSecurityphone());
-            if (flag) {
-                request.getSession().removeAttribute("securityname");//重置成功后清除掉
-                ResponseUtils.outHtml(response, "success");
-            } else {
-                ResponseUtils.outHtml(response, "error");
-            }
-        }else {
+        if (num > 0) {
+            ResponseUtils.outHtml(response, "success");
+        } else {
             ResponseUtils.outHtml(response, "notmen");
         }
+    }
 
+    //重置安防员密码
+    @SecuritySystemLog(operationType = "修改", operationName = "安防员重置密码")
+    @RequestMapping("/resetSecuritypwd")
+    public void resetSecuritypwd(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response) {
+        request.getSession().setAttribute("securityname", tblSecurity.getSecurityname());
+        Boolean flag = securityService.resetSecuritypwd(tblSecurity.getSecurityname(), tblSecurity.getSecurityphone());
+        if (flag) {
+            request.getSession().removeAttribute("securityname");//重置成功后清除掉
+            ResponseUtils.outHtml(response, "success");
+        } else {
+            ResponseUtils.outHtml(response, "error");
+        }
     }
 
     //查找宝宝班级信息
@@ -443,9 +447,9 @@ public class SecurityController {
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
         } else {
-            if(kindername == null){
+            if (kindername == null) {
                 dateWrite.setMsg("亲，您需要登录幼儿园账号后才可以查看该信息！");
-            }else {
+            } else {
                 dateWrite.setMsg("亲，暂无相关数据(注：如果是时间搜索，请选择周一至周日的时间进行查询，谢谢！)");
             }
             request.setCharacterEncoding("UTF-8");
@@ -480,9 +484,9 @@ public class SecurityController {
     @RequestMapping("/findCoordinate")
     public void findCoordinate(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Gson g = new Gson();
-        if(kindername == null){
+        if (kindername == null) {
             response.getWriter().print("notkindername");
-        }else {
+        } else {
             TblKinder tblKinder = securityService.findKinderId(kindername);
             List<TblCoordinate> tblCoordinateList = securityService.findCoordinate(tblKinder.getKinderid().toString());
             if (0 != tblCoordinateList.size()) {
@@ -500,10 +504,10 @@ public class SecurityController {
 
     //查出幼儿园的电子围栏信息
     @RequestMapping("/findLngLatInfo")
-    public void findLngLatInfo(DateWrite dateWrite,HttpServletRequest request,HttpServletResponse response) throws Exception {
+    public void findLngLatInfo(DateWrite dateWrite, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String kindername = request.getParameter("kindername");
         List<TblCoordinate> tblCoordinateList = securityService.findLngLatInfo(kindername);
-        if(0 != tblCoordinateList.size()){
+        if (0 != tblCoordinateList.size()) {
             dateWrite.setCode(0);
             dateWrite.setMsg(" ");
             dateWrite.setCount(0);
@@ -512,10 +516,10 @@ public class SecurityController {
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
-        }else {
-            if(kindername == null){
+        } else {
+            if (kindername == null) {
                 dateWrite.setMsg("亲，您需要登录幼儿园账号后才可以查看该信息！");
-            }else {
+            } else {
                 dateWrite.setMsg("亲，暂无相关数据！");
             }
             request.setCharacterEncoding("UTF-8");
@@ -528,28 +532,28 @@ public class SecurityController {
     //修改电子围栏坐标
     @SecuritySystemLog(operationType = "修改", operationName = "安防员修改幼儿园电子围栏")
     @RequestMapping("/updateMealInfo")
-    public void updateMealInfo(TblCoordinate tblCoordinate,HttpServletRequest request,HttpServletResponse response){
-       //需要幼儿园账号找出ID
+    public void updateMealInfo(TblCoordinate tblCoordinate, HttpServletRequest request, HttpServletResponse response) {
+        //需要幼儿园账号找出ID
         Gson g = new Gson();
         String msg = request.getParameter("TblCoordinate");
-        tblCoordinate = g.fromJson(msg,TblCoordinate.class);
+        tblCoordinate = g.fromJson(msg, TblCoordinate.class);
         List<TblCoordinate> tblCoordinateList = tblCoordinate.getCoordinatelist();
         TblKinder tblKinder = securityService.findKinderId(kindername);//查出幼儿园id
         Boolean flag = securityService.deleteLngLatInfo(tblKinder.getKinderid());
-        if(flag){
+        if (flag) {
             Boolean flag1 = securityService.addCoordinate(tblCoordinateList);
             if (flag1) {
                 ResponseUtils.outHtml(response, "success");
             } else {
                 ResponseUtils.outHtml(response, "error");
             }
-        }else {
+        } else {
             ResponseUtils.outHtml(response, "error");
         }
     }
 
     @RequestMapping("/showMonitorInfo")
-    public void showMonitorInfo(DateWrite dateWrite, MonitorPage monitorPage,HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void showMonitorInfo(DateWrite dateWrite, MonitorPage monitorPage, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         Integer page = Integer.valueOf(request.getParameter("page"));
         Integer limit = Integer.valueOf(request.getParameter("limit"));
@@ -571,9 +575,9 @@ public class SecurityController {
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
         } else {
-            if(kindername == null){
+            if (kindername == null) {
                 dateWrite.setMsg("亲，您需要登录幼儿园账号后才可以查看该信息！");
-            }else {
+            } else {
                 dateWrite.setMsg("亲，暂无相关数据！");
             }
             request.setCharacterEncoding("UTF-8");
@@ -585,7 +589,7 @@ public class SecurityController {
 
 
     @RequestMapping("/showClassInfo")
-    public void showClassInfo(DateWrite dateWrite, ClassPage classPage, HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public void showClassInfo(DateWrite dateWrite, ClassPage classPage, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Integer page = Integer.valueOf(request.getParameter("page"));
         Integer limit = Integer.valueOf(request.getParameter("limit"));
 
@@ -607,9 +611,9 @@ public class SecurityController {
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
         } else {
-            if(kindername == null){
+            if (kindername == null) {
                 dateWrite.setMsg("亲，您需要登录幼儿园账号后才可以查看该信息！");
-            }else {
+            } else {
                 dateWrite.setMsg("亲，暂无相关数据！");
             }
             request.setCharacterEncoding("UTF-8");
@@ -638,17 +642,17 @@ public class SecurityController {
 
     @SecuritySystemLog(operationType = "修改", operationName = "安防员配置班级家长直播权限")
     @RequestMapping("/updateMonitorCP")
-    public void updateMonitorCP(TblMonitorname tblMonitorname,HttpServletRequest request,HttpServletResponse response){
+    public void updateMonitorCP(TblMonitorname tblMonitorname, HttpServletRequest request, HttpServletResponse response) {
         Gson g = new Gson();
         String msg = request.getParameter("TblMonitorname");
-        tblMonitorname = g.fromJson(msg,TblMonitorname.class);
+        tblMonitorname = g.fromJson(msg, TblMonitorname.class);
         List tblMonitornameList = tblMonitorname.getTblMonitornameList();
         Integer classid = tblMonitorname.getClassid();
         List<Map<String, Integer>> list = new ArrayList();
-        for(int i = 0;i<tblMonitornameList.size();i++){
+        for (int i = 0; i < tblMonitornameList.size(); i++) {
             Map<String, Integer> menuMap = new LinkedHashMap();
             Double id = (Double) tblMonitornameList.get(i);
-            String []arr = id.toString().split("\\.");
+            String[] arr = id.toString().split("\\.");
             String num = arr[0];
             menuMap.put("cid", classid);
             menuMap.put("mnid", Integer.valueOf(num));
@@ -656,30 +660,30 @@ public class SecurityController {
         }
         Boolean flag = null;
         Integer count = securityService.findMonitorInfoCont(classid).intValue();
-        if(count > 0){
+        if (count > 0) {
             flag = securityService.deleteMnId(classid);
-            if(flag){
+            if (flag) {
                 flag = securityService.updateTblClamon(list);
-                if(flag){
-                    ResponseUtils.outHtml(response,"success");
-                }else {
-                    ResponseUtils.outHtml(response,"error");
+                if (flag) {
+                    ResponseUtils.outHtml(response, "success");
+                } else {
+                    ResponseUtils.outHtml(response, "error");
                 }
-            }else {
-                ResponseUtils.outHtml(response,"error");
+            } else {
+                ResponseUtils.outHtml(response, "error");
             }
-        }else {
+        } else {
             flag = securityService.updateTblClamon(list);
-            if(flag){
-                ResponseUtils.outHtml(response,"success");
-            }else {
-                ResponseUtils.outHtml(response,"error");
+            if (flag) {
+                ResponseUtils.outHtml(response, "success");
+            } else {
+                ResponseUtils.outHtml(response, "error");
             }
         }
     }
 
     @RequestMapping("/showMonitorInfoMag")
-    public void showMonitorInfoMag(DateWrite dateWrite, MonitorPage monitorPage,HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void showMonitorInfoMag(DateWrite dateWrite, MonitorPage monitorPage, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String liketime = request.getParameter("key1");//视频时间
         String likeName = request.getParameter("key2");//视频名称
         Object liketime1 = null;
@@ -725,9 +729,9 @@ public class SecurityController {
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
         } else {
-            if(kindername == null){
+            if (kindername == null) {
                 dateWrite.setMsg("亲，您需要登录幼儿园账号后才可以查看该信息！");
-            }else {
+            } else {
                 dateWrite.setMsg("亲，暂无相关数据！");
             }
             request.setCharacterEncoding("UTF-8");

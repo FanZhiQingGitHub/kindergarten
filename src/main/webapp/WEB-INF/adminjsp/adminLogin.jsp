@@ -190,7 +190,7 @@
                     <label class="layui-form-label">管理员</label>
                     <div class="layui-input-block">
                         <i class="layui-icon layui-icon-username admin-icon admin-icon-adminname"></i>
-                        <input type="text" name="adminname" lay-verify="required" placeholder="请输入管理员名称" value="admin"
+                        <input type="text" name="adminname" lay-verify="required" placeholder="请输入管理员名称" value=""
                                autocomplete="off" class="layui-input" id="te1">
                     </div>
                 </div>
@@ -199,7 +199,7 @@
                     <div class="layui-input-inline">
                         <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
                         <input type="password" name="adminpwd" required lay-verify="pass" placeholder="请输入6-12位密码"
-                               value="123456"
+                               value=""
                                autocomplete="off" class="layui-input" id="te2">
                     </div>
                 </div>

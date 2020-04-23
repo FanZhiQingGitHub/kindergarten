@@ -15,6 +15,7 @@ public class TblSecurity {
     private String securityregtime;
     private String securitystatus;
     private Integer rid;
+    private Integer kid;
 
     private String code;
     private String time1;
@@ -23,7 +24,7 @@ public class TblSecurity {
     public TblSecurity() {
     }
 
-    public TblSecurity(Integer securityid, String securityname, String securitypwd, String securitysex, Integer securityage, String securityadd, String securityphone, String securityregtime, String securitystatus, Integer rid) {
+    public TblSecurity(Integer securityid, String securityname, String securitypwd, String securitysex, Integer securityage, String securityadd, String securityphone, String securityregtime, String securitystatus, Integer rid, Integer kid) {
         this.securityid = securityid;
         this.securityname = securityname;
         this.securitypwd = securitypwd;
@@ -34,6 +35,7 @@ public class TblSecurity {
         this.securityregtime = securityregtime;
         this.securitystatus = securitystatus;
         this.rid = rid;
+        this.kid = kid;
     }
 
     public Integer getSecurityid() {
@@ -144,6 +146,14 @@ public class TblSecurity {
         this.time2 = time2;
     }
 
+    public Integer getKid() {
+        return kid;
+    }
+
+    public void setKid(Integer kid) {
+        this.kid = kid;
+    }
+
     @Override
     public String toString() {
         return "TblSecurity{" +
@@ -157,7 +167,10 @@ public class TblSecurity {
                 ", securityregtime='" + securityregtime + '\'' +
                 ", securitystatus='" + securitystatus + '\'' +
                 ", rid=" + rid +
+                ", kid=" + kid +
                 ", code='" + code + '\'' +
+                ", time1='" + time1 + '\'' +
+                ", time2='" + time2 + '\'' +
                 '}';
     }
 }

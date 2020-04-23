@@ -38,6 +38,8 @@ public class MainController {
         kindername = tblKinder.getKindername();
         String kinderpwd = MD5Utils.md5(tblKinder.getKinderpwd());
         String code = tblKinder.getKindercode();
+        System.out.println("kindername="+kindername);
+        System.out.println("kinderpwd="+kinderpwd);
         Boolean confirm = code.equalsIgnoreCase(maincode);
         if (confirm) {
             TblKinder tblKinder1 = mainService.findKinderStatus(kindername);

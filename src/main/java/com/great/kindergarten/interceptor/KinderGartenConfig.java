@@ -1,5 +1,7 @@
 package com.great.kindergarten.interceptor;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -16,7 +18,17 @@ public class KinderGartenConfig implements WebMvcConfigurer {
         InterceptorRegistration interceptorRegistration = registry.addInterceptor(new KinderGartenInterceptor());
         interceptorRegistration.addPathPatterns("/**");
         interceptorRegistration.excludePathPatterns(
-                "/**/*.jsp","/image/**","/js/**","/layui/**","/mainres/**"
+                "/commons/**",
+                "/homeWork/**",
+                "/image/**",
+                "/js/**",
+                "/layui/**",
+                "/loginres/**",
+                "/mainres/**",
+                "/photos/**",
+                "/resources/**",
+                "/workRelease/**"
         );
     }
 }
+

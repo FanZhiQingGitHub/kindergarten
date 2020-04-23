@@ -123,22 +123,28 @@ public class HealtherController {
         }
     }
 
+    @RequestMapping("/findExistHealtherName")
+    public void findExistHealtherName(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
+        request.getSession().setAttribute("healthername", tblHealther.getHealthername());
+        Integer num = healtherService.findExistHealtherName(tblHealther.getHealthername());
+        if (num > 0) {
+            ResponseUtils.outHtml(response, "success");
+        } else {
+            ResponseUtils.outHtml(response, "notmen");
+        }
+    }
+
 
     @HealtherSystemLog(operationType = "重置密码", operationName = "保健员重置密码")
     @RequestMapping("/resetHealtherpwd")
     public void resetHealtherpwd(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
-        request.getSession().setAttribute("healthername",tblHealther.getHealthername());
-        Integer num = healtherService.findExistHealtherName(tblHealther.getHealthername());
-        if(num > 0){
-            Boolean flag = healtherService.resetHealtherpwd(tblHealther.getHealthername(),tblHealther.getHealtherphone());
-            if(flag){
-                request.getSession().removeAttribute("healthername");//重置成功后清除掉
-                ResponseUtils.outHtml(response,"success");
-            }else {
-                ResponseUtils.outHtml(response,"error");
-            }
-        }else {
-            ResponseUtils.outHtml(response,"notmen");
+        request.getSession().setAttribute("healthername", tblHealther.getHealthername());
+        Boolean flag = healtherService.resetHealtherpwd(tblHealther.getHealthername(), tblHealther.getHealtherphone());
+        if (flag) {
+            request.getSession().removeAttribute("healthername");//重置成功后清除掉
+            ResponseUtils.outHtml(response, "success");
+        } else {
+            ResponseUtils.outHtml(response, "error");
         }
     }
 
@@ -193,7 +199,7 @@ public class HealtherController {
             response.setCharacterEncoding("UTF-8");
             request.getSession().setAttribute("cName", cName);
             ResponseUtils.outJson(response, dateWrite);
-        }else {
+        } else {
             dateWrite.setMsg("亲，暂无相关数据");
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
@@ -253,7 +259,7 @@ public class HealtherController {
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
-        }else {
+        } else {
             dateWrite.setMsg("亲，暂无相关数据");
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
@@ -336,7 +342,7 @@ public class HealtherController {
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
-        }else {
+        } else {
             dateWrite.setMsg("亲，暂无相关数据");
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
@@ -389,7 +395,6 @@ public class HealtherController {
             ResponseUtils.outHtml(response, "error");
         }
     }
-
 
 
 }

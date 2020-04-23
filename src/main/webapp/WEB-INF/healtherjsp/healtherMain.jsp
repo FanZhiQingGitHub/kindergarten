@@ -82,17 +82,16 @@
     </div>
     <div class="layui-carousel imgbox" id="test1">
         <div carousel-item class="imgH">
-            <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/healtherimg/img/heather-1.jpeg">
+            <div><img style="width: 100%;" src="${pageContext.request.contextPath}/image/healtherimg/img/heather-1.jpeg">
             </div>
-            <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/healtherimg/img/heather-2.jpeg">
+            <div><img style="width: 100%;" src="${pageContext.request.contextPath}/image/healtherimg/img/heather-2.jpeg">
             </div>
-            <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/healtherimg/img/heather-3.jpg">
+            <div><img style="width: 100%;" src="${pageContext.request.contextPath}/image/healtherimg/img/heather-3.jpg">
             </div>
-            <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/healtherimg/img/heather-4.jpg">
+            <div><img style="width: 100%;" src="${pageContext.request.contextPath}/image/healtherimg/img/heather-4.jpg">
             </div>
-            <div><img style="width: 100%" src="${pageContext.request.contextPath}/image/healtherimg/img/heather-5.jpg">
+            <div><img style="width: 100%;" src="${pageContext.request.contextPath}/image/healtherimg/img/heather-5.jpg">
             </div>
-
         </div>
     </div>
 

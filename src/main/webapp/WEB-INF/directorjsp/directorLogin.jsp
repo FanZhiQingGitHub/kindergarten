@@ -240,7 +240,7 @@
                     <label class="layui-form-label">用户名</label>
                     <div class="layui-input-inline">
                         <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
-                        <input type="text" name="username" lay-verify="required" placeholder="请输入用户名" value="刘金坤"
+                        <input type="text" name="username" lay-verify="required" placeholder="请输入用户名" value="李智慧"
                                autocomplete="off" class="layui-input" id="te1">
                     </div>
                 </div>
@@ -258,7 +258,7 @@
                     <label class="layui-form-label">验证码</label>
                     <div class="layui-input-inline">
                         <input type="text" name="code" lay-verify="code" placeholder="请输入验证码"
-                               autocomplete="off" class="layui-input verity">
+                               autocomplete="off" class="layui-input verity" value="0000">
                     </div>
 
                     <div id="codediv">
