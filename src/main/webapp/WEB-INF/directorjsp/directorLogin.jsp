@@ -430,7 +430,7 @@
             $("#rectorname").blur(function () {
                 var rectorname = $("#rectorname").val();
                 $.ajax({
-                    url: path + '/director/resetRectorPwd',
+                    url: path + '/director/selectresetRectorPwd',
                     async: true,
                     type: 'post',
                     data: {

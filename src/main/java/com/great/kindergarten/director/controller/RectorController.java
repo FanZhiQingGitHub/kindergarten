@@ -2,10 +2,12 @@ package com.great.kindergarten.director.controller;
 
 import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
+import com.great.kindergarten.director.annotation.RectorSystemLog;
 import com.great.kindergarten.director.resultbean.DateTable;
 import com.great.kindergarten.director.resultbean.TblScTInfo;
 import com.great.kindergarten.director.service.KinderService;
 import com.great.kindergarten.director.service.RectorService;
+import com.great.kindergarten.security.annotation.SecuritySystemLog;
 import com.great.kindergarten.security.service.SecurityService;
 import com.great.kindergarten.util.DateUtil;
 import com.great.kindergarten.util.FaceRecognitionUtils;
@@ -130,6 +132,8 @@ public class RectorController
 	}
 
 	//登录判断
+	@RectorSystemLog(operationType = "登录", operationName = "园长登录")
+
 	@RequestMapping("/directorLogin")
 	public void loginCode(String username, String userpwd, String code, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -146,6 +150,8 @@ public class RectorController
 			if (rectorstatus.equals("启用"))
 			{
 				request.getSession().setAttribute("logintblRector", tblRectors);
+				//存这个是因为没有登录，没有用户名，所以需要存一下，记录系统日志
+				request.getSession().setAttribute("rectorname", tblRectors.getRectorname());
 				String PicCode = (String) request.getSession().getAttribute("PicCode");
 				code = code.toLowerCase();
 				if (code.equals(PicCode))
@@ -172,24 +178,34 @@ public class RectorController
 		}
 	}
 
-	//	重置密码
-	@RequestMapping("/resetRectorPwd")
-	public void resetRectorPwd(String rectorname,String rectorphone,HttpServletRequest request, HttpServletResponse response)
+	//	重置密码--查询是否有对应的用户
+	@RequestMapping("/selectresetRectorPwd")
+	public void selectresetRectorPwd(String rectorname, HttpServletRequest request, HttpServletResponse response)
 	{
-		request.getSession().setAttribute("rectorname",rectorname);//存这个是因为没有登录，没有用户名，所以需要存一下，记录系统日志
 		Integer num = rectorService.findExistRectorName(rectorname);
-		if(num>0){
-			boolean result = rectorService.resetRectorPwd(rectorname,rectorphone);
-			if (result)
-			{
-				request.getSession().removeAttribute("rectorname");//重置成功后清除掉
-				ResponseUtils.outHtml(response, "success");
-			} else
-			{
-				ResponseUtils.outHtml(response, "error");
-			}
-		}else {
-			ResponseUtils.outHtml(response,"notmen");
+		if (num > 0)
+		{
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "notmen");
+		}
+	}
+
+	//	重置密码--进行重置
+	@RectorSystemLog(operationType = "重置密码", operationName = "园长重置密码")
+	@RequestMapping("/resetRectorPwd")
+	public void resetRectorPwd(String rectorname, String rectorphone, HttpServletRequest request, HttpServletResponse response)
+	{
+		request.getSession().setAttribute("rectorname", rectorname);//存这个是因为没有登录，没有用户名，所以需要存一下，记录系统日志
+		boolean result = rectorService.resetRectorPwd(rectorname, rectorphone);
+		if (result)
+		{
+			request.getSession().removeAttribute("rectorname");//重置成功后清除掉
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
 		}
 	}
 
@@ -214,6 +230,7 @@ public class RectorController
 	}
 
 	//更新密码
+	@RectorSystemLog(operationType = "修改密码", operationName = "园长修改密码")
 	@RequestMapping("/updatePwd")
 	public void updatePwd(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -291,6 +308,7 @@ public class RectorController
 	}
 
 	//园所申请审批
+	@RectorSystemLog(operationType = "园所申请审批", operationName = "园长申请园所")
 	@RequestMapping("/directorReg")
 	public void directorReg(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response) throws ParseException
 	{
@@ -1833,7 +1851,7 @@ public class RectorController
 			{
 				map.put("overTime", overTime);
 			}
-			map.put("kid",tblKinder.getKinderid());
+			map.put("kid", tblKinder.getKinderid());
 			int pages = (pageInt - 1) * limitInt;
 			int limits = limitInt;
 			map.put("pageInt", pages);
