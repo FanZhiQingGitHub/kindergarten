@@ -91,6 +91,7 @@
 
 		$(function () {
 			$("#save").click(function () {
+				var classid = $("#classid").val();
 				var msg = {"tblCourseList": tblCourseList, "cid": classid};
 				msg = JSON.stringify(msg);
 				$.ajax({
@@ -118,6 +119,7 @@
 
 			//新增的使用
 			$(".add").click(function () {
+				var classid = $("#classid").val();
 				var path = $("#path").val();
 				layer.open({
 					type: 2,

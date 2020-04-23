@@ -156,10 +156,16 @@ public class RectorController
 				code = code.toLowerCase();
 				if (code.equals(PicCode))
 				{
-					String kindername = (String) request.getSession().getAttribute("kindername");
+					TblKinder tblKinder = rectorService.selectkinderId(tblRectors.getRectorid());
 					//查看对应的校园公告内容
-					List<TblCampus> tblCampusList = securityService.findKinderNews(kindername);
-					request.getSession().setAttribute("tblCampusList", tblCampusList);
+					Map<String, Object> map = new HashMap<>();
+					map.put("kid", tblKinder.getKinderid());
+					map.put("pageInt", 0);
+					map.put("limitInt", 5);
+
+					System.out.println("校园公告信息=" + map);
+					List<TblCampus> tblCampusinfoList = kinderService.findCampusBulletinAll(map);
+					request.getSession().setAttribute("tblCampusList", tblCampusinfoList);
 					System.out.println("前台验证码成功！");
 					ResponseUtils.outHtml(response, "success");
 				} else
@@ -178,6 +184,36 @@ public class RectorController
 		}
 	}
 
+	//查看对应的园所校园公告
+	@RequestMapping("/selectCampus")
+	public void selectCampus(HttpServletRequest request, HttpServletResponse response)
+	{
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
+
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
+		{
+			Map<String, Object> map = new HashMap<>();
+			map.put("kid", tblKinder.getKinderid());
+			map.put("pageInt", 0);
+			map.put("limitInt", 5);
+
+			System.out.println("校园公告信息=" + map);
+			List<TblCampus> tblCampusinfoList = kinderService.findCampusBulletinAll(map);
+			request.getSession().setAttribute("tblCampusList", tblCampusinfoList);
+			if (tblCampusinfoList.size() > 0)
+			{
+				ResponseUtils.outHtml(response, "success");
+			} else
+			{
+				ResponseUtils.outHtml(response, "error");
+			}
+		}
+	}
+
+
 	//	重置密码--查询是否有对应的用户
 	@RequestMapping("/selectresetRectorPwd")
 	public void selectresetRectorPwd(String rectorname, HttpServletRequest request, HttpServletResponse response)
@@ -191,6 +227,7 @@ public class RectorController
 			ResponseUtils.outHtml(response, "notmen");
 		}
 	}
+
 
 	//	重置密码--进行重置
 	@RectorSystemLog(operationType = "重置密码", operationName = "园长重置密码")
@@ -731,6 +768,14 @@ public class RectorController
 			map.put("limitInt", limits);
 
 			System.out.println("家长信息=" + map);
+
+			System.out.println("请获取园所ID：" + tblKinder.getKinderid());
+			//查找对应的幼儿园的孩子信息--下拉框的显示
+			Integer kid = tblKinder.getKinderid();
+			List<TblStudent> tblStudentList = rectorService.findChildrenParentAll(kid);
+			System.out.println("请获取孩子的信息：" + tblStudentList);
+			request.getSession().setAttribute("tblStudentList", tblStudentList);
+
 			List<TblParent> tblParents = rectorService.findParentAll(map);
 
 			System.out.println("家长输出=" + tblParents);
@@ -745,11 +790,6 @@ public class RectorController
 				request.setCharacterEncoding("UTF-8");
 				response.setContentType("text/html");
 				response.setCharacterEncoding("UTF-8");
-
-				//查找对应的幼儿园的孩子信息--下拉框的显示
-				List<TblStudent> tblStudentList = rectorService.findChildrenParentAll(tblKinder.getKinderid());
-				System.out.println("请获取孩子的信息：" + tblStudentList);
-				request.getSession().setAttribute("tblStudentList", tblStudentList);
 				ResponseUtils.outJson(response, dateTable);
 			} else
 			{
@@ -941,6 +981,14 @@ public class RectorController
 			map.put("limitInt", limits);
 
 			System.out.println("班级信息=" + map);
+
+			System.out.println("请获取园所ID：" + tblKinder.getKinderid());
+			//查找对应的教师的班级信息--下拉框的显示
+			Integer kid = tblKinder.getKinderid();
+			List<TblTeacher> tblTeacherList = kinderService.findTeacherClassAll(kid);
+			System.out.println("请获取班主任的信息：" + tblTeacherList);
+			request.getSession().setAttribute("tblTeacherList", tblTeacherList);
+
 			List<TblTeacher> tblTeachers = kinderService.findClassTeacherAll(map);
 
 			System.out.println("班级输出=" + tblTeachers);
@@ -955,11 +1003,6 @@ public class RectorController
 				request.setCharacterEncoding("UTF-8");
 				response.setContentType("text/html");
 				response.setCharacterEncoding("UTF-8");
-
-				//查找对应的教师的班级信息--下拉框的显示
-				List<TblTeacher> tblTeacherList = kinderService.findTeacherClassAll();
-				System.out.println("请获取班主任的信息：" + tblTeacherList);
-				request.getSession().setAttribute("tblTeacherList", tblTeacherList);
 				ResponseUtils.outJson(response, dateTable);
 			} else
 			{
@@ -1209,25 +1252,37 @@ public class RectorController
 	@RequestMapping("/addClassForm")
 	protected void addClassForm(TblClass tblClass, String teachername, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		System.out.println("班级的添加信息显示：" + tblClass + teachername);
-		tblClass.setClassregtime(new Date());
-		int result = kinderService.addClassForm(tblClass);
-		if (result > 0)
-		{
-			TblClass tblClassInfo = kinderService.selectClassByCid(tblClass.getClassname());
-			//修改对应的学生表的家长的外键
-			Map<String, Object> map = new HashMap<>();
-			if (null != teachername && "" != teachername)
-			{
-				map.put("teachername", teachername);
-			}
-			if (0 != tblClassInfo.getClassid())
-			{
-				map.put("cid", tblClassInfo.getClassid());
-			}
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
 
-			int result0 = kinderService.updateTeacherByCid(map);
-			ResponseUtils.outHtml(response, "success");
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		//判断是不是有对应的园所
+		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
+		{
+			System.out.println("班级的添加信息显示：" + tblClass + teachername);
+			tblClass.setClassregtime(new Date());
+			tblClass.setKid(tblKinder.getKinderid());
+			int result = kinderService.addClassForm(tblClass);
+			if (result > 0)
+			{
+				TblClass tblClassInfo = kinderService.selectClassByCid(tblClass.getClassname());
+				//修改对应的学生表的家长的外键
+				Map<String, Object> map = new HashMap<>();
+				if (null != teachername && "" != teachername)
+				{
+					map.put("teachername", teachername);
+				}
+				if (0 != tblClassInfo.getClassid())
+				{
+					map.put("cid", tblClassInfo.getClassid());
+				}
+
+				int result0 = kinderService.updateTeacherByCid(map);
+				ResponseUtils.outHtml(response, "success");
+			} else
+			{
+				ResponseUtils.outHtml(response, "error");
+			}
 		} else
 		{
 			ResponseUtils.outHtml(response, "error");
@@ -1345,6 +1400,17 @@ public class RectorController
 			map.put("limitInt", limits);
 
 			System.out.println("班级成员信息=" + map);
+
+			//			查找对应的班级的班级信息--下拉框的显示
+			List<TblClass> tblClassList = kinderService.findAllClassAll(tblKinder.getKinderid());
+			System.out.println("请获取班级的信息：" + tblClassList);
+			request.getSession().setAttribute("tblClassList", tblClassList);
+
+			//查找对应的幼儿园的孩子信息--下拉框的显示
+			List<TblStudent> tblStudentList = rectorService.findChildrenParentAll(tblKinder.getKinderid());
+			System.out.println("请获取孩子的信息：" + tblStudentList);
+			request.getSession().setAttribute("tblStudentList", tblStudentList);
+
 			List<TblScTInfo> tblScTInfoList = kinderService.findClassMemberAll(map);
 
 			System.out.println("班级成员输出=" + tblScTInfoList);
@@ -1359,16 +1425,6 @@ public class RectorController
 				request.setCharacterEncoding("UTF-8");
 				response.setContentType("text/html");
 				response.setCharacterEncoding("UTF-8");
-
-				//			查找对应的班级的班级信息--下拉框的显示
-				List<TblClass> tblClassList = kinderService.findAllClassAll(tblKinder.getKinderid());
-				System.out.println("请获取班级的信息：" + tblClassList);
-				request.getSession().setAttribute("tblClassList", tblClassList);
-
-				//查找对应的幼儿园的孩子信息--下拉框的显示
-				List<TblStudent> tblStudentList = rectorService.findChildrenParentAll(tblKinder.getKinderid());
-				System.out.println("请获取孩子的信息：" + tblStudentList);
-				request.getSession().setAttribute("tblStudentList", tblStudentList);
 				ResponseUtils.outJson(response, dateTable);
 			} else
 			{

@@ -58,7 +58,7 @@ public interface KinderMapper
 	public TblClass selectClassName(String classname);
 
 	//查找对应的所有学生信息
-	public List<TblTeacher> findTeacherClassAll();
+	public List<TblTeacher> findTeacherClassAll(Integer kinderid);
 
 	//新增对应的班级
 	public int addClassForm(TblClass tblClass);
