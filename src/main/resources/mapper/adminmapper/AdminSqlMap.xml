@@ -12,14 +12,16 @@
         <result column="adminstatus" property="adminstatus"/>
         <result column="rid" property="rid"/>
     </resultMap>
+
     <insert id="addKinder" parameterType="java.util.List">
         insert into
-        tbl_kinder(kindername,kinderlp,kinderlpid,kinderlpadd,kinderlpphone,schoolpermit,healthpermit,firepermit,grouppermit,registrationpermit,kinderapptime,kinderregtime,kinderstatus,kinderacount,kindercode,kinderpwd)
+        tbl_kinder(kindername,kinderlp,kinderlpid,kinderlpadd,kinderlpphone,schoolpermit,healthpermit,firepermit,grouppermit,registrationpermit,kinderapptime,kinderregtime,kinderstatus,kinderacount,kindercode,kinderpwd,kinderscale,kinderfunds)
         values
         <foreach collection="list" item="i" index="index" separator=",">
-            (#{i.kindername},#{i.kinderlp},#{i.kinderlpid},#{i.kinderlpadd},#{i.kinderlpphone},#{i.schoolpermit},#{i.healthpermit},#{i.firepermit},#{i.grouppermit},#{i.registrationpermit},#{i.kinderapptime},#{i.kinderregtime},#{i.kinderstatus},#{i.kinderacount},#{i.kindercode},#{i.kinderpwd})
+            (#{i.kindername},#{i.kinderlp},#{i.kinderlpid},#{i.kinderlpadd},#{i.kinderlpphone},#{i.schoolpermit},#{i.healthpermit},#{i.firepermit},#{i.grouppermit},#{i.registrationpermit},#{i.kinderapptime},#{i.kinderregtime},#{i.kinderstatus},#{i.kinderacount},#{i.kindercode},#{i.kinderpwd},#{i.kinderscale},#{i.kinderfunds})
         </foreach>
     </insert>
+
     <insert id="addMenuInfo">
         insert into
         tbl_menu(menuname,menuurl,menusonid,sort)
@@ -670,6 +672,7 @@
                 videoadd = #{videoadd},
             </if>
         </set>
+        where safetyvideoid = #{safetyvideoid}
     </update>
     <update id="updateParameter">
         update tbl_parameter
@@ -730,9 +733,47 @@
     </update>
 
 
-    <select id="findAllKinder" resultType="com.great.kindergarten.commons.entity.TblKinder">
-        select * from tbl_kinder
+    <!--园所信息-->
+    <resultMap id="KinderMap" type="com.great.kindergarten.commons.entity.TblKinder">
+        <result column="kinderid" property="kinderid"></result>
+        <result column="kindername" property="kindername"></result>
+        <result column="kinderlp" property="kinderlp"></result>
+        <result column="kinderlpid" property="kinderlpid"></result>
+        <result column="kinderlpadd" property="kinderlpadd"></result>
+        <result column="kinderlpphone" property="kinderlpphone"></result>
+
+        <result column="schoolpermit" property="schoolpermit"></result>
+        <result column="healthpermit" property="healthpermit"></result>
+        <result column="firepermit" property="firepermit"></result>
+
+        <result column="grouppermit" property="grouppermit"></result>
+        <result column="registrationpermit" property="registrationpermit"></result>
+        <result column="kinderapptime" property="kinderapptime"></result>
+        <result column="kinderregtime" property="kinderregtime"></result>
+
+        <result column="kinderstatus" property="kinderstatus"></result>
+        <result column="kinderacount" property="kinderacount"></result>
+        <result column="kindercode" property="kindercode"></result>
+        <result column="kinderpwd" property="kinderpwd"></result>
+        <result column="kinderscale" property="kinderscale"></result>
+        <result column="kinderfunds" property="kinderfunds"></result>
+
+        <result column="rectorid" property="rectorid"></result>
+        <result column="rectorname" property="rectorname"></result>
+        <result column="recid" property="recid"></result>
+        <association property="tblRector" javaType="com.great.kindergarten.commons.entity.TblRector">
+            <id property="rectorid" column="rectorid"/>
+            <result property="rectorid" column="rectorid"/>
+            <result property="rectorname" column="rectorname"/>
+        </association>
+    </resultMap>
+
+
+    <select id="findAllKinder" resultMap="KinderMap">
+        select k.*,r.rectorid,r.rectorname from tbl_kinder k,tbl_rector r
         <where>
+            k.recid = r.rectorid
+
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(kinderregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -749,12 +790,13 @@
                 and kindercode = #{kindercode}
             </if>
         </where>
-        order by kinderregtime desc
+        order by k.kinderregtime desc
     </select>
 
     <select id="findAllCount" resultType="java.lang.Integer">
-        select count(*) from tbl_kinder
+        select count(*) from tbl_kinder k,tbl_rector r
         <where>
+            k.recid = r.rectorid
             <if test="time1!= '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(kinderregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -770,6 +812,14 @@
             <if test=" kindercode != '' and  kindercode != null and kindercode !='请选择'">
                 and kindercode = #{kindercode}
             </if>
+        </where>
+    </select>
+
+    <!--园所详情信息-->
+    <select id="findKinderInfoById" resultMap="KinderMap" >
+        select k.*,r.rectorid,r.rectorname from tbl_kinder k,tbl_rector r
+        <where>
+            k.recid = r.rectorid and k.kinderid = #{k.kinderid}
         </where>
     </select>
 
@@ -1599,6 +1649,34 @@
     <!--    先查是不是有这个人-->
     <select id="findExistAdminName" resultType="java.lang.Integer" parameterType="java.util.Map">
         select count(*) from tbl_admin where adminname = #{adminname}
+    </select>
+    <select id="findAllReadBookName" resultType="java.lang.String">
+        select readmagname from tbl_readmag where readmagpage = 0
+    </select>
+
+    <!--根据绘本名查找绘本信息-->
+    <select id="findReadInfoByName" resultType="com.great.kindergarten.commons.entity.TblReadmag">
+        select * from tbl_readmag
+        <where>
+            readmagpage != 0
+            <if test="readmagname != '' and readmagname != null and readmagname != '请选择绘本'">
+                and readmagname = #{readmagname}
+            </if>
+        </where>
+        order by readmagpage asc
+    </select>
+    <select id="findReadCountByName" resultType="java.lang.Integer">
+        select count(*) from tbl_readmag
+        <where>
+            readmagpage != 0
+            <if test="readmagname != '' and readmagname != null and readmagname != '请选择绘本'">
+                and readmagname = #{readmagname}
+            </if>
+        </where>
+    </select>
+
+    <select id="findReadMagIdByName" resultType="java.lang.Integer">
+        select readmagid from tbl_readmag where readmagname = #{readmagname} and readmagpage = 0
     </select>
 
     <update id="resetAdminPwd" parameterType="java.util.Map">

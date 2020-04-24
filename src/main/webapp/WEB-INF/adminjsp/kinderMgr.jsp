@@ -14,9 +14,21 @@
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
+		body{
+			font-size: 140%;
+		}
 		h2{
 			text-align: center;
 			margin-top: 1%;
+		}
+		.layui-input{
+			width:120%;
+			margin: auto;
+		}
+		.layui-table-cell{
+			height: 45px;
+			line-height: 45px;
+			font-size: 140%;
 		}
 		#selName{
 			margin-top: 5%;
@@ -24,6 +36,11 @@
 			height: 30%;
 		}
 
+		.sp{
+			font-size: 140%;
+			height: 40px;
+			line-height: 40px;
+		}
 	</style>
 </head>
 <body>
@@ -35,20 +52,20 @@
 				<div class="layui-form-item" style="margin-left: 6%;">
 					<div class="layui-block">查询条件：</div>
 					<div class="layui-inline">
-						<span class="layui-form-label">申请时间：</span>
+						<span class="layui-form-label" style="width: auto">申请时间：</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" style="width: 82%;margin-top: 2% ">
+							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" >
 						</div>
 					</div>
 					<div class="layui-inline">
-						<span class="layui-form-label" style="margin-left: -35%">至</span>
+						<span class="layui-form-label" style="margin: 5% 15%;width: 10%">至</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 2% 0 0 10%">
+							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="margin: -27% 65%;">
 						</div>
 					</div>
 					<div class="layui-inline" >
-						<span class="layui-form-label" style="margin-left: -55%">状态：</span>
-						<div class="layui-input-inline" style="margin-left: -18%;">
+						<span class="layui-form-label" style="margin-left: 35%">状态：</span>
+						<div class="layui-input-inline" style="margin: -13% 75%;">
 							<select name="sel" id="sel" lay-filter="mySelect" lay-verify="" >
 								<option value="请选择">请选择</option>
 								<option value="禁用">禁用</option>
@@ -56,21 +73,21 @@
 							</select>
 						</div>
 					</div>
-					<button class="layui-btn" data-type="reload" style="margin-left: -4%"><i class="layui-icon">&#xe615;查询</i></button>
+					<button class="layui-btn" data-type="reload" style="margin: -1.5% 14%;"><i class="layui-icon">&#xe615;查询</i></button>
 				</div>
 				<div class="layui-form-item" style="margin-left: 6%;">
 					<div class="layui-inline">
-						<span class="layui-form-label">园所名称：</span>
+						<span class="layui-form-label" style="width: auto">园所名称：</span>
 						<div class="layui-input-inline">
-							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" style="width: 82%;margin-top: 3% ">
+							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" >
 						</div>
 					</div>
-					<button class="layui-btn btn-add btn-default" id="btn-add" style="margin-left:56%"><i class="layui-icon">&#xe624;新增</i></button>
+					<button class="layui-btn btn-add btn-default" id="btn-add" style="margin-left:50%"><i class="layui-icon">&#xe624;新增</i></button>
 				</div>
 			</div>
 		</form>
 	</div>
-	<table id="kinder" lay-filter="test"></table>
+	<table id="kinder" lay-filter="test" class="layui-table-cell"></table>
 	<div id="type-content" style="display: none;">
 		<div class="layui-form-item">
 			<label class="layui-form-label">园所名称：</label>
@@ -153,14 +170,14 @@
 	</div>
 	<script type="text/html" id="barOption">
 		{{#  if(d.kindercode == '启用'){ }}
-		<a  class="layui-btn layui-btn-danger layui-btn-xs" lay-event="forbidden" style="width: 15%;height: 75%">禁用</a>
+		<a  class="layui-btn layui-btn-danger layui-btn-xs" lay-event="forbidden" style="height: 45px"><span class="sp">禁用</span></a>
 		{{#  } }}
 		{{#  if(d.kindercode == '禁用'){ }}
-		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="open" style="width: 15%;height: 75%">启用</a>
+		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="open" style="height: 45px"><span class="sp">启用</span></a>
 		{{#  } }}
-		<a type="button" class="layui-btn layui-btn-xs" lay-event="restPwd" style="width: 25%;height: 75%">重置密码</a>
-		<a type="button" class="layui-btn layui-btn-xs" lay-event="update" style="width: 15%;height: 75%">修改</a>
-		<a type="button" class="layui-btn layui-btn-xs" lay-event="delete" style="width: 15%;height: 75%">删除</a>
+		<a type="button" class="layui-btn layui-btn-xs" lay-event="restPwd" style="height: 45px"><span class="sp">重置密码</span></a>
+		<a type="button" class="layui-btn layui-btn-xs" lay-event="update" style="height: 45px"><span class="sp">修改</span></a>
+		<a type="button" class="layui-btn layui-btn-xs" lay-event="delete" style="height: 45px"><span class="sp">删除</span></a>
 	</script>
 </body>
 
@@ -185,17 +202,20 @@
 			var path = $("#path").val();
 			var tableIns = table.render({
 				elem: '#kinder'
-				, height: 312
+				, height: 450
 				, url: path + "/admin/qualifyAppInfo"//数据接口
 				, page: true //开启分页
 				, limit: 5
 				, limits: [5, 10]
 				, cols: [[ //表头
-					{field: 'kinderid', title: '序号', align: 'center', width: 185, sort: true, fixed: 'left'}
-					, {field: 'kindername', title: '园所名称', align: 'center', width: 210}
-					, {field: 'kinderapptime', title: '审批时间', align: 'center', width: 265
+					{field: 'kinderid', title: '序号', align: 'center', width: 160, sort: true, fixed: 'left'}
+					, {field: 'kindername', title: '园所名称', align: 'center', width: 340}
+					, {field: 'rectorname', title: '园长名称', align: 'center', width: 180}
+					, {field: 'kinderacount', title: '园所账号', align: 'center', width: 180}
+					, {field: 'kindercode', title: '园所状态', align: 'center', width: 180}
+					, {field: 'kinderapptime', title: '审批时间', align: 'center', width: 320
 					   ,templet:"<div>{{layui.util.toDateString(d.kinderapptime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
-					, {fixed: 'right', title: '操作', align: 'center', width: 482, toolbar: '#barOption'}
+					, {fixed: 'right', title: '操作', align: 'center', width: 360, toolbar: '#barOption'}
 				]]
 				, id: 'kinderTable'
 				, parseData: function (res) { //res 即为原始返回的数据
