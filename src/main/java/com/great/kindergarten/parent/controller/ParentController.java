@@ -650,7 +650,7 @@ public class ParentController {
         //获取信息
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
         //String name
-        if (FaceRecognitionUtils.faceRegister(face, parent.getParentId())){
+        if (FaceRecognitionUtils.faceRegister(face, "p"+parent.getParentId())){
             result.setSuccess(true);
         }
 
@@ -677,7 +677,7 @@ public class ParentController {
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
 
         //人脸识别成功
-        if (FaceRecognitionUtils.identify(face,parent.getParentId())){
+        if (FaceRecognitionUtils.identify(face,"p"+parent.getParentId())){
             //设置日期格式（当天日期）
             SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
             timeamdate = date.format(new Date());
