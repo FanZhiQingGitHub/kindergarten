@@ -38,8 +38,6 @@
 				<select name="teacherjob" id="teacherjob" lay-filter="mySelect">
 					<option value="暂无" selected>暂无选择</option>
 					<option value="班主任">班主任</option>
-					<option value="保健员">保健员</option>
-					<option value="安防员">安防员</option>
 				</select>
 			</div>
 		</div>

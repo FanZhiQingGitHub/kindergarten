@@ -1,8 +1,5 @@
 <%--
   Created by IntelliJ IDEA.
-  User: junlong
-  Date: 2019-11-13
-  Time: 22:25
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
@@ -25,7 +22,7 @@
 <body>
 <input type="hidden" id="kindername" value="${kindername}">
 <form class="layui-form" action="#" lay-filter="test1">
-	<input type="text" name="studentid" id="studentid">
+	<input type="hidden" name="studentid" id="studentid">
 	<input type="hidden" value="${pageContext.request.contextPath}" id="path"/>
 	<div class="layui-form-item">
 		<label class="layui-form-label">宝宝名称：</label>
@@ -63,16 +60,6 @@
 			</div>
 		</div>
 	</div>
-
-<%--	<div class="layui-form-item">--%>
-<%--		<label class="layui-form-label">入学学费：</label>--%>
-<%--		<div class="layui-input-inline">--%>
-<%--			<div class="layui-form">--%>
-<%--				<input type="text" class="layui-input" name="kindertuition" id="kindertuition"--%>
-<%--					   autocomplete="off" readonly>--%>
-<%--			</div>--%>
-<%--		</div>--%>
-<%--	</div>--%>
 </form>
 
 <script>
@@ -81,30 +68,6 @@
 		var form = layui.form;
 		$ = layui.$;
 		var layer = layui.layer;
-
-		// var path = $("#path").val();
-		// var kindername = $("#kindername").val();
-		// $.ajax({
-		// 	url: path + "/director/findKindertuition",
-		// 	async: true,
-		// 	type: "post",
-		// 	data: {"kindername": kindername},
-		// 	dataType: "text",
-		// 	success: function (msg) {
-		// 		if(kindername.length == 0){
-		// 			layer.msg('您需要登录幼儿园账号才能显示学费信息！',{icon:3});
-		// 		}else {
-		// 			if (msg == "error") {
-		// 				layer.msg('学费信息显示失败！',{icon:2});
-		// 			}else {
-		// 				$("#kindertuition").val(msg+"元/每月");
-		// 			}
-		// 		}
-		// 	},
-		// 	error: function () {
-		// 		layer.alert("网络繁忙");
-		// 	}
-		// })
 
 		$(function () {
 			//幼儿名字判断是不是重复
@@ -128,8 +91,28 @@
 					}
 				});
 			});
+			// //日期范围
+			// $("#studentbrith").on('blur', function (){
+			// 	var birthday = $('#studentbrith').val(); //假设用户输入的是这种格式  birthday="2017-10-11"
+			// 	var birthday1 = birthday.split('-');
+			// 	var convert2Date = new Date(birthday1[0], birthday1[1], birthday1[2]);//把字符串转换成日期   网上很多方法
+			// 	var nowDate = new Date();   //获取当前时间
+			// 	var age = nowDate.getTime() - convert2Date.getTime();  //毫秒
+			// 	age = age / (24 * 3600 * 1000); //天数  至于转换成多少年(岁)，详细的还要根据是否闰年计算 age/(24*3600*1000*366) 或者 age/(24*3600*1000*365)
+			// 	if (age>5 && age< 8)
+			// 		alert('符合年龄！');
+			// 	else {
+			// 		alert('不符合规范，请输入当前年份计算的年龄在5岁到8岁之间！');
+			// 		$('#studentbrith').focus();
+			// 	}
+			//
+			// });
+
 		})
 	});
+	function validateAge() {
+
+	}
 </script>
 </body>
 </html>

@@ -23,6 +23,7 @@
 <h1 style="text-align:center;font-size: 40px;color: #009688">班级成员管理</h1>
 <!-- 增加搜索条件 -->
 <div class="demoTable">
+	<div style="text-align: center">园所名称：<span>${kindername}</span></div>
 	<button class="layui-btn" data-type="cancel"><i class="layui-icon">&#xe65c;</i>返回首页</button>
 	&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 查询条件：
 	<br/>

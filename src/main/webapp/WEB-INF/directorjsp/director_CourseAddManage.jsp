@@ -29,6 +29,7 @@
         <div class="layui-input-inline">
             <input type="text" class="layui-input" id="mealtime" placeholder=" ~ " style="width: 500px">
         </div>
+        <span style="color: #ff4400">注意：请选择最近的一整周的日期（星期一到星期日之间）</span>
     </div>
 
     <table class="layui-hide" id="demo"></table>

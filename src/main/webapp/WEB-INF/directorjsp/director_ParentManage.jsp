@@ -23,6 +23,7 @@
 <h1 style="text-align:center;font-size: 40px;color: #009688">家长管理</h1>
 <!-- 增加搜索条件 -->
 <div class="demoTable">
+	<div style="text-align: center">园所名称：<span>${kindername}</span></div>
 	<button class="layui-btn" data-type="cancel"><i class="layui-icon">&#xe65c;</i>返回首页</button>
 	&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 	查询条件：
@@ -245,7 +246,7 @@
 								data: formData,
 								success: function (data) {
 									if(data==="success"){
-										layer.alert("新增家长成功！",{icon: 6}, function(){
+										layer.alert("新增家长成功！默认密码是123456",{icon: 6}, function(){
 											window.location.href = src + "/director/toUrl/director_ParentManage";
 										});
 									}else{

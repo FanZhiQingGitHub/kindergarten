@@ -133,7 +133,6 @@ public class RectorController
 
 	//登录判断
 	@RectorSystemLog(operationType = "登录", operationName = "园长登录")
-
 	@RequestMapping("/directorLogin")
 	public void loginCode(String username, String userpwd, String code, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -346,6 +345,23 @@ public class RectorController
 			ResponseUtils.outHtml(response, "error");
 		}
 	}
+	//园所申请审批--判断是不是有对应的园所，如果有就不进入添加
+	@RequestMapping("/checkApproval")
+	public void checkApproval(String kinderacount, HttpServletRequest request, HttpServletResponse response)
+	{
+		//获取到对应的园长ID值
+		TblRector tblR = (TblRector) request.getSession().getAttribute("logintblRector");
+
+		TblKinder tblKinder = rectorService.selectkinderId(tblR.getRectorid());
+		if (null == tblKinder)
+		{
+			System.out.println("没有对应的园所信息");
+			ResponseUtils.outHtml(response, "success");
+		} else
+		{
+			ResponseUtils.outHtml(response, "error");
+		}
+	}
 
 	//园所申请审批
 	@RectorSystemLog(operationType = "园所申请审批", operationName = "园长申请园所")
@@ -383,6 +399,7 @@ public class RectorController
 		//判断是不是有对应的园所
 		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
+			request.getSession().setAttribute("kindername", tblKinder.getKindername());
 			//前端传过来的值通过-json里面去查看
 			String page = request.getParameter("page");
 			String limit = request.getParameter("limit");
@@ -540,6 +557,7 @@ public class RectorController
 			tblTeacher.setTeacherpwd(md5pwd);
 			tblTeacher.setKinderid(tblKinder.getKinderid());
 			tblTeacher.setTeacherstatus("启用");
+			tblTeacher.setCid(-1);
 			System.out.println("申请教师=" + tblTeacher);
 			int result = rectorService.addTeacherForm(tblTeacher);
 			if (result > 0)
@@ -569,6 +587,7 @@ public class RectorController
 		//判断是不是有对应的园所
 		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
+			request.getSession().setAttribute("kindername", tblKinder.getKindername());
 			String page = request.getParameter("page");
 			String limit = request.getParameter("limit");
 			String studentname = request.getParameter("studentname");
@@ -666,6 +685,8 @@ public class RectorController
 			tblStudent.setStudentlng("118.19320");
 			tblStudent.setStudentlat("24.48854");
 			tblStudent.setKid(tblKinder.getKinderid());
+			tblStudent.setPid(-1);
+			tblStudent.setCid(-1);
 
 			int result = rectorService.addChildrenForm(tblStudent);
 			if (result > 0)
@@ -681,7 +702,7 @@ public class RectorController
 		}
 	}
 
-	//园所----幼儿信息进行对应的删除操作delTeacherTable
+	//园所----幼儿信息进行对应的删除操作
 	@RequestMapping("/delChildrenTable")
 	public void delChildrenTable(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -742,6 +763,7 @@ public class RectorController
 		//判断是不是有对应的园所
 		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
+			request.getSession().setAttribute("kindername", tblKinder.getKindername());
 			String page = request.getParameter("page");
 			String limit = request.getParameter("limit");
 			String parentname = request.getParameter("parentname");
@@ -775,8 +797,13 @@ public class RectorController
 
 			System.out.println("请获取园所ID：" + tblKinder.getKinderid());
 			//查找对应的幼儿园的孩子信息--下拉框的显示
-			Integer kid = tblKinder.getKinderid();
-			List<TblStudent> tblStudentList = rectorService.findChildrenParentAll(kid);
+			Map<String, Object> mapStu = new HashMap<>();
+
+//			Integer kid = tblKinder.getKinderid();
+			mapStu.put("kid",tblKinder.getKinderid());
+			mapStu.put("pid",-1);
+
+			List<TblStudent> tblStudentList = rectorService.findChildrenParentAll(mapStu);
 			System.out.println("请获取孩子的信息：" + tblStudentList);
 			request.getSession().setAttribute("tblStudentList", tblStudentList);
 
@@ -955,6 +982,7 @@ public class RectorController
 		//判断是不是有对应的园所
 		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
+			request.getSession().setAttribute("kindername", tblKinder.getKindername());
 			String page = request.getParameter("page");
 			String limit = request.getParameter("limit");
 			String classname = request.getParameter("classname");
@@ -988,8 +1016,10 @@ public class RectorController
 
 			System.out.println("请获取园所ID：" + tblKinder.getKinderid());
 			//查找对应的教师的班级信息--下拉框的显示
-			Integer kid = tblKinder.getKinderid();
-			List<TblTeacher> tblTeacherList = kinderService.findTeacherClassAll(kid);
+			Map<String, Object> mapStu = new HashMap<>();
+			mapStu.put("kinderid",tblKinder.getKinderid());
+			mapStu.put("cid",-1);
+			List<TblTeacher> tblTeacherList = kinderService.findTeacherClassAll(mapStu);
 			System.out.println("请获取班主任的信息：" + tblTeacherList);
 			request.getSession().setAttribute("tblTeacherList", tblTeacherList);
 
@@ -1234,7 +1264,6 @@ public class RectorController
 
 	}
 
-
 	/*
 	 * 班级模块--增删改
 	 * */
@@ -1369,6 +1398,8 @@ public class RectorController
 		//判断是不是有对应的园所
 		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
+			request.getSession().setAttribute("kindername", tblKinder.getKindername());
+
 			String page = request.getParameter("page");
 			String limit = request.getParameter("limit");
 			String studentname = request.getParameter("studentname");
@@ -1405,13 +1436,19 @@ public class RectorController
 
 			System.out.println("班级成员信息=" + map);
 
-			//			查找对应的班级的班级信息--下拉框的显示
+			//查找对应的班级的班级信息--下拉框的显示
 			List<TblClass> tblClassList = kinderService.findAllClassAll(tblKinder.getKinderid());
 			System.out.println("请获取班级的信息：" + tblClassList);
 			request.getSession().setAttribute("tblClassList", tblClassList);
 
 			//查找对应的幼儿园的孩子信息--下拉框的显示
-			List<TblStudent> tblStudentList = rectorService.findChildrenParentAll(tblKinder.getKinderid());
+//			List<TblStudent> tblStudentList = rectorService.findChildrenParentAll(tblKinder.getKinderid());
+			Map<String, Object> mapStu = new HashMap<>();
+
+			//			Integer kid = tblKinder.getKinderid();
+			mapStu.put("kid",tblKinder.getKinderid());
+			mapStu.put("cid",-1);
+			List<TblStudent> tblStudentList = rectorService.findChildrenParentAll(mapStu);
 			System.out.println("请获取孩子的信息：" + tblStudentList);
 			request.getSession().setAttribute("tblStudentList", tblStudentList);
 
@@ -1539,6 +1576,7 @@ public class RectorController
 		//判断是不是有对应的园所
 		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
+			request.getSession().setAttribute("kindername", tblKinder.getKindername());
 			String page = request.getParameter("page");
 			String limit = request.getParameter("limit");
 			String campusinfoname = request.getParameter("campusinfoname");
@@ -1877,8 +1915,8 @@ public class RectorController
 	}
 
 	//查询对应的消息信息显示
-	@RequestMapping("/selectSchoolMessage")
-	public void selectSchoolMessage(HttpServletRequest request, HttpServletResponse response) throws IOException
+	@RequestMapping("/selectSchoolMessageMe")
+	public void selectSchoolMessageMe(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 		//记得在前面要加上对应的园所ID的值
 		//获取到对应的园长ID值
@@ -1951,6 +1989,73 @@ public class RectorController
 			response.setCharacterEncoding("UTF-8");
 			ResponseUtils.outJson(response, dateTable);
 		}
+	}
+
+	//不同端的消息显示
+	//查询对应的消息信息显示
+	@RequestMapping("/selectSchoolMessage")
+	public void selectSchoolMessage(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		//记得在前面要加上对应的园所ID的值
+		//获取到对应的园长ID值
+		Integer kid = (Integer) request.getSession().getAttribute("kid");
+
+//		TblKinder tblKinder = rectorService.selectkinderId(kid);
+
+			String page = request.getParameter("page");
+			String limit = request.getParameter("limit");
+			String infotypename = request.getParameter("infotypename");
+			String beginTime = request.getParameter("beginTime");
+			String overTime = request.getParameter("overTime");
+			int pageInt = Integer.valueOf(page);
+			int limitInt = Integer.valueOf(limit);
+
+			System.out.println("消息通知是=" + infotypename);
+			//		获取对应的id值
+			Map<String, Object> map = new HashMap<>();
+			if (null != infotypename && "" != infotypename)
+			{
+				map.put("infotypename", infotypename);
+			}
+			if (null != beginTime && "" != beginTime)
+			{
+				map.put("beginTime", beginTime);
+			}
+			if (null != overTime && "" != overTime)
+			{
+				map.put("overTime", overTime);
+			}
+			map.put("kid", kid);
+			int pages = (pageInt - 1) * limitInt;
+			int limits = limitInt;
+			map.put("pageInt", pages);
+			map.put("limitInt", limits);
+
+			System.out.println("消息通知信息=" + map);
+			List<TblInfotype> tblInfotypeList = kinderService.findSchoolMessageAll(map);
+
+			System.out.println("消息通知输出=" + tblInfotypeList);
+			if (0 != tblInfotypeList.size())
+			{
+				Integer count = kinderService.findSchoolMessageAllCount(map).intValue();
+				System.out.println("输出消息通知次数：" + count);
+				dateTable.setCode(0);
+				dateTable.setMsg(" ");
+				dateTable.setCount(count);
+				dateTable.setData(tblInfotypeList);
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			} else
+			{
+				dateTable.setCode(201);
+				dateTable.setMsg("无数据");
+				request.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				ResponseUtils.outJson(response, dateTable);
+			}
 	}
 
 
@@ -2424,6 +2529,8 @@ public class RectorController
 		}
 	}
 
+
+
 	//	保健员管理--信息查询和显示
 	@RequestMapping("/selectHealtherManage")
 	public void selectHealtherManage(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException
@@ -2435,6 +2542,8 @@ public class RectorController
 		//判断是不是有对应的园所
 		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
+			request.getSession().setAttribute("kindername", tblKinder.getKindername());
+
 			//前端传过来的值通过-json里面去查看
 			String page = request.getParameter("page");
 			String limit = request.getParameter("limit");
@@ -2595,6 +2704,7 @@ public class RectorController
 		//判断是不是有对应的园所
 		if (null != tblKinder && tblKinder.getKinderstatus().equals("通过"))
 		{
+			request.getSession().setAttribute("kindername", tblKinder.getKindername());
 			//前端传过来的值通过-json里面去查看
 			String page = request.getParameter("page");
 			String limit = request.getParameter("limit");

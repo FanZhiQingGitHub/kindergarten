@@ -146,8 +146,13 @@
     </select>
 
     <!--班级管理....查找对应的老师的信息下拉框-->
-    <select id="findTeacherClassAll" resultType="TblTeacher" parameterType="integer">
-        select * from tbl_teacher where teacherjob='班主任' and kinderid = #{kinderid}
+    <select id="findTeacherClassAll" resultType="TblTeacher" parameterType="java.util.HashMap">
+        select * from tbl_teacher
+        <where> teacherjob='班主任' and kinderid = #{kinderid}
+            <if test="cid != null and cid != ''">
+                and cid =#{cid}
+            </if>
+        </where>
     </select>
 
     <!--班级管理.查找判断对应的班级是不是唯一-->

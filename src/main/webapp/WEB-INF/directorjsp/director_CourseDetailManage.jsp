@@ -16,7 +16,7 @@
 <input type="hidden" id="start" value="1">
 <input type="hidden" id="end" value="7">
 <input type="hidden" id="path" value="<%=path%>">
-<input type="text" id="classid" name="classid">
+<input type="hidden" id="classid" name="classid">
 
 <div class="layui-fluid">
 	<div class="layadmin-user-login-box layadmin-user-login-header">
@@ -24,7 +24,7 @@
 		<button type="button" class="layui-btn add"><i class="layui-icon">&#xe654;</i>新增</button>
 		班级名称：<input type="text" id="classname" name="classname">
 		<br/>
-		<input type="text" id="datetimes" readonly>
+<%--		<input type="text" id="datetimes" readonly>--%>
 	</div>
 	<div class="layui-inline" style="width:100%;">
 		<hr>
@@ -65,7 +65,7 @@
 			, text: { //自定义文本，此处用法--》当返回数据为空时的异常提示
 				none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
 			}
-			, height: 250
+			, height: 350
 			//数据接口
 			, url: path + '/director/showAllCourseId'
 			// , page: true //开启分页
@@ -123,7 +123,7 @@
 				var path = $("#path").val();
 				layer.open({
 					type: 2,
-					area: ['100%', '95%'],
+					area: ['90%', '80%'],
 					title: '新增课程信息',
 					content: path + '/director/toUrl/director_CourseAddManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 					, success: function (layero, index) {

@@ -40,7 +40,6 @@
             width: 80%;
             padding: 0;
         }
-
     </style>
     <!--加载meta IE兼容文件-->
     <!--[if lt IE 9]>
@@ -57,13 +56,13 @@
         <li class="layui-nav-item" >
             <a href="javascript:;" style="color: black;font-size: 18px">
                 <img src="${pageContext.request.contextPath}/image/logo/headDirector.jpg" class="layui-nav-img">
-                欢迎&nbsp;&nbsp;&nbsp;${logintblRector.rectorname}&nbsp;,&nbsp;园长
+                欢迎&nbsp;&nbsp;&nbsp;<span style="color: #ff4400">${logintblRector.rectorname}</span>&nbsp&nbsp;园长
             </a>
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0);"  class="personMsg">个人信息</a></dd>
                 <dd><a href="javascript:void(0);"  class="updatePwd">修改密码</a></dd>
                 <dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
-                <dd><a href="javascript:void(0);"  class="addTeaAttendTime">教师上课打卡</a></dd>
+<%--                <dd><a href="javascript:void(0);"  class="addTeaAttendTime">教师上课打卡</a></dd>--%>
             </dl>
         </li>
         <li class="layui-nav-item"><a  href="javascript:void(0); "  id="exit" style="color: black;font-size: 18px">注销</a></li>
@@ -238,7 +237,7 @@
                 shade: 0.8//表示的是阴影的大小
                 , area: ['55%', '65%'],
                 moveType: 1,//拖拽模式，0或者1
-                content: src + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                content: src + '/director/toUrl/director_SchoolMessageMe' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                 , success: function (layero, index) {
                     console.log(layero, index);
                 }
@@ -330,90 +329,57 @@
 
         //园所界面的跳转
         $("#approvalGarden").on('click',function () {
-            layer.confirm('您确定要进入到园长审批界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
-                window.location.href = src+"/director/toUrl/directorReg";
-                return true;
+            $.ajax({
+                url: src + "/director/checkApproval",
+                async: true,
+                type: "post",
+                success: function (msg) {
+                    if(msg=="success"){
+                        console.log("跳转界面");
+                        window.location.href = src+"/director/toUrl/directorReg";
+                    }else{
+                        layer.msg("该园长已经有对应的园所了，不可再申请园所！");
+                    }
+                }
             });
-            return false;
         });
 
         //教师管理
         $("#teachersManagement").on('click',function () {
-            layer.confirm('您确定要进入到教师管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_TeacherManage";
-                return true;
-            });
-            return false;
         });
 
         //教师考勤管理
         $("#teachersAttendManagement").on('click',function () {
-            layer.confirm('您确定要进入到教师考勤管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_TeacherAttendManage";
-                return true;
-            });
-            return false;
         });
         //幼儿管理
         $("#childrenManagement").on('click',function () {
-            layer.confirm('您确定要进入到幼儿管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_ChildrenManage";
-                return true;
-            });
-            return false;
         });
 
         //家长管理
         $("#parentManagement").on('click',function () {
-            layer.confirm('您确定要进入到家长管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_ParentManage";
-                return true;
-            });
-            return false;
         });
 
         //课程管理
         $("#courseManagement").on('click',function () {
-            layer.confirm('您确定要进入到课程管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_CourseManage";
-                return true;
-            });
-            return false;
         });
 
         //班级管理
         $("#classManagement").on('click',function () {
-            layer.confirm('您确定要进入到班级管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_ClassManage";
-                return true;
-            });
-            return false;
         });
 
         //班级成员管理
         $("#classMemberManagement").on('click',function () {
-            layer.confirm('您确定要进入到班级成员管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_ClassMemberManage";
-                return true;
-            });
-            return false;
         });
         //校园公告管理
         $("#campusBulletinManagement").on('click',function () {
-            layer.confirm('您确定要进入到校园公告管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_CampusBulletinManage";
-                return true;
-            });
-            return false;
         });
         //在线聊天
         $("#chatTeacher").on('click',function () {
@@ -436,14 +402,12 @@
 
         //消息通知
         $("#messageNotice").on('click',function () {
-            layer.confirm('您确定要进入到消息通知进行编辑吗?', {icon: 3, title: '温馨提示'}, function (index) {
                 $.ajax({
                     url: src + "/director/selectInfoType",
                     async: true,
                     type: "post",
                     success: function (msg) {
                         if (msg == "success") {
-                                layer.close(index);
                                 window.location.href = src+"/director/toUrl/director_SchoolMessageNotice";
                         } else {
                             layer.alert("该账户未申请园所或未通过审批，请先操作后再进入!!!", {icon: 2});
@@ -452,9 +416,6 @@
                         layer.alert("网络繁忙！", {icon: 2});
                     }
                 });
-                return true;
-            });
-            return false;
         });
 
         //点击查看园所视频
@@ -470,20 +431,20 @@
                 //直接跳出一个标签播放视频
             });
         });
-        $(".addTeaAttendTime").click(function () {
-            layer.open({
-                type: 2,
-                area: ['95%', '81%'],
-                offset: ['10%', '3%'],
-                title: '智慧幼儿园-人脸识别界面',
-                content: src + '/director/toUrl/dirFaceID' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-                , success: function (layero, index) {
-                    var body = layer.getChildFrame("body", index);
-                }
-            });
+        // $(".addTeaAttendTime").click(function () {
+        //     layer.open({
+        //         type: 2,
+        //         area: ['95%', '81%'],
+        //         offset: ['10%', '3%'],
+        //         title: '智慧幼儿园-人脸识别界面',
+        //         content: src + '/director/toUrl/dirFaceID' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+        //         , success: function (layero, index) {
+        //             var body = layer.getChildFrame("body", index);
+        //         }
+        //     });
+        // });
 
-        });
-
+        //查看校园公告
         $(document).ready(function(){
             $.ajax({
                 url: src + "/director/selectCampus",
@@ -494,9 +455,7 @@
             });
         });
     });
-
 </script>
-
 
 </body>
 </html>
