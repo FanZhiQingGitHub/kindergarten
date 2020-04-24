@@ -188,6 +188,21 @@ public class SecurityService {
         return securityMapper.findALLMonitorInfoCountMag(monitorPage);
     }
 
+    public List<TblDefaultrack> findDefaultLngLatInfo(){
+        return securityMapper.findDefaultLngLatInfo();
+    }
+
+    public Long findExistStuLngLat(String studentid){
+        Map<String,String> stuMap = new LinkedHashMap<>();
+        stuMap.put("studentid",studentid);
+        return securityMapper.findExistStuLngLat(stuMap);
+    }
+
+    @Transactional
+    public Boolean addStuLngLatInfo(List<TblDefaultrack> tblDefaultrackList){
+        return securityMapper.addStuLngLatInfo(tblDefaultrackList);
+    }
+
     @Transactional
     public int addLog(TblSyslog log)
     {

@@ -76,5 +76,11 @@ public interface SecurityMapper {
 
     public Long findALLMonitorInfoCountMag(MonitorPage monitorPage);
 
+    public List<TblDefaultrack> findDefaultLngLatInfo();
+
+    public Long findExistStuLngLat(Map<String,String> stuMap);
+
+    public Boolean addStuLngLatInfo(List<TblDefaultrack> tblDefaultrackList);
+
     public int addLog(TblSyslog log);//系统日志
 }

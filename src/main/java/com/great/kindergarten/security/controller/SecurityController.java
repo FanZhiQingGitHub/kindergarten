@@ -354,7 +354,6 @@ public class SecurityController {
         String studentname = request.getParameter("studentname");
         String lnginfo = request.getParameter("lnginfo");
         String latinfo = request.getParameter("latinfo");
-        Gson g = new Gson();
         String alarmlogarea = null;
         String lng = null;
         String lat = null;
@@ -383,7 +382,7 @@ public class SecurityController {
             alarmlogarea = "东门";
         } else if (lng.equals("118.19320") && lat.equals("24.48892")) {
             alarmlogarea = "北门";
-        } else if (lng.equals("118.19320") && lat.equals("24.48828")) {
+        } else if (lng.equals("118.192821") && lat.equals("24.488299")) {
             alarmlogarea = "南门";
         }
         TblKinder tblKinder = securityService.findKinderId(kindername);
@@ -738,6 +737,55 @@ public class SecurityController {
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
+        }
+    }
+
+    //查出幼儿园的电子围栏信息
+    @RequestMapping("/findDefaultLngLatInfo")
+    public void findDefaultLngLatInfo(DateWrite dateWrite, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        List<TblDefaultrack> tblDefaultrackList = securityService.findDefaultLngLatInfo();
+        if (0 != tblDefaultrackList.size()) {
+            dateWrite.setCode(0);
+            dateWrite.setMsg(" ");
+            dateWrite.setCount(0);
+            dateWrite.setData(tblDefaultrackList);
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        } else {
+            dateWrite.setMsg("亲，暂无相关数据！");
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            ResponseUtils.outJson(response, dateWrite);
+        }
+    }
+
+    //添加宝宝运动轨迹
+    @SecuritySystemLog(operationType = "新增", operationName = "安防员新增宝宝运动轨迹")
+    @RequestMapping("/addStuTrack")
+    public void addStuTrack(TblDefaultrack tblDefaultrack, HttpServletRequest request, HttpServletResponse response) {
+        //需要幼儿园账号找出ID
+        Gson g = new Gson();
+        String msg = request.getParameter("TblDefaultrack");
+        tblDefaultrack = g.fromJson(msg, TblDefaultrack.class);
+        List<TblDefaultrack> tblDefaultrackList = tblDefaultrack.getTblDefaultrackList();
+        Integer studentid = tblDefaultrack.getStudentid();
+        for(int i = 0;i<tblDefaultrackList.size();i++){
+            tblDefaultrackList.get(i).setStudentid(studentid);
+        }
+        //需要先判断这个孩子有没有轨迹数据
+        Integer num = securityService.findExistStuLngLat(studentid.toString()).intValue();
+        if(num > 0){
+            ResponseUtils.outHtml(response, "exist");
+        }else {
+            Boolean flag = securityService.addStuLngLatInfo(tblDefaultrackList);
+            if (flag) {
+                ResponseUtils.outHtml(response, "success");
+            } else {
+                ResponseUtils.outHtml(response, "error");
+            }
         }
     }
 

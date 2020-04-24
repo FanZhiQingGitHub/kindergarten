@@ -157,16 +157,6 @@ public class TblSecurity {
         this.time2 = time2;
     }
 
-    public Integer getKid()
-    {
-        return kid;
-    }
-
-    public void setKid(Integer kid)
-    {
-        this.kid = kid;
-    }
-
     @Override
     public String toString() {
         return "TblSecurity{" +

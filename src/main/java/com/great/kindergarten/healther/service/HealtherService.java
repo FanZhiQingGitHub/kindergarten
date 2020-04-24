@@ -69,8 +69,10 @@ public class HealtherService {
         return healtherMapper.findALLExaminationCount(examinationPage);
     }
 
-    public List<TblClass> findAllClass(){
-        return healtherMapper.findAllClass();
+    public List<TblClass> findAllClass(String kindername){
+        Map<String, String> kindermap = new LinkedHashMap<>();
+        kindermap.put("kindername",kindername);
+        return healtherMapper.findAllClass(kindermap);
     }
 
     @Transactional
@@ -78,9 +80,10 @@ public class HealtherService {
         return healtherMapper.updateExaminationInfo(tblExamination);
     }
 
-    public Integer findStudentId(String studentname){
+    public Integer findStudentId(String studentname,String kindername){
         Map<String, String> studentmap = new LinkedHashMap<>();
         studentmap.put("studentname",studentname);
+        studentmap.put("kindername",kindername);
         return healtherMapper.findStudentId(studentmap);
     }
 
@@ -114,15 +117,17 @@ public class HealtherService {
         return healtherMapper.addRecipeInfo(tblRecipeList);
     }
 
-    public List<TblRecipe> findAllRecipeInfo(Integer mealid){
+    public List<TblRecipe> findAllRecipeInfo(Integer mealid,Integer kinderid){
         Map<String, Integer> mealIdMap = new LinkedHashMap<>();
         mealIdMap.put("mealid",mealid);
+        mealIdMap.put("kinderid",kinderid);
         return healtherMapper.findAllRecipeInfo(mealIdMap);
     }
 
-    public Long findAllRecipeInfoCount(Integer mealid){
+    public Long findAllRecipeInfoCount(Integer mealid,Integer kinderid){
         Map<String, Integer> mealIdMap = new LinkedHashMap<>();
         mealIdMap.put("mealid",mealid);
+        mealIdMap.put("kinderid",kinderid);
         return healtherMapper.findAllRecipeInfoCount(mealIdMap);
     }
 
@@ -136,6 +141,13 @@ public class HealtherService {
         KinderNewsmap.put("kindername",kindername);
         return healtherMapper.findHealtherNews(KinderNewsmap);
     }
+
+    public Integer findKinderID(String kindername){
+        Map<String, String> KinderMap = new LinkedHashMap<>();
+        KinderMap.put("kindername",kindername);
+        return healtherMapper.findKinderID(KinderMap);
+    }
+
 
     @Transactional
     public int addLog(TblSyslog log)

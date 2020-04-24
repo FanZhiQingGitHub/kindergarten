@@ -354,22 +354,16 @@
                             location.href = path + "/director/toUrl/directorMain";
                         });
                     } else if (msg === "error") {
-                        layer.alert("登录失败！", {icon: 2});
-                        var code = document.getElementById("code");
-                        code.src = path + "/director/loginCode?" + time;
+                        layer.alert("账号或密码错误！", {icon: 2});
                     } else if (msg === "codeerror") {
                         layer.alert("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/director/loginCode?" + time;
                     } else if (msg === "notmen") {
                         layer.alert("该用户已被禁用或者不存在！", {icon: 2});
-                        var code = document.getElementById("code");
-                        code.src = path + "/director/loginCode?" + time;
                     }
                 }, error: function (msg) {
                     layer.alert("网络繁忙！", {icon: 2});
-                    var code = document.getElementById("code");
-                    code.src = path + "/director/loginCode?" + time;
                 }
             });
         });

@@ -267,22 +267,15 @@
                             location.href = path + "/main/path/main";
                         });
                     } else if (msg == "error") {
-                        layer.msg("登录失败！", {icon: 2});
-                        var code = document.getElementById("code");
-                        code.src = path + "/main/LoginCode?" + Math.random();
+                        layer.msg("账号或密码错误！", {icon: 2});
                     } else if (msg == "codeerror") {
                         layer.msg("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/main/LoginCode?" + Math.random();
                     } else if (msg == "notmen") {
                         layer.msg("该幼儿园已被禁用或者不存在！", {icon: 2});
-                        var code = document.getElementById("code");
-                        code.src = path + "/main/LoginCode?" + Math.random();
-
                     }else if (msg == "notpass") {
                         layer.msg("该幼儿园未通过审批！", {icon: 2});
-                        var code = document.getElementById("code");
-                        code.src = path + "/main/LoginCode?" + Math.random();
                     }
                 }, error: function (msg) {
                     layer.msg("网络繁忙！", {icon: 2});

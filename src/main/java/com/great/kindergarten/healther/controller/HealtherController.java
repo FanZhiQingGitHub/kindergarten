@@ -106,9 +106,9 @@ public class HealtherController {
                 if (null != Healther) {
                     List<TblHealther> tblHealtherList = new ArrayList<>();
                     tblHealtherList.add(Healther);
-                    List<TblClass> tblClassList = healtherService.findAllClass();
                     kindername = (String) request.getSession().getAttribute("kindername");
                     List<TblCampus> tblCampuses = healtherService.findHealtherNews(kindername);
+                    List<TblClass> tblClassList = healtherService.findAllClass(kindername);
                     request.getSession().setAttribute("tblCampuses", tblCampuses);
                     request.getSession().setAttribute("tblClassList", tblClassList);
                     request.getSession().setAttribute("healthername", healthername);
@@ -122,6 +122,25 @@ public class HealtherController {
             ResponseUtils.outHtml(response, "codeerror");
         }
     }
+
+    //根据园所查找所有班级信息
+    @RequestMapping("/findAllClassInfo")
+    public void findAllClassInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        kindername = (String) request.getSession().getAttribute("kindername");
+        List<TblClass> tblClassList = healtherService.findAllClass(kindername);
+        Gson g = new Gson();
+        if (0 != tblClassList.size()) {
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            Object[] info = tblClassList.toArray();
+            String result = g.toJson(info);
+            response.getWriter().print(result);
+        } else {
+            response.getWriter().print("error");
+        }
+    }
+
 
     @RequestMapping("/findExistHealtherName")
     public void findExistHealtherName(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
@@ -186,7 +205,7 @@ public class HealtherController {
         }
         Integer minpage = (page - 1) * limit;
         Integer maxpage = limit;
-        ExaminationPage examinationPage = new ExaminationPage(cName, minpage, maxpage);
+        ExaminationPage examinationPage = new ExaminationPage(kindername,cName, minpage, maxpage);
         List<TblExamination> tblExaminationList = healtherService.findALLExamination(examinationPage);
         if (0 != tblExaminationList.size()) {
             Integer count = healtherService.findALLExaminationCount(examinationPage).intValue();
@@ -222,7 +241,7 @@ public class HealtherController {
     @HealtherSystemLog(operationType = "增加", operationName = "保健员新增体检信息")
     @RequestMapping("/addExaminationInfo")
     public void addExaminationInfo(TblExamination tblExamination, HttpServletResponse response) throws ParseException {
-        Integer studentid = healtherService.findStudentId(tblExamination.getStudentname());
+        Integer studentid = healtherService.findStudentId(tblExamination.getStudentname(),kindername);
         if (studentid == null) {
             ResponseUtils.outHtml(response, "notname");
         } else {
@@ -246,6 +265,7 @@ public class HealtherController {
 
         Integer minpage = (page - 1) * limit;
         Integer maxpage = limit;
+        mealPage.setKindername(kindername);
         mealPage.setPage(minpage);
         mealPage.setLimit(maxpage);
         List<TblMeal> tblMealList = healtherService.findAllMealInfo(mealPage);
@@ -287,9 +307,11 @@ public class HealtherController {
         Date mealstarttime = format.parse(time1);
         Date mealendtime = format.parse(time2);
 
+        Integer kinderid = healtherService.findKinderID(kindername);
         List<TblMeal> tblMealList = new ArrayList<>();
         tblMeal.setMealstarttime(mealstarttime);
         tblMeal.setMealendtime(mealendtime);
+        tblMeal.setKid(kinderid);
         tblMealList.add(tblMeal);
         Boolean flag = null;
         flag = healtherService.addMealInfo(tblMealList);
@@ -298,6 +320,7 @@ public class HealtherController {
             String info = "暂未配置";
             for (int i = 0; i < tblRecipeList.size(); i++) {
                 tblRecipeList.get(i).setMid(mealid);
+                tblRecipeList.get(i).setKid(kinderid);
                 tblRecipeList.get(i).getFriday();
 
                 if ("".equals(tblRecipeList.get(i).getMonday())) {
@@ -331,9 +354,10 @@ public class HealtherController {
     public void showAllRecipeInfo(DateWrite dateWrite, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         String mealid = request.getParameter("mealid");
         Integer mid = Integer.valueOf(mealid);
-        List<TblRecipe> tblRecipeList = healtherService.findAllRecipeInfo(mid);
+        Integer kinderid = healtherService.findKinderID(kindername);
+        List<TblRecipe> tblRecipeList = healtherService.findAllRecipeInfo(mid,kinderid);
         if (0 != tblRecipeList.size()) {
-            Integer count = healtherService.findAllRecipeInfoCount(mid).intValue();
+            Integer count = healtherService.findAllRecipeInfoCount(mid,kinderid).intValue();
             dateWrite.setCode(0);
             dateWrite.setMsg("");
             dateWrite.setCount(count);
