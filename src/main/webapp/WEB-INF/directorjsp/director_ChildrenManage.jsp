@@ -1,8 +1,5 @@
 <%--
   Created by IntelliJ IDEA.
-  User: JK
-  Date: 2020-3-10
-  Time: 10:21
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
@@ -25,6 +22,7 @@
 <h1 style="text-align:center;font-size: 40px;color: #009688">幼儿管理</h1>
 <!-- 增加搜索条件 -->
 <div class="demoTable">
+	<div style="text-align: center">园所名称：<span>${kindername}</span></div>
 	<button class="layui-btn" data-type="cancel"><i class="layui-icon">&#xe65c;</i>返回首页</button>
 	&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 查询条件：
 	<br/>
@@ -47,7 +45,6 @@
 
 <table id="demo" lay-filter="test"></table>
 <script type="text/html" id="barDemo">
-	<%--	<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>--%>
 	<a class="layui-btn edit layui-btn-xs" data-method="dialog" lay-event="edit"><i class="layui-icon">&#xe642;</i>编辑</a>
 	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon">&#xe67e;</i>删除</a>
 </script>

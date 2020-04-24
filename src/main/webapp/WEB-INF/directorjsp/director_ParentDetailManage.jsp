@@ -23,7 +23,7 @@
 <body>
 <input type="hidden" id="kindername" value="${kindername}">
 <form class="layui-form" action="#" lay-filter="test1">
-	<input type="text" name="parentId" id="parentId">
+	<input type="hidden" name="parentId" id="parentId">
 	<input type="hidden" value="${pageContext.request.contextPath}" id="path"/>
 	<div class="layui-form-item">
 		<label class="layui-form-label">家长名称：</label>

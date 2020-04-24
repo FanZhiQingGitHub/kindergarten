@@ -40,7 +40,6 @@
             width: 80%;
             padding: 0;
         }
-
     </style>
     <!--加载meta IE兼容文件-->
     <!--[if lt IE 9]>
@@ -57,13 +56,13 @@
         <li class="layui-nav-item" >
             <a href="javascript:;" style="color: black;font-size: 18px">
                 <img src="${pageContext.request.contextPath}/image/logo/headDirector.jpg" class="layui-nav-img">
-                欢迎&nbsp;&nbsp;&nbsp;${logintblRector.rectorname}&nbsp;,&nbsp;园长
+                欢迎&nbsp;&nbsp;&nbsp;<span style="color: #ff4400">${logintblRector.rectorname}</span>&nbsp&nbsp;园长
             </a>
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0);"  class="personMsg">个人信息</a></dd>
                 <dd><a href="javascript:void(0);"  class="updatePwd">修改密码</a></dd>
                 <dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
-                <dd><a href="javascript:void(0);"  class="addTeaAttendTime">教师上课打卡</a></dd>
+<%--                <dd><a href="javascript:void(0);"  class="addTeaAttendTime">教师上课打卡</a></dd>--%>
             </dl>
         </li>
         <li class="layui-nav-item"><a  href="javascript:void(0); "  id="exit" style="color: black;font-size: 18px">注销</a></li>
@@ -144,10 +143,6 @@
 
     </div>
 
-
-
-
-
     <div class="prod-show" style="max-width: 80%;">
         <div class="layui-fluid">
             <div class="row layui-col-space12 layui-clear">
@@ -172,15 +167,9 @@
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
                         <h3 style="text-align: left">园所视频Videos</h3>
-                        <div class="layui-carousel videobox" id="test2">
-                            <div carousel-item class="videroH">
-                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/2019-nCoV.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/2019-nCoV.jpg"></a></div>
-                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/CrossTheRoadSafely.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/CrossTheRoadSafely.jpg"></a></div>
-                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/farmPropaganda.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/farmPropaganda.jpg"></a></div>
-                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/SafetyRollerSkate.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/SafetyRollerSkate.jpg"></a></div>
-                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/TakeTheElevatorSafely.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/TakeTheElevatorSafely.jpg"></a></div>
-                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/Traffic_safety.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/Traffic_safety.jpg"></a></div>
-                            </div>
+                        <div style=" overflow:auto;">
+                            <a href="javascript:void(0);" id="playVideos"><img style="width: 100%"
+                                                                               src="${pageContext.request.contextPath}/image/photos/directorvideo.png"></a>
                         </div>
                     </div>
                 </div>
@@ -208,40 +197,25 @@
         var carousel = layui.carousel, $ = layui.$;
         var layer = layui.layer;
 	    var src = $("#path").val();
-
-        //首页轮播图
+        //建造实例
         carousel.render({
             elem: '#test1'
-            , width: '100%' //设置容器宽度
+            , width: '80%' //设置容器宽度
             , arrow: 'always'
             , height: 'auto'
-            //,anim: 'updown' //切换动画方式
-        });
-        //首页轮播视频
-        carousel.render({
-            elem: '#test2'
-            , width: '100%' //设置容器宽度
-            , arrow: 'always'
-            , height: 'auto'
-            //,anim: 'updown' //切换动画方式
-        });
 
+            //,anim: 'updown' //切换动画方式
+        });
         $('.app-header-menuicon').on('click', function () {
             $('.header-down-nav').toggleClass('down-nav')
-        })
+        });
         var imgH = $('.imgbox div.layui-this').outerHeight();
-        $('.imgH').css('height', imgH + 'px');
-
-        var videroH = $('.videobox div.layui-this').outerHeight();
-        $('.videroH').css('height', videroH + 'px');
-
+        $('.imgH').css('height', imgH + 'px')
         window.onresize = function () {
             var imgH = $('.imgbox div.layui-this').outerHeight();
-            $('.imgH').css('height', imgH + 'px');
-
-            var videroH = $('.videobox div.layui-this').outerHeight();
-            $('.videroH').css('height', videroH + 'px');
+            $('.imgH').css('height', imgH + 'px')
         };
+
         //个人信息的显示
         $('.personMsg').on('click',function () {
             layer.open({
@@ -263,7 +237,7 @@
                 shade: 0.8//表示的是阴影的大小
                 , area: ['55%', '65%'],
                 moveType: 1,//拖拽模式，0或者1
-                content: src + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                content: src + '/director/toUrl/director_SchoolMessageMe' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                 , success: function (layero, index) {
                     console.log(layero, index);
                 }
@@ -355,90 +329,57 @@
 
         //园所界面的跳转
         $("#approvalGarden").on('click',function () {
-            layer.confirm('您确定要进入到园长审批界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
-                window.location.href = src+"/director/toUrl/directorReg";
-                return true;
+            $.ajax({
+                url: src + "/director/checkApproval",
+                async: true,
+                type: "post",
+                success: function (msg) {
+                    if(msg=="success"){
+                        console.log("跳转界面");
+                        window.location.href = src+"/director/toUrl/directorReg";
+                    }else{
+                        layer.msg("该园长已经有对应的园所了，不可再申请园所！");
+                    }
+                }
             });
-            return false;
         });
 
         //教师管理
         $("#teachersManagement").on('click',function () {
-            layer.confirm('您确定要进入到教师管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_TeacherManage";
-                return true;
-            });
-            return false;
         });
 
         //教师考勤管理
         $("#teachersAttendManagement").on('click',function () {
-            layer.confirm('您确定要进入到教师考勤管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_TeacherAttendManage";
-                return true;
-            });
-            return false;
         });
         //幼儿管理
         $("#childrenManagement").on('click',function () {
-            layer.confirm('您确定要进入到幼儿管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_ChildrenManage";
-                return true;
-            });
-            return false;
         });
 
         //家长管理
         $("#parentManagement").on('click',function () {
-            layer.confirm('您确定要进入到家长管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_ParentManage";
-                return true;
-            });
-            return false;
         });
 
         //课程管理
         $("#courseManagement").on('click',function () {
-            layer.confirm('您确定要进入到课程管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_CourseManage";
-                return true;
-            });
-            return false;
         });
 
         //班级管理
         $("#classManagement").on('click',function () {
-            layer.confirm('您确定要进入到班级管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_ClassManage";
-                return true;
-            });
-            return false;
         });
 
         //班级成员管理
         $("#classMemberManagement").on('click',function () {
-            layer.confirm('您确定要进入到班级成员管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_ClassMemberManage";
-                return true;
-            });
-            return false;
         });
         //校园公告管理
         $("#campusBulletinManagement").on('click',function () {
-            layer.confirm('您确定要进入到校园公告管理界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
                 window.location.href = src+"/director/toUrl/director_CampusBulletinManage";
-                return true;
-            });
-            return false;
         });
         //在线聊天
         $("#chatTeacher").on('click',function () {
@@ -461,14 +402,12 @@
 
         //消息通知
         $("#messageNotice").on('click',function () {
-            layer.confirm('您确定要进入到消息通知进行编辑吗?', {icon: 3, title: '温馨提示'}, function (index) {
                 $.ajax({
                     url: src + "/director/selectInfoType",
                     async: true,
                     type: "post",
                     success: function (msg) {
                         if (msg == "success") {
-                                layer.close(index);
                                 window.location.href = src+"/director/toUrl/director_SchoolMessageNotice";
                         } else {
                             layer.alert("该账户未申请园所或未通过审批，请先操作后再进入!!!", {icon: 2});
@@ -477,41 +416,35 @@
                         layer.alert("网络繁忙！", {icon: 2});
                     }
                 });
-                return true;
-            });
-            return false;
         });
 
         //点击查看园所视频
-        $(".playVideos").click(function () {
-            var videoUrl = $(this).attr('title');
+        $("#playVideos").click(function () {
             //打开一个窗口播放视频
             layer.open({
                 //打开一个窗口播放视频
                 type: 1,
-                area: ['95%', '80%'],
-                offset:['10%','3%'],
-                title:'园所视频播放',
+                area: ['75%', '85%'],
+                title:'园所宣传视频',
                 content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
-                    '<source src="'+videoUrl+'" type="video/mp4"></source></video>'
+                        '<source src="${pageContext.request.contextPath}/videos/farmPropaganda.mp4" type="video/mp4"></source></video>'
                 //直接跳出一个标签播放视频
             });
         });
+        // $(".addTeaAttendTime").click(function () {
+        //     layer.open({
+        //         type: 2,
+        //         area: ['95%', '81%'],
+        //         offset: ['10%', '3%'],
+        //         title: '智慧幼儿园-人脸识别界面',
+        //         content: src + '/director/toUrl/dirFaceID' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+        //         , success: function (layero, index) {
+        //             var body = layer.getChildFrame("body", index);
+        //         }
+        //     });
+        // });
 
-        $(".addTeaAttendTime").click(function () {
-            layer.open({
-                type: 2,
-                area: ['95%', '81%'],
-                offset: ['10%', '3%'],
-                title: '智慧幼儿园-人脸识别界面',
-                content: src + '/director/toUrl/dirFaceID' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-                , success: function (layero, index) {
-                    var body = layer.getChildFrame("body", index);
-                }
-            });
-
-        });
-
+        //查看校园公告
         $(document).ready(function(){
             $.ajax({
                 url: src + "/director/selectCampus",
@@ -521,11 +454,8 @@
                 }
             });
         });
-
     });
-
 </script>
-
 
 </body>
 </html>

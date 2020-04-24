@@ -141,6 +141,7 @@
 			,teacherstatus
 			,rid
 			,kinderid
+			,cid
 		)values(
 			 #{teachername}
 			,#{teacherjob}
@@ -153,6 +154,7 @@
 			,#{teacherstatus}
 			,#{rid}
 			,#{kinderid}
+			,#{cid}
 		)
 	</insert>
 
@@ -200,6 +202,8 @@
 			,studentlat
 			,studenttime
 			,kid
+			,pid
+			,cid
 		)values(
 		    #{studentname}
 			,#{studentsex}
@@ -209,7 +213,9 @@
             ,#{studentlng}
 			,#{studentlat}
 			,#{studenttime}
-			,#{kid})
+			,#{kid}
+			,#{pid}
+			,#{cid})
 	</insert>
 
     <!--对应的幼儿表格信息....删除语句信息-->
@@ -279,8 +285,16 @@
         update tbl_student set pid = #{pid} where studentname = #{studentname};
     </update>
 <!--    查找所有对应的学生表的学生信息-->
-    <select id="findChildrenParentAll" resultType="TblStudent" parameterType="integer">
-        select * from tbl_student where kid = #{kid}
+    <select id="findChildrenParentAll" resultType="TblStudent" parameterType="java.util.HashMap">
+        select * from tbl_student
+        <where> kid = #{kid}
+            <if test="pid != null and pid != ''">
+                and pid =#{pid}
+            </if>
+            <if test="cid != null and cid != ''">
+                and cid =#{cid}
+            </if>
+        </where>
     </select>
 
     <!--家长的删除操作-->

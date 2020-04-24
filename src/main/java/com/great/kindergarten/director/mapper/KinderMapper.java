@@ -57,8 +57,8 @@ public interface KinderMapper
 	//判断对应的班级有哪些老师的名称是不是重复
 	public TblClass selectClassName(String classname);
 
-	//查找对应的所有学生信息
-	public List<TblTeacher> findTeacherClassAll(Integer kinderid);
+	//查找对应的所有教师信息
+	public List<TblTeacher> findTeacherClassAll(Map<String, Object> map);
 
 	//新增对应的班级
 	public int addClassForm(TblClass tblClass);

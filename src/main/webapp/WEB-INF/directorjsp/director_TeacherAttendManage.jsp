@@ -33,15 +33,15 @@
 	<div class="layui-inline selects">
 		<input class="layui-input" name="teachername" id="teachername" autocomplete="off">
 	</div>
-	角色：
-	<div class="layui-inline selects">
-		<select name="teacherjob" id="teacherjob"  lay-filter="mySelect">
-			<option value="暂无" selected>暂无选择</option>
-			<option value="班主任">班主任</option>
-			<option value="安防员">安防员</option>
-			<option value="保健员">保健员</option>
-		</select>
-	</div>
+<%--	角色：--%>
+<%--	<div class="layui-inline selects">--%>
+<%--		<select name="teacherjob" id="teacherjob"  lay-filter="mySelect">--%>
+<%--			<option value="暂无" selected>暂无选择</option>--%>
+<%--			<option value="班主任">班主任</option>--%>
+<%--			<option value="安防员">安防员</option>--%>
+<%--			<option value="保健员">保健员</option>--%>
+<%--		</select>--%>
+<%--	</div>--%>
 	<button class="layui-btn" data-type="reload"><i class="layui-icon">&#xe615;</i>查询</button>
 </div>
 <input type="hidden" value="${pageContext.request.contextPath}" id="srcAddress"/>
@@ -126,8 +126,8 @@
 				//执行重载--只重载数据
 				table.reload('demotable', {
 					where: { //设定异步数据接口的额外参数，任意设
-						teachername: $("#teachername").val(),
-						teacherjob:$("#teacherjob").val()
+						teachername: $("#teachername").val()
+						// ,teacherjob:$("#teacherjob").val()
 					}
 					, page: {
 						curr: 1 //重新从第 1 页开始

@@ -74,7 +74,7 @@
 						success: function (msg) {
 							if (msg == "success") {
 								layer.alert("添加消息成功！", {icon: 6}, function (index) {
-									window.parent.location.reload();
+									window.location.href = src+"/director/toUrl/directorMain";
 								});
 							} else {
 								layer.alert("添加消息失败！", {icon: 2});

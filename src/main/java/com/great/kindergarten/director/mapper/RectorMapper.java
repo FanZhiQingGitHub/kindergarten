@@ -88,7 +88,7 @@ public interface RectorMapper
 	public int updateChildrenByPid(Map<String, Object> map);
 
 	//查找对应的所有学生信息
-	public List<TblStudent> findChildrenParentAll(Integer kid);
+	public List<TblStudent> findChildrenParentAll(Map<String, Object> map);
 
 	/*家长的删除*/
 	public int delParentTable(int parentId);
