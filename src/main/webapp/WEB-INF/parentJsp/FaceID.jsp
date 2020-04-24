@@ -139,7 +139,12 @@
 										var index = parent.layer.getFrameIndex(window.name);
 										parent.layer.close(index);//关闭当前页
 									});
-							}else {
+							}else if (msg=='failure'){
+								layer.alert("识别失败，请重试",{icon:6},function () {
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index);//关闭当前页
+								});
+							} else {
 								layer.alert("亲，不知道哪里出错了！",{icon:2},function () {
 									var index = parent.layer.getFrameIndex(window.name);
 									parent.layer.close(index);//关闭当前页

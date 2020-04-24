@@ -17,13 +17,20 @@ class KindergartenApplicationTests {
     public static void main(String[] args)
     {
 
-        String  img64Str = FaceRecognitionUtils.fileToBase64("C:\\Users\\JK\\Documents\\WeChat Files\\All Users\\liu.png");
+        String  img64Str = FaceRecognitionUtils.fileToBase64("F:\\kindergarten\\src\\main\\webapp\\image\\logo\\parent1.jpg");
 //
         System.out.println(img64Str);
 //
 //        FaceRecognitionUtils.identify(img64Str,null);
 //
-        FaceRecognitionUtils.faceRegister(img64Str,"testPhoto1");
+
+        if ( FaceRecognitionUtils.faceRegister(img64Str,0)){
+
+            System.out.println("成功");
+        }else {
+            System.out.println("失败");
+        }
+
 
     }
 }

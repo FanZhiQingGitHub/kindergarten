@@ -33,9 +33,12 @@ public class FaceRecognitionUtils
 	/**
 	 * 传入图片的Base64字符串信息 去服务器比对是否有这个人
 	 * @param imageString
-	 * @param id
+	 * @param userId
 	 */
-	public static void identify(String imageString,Integer id) {
+	public static Boolean identify(String imageString,Integer userId) {
+
+		Boolean result =false;
+
 //        文档地址
 //        http://ai.baidu.com/docs#/Face-Java-SDK/top
 		String imageType = "BASE64";
@@ -58,6 +61,12 @@ public class FaceRecognitionUtils
         options.put("match_threshold", "80");
         //活体检测 检测为生物的可能性（不知道啥）
         options.put("liveness_control", "LOW");
+
+        if (userId!=null){
+	        //指定用户去比对
+	        options.put("user_id", userId+"");
+        }
+
         //要检测的库  我那边创建了三个 但实际用到的就一个AllFace
 		String groupIdList = "AllFace,ParentFaceId,TeacherFaceId";
 		//查找方法 传入Base64的字符串 字符串类型 要查询的库列表 要查询的选项（上面）
@@ -69,9 +78,9 @@ public class FaceRecognitionUtils
 		//判断是否有匹配的对象
 		if (res.getString("error_msg") != null && res.getString("error_msg").equals("SUCCESS")) {
 
+			result= true;
 			//找到返回的第一个用户
 			JSONObject jsonObject = res.getJSONObject("result").getJSONArray("user_list").getJSONObject(0);
-
 
 			System.out.println("匹配得分：" + jsonObject.getInt("score"));
 
@@ -79,32 +88,37 @@ public class FaceRecognitionUtils
 
 			System.out.println("user_id：" + jsonObject.getString("user_id"));
 
-
 		} else {
 			System.out.println(res.toString());
 		}
+
+
+		return result;
 	}
 
 
 	/**
 	 * 人脸注册方法
 	 * @param imageString
-	 * @param name
+	 * @param userId
 	 */
-	public static void faceRegister(String imageString,String name){
+	public static Boolean faceRegister(String imageString,Integer userId){
+		Boolean result =false;
+
 		// 传入可选参数调用接口，根据需求自行设置
 		HashMap<String, String> options = new HashMap<String, String>(10);
 		String imageType = "BASE64";
 
-		if (imageString!=null&&!"".equals(imageString)&&name!=null&&!"".equals(name)){
-
-			JSONObject res =client.addUser(imageString,imageType,"AllFace",name,options);
-
+		if (imageString!=null&&!"".equals(imageString)&&userId!=null){
+			JSONObject res =client.addUser(imageString,imageType,"AllFace",userId+"",options);
+			//判断是否注册成功
 			System.out.println(res);
+		if (res.getString("error_msg") != null && res.getString("error_msg").equals("SUCCESS")) {
+			result= true;
+		}
 		}
 
-
-
+		return result;
 	}
 
 

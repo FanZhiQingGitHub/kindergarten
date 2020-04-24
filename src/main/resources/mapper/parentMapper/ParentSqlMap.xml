@@ -69,6 +69,26 @@
 
 
 
+    <!--日志记录-->
+    <insert id="addLog" parameterType="com.great.kindergarten.commons.entity.TblSyslog">
+        insert into tbl_syslog(
+            operateor,
+            operatetype,
+            operatedetail,
+            operatetime,
+            operateresult,
+            operateip
+        )values
+        (
+            #{operateor}
+        ,#{operatetype}
+        ,#{operatedetail}
+        ,#{operatetime}
+        ,#{operateresult}
+        ,#{operateip}
+        )
+    </insert>
+
 
     <select id="findPhotosByCid"  parameterType="SearchCondition" resultType="TblPhoto">
         select *
@@ -225,7 +245,9 @@
             parameterType="com.great.kindergarten.healther.resultbean.MealPage">
         select * from tbl_meal
         <where>
-
+            <if test=" name != null and name != ''">
+                 kid =#{name}
+            </if>
         </where>
         order by mealstarttime desc limit #{page},#{limit}
     </select>
@@ -233,6 +255,12 @@
     <!--    查询膳食表信息记录条数-->
     <select id="findAllMealInfoCount" resultType="integer">
         select count(*) from tbl_meal
+        <where>
+            <if test=" name != null and name != ''">
+                kid =#{name}
+            </if>
+        </where>
+
     </select>
 
 
