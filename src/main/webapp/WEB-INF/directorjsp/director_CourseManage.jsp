@@ -23,6 +23,7 @@
 <h1 style="text-align:center;font-size: 40px;color: #009688">课程管理</h1>
 <!-- 增加搜索条件 -->
 <div class="demoTable">
+	<div style="text-align: center">园所名称：<span>${kindername}</span></div>
 	<button class="layui-btn" data-type="cancel"><i class="layui-icon">&#xe65c;</i>返回首页</button>
 	&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 查询条件：
 	<br/>
@@ -58,7 +59,7 @@
 		//第一个实例
 		table.render({
 			elem: '#demo'
-			, height: 445
+			, height: 525
 			, limit: 5//设置的一页要有几条的记录
 			, limits: [5, 10]//设置的是对应的是有几个内容值
 			, url: src + '/director/selectCourseManagement' //数据接口
@@ -89,7 +90,7 @@
 					layer.open({
 						type: 2,
 						title: '修改信息',
-						area: ['82%', '70%'],
+						area: ['82%', '80%'],
 						moveType: 1,//拖拽模式，0或者1
 						content: src + '/director/toUrl/director_CourseDetailManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 						, success: function (layero, index) {

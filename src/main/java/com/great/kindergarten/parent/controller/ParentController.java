@@ -3,6 +3,7 @@ package com.great.kindergarten.parent.controller;
 import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.healther.resultbean.MealPage;
+import com.great.kindergarten.parent.annotation.ParentSystemLog;
 import com.great.kindergarten.parent.service.ParentService;
 import com.great.kindergarten.security.resultbean.MonitorPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
@@ -44,18 +45,30 @@ public class ParentController {
     private String parentname;
 
     //考勤新增用
-    String timeamdate = null;//获取今天的日期
-    String ct = null;//当前时间段
-    String timeam = null;//上午打卡时间段
-    String timepm = null;//下午打卡时间段
-    Boolean flagDate = null;//查是否存在当前周的日期区间
-    Boolean flagAm = null;//上午考勤新增
-    Boolean flagPm = null;//下午考勤新增
-    Integer dateid = null;//日期区间id
-    Integer studentid = null;//学生id
-    String monday = null;//星期一的日期
-    String sunday = null;//星期二的日期
-    String today = null;//今天是星期几
+    //获取今天的日期
+    String timeamdate = null;
+    //当前时间段
+    String ct = null;
+    //上午打卡时间段
+    String timeam = null;
+    //下午打卡时间段
+    String timepm = null;
+    //查是否存在当前周的日期区间
+    Boolean flagDate = null;
+    //上午考勤新增
+    Boolean flagAm = null;
+    //下午考勤新增
+    Boolean flagPm = null;
+    //日期区间id
+    Integer dateid = null;
+    //学生id
+    Integer studentid = null;
+    //星期一的日期
+    String monday = null;
+    //星期二的日期
+    String sunday = null;
+    //今天是星期几
+    String today = null;
 
     @Resource
     private ParentService parentService;
@@ -67,6 +80,63 @@ public class ParentController {
     public String toUrl(@PathVariable String url, HttpServletRequest request) {
         return "parentJsp/" + url;
     }
+
+
+
+
+
+    @RequestMapping("/findCampusBulletinAll")
+    @ResponseBody
+    public TableDate findCampusBulletinAll(HttpServletRequest request){
+
+        //取得是谁要执行查询操作
+        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
+
+        //数据解析
+        String campusinfoname = request.getParameter("campusinfoname");
+        String beginTime = request.getParameter("beginTime");
+        String overTime = request.getParameter("overTime");
+        String page = request.getParameter("page");
+        String limit = request.getParameter("limit");
+
+        int pageInt = Integer.valueOf(page);
+        int limitInt = Integer.valueOf(limit);
+
+        Map<String, Object> map = new HashMap<>();
+
+        if (null != overTime && "" != overTime)
+        {
+            map.put("overTime", overTime);
+        }
+        if (null != beginTime && "" != beginTime)
+        {
+            map.put("beginTime", beginTime);
+        }
+
+        if (null != campusinfoname && "" != campusinfoname)
+        {
+            map.put("campusinfoname", campusinfoname);
+        }
+
+        map.put("kid", parent.getKid());
+        int pages = (pageInt - 1) * limitInt;
+        int limits = limitInt;
+        map.put("pageInt", pages);
+        map.put("limitInt", limits);
+        //数据查询返回
+        return parentService.findCampusBulletinAll(map);
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     //重置密码
     @RequestMapping("/resetParentpwd")
@@ -91,7 +161,7 @@ public class ParentController {
 
     @RequestMapping("/showMonitorInfo")
     public void showMonitorInfo(DateWrite dateWrite, MonitorPage monitorPage, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+        //显示幼儿园直播列表
 
         //取得是谁要进行操作
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
@@ -205,10 +275,14 @@ public class ParentController {
 
     @RequestMapping("/findAllMealInfo")
     @ResponseBody
-    public TableDate findAllMealInfo(MealPage mealPage){
+    public TableDate findAllMealInfo(SearchCondition searchCondition , HttpServletRequest request){
         //找到所有的食谱
+        //取得是谁要执行查询操作
+        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
+
+        searchCondition.setName(parent.getKid()+"");
         //返回查找的结果
-        return parentService.findAllMealInfo(mealPage);
+        return parentService.findAllMealInfo(searchCondition);
     }
 
 
@@ -373,7 +447,6 @@ public class ParentController {
                 e.printStackTrace();
             }
         }
-        res.setData("{\'src\':\'" + path + "\'}");
         return res;
     }
 
@@ -384,11 +457,12 @@ public class ParentController {
 //    查询家长的孩子的作业列表方法
         //取得是谁要执行查询操作
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
-//        Integer cid = Integer.valueOf(request.getParameter("cid"));
+        Integer cid = Integer.valueOf(request.getParameter("cid"));
         //设置查找人id
-        searchCondition.setParentId(3);
+        searchCondition.setParentId(parent.getParentId());
+
         //返回查找的结果
-        return parentService.kidHomeWorkList(searchCondition, 1);
+        return parentService.kidHomeWorkList(searchCondition, cid);
     }
 
     @RequestMapping("/getKids")
@@ -399,7 +473,7 @@ public class ParentController {
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
 
         //返回查找的结果
-        return parentService.getKids(3);
+        return parentService.getKids(parent.getParentId());
     }
 
 
@@ -474,7 +548,7 @@ public class ParentController {
         try {
             int width = 60;
             int height = 30;
-            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
+            String data = "QWERTYUIPASDFGHJKLZXCVBNMqwertyuipasdfghjklzxcvbnm123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
             Random random = new Random();//随机类
             //1 创建图片数据缓存区域（核心类）
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);//创建一个彩色的图片
@@ -518,7 +592,7 @@ public class ParentController {
         }
     }
 
-
+//    @ParentSystemLog(operationType = "登陆", operationName = "家长登陆")
     @RequestMapping("/Login")
     @ResponseBody
     public Result parentLogin(HttpServletRequest request, String parentName, String parentPwd, String code) {
@@ -564,16 +638,23 @@ public class ParentController {
 
 
     //-------------人脸识别考勤---------------
-    //注册人脸
+
     @RequestMapping("/regFaceId")
-    public void regFaceId(HttpServletRequest request, HttpServletResponse response) {
+    @ResponseBody
+  public Result regFaceId(HttpServletRequest request, HttpServletResponse response) {
+        //注册人脸方法
+        Result result = new Result();
+
         String face = request.getParameter("face");
+
+        //获取信息
+        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
         //String name
-        FaceRecognitionUtils.faceRegister(face, "name");
+        if (FaceRecognitionUtils.faceRegister(face, parent.getParentId())){
+            result.setSuccess(true);
+        }
 
-        //加到数据库
-
-        System.out.println("face=" + face);
+        return result;
     }
 
     //新增考勤-------------------------------------------------------------------------------------------
@@ -582,7 +663,7 @@ public class ParentController {
     2.家长类型（妈妈或者爸爸）
     3.当前时间段：如8:30
     4.需要判断是上午还是下午
-    5.需要pmid
+    5.需要pmid                                                    registered
     6.需要孩子id
     7.需要日期区间id（需要添加本周一到本周日） --完成
     8.如果下午或上午没打卡的话默认要插入请假或者其它默认数据
@@ -591,41 +672,61 @@ public class ParentController {
     public void addStuTime(TblDate tblDate, TblStutime tblStutime, HttpServletRequest request, HttpServletResponse response) throws ParseException {
 
         String face = request.getParameter("face");
-        FaceRecognitionUtils.identify(face, null);
 
-        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式（当天日期）
-        timeamdate = date.format(new Date());
-        //本周日期
-        monday = DateUtil.getMondayOfThisWeek(1);
-        sunday = DateUtil.getSundayOfThisWeek(7);
-        List<TblDate> tblDateList = parentService.findDateInfo(monday, sunday);//查询是否存在本周一和周日的日期
+        //获取信息
+        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
 
-        Date dt = new Date();
-        today = DateUtil.getWeekOfDate(dt);
-        if (today.equals("星期六") || today.equals("星期日")) {
-            System.out.println("不进行新增考勤");
-            ResponseUtils.outHtml(response, "notadd");
-        } else {
-            if (0 == tblDateList.size()) { //如果不存在本周一和周日的日期
-                System.out.println("不存在本周一和周日的日期");
-                tblDate.setMonday(date.parse(monday));
-                tblDate.setSunday(date.parse(sunday));
-                List<TblDate> dateList = new ArrayList<>();
-                flagDate = parentService.addDateInfo(dateList);
-                if (flagDate) {
-                    System.out.println("日期区间新增成功");
-                    addStudentTime(tblDate, tblStutime, request, response);//新增考勤
-                } else {
-                    System.out.println("日期区间新增失败");
-                    ResponseUtils.outHtml(response, "errorinfo");
-                }
+        //人脸识别成功
+        if (FaceRecognitionUtils.identify(face,parent.getParentId())){
+            //设置日期格式（当天日期）
+            SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+            timeamdate = date.format(new Date());
+            //本周日期
+            monday = DateUtil.getMondayOfThisWeek(1);
+            sunday = DateUtil.getSundayOfThisWeek(7);
+            //查询是否存在本周一和周日的日期
+            List<TblDate> tblDateList = parentService.findDateInfo(monday, sunday);
+            Date dt = new Date();
+            today = DateUtil.getWeekOfDate(dt);
+            if (today.equals("星期六") || today.equals("星期日")) {
+                System.out.println("不进行新增考勤");
+                ResponseUtils.outHtml(response, "notadd");
             } else {
-                System.out.println("存在本周一和周日的日期");
-                addStudentTime(tblDate, tblStutime, request, response);//新增考勤
+                if (0 == tblDateList.size()) {
+                    //如果不存在本周一和周日的日期
+                    System.out.println("不存在本周一和周日的日期");
+                    tblDate.setMonday(date.parse(monday));
+                    tblDate.setSunday(date.parse(sunday));
+                    List<TblDate> dateList = new ArrayList<>();
+                    flagDate = parentService.addDateInfo(dateList);
+                    if (flagDate) {
+                        System.out.println("日期区间新增成功");
+                        //新增考勤
+                        addStudentTime(tblDate, tblStutime, request, response);
+                    } else {
+                        System.out.println("日期区间新增失败");
+                        ResponseUtils.outHtml(response, "errorinfo");
+                    }
+                } else {
+                    System.out.println("存在本周一和周日的日期");
+                    //新增考勤
+                    addStudentTime(tblDate, tblStutime, request, response);
+                }
             }
+        }else {
+            //人脸识别失败
+            ResponseUtils.outHtml(response, "failure");
         }
+
     }
 
+    /**
+     * 增加学生打卡时间方法
+     * @param tblDate
+     * @param tblStutime
+     * @param request
+     * @param response
+     */
     private void addStudentTime(TblDate tblDate, TblStutime tblStutime, HttpServletRequest request, HttpServletResponse response) {
         System.out.println("新增考勤信息");
         Calendar now = Calendar.getInstance();//获取时间段

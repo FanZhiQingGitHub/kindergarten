@@ -23,7 +23,7 @@
 <body>
 
 <form class="layui-form" action="#" lay-filter="test1">
-	<input type="text" name="classid" id="classid">
+	<input type="hidden" name="classid" id="classid">
 	<input type="hidden" value="${pageContext.request.contextPath}" id="path"/>
 	<div class="layui-form-item">
 		<label class="layui-form-label">班级名称：</label>

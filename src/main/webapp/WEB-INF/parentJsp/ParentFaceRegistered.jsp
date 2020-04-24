@@ -9,18 +9,15 @@
 <%@ include file="/commons/basejs.jsp" %>
 <html>
 <head>
-	<title>智慧幼儿园-人脸识别界面</title>
-	<%String path = request.getContextPath(); %>
-	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
-	<script src=<%=path + "/layui/layui.js"%>></script>
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/mainres/css/main.css">
+	<title>智慧幼儿园-人脸注册界面</title>
+
+
 </head>
 <body>
-<input type="hidden" id="path" value="<%=path%>">
 <div class="layui-fluid">
 
 	<div class="layadmin-user-login-box layadmin-user-login-header">
-		<h2 style="margin-left: 47%">人脸识别界面</h2>
+		<h2 style="margin-left: 47%">人脸注册界面</h2>
 	</div>
 	<div class="layui-inline" style="width:100%;">
 		<hr>
@@ -40,12 +37,9 @@
 		<div class="layui-inline" style="margin-left: 32%;margin-top: 4%">
 			<div class="layui-input-inline">
 				<button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal "
-						style="width: 330px;height: 60px;font-size: 25px" id="bu2"><i class="layui-icon">&#xe6af;</i>教师考勤打卡记得点我哦
+						style="width: 330px;height: 60px;font-size: 25px" id="bu2"><i class="layui-icon">&#xe6af;</i>点我进行注册
 				</button>
 
-				<button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm"
-						style="width: 170px;" id="bu3"><i class="layui-icon">&#xe654;</i>这边可以请假哦
-				</button>
 			</div>
 		</div>
 	</div>
@@ -58,8 +52,6 @@
 		var carousel = layui.carousel, $ = layui.jquery;
 		var element = layui.element;
 		var layer = layui.layer;
-		var form = layui.form;
-		var path = $("#path").val();
 		var video = document.getElementById('webcam');
 
 		layer.msg('温馨提醒：摄像头功能需要使用谷歌浏览器才可以访问！');
@@ -112,45 +104,30 @@
 				//获取到String类型的image信息
 				var face = url.split(",")[1];
 
-				console.log("face="+face);
 				if(face == null){
 					layer.alert('您好，请先开启相机拍照后打卡！',{icon:2});
 				}else {
 					//用ajax做验证 ,判断是否验证成功
 					$.ajax({
-						url: path+'/director/addTeaAttendTime',
+						url: path+'/parent/regFaceId',
 						type:"post",
 						async: true,
 						cache: false,
 						data: {"face":face},
-						success: function(msg) {
-							if(msg == "amsuccess"){
-								layer.alert("早上好，打卡成功！",{icon:6},function () {
-									var index = parent.layer.getFrameIndex(window.name);
-									parent.layer.close(index);//关闭当前页
-								});
-							}else if(msg == "omsuccess") {
-								layer.alert("欢迎回来，打卡成功，！", {icon: 6},function () {
-									var index = parent.layer.getFrameIndex(window.name);
-									parent.layer.close(index);//关闭当前页
-								});
-							}
-							else if(msg == "pmsuccess") {
-								layer.alert("打卡成功，祝您一路顺风！", {icon: 6},function () {
-									var index = parent.layer.getFrameIndex(window.name);
-									parent.layer.close(index);//关闭当前页
-								});
-							}else if(msg == "notadd"){
-									layer.alert("亲，今天是周末哦！",{icon:6},function () {
+						success: function(result) {
+							if (result.success){
+									layer.alert("注册成功，现在可以进行打卡",{icon:6},function () {
 										var index = parent.layer.getFrameIndex(window.name);
 										parent.layer.close(index);//关闭当前页
 									});
 							}else {
-								layer.alert("亲，不知道哪里出错了！",{icon:2},function () {
+								layer.alert("请勿多次重复注册",{icon:2},function () {
 									var index = parent.layer.getFrameIndex(window.name);
 									parent.layer.close(index);//关闭当前页
 								});
 							}
+
+
 						},
 						error:function(msg) {
 							layer.alert("网络繁忙，请您稍后重试",{icon:2},function () {
@@ -160,19 +137,9 @@
 						}
 					});
 				}
-			});
-			$("#bu3").click(function () {
-				var path = $("#path").val();
-				layer.open({
-					type: 2,
-					area: ['400px', '500px'],
-					offset: ['120px', '650px'],
-					title: '新增请假信息',
-					content: path + '/director/toUrl/addLeaveManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-					, success: function (layero, index) {
-					}
-				});
-			});
+
+			})
+
 		});
 	});
 

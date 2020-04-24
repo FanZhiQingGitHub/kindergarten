@@ -46,6 +46,7 @@ public class MainController {
                     tblKinder = mainService.kinderLogin(kindername, kinderpwd);
                     if (null != tblKinder) {
                         request.getSession().setAttribute("kindername", kindername);
+                        request.getSession().setAttribute("kid", tblKinder.getKinderid());
                         ResponseUtils.outHtml(response, "success");
                     }else {
                         ResponseUtils.outHtml(response, "error");

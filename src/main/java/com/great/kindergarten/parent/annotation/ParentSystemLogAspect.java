@@ -1,6 +1,8 @@
 package com.great.kindergarten.parent.annotation;
 
 
+import com.great.kindergarten.commons.entity.TblSyslog;
+import com.great.kindergarten.parent.service.ParentService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -9,9 +11,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.util.Date;
 
 /**
  * 切点类
@@ -21,8 +26,8 @@ import java.lang.reflect.Method;
 public class ParentSystemLogAspect {
 //注入Service用于把日志保存数据库
 
-//    @Resource  //这里我用resource注解
-//    private UserService userService;
+     @Resource
+    private ParentService parentService;
 
 
     //这里的zxtest要和log4j.properties里的配置一致，否则写不到文件中
@@ -88,12 +93,10 @@ public class ParentSystemLogAspect {
         HttpSession session = request.getSession();
 
         //读取session中的用户
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute("parentname");
         //请求的IP
-        String ip = request.getRemoteAddr();
-        if(ip.equals("0:0:0:0:0:0:0:1")){
-            ip = "127.0.0.1";
-        }
+        InetAddress addr = InetAddress.getLocalHost();
+        String ip = addr.getHostAddress();
 
         try {
 
@@ -121,25 +124,30 @@ public class ParentSystemLogAspect {
             System.out.println("请求人:" + username);
             System.out.println("请求IP:" + ip);
             //*========数据库日志=========*//
-//            LogTable logTable = new LogTable();
-//            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-//            String logtime = df.format(new Date());//获取当前时间
-//
-//            logTable.setOperateor(username);
-//            logTable.setOperatetype(operationType);
-//            logTable.setOperatedetail(operationName);
-//            logTable.setOperatedate(logtime);
-//            logTable.setOperateresult("正常");
-//            logTable.setOperateip(ip);
-//            List<LogTable> logTableList = new ArrayList<>();
-//            logTableList.add(logTable);
-//
-//            //保存数据库
-//            Boolean flag = userService.addSysLogInfo(logTableList);
-//            if(flag){
-//                System.out.println(logTable);
-//                System.out.println("=====controller后置通知结束=====");
-//            }
+
+            TblSyslog log = new TblSyslog();
+            log.setOperatedetail(operationName);
+            log.setOperatetype(operationType);
+            log.setOperateip(ip);
+            log.setOperateresult("正常");
+            if(username != null)
+            {
+                log.setOperateor(username);
+            }else{
+                log.setOperateor("无");
+            }
+            System.out.println("日志记录时间"+new Date());
+            log.setOperatetime(new Date());
+
+            //保存数据库
+            Integer num = parentService.addLog(log);
+            if(num>0){
+                System.out.println(log);
+                System.out.println("=====controller后置通知结束=====");
+            }else {
+                System.out.println(log);
+                System.out.println("=====controller后置通知异常=====");
+            }
         } catch (Exception e) {
             //记录本地异常日志
             logger.error("==后置通知异常==");
@@ -170,7 +178,7 @@ public class ParentSystemLogAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session = request.getSession();
         //读取session中的用户
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute("parentname");
         //请求的IP
         String ip = request.getRemoteAddr();
 
@@ -216,24 +224,29 @@ public class ParentSystemLogAspect {
             System.out.println("请求人:" + username);
             System.out.println("请求IP:" + ip);
             //*========数据库日志=========*//
-//            LogTable logTable = new LogTable();
-//            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-//            String logtime = df.format(new Date());//获取当前时间
-//
-//            logTable.setOperateor(username);
-//            logTable.setOperatetype(operationType);
-//            logTable.setOperatedetail(operationName);
-//            logTable.setOperatedate(logtime);
-//            logTable.setOperateresult("异常");
-//            logTable.setOperateip(ip);
-//            List<LogTable> logTableList = new ArrayList<>();
-//            logTableList.add(logTable);
-//            //保存数据库
-//            Boolean flag = userService.addSysLogInfo(logTableList);
-//            if(flag){
-//                System.out.println(logTable);
-//                System.out.println("=====异常通知结束=====");
-//            }
+            TblSyslog log = new TblSyslog();
+            log.setOperatedetail(operationName);
+            log.setOperatetype(operationType);
+            log.setOperateip(ip);
+            log.setOperateresult("异常");
+            if(username != null)
+            {
+                log.setOperateor(username);
+            }else{
+                log.setOperateor("无");
+            }
+            System.out.println("日志记录时间"+new Date());
+            log.setOperatetime(new Date());
+
+            //保存数据库
+            Integer num = parentService.addLog(log);
+            if(num>0){
+                System.out.println(log);
+                System.out.println("=====controller后置通知结束=====");
+            }else {
+                System.out.println(log);
+                System.out.println("=====controller后置通知异常=====");
+            }
         } catch (Exception ex) {
             //记录本地异常日志
             logger.error("==异常通知异常==");

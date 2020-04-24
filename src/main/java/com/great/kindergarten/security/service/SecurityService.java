@@ -59,8 +59,10 @@ public class SecurityService {
         return securityMapper.resetSecuritypwd(securitymap);
     }
 
-    public List<TblClass> findAllClass(){
-        return securityMapper.findAllClass();
+    public List<TblClass> findAllClass(String kindername){
+        Map<String, String> kindermap = new LinkedHashMap<>();
+        kindermap.put("kindername",kindername);
+        return securityMapper.findAllClass(kindermap);
     }
 
     public List<TblStudent> findALLPickUpInfo(PickUpInfoPage pickUpInfoPage){
@@ -75,8 +77,10 @@ public class SecurityService {
         return securityMapper.findALLPickUpDetailInfo(pickUpInfoDetailPage);
     }
 
-    public List<TblStudent> findAllStuInfo(){
-        return securityMapper.findAllStuInfo();
+    public List<TblStudent> findAllStuInfo(String kindername){
+        Map<String, String> kindermap = new LinkedHashMap<>();
+        kindermap.put("kindername",kindername);
+        return securityMapper.findAllStuInfo(kindermap);
     }
 
     public List<TblStudent> findStuLngLetInfo(String studentid,String studentname,String studentbrith){

@@ -43,6 +43,7 @@
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0)" id="a1">个人信息</a></dd>
                 <dd><a href="javascript:void(0)" id="addStuTime">上课打卡</a></dd>
+                <dd><a href="javascript:void(0)" id="regFaceId">人脸注册</a></dd>
             </dl>
         </li>
         <li class="layui-nav-item"><a href="javascript:void(0); "  id="exit" style="color: black;font-size: 18px">注销</a></li>
@@ -205,12 +206,16 @@
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
                         <h3 style="text-align: left">园所视频Videos</h3>
-                        <div style=" overflow:auto;">
-                            
-                            <a  id="playVideos"><img src="${path}/image/logo/logo.png" alt=""/></a><br>
-
+                        <div class="layui-carousel videobox" id="test2">
+                            <div carousel-item class="videroH">
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/2019-nCoV.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/2019-nCoV.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/CrossTheRoadSafely.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/CrossTheRoadSafely.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/farmPropaganda.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/farmPropaganda.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/SafetyRollerSkate.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/SafetyRollerSkate.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/TakeTheElevatorSafely.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/TakeTheElevatorSafely.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/Traffic_safety.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/Traffic_safety.jpg"></a></div>
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -241,7 +246,9 @@
         var carousel = layui.carousel, $ = layui.$;
         var element = layui.element;
         var layer = layui.layer;
-        //建造实例
+
+
+        //首页轮播图
         carousel.render({
             elem: '#test1'
             , width: '100%' //设置容器宽度
@@ -249,15 +256,32 @@
             , height: 'auto'
             //,anim: 'updown' //切换动画方式
         });
+        //首页轮播视频
+        carousel.render({
+            elem: '#test2'
+            , width: '100%' //设置容器宽度
+            , arrow: 'always'
+            , height: 'auto'
+            //,anim: 'updown' //切换动画方式
+        });
+
         $('.app-header-menuicon').on('click', function () {
             $('.header-down-nav').toggleClass('down-nav')
-        });
+        })
         var imgH = $('.imgbox div.layui-this').outerHeight();
         $('.imgH').css('height', imgH + 'px');
+
+        var videroH = $('.videobox div.layui-this').outerHeight();
+        $('.videroH').css('height', videroH + 'px');
+
         window.onresize = function () {
             var imgH = $('.imgbox div.layui-this').outerHeight();
-            $('.imgH').css('height', imgH + 'px')
+            $('.imgH').css('height', imgH + 'px');
+
+            var videroH = $('.videobox div.layui-this').outerHeight();
+            $('.videroH').css('height', videroH + 'px');
         };
+
 
         $(function () {
 
@@ -435,7 +459,7 @@
                     shade: 0.8//表示的是阴影的大小
                     , area: ['55%', '65%'],
                     moveType: 1,//拖拽模式，0或者1
-                    content: path + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    content: path + '/parent/toUrl/SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                     , success: function (layero, index) {
                         console.log(layero, index);
                     }
@@ -463,19 +487,38 @@
 
 
 
-	        //点击查看园所视频
-            $("#playVideos").click(function () {
-
+            //点击查看园所视频
+            $(".playVideos").click(function () {
+                var videoUrl = $(this).attr('title');
                 //打开一个窗口播放视频
                 layer.open({
                     //打开一个窗口播放视频
                     type: 1,
-                    area: ['70%', '70%'],
-	                offset:['10%','5%'],
-	                title:'园所介绍',
+                    area: ['95%', '80%'],
+                    offset:['10%','3%'],
+                    title:'园所视频播放',
                     content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
-                            '<source src="${pageContext.request.contextPath}/videos/TakeTheElevatorSafely.mp4" type="video/mp4"></source></video>'
+                        '<source src="'+videoUrl+'" type="video/mp4"></source></video>'
                     //直接跳出一个标签播放视频
+                });
+            });
+
+
+
+            $(".a1").click(function () { //点击查看园所新闻
+                var name = $(this).text();
+                var titleInfo = name.split(":")[0];
+                var detailInfo = name.split(":")[1];
+                var kindername = $("#kindername").val();
+                //打开一个窗口播放视频
+                layer.open({
+                    //打开一个窗口播放视频
+                    // area: ['40%', '50%'],
+                    area: 'auto',
+                    // offset:['26%','31%'],
+                    offset:'auto',
+                    title:titleInfo,
+                    content: detailInfo
                 });
             });
 
@@ -499,6 +542,26 @@
                     });
                 }
             });
+
+
+            $("#regFaceId").click(function () {
+                    layer.open({
+                        type: 2,
+                        area: ['95%', '81%'],
+                        offset: ['10%', '3%'],
+                        title: '智慧幼儿园-人脸注册界面',
+                        content: path + '/parent/toUrl/ParentFaceRegistered' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                        , success: function (layero, index) {
+                            var body = layer.getChildFrame("body", index);
+                        }
+                    });
+
+            });
+
+
+
+
+
         });
     });
 

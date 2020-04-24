@@ -23,7 +23,7 @@
 <body>
 
 <form class="layui-form" action="#" lay-filter="test1">
-	<input type="text" name="studentid" id="studentid">
+	<input type="hidden" name="studentid" id="studentid">
 	<input type="hidden" value="${pageContext.request.contextPath}" id="path"/>
 	<div class="layui-form-item">
 		<label class="layui-form-label">学生名称：</label>
@@ -60,29 +60,7 @@
 		$ = layui.$;
 		var layer = layui.layer;
 		//对应的班级ID的删除-正则表达式的判断
-		// var classid = $("#classid").val();
-		// var src = $("#path").val();
-		// if ("" != classid || null != classid) {
-		// 	console.log("对应修改" + classid);
-		// 	$("#classname").on('blur', function () {
-		// 		console.log("点击事件=" + classid);
-		// 		$.ajax({
-		// 			url: src + '/director/selectTeacherByCid',
-		// 			type: 'post'
-		// 			, data: {"classid": classid},
-		// 			dataType: "text",
-		// 			success: function (data) {
-		// 				console.log("--" + data.toString());
-		// 			}, error: function (err) {
-		// 				console.log(err);
-		// 			}
-		// 		});
-		// 	});
-		// }
 	});
-	// function teacherchange() {
-	// 	console.log("进入方法=");
-	// }
 </script>
 </body>
 </html>

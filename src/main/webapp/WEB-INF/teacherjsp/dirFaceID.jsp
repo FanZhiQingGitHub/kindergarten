@@ -40,7 +40,7 @@
 		<div class="layui-inline" style="margin-left: 32%;margin-top: 4%">
 			<div class="layui-input-inline">
 				<button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal "
-						style="width: 330px;height: 60px;font-size: 25px" id="bu2"><i class="layui-icon">&#xe6af;</i>上下课记得点我哦
+						style="width: 330px;height: 60px;font-size: 25px" id="bu2"><i class="layui-icon">&#xe6af;</i>教师考勤打卡记得点我哦
 				</button>
 
 				<button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm"
@@ -112,13 +112,13 @@
 				//获取到String类型的image信息
 				var face = url.split(",")[1];
 
-				console.log("face="+face)
+				console.log("face="+face);
 				if(face == null){
 					layer.alert('您好，请先开启相机拍照后打卡！',{icon:2});
 				}else {
 					//用ajax做验证 ,判断是否验证成功
 					$.ajax({
-						url: path+'/parent/addStuTime',
+						url: path+'/teacher/addTeaAttendTime',
 						type:"post",
 						async: true,
 						cache: false,
@@ -129,7 +129,13 @@
 									var index = parent.layer.getFrameIndex(window.name);
 									parent.layer.close(index);//关闭当前页
 								});
-							}else if(msg == "pmsuccess") {
+							}else if(msg == "omsuccess") {
+								layer.alert("欢迎回来，打卡成功，！", {icon: 6},function () {
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index);//关闭当前页
+								});
+							}
+							else if(msg == "pmsuccess") {
 								layer.alert("打卡成功，祝您一路顺风！", {icon: 6},function () {
 									var index = parent.layer.getFrameIndex(window.name);
 									parent.layer.close(index);//关闭当前页
@@ -139,12 +145,7 @@
 										var index = parent.layer.getFrameIndex(window.name);
 										parent.layer.close(index);//关闭当前页
 									});
-							}else if (msg=='failure'){
-								layer.alert("识别失败，如果未注册人脸请先进行注册",{icon:2},function () {
-									var index = parent.layer.getFrameIndex(window.name);
-									parent.layer.close(index);//关闭当前页
-								});
-							} else {
+							}else {
 								layer.alert("亲，不知道哪里出错了！",{icon:2},function () {
 									var index = parent.layer.getFrameIndex(window.name);
 									parent.layer.close(index);//关闭当前页
@@ -159,15 +160,15 @@
 						}
 					});
 				}
-
-			}),$("#bu3").click(function () {
+			});
+			$("#bu3").click(function () {
 				var path = $("#path").val();
 				layer.open({
 					type: 2,
-					area: ['400px', '450px'],
+					area: ['400px', '500px'],
 					offset: ['120px', '650px'],
 					title: '新增请假信息',
-					content: path + '/parent/toUrl/addLeaveInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					content: path + '/teacher/toUrl/addLeaveManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 					, success: function (layero, index) {
 					}
 				});

@@ -66,35 +66,8 @@
             return now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
         }
 
-        // //1、查出宝宝名称下拉框的值
-        // $.ajax({
-        //     url: path + '/parent/findAllStuInfo',
-        //     async: true,
-        //     type: 'post',
-        //     datatype: 'text',
-        //     success: function (data) {
-        //         if (data == "error") {
-        //             layer.msg("暂无宝宝信息！", {icon: 2});
-        //         } else {
-        //             var stuinfo = JSON.parse(data);
-        //             var option;
-        //             option += "<option value='请选择'>" + "请选择宝宝名称" + "</option>";
-        //             for (var i in stuinfo) {
-        //                 option += "<option value='" + stuinfo[i].studentid+ "'>" + stuinfo[i].studentname + "</option>";
-        //             }
-        //             $("#te1").html(option);
-        //             $("#te1").show();
-        //         }
-        //     }, error: function (data) {
-        //         layer.msg("网络繁忙！", {icon: 2});
-        //     }
-        // });
-
-
         $(function () {
            $("#addInfo").click(function () {
-               // var studentid = $("#te1").val();
-               // var parentname = $("#te2").val();
                var leaveDate = $("#te3").val();
                var time = $("input[name='time']:checked").val();
 
@@ -102,7 +75,7 @@
                    layer.msg("请选择请假日期！", {icon: 6});
                }else {
                    $.ajax({
-                       url: path + "/director/addLeaveManage",
+                       url: path + "/teacher/addLeaveManage",
                        async: true,
                        type: "post",
                        data: {"time": time, "leaveDate": leaveDate},

@@ -66,7 +66,7 @@
                 </div>
 
 
-                <button type="button" class="layui-btn layui-btn-normal" data-type="reload"><i class="layui-icon">&#xe615;</i>查询体检信息</button>
+                <button type="button" class="layui-btn layui-btn-normal" data-type="reload"><i class="layui-icon">&#xe615;</i>查询接送信息</button>
 
             </div>
         </div>
@@ -103,7 +103,12 @@
             datatype: 'text',
             success: function (data) {
                 if (data == "error") {
-                    layer.alert("暂无班级信息！", {icon: 2});
+                    layer.msg("暂无班级信息！", {icon: 2});
+                } else if(data == "notkinder"){
+                    var error;
+                    error = "<option value='请选择'>" + "请登录幼儿园查看" + "</option>";
+                    $("#classname").html(error);
+                    $("#classname").show();
                 } else {
                     var clainfo = JSON.parse(data);
                     var option;

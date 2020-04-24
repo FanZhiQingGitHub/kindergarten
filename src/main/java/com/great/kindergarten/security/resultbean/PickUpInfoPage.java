@@ -4,6 +4,7 @@ package com.great.kindergarten.security.resultbean;
  * 接送信息管理实体信息分页类
  */
 public class PickUpInfoPage {
+    private String kindername;
     private Object time1;
     private Object time2;
     private String uStuName;
@@ -14,13 +15,22 @@ public class PickUpInfoPage {
     public PickUpInfoPage() {
     }
 
-    public PickUpInfoPage(Object time1, Object time2, String uStuName, String cName, Integer page, Integer limit) {
+    public PickUpInfoPage(String kindername, Object time1, Object time2, String uStuName, String cName, Integer page, Integer limit) {
+        this.kindername = kindername;
         this.time1 = time1;
         this.time2 = time2;
         this.uStuName = uStuName;
         this.cName = cName;
         this.page = page;
         this.limit = limit;
+    }
+
+    public String getKindername() {
+        return kindername;
+    }
+
+    public void setKindername(String kindername) {
+        this.kindername = kindername;
     }
 
     public Object getTime1() {
@@ -74,7 +84,8 @@ public class PickUpInfoPage {
     @Override
     public String toString() {
         return "PickUpInfoPage{" +
-                "time1=" + time1 +
+                "kindername='" + kindername + '\'' +
+                ", time1=" + time1 +
                 ", time2=" + time2 +
                 ", uStuName='" + uStuName + '\'' +
                 ", cName='" + cName + '\'' +
