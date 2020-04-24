@@ -25,7 +25,8 @@ public interface TeacherMapper {
 	public List<TblCourse> findCourseByTodayCid(HashMap<String,Object> dataHashMap);
 
 	public Integer findCount(Integer cid);
-	public List<TblClass> findClassName();
+	//  根据cid 查找班级所有
+	public List<TblClass> findClassName(Integer cid);
 	public Integer findClassidByName(TblClass tblClass);
 	//查询发布作业表中最后一个id
 	public Integer findFinallyWorkreleaseid();

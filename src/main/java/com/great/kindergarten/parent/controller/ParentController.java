@@ -81,6 +81,63 @@ public class ParentController {
         return "parentJsp/" + url;
     }
 
+
+
+
+
+    @RequestMapping("/findCampusBulletinAll")
+    @ResponseBody
+    public TableDate findCampusBulletinAll(HttpServletRequest request){
+
+        //取得是谁要执行查询操作
+        TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
+
+        //数据解析
+        String campusinfoname = request.getParameter("campusinfoname");
+        String beginTime = request.getParameter("beginTime");
+        String overTime = request.getParameter("overTime");
+        String page = request.getParameter("page");
+        String limit = request.getParameter("limit");
+
+        int pageInt = Integer.valueOf(page);
+        int limitInt = Integer.valueOf(limit);
+
+        Map<String, Object> map = new HashMap<>();
+
+        if (null != overTime && "" != overTime)
+        {
+            map.put("overTime", overTime);
+        }
+        if (null != beginTime && "" != beginTime)
+        {
+            map.put("beginTime", beginTime);
+        }
+
+        if (null != campusinfoname && "" != campusinfoname)
+        {
+            map.put("campusinfoname", campusinfoname);
+        }
+
+        map.put("kid", parent.getKid());
+        int pages = (pageInt - 1) * limitInt;
+        int limits = limitInt;
+        map.put("pageInt", pages);
+        map.put("limitInt", limits);
+        //数据查询返回
+        return parentService.findCampusBulletinAll(map);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     //重置密码
     @RequestMapping("/resetParentpwd")
     public void resetParentpwd(HttpServletRequest request, HttpServletResponse response) {
@@ -104,7 +161,7 @@ public class ParentController {
 
     @RequestMapping("/showMonitorInfo")
     public void showMonitorInfo(DateWrite dateWrite, MonitorPage monitorPage, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+        //显示幼儿园直播列表
 
         //取得是谁要进行操作
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
@@ -390,7 +447,6 @@ public class ParentController {
                 e.printStackTrace();
             }
         }
-        res.setData("{\'src\':\'" + path + "\'}");
         return res;
     }
 
@@ -403,7 +459,8 @@ public class ParentController {
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
         Integer cid = Integer.valueOf(request.getParameter("cid"));
         //设置查找人id
-        searchCondition.setParentId(3);
+        searchCondition.setParentId(parent.getParentId());
+
         //返回查找的结果
         return parentService.kidHomeWorkList(searchCondition, cid);
     }
@@ -491,7 +548,7 @@ public class ParentController {
         try {
             int width = 60;
             int height = 30;
-            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
+            String data = "QWERTYUIPASDFGHJKLZXCVBNMqwertyuipasdfghjklzxcvbnm123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
             Random random = new Random();//随机类
             //1 创建图片数据缓存区域（核心类）
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);//创建一个彩色的图片
@@ -593,7 +650,7 @@ public class ParentController {
         //获取信息
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
         //String name
-        if (FaceRecognitionUtils.faceRegister(face, parent.getParentId())){
+        if (FaceRecognitionUtils.faceRegister(face, "p"+parent.getParentId())){
             result.setSuccess(true);
         }
 
@@ -606,7 +663,7 @@ public class ParentController {
     2.家长类型（妈妈或者爸爸）
     3.当前时间段：如8:30
     4.需要判断是上午还是下午
-    5.需要pmid
+    5.需要pmid                                                    registered
     6.需要孩子id
     7.需要日期区间id（需要添加本周一到本周日） --完成
     8.如果下午或上午没打卡的话默认要插入请假或者其它默认数据
@@ -620,7 +677,7 @@ public class ParentController {
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
 
         //人脸识别成功
-        if (FaceRecognitionUtils.identify(face,parent.getParentId())){
+        if (FaceRecognitionUtils.identify(face,"p"+parent.getParentId())){
             //设置日期格式（当天日期）
             SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
             timeamdate = date.format(new Date());

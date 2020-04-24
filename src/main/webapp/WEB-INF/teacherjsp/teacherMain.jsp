@@ -410,7 +410,7 @@
 					area: ['95%', '81%'],
 					offset: ['10%', '3%'],
 					title: '智慧幼儿园-人脸识别界面',
-					content: path + '/director/toUrl/dirFaceID' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					content: path + '/teacher/toUrl/dirFaceID' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 					, success: function (layero, index) {
 						var body = layer.getChildFrame("body", index);
 					}

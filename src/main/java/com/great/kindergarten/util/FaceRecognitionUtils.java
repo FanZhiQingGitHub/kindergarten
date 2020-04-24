@@ -35,7 +35,7 @@ public class FaceRecognitionUtils
 	 * @param imageString
 	 * @param userId
 	 */
-	public static Boolean identify(String imageString,Integer userId) {
+	public static Boolean identify(String imageString,String userId) {
 
 		Boolean result =false;
 
@@ -64,7 +64,7 @@ public class FaceRecognitionUtils
 
         if (userId!=null){
 	        //指定用户去比对
-	        options.put("user_id", userId+"");
+	        options.put("user_id", userId);
         }
 
         //要检测的库  我那边创建了三个 但实际用到的就一个AllFace
@@ -102,7 +102,7 @@ public class FaceRecognitionUtils
 	 * @param imageString
 	 * @param userId
 	 */
-	public static Boolean faceRegister(String imageString,Integer userId){
+	public static Boolean faceRegister(String imageString,String userId){
 		Boolean result =false;
 
 		// 传入可选参数调用接口，根据需求自行设置
@@ -110,7 +110,7 @@ public class FaceRecognitionUtils
 		String imageType = "BASE64";
 
 		if (imageString!=null&&!"".equals(imageString)&&userId!=null){
-			JSONObject res =client.addUser(imageString,imageType,"AllFace",userId+"",options);
+			JSONObject res =client.addUser(imageString,imageType,"AllFace",userId,options);
 			//判断是否注册成功
 			System.out.println(res);
 		if (res.getString("error_msg") != null && res.getString("error_msg").equals("SUCCESS")) {

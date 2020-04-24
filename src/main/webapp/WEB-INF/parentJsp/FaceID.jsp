@@ -140,7 +140,7 @@
 										parent.layer.close(index);//关闭当前页
 									});
 							}else if (msg=='failure'){
-								layer.alert("识别失败，请重试",{icon:6},function () {
+								layer.alert("识别失败，如果未注册人脸请先进行注册",{icon:2},function () {
 									var index = parent.layer.getFrameIndex(window.name);
 									parent.layer.close(index);//关闭当前页
 								});
