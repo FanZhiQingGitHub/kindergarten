@@ -23,6 +23,8 @@ public class TblHealther {
    private String healtherstatus;
    private Integer rid;
 
+   private Integer kid;
+
    private String code;
    private String time1;
    private String time2;
@@ -149,6 +151,16 @@ public class TblHealther {
     public void setTime2(String time2)
     {
         this.time2 = time2;
+    }
+
+    public Integer getKid()
+    {
+        return kid;
+    }
+
+    public void setKid(Integer kid)
+    {
+        this.kid = kid;
     }
 
     @Override

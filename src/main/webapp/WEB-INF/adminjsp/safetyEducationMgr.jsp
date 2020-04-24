@@ -14,19 +14,29 @@
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
+		body{
+			font-size: 140%;
+		}
 		h2{
 			text-align: center;
 			margin-top: 1%;
 		}
-		#selName{
-			margin-top: 5%;
-			width: 168%;
-			height: 30%;
+		.layui-input{
+			width:120%;
+			margin: auto;
 		}
-		#selNames{
-			margin-top: 5%;
-			width: 168%;
-			height: 30%;
+		.layui-table-cell{
+			height: 45px;
+			line-height: 45px;
+			font-size: 140%;
+		}
+		a{
+			font-size: 140%;
+		}
+		.sp{
+			font-size: 140%;
+			height: 40px;
+			line-height: 40px;
 		}
 	</style>
 </head>
@@ -39,25 +49,25 @@
 				<div class="layui-form-item" style="margin-left: 6%;">
 					<div class="layui-block">查询条件：</div>
 					<div class="layui-inline">
-						<span class="layui-form-label">上传时间：</span>
+						<span class="layui-form-label" style="width: auto">上传时间：</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" style="width: 82%;margin-top: 2% ">
+							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" style="">
 						</div>
 					</div>
 					<div class="layui-inline">
-						<span class="layui-form-label" style="margin-left: -35%">至</span>
+						<span class="layui-form-label" style="margin: 5% 15%;width: 10%">至</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 2% 0 0 10%">
+							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="margin: -27% 65%;">
 						</div>
 					</div>
-					<button class="layui-btn" data-type="reload" style="margin-left: -5%"><i class="layui-icon">&#xe615;查询</i></button>
+					<button class="layui-btn" data-type="reload" style="margin-left: 10%"><i class="layui-icon">&#xe615;查询</i></button>
 					<button class="layui-btn btn-add btn-default" id="btn-add" style=""><i class="layui-icon">&#xe681;上传</i></button>
 				</div>
 				<div class="layui-form-item" style="margin-left: 6%;">
 					<div class="layui-inline">
-						<span class="layui-form-label">园所名称：</span>
+						<span class="layui-form-label" style="width: auto">园所名称：</span>
 						<div class="layui-input-inline">
-							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" style="width: 82%;margin-top: 3% ">
+							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" style=" ">
 						</div>
 					</div>
 <%--					<button class="layui-btn btn-add btn-default" id="btn-add" style="margin-left:45%"><i class="layui-icon">&#xe624;新增</i></button>--%>
@@ -65,6 +75,7 @@
 			</div>
 		</form>
 	</div>
+
 	<table id="education" lay-filter="test"></table>
 	<div id="type-content" style="display: none;">
 		<input type="hidden" id="sid" name="sid>">
@@ -121,8 +132,8 @@
 		</div>
 	</div>
 	<script type="text/html" id="barOption">
-		<a type="button" class="layui-btn layui-btn-xs" lay-event="reUpload" style="width: 40%;height: 80%"><i class="layui-icon">&#xe67c;重新上传</i></a>
-		<a type="button" class="layui-btn layui-btn-xs" lay-event="delete" style="width: 25%;height: 80%"><i class="layui-icon">&#xe640;删除</i></a>
+		<a type="button" class="layui-btn layui-btn-sm" lay-event="reUpload" style="height: 45px"><span class="sp"><i class="layui-icon">&#xe67c;重新上传</i></span></a>
+		<a type="button" class="layui-btn layui-btn-sm" lay-event="delete" style="height: 45px"><span class="sp"><i class="layui-icon">&#xe640;删除</i></span></a>
 	</script>
 </body>
 
@@ -148,18 +159,18 @@
 			var path = $("#path").val();
 			var tableIns = table.render({
 				elem: '#education'
-				, height: 312
+				, height: 450
 				, url: path + "/admin/safetyEducationInfo"//数据接口
 				, page: true //开启分页
 				, limit: 5
 				, limits: [5, 10]
 				, cols: [[ //表头
-					{field: 'safetyvideoid', title: '视频编号', align: 'center', width: 120, sort: true, fixed: 'left'}
-					, {field: 'safetyvideoname', title: '视频名称', align: 'center', width: 135,
-						templet: '<div ><a href="${pageContext.request.contextPath}/{{d.videoadd}}" class="layui-table-link">{{d.safetyvideoname}}</a></div>'}
-					, {field: 'videoname', title: '文件名称', align: 'center', width: 190}
-					, {field: 'videoadd', title: '文件地址', align: 'center', width: 260}
-					, {field: 'safetyvideotime', title: '上传时间', align: 'center', width: 180
+					{field: 'safetyvideoid', title: '视频编号', align: 'center', width: 150, sort: true, fixed: 'left'}
+					, {field: 'safetyvideoname', title: '视频名称', align: 'center', width: 280,
+						templet: '<div ><a href="${pageContext.request.contextPath}/{{d.videoadd}}" class="layui-table-link" style="font-size:100%">{{d.safetyvideoname}}</a></div>'}
+					, {field: 'videoname', title: '文件名称', align: 'center', width: 300}
+					, {field: 'videoadd', title: '文件地址', align: 'center', width: 360}
+					, {field: 'safetyvideotime', title: '上传时间', align: 'center', width: 240
 					   ,templet:"<div>{{layui.util.toDateString(d.safetyvideotime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
 					, {fixed: 'right', title: '操作', align: 'center', width: 255, toolbar: '#barOption'}
 				]]
@@ -180,26 +191,22 @@
 					data = obj.data; //获得当前行数据
 					var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 					if(layEvent === 'reUpload'){
-							layer.close(index);
-							parent.layer.open({
+							layer.open({
 								type: 2,
-								// area: ['30%', '60%'],
-								area: ['40%', '60%'],
-								// content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+								area: ['30%', '44%'],
 								content: path+"/admin/toUrl/reUploadVideoInfo",
-								title: '重新上传',
-								// btn: ['保存', '取消'],
-								offset: '100px',
+								title: ['重新上传','font-size:18px'],
 								btnAlign: 'c',
 								success:function(layero, index){
 									var body = layer.getChildFrame('body',index);
 									body.find("#safetyVideoName3").val(data.safetyvideoname);
 									body.find("#videoName3").val(data.videoname);
 									body.find("#videoAdd3").val(data.videoadd);
+									body.find("#safetyvideoid").val(data.safetyvideoid)
 								}
 						});
 					}else if(layEvent === 'delete'){
-						layer.confirm("确定要删除该视频信息？",{icon:3,title:'温馨提示'},function (index) {
+						layer.confirm("确定要删除该视频信息？",{icon:3,area:['350px','200px'],title:['温馨提示','font-size:18px']},function (index) {
 							layer.close(index);
 							$.ajax({
 								url: path + "/admin/deleteSafetyVideoInfo",
@@ -222,14 +229,15 @@
 			});
 
 			$("#btn-add").click(function () {
-				parent.layer.open({
+				layer.open({
 					type: 2,
-					area: ['35%', '56%'],
+					area: ['30%', '44%'],
 					// content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
 					content: path+"/admin/toUrl/uploadVideoInfo",
-					title: '上传视频',
+					title: ['上传视频','font-size:18px'],
 					// btn: ['保存', '取消'],
-					offset: '100px',
+					// offset: '100px',
+					closeBtn :0,
 					btnAlign: 'c'
 				});
 			});

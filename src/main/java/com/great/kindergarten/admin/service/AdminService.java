@@ -194,6 +194,12 @@ public class AdminService {
 		return adminMapper.findTblKinderById(kinderid);
 	}
 
+	//园所详情
+	public List<TblKinder> findKinderInfoById(Integer kinderid)
+	{
+		return adminMapper.findKinderInfoById(kinderid);
+	}
+
 	public Integer findIdByKinderName(String kinderName)
 	{
 		return adminMapper.findIdByKinderName(kinderName);
@@ -316,6 +322,25 @@ public class AdminService {
 		return adminMapper.reUploadBook(tblReadmag);
 	}
 
+	public List<String> findAllReadBookName()
+	{
+		return adminMapper.findAllReadBookName();
+	}
+
+	public List<TblReadmag> findReadInfoByName(HashMap<String, Object> condition, RowBounds rowBounds)
+	{
+		return adminMapper.findReadInfoByName(condition, rowBounds);
+	}
+
+	public int findReadCountByName(HashMap<String, Object> condition)
+	{
+		return adminMapper.findReadCountByName(condition);
+	}
+
+	public Integer findReadMagIdByName(String readMagName)
+	{
+		return  adminMapper.findReadMagIdByName(readMagName);
+	}
 	//权限管理
 	public List<TblRole> findRoleInfo()
 	{
@@ -567,11 +592,6 @@ public class AdminService {
 		return adminMapper.addSecurity(tblSecurityList);
 	}
 
-	//	public List<String> findHealtherJob()
-	//	{
-	//		return adminMapper.findHealtherJob();
-	//	}
-
 	//学生管理
 	public List<TblStudent> findAllStudentInfo(HashMap<String, Object> condition, RowBounds rowBounds)
 	{
@@ -810,5 +830,20 @@ public class AdminService {
 		readBookPageBean.setList(list);
 
 		return readBookPageBean;
+	}
+
+	public Integer findExistAdminName(String adminname)
+	{
+		Map<String,String> adminMap = new LinkedHashMap<>();
+		adminMap.put("adminname",adminname);
+		return adminMapper.findExistAdminName(adminMap);
+	}
+
+	public boolean resetAdminPwd(String adminname,String adminphone)
+	{
+		Map<String,String> adminMap = new LinkedHashMap<>();
+		adminMap.put("adminname",adminname);
+		adminMap.put("adminphone",adminphone);
+		return adminMapper.resetAdminPwd(adminMap);
 	}
 }

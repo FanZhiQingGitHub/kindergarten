@@ -18,8 +18,8 @@
     </resultMap>
 
     <!--    用户状态查询-->
-    <select id="findSecurityStatus" resultType="java.lang.String" parameterType="java.util.Map">
-        select securitystatus from tbl_security
+    <select id="findSecurityStatus" resultType="com.great.kindergarten.commons.entity.TblSecurity" parameterType="java.util.Map">
+        select * from tbl_security
         <where>
             <if test="securityname != '' and securityname != null ">
                 and securityname = #{securityname}

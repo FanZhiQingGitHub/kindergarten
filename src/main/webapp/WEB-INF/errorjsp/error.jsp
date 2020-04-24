@@ -147,6 +147,7 @@
 
 </head>
 <body>
+<input type="hidden" id="path" value="<%=path%>">
 <div class="da-wrapper">
     <div class="da-content">
         <div class="da-container clearfix">
@@ -158,10 +159,22 @@
                     <p class="tip3">You don't have permission to access the URL on this server.</p>
                 </div>
                 <h1 class="da-error-heading">Sorry, 请稍后再试 !!!</h1>
+<%--                <a class="da-error-heading" href="javascript:void(0);" id="a1">点击此处返回登录界面</a>--%>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    layui.use(['form', 'layer', 'jquery', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+        $ = layui.jquery;
+
+    });
+</script>
 
 </body>
 </html>

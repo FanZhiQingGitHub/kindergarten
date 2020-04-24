@@ -165,12 +165,12 @@
                             window.parent.location.reload();
                         });
                     }else if(msg == "notname"){
-                        layer.alert("sorry，未找到该宝宝！", {icon: 2});
+                        layer.msg("sorry，未找到该宝宝！", {icon: 2});
                     }else {
-                        layer.alert("添加失败！", {icon: 2});
+                        layer.msg("添加失败！", {icon: 2});
                     }
                 }, error: function (msg) {
-                    layer.alert("网络繁忙！", {icon: 2});
+                    layer.msg("网络繁忙！", {icon: 2});
                 }
             })
         });

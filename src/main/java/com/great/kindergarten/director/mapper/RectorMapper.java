@@ -102,5 +102,47 @@ public interface RectorMapper
 	public TblStudent selectStudentByStudentId(int pid);
 	//	public int updateChildrenByPidDown(Map<String, Object> map);
 
+	/*
+	 * 保健员模块的设计
+	 * */
+	//保健员模块设计
+	public List<TblHealther> findHealtherAll(Map<String, Object> map);
 
+	//保健员模块--查询记录条数
+	public Long findHealtherAllCount(Map<String, Object> map);
+
+	//对应的保健员表格信息的删除
+	public int delHealtherTable(int healtherid);
+
+	//判断保健员的名称是不是重复
+	public TblHealther selectHealtherName(String healthername);
+
+	//	对应的保健员表格信息--更新语句信息
+	public int updateHealtherById(TblHealther tblHealther);
+
+	//对应的进行保健员的新增
+	public int addHealtherForm(TblHealther tblHealther);
+
+
+
+	/*
+	 * 安防员模块的设计
+	 * */
+	//安防员模块设计
+	public List<TblSecurity> findSecurityAll(Map<String, Object> map);
+
+	//安防员模块--查询记录条数
+	public Long findSecurityAllCount(Map<String, Object> map);
+
+	//对应的安防员表格信息的删除
+	public int delSecurityTable(int securityid);
+
+	//判断安防员的名称是不是重复
+	public TblSecurity selectSecurityName(String securityname);
+
+	//	对应的安防员表格信息--更新语句信息
+	public int updateSecurityById(TblSecurity tblSecurity);
+
+	//对应的进行安防员的新增
+	public int addSecurityForm(TblSecurity tblSecurity);
 }

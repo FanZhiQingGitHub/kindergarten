@@ -97,6 +97,7 @@ public class SecuritySystemLogAspect {
         //请求的IP
         InetAddress addr = InetAddress.getLocalHost();
         String ip = addr.getHostAddress();
+
         try {
 
             String targetName = joinPoint.getTarget().getClass().getName();
@@ -122,6 +123,7 @@ public class SecuritySystemLogAspect {
             System.out.println("方法描述:" + operationName);
             System.out.println("请求人:" + securityname);
             System.out.println("请求IP:" + ip);
+
             //*========数据库日志=========*//
             TblSyslog log = new TblSyslog();
             log.setOperatedetail(operationName);

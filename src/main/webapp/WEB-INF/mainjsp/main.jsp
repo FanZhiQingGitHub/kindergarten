@@ -63,8 +63,8 @@
             <a href="${pageContext.request.contextPath}/main/teacher" class="active" style="font-size: 18px">教师端</a>
             <a href="${pageContext.request.contextPath}/main/healther" class="active" style="font-size: 18px">保健员端</a>
             <a href="${pageContext.request.contextPath}/main/security" class="active" style="font-size: 18px">安防员端</a>
-            <a href="${pageContext.request.contextPath}/main/director" class="active" style="font-size: 18px">园长端</a>
-            <a href="${pageContext.request.contextPath}/main/admin" class="active" style="font-size: 18px">平台端</a>
+<%--            <a href="${pageContext.request.contextPath}/main/director" class="active" style="font-size: 18px">园长端</a>--%>
+<%--            <a href="${pageContext.request.contextPath}/main/admin" class="active" style="font-size: 18px">平台端</a>--%>
             <a href="${pageContext.request.contextPath}/main/path/about" class="active" style="font-size: 18px">关于</a>
             <a href="javascript:void(0); " class="active" style="font-size: 18px" id="exit">注销</a>
         </div>
