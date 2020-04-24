@@ -171,8 +171,8 @@
 
 
     <!--    查班级所有名称-->
-    <select id="findClassName" resultMap="classMap" >
-        select * from tbl_class;
+    <select id="findClassName" resultMap="classMap" parameterType="java.lang.Integer">
+        select * from tbl_class where classid=#{cid};
     </select>
     <!--    根据班级名查找id-->
     <select id="findClassidByName" resultType="java.lang.Integer" parameterType="TblClass">

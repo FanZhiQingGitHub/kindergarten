@@ -68,11 +68,11 @@ public class TeacherService {
         return teacherMapper.findCourseByTodayCid(dataHashMap);
     }
 
-    //    查找班级所有名称
-    public List<TblClass> findClassName()
+    //  根据cid 查找班级所有
+    public List<TblClass> findClassName(Integer cid)
     {
 
-        return teacherMapper.findClassName();
+        return teacherMapper.findClassName(cid);
     }
     //根据班级名查找id
     public Integer findClassidByName(TblClass tblClass)

@@ -56,7 +56,7 @@ public class TeacherSystemLogAspect {
 
     //配置controller环绕通知,使用在方法aspect()上注册的切入点
     @Around("controllerAspect()")
-    public void around(JoinPoint joinPoint) {
+    public Object around(JoinPoint joinPoint) {
         System.out.println("==========开始执行controller环绕通知===============");
         long start = System.currentTimeMillis();
         //(signature是信号,标识的意思):获取被增强的方法相关信息.其后续方法有两个
@@ -79,6 +79,7 @@ public class TeacherSystemLogAspect {
                 logger.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms with exception : " + e.getMessage());
             }
         }
+        return "aaabbb";
     }
 
     /**
