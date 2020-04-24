@@ -27,9 +27,14 @@ public class MainController {
     @Resource
     private MainService mainService;
 
-    @RequestMapping("/Login")
-    public String Login(){
-        return "mainjsp/Login";
+//    @RequestMapping("/Login")
+//    public String Login(){
+//        return "mainjsp/Login";
+//    }
+
+    @RequestMapping("/path/{url}")
+    public String showMain(@PathVariable(value = "url") String path) {
+        return "mainjsp/" + path;
     }
 
     @MainSystemLog(operationType = "登录", operationName = "幼儿园登录")
@@ -111,10 +116,6 @@ public class MainController {
         }
     }
 
-    @RequestMapping("/path/{url}")
-    public String showMain(@PathVariable(value = "url") String path) {
-        return "mainjsp/" + path;
-    }
 
     @RequestMapping("/parent")
     public String Parent() {

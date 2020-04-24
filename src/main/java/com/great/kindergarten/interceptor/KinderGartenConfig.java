@@ -16,18 +16,58 @@ public class KinderGartenConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         InterceptorRegistration interceptorRegistration = registry.addInterceptor(new KinderGartenInterceptor());
-        interceptorRegistration.addPathPatterns("/**");
+        interceptorRegistration.addPathPatterns("/main/**","/admin/**","/director/**","/healther/**","/parent/**","/security/**","/teacher/**");
         interceptorRegistration.excludePathPatterns(
-                "/commons/**",
-                "/homeWork/**",
-                "/image/**",
-                "/js/**",
-                "/layui/**",
-                "/loginres/**",
-                "/mainres/**",
-                "/photos/**",
-                "/resources/**",
-                "/workRelease/**"
+                "/main/path/Login",
+                "/main/mainLogin",
+                "/main/LoginCode",
+
+                "/admin/toUrl/adminLogin",
+                "/admin/checkLogin",
+                "/admin/loginCode",
+                "/admin/resetAdminPwd",
+                "/admin/resetAdminPwd",
+
+                "/director/toUrl/directorLogin",
+                "/director/directorLogin",
+                "/director/loginCode",
+                "/director/selectresetRectorPwd",
+                "/director/resetRectorPwd",
+
+//                "/healther/path/healtherLogin",
+                "/healther/healtherLogin",
+                "/healther/loginCode",
+                "/healther/findExistHealtherName",
+                "/healther/resetHealtherpwd",
+
+//                "/parent/toUrl/parentLogin",
+                "/parent/healtherLogin",
+                "/parent/loginCode",
+                "/parent/resetParentpwd",
+
+//                "/security/path/securityLogin",
+                "/security/securityLogin",
+                "/security/loginCode",
+                "/security/findExistSecurityName",
+                "/security/resetSecuritypwd",
+
+//                "/teacher/toUrl/teacherLogin",
+                "/teacher/teacherLogin",
+                "/teacher/loginCode",
+                "/teacher/resetTeacherpwd"
+
+
+
+//                "/commons/**",
+//                "/homeWork/**",
+//                "/image/**",
+//                "/js/**",
+//                "/layui/**",
+//                "/loginres/**",
+//                "/mainres/**",
+//                "/photos/**",
+//                "/resources/**",
+//                "/workRelease/**"
         );
     }
 }

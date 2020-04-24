@@ -72,8 +72,6 @@ public class TeacherController {
 		return "mainjsp/main";
 	}
 
-
-
 	//跳转路径
 	@RequestMapping(value="/toUrl/{url}")
 	public String getUrl(@PathVariable(value = "url") String path)
@@ -153,7 +151,7 @@ public class TeacherController {
 	}
     //登录
 
-    @TeacherSystemLog(operationType= "登录", operationName = "老师登录")
+//    @TeacherSystemLog(operationType= "登录", operationName = "老师登录")
 	@RequestMapping(value="/teacherLogin")
 	@ResponseBody
 	public  String teacherMain(TblTeacher tblTeacher,HttpServletRequest request){
