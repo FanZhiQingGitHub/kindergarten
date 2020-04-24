@@ -19,6 +19,14 @@ public class TeacherService {
     @Resource
     private TeacherMapper teacherMapper;
 
+    //添加系统日志
+
+    @Transactional
+    public int addLog(TblSyslog log)
+    {
+        return teacherMapper.addLog(log);
+    }
+
     public String findTeacherStatus(String teachername){
         Map<String,String> teachermap = new LinkedHashMap<>();
         teachermap.put("teachername",teachername);
