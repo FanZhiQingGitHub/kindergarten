@@ -69,6 +69,63 @@
 
 
 
+    <!--日志记录-->
+    <insert id="addLog" parameterType="com.great.kindergarten.commons.entity.TblSyslog">
+        insert into tbl_syslog(
+            operateor,
+            operatetype,
+            operatedetail,
+            operatetime,
+            operateresult,
+            operateip
+        )values
+        (
+            #{operateor}
+        ,#{operatetype}
+        ,#{operatedetail}
+        ,#{operatetime}
+        ,#{operateresult}
+        ,#{operateip}
+        )
+    </insert>
+
+
+    <!--校园公告管理....查询总记录-->
+    <select id="findCampusBulletinAll" resultType="TblCampus" parameterType="java.util.HashMap">
+        select * from tbl_campusinfo
+        <where>
+              kid = #{kid}
+            <if test="campusinfoname != null and campusinfoname != ''">
+                and campusinfoname like "%"#{campusinfoname}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and campustime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and campustime &lt; #{overTime}
+            </if>
+        </where>
+        order by campustime desc limit #{pageInt},#{limitInt}
+    </select>
+
+    <!--校园公告管理...校园公告表的内容-->
+    <select id="findCampusBulletinAllCount" resultType="integer" parameterType="java.util.HashMap">
+        select count(*) from tbl_campusinfo
+        <where>
+             kid = #{kid}
+            <if test="campusinfoname != null and campusinfoname != ''">
+                and campusinfoname like "%"#{campusinfoname}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and campustime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and campustime &lt; #{overTime}
+            </if>
+        </where>
+    </select>
+
+
 
     <select id="findPhotosByCid"  parameterType="SearchCondition" resultType="TblPhoto">
         select *
@@ -225,7 +282,9 @@
             parameterType="com.great.kindergarten.healther.resultbean.MealPage">
         select * from tbl_meal
         <where>
-
+            <if test=" name != null and name != ''">
+                 kid =#{name}
+            </if>
         </where>
         order by mealstarttime desc limit #{page},#{limit}
     </select>
@@ -233,6 +292,12 @@
     <!--    查询膳食表信息记录条数-->
     <select id="findAllMealInfoCount" resultType="integer">
         select count(*) from tbl_meal
+        <where>
+            <if test=" name != null and name != ''">
+                kid =#{name}
+            </if>
+        </where>
+
     </select>
 
 
@@ -298,10 +363,11 @@
         select twl.* ,tw.workurl,tw.wfinishtime,tw.workresult,tw.workeva,tw.sid,tw.studentname,tw.pid,tw.parentname,tw.cid from
         (
         tbl_workrelease twl  left join tbl_work tw on twl.workreleaseid =tw.workreleaseid
-        and tw.pid =#{condition.parentId} and tw.sid=#{condition.status}  and tw.cid=twl.cid =#{cid}
+        and tw.pid =#{condition.parentId} and tw.sid=#{condition.status}
         )
 
         <where>
+
 
             1=1
             <if test=" condition.name != null and condition.name != ''">
@@ -317,6 +383,7 @@
                 and twl.workreleasetime &lt;= #{condition.endTime}
             </if>
 
+            and twl.cid =#{cid}
         </where>
 
         order by twl.workreleasetime desc
@@ -330,7 +397,7 @@
         select count(*)  from
         (
         tbl_workrelease twl  left join tbl_work tw on twl.workreleaseid =tw.workreleaseid
-        and tw.pid =#{condition.parentId} and tw.sid=#{condition.status}  and tw.cid=twl.cid =#{cid}
+        and tw.pid =#{condition.parentId} and tw.sid=#{condition.status}
         )
 
         <where>
@@ -348,6 +415,7 @@
                 and twl.workreleasetime &lt;= #{condition.endTime}
             </if>
 
+            and twl.cid =#{cid}
         </where>
 
         order by twl.workreleasetime desc

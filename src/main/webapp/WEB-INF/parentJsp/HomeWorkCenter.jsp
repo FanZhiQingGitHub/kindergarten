@@ -191,7 +191,6 @@
 			if (layEvent === 'SubmitHomeWork') {
 
 				layer.open({
-					//打开一个窗口播放视频
 					type: 2,
 					area: ['70%', '70%'],
 					offset:['10%','5%'],
@@ -221,7 +220,7 @@
 							}
 							,done: function(res, index, upload){
 								if (res.code==0){
-									layer.config(" 上传成功");
+									layer.confirm(" 上传成功");
 									layer.close(index);
 									//刷新表格
 									window.location.reload();

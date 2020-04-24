@@ -18,6 +18,25 @@ public interface ParentMapper {
 
 
 	/**
+	 * 查询校园公共信息
+	 * @param map
+	 * @return
+	 */
+	 List<TblCampus> findCampusBulletinAll(Map<String, Object> map);
+
+	/**
+	 * 计算有几条校园公告
+	 * @param map
+	 * @return
+	 */
+	 Integer findCampusBulletinAllCount(Map<String, Object> map);
+	/**
+	 * 往数据库增加日志方法
+	 * @param log
+	 * @return
+	 */
+	int addLog(TblSyslog log);//系统日志
+	/**
 	 * 根据班级id找到相册列表
 	 * @param searchCondition
 	 * @return
@@ -76,15 +95,16 @@ public interface ParentMapper {
 	List<TblRecipe> findAllRecipeInfo(Integer mealId);
 	/**
 	 * 根据页码找到食物历史记录
-	 * @param mealPage
+	 * @param searchCondition
 	 * @return
 	 */
-	List<TblMeal> findAllMealInfo(MealPage mealPage);
+	List<TblMeal> findAllMealInfo(SearchCondition searchCondition);
 	/**
 	 * 根据条件找到总共有几条食物记录
+	 * @param searchCondition
 	 * @return
 	 */
-	Integer findAllMealInfoCount();
+	Integer findAllMealInfoCount(SearchCondition searchCondition);
 
 
 	/**
