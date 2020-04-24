@@ -240,7 +240,7 @@
                     <label class="layui-form-label">用户名</label>
                     <div class="layui-input-inline">
                         <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
-                        <input type="text" name="username" lay-verify="required" placeholder="请输入用户名" value="刘金坤"
+                        <input type="text" name="username" lay-verify="required" placeholder="请输入用户名" value="李智慧"
                                autocomplete="off" class="layui-input" id="te1">
                     </div>
                 </div>
@@ -258,7 +258,7 @@
                     <label class="layui-form-label">验证码</label>
                     <div class="layui-input-inline">
                         <input type="text" name="code" lay-verify="code" placeholder="请输入验证码"
-                               autocomplete="off" class="layui-input verity">
+                               autocomplete="off" class="layui-input verity" value="0000">
                     </div>
 
                     <div id="codediv">
@@ -354,22 +354,16 @@
                             location.href = path + "/director/toUrl/directorMain";
                         });
                     } else if (msg === "error") {
-                        layer.alert("登录失败！", {icon: 2});
-                        var code = document.getElementById("code");
-                        code.src = path + "/director/loginCode?" + time;
+                        layer.alert("账号或密码错误！", {icon: 2});
                     } else if (msg === "codeerror") {
                         layer.alert("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/director/loginCode?" + time;
                     } else if (msg === "notmen") {
                         layer.alert("该用户已被禁用或者不存在！", {icon: 2});
-                        var code = document.getElementById("code");
-                        code.src = path + "/director/loginCode?" + time;
                     }
                 }, error: function (msg) {
                     layer.alert("网络繁忙！", {icon: 2});
-                    var code = document.getElementById("code");
-                    code.src = path + "/director/loginCode?" + time;
                 }
             });
         });

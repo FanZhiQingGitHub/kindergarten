@@ -2139,8 +2139,7 @@ public class AdminController
 	{
 		if (tblSecurity != null)
 		{
-			SimpleDateFormat sf = new SimpleDateFormat();
-			tblSecurity.setSecurityregtime(sf.format(new Date()));
+			tblSecurity.setSecurityregtime(new Date());
 			tblSecurity.setSecuritystatus("启用");
 			List<TblSecurity> tblSecurityList = new ArrayList<>();
 			tblSecurityList.add(tblSecurity);

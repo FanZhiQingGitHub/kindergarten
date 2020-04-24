@@ -205,6 +205,7 @@ public class RectorService
 		return rectorMapper.updateParentTable(tblParent);
 	}
 
+
 	/* 保健员模块设计*/
 	//查询保健员对应的信息
 	public List<TblHealther> findHealtherAll(Map<String, Object> map)
@@ -285,6 +286,5 @@ public class RectorService
 	{
 		return rectorMapper.addSecurityForm(tblSecurity);
 	}
-
 
 }

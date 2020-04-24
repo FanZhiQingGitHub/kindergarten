@@ -10,7 +10,7 @@ import java.util.Map;
 @Mapper
 public interface SecurityMapper {
 
-    public String findSecurityStatus(Map<String, String> securitymap);
+    public TblSecurity findSecurityStatus(Map<String, String> securitymap);
 
     public TblSecurity securityLogin(Map<String, String> securitymap);
 
@@ -75,6 +75,12 @@ public interface SecurityMapper {
     public List<TblMonitor> findALLMonitorInfoMag(MonitorPage monitorPage);
 
     public Long findALLMonitorInfoCountMag(MonitorPage monitorPage);
+
+    public List<TblDefaultrack> findDefaultLngLatInfo();
+
+    public Long findExistStuLngLat(Map<String,String> stuMap);
+
+    public Boolean addStuLngLatInfo(List<TblDefaultrack> tblDefaultrackList);
 
     public int addLog(TblSyslog log);//系统日志
 }

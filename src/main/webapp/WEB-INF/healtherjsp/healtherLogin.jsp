@@ -175,7 +175,7 @@
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-block">
                     <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
-                    <input type="text" name="healthername" lay-verify="required" placeholder="请输入用户名" value="李四"
+                    <input type="text" name="healthername" lay-verify="required" placeholder="请输入用户名" value=""
                            autocomplete="off" class="layui-input" id="te1">
                 </div>
             </div>
@@ -184,7 +184,7 @@
                 <div class="layui-input-inline">
                     <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
                     <input type="password" name="healtherpwd" required lay-verify="pass" placeholder="请输入6-12位密码"
-                           value="123456"
+                           value=""
                            autocomplete="off" class="layui-input" id="te2">
                 </div>
             </div>
@@ -273,18 +273,13 @@
                             location.href = path + "/healther/path/healtherMain";
                         });
                     } else if (msg == "error") {
-                        layer.msg("登录失败！", {icon: 2});
-                        var code = document.getElementById("code");
-                        code.src = path + "/healther/loginCode?" + Math.random();
+                        layer.msg("账号或密码错误！", {icon: 2});
                     } else if (msg == "codeerror") {
                         layer.msg("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/healther/loginCode?" + Math.random();
                     } else if (msg == "notmen") {
                         layer.msg("该用户已被禁用或者不存在！", {icon: 2});
-                        var code = document.getElementById("code");
-                        code.src = path + "/healther/loginCode?" + Math.random();
-
                     }
                 }, error: function (msg) {
                     layer.msg("网络繁忙！", {icon: 2});
@@ -349,7 +344,7 @@
             }), $("#healthername").blur(function () {
                 var healthername = $("#healthername").val();
                 $.ajax({
-                    url: path + '/healther/resetHealtherpwd',
+                    url: path + '/healther/findExistHealtherName',
                     async: true,
                     type: 'post',
                     data: {

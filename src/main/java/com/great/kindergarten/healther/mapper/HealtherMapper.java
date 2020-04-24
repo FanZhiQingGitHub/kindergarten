@@ -28,7 +28,7 @@ public interface HealtherMapper {
 
     public Long findALLExaminationCount(ExaminationPage examinationPage);
 
-    public List<TblClass> findAllClass();
+    public List<TblClass> findAllClass(Map<String, String> kindermap);
 
     public Boolean updateExaminationInfo(TblExamination tblExamination);
 
@@ -53,6 +53,8 @@ public interface HealtherMapper {
     public Boolean updateRecipeInfo(Integer mid);
 
     public List<TblCampus> findHealtherNews(Map<String, String> KinderNewsmap);
+
+    public Integer findKinderID(Map<String, String> KinderMap);
 
     public int addLog(TblSyslog log);//系统日志
 

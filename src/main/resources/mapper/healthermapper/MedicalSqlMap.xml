@@ -26,9 +26,9 @@
     <!--    查找宝宝体检信息表-->
     <select id="findALLExamination" resultMap="ExaminationMap" parameterType="com.great.kindergarten.healther.resultbean.ExaminationPage">
         select s.studentid,s.studentname,e.*
-        from tbl_examination e,tbl_student s ,tbl_class c
+        from tbl_examination e,tbl_student s ,tbl_class c,tbl_kinder kin
         <where>
-            e.sid = s.studentid and s.cid = c.classid
+            e.sid = s.studentid and s.cid = c.classid and s.kid = kin.kinderid and kin.kindername = #{kindername}
             <if test="cName != '' and cName != null and cName != '请选择' ">
                 and c.classname = #{cName}
             </if>
@@ -38,9 +38,9 @@
 
     <!--    查找宝宝体检信息表,查询记录条数-->
     <select id="findALLExaminationCount" resultType="java.lang.Long" parameterType="com.great.kindergarten.healther.resultbean.ExaminationPage">
-        select count(*) from tbl_examination e,tbl_student s ,tbl_class c
+        select count(*) from tbl_examination e,tbl_student s ,tbl_class c,tbl_kinder kin
         <where>
-            e.sid = s.studentid and s.cid = c.classid
+            e.sid = s.studentid and s.cid = c.classid and s.kid = kin.kinderid and kin.kindername = #{kindername}
             <if test="cName != '' and cName != null and cName != '请选择' ">
                 and c.classname = #{cName}
             </if>
@@ -48,8 +48,8 @@
     </select>
 
     <!--    查找班级信息，不带分页，作为搜索条件-->
-    <select id="findAllClass" resultType="com.great.kindergarten.commons.entity.TblClass">
-        select * from tbl_class
+    <select id="findAllClass" resultType="com.great.kindergarten.commons.entity.TblClass" parameterType="java.util.Map">
+        select * from tbl_class cla,tbl_kinder kin where cla.kid = kin.kinderid and kin.kindername = #{kindername}
     </select>
 
 <!--    更新宝宝体检信息-->
@@ -71,8 +71,9 @@
 
     <!--    宝宝ID查询-->
     <select id="findStudentId" resultType="java.lang.Integer" parameterType="java.util.Map">
-        select studentid from tbl_student
+        select studentid from tbl_student stu ,tbl_kinder kin
         <where>
+            stu.kid = kin.kinderid and kin.kindername = #{kindername}
             <if test="studentname != '' and studentname != null ">
                 and studentname = #{studentname}
             </if>

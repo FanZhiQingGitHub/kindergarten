@@ -144,6 +144,10 @@
 
     </div>
 
+
+
+
+
     <div class="prod-show" style="max-width: 80%;">
         <div class="layui-fluid">
             <div class="row layui-col-space12 layui-clear">
@@ -493,6 +497,7 @@
                 }
             });
         });
+
     });
 
 </script>

@@ -14,6 +14,7 @@ public class TblRecipe {
     private String thursday;
     private String friday;
     private Integer mid;
+    private Integer kid;
 
     private List<TblRecipe> tblRecipeList;
     private String mealtime;
@@ -21,7 +22,7 @@ public class TblRecipe {
     public TblRecipe() {
     }
 
-    public TblRecipe(Integer recipeid, String recipename, String monday, String tuesday, String wednesday, String thursday, String friday, Integer mid) {
+    public TblRecipe(Integer recipeid, String recipename, String monday, String tuesday, String wednesday, String thursday, String friday, Integer mid,Integer kid) {
         this.recipeid = recipeid;
         this.recipename = recipename;
         this.monday = monday;
@@ -30,6 +31,7 @@ public class TblRecipe {
         this.thursday = thursday;
         this.friday = friday;
         this.mid = mid;
+        this.kid = kid;
     }
 
     public Integer getRecipeid() {
@@ -96,6 +98,14 @@ public class TblRecipe {
         this.mid = mid;
     }
 
+    public Integer getKid() {
+        return kid;
+    }
+
+    public void setKid(Integer kid) {
+        this.kid = kid;
+    }
+
     public List<TblRecipe> getTblRecipeList() {
         return tblRecipeList;
     }
@@ -123,6 +133,7 @@ public class TblRecipe {
                 ", thursday='" + thursday + '\'' +
                 ", friday='" + friday + '\'' +
                 ", mid=" + mid +
+                ", kid=" + kid +
                 ", tblRecipeList=" + tblRecipeList +
                 ", mealtime='" + mealtime + '\'' +
                 '}';
