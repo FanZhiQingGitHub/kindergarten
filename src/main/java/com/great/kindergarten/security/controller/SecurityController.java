@@ -118,7 +118,7 @@ public class SecurityController {
 
     @RequestMapping("/checkOldPwd")
     public void checkOldPwd(HttpServletRequest request, HttpServletResponse response) {
-        String oldpwd = request.getParameter("oldSecuritypwd");
+        String oldpwd = request.getParameter("oldSecuritypwd");//获取输入的旧密码
         String oldSecuritypwd = MD5Utils.md5(oldpwd);//旧密码
         TblSecurity tblSecurity = securityService.findSecurityId(securityname);
         if (oldSecuritypwd.equals(tblSecurity.getSecuritypwd())) {
