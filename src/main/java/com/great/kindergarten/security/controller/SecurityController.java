@@ -99,6 +99,7 @@ public class SecurityController {
             if ("启用".equals(securitystatus.getSecuritystatus())) {
                 TblSecurity Security = securityService.securityLogin(securityname, securitypwd);
                 if (null != Security) {
+                    ResponseUtils.outHtml(response, "success");
                     List<TblSecurity> tblSecurityList = new ArrayList<>();
                     tblSecurityList.add(Security);
                     kindername = (String) request.getSession().getAttribute("kindername");
@@ -106,7 +107,6 @@ public class SecurityController {
                     request.getSession().setAttribute("tblCampusList", tblCampusList);
                     request.getSession().setAttribute("securityname", securityname);
                     request.getSession().setAttribute("tblSecurityList", tblSecurityList);
-                    ResponseUtils.outHtml(response, "success");
                 }
             } else {
                 ResponseUtils.outHtml(response, "notmen");
@@ -170,16 +170,20 @@ public class SecurityController {
     @RequestMapping("/findStuClassInfo")
     public void findStuClassInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Gson g = new Gson();
-        List<TblClass> tblClassList = securityService.findAllClass();//查找所有班级信息，用于接送信息班级下拉框查询
-        if (0 != tblClassList.size()) {
-            request.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            Object[] info = tblClassList.toArray();
-            String result = g.toJson(info);
-            response.getWriter().print(result);
-        } else {
-            response.getWriter().print("error");
+        if(null == kindername){
+            response.getWriter().print("notkinder");
+        }else {
+            List<TblClass> tblClassList = securityService.findAllClass(kindername);//查找所有班级信息，用于接送信息班级下拉框查询
+            if (0 != tblClassList.size()) {
+                request.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html");
+                response.setCharacterEncoding("UTF-8");
+                Object[] info = tblClassList.toArray();
+                String result = g.toJson(info);
+                response.getWriter().print(result);
+            } else {
+                response.getWriter().print("error");
+            }
         }
     }
 
@@ -219,32 +223,40 @@ public class SecurityController {
         }
         Integer minpage = (page - 1) * limit;
         Integer maxpage = limit;
-        pickUpInfoPage.setPage(minpage);
-        pickUpInfoPage.setLimit(maxpage);
-        pickUpInfoPage.setTime1(time1);
-        pickUpInfoPage.setTime2(time2);
-        pickUpInfoPage.setuStuName(uStuName);
-        pickUpInfoPage.setcName(cName);
-        List<TblStudent> tblStudentList = securityService.findALLPickUpInfo(pickUpInfoPage);
-        if (0 != tblStudentList.size()) {
-            Integer count = securityService.findALLPickUpInfoCount(pickUpInfoPage).intValue();
-            dateWrite.setCode(0);
-            dateWrite.setMsg(" ");
-            dateWrite.setCount(count);
-            dateWrite.setData(tblStudentList);
-            request.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            request.getSession().setAttribute("uStuName", uStuName);
-            ResponseUtils.outJson(response, dateWrite);
-        } else {
-            dateWrite.setMsg("亲，暂无相关数据(注：如果是时间搜索，请选择周一至周日的时间进行查询，谢谢！)");
+        if(null == kindername){
+            dateWrite.setMsg("亲，您需要登录幼儿园才可以查看该信息！");
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
+        }else {
+            pickUpInfoPage.setKindername(kindername);
+            pickUpInfoPage.setPage(minpage);
+            pickUpInfoPage.setLimit(maxpage);
+            pickUpInfoPage.setTime1(time1);
+            pickUpInfoPage.setTime2(time2);
+            pickUpInfoPage.setuStuName(uStuName);
+            pickUpInfoPage.setcName(cName);
+            List<TblStudent> tblStudentList = securityService.findALLPickUpInfo(pickUpInfoPage);
+            if (0 != tblStudentList.size()) {
+                Integer count = securityService.findALLPickUpInfoCount(pickUpInfoPage).intValue();
+                dateWrite.setCode(0);
+                dateWrite.setMsg(" ");
+                dateWrite.setCount(count);
+                dateWrite.setData(tblStudentList);
+                request.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html");
+                response.setCharacterEncoding("UTF-8");
+                request.getSession().setAttribute("uStuName", uStuName);
+                ResponseUtils.outJson(response, dateWrite);
+            } else {
+                dateWrite.setMsg("亲，暂无相关数据(注：如果是时间搜索，请选择周一至周日的时间进行查询，谢谢！)");
+                request.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html");
+                response.setCharacterEncoding("UTF-8");
+                ResponseUtils.outJson(response, dateWrite);
+            }
         }
-
     }
 
     //孩子详细接送信息，含考勤
@@ -293,18 +305,22 @@ public class SecurityController {
     @RequestMapping("/findAllStuInfo")
     public void findAllStuInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Gson g = new Gson();
-        List<TblStudent> tblStudentList = securityService.findAllStuInfo();//查找所有宝宝信息，用于电子围栏宝宝名称下拉框查询
-        if (0 != tblStudentList.size()) {
-            request.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            Object[] info = tblStudentList.toArray();
-            String result = g.toJson(info);
-            response.getWriter().print(result);
-        } else {
-            response.getWriter().print("error");
+        if(null == kindername){
+            response.getWriter().print("notkinder");
+        }else {
+            List<TblStudent> tblStudentList = securityService.findAllStuInfo(kindername);//查找所有宝宝信息，用于电子围栏宝宝名称下拉框查询
+            if (0 != tblStudentList.size()) {
+                request.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html");
+                response.setCharacterEncoding("UTF-8");
+                Object[] info = tblStudentList.toArray();
+                String result = g.toJson(info);
+                response.getWriter().print(result);
+            } else {
+                response.getWriter().print("error");
+            }
         }
-    } //查找所有学生信息
+    }
 
     //查找所选择宝宝的默认坐标信息(备用)
     @RequestMapping("/findStuLngLatInfo")

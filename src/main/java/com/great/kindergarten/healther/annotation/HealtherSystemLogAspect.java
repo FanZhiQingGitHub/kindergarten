@@ -128,30 +128,26 @@ public class HealtherSystemLogAspect {
             log.setOperatetype(operationType);
             log.setOperateip(ip);
             log.setOperateresult("正常");
-            if(healthername != null)
-            {
+            if (healthername != null) {
                 log.setOperateor(healthername);
-            }else{
-                log.setOperateor("无");
-            }
-            System.out.println("日志记录时间"+new Date());
-            log.setOperatetime(new Date());
-
-            //保存数据库
-            Integer num = healtherService.addLog(log);
-            if(num>0){
-                System.out.println(log);
-                System.out.println("=====controller后置通知结束=====");
-            }else {
-                System.out.println(log);
-                System.out.println("=====controller后置通知异常=====");
+                System.out.println("日志记录时间" + new Date());
+                log.setOperatetime(new Date());
+                //保存数据库
+                Integer num = healtherService.addLog(log);
+                if (num > 0) {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知结束=====");
+                } else {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知异常=====");
+                }
+            } else {
+                System.out.println("日志记录失败");
             }
         } catch (Exception e) {
             //记录本地异常日志
             logger.error("==后置通知异常==");
             logger.error("异常信息:{}------" + e.getMessage());
-
-
             throw e;
         }
     }
@@ -219,23 +215,21 @@ public class HealtherSystemLogAspect {
             log.setOperatetype(operationType);
             log.setOperateip(ip);
             log.setOperateresult("异常");
-            if(healthername != null)
-            {
+            if (healthername != null) {
                 log.setOperateor(healthername);
-            }else{
-                log.setOperateor("无");
-            }
-            System.out.println("日志记录时间"+new Date());
-            log.setOperatetime(new Date());
-
-            //保存数据库
-            Integer num = healtherService.addLog(log);
-            if(num>0){
-                System.out.println(log);
-                System.out.println("=====controller后置通知结束=====");
-            }else {
-                System.out.println(log);
-                System.out.println("=====controller后置通知异常=====");
+                System.out.println("日志记录时间" + new Date());
+                log.setOperatetime(new Date());
+                //保存数据库
+                Integer num = healtherService.addLog(log);
+                if (num > 0) {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知结束=====");
+                } else {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知异常=====");
+                }
+            } else {
+                System.out.println("日志记录失败");
             }
         } catch (Exception ex) {
             //记录本地异常日志
