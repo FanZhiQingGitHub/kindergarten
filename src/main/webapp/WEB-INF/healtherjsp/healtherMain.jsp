@@ -7,8 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 <head>
@@ -32,7 +31,6 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-
 
 </head>
 <body>
@@ -80,6 +78,7 @@
         <h3>好营养我们造,为孩子健康护航</h3>
         <h4>We make good nutrition, escort the health of children.</h4>
     </div>
+
     <div class="layui-carousel imgbox" id="test1">
         <div carousel-item class="imgH">
             <div><img style="width: 100%;" src="${pageContext.request.contextPath}/image/healtherimg/img/heather-1.jpeg">
@@ -95,24 +94,22 @@
         </div>
     </div>
 
-    <div class="prod-show" >
-
-        <div class="img-txt">
+    <div class="prod-show">
+        <div class="img-txt" style="float: left">
             <h3>
-                <button type="button" id="bu1" class="layui-btn layui-btn-lg layui-btn-normal"
-                        style="width: 100%;height: 100%;font-size: 20px">体检管理
+                <button type="button" id="bu1" class="layui-btn layui-btn-lg"
+                        style="width: 450px;height: 100%;font-size: 20px">体检管理
                 </button>
             </h3>
         </div>
 
-        <div class="img-txt">
+        <div class="img-txt" style="float: right">
             <h3>
-                <button type="button" id="bu2" class="layui-btn layui-btn-lg layui-btn-warm"
-                        style="width: 100%;height: 100%;font-size: 20px">膳食管理
+                <button type="button" id="bu2" class="layui-btn layui-btn-lg layui-btn-normal"
+                        style="width: 450px;height: 100%;font-size: 20px">膳食管理
                 </button>
             </h3>
         </div>
-
     </div>
 
 
@@ -128,11 +125,7 @@
                         <div style=" overflow:auto;" id="newsInfo">
                             <c:if test="${not empty tblCampuses}">
                                 <c:forEach items="${tblCampuses}" var="i" step="1">
-                                    <p><a class="a1" href="javascript:void(0);"
-                                          style="font-size: 15px;width: 200px">${i.campusinfoname}:${i.campusinfodetail}</a><span
-                                            style="font-size: 15px;margin-left: 18%">发布时间：<fmt:formatDate
-                                            value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss'/></span><span></span>
-                                    </p>
+                                <p><a class="a1" href="javascript:void(0);" style="font-size: 15px;width: 200px">${i.campusinfoname}:${i.campusinfodetail}</a><span style="font-size: 15px;margin-left: 10%">发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></span><span></span></p>
                                 </c:forEach>
                             </c:if>
                         </div>
@@ -141,8 +134,15 @@
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
                         <h3 style="text-align: left">园所视频Videos</h3>
-                        <div style=" overflow:auto;">
-                            <a href="javascript:void(0);" id="playVideos"><img style="width: 100%" src="${pageContext.request.contextPath}/image/healtherimg/img/2019-nCoV.jpg"></a>
+                        <div class="layui-carousel videobox" id="test2">
+                            <div carousel-item class="videroH">
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/2019-nCoV.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/2019-nCoV.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/CrossTheRoadSafely.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/CrossTheRoadSafely.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/farmPropaganda.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/farmPropaganda.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/SafetyRollerSkate.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/SafetyRollerSkate.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/TakeTheElevatorSafely.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/TakeTheElevatorSafely.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/Traffic_safety.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/Traffic_safety.jpg"></a></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -174,7 +174,7 @@
         var path = $("#path").val();
 
 
-        //建造实例
+        //首页轮播图
         carousel.render({
             elem: '#test1'
             , width: '100%' //设置容器宽度
@@ -182,14 +182,30 @@
             , height: 'auto'
             //,anim: 'updown' //切换动画方式
         });
+        //首页轮播视频
+        carousel.render({
+            elem: '#test2'
+            , width: '100%' //设置容器宽度
+            , arrow: 'always'
+            , height: 'auto'
+            //,anim: 'updown' //切换动画方式
+        });
+
         $('.app-header-menuicon').on('click', function () {
             $('.header-down-nav').toggleClass('down-nav')
         })
         var imgH = $('.imgbox div.layui-this').outerHeight();
-        $('.imgH').css('height', imgH + 'px')
+        $('.imgH').css('height', imgH + 'px');
+
+        var videroH = $('.videobox div.layui-this').outerHeight();
+        $('.videroH').css('height', videroH + 'px');
+
         window.onresize = function () {
             var imgH = $('.imgbox div.layui-this').outerHeight();
-            $('.imgH').css('height', imgH + 'px')
+            $('.imgH').css('height', imgH + 'px');
+
+            var videroH = $('.videobox div.layui-this').outerHeight();
+            $('.videroH').css('height', videroH + 'px');
         };
 
 
@@ -277,16 +293,17 @@
             });
         });
         //点击查看园所视频
-        $("#playVideos").click(function () {
+        $(".playVideos").click(function () {
+            var videoUrl = $(this).attr('title');
             //打开一个窗口播放视频
             layer.open({
                 //打开一个窗口播放视频
                 type: 1,
                 area: ['95%', '80%'],
                 offset:['10%','3%'],
-                title:'安全乘坐电梯',
+                title:'园所视频播放',
                 content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
-                    '<source src="${pageContext.request.contextPath}/videos/2019-nCoV.mp4" type="video/mp4"></source></video>'
+                    '<source src="'+videoUrl+'" type="video/mp4"></source></video>'
                 //直接跳出一个标签播放视频
             });
         });

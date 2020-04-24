@@ -344,16 +344,21 @@
         });
 
         $('body').on('click', '.addStuLngLatInfo', function () {
-            layer.open({
-                type: 2,
-                area: ['80%', '75%'],
-                offset: ['10%', '9.5%'],
-                title: '添加宝宝运动轨迹',
-                content: path + '/security/path/addStuLngLatInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-                , success: function (layero, index) {
-                    var body = layer.getChildFrame("body", index);
-                }
-            });
+            var kindername = $("#kinder").val();
+            if (kindername.length == 0) {
+                layer.msg('对不起，您必须登录幼儿园账号才可以进行此操作！', {icon: 2});
+            } else {
+                layer.open({
+                    type: 2,
+                    area: ['80%', '75%'],
+                    offset: ['10%', '9.5%'],
+                    title: '添加宝宝运动轨迹',
+                    content: path + '/security/path/addStuLngLatInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                        var body = layer.getChildFrame("body", index);
+                    }
+                });
+            }
         });
 
         //绘制电子围栏
@@ -378,24 +383,21 @@
         //修改电子围栏
         $('body').on('click', '.updateElectricFence', function () {
             var kindername = $("#kinder").val();
-            layer.confirm('您确定要修改吗?', {icon: 3, title:'提示'},function (index) {
-                if (kindername.length == 0) {
-                    layer.msg('对不起，您必须登录幼儿园账号才可以进行此操作！', {icon: 2});
-                    layer.close(index);
-                } else {
-                    layer.open({
-                        type: 2,
-                        area: ['100%', '80%'],
-                        offset: ['0%', '0%'],
-                        title: '修改' + kindername + '电子围栏',
-                        content: path + '/security/path/updateLngLatInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-                        , success: function (layero, index) {
-                            var body = layer.getChildFrame("body", index);
-                            body.find("#kinder").val(kindername);
-                        }
-                    });
-                }
-            });
+            if (kindername.length == 0) {
+                layer.msg('对不起，您必须登录幼儿园账号才可以进行此操作！', {icon: 2});
+            } else {
+                layer.open({
+                    type: 2,
+                    area: ['100%', '80%'],
+                    offset: ['0%', '0%'],
+                    title: '修改' + kindername + '电子围栏',
+                    content: path + '/security/path/updateLngLatInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                        var body = layer.getChildFrame("body", index);
+                        body.find("#kinder").val(kindername);
+                    }
+                });
+            }
         });
     });
 

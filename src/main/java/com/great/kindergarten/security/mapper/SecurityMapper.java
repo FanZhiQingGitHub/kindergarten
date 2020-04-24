@@ -22,7 +22,7 @@ public interface SecurityMapper {
 
     public Boolean resetSecuritypwd(Map<String, String> securitymap);
 
-    public List<TblClass> findAllClass();
+    public List<TblClass> findAllClass(Map<String, String> kindermap);
 
     public List<TblStudent> findALLPickUpInfo(PickUpInfoPage pickUpInfoPage);
 
@@ -30,7 +30,7 @@ public interface SecurityMapper {
 
     public List<TblDate> findALLPickUpDetailInfo(PickUpInfoDetailPage pickUpInfoDetailPage);
 
-    public List<TblStudent> findAllStuInfo();
+    public List<TblStudent> findAllStuInfo(Map<String, String> kindermap);
 
     public List<TblStudent> findStuLngLetInfo(Map<String, String> stumap);
 
