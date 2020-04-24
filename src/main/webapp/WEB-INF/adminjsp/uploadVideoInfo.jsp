@@ -16,6 +16,7 @@
 	<style>
 		body{
 			overflow:hidden;
+			font-size: 120%;
 		}
 		#save{margin-left: 30%;}
 		div{
@@ -23,6 +24,10 @@
 		}
 		.layui-input{
 			margin: -2% -9%;
+			width: 160%;
+		}
+		.sp{
+			font-size: 120%;
 		}
 	</style>
 </head>
@@ -31,34 +36,34 @@
 	<form class="layui-form" action=""  enctype="multipart/form-data" lay-filter="example">
 		<div class="layadmin-user-login-box layadmin-user-login-header">
 			<div class="layui-form-item">
-				<label class="layui-form-label">上传视频：</label>
+				<label class="layui-form-label" style="width: auto">上传视频：</label>
 				<button type="button" class="layui-btn layui-btn-primary" name="file" id="uploadVideo"><i class="layui-icon">&#xe624;</i></button>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">视频名称：</label>
+				<label class="layui-form-label" style="width: auto">视频名称：</label>
 				<div class="layui-input-inline">
-					<input type="text" class="layui-input" name="safetyVideoName" id="safetyVideoName" placeholder="请输入视频名称" style="width: 140%;">
+					<input type="text" class="layui-input" name="safetyVideoName" id="safetyVideoName" placeholder="请输入视频名称" >
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">文件名称：</label>
+				<label class="layui-form-label" style="width: auto">文件名称：</label>
 				<div class="layui-input-inline">
-					<input type="text" id="videoName" name="videoName" placeholder="请输入文件名称" value=""
-					       autocomplete="off" class="layui-input" style="width: 140%" readonly>
+					<input type="text" id="videoName" name="videoName" placeholder="选择文件后回显文件名称" value=""
+					       autocomplete="off" class="layui-input"  readonly>
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">文件地址：</label>
+				<label class="layui-form-label" style="width: auto">文件地址：</label>
 				<div class="layui-input-inline">
-					<input type="text" id="videoAdd" name="videoAdd" placeholder="请输入文件地址" value=""
-					       autocomplete="off" class="layui-input" style="width: 140%" readonly>
+					<input type="text" id="videoAdd" name="videoAdd" placeholder="选择文件后回显文件地址" value=""
+					       autocomplete="off" class="layui-input" readonly>
 				</div>
 			</div>
 			<div class="demoTable">
-				<div style="padding-bottom: 10px;">
-					<div class="layui-upload">
-						<button type="button" class="layui-btn" id="save">保存</button>
-						<button type="button" class="layui-btn" id="cancel">取消</button>
+				<div style="padding-bottom: 15px;">
+					<div class="layui-upload" >
+						<button type="button" class="layui-btn" id="save"><span class="sp">保存</span></button>
+						<button type="button" class="layui-btn" id="cancel"><span class="sp">取消</span></button>
 					</div>
 				</div>
 			</div>
@@ -109,13 +114,21 @@
 				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
 				setTimeout(function () {
 					parent.layer.close(index); //再执行关闭
-				}, 3000);
+					parent.location.reload();
+				}, 1000);
 			}
 			,error: function(){
 				//请求异常回调
 				layer.alert("上传失败！",{icon:2});
 			}
 		});
+		
+		$(function () {
+			$("#cancel").click(function () {
+				var path = $("#path").val();
+				parent.location.href = path+"/admin/toUrl/safetyEducationMgr";
+			})
+		})
 
 	});
 </script>

@@ -125,6 +125,13 @@ public interface AdminMapper
 
 	public TblKinder findTblKinderById(Integer kinderid);
 
+	/**
+	 * 根据园所id查询园所详情信息
+	 * @param kinderid
+	 * @return
+	 */
+	public List<TblKinder> findKinderInfoById(Integer kinderid);
+
 	public List<TblKinder> findKinder();
 
 	public String findAccountByName(String kindername);
@@ -172,6 +179,14 @@ public interface AdminMapper
 
 	public List<TblMenu> findMenuByRid(Integer roleid);
 
+	public List<String> findAllReadBookName();
+
+	//根据会本名查询绘本信息
+	public List<TblReadmag> findReadInfoByName(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public int findReadCountByName(HashMap<String, Object> condition);
+
+	public Integer findReadMagIdByName(String readMagName);
 
 	/**
 	 * 查看绘本

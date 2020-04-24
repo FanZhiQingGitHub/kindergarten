@@ -19,15 +19,25 @@
 			text-align: center;
 			margin-top: 1%;
 		}
-		#selName{
-			margin-top: 5%;
-			width: 168%;
-			height: 30%;
+		body{
+			font-size: 140%;
 		}
-		#selNames{
-			margin-top: 5%;
-			width: 168%;
-			height: 30%;
+		.layui-input{
+			width:120%;
+			margin: auto;
+		}
+		.layui-table-cell{
+			height: 45px;
+			line-height: 45px;
+			font-size: 140%;
+		}
+		a{
+			font-size: 140%;
+		}
+		.sp{
+			font-size: 140%;
+			height: 40px;
+			line-height: 40px;
 		}
 	</style>
 </head>
@@ -40,33 +50,32 @@
 				<div class="layui-form-item" style="margin-left: 6%;">
 					<div class="layui-block">查询条件：</div>
 					<div class="layui-inline">
-						<span class="layui-form-label">上传时间：</span>
+						<span class="layui-form-label" style="width: auto">上传时间：</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" style="width: 82%;margin-top: 2% ">
+							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" >
 						</div>
 					</div>
 					<div class="layui-inline">
-						<span class="layui-form-label" style="margin-left: -35%">至</span>
+						<span class="layui-form-label" style="margin: 5% 15%;width: 10%">至</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 2% 0 0 10%">
+							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="margin: -27% 65%;">
 						</div>
 					</div>
-					<button class="layui-btn" data-type="reload" style="margin-left: -5%"><i class="layui-icon">&#xe615;查询</i></button>
-					<button class="layui-btn btn-add  layui-btn-disabled" id="btn-add" ><i class="layui-icon">&#xe681;上传</i></button>
+					<button class="layui-btn" data-type="reload" style="margin-left: 10%"><i class="layui-icon">&#xe615;查询</i></button>
 				</div>
 				<div class="layui-form-item" style="margin-left: 6%;">
 					<div class="layui-inline">
-						<span class="layui-form-label">视频名称：</span>
+						<span class="layui-form-label" style="width: auto">视频名称：</span>
 						<div class="layui-input-inline">
-							<input type="text" class="layui-input" name="safetyVideoName1" id="safetyVideoName1" placeholder="请输入视频名称" style="width: 82%;margin-top: 3% ">
+							<input type="text" class="layui-input" name="safetyVideoName1" id="safetyVideoName1" placeholder="请输入视频名称" >
 						</div>
 					</div>
-<%--					<button class="layui-btn btn-add btn-default" id="btn-add" style="margin-left:45%"><i class="layui-icon">&#xe624;新增</i></button>--%>
 				</div>
 			</div>
 		</form>
 	</div>
-	<table id="videoQuestion" lay-filter="test"></table>
+	<table id="videoQuestion" lay-filter="test" class="layui-table-cell"></table>
+
 	<div id="type-content" style="display: none;">
 		<div class="layui-form-item">
 			<label class="layui-form-label">上传视频：</label>
@@ -120,6 +129,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div id="type-content3" style="display: none;">
 <%--		<div class="layui-row" >--%>
 <%--			<form class="layui-form" action="" onsubmit="return false;" >--%>
@@ -138,7 +148,7 @@
 <%--		</div>--%>
 		<input type="hidden" id="id" name="id">
 		<table id="configItems" lay-filter="test" class="">
-			<div class="layui-form-item" style="margin-left: 10%;">
+			<div class="layui-form-item" style="margin-left: 15%;">
 				<div class="layui-inline">
 					<span class="layui-form-label">标题：</span>
 					<div class="layui-input-inline">
@@ -150,40 +160,58 @@
 			<span style="margin-left:1%;font-size: 90%">题目预览：</span>
 		</table>
 	</div>
+
 	<div id="type-content4" style="display: none;">
 		<input type="hidden" id="safetyVideoId" name="safetyVideoId">
 		<%--	<h3>新增题目</h3>--%>
 		<div class="layui-form-item" style="margin-top: 1%;">
-			<label class="layui-form-label">题目：</label>
+			<label class="layui-form-label" style="width: auto;margin-left: 7.2%">题目：</label>
 			<div class="layui-inline">
 				<input type="text" class="layui-input" name="topicName" id="topicName" placeholder="请输入题目" style="width: 180%;">
 			</div>
 		</div>
 		<div class="layui-form-item">
-			<label class="layui-form-label">选项A：</label>
+			<label class="layui-form-label" style="width: auto;margin-left: 5%">选项A：</label>
+			<div class="layui-input-inline" style="margin-top: 1%;width: 60%">
+				<input type="radio" id="ra1" name="optionA" class="optionA" value="正确" title="正确" checked>正确
+				<input type="radio" id="ra2" name="optionA" class="optionA" value="是" title="是" style="margin-left: 10%;">是
+				<input type="radio" id="ra3" name="optionA" class="optionA" value="符合" title="符合" style="margin-left: 10%;">符合
+			</div>
+<%--			<div class="layui-inline">--%>
+<%--				<input type="text" class="layui-input" name="a" id="a" placeholder="请输入选项A名称" style="width: 180%;">--%>
+<%--			</div>--%>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: auto;margin-left: 5%">选项B：</label>
+			<div class="layui-input-inline" style="margin-top: 1%;width: 60%">
+				<input type="radio" id="ra4" name="optionB" class="optionB" value="错误" title="错误" checked>错误
+				<input type="radio" id="ra5" name="optionB" class="optionB" value="否" title="否" style="margin-left: 10%;">否
+				<input type="radio" id="ra6" name="optionB" class="optionB" value="不符合" title="不符合" style="margin-left: 10%;">不符合
+			</div>
+<%--			<div class="layui-inline">--%>
+<%--				<input type="text" class="layui-input" name="b" id="b" placeholder="请输入选项B名称" style="width: 180%;">--%>
+<%--			</div>--%>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: auto;margin-left: 0.5%">正确答案：</label>
 			<div class="layui-inline">
-				<input type="text" class="layui-input" name="a" id="a" placeholder="请输入选项A名称" style="width: 180%;">
+				<input type="text" id="result" name="result" placeholder="请输入正确答案" value=""
+				       autocomplete="off" class="layui-input" style="width: 180%;">
 			</div>
 		</div>
 		<div class="layui-form-item">
-			<label class="layui-form-label">选项B：</label>
-			<div class="layui-inline">
-				<input type="text" class="layui-input" name="b" id="b" placeholder="请输入选项B名称" style="width: 180%;">
+			<label class="layui-form-label" style="width: auto;margin-left: 7.2%">得分：</label>
+			<div class="layui-input-inline" style="margin-top: 1%;width: 60%">
+				<input type="radio" id="ra7" name="score" class="score" value="5" title="5" checked>5分
+				<input type="radio" id="ra8" name="score" class="score" value="10" title="10" style="margin-left: 4%;">10分
+				<input type="radio" id="ra9" name="score" class="score" value="15" title="15" style="margin-left: 4%;">15分
+				<input type="radio" id="ra10" name="score" class="score" value="20" title="20" style="margin-left: 4%;">20分
+				<input type="radio" id="ra11" name="score" class="score" value="25" title="25" style="margin-left: 4%;">25分
 			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">正确答案：</label>
-			<div class="layui-inline">
-				<input type="text" id="result" name="result" placeholder="请输入答案" value=""
-				       autocomplete="off" class="layui-input" style="width: 180%">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">得分：</label>
-			<div class="layui-inline">
-				<input type="text" id="score" name="score" placeholder="请输入分值" value=""
-				       autocomplete="off" class="layui-input" style="width: 180%">
-			</div>
+<%--			<div class="layui-inline">--%>
+<%--				<input type="text" id="score" name="score" placeholder="请输入分值" value=""--%>
+<%--				       autocomplete="off" class="layui-input" style="width: 180%">--%>
+<%--			</div>--%>
 		</div>
 	</div>
 
@@ -224,7 +252,7 @@
 	</div>
 
 	<script type="text/html" id="barOption">
-		<a type="button" class="layui-btn layui-btn-xs" lay-event="configItems" style="width: 40%;height: 80%">配置试题</a>
+		<a type="button" class="layui-btn layui-btn-sm" lay-event="configItems" style="height: 40px;"><span class="sp">配置试题</span></a>
 	</script>
 </body>
 
@@ -250,18 +278,18 @@
 			var path = $("#path").val();
 			var tableIns = table.render({
 				elem: '#videoQuestion'
-				, height: 312
+				, height: 450
 				, url: path + "/admin/videoQuestionConfiguration"//数据接口
 				, page: true //开启分页
 				, limit: 5
 				, limits: [5, 10]
 				, cols: [[ //表头
-					{field: 'safetyvideoid', title: '视频编号', align: 'center', width: 160, sort: true, fixed: 'left'}
-					, {field: 'safetyvideoname', title: '视频名称', align: 'center', width: 200}
-					, {field: 'videoname', title: '文件名称', align: 'center', width: 260}
-					, {field: 'safetyvideotime', title: '上传时间', align: 'center', width: 240
+					{field: 'safetyvideoid', title: '视频编号', align: 'center', width: 200, sort: true, fixed: 'left'}
+					, {field: 'safetyvideoname', title: '视频名称', align: 'center', width: 340}
+					, {field: 'videoname', title: '文件名称', align: 'center', width: 400}
+					, {field: 'safetyvideotime', title: '上传时间', align: 'center', width: 340
 					   ,templet:"<div>{{layui.util.toDateString(d.safetyvideotime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
-					, {fixed: 'right', title: '操作', align: 'center', width: 282, toolbar: '#barOption'}
+					, {fixed: 'right', title: '操作', align: 'center', width: 442, toolbar: '#barOption'}
 				]]
 				, id: 'videoQuestionTable'
 				, parseData: function (res) { //res 即为原始返回的数据
@@ -283,13 +311,13 @@
 						var data2 = "";
 							layer.open({
 								type: 1,
-								area: ['70%', '90%'],
+								area: ['60%', '86%'],
 								// content: path+"/admin/toUrl/configItemsMgr", //数组第二项即吸附元素选择器或者DOM
 								closeBtn :0,
 								content: $("#type-content3"),
-								title: '配置试题',
+								title: ['配置试题','font-size:18px'],
 								btn: ['保存', '取消'],
-								offset: ['30px','200px'],
+								offset: '60px',
 								btnAlign: 'c',
 								success:function (layero, index) {
 									var opt = "";
@@ -312,14 +340,14 @@
 												var b = data2[i].b;
 												var bvalue = data2[i].bvalue;
 												opt += "<tr>" +
-													"<td colspan='4' id='top' style='font-size: 90%;padding: 1%' >" + safetyvtqid + "." + safetyvtqname + "</td>" +
-													"<td><input type='button' class='layui-btn-primary' id = 'btn' name='btn' value='修改' style='width: 180%;margin-left: 60%;font-size: 90%;' onclick='showCurTopInfo(this)'></td>" +
-													"<td><input type='button' class='layui-btn-primary' id = 'btn1' name='btn1' value='删除' style='width: 180%;height:8%;margin-left: 160%;font-size: 90%;'  onclick='deleteTopic(this)'></td>" +
+													"<td colspan='4' id='top' style='font-size: 110%;padding: 1%' >" + safetyvtqid + "." + safetyvtqname + "</td>" +
+													"<td><input type='button' class='layui-btn-primary' id = 'btn' name='btn' value='修改' style='width: 180%;margin-left: 60%;font-size: 110%;' onclick='showCurTopInfo(this)'></td>" +
+													"<td><input type='button' class='layui-btn-primary' id = 'btn1' name='btn1' value='删除' style='width: 180%;height:8%;margin-left: 160%;font-size: 110%;'  onclick='deleteTopic(this)'></td>" +
 													"</tr>";
 												opt += "<tr>" +
-													"<td colspan='4' id='td1' style='font-size: 90%;padding: 1% 2%;'>" +
+													"<td colspan='4' id='td1' style='font-size: 110%;padding: 1% 2%;'>" +
 													"<input type='radio' class='rad' name='answer" + safetyvtqid + "' value='" + avalue + "' >" + a + "</td>" +
-													"<td colspan='4' id='td1' style='font-size: 90%;'>" +
+													"<td colspan='4' id='td1' style='font-size: 110%;'>" +
 													"<input type='radio' class='rad' name='answer" + safetyvtqid + "' value='" + bvalue + "' >" + b + "</td>" +
 													"</tr>";
 											}
@@ -341,18 +369,18 @@
 			$("#btn-add2").click(function () {
 				layer.open({
 					type: 1,
-					area: ['40%', '80%'],
+					area: ['40%', '60%'],
 					closeBtn :0,
 					// content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
 					// content: path+"/admin/toUrl/addTopicInfo",
 					content:$("#type-content4"),
-					title: '新增题目',
+					title: ['新增题目','font-size:18px'],
 					btn: ['保存', '取消'],
-					offset: ['60px','300px'],
+					// offset: ['60px','300px'],
 					btnAlign: 'c',
-					end: function () {
-						location.reload();
-					},
+					// end: function () {
+					// 	location.reload();
+					// },
 					success : function(layero, index) {
 						var id = $("#id").val();
 						$("#safetyVideoId").val(id);
@@ -360,13 +388,13 @@
 					btn1: function (index) {
 						var title = $("#safetyVideoId").val();
 						var topicName = $("#topicName").val();
-						var a = $("#a").val();
-						var b = $("#b").val();
+						var a = $("input[name='optionA']:checked").val();
+						var b = $("input[name='optionB']:checked").val();
 						var avalue = 0;
 						var bvalue = 0;
 						var result = $("#result").val();
-						var score = $("#score").val();
-						if(result == "正确" || result == "是")
+						var score = $("input[name='score']:checked").val();
+						if(result == "正确" || result == "是" || result == "符合")
 						{
 							avalue = score;
 							bvalue = 0;
@@ -375,7 +403,15 @@
 							avalue = 0;
 						}
 						if (topicName.length == 0) {
-							layer.alert("请输入题目", {icon: 2});
+							layer.alert("不能为空,请输入题目", {icon: 2});
+						}else if(a == 0) {
+							layer.alert("不能为空,请先选择A选项内容", {icon: 2});
+						}else if(b == 0)
+						{
+							layer.alert("不能为空,请先选择B选项内容", {icon: 2});
+						}else if(result == 0)
+						{
+							layer.alert("答案不能为空，请输入正确答案", {icon: 2});
 						}
 						else {
 							$.ajax({
@@ -391,6 +427,7 @@
 										$("#configItems").append("");
 										layer.alert("新增成功！", {icon: 6});
 										layer.close(index);
+										parent.location.reload();
 										var opt = "";
 										var title = "";
 										var items = eval(data);
@@ -405,14 +442,14 @@
 											var b = items[i].b;
 											var bvalue = items[i].bvalue;
 											opt += "<tr>" +
-												"<td colspan='4' id='top' style='font-size: 90%;padding: 1%' >" + safetyvtqid + "." + safetyvtqname + "</td></tr>";
+												"<td colspan='4' id='top' style='font-size: 110%;padding: 1%' >" + safetyvtqid + "." + safetyvtqname + "</td></tr>";
 											opt += "<tr>" +
-												"<td colspan='4' id='td1' style='font-size: 90%;padding: 1% 2%;'>" +
+												"<td colspan='4' id='td1' style='font-size: 110%;padding: 1% 2%;'>" +
 												"<input type='radio' class='rad' name='answer" + safetyvtqid + "' value='" + avalue + "' >" + a + "</td>" +
-												"<td colspan='4' id='td1' style='font-size: 90%;'>" +
+												"<td colspan='4' id='td1' style='font-size: 110%;'>" +
 												"<input type='radio' class='rad' name='answer" + safetyvtqid + "' value='" + bvalue + "' >" + b + "</td>" +
-												"<td><input type='button' class='layui-btn-primary' id = 'btn' name='btn' value='修改' style='width: 180%;margin-left: 60%;font-size: 90%;' onclick='showCurTopInfo(this)'></td>" +
-												"<td><input type='button' class='layui-btn-primary' id = 'btn1' name='btn1' value='删除' style='width: 180%;height:8%;margin-left: 160%;font-size: 90%;' onclick='deleteTopic(this)'></td>" +
+												"<td><input type='button' class='layui-btn-primary' id = 'btn' name='btn' value='修改' style='width: 180%;margin-left: 60%;font-size: 110%;' onclick='showCurTopInfo(this)'></td>" +
+												"<td><input type='button' class='layui-btn-primary' id = 'btn1' name='btn1' value='删除' style='width: 180%;height:8%;margin-left: 160%;font-size: 110%;' onclick='deleteTopic(this)'></td>" +
 												"</tr>";
 										}
 										$("#configItems").append(opt);
@@ -426,10 +463,10 @@
 					},
 					btn2:function () {
 						$("#topicName").val("");
-						$("#a").val("");
-						$("#b").val("");
+						// $("#a").val("");
+						// $("#b").val("");
 						$("#result").val("");
-						$("#score").val("");
+						// $("#score").val("");
 					}
 				});
 			});
@@ -444,43 +481,43 @@
 						layer.msg("题目输入合法", {icon: 6});
 					}
 				});
-				$("#a").blur(function () {
-					var reg = /^[\u4e00-\u9fa5]$/;
-					var a = $('#a').val();
-					if (!$('#a').val().match(reg) || a == 0) {
-						layer.msg("请输入正确或是", {icon: 2});
-					} else {
-						layer.msg("选项A输入合法", {icon: 6});
-					}
-				});
-				$("#b").blur(function () {
-					var reg = /^[\u4e00-\u9fa5]$/;
-					var b = $('#b').val();
-					if (!$('#b').val().match(reg) || b == 0 ) {
-						layer.msg("请输入错误或否", {icon: 2});
-					} else {
-						layer.msg("选项A输入合法", {icon: 6});
-					}
-				});
+				// $("#a").blur(function () {
+				// 	var reg = /^[\u4e00-\u9fa5]$/;
+				// 	var a = $('#a').val();
+				// 	if (!$('#a').val().match(reg) || a == 0) {
+				// 		layer.msg("请输入正确或是", {icon: 2});
+				// 	} else {
+				// 		layer.msg("选项A输入合法", {icon: 6});
+				// 	}
+				// });
+				// $("#b").blur(function () {
+				// 	var reg = /^[\u4e00-\u9fa5]$/;
+				// 	var b = $('#b').val();
+				// 	if (!$('#b').val().match(reg) || b == 0 ) {
+				// 		layer.msg("请输入错误或否", {icon: 2});
+				// 	} else {
+				// 		layer.msg("选项A输入合法", {icon: 6});
+				// 	}
+				// });
 				$("#result").blur(function () {
 					var reg = /^[\u4e00-\u9fa5]{1,2}$/;
 					var result = $('#result').val();
 					if (!$('#result').val().match(reg) || result == 0 ) {
-						layer.msg("请输入正确答案：1.正确或错误，2.是或否", {icon: 2});
+						layer.msg("输入不合法，请重新输入正确答案：", {icon: 2});
 					} else {
 						layer.msg("输入合法", {icon: 6});
 					}
 				});
-				$("#score").blur(function () {
-					var reg = /^[0-9]*$/;
-					var score = $('#score').val();
-					if(!$('#score').val().match(reg) || score == 0)
-					{
-						layer.msg("输入不合法，请输入数字", {icon: 2});
-					}else{
-						layer.msg("输入合法", {icon: 6});
-					}
-				});
+				// $("#score").blur(function () {
+				// 	var reg = /^[0-9]*$/;
+				// 	var score = $('#score').val();
+				// 	if(!$('#score').val().match(reg) || score == 0)
+				// 	{
+				// 		layer.msg("输入不合法，请输入数字", {icon: 2});
+				// 	}else{
+				// 		layer.msg("输入合法", {icon: 6});
+				// 	}
+				// });
 			});
 
 			$("#btn-add").click(function () {

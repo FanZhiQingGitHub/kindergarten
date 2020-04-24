@@ -237,6 +237,18 @@
         </div>
     </div>
 
+    <div id="type-content" style="display: none;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <input type="text" id="adminname" placeholder="请输入您的登录用户名"
+                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
+            </div>
+            <div class="layui-inline">
+                <input type="text" id="adminphone" placeholder="请输入11位手机号码" value=""
+                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
+            </div>
+        </div>
+    </div>
 </form>
 
 <script>
@@ -317,7 +329,50 @@
                 code.src = path + "/admin/loginCode?"+Math.random();
 
             }),$("#bu3").click(function () {
-                layer.alert("该功能尚未开放！", {icon: 6});
+                // layer.alert("该功能尚未开放！", {icon: 6});
+                var path = $("#path").val();
+                layer.open({
+                    type: 1,
+                    content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+                    title: '个人密码重置',
+                    btn: ['确定', '取消'],
+                    area: ['20%', '35%'],
+                    offset: ['30%'],
+                    btnAlign: 'c',
+                    btn1: function (index) {
+                        var adminname = $("#adminname").val();
+                        var adminphone = $("#adminphone").val();
+                        var num = /^1\d{10}$/;
+                        if (adminname.length == 0) {
+                            layer.msg("您好，用户名不能为空！", {icon: 2});
+                        }else if (!num.test(adminphone)) {
+                            layer.alert("您好，手机号码必须11位，且不能出现空格！", {icon: 2});
+                        } else {
+                            $.ajax({
+                                url: path + '/admin/resetAdminPwd',
+                                async: true,
+                                type: 'post',
+                                data: {
+                                    "adminname": adminname,
+                                    "adminphone": adminphone
+                                },
+                                datatype: 'text',
+                                success: function (data) {
+                                    if (data == "error") {
+                                        layer.msg("重置失败！", {icon: 2});
+                                    } else {
+                                        layer.alert("重置成功，新密码为：'123456' ", {icon: 6});
+                                        $("#adminname").val("");
+                                        $("#adminphone").val("");
+                                        layer.close(index);
+                                    }
+                                }, error: function (data) {
+                                    layer.msg("网络繁忙！", {icon: 2});
+                                }
+                            });
+                        }
+                    }
+                });
             }),$("#bu4").click(function () {
                 var path = $("#path").val();
                 location.href = path + "/main/path/main";

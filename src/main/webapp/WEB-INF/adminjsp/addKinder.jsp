@@ -23,6 +23,7 @@
             height: 100%;
             background-size: 100% 100%;
             background-attachment: fixed;
+            font-size: 140%;
         }
         #alldiv {
             position: absolute;
@@ -31,7 +32,7 @@
         }
         #hh1 {
             font-weight: bold;
-            font-size: 20px;
+            /*font-size: 20px;*/
             margin-top: 1%;
             text-align: center;
             font-family: 楷体;
@@ -39,9 +40,8 @@
 
         .container {
             position: relative;
-            width: 42%;
+            width: 36%;
             min-height: 33%;
-	        /*height: 33%;*/
             top: 1%;
             left: 0;
             bottom: 0;
@@ -52,28 +52,25 @@
             border-radius: 10px;
             background-color: rgba(82, 108, 108, 0.2);
             box-shadow: 0 3px 18px rgba(240, 255, 255, 0.2);
-            font-size: 12px;
-
         }
         .layui-form-item .layui-input-inline{
-            width: 300px;
+            width: 350px;
         }
+
         .layui-form-label {
             width: 140px;
         }
-        label{
-            margin-left: -12%;
-        }
+
     </style>
 </head>
-<body background="${pageContext.request.contextPath}/image/adminimg/img/add.jpg" style="width: 100%;height: 100%">
+<body >
     <form class="layui-form" method="post">
         <input type="hidden" id="path" value="<%=path%>">
         <div id="alldiv">
             <h1 id="hh1">新增园所</h1>
             <hr style="color: white">
             <div class="container">
-                <div class="layui-form-item">
+                <div class="layui-form-item" >
                     <label class="layui-form-label">幼儿园名称：</label>
                     <div class="layui-input-inline">
                         <input type="text" name="kindername" id="kindername" lay-verify="kindername" placeholder="请输入幼儿园名称" autocomplete="off"
@@ -81,7 +78,7 @@
                     </div>
                 </div>
 
-                <div class="layui-form-item">
+                <div class="layui-form-item" >
                     <label class="layui-form-label">账号：</label>
                     <div class="layui-input-inline">
                         <input type="text" name="kinderacount" id="kinderacount" lay-verify="kinderacount" placeholder="请输入账号" autocomplete="off"
@@ -89,7 +86,7 @@
                     </div>
                 </div>
 
-                <div class="layui-form-item">
+                <div class="layui-form-item" >
                     <label class="layui-form-label">密码：</label>
                     <div class="layui-input-inline">
                         <input type="password" name="kinderpwd" id="kinderpwd" lay-verify="kinderpwd" placeholder="请输入6-12位密码" autocomplete="off"
@@ -97,7 +94,7 @@
                     </div>
                 </div>
 
-                <div class="layui-form-item">
+                <div class="layui-form-item" >
                     <label class="layui-form-label">法人：</label>
                     <div class="layui-input-inline">
                         <input type="text" name="kinderlp" id="kinderlp" lay-verify="kinderlp" placeholder="请输入法人信息" autocomplete="off"
@@ -105,15 +102,15 @@
                     </div>
                 </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">法人身份证：</label>
+                <div class="layui-form-item" >
+                    <label class="layui-form-label" >法人身份证：</label>
                     <div class="layui-input-inline">
                         <input type="text" name="kinderlpid" id="kinderlpid" lay-verify="kinderlpid" placeholder="请输入18位身份证" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
 
-                <div class="layui-form-item">
+                <div class="layui-form-item" >
                     <label class="layui-form-label">地址：</label>
                     <div class="layui-input-inline">
                         <input type="text" name="kinderlpadd" id="kinderlpadd" lay-verify="kinderlpadd" placeholder="请输入可用地址" autocomplete="off"
@@ -121,7 +118,7 @@
                     </div>
                 </div>
 
-                <div class="layui-form-item">
+                <div class="layui-form-item" >
                     <div class="layui-inline">
                         <label class="layui-form-label">联系电话：</label>
                         <div class="layui-input-inline">
@@ -131,7 +128,7 @@
                     </div>
                 </div>
 
-                <div class="layui-form-item">
+                <div class="layui-form-item" >
                     <div class="layui-inline">
                         <label class="layui-form-label">办学许可证：</label>
                         <div class="layui-input-inline">
@@ -141,7 +138,7 @@
                     </div>
                 </div>
 
-                <div class="layui-form-item">
+                <div class="layui-form-item" >
                     <div class="layui-inline">
                         <label class="layui-form-label">卫生许可证：</label>
                         <div class="layui-input-inline">
@@ -151,7 +148,7 @@
                     </div>
                 </div>
 
-                <div class="layui-form-item">
+                <div class="layui-form-item" >
                     <div class="layui-inline">
                         <label class="layui-form-label">消防许可证：</label>
                         <div class="layui-input-inline">
@@ -161,7 +158,7 @@
                     </div>
                 </div>
 
-                <div class="layui-form-item">
+                <div class="layui-form-item" >
                     <div class="layui-inline">
                         <label class="layui-form-label">组织代码证：</label>
                         <div class="layui-input-inline">
@@ -175,7 +172,29 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">税务登记证：</label>
                         <div class="layui-input-inline">
-                            <input type="tel" name="registrationpermit" id="registrationpermit" lay-verify="registrationpermit|license" placeholder="请输入税务登记证" autocomplete="off"
+                            <input type="" name="registrationpermit" id="registrationpermit" lay-verify="registrationpermit|license" placeholder="请输入税务登记证" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">园所规模：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="kinderscale" id="kinderscale" lay-verify="kinderscale"
+                                   placeholder="请输入申请规模(单位：㎡)" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">注册资金：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="kinderfunds" id="kinderfunds" lay-verify="kinderfunds"
+                                   placeholder="请输入注册资金(单位：元)" autocomplete="off"
                                    class="layui-input">
                         </div>
                     </div>
@@ -184,9 +203,11 @@
                 <div class="layui-form-item">
                     <div class="layui-input-inline" style="margin-left: 32%;">
                         <button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="addKinderInfo">
-                            保存
+                            <span class="sp">保存</span>
                         </button>
-                        <button type="button" class="layui-btn layui-btn-primary" id="bu3" style="margin-left: 10%">返回</button>
+                        <button type="button" class="layui-btn layui-btn-primary" id="bu3" style="margin-left: 10%">
+                            <span class="sp">返回</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -256,6 +277,14 @@
                 /^[a-zA-Z0-9]{10,20}$/
                 , '您好，许可证必须10~20位，且不能出现空格！'
             ],
+            kinderscale: [
+                /^[0-9]*$/
+                ,'您好，园所规模为0-9数字组成的字符！'
+            ],
+            kinderfunds: [
+                /^[0-9]*$/
+                ,'您好，注册资金为0-9之间的数字！'
+            ],
             content: function (value) {
                 layedit.sync(editIndex);
             }
@@ -286,12 +315,8 @@
 
         $(function () {
             $("#bu3").click(function () {
-                layer.confirm('您确定返回到园所管理页面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                    var path = $("#path").val();
-                    location.href = path + "/admin/toUrl/kinderMgr";
-                    return true;
-                });
-                return false;
+                var path = $("#path").val();
+                location.href = path + "/admin/toUrl/kinderMgr";
             });
             //幼儿园名字判断是不是重复
             $("#kindername").on('blur', function () {
