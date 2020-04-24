@@ -395,4 +395,23 @@
         UPDATE tbl_teacher SET teacherpwd = 'e10adc3949ba59abbe56e057f20f883e' where teachername = #{teachername} and teacherphone = #{teacherphone} ;
     </update>
 
+    <!--日志记录-->
+    <insert id="addLog" parameterType="com.great.kindergarten.commons.entity.TblSyslog">
+		insert into tbl_syslog(
+			 operateor,
+			 operatetype,
+			 operatedetail,
+			 operatetime,
+			 operateresult,
+			 operateip
+		)values
+			(
+				#{operateor}
+				,#{operatetype}
+				,#{operatedetail}
+				,#{operatetime}
+				,#{operateresult}
+				,#{operateip}
+			)
+	</insert>
 </mapper>
