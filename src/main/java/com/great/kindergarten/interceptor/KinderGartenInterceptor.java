@@ -27,16 +27,13 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();//拿到拦截的页面
         System.out.println("uri=" + uri);
-
         //request.getSchema()可以返回当前页面使用的协议，就是上面例子中的“http”
         //request.getServerName()可以返回当前页面所在的服务器的名字，就是上面例子中的“localhost"
         //request.getServerPort()可以返回当前页面所在的服务器使用的端口，
         //request.getContextPath()可以返回当前页面所在的应用的名字
-
         String path = request.getContextPath();
         String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path;
         System.out.println("basePath="+basePath);
-
 //        String main = "/kindergarten/main/path/main";
 //        String admin = "/kindergarten/admin/toUrl/adminMain";
 //        String director = "/kindergarten/director/toUrl/directorMain";
