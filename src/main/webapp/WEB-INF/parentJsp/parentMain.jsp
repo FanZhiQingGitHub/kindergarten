@@ -43,6 +43,7 @@
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0)" id="a1">个人信息</a></dd>
                 <dd><a href="javascript:void(0)" id="addStuTime">上课打卡</a></dd>
+                <dd><a href="javascript:void(0)" id="regFaceId">人脸注册</a></dd>
             </dl>
         </li>
         <li class="layui-nav-item"><a href="javascript:void(0); "  id="exit" style="color: black;font-size: 18px">注销</a></li>
@@ -458,7 +459,7 @@
                     shade: 0.8//表示的是阴影的大小
                     , area: ['55%', '65%'],
                     moveType: 1,//拖拽模式，0或者1
-                    content: path + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    content: path + '/parent/toUrl/SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                     , success: function (layero, index) {
                         console.log(layero, index);
                     }
@@ -502,6 +503,25 @@
                 });
             });
 
+
+
+            $(".a1").click(function () { //点击查看园所新闻
+                var name = $(this).text();
+                var titleInfo = name.split(":")[0];
+                var detailInfo = name.split(":")[1];
+                var kindername = $("#kindername").val();
+                //打开一个窗口播放视频
+                layer.open({
+                    //打开一个窗口播放视频
+                    // area: ['40%', '50%'],
+                    area: 'auto',
+                    // offset:['26%','31%'],
+                    offset:'auto',
+                    title:titleInfo,
+                    content: detailInfo
+                });
+            });
+
             $("#addStuTime").click(function () {
                 var path = $("#path").val();
                 var weekInfo = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
@@ -522,6 +542,26 @@
                     });
                 }
             });
+
+
+            $("#regFaceId").click(function () {
+                    layer.open({
+                        type: 2,
+                        area: ['95%', '81%'],
+                        offset: ['10%', '3%'],
+                        title: '智慧幼儿园-人脸注册界面',
+                        content: path + '/parent/toUrl/ParentFaceRegistered' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                        , success: function (layero, index) {
+                            var body = layer.getChildFrame("body", index);
+                        }
+                    });
+
+            });
+
+
+
+
+
         });
     });
 

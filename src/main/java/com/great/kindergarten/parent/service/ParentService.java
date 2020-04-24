@@ -8,10 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Administrator
@@ -36,6 +33,27 @@ public class ParentService {
     {
         return parentMapper.addLog(log);
     }
+
+
+
+
+    /**
+     *  根据搜索条件找到对应的相册列表
+     * @param map
+     * @return
+     */
+    public TableDate findCampusBulletinAll(Map<String, Object> map ){
+
+        TableDate tableDate = new TableDate();
+        //计算有几个条数
+        tableDate.setCount(parentMapper.findCampusBulletinAllCount(map));
+        //放入数据
+        tableDate.setData(parentMapper.findCampusBulletinAll(map));
+
+        return tableDate;
+    }
+
+
 
 
     /**
@@ -150,7 +168,7 @@ public class ParentService {
 
     /**
      * 根据id和条件找到孩子作业列表
-     * @param mealPage
+     * @param searchCondition
      * @return
      */
     public TableDate findAllMealInfo(SearchCondition searchCondition){

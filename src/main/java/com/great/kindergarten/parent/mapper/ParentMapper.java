@@ -18,6 +18,19 @@ public interface ParentMapper {
 
 
 	/**
+	 * 查询校园公共信息
+	 * @param map
+	 * @return
+	 */
+	 List<TblCampus> findCampusBulletinAll(Map<String, Object> map);
+
+	/**
+	 * 计算有几条校园公告
+	 * @param map
+	 * @return
+	 */
+	 Integer findCampusBulletinAllCount(Map<String, Object> map);
+	/**
 	 * 往数据库增加日志方法
 	 * @param log
 	 * @return
