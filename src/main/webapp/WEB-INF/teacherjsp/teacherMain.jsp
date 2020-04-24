@@ -104,41 +104,7 @@
 		</div>
 	</div>
 
-	<div class="prod-show">
-		<div class="layui-fluid">
-			<div class="row layui-col-space12 layui-clear">
-				<div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
-					<div class="img-txt">
-						<img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-1.jpg"
-						     alt="">
-						<h3>作业中心</h3>
-					</div>
-				</div>
-				<div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
-					<div class="img-txt">
-						<img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-2.jpg"
-						     alt="">
-						<h3>安全教育</h3>
-					</div>
-				</div>
-				<div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
-					<div class="img-txt">
-						<img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-2.jpg"
-						     alt="">
-						<h3>班级中心</h3>
-					</div>
-				</div>
-				<div class="layui-col-xs6 layui-col-sm6 layui-col-md3">
-					<div class="img-txt">
-						<img style="width: 100%;" src="${pageContext.request.contextPath}/image/growthfile/growth-2.jpg"
-						     alt="">
-						<h3>资源中心</h3>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="nav_btn">
+	<div class="nav_btn" style="margin-left: 14.5%">
 		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="course">课<br/>程<br/>表</button>
 		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="publishAssignment">发<br/>布<br/>作<br/>业</button>
 		<button type="button" class="layui-btn layui-btn-normal layui-btn-radius getbtn" id="examineAssignment">查<br/>看<br/>作<br/>业</button>
@@ -175,9 +141,15 @@
 				<div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
 					<div class="img-txt">
 						<h3 style="text-align: left">园所视频Videos</h3>
-						<div style=" overflow:auto;">
-							<a href="javascript:void(0);" id="playVideos">
-								<img style="width: 100%" src="${pageContext.request.contextPath}/image/photos/directorvideo.png"></a>
+						<div class="layui-carousel videobox" id="test2">
+							<div carousel-item class="videroH">
+								<div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/2019-nCoV.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/2019-nCoV.jpg"></a></div>
+								<div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/CrossTheRoadSafely.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/CrossTheRoadSafely.jpg"></a></div>
+								<div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/farmPropaganda.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/farmPropaganda.jpg"></a></div>
+								<div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/SafetyRollerSkate.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/SafetyRollerSkate.jpg"></a></div>
+								<div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/TakeTheElevatorSafely.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/TakeTheElevatorSafely.jpg"></a></div>
+								<div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/Traffic_safety.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/Traffic_safety.jpg"></a></div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -209,7 +181,7 @@
 		var path = $("#path").val();
 
 
-		//建造实例
+		//首页轮播图
 		carousel.render({
 			elem: '#test1'
 			, width: '100%' //设置容器宽度
@@ -217,14 +189,30 @@
 			, height: 'auto'
 			//,anim: 'updown' //切换动画方式
 		});
+		//首页轮播视频
+		carousel.render({
+			elem: '#test2'
+			, width: '100%' //设置容器宽度
+			, arrow: 'always'
+			, height: 'auto'
+			//,anim: 'updown' //切换动画方式
+		});
+
 		$('.app-header-menuicon').on('click', function () {
 			$('.header-down-nav').toggleClass('down-nav')
-		});
+		})
 		var imgH = $('.imgbox div.layui-this').outerHeight();
 		$('.imgH').css('height', imgH + 'px');
+
+		var videroH = $('.videobox div.layui-this').outerHeight();
+		$('.videroH').css('height', videroH + 'px');
+
 		window.onresize = function () {
 			var imgH = $('.imgbox div.layui-this').outerHeight();
-			$('.imgH').css('height', imgH + 'px')
+			$('.imgH').css('height', imgH + 'px');
+
+			var videroH = $('.videobox div.layui-this').outerHeight();
+			$('.videroH').css('height', videroH + 'px');
 		};
 
 		$(function () {
@@ -449,16 +437,19 @@
 			});
 			return false;
 		});
+
 		//点击查看园所视频
-		$("#playVideos").click(function () {
+		$(".playVideos").click(function () {
+			var videoUrl = $(this).attr('title');
 			//打开一个窗口播放视频
 			layer.open({
 				//打开一个窗口播放视频
 				type: 1,
-				area: ['75%', '85%'],
-				title:'园所宣传视频',
+				area: ['95%', '80%'],
+				offset:['10%','3%'],
+				title:'园所视频播放',
 				content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
-					'<source src="${pageContext.request.contextPath}/videos/farmPropaganda.mp4" type="video/mp4"></source></video>'
+						'<source src="'+videoUrl+'" type="video/mp4"></source></video>'
 				//直接跳出一个标签播放视频
 			});
 		});

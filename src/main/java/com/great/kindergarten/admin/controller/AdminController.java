@@ -132,6 +132,29 @@ public class AdminController
 	}
 
 	/**
+	 * 重置密码
+	 * @param tblAdmin
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/resetAdminPwd")
+	public void resetAdminPwd(TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response) {
+		request.getSession().setAttribute("adminname",tblAdmin.getAdminname());
+		Integer num = adminService.findExistAdminName(tblAdmin.getAdminname());
+		if(num > 0){
+			Boolean flag = adminService.resetAdminPwd(tblAdmin.getAdminname(),tblAdmin.getAdminphone());
+			if(flag){
+				request.getSession().removeAttribute("adminname");//重置成功后清除掉
+				ResponseUtils.outHtml(response,"success");
+			}else {
+				ResponseUtils.outHtml(response,"error");
+			}
+		}else {
+			ResponseUtils.outHtml(response,"notmen");
+		}
+	}
+
+	/**
 	 * 管理员登录校验
 	 * @param tblAdmin
 	 * @param req
@@ -195,6 +218,17 @@ public class AdminController
 								roleNewList.add(str);
 							}
 						}
+
+						List<String> tblReadList = adminService.findAllReadBookName();
+						List<String> readNewList = new ArrayList<String>();
+						for (String str : tblReadList)
+						{
+							if (!readNewList.contains(str))
+							{
+								readNewList.add(str);
+							}
+						}
+
 						List<TblMenu> stairMenuList = adminService.findStairMenu();
 						req.getSession().setAttribute("stairMenuList", stairMenuList);
 						req.getSession().setAttribute("parentNewList", parentNewList);
@@ -203,6 +237,8 @@ public class AdminController
 						req.getSession().setAttribute("parameterNewList", parameterNewList);
 						req.getSession().setAttribute("teacherNewList", teacherNewList);
 						req.getSession().setAttribute("teacherNewList", teacherNewList);
+						req.getSession().setAttribute("readNewList", readNewList);
+
 						String rolename = adminService.findRoleByRid(tblAdmin.getRid());
 						req.getSession().setAttribute("rolename", rolename);
 						req.getSession().setAttribute("tblAdmin", tblAdmin);
@@ -652,6 +688,25 @@ public class AdminController
 		}
 	}
 
+	/**
+	 * 园所详情信息
+	 * @param tblKinder
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/findKinderInfoById")
+	public void findKinderInfoById(TblKinder tblKinder , HttpServletRequest request, HttpServletResponse response)
+	{
+		System.out.println("园所信息"+tblKinder);
+		if(tblKinder != null)
+		{
+			List<TblKinder> tblKinderList = adminService.findKinderInfoById(tblKinder.getKinderid());
+			ResponseUtils.outJson(response,GsonUtils.getgsonUtils().toStr(tblKinderList));
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
 	@RequestMapping("/qualifyAppInfo")
 	public void findKinderByPage(String page, String limit, TblKinder tblKinder, DataResult dataResult, HttpServletRequest req, HttpServletResponse res) throws IOException
 	{
@@ -720,9 +775,9 @@ public class AdminController
 	{
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
 		String kinderstatus = null;
-		int kinderid = Integer.valueOf(request.getParameter("kinderid"));
 		if (tblKinder != null)
 		{
+			int kinderid = Integer.valueOf(request.getParameter("kinderid"));
 			kinderstatus = "通过";
 			int num = adminService.checkQualify(kinderstatus, kinderid, sf.format(new Date()));
 			if (num > 0)
@@ -777,22 +832,31 @@ public class AdminController
 		}
 	}
 
-	//新增园所
+	/**
+	 * 新增园所
+	 * @param tblKinder
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping("/addKinder")
 	public void addKinder(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
-		tblKinder.setKinderregtime(new Date());
-		tblKinder.setKinderstatus("未审批");
-		tblKinder.setKindercode("启用");
-		List<TblKinder> tblKinderList = new ArrayList<>();
-		tblKinderList.add(tblKinder);
-		int num = adminService.addKinder(tblKinderList);
-		if (num > 0)
+		if(tblKinder != null)
 		{
-			ResponseUtils.outHtml(response, "success");
-		} else
-		{
-			ResponseUtils.outHtml(response, "error");
+			tblKinder.setKinderregtime(new Date());
+			tblKinder.setKinderstatus("未审批");
+			tblKinder.setKindercode("启用");
+			tblKinder.setKinderpwd(MD5Utils.md5(tblKinder.getKinderpwd()));
+			List<TblKinder> tblKinderList = new ArrayList<>();
+			tblKinderList.add(tblKinder);
+			int num = adminService.addKinder(tblKinderList);
+			if (num > 0)
+			{
+				ResponseUtils.outHtml(response, "success");
+			} else
+			{
+				ResponseUtils.outHtml(response, "error");
+			}
 		}
 	}
 
@@ -1069,6 +1133,33 @@ public class AdminController
 		}
 	}
 
+
+	@RequestMapping("/findReadInfoByName")
+	public void findReadInfoByName(String page, String limit, TblReadmag tblReadmag, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		HashMap<String, Object> condition = new HashMap<>();
+		String readMagName = request.getParameter("readmagname");
+		if (null != readMagName && !"".equals(readMagName.trim()))
+		{
+			condition.put("readmagname", readMagName);
+		}
+
+		int num = adminService.findReadCountByName(condition);
+		RowBounds rowBounds = new RowBounds((Integer.valueOf(page) - 1) * Integer.valueOf(limit), Integer.valueOf(limit));
+		List<TblReadmag> readMagList = adminService.findReadInfoByName(condition, rowBounds);
+		if (readMagList != null)
+		{
+			dataResult.setCode(0);
+			dataResult.setMsg("");
+			dataResult.setCount(num);
+			dataResult.setData(readMagList);
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
 	@RequestMapping("/readBookInfo")
 	@ResponseBody
 	public PageBean<TblReadmag> readBookInfo(HttpServletRequest request){
@@ -1092,7 +1183,6 @@ public class AdminController
 		{
 			int num = adminService.findReadCountById(readmagid);
 			List<TblReadmag> tblReadmagList = adminService.findReadInfoById(curPage,Integer.valueOf(limit),readmagid);
-			System.out.println("数据"+GsonUtils.getgsonUtils().toStr(tblReadmagList));
 			dataResult.setCode(0);
 			dataResult.setMsg("");
 			dataResult.setCount(num);
@@ -1164,7 +1254,7 @@ public class AdminController
 
 
 	@RequestMapping("/uploadImg")
-	public void upload(@RequestParam("file") MultipartFile file, String contentInfo, String pageNum, String reamagname1, TblReadmag tblReadmag, HttpServletRequest request, HttpServletResponse response) throws IOException
+	public void upload(@RequestParam("file") MultipartFile file, String contentInfo, String pageNum, String readMagName1, TblReadmag tblReadmag, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 		String prefix = "";
 		String dateStr = "";
@@ -1185,12 +1275,16 @@ public class AdminController
 			{
 				files.getParentFile().mkdirs();
 			}
-			tblReadmag.setReadmagname("三只小羊");
+			System.out.println("绘本信息："+readMagName1);
+			Integer readmagid = adminService.findReadMagIdByName(readMagName1);
+			System.out.println(readmagid);
+			tblReadmag.setReadmagname(readMagName1);
 			tblReadmag.setReadmagurl("E:\\kindergarten\\亲子阅读");
 			tblReadmag.setReadmagdetail(contentInfo);
 			tblReadmag.setPhotourl("image/adminimg/img/" + originalName);
 			tblReadmag.setReadmagpage(Integer.valueOf(pageNum));
 			tblReadmag.setReadmagtime(date);
+			tblReadmag.setRelatedid(readmagid);
 			int num = adminService.addPhotoImg(tblReadmag);
 			if (num > 0)
 			{
@@ -1456,6 +1550,7 @@ public class AdminController
 		{
 			tblRector.setRectorregtime(new Date());
 			tblRector.setRectorstatus("启用");
+			tblRector.setRectorpwd(MD5Utils.md5("123456"));
 			List<TblRector> tblRectorList = new ArrayList<>();
 			tblRectorList.add(tblRector);
 			int num = adminService.addRector(tblRectorList);
@@ -2044,8 +2139,7 @@ public class AdminController
 	{
 		if (tblSecurity != null)
 		{
-			SimpleDateFormat sf = new SimpleDateFormat();
-			tblSecurity.setSecurityregtime(sf.format(new Date()));
+			tblSecurity.setSecurityregtime(new Date());
 			tblSecurity.setSecuritystatus("启用");
 			List<TblSecurity> tblSecurityList = new ArrayList<>();
 			tblSecurityList.add(tblSecurity);
@@ -2432,6 +2526,7 @@ public class AdminController
 			if (num > 0)
 			{
 				file.transferTo(files);
+				tblSafetyVideoList.clear();
 				response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
 				response.getWriter().flush();
 				response.getWriter().close();
@@ -2447,7 +2542,7 @@ public class AdminController
 
 	@AdminSystemLog(operationType = "重新上传视频", operationName = "重新上传视频")
 	@RequestMapping("/updateSafetyVideoInfo")
-	public void updateSafetyVideoInfo(@RequestParam("file") MultipartFile file, String safetyVideoName, String videoName, String videoAdd, TblSafetyvideo tblSafetyvideo, HttpServletRequest request, HttpServletResponse response) throws IOException
+	public void updateSafetyVideoInfo(@RequestParam("file") MultipartFile file, String safetyVideoName, String videoName, String videoAdd, Integer safetyvideoid, TblSafetyvideo tblSafetyvideo, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 		String prefix = "";
 		String dateStr = "";
@@ -2468,12 +2563,16 @@ public class AdminController
 			{
 				files.getParentFile().mkdirs();
 			}
-			tblSafetyvideo.setSafetyvideoname(safetyVideoName);
-			tblSafetyvideo.setVideoadd(videoAdd);
-			tblSafetyvideo.setVideoname(videoName);
-			tblSafetyvideo.setSafetyvideotime(new Date());
-			//
-			int num = adminService.updateSafetyVideo(tblSafetyvideo);
+			int num = 0;
+			if (safetyvideoid != null)
+			{
+				tblSafetyvideo.setSafetyvideoid(safetyvideoid);
+				tblSafetyvideo.setSafetyvideoname(safetyVideoName);
+				tblSafetyvideo.setVideoadd(videoAdd);
+				tblSafetyvideo.setVideoname(videoName);
+				tblSafetyvideo.setSafetyvideotime(new Date());
+				num = adminService.updateSafetyVideo(tblSafetyvideo);
+			}
 			if (num > 0)
 			{
 				file.transferTo(files);
@@ -2481,11 +2580,12 @@ public class AdminController
 				response.getWriter().flush();
 				response.getWriter().close();
 			}
-		} else
-		{
-			response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
-			response.getWriter().flush();
-			response.getWriter().close();
+			else
+			{
+				response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
+				response.getWriter().flush();
+				response.getWriter().close();
+			}
 		}
 	}
 

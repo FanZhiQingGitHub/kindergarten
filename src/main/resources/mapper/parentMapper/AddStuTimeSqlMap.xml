@@ -69,7 +69,7 @@
     </insert>
 
     <insert id="addPmDate" parameterType="java.util.Map">
-        insert into tbl_stutimepm(timepmdate)values(#{timepmdate})
+        insert into tbl_stutimepm(timepmdate,timepm,pnamepm)values(#{timepmdate},'无','无')
     </insert>
 
     <!--    新增下午考勤信息-->

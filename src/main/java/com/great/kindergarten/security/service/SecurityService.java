@@ -18,7 +18,7 @@ public class SecurityService {
     @Resource
     private SecurityMapper securityMapper;
 
-    public String findSecurityStatus(String securityname){
+    public TblSecurity findSecurityStatus(String securityname){
         Map<String, String> securitymap = new LinkedHashMap<>();
         securitymap.put("securityname",securityname);
         return securityMapper.findSecurityStatus(securitymap);
@@ -59,8 +59,10 @@ public class SecurityService {
         return securityMapper.resetSecuritypwd(securitymap);
     }
 
-    public List<TblClass> findAllClass(){
-        return securityMapper.findAllClass();
+    public List<TblClass> findAllClass(String kindername){
+        Map<String, String> kindermap = new LinkedHashMap<>();
+        kindermap.put("kindername",kindername);
+        return securityMapper.findAllClass(kindermap);
     }
 
     public List<TblStudent> findALLPickUpInfo(PickUpInfoPage pickUpInfoPage){
@@ -75,8 +77,10 @@ public class SecurityService {
         return securityMapper.findALLPickUpDetailInfo(pickUpInfoDetailPage);
     }
 
-    public List<TblStudent> findAllStuInfo(){
-        return securityMapper.findAllStuInfo();
+    public List<TblStudent> findAllStuInfo(String kindername){
+        Map<String, String> kindermap = new LinkedHashMap<>();
+        kindermap.put("kindername",kindername);
+        return securityMapper.findAllStuInfo(kindermap);
     }
 
     public List<TblStudent> findStuLngLetInfo(String studentid,String studentname,String studentbrith){
@@ -186,6 +190,21 @@ public class SecurityService {
 
     public Long findALLMonitorInfoCountMag(MonitorPage monitorPage){
         return securityMapper.findALLMonitorInfoCountMag(monitorPage);
+    }
+
+    public List<TblDefaultrack> findDefaultLngLatInfo(){
+        return securityMapper.findDefaultLngLatInfo();
+    }
+
+    public Long findExistStuLngLat(String studentid){
+        Map<String,String> stuMap = new LinkedHashMap<>();
+        stuMap.put("studentid",studentid);
+        return securityMapper.findExistStuLngLat(stuMap);
+    }
+
+    @Transactional
+    public Boolean addStuLngLatInfo(List<TblDefaultrack> tblDefaultrackList){
+        return securityMapper.addStuLngLatInfo(tblDefaultrackList);
     }
 
     @Transactional

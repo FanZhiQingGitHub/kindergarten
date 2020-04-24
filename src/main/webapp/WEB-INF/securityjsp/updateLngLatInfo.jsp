@@ -19,7 +19,7 @@
 <body>
 
 <input type="hidden" id="path" value="<%=path%>">
-<input type="hidden" id="kinder">
+<input type="hidden" id="kinder" value="${kindername}">
 
 <div class="layui-fluid">
 

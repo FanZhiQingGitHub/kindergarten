@@ -18,8 +18,8 @@
     </resultMap>
 
     <!--    用户状态查询-->
-    <select id="findSecurityStatus" resultType="java.lang.String" parameterType="java.util.Map">
-        select securitystatus from tbl_security
+    <select id="findSecurityStatus" resultType="com.great.kindergarten.commons.entity.TblSecurity" parameterType="java.util.Map">
+        select * from tbl_security
         <where>
             <if test="securityname != '' and securityname != null ">
                 and securityname = #{securityname}
@@ -67,13 +67,7 @@
 
     <!--   主页新闻查询-->
     <select id="findKinderNews" resultType="com.great.kindergarten.commons.entity.TblCampus" parameterType="java.util.Map">
-        select cam.campusinfoid,cam.campusinfoname,cam.campustime,cam.campusinfodetail,cam.kid from tbl_campusinfo cam , tbl_kinder kin
-        <where>
-            cam.kid = kin.kinderid
-            <if test="kindername != '' and kindername != null ">
-                and kin.kindername = #{kindername}
-            </if>
-        </where>
+        select * from tbl_campusinfo cam , tbl_kinder kin where cam.kid = kin.kinderid and kin.kindername = #{kindername}
     </select>
 
     <!--日志记录-->

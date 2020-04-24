@@ -97,6 +97,7 @@ public class SecuritySystemLogAspect {
         //请求的IP
         InetAddress addr = InetAddress.getLocalHost();
         String ip = addr.getHostAddress();
+
         try {
 
             String targetName = joinPoint.getTarget().getClass().getName();
@@ -122,29 +123,28 @@ public class SecuritySystemLogAspect {
             System.out.println("方法描述:" + operationName);
             System.out.println("请求人:" + securityname);
             System.out.println("请求IP:" + ip);
+
             //*========数据库日志=========*//
             TblSyslog log = new TblSyslog();
             log.setOperatedetail(operationName);
             log.setOperatetype(operationType);
             log.setOperateip(ip);
             log.setOperateresult("正常");
-            if(securityname != null)
-            {
+            if (securityname != null) {
                 log.setOperateor(securityname);
-            }else{
-                log.setOperateor("无");
-            }
-            System.out.println("日志记录时间"+new Date());
-            log.setOperatetime(new Date());
-
-            //保存数据库
-            Integer num = securityService.addLog(log);
-            if(num>0){
-                System.out.println(log);
-                System.out.println("=====controller后置通知结束=====");
-            }else {
-                System.out.println(log);
-                System.out.println("=====controller后置通知异常=====");
+                System.out.println("日志记录时间" + new Date());
+                log.setOperatetime(new Date());
+                //保存数据库
+                Integer num = securityService.addLog(log);
+                if (num > 0) {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知结束=====");
+                } else {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知异常=====");
+                }
+            } else {
+                System.out.println("日志记录失败");
             }
         } catch (Exception e) {
             //记录本地异常日志
@@ -220,24 +220,23 @@ public class SecuritySystemLogAspect {
             log.setOperatetype(operationType);
             log.setOperateip(ip);
             log.setOperateresult("异常");
-            if(securityname != null)
-            {
+            if (securityname != null) {
                 log.setOperateor(securityname);
-            }else{
-                log.setOperateor("无");
+                System.out.println("日志记录时间" + new Date());
+                log.setOperatetime(new Date());
+                //保存数据库
+                Integer num = securityService.addLog(log);
+                if (num > 0) {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知结束=====");
+                } else {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知异常=====");
+                }
+            } else {
+                System.out.println("日志记录失败");
             }
-            System.out.println("日志记录时间"+new Date());
-            log.setOperatetime(new Date());
 
-            //保存数据库
-            Integer num = securityService.addLog(log);
-            if(num>0){
-                System.out.println(log);
-                System.out.println("=====controller后置通知结束=====");
-            }else {
-                System.out.println(log);
-                System.out.println("=====controller后置通知异常=====");
-            }
         } catch (Exception ex) {
             //记录本地异常日志
             logger.error("==异常通知异常==");

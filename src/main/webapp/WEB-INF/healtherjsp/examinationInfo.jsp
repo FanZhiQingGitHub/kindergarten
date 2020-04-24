@@ -18,6 +18,7 @@
 </head>
 <body>
 <input type="hidden" id="path" value="<%=path%>">
+<input type="hidden" id="kinder" value="${kindername}">
 
 <div class="layui-fluid">
 
@@ -36,22 +37,22 @@
                     <div class="layui-form-item" style="color: black;width: 300px;margin-top: 5%">
                         <label class="layui-form-label">班级名称：</label>
                         <div class="layui-input-block">
-                            <select name="class" id="classname" style="width:160px;height: 5.3%">
-                                <option value="请选择">请选择</option>
-                                <c:if test="${not empty tblClassList}">
-                                    <c:forEach items="${tblClassList}" var="i" step="1">
-                                        <option value="${i.classname}">${i.classname}</option>
-                                    </c:forEach>
-                                </c:if>
+                            <select name="class" id="classname" style="width:200px;height: 5.3%">
+<%--                                <option value="请选择">请选择</option>--%>
+<%--                                <c:if test="${not empty tblClassList}">--%>
+<%--                                    <c:forEach items="${tblClassList}" var="i" step="1">--%>
+<%--                                        <option value="${i.classname}">${i.classname}</option>--%>
+<%--                                    </c:forEach>--%>
+<%--                                </c:if>--%>
                             </select>
                         </div>
                     </div>
                 </div>
 
 
-                <button type="button" class="layui-btn layui-btn-normal" data-type="reload"><i class="layui-icon">&#xe615;</i>查询体检信息
+                <button type="button" class="layui-btn layui-btn-normal" data-type="reload" style="margin-left: 1%"><i class="layui-icon">&#xe615;</i>查询体检信息
                 </button>
-                <button type="button" class="layui-btn add"><i class="layui-icon">&#xe654;</i>新增体检信息</button>
+                <button type="button" class="layui-btn add" style="margin-left: 1%"><i class="layui-icon">&#xe654;</i>新增体检信息</button>
             </div>
         </div>
     </div>
@@ -76,6 +77,46 @@
         var form = layui.form;
         var layer = layui.layer;
         var path = $("#path").val();
+
+        //1、查出班级下拉框的值
+        $.ajax({
+            url: path + '/healther/findAllClassInfo',
+            async: true,
+            type: 'post',
+            datatype: 'text',
+            success: function (data) {
+                if (data == "error") {
+                    var option;
+                    option += "<option value='请选择'>" + "您需要登录幼儿园账号显示" + "</option>";
+                    $("#classname").html(option);
+                    $("#classname").show();
+                    layer.msg("您需要登录幼儿园后显示班级信息！", {icon: 2});
+                } else {
+                    var kindername = $("#kinder").val();
+                    if (kindername.length == 0) {
+                        // layer.msg('对不起，您必须登录幼儿园账号才可以进行此操作！', {icon: 2});
+                        var option;
+                        option += "<option value='请选择'>" + "您需要登录幼儿园账号显示" + "</option>";
+                        $("#classname").html(option);
+                        $("#classname").show();
+                    } else {
+                        var clainfo = JSON.parse(data);
+                        var option;
+                        option += "<option value='请选择'>" + "请选择班级" + "</option>";
+                        for (var i in clainfo) {
+                            option += "<option value='" +clainfo[i].classname +"'>" + clainfo[i].classname + "</option>";
+                        }
+                        $("#classname").html(option);
+                        $("#classname").show();
+                    }
+                }
+            }, error: function (data) {
+                layer.msg("网络繁忙！", {icon: 2});
+            }
+        });
+
+
+
         //第一个实例
         table.render({
             elem: '#dataTable'

@@ -35,7 +35,6 @@
         </div>
     </div>
 
-
     <table class="layui-hide" id="demo"></table>
 
     <div class="layui-btn-container" style="margin-left: 46%;margin-top: 6%">
@@ -110,11 +109,13 @@
                                 layer.alert("添加成功！", {icon: 6}, function (index) {
                                     window.parent.location.reload();
                                 });
+                            } else if (msg == "notkinder") {
+                                layer.msg("您需要登录幼儿园后才能进行此操作！", {icon: 2});
                             } else {
-                                layer.alert("添加失败！", {icon: 2});
+                                layer.msg("添加失败！", {icon: 2});
                             }
                         }, error: function (msg) {
-                            layer.alert("网络繁忙！", {icon: 2});
+                            layer.msg("网络繁忙！", {icon: 2});
                         }
                     })
                 }
@@ -140,7 +141,7 @@
             var now = new Date();
             var day = now.getDay();
             var fridaydate = new Date((5 - day) * (3600 * 24 * 1000) + now.getTime()).getDate();
-            var friday = now.getFullYear() + "-" + (now.getMonth() + 1) + "-"+fridaydate;
+            var friday = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + fridaydate;
             return friday;
         }
 

@@ -99,4 +99,5 @@ public interface TeacherMapper {
 
 	public Boolean resetTeacherpwd(Map<String, String> teachermap);
 
+	public int addLog(TblSyslog log);//系统日志
 }

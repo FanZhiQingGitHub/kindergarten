@@ -38,6 +38,11 @@ public class TblKinder {
     private String kinderfunds;//注册资金
     private Integer recid;//对应的园长ID外键
 
+    //连表查询用误删
+    private TblRector tblRector;
+    private Integer rectorid;
+    private String rectorname;
+
     private String time1;
     private String time2;
 
@@ -244,6 +249,36 @@ public class TblKinder {
     public void setRecid(Integer recid)
     {
         this.recid = recid;
+    }
+
+    public TblRector getTblRector()
+    {
+        return tblRector;
+    }
+
+    public void setTblRector(TblRector tblRector)
+    {
+        this.tblRector = tblRector;
+    }
+
+    public Integer getRectorid()
+    {
+        return rectorid;
+    }
+
+    public void setRectorid(Integer rectorid)
+    {
+        this.rectorid = rectorid;
+    }
+
+    public String getRectorname()
+    {
+        return rectorname;
+    }
+
+    public void setRectorname(String rectorname)
+    {
+        this.rectorname = rectorname;
     }
 
     @Override

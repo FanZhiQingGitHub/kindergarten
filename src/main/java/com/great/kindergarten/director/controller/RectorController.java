@@ -134,12 +134,15 @@ public class RectorController
 	//登录判断
 	@RectorSystemLog(operationType = "登录", operationName = "园长登录")
 	@RequestMapping("/directorLogin")
-	public void loginCode(String username, String userpwd, String code, HttpServletRequest request, HttpServletResponse response)
+	public void directorLogin(String username, String userpwd, String code, HttpServletRequest request, HttpServletResponse response)
 	{
 		tblRector.setRectorname(username);
 		String md5pwd = MD5Utils.md5(userpwd);
 		System.out.println("密码是：" + md5pwd);
 		tblRector.setRectorpwd(md5pwd);
+
+		System.out.println("username="+username);
+		System.out.println("userpwd="+userpwd);
 
 		TblRector tblRectors = rectorService.findRector(tblRector);
 		System.out.println(tblRectors);

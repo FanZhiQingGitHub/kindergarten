@@ -37,8 +37,6 @@
 </head>
 <body>
 <input type="hidden" id="path" value="<%=path%>">
-<input type="hidden" id="studentid">
-<input type="hidden" id="studentbrith" value="<%=path%>">
 <input type="hidden" id="kinder" value="${kindername}">
 
 
@@ -79,16 +77,17 @@
 
         <div class="layui-inline" style="margin-left: 5%">
             <div class="layui-input-inline">
-                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal alarmLogInfo"
-                        style="width: 150px">报警信息
+                <button type="button" class="layui-btn layui-btn-radius alarmLogInfo"
+                        style="width: 120px">报警信息
                 </button>
-
+                <button type="button" class="layui-btn layui-btn-radius layui-btn-normal addStuLngLatInfo"
+                        style="width: 120px">添加宝宝轨迹
+                </button>
                 <button type="button" class="layui-btn layui-btn-radius layui-btn-warm addElectricFence"
-                        style="width: 150px" id="bu">绘制电子围栏
+                        style="width: 120px" id="bu">绘制电子围栏
                 </button>
-
                 <button type="button" class="layui-btn layui-btn-radius layui-btn-danger updateElectricFence"
-                        style="width: 150px;">修改电子围栏
+                        style="width: 120px;">修改电子围栏
                 </button>
             </div>
         </div>
@@ -144,13 +143,13 @@
             datatype: 'text',
             success: function (data) {
                 if (data == "error") {
-                    layer.alert("暂无宝宝信息！", {icon: 2});
+                    layer.msg("暂无宝宝信息！", {icon: 2});
                 } else {
-                    var kindername = $("#kindername").val();
+                    var kindername = $("#kinder").val();
                     if (kindername.length == 0) {
                         // layer.msg('对不起，您必须登录幼儿园账号才可以进行此操作！', {icon: 2});
                         var option;
-                        option += "<option value='请选择'>" + "您需要登录幼儿园账号" + "</option>";
+                        option += "<option value='请选择'>" + "您需要登录幼儿园账号显示" + "</option>";
                         $("#stuname").html(option);
                         $("#stuname").show();
                     } else {
@@ -222,9 +221,9 @@
 
 
         //添加地图点击监听
-        // map.addEventListener("click", function (e) {
-        //     console.log(e.point.lng + "," + e.point.lat);
-        // });
+        map.addEventListener("click", function (e) {
+            console.log(e.point.lng + "," + e.point.lat);
+        });
 
         //2.查出给每个孩子默认的显示位置（即学校位置）
         var studentid;
@@ -251,7 +250,6 @@
                         } else {
                             var info = JSON.parse(data);
                             var polArry = [];
-
                             var styleOptions = {
                                 strokeColor: "red",    //边线颜色。
                                 fillColor: "red",      //填充颜色。当参数为空时，圆形将没有填充效果。
@@ -261,28 +259,7 @@
                                 strokeStyle: 'solid' //边线的样式，solid或dashed。
                             }
 
-
-                            // function stuTrack(arr) {
-                            //     if(Object.prototype.toString.call(arr).slice(8,-1) !== "Array") return;
-                            //     var length = arr.length;
-                            //     var i = 0;
-                            //     return function(){
-                            //         if(i<length,i++)
-                            //             console.log(i);
-                            //         console.log(length);
-                            //         var lngLatNum = new BMap.Point(arr[i].lng,arr[i].lat);
-                            //
-                            //         addMarker([lngLatNum]);
-                            //         polArry.push(lngLatNum);
-                            //         var polyline = new BMap.Polyline(polArry, styleOptions);
-                            //         map.addOverlay(polyline);
-                            //     }
-                            // }
-                            // timer = setInterval(stuTrack(info),1000);
-
-
                             $("#studentname").val(studentname);
-
                             for (var i = 0; i < info.length; i++) {
                                 (function (e) {
                                     timer = setTimeout(function () {
@@ -301,7 +278,7 @@
 
                         }
                     }, error: function (data) {
-                        layer.alert("网络繁忙！", {icon: 2});
+                        layer.msg("网络繁忙！", {icon: 2});
                     }
                 });
             });
@@ -366,6 +343,24 @@
             });
         });
 
+        $('body').on('click', '.addStuLngLatInfo', function () {
+            var kindername = $("#kinder").val();
+            if (kindername.length == 0) {
+                layer.msg('对不起，您必须登录幼儿园账号才可以进行此操作！', {icon: 2});
+            } else {
+                layer.open({
+                    type: 2,
+                    area: ['80%', '75%'],
+                    offset: ['10%', '9.5%'],
+                    title: '添加宝宝运动轨迹',
+                    content: path + '/security/path/addStuLngLatInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                        var body = layer.getChildFrame("body", index);
+                    }
+                });
+            }
+        });
+
         //绘制电子围栏
         $('body').on('click', '.addElectricFence', function () {
             var kindername = $("#kinder").val();
@@ -388,24 +383,21 @@
         //修改电子围栏
         $('body').on('click', '.updateElectricFence', function () {
             var kindername = $("#kinder").val();
-            layer.confirm('您确定要修改吗?', {icon: 3, title:'提示'},function (index) {
-                if (kindername.length == 0) {
-                    layer.msg('对不起，您必须登录幼儿园账号才可以进行此操作！', {icon: 2});
-                    layer.close(index);
-                } else {
-                    layer.open({
-                        type: 2,
-                        area: ['100%', '80%'],
-                        offset: ['0%', '0%'],
-                        title: '修改' + kindername + '电子围栏',
-                        content: path + '/security/path/updateLngLatInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-                        , success: function (layero, index) {
-                            var body = layer.getChildFrame("body", index);
-                            body.find("#kinder").val(kindername);
-                        }
-                    });
-                }
-            });
+            if (kindername.length == 0) {
+                layer.msg('对不起，您必须登录幼儿园账号才可以进行此操作！', {icon: 2});
+            } else {
+                layer.open({
+                    type: 2,
+                    area: ['100%', '80%'],
+                    offset: ['0%', '0%'],
+                    title: '修改' + kindername + '电子围栏',
+                    content: path + '/security/path/updateLngLatInfo' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                        var body = layer.getChildFrame("body", index);
+                        body.find("#kinder").val(kindername);
+                    }
+                });
+            }
         });
     });
 

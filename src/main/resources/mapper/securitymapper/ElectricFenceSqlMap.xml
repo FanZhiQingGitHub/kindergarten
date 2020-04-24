@@ -5,9 +5,10 @@
 <mapper namespace="com.great.kindergarten.security.mapper.SecurityMapper">
 
     <!--    查找宝宝的所有信息，作为搜索条件-->
-    <select id="findAllStuInfo" resultType="com.great.kindergarten.commons.entity.TblStudent">
-        select * from tbl_student
+    <select id="findAllStuInfo" resultType="com.great.kindergarten.commons.entity.TblStudent" parameterType="java.util.Map">
+        select * from tbl_student stu,tbl_kinder kin where stu.kid = kin.kinderid and kin.kindername=#{kindername}
     </select>
+
 
     <!--    根据宝宝名称和出生日期查找宝宝的坐标信息-->
     <select id="findStuLngLetInfo" resultType="com.great.kindergarten.commons.entity.TblStudent"
@@ -115,5 +116,23 @@
         delete from tbl_coordinate where kinderid = #{kinderid}
     </delete>
 
+    <select id="findDefaultLngLatInfo" resultType="com.great.kindergarten.commons.entity.TblDefaultrack"
+            parameterType="java.util.Map">
+        select * from tbl_defaultrack
+    </select>
+
+    <select id="findExistStuLngLat" resultType="java.lang.Long" parameterType="java.util.Map">
+        select count(*) from tbl_stutrack where stuid = #{studentid}
+    </select>
+
+    <!--    新增电子围栏坐标-->
+    <insert id="addStuLngLatInfo" parameterType="java.util.List">
+        insert into
+        tbl_stutrack(lng,lat,stuid)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.lng},#{i.lat},#{i.studentid})
+        </foreach>
+    </insert>
 
 </mapper>

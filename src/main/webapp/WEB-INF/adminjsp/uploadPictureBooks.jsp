@@ -14,6 +14,15 @@
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
+		body{
+			font-size: 140%;
+		}
+
+		.layui-input{
+			width:120%;
+			margin: auto;
+		}
+
 		h3 {
 			text-align: center;
 		}
@@ -21,12 +30,19 @@
 			height: 70px;
 			line-height: 70px;
 			white-space:normal;
+			font-size: 140%;
 		}
 		#mName{
-			margin: -24% 0 0 155%;
+			margin: -12% 125%;
 		}
+
 		#btn-add{
 			margin: -5% 0 0 60%;
+		}
+		.sp{
+			font-size: 140%;
+			height: 40px;
+			line-height: 40px;
 		}
 	</style>
 </head>
@@ -34,21 +50,29 @@
 	<input type="hidden" id="path" value="<%=path%>">
 	<div class="layui-row" style="margin-top: 20px;">
 		<form class="layui-form" action="" onsubmit="return false;" >
-			<div class="uploadTable">
+			<div class="uploadTable" style="margin-left: 10%">
 				<div class="layui-inline">
-					<span class="layui-form-label" style="margin-left: 50%">绘本名称：</span>
-					<div class="layui-inline">
-						<input class="layui-input" name="mName" id="mName" autocomplete="off" placeholder="请输入绘本名称">
+					<span class="layui-form-label" style="width:auto;margin-left: 50%">绘本名称：</span>
+					<div class="layui-inline" style="margin: -10% 85%;width: 60%">
+						<select name="mName" id="mName" lay-filter="mySelect" lay-verify="" style="width:auto;">
+							<option value="请选择绘本">请选择绘本</option>
+							<c:if test="${not empty readNewList}">
+								<c:forEach items="${readNewList}" var="i">
+									<option value="${i}">${i}</option>
+								</c:forEach>
+							</c:if>
+						</select>
+<%--						<input class="layui-input" name="mName" id="mName" autocomplete="off" placeholder="请输入绘本名称">--%>
 					</div>
 				</div>
-				<button class="layui-btn btn-add btn-default" id="btn-add" style="display: none"><i class="layui-icon">&#xe624;新增图片</i></button>
+				<button class="layui-btn btn-add btn-default" id="btn-add" style="display: none;margin: -3.5% 65%;"><i class="layui-icon">&#xe624;新增图片</i></button>
 			</div>
 		</form>
 	</div>
-	<table id="upload" lay-filter="test" class="layui-table-cell"></table>
+	<table id="upload" lay-filter="test" class="layui-table-cell" style="margin-top: 5%"></table>
 	<script type="text/html" id="barOption">
-		<button type="button" class="layui-btn layui-btn-normal" lay-event="update" style="text-align: -moz-center"><i class="layui-icon">&#xe642;修改</i></button>
-		<button type="button" class="layui-btn layui-btn-normal" lay-event="delete" ><i class="layui-icon">&#xe640;删除</i></button>
+		<button type="button" class="layui-btn layui-btn-normal" lay-event="update" style="text-align: -moz-center"><span class="sp"><i class="layui-icon">&#xe642;修改</i></span></button>
+		<button type="button" class="layui-btn layui-btn-normal" lay-event="delete" ><span class="sp"><i class="layui-icon">&#xe640;删除</i></span></button>
 	</script>
 </body>
 
@@ -63,10 +87,14 @@
 			, table = layui.table
 			, $ = layui.jquery
 			, upload = layui.upload;
+		form.render();
 		var path = $("#path").val();
 
 		$(function () {
-			$("#mName").blur(function () {
+			// $("#mySelect select").change(function ()
+			form.on('select(mySelect)',function () {
+			// {
+				form.render('select');
 				var readMagName = $("#mName").val();
 				document.getElementById('btn-add').style.display = "block";
 				// $.ajax({
@@ -78,19 +106,19 @@
 				// 	success: function (data) {
 						var tableIns = table.render({
 							elem: '#upload'
-							, height: 300
-							, url: path + "/admin/readMgrInfo?readmagname="+readMagName+""//数据接口
+							, height: 350
+							, url: path + "/admin/findReadInfoByName?readmagname="+readMagName+""//数据接口
 							, page: true //开启分页
 							, limit: 2
 							, limits: [2, 5]
 							, cols: [[ //表头
-								{field: 'readmagpage', title: '页数', align: 'center', width: 100, sort: true, fixed: 'left'}
-								, {field: 'readmagdetail', title: '故事内容', align: 'center', width: 120 }
+								{field: 'readmagpage', title: '页数', align: 'center', width: 160, sort: true, fixed: 'left'}
+								, {field: 'readmagdetail', title: '故事内容', align: 'center', width: 360 }
 								, {
 									field: 'photourl', title: '图片', align: 'center', width: 240
 									, templet: function (d) { return '<div><img src="'+path+'/'+d.photourl+'" style="width: 60px;height: 60px"></div>' }
 								}
-								, {fixed: 'right', title: '操作', align: 'center', width: 300, toolbar: '#barOption'}
+								, {fixed: 'right', title: '操作', align: 'center', width: 442, toolbar: '#barOption'}
 							]]
 							, id: 'uploadTable'
 							, parseData: function (res) { //res 即为原始返回的数据
@@ -113,14 +141,15 @@
 			var readMagName = $("#mName").val();
 			layer.open({
 				type: 2,
-				area: ['60%', '80%'],
+				area: ['40%', '80%'],
 				content: path+"/admin/toUrl/addPhotoInfo", //数组第二项即吸附元素选择器或者DOM
-				title: '新增图片',
+				title: ['新增图片','font-size:18px'],
 				// btn: ['保存','取消'],
-				offset: '30px',
+				// offset: '30px',
+				// closeBtn:0,
 				btnAlign: 'c',
 				success:function(layero, index){
-					layero.find('.layui-layer-btn0').id('test9');
+					// layero.find('.layui-layer-btn0').id('test9');
 					var body = layer.getChildFrame('body',index);
 					body.find("#readMagName1").val(readMagName);
 				}

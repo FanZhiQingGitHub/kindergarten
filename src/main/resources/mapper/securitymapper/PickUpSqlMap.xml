@@ -5,8 +5,8 @@
 <mapper namespace="com.great.kindergarten.security.mapper.SecurityMapper">
 
     <!--    查找班级信息，不带分页，作为搜索条件-->
-    <select id="findAllClass" resultType="com.great.kindergarten.commons.entity.TblClass">
-        select * from tbl_class
+    <select id="findAllClass" resultType="com.great.kindergarten.commons.entity.TblClass" parameterType="java.util.Map">
+        select * from tbl_class cla,tbl_kinder kin where cla.kid = kin.kinderid and kin.kindername=#{kindername}
     </select>
 
     <resultMap id="pickUpInfoMap" type="com.great.kindergarten.commons.entity.TblDate">
@@ -47,9 +47,9 @@
     <select id="findALLPickUpInfo" resultMap="pickUpInfoMap"
             parameterType="com.great.kindergarten.security.resultbean.PickUpInfoPage">
         select am.timeamid, stu.studentid,stu.studentname,stu.studentsex,cla.classname,th.teachername
-        from tbl_date da,tbl_stutimeam am ,tbl_student stu ,tbl_teacher th ,tbl_class cla
+        from tbl_date da,tbl_stutimeam am ,tbl_student stu ,tbl_teacher th ,tbl_class cla,tbl_kinder kin
         <where>
-            am.did =da.dateid and am.sid = stu.studentid and stu.cid = cla.classid and th.cid = cla.classid
+            am.did =da.dateid and am.sid = stu.studentid and stu.cid = cla.classid and th.cid = cla.classid and stu.kid = kin.kinderid and kin.kindername = #{kindername}
             <if test="uStuName != '' and uStuName != null ">
                 and stu.studentname = #{uStuName}
             </if>
@@ -69,9 +69,9 @@
 
     <select id="findALLPickUpInfoCount" resultType="java.lang.Long"
             parameterType="com.great.kindergarten.security.resultbean.PickUpInfoPage">
-        select count(*) from tbl_date da,tbl_stutimeam am ,tbl_student stu ,tbl_teacher th ,tbl_class cla
+        select count(*) from tbl_date da,tbl_stutimeam am ,tbl_student stu ,tbl_teacher th ,tbl_class cla,tbl_kinder kin
         <where>
-            am.did =da.dateid and am.sid = stu.studentid and stu.cid = cla.classid and th.cid = cla.classid
+            am.did =da.dateid and am.sid = stu.studentid and stu.cid = cla.classid and th.cid = cla.classid and stu.kid = kin.kinderid and kin.kindername = #{kindername}
             <if test="uStuName != '' and uStuName != null ">
                 and stu.studentname = #{uStuName}
             </if>

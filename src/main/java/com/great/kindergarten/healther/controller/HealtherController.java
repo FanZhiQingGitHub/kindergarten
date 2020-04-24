@@ -101,19 +101,20 @@ public class HealtherController {
         Boolean confirm = code.equalsIgnoreCase(healthercode);
         if (confirm) {
             String healtherstatus = healtherService.findHealtherStatus(healthername);
-            if (healtherstatus.equals("启用")) {
+            if ("启用".equals(healtherstatus)) {
                 TblHealther Healther = healtherService.healtherLogin(healthername, healtherpwd);
                 if (null != Healther) {
+                    ResponseUtils.outHtml(response, "success");
                     List<TblHealther> tblHealtherList = new ArrayList<>();
                     tblHealtherList.add(Healther);
-                    List<TblClass> tblClassList = healtherService.findAllClass();
                     kindername = (String) request.getSession().getAttribute("kindername");
                     List<TblCampus> tblCampuses = healtherService.findHealtherNews(kindername);
+                    List<TblClass> tblClassList = healtherService.findAllClass(kindername);
+                    System.out.println("tblCampuses="+tblCampuses);
                     request.getSession().setAttribute("tblCampuses", tblCampuses);
                     request.getSession().setAttribute("tblClassList", tblClassList);
                     request.getSession().setAttribute("healthername", healthername);
                     request.getSession().setAttribute("tblHealtherList", tblHealtherList);
-                    ResponseUtils.outHtml(response, "success");
                 }
             } else {
                 ResponseUtils.outHtml(response, "notmen");
@@ -124,21 +125,48 @@ public class HealtherController {
     }
 
 
+
+    //根据园所查找所有班级信息
+    @RequestMapping("/findAllClassInfo")
+    public void findAllClassInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        kindername = (String) request.getSession().getAttribute("kindername");
+        List<TblClass> tblClassList = healtherService.findAllClass(kindername);
+        Gson g = new Gson();
+        if (0 != tblClassList.size()) {
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            Object[] info = tblClassList.toArray();
+            String result = g.toJson(info);
+            response.getWriter().print(result);
+        } else {
+            response.getWriter().print("error");
+        }
+    }
+
+
+    @RequestMapping("/findExistHealtherName")
+    public void findExistHealtherName(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
+        request.getSession().setAttribute("healthername", tblHealther.getHealthername());
+        Integer num = healtherService.findExistHealtherName(tblHealther.getHealthername());
+        if (num > 0) {
+            ResponseUtils.outHtml(response, "success");
+        } else {
+            ResponseUtils.outHtml(response, "notmen");
+        }
+    }
+
+
     @HealtherSystemLog(operationType = "重置密码", operationName = "保健员重置密码")
     @RequestMapping("/resetHealtherpwd")
     public void resetHealtherpwd(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
-        request.getSession().setAttribute("healthername",tblHealther.getHealthername());
-        Integer num = healtherService.findExistHealtherName(tblHealther.getHealthername());
-        if(num > 0){
-            Boolean flag = healtherService.resetHealtherpwd(tblHealther.getHealthername(),tblHealther.getHealtherphone());
-            if(flag){
-                request.getSession().removeAttribute("healthername");//重置成功后清除掉
-                ResponseUtils.outHtml(response,"success");
-            }else {
-                ResponseUtils.outHtml(response,"error");
-            }
-        }else {
-            ResponseUtils.outHtml(response,"notmen");
+        request.getSession().setAttribute("healthername", tblHealther.getHealthername());
+        Boolean flag = healtherService.resetHealtherpwd(tblHealther.getHealthername(), tblHealther.getHealtherphone());
+        if (flag) {
+            request.getSession().removeAttribute("healthername");//重置成功后清除掉
+            ResponseUtils.outHtml(response, "success");
+        } else {
+            ResponseUtils.outHtml(response, "error");
         }
     }
 
@@ -171,7 +199,6 @@ public class HealtherController {
     @RequestMapping("/showALLExamination")
     public void showALLExamination(HttpServletRequest request, HttpServletResponse response, DateWrite dateWrite) throws UnsupportedEncodingException {
         String likeName = request.getParameter("key");
-
         Integer page = Integer.valueOf(request.getParameter("page"));
         Integer limit = Integer.valueOf(request.getParameter("limit"));
         String cName = null;
@@ -180,25 +207,33 @@ public class HealtherController {
         }
         Integer minpage = (page - 1) * limit;
         Integer maxpage = limit;
-        ExaminationPage examinationPage = new ExaminationPage(cName, minpage, maxpage);
-        List<TblExamination> tblExaminationList = healtherService.findALLExamination(examinationPage);
-        if (0 != tblExaminationList.size()) {
-            Integer count = healtherService.findALLExaminationCount(examinationPage).intValue();
-            dateWrite.setCode(0);
-            dateWrite.setMsg("");
-            dateWrite.setCount(count);
-            dateWrite.setData(tblExaminationList);
+        if(null == kindername){
+            dateWrite.setMsg("亲，暂无相关数据，请登录幼儿园后查看！");
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
-            request.getSession().setAttribute("cName", cName);
             ResponseUtils.outJson(response, dateWrite);
         }else {
-            dateWrite.setMsg("亲，暂无相关数据");
-            request.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            ResponseUtils.outJson(response, dateWrite);
+            ExaminationPage examinationPage = new ExaminationPage(kindername,cName, minpage, maxpage);
+            List<TblExamination> tblExaminationList = healtherService.findALLExamination(examinationPage);
+            if (0 != tblExaminationList.size()) {
+                Integer count = healtherService.findALLExaminationCount(examinationPage).intValue();
+                dateWrite.setCode(0);
+                dateWrite.setMsg("");
+                dateWrite.setCount(count);
+                dateWrite.setData(tblExaminationList);
+                request.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html");
+                response.setCharacterEncoding("UTF-8");
+                request.getSession().setAttribute("cName", cName);
+                ResponseUtils.outJson(response, dateWrite);
+            } else {
+                dateWrite.setMsg("亲，暂无相关数据");
+                request.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html");
+                response.setCharacterEncoding("UTF-8");
+                ResponseUtils.outJson(response, dateWrite);
+            }
         }
     }
 
@@ -216,7 +251,7 @@ public class HealtherController {
     @HealtherSystemLog(operationType = "增加", operationName = "保健员新增体检信息")
     @RequestMapping("/addExaminationInfo")
     public void addExaminationInfo(TblExamination tblExamination, HttpServletResponse response) throws ParseException {
-        Integer studentid = healtherService.findStudentId(tblExamination.getStudentname());
+        Integer studentid = healtherService.findStudentId(tblExamination.getStudentname(),kindername);
         if (studentid == null) {
             ResponseUtils.outHtml(response, "notname");
         } else {
@@ -240,25 +275,34 @@ public class HealtherController {
 
         Integer minpage = (page - 1) * limit;
         Integer maxpage = limit;
-        mealPage.setPage(minpage);
-        mealPage.setLimit(maxpage);
-        List<TblMeal> tblMealList = healtherService.findAllMealInfo(mealPage);
-        if (0 != tblMealList.size()) {
-            Integer count = healtherService.findAllMealInfoCount(mealPage).intValue();
-            dateWrite.setCode(0);
-            dateWrite.setMsg("");
-            dateWrite.setCount(count);
-            dateWrite.setData(tblMealList);
+        if(null == kindername){
+            dateWrite.setMsg("亲，暂无相关数据，请登录幼儿园后查看！");
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
         }else {
-            dateWrite.setMsg("亲，暂无相关数据");
-            request.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            ResponseUtils.outJson(response, dateWrite);
+            mealPage.setKindername(kindername);
+            mealPage.setPage(minpage);
+            mealPage.setLimit(maxpage);
+            List<TblMeal> tblMealList = healtherService.findAllMealInfo(mealPage);
+            if (0 != tblMealList.size()) {
+                Integer count = healtherService.findAllMealInfoCount(mealPage).intValue();
+                dateWrite.setCode(0);
+                dateWrite.setMsg("");
+                dateWrite.setCount(count);
+                dateWrite.setData(tblMealList);
+                request.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html");
+                response.setCharacterEncoding("UTF-8");
+                ResponseUtils.outJson(response, dateWrite);
+            } else {
+                dateWrite.setMsg("亲，暂无相关数据");
+                request.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html");
+                response.setCharacterEncoding("UTF-8");
+                ResponseUtils.outJson(response, dateWrite);
+            }
         }
     }
 
@@ -281,43 +325,50 @@ public class HealtherController {
         Date mealstarttime = format.parse(time1);
         Date mealendtime = format.parse(time2);
 
-        List<TblMeal> tblMealList = new ArrayList<>();
-        tblMeal.setMealstarttime(mealstarttime);
-        tblMeal.setMealendtime(mealendtime);
-        tblMealList.add(tblMeal);
-        Boolean flag = null;
-        flag = healtherService.addMealInfo(tblMealList);
-        if (flag) {
-            Integer mealid = healtherService.findMealID(mealstarttime, mealendtime);
-            String info = "暂未配置";
-            for (int i = 0; i < tblRecipeList.size(); i++) {
-                tblRecipeList.get(i).setMid(mealid);
-                tblRecipeList.get(i).getFriday();
-
-                if ("".equals(tblRecipeList.get(i).getMonday())) {
-                    tblRecipeList.get(i).setMonday(info);
-                }
-                if ("".equals(tblRecipeList.get(i).getTuesday())) {
-                    tblRecipeList.get(i).setTuesday(info);
-                }
-                if ("".equals(tblRecipeList.get(i).getWednesday())) {
-                    tblRecipeList.get(i).setWednesday(info);
-                }
-                if ("".equals(tblRecipeList.get(i).getThursday())) {
-                    tblRecipeList.get(i).setThursday(info);
-                }
-                if ("".equals(tblRecipeList.get(i).getFriday())) {
-                    tblRecipeList.get(i).setFriday(info);
-                }
-            }
-            flag = healtherService.addRecipeInfo(tblRecipeList);
+        if(null == kindername){
+            ResponseUtils.outHtml(response, "notkinder");
+        }else {
+            Integer kinderid = healtherService.findKinderID(kindername);
+            List<TblMeal> tblMealList = new ArrayList<>();
+            tblMeal.setMealstarttime(mealstarttime);
+            tblMeal.setMealendtime(mealendtime);
+            tblMeal.setKid(kinderid);
+            tblMealList.add(tblMeal);
+            Boolean flag = null;
+            flag = healtherService.addMealInfo(tblMealList);
             if (flag) {
-                ResponseUtils.outHtml(response, "success");
+                Integer mealid = healtherService.findMealID(mealstarttime, mealendtime);
+                String info = "暂未配置";
+                for (int i = 0; i < tblRecipeList.size(); i++) {
+                    tblRecipeList.get(i).setMid(mealid);
+                    tblRecipeList.get(i).setKid(kinderid);
+                    tblRecipeList.get(i).getFriday();
+
+                    if ("".equals(tblRecipeList.get(i).getMonday())) {
+                        tblRecipeList.get(i).setMonday(info);
+                    }
+                    if ("".equals(tblRecipeList.get(i).getTuesday())) {
+                        tblRecipeList.get(i).setTuesday(info);
+                    }
+                    if ("".equals(tblRecipeList.get(i).getWednesday())) {
+                        tblRecipeList.get(i).setWednesday(info);
+                    }
+                    if ("".equals(tblRecipeList.get(i).getThursday())) {
+                        tblRecipeList.get(i).setThursday(info);
+                    }
+                    if ("".equals(tblRecipeList.get(i).getFriday())) {
+                        tblRecipeList.get(i).setFriday(info);
+                    }
+                }
+                flag = healtherService.addRecipeInfo(tblRecipeList);
+                if (flag) {
+                    ResponseUtils.outHtml(response, "success");
+                } else {
+                    ResponseUtils.outHtml(response, "error");
+                }
             } else {
                 ResponseUtils.outHtml(response, "error");
             }
-        } else {
-            ResponseUtils.outHtml(response, "error");
         }
     }
 
@@ -325,9 +376,10 @@ public class HealtherController {
     public void showAllRecipeInfo(DateWrite dateWrite, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         String mealid = request.getParameter("mealid");
         Integer mid = Integer.valueOf(mealid);
-        List<TblRecipe> tblRecipeList = healtherService.findAllRecipeInfo(mid);
+        Integer kinderid = healtherService.findKinderID(kindername);
+        List<TblRecipe> tblRecipeList = healtherService.findAllRecipeInfo(mid,kinderid);
         if (0 != tblRecipeList.size()) {
-            Integer count = healtherService.findAllRecipeInfoCount(mid).intValue();
+            Integer count = healtherService.findAllRecipeInfoCount(mid,kinderid).intValue();
             dateWrite.setCode(0);
             dateWrite.setMsg("");
             dateWrite.setCount(count);
@@ -336,7 +388,7 @@ public class HealtherController {
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
-        }else {
+        } else {
             dateWrite.setMsg("亲，暂无相关数据");
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
@@ -389,7 +441,6 @@ public class HealtherController {
             ResponseUtils.outHtml(response, "error");
         }
     }
-
 
 
 }

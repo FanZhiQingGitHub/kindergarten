@@ -19,18 +19,43 @@
 	<script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
 	<script src="${pageContext.request.contextPath}/layui/layui.js"></script>
 	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body,html{
+			height: 100%;
+			overflow:hidden;
+		}
+
+		#header{
+			width: 100%;
+			height: 80px;
+		}
+
+		#scroll{
+			width: 220px;
+
+		}
+
+		#index-commonmenu
+		{
+			top:80px;
+		}
+
 		#exit{
 			background: #040404;
 		}
+
 		#title{
-			padding: 2%;
-			font-size: 18px;
+			padding: 5%;
+			font-size: 22px;
 			line-height: 120%;
 		}
 		.menu_div_item{
-			font-size: 16px;
+			font-size: 20px;
 			color: #8f9199;
-			padding: 2%;
+			padding: 5%;
 			line-height: 180%;
 		}
 	</style>
@@ -39,11 +64,12 @@
 	<input type="hidden" id="kindername" value="${kindername}">
 	<input type="hidden" id="path" value="<%=path%>">
 	<div class="layui-layout layui-layout-admin">
-		<div class="layui-header">
-			<div class="layui-logo" >智慧幼儿园平台端管理系统</div>
+
+		<div class="layui-header" id="header">
+			<div class="layui-logo" style="width: 300px;margin: 0.5% 0;font-size: 175%">智慧幼儿园平台端管理系统</div>
 				<ul class="layui-nav layui-layout-right">
 					<li class="layui-nav-item">
-						<a href="javascript:;">
+						<a href="javascript:;" style="margin: 2% -20%;font-size: 165%;">
 							<img id="adminheadurl" class="layui-nav-img" style="width: 30px;height: 30px">
 							<%
 								String adminname = (String) request.getSession().getAttribute("adminname");
@@ -56,13 +82,13 @@
 						</dl>
 					</li>
 					<button type="button" class="layui-btn layui-btn-normal" style="background-color: transparent" id="exit" lay-submit lay-filter="logout">
-						退出
+						<span style="font-size: 165%;">退出</span>
 					</button>
 				</ul>
 		</div>
 
 		<div id="index-commonmenu" class="layui-side layui-bg-black">
-			<div class="layui-side-scroll">
+			<div class="layui-side-scroll" id="scroll">
 				<c:if test="${not empty menuMap}">
 					<c:forEach items="${menuMap}" var="i">
 						<div onclick="showOrHide(this)" id="title">
@@ -79,8 +105,8 @@
 				</c:if>
 			</div>
 		</div>
-		<!-- 内容主体区域 -->
-		<div class="layui-body">
+
+		<div class="layui-body" id="body">
 			<iframe id="iframeMain" name="iframeMain" src="" style="width: 100%" height="100%" ></iframe>
 		</div>
 	</div>

@@ -15,6 +15,7 @@
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
 		body{
+			font-size: 140%;
 			overflow:hidden;
 		}
 		#uploadImg{
@@ -25,38 +26,51 @@
 			height: 50px;
 		}
 		#save{margin-left: 30%;}
+
+		.layui-input{
+			width:140%;
+			margin: auto;
+		}
+		a{
+			font-size: 140%;
+		}
+		.sp{
+			font-size: 140%;
+			height: 40px;
+			line-height: 40px;
+		}
 	</style>
 </head>
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
 	<form class="layui-form" action=""  enctype="multipart/form-data" lay-filter="example">
 		<div class="layadmin-user-login-box layadmin-user-login-header">
-			<div class="layui-form-item">
-				<label class="layui-form-label">图片信息：</label>
+			<div class="layui-form-item" style="margin-top: 5%;" >
+				<label class="layui-form-label" style="width: auto">图片信息：</label>
 				<div class="layui-input-inline">
 					<img class="layui-upload-img" id="demo1">
 				</div>
 				<button type="button" class="layui-btn layui-btn-normal" name="file" id="uploadImg"><i class="layui-icon">&#xe67c;上传图片</i></button>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">内容信息：</label>
+				<label class="layui-form-label" style="width: auto">内容信息：</label>
 				<div class="layui-input-inline">
-					<textarea type="text" name="contentInfo" id="contentInfo" lay-verify="title" autocomplete="off" placeholder="请输入绘本信息" class="layui-input" style="width: 300px;height: 80px"></textarea>
+					<textarea type="text" name="contentInfo" id="contentInfo" lay-verify="title" autocomplete="off" placeholder="请输入绘本信息" class="layui-input" style="width:140%;height: 150px"></textarea>
 				</div>
 			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">页数：</label>
+			<div class="layui-form-item" style="margin-left: 7.5%">
+				<label class="layui-form-label" style="width: auto">页数：</label>
 				<div class="layui-input-inline">
 					<input type="text" name="pageNum" id="pageNum" lay-verify="title" autocomplete="off"
-					       class="layui-input"style="width: 300px">
+					       class="layui-input">
 				</div>
 			</div>
-			<input type="hidden" id="readMagName1" name="readMagName1">
+			<input type="hidden" id="readMagName1" name="readMagName1" value="">
 			<div class="demoTable">
 				<div style="padding-bottom: 10px;">
 					<div class="layui-upload">
-						<button type="button" class="layui-btn" id="save">保存</button>
-						<button type="button" class="layui-btn" id="cancel">取消</button>
+						<button type="button" class="layui-btn" id="save"><span class="sp">保存</span></button>
+						<button type="button" class="layui-btn" id="cancel"><span class="sp">取消</span></button>
 					</div>
 				</div>
 			</div>
@@ -106,13 +120,22 @@
 				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
 				setTimeout(function () {
 					parent.layer.close(index); //再执行关闭
-				}, 3000);
+					parent.location.reload();
+				}, 1000);
 			}
 			,error: function(){
 				//请求异常回调
 				layer.alert("上传失败！",{icon:2});
 			}
 		});
+
+		$(function () {
+			$("#cancel").click(function () {
+				var path = $("#path").val();
+				parent.location.href = path+"/admin/toUrl/uploadPictureBooks";
+				$("#mName").val($("#readMagName1").val());
+			})
+		})
 	});
 </script>
 </html>
