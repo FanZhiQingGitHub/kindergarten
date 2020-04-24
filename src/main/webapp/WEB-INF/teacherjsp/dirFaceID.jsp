@@ -118,7 +118,7 @@
 				}else {
 					//用ajax做验证 ,判断是否验证成功
 					$.ajax({
-						url: path+'/director/addTeaAttendTime',
+						url: path+'/teacher/addTeaAttendTime',
 						type:"post",
 						async: true,
 						cache: false,
@@ -168,7 +168,7 @@
 					area: ['400px', '500px'],
 					offset: ['120px', '650px'],
 					title: '新增请假信息',
-					content: path + '/director/toUrl/addLeaveManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					content: path + '/teacher/toUrl/addLeaveManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 					, success: function (layero, index) {
 					}
 				});
