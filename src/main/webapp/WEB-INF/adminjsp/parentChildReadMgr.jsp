@@ -17,23 +17,29 @@
 	<style>
 
 		h2 {
+			margin-top: 2%;
 			text-align: center;
 		}
-		.layui-table-cell{
-			/*margin-top: 3%;*/
-			height:38px;
-			line-height: 38px;
-			/*white-space:normal;*/
-			/*display:table-cell;*/
-			/*vertical-align: middle;*/
-			/*height:auto;*/
-			/*overflow:visible;*/
-			/*text-overflow:inherit;*/
+		body{
+			font-size: 140%;
 		}
-
-		/*#readImg{*/
-		/*	height: 100px;*/
-		/*}*/
+		.layui-input{
+			width:120%;
+			margin: auto;
+		}
+		.layui-table-cell{
+			height: 45px;
+			line-height: 45px;
+			font-size: 140%;
+		}
+		a{
+			font-size: 140%;
+		}
+		.sp{
+			font-size: 140%;
+			height: 40px;
+			line-height: 40px;
+		}
 
 	</style>
 </head>
@@ -43,68 +49,69 @@
 	<div class="layui-row" >
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="readTable">
-				<div class="layui-form-item" style="margin-left: 3%">
+				<div class="layui-form-item" style="margin-left: 6%">
 					<div class="layui-block">查询条件：</div>
 					<div class="layui-inline">
-						<span class="layui-form-label">上传时间：</span>
+						<span class="layui-form-label" style="width: auto">上传时间：</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" style="width: 82%;margin-top: 2% ">
+							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" >
 						</div>
 					</div>
 					<div class="layui-inline">
-						<span class="layui-form-label" style="margin-left: -40%">至</span>
+						<span class="layui-form-label" style="margin: 5% 15%;width: 10%">至</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 2% 0 0 -5%">
+							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="margin: -27% 65%;">
 						</div>
 					</div>
-					<button class="layui-btn" data-type="reload" style="margin-left: -8%"><i class="layui-icon">&#xe615;查询</i></button>
+					<button class="layui-btn" data-type="reload" style="margin-left: 10%"><i class="layui-icon">&#xe615;查询</i></button>
 					<button class="layui-btn btn-add btn-default" id="btn-add" ><i class="layui-icon">&#xe681;上传绘本</i></button>
 				</div>
-				<div class="layui-form-item">
+				<div class="layui-form-item" style="margin-left: 6%">
 					<div class="layui-inline">
-						<span class="layui-form-label" style="margin-left: 11%">绘本名称：</span>
+						<span class="layui-form-label" style="width: auto">绘本名称：</span>
 						<div class="layui-input-inline">
-							<input type="text" class="layui-input" name="readMagName" id="readMagName" placeholder="请输入绘本名称" style="width: 82%;margin: -20% 0 0 75%;">
+							<input type="text" class="layui-input" name="readMagName" id="readMagName" placeholder="请输入绘本名称" >
 						</div>
 					</div>
 				</div>
 			</div>
 		</form>
 	</div>
-	<table id="read" lay-filter="test" class="layui-table-cell" style="margin-top: -2%"></table>
+	<table id="read" lay-filter="test" class="layui-table-cell" ></table>
+
 	<div id="type-content" style="display: none;">
 		<form class="layui-form" action="">
-			<div class="layui-form-item">
-				<label class="layui-form-label" style="">绘本名称：</label>
+			<div class="layui-form-item" style="margin: 4% 6%">
+				<label class="layui-form-label" style="width: auto">绘本名称：</label>
 				<div class="layui-input-inline">
-					<input type="text" class="layui-input" name="readMagName2" id="readMagName2" value="" placeholder="" style="width: 122%;margin-top: 1%">
+					<input type="text" class="layui-input" name="readMagName2" id="readMagName2" value="" placeholder="" style="margin-top: 1%;width: 230%">
 				</div>
 			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">绘本图片：</label>
+			<div class="layui-form-item" style="margin-left: 6%">
+				<label class="layui-form-label" style="width: auto">绘本图片：</label>
 				<div class="layui-input-inline">
-					<input type="text" id="readMagPic" name="readMagPic" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="width: 122%">
-				</div>
-			</div>
-
-			<div class="layui-form-item">
-				<label class="layui-form-label">文件地址：</label>
-				<div class="layui-input-inline">
-					<input type="text" id="readMagUrl" name="readMagUrl" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="width: 122%">
+					<input type="text" id="readMagPic" name="readMagPic" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="margin-top: 1%;width: 180%">
 				</div>
 			</div>
 
-			<div class="layui-form-item">
-				<label class="layui-form-label">页数：</label>
+			<div class="layui-form-item" style="margin-left: 6%">
+				<label class="layui-form-label" style="width: auto">文件地址：</label>
 				<div class="layui-input-inline">
-					<input type="text" id="readMagPage" name="readMagPage" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="width: 122%">
+					<input type="text" id="readMagUrl" name="readMagUrl" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="margin-top: 1%;width: 230%">
+				</div>
+			</div>
+
+			<div class="layui-form-item" style="margin-left: 6%">
+				<label class="layui-form-label" style="width: auto;margin-left: 8%">页数：</label>
+				<div class="layui-input-inline">
+					<input type="text" id="readMagPage" name="readMagPage" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="margin-top: 1%;width: 230%">
 				</div>
 			</div>
 		</form>
 	</div>
 
 	<div id="type-content2" style="display: none;">
-		<button class="layui-btn" style="margin-top: 3%" id="reback">返回亲子阅读管理</button>
+		<button class="layui-btn" style="margin-top: 3%" id="reback"><span class="sp">返回亲子阅读管理</span></button>
 		<h1 align="center" id="titleName" > </h1>
 
 		<div align="center">
@@ -137,9 +144,9 @@
 	</div>
 
 	<script type="text/html" id="barOption">
-		<button type="button" class="layui-btn layui-btn-sm" lay-event="detail" style="text-align: -moz-center"><i class="layui-icon">&#xe642;查看绘本</i></button>
-		<button type="button" class="layui-btn layui-btn-sm" lay-event="reUpload" style="text-align: -moz-center"><i class="layui-icon">&#xe642;重新上传</i></button>
-		<button type="button" class="layui-btn layui-btn-sm" lay-event="delete" ><i class="layui-icon">&#xe640;删除</i></button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="detail" style="height: 40px"><span class="sp"><i class="layui-icon">&#xe642;查看绘本</i></span></button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="reUpload" style="height: 40px"><span class="sp"><i class="layui-icon">&#xe642;重新上传</i></span></button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="delete" style="height: 40px"><span class="sp"><i class="layui-icon">&#xe640;删除</i></span></button>
 	</script>
 </body>
 <script>
@@ -160,25 +167,25 @@
 		path = $("#path").val();
 		var tableIns = table.render({
 			elem: '#read'
-			, height: 350
+			, height: 450
 			, url: path + "/admin/readMgrInfo"//数据接口
 			, page: true //开启分页
 			, limit: 5
 			, limits: [5, 10]
 			, cols: [[ //表头
-				{field: 'readmagid', title: '绘本编号', align: 'center', width: 120, sort: true, fixed: 'left'}
-				, {field: 'readmagname', title: '绘本名称', align: 'center', width: 120,
-					templet: '<div ><a href="${pageContext.request.contextPath}/{{d.readmagurl}}" class="layui-table-link">{{d.readmagname}}</a></div>'}
-				, {field: 'readmagurl', title: '文件夹地址', align: 'center', width: 202
+				{field: 'readmagid', title: '绘本编号', align: 'center', width: 180, sort: true, fixed: 'left'}
+				, {field: 'readmagname', title: '绘本名称', align: 'center', width: 240,
+					templet: '<div ><a href="${pageContext.request.contextPath}/{{d.readmagurl}}" class="layui-table-link" style="font-size:100%">{{d.readmagname}}</a></div>'}
+				, {field: 'readmagurl', title: '文件夹地址', align: 'center', width: 300
 				}
-				, {field: 'photourl', title: '图片地址', align: 'center', width: 120
-					, templet: function (d) { return '<div><img src="'+path+'/'+d.photourl+'" style="width: 40px;height: 40px"></div>' }
+				, {field: 'photourl', title: '图片地址', align: 'center', width: 180
+					, templet: function (d) { return '<div><img src="'+path+'/'+d.photourl+'" style="width: 45px;height: 45px"></div>' }
 				}
 				, {
-					field: 'readmagtime', title: '上传时间', align: 'center', width: 180
+					field: 'readmagtime', title: '上传时间', align: 'center', width: 280
 					, templet: "<div>{{layui.util.toDateString(d.readmagtime,'yyyy-MM-dd HH:mm:ss')}}</div>"
 				}
-				, {fixed: 'right', title: '操作', align: 'center', width: 400, toolbar: '#barOption'}
+				, {fixed: 'right', title: '操作', align: 'center', width: 540, toolbar: '#barOption'}
 			]]
 			, id: 'readTable'
 			, parseData: function (res) { //res 即为原始返回的数据
@@ -203,9 +210,9 @@
 						area: ['50%', '85%'],
 						// content: path+"/admin/toUrl/pictureBookInfo", //数组第二项即吸附元素选择器或者DOM
 						content: $("#type-content2"),
-						title: '绘本详情',
+						title: ['绘本详情','font-size:18px'],
 						// btn: ['返回'],
-						offset: '10px',
+						// offset: '10px',
 						btnAlign: 'c',
 						closeBtn :0,
 						success : function(layero, index) {
@@ -239,7 +246,7 @@
 						}
 					});
 				}else if(layEvent === 'delete'){
-					layer.confirm("确定要删除该绘本信息？",{icon:3,title:'温馨提示'},function (index) {
+					layer.confirm("确定要删除该绘本信息？",{icon:3,title:'温馨提示',area:['350px','200px']},function (index) {
 						layer.close(index);
 						$.ajax({
 							url: path + "/admin/deleteReadInfo",
@@ -263,12 +270,12 @@
 				}else if(layEvent === 'reUpload'){
 					layer.open({
 						type: 1,
-						area: ['35%', '60%'],
+						area: ['35%', '55%'],
 						// content: path+"/admin/toUrl/reUploadPictureBook", //数组第二项即吸附元素选择器或者DOM
 						content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-						title: '修改绘本信息',
+						title: ['修改绘本信息','font-size:18px'],
 						btn: ['保存','返回'],
-						offset: '30px',
+						// offset: '30px',
 						btnAlign: 'c',
 						success:function(layero, index){
 							$("#readMagName2").val(data.readmagname);
@@ -367,11 +374,12 @@
 		$("#btn-add").click(function () {
 			layer.open({
 				type: 2,
-				area: ['70%', '90%'],
+				area: ['70%', '70%'],
 				content: path+"/admin/toUrl/uploadPictureBooks", //数组第二项即吸附元素选择器或者DOM
-				title: '上传绘本',
-				btn: ['保存', '取消'],
-				// offset: '100px',
+				title: ['上传绘本','font-size:18px'],
+				// btn: ['保存', '取消'],
+				closeBtn:0,
+				// offset: '50px',
 				btnAlign: 'c',
 				success:function(){
 

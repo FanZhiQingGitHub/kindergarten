@@ -116,89 +116,26 @@
             font-size: 30px;
             color: black;
         }
+        .main_left{ float:left; width:600px; position:relative}
+        .main_left img{ position:absolute}
+        .theimg{ top:90px; left:220px}
+        .secimg{top:90px; left:180px}
+        .firimg{top:90px; left:50px}
 
-        .main_left {
-            float: left;
-            width: 600px;
-            position: relative
-        }
+        .main_right{ width:456px; height:386px; float:right; padding-right:36px;}
+        .main_r_up{ height:74px;padding-top:20px;}
+        .main_r_up img{ float:left}
+        .main_r_up .pp{ float:left;height:74px; line-height:74px; font-size:18px; color:#333; padding-left:20px;letter-spacing:9px;}
 
-        .main_left img {
-            position: absolute
-        }
+        .footer{ width:100%; height:60px; line-height:60px; position:fixed; bottom:0; background:url(${pageContext.request.contextPath}/loginres/images/footerBg.png);background-color: transparent;}
+        .footer0{ width:1200px; height:60px; margin:0 auto; font-size:14px; color:#adacac}
+        .footer_l{ float:left}
+        .footer_r{ float:right}
 
-        .theimg {
-            top: 90px;
-            left: 220px
-        }
-
-        .secimg {
-            top: 90px;
-            left: 180px
-        }
-
-        .firimg {
-            top: 90px;
-            left: 50px
-        }
-
-        .main_right {
-            width: 456px;
-            height: 386px;
-            float: right;
-            padding-right: 36px;
-        }
-
-        .main_r_up {
-            height: 74px;
-            padding-top: 20px;
-        }
-
-        .main_r_up img {
-            float: left
-        }
-
-        .main_r_up .pp {
-            float: left;
-            height: 74px;
-            line-height: 74px;
-            font-size: 18px;
-            color: #333;
-            padding-left: 20px;
-            letter-spacing: 9px;
-        }
-
-        .footer {
-            width: 100%;
-            height: 60px;
-            line-height: 60px;
-            position: fixed;
-            bottom: 0;
-            background: url(${pageContext.request.contextPath}/loginres/images/footerBg.png);
-            background-color: transparent;
-        }
-
-        .footer0 {
-            width: 1200px;
-            height: 60px;
-            margin: 0 auto;
-            font-size: 14px;
-            color: #adacac
-        }
-
-        .footer_l {
-            float: left
-        }
-
-        .footer_r {
-            float: right
-        }
-
-        #bu3:hover {
+        #bu3:hover{
             color: #00FFFF;
         }
-
-        #bu4:hover {
+        #bu4:hover{
             color: #00FFFF;
         }
 
@@ -211,7 +148,6 @@
             background-color: transparent;
             color: black;
         }
-
         #bu4 {
             width: 30%;
             height: 8%;
@@ -245,9 +181,8 @@
             <div class="main_right">
 
                 <div class="main_r_up">
-                    <img src="${pageContext.request.contextPath}/loginres/images/head.png"/>
-                    <div class="pp"><img src="${pageContext.request.contextPath}/image/adminimg/img/adminLogin.png"
-                                         style="width: 300px;height: 45px;margin-top: 25px"/></div>
+                    <img src="${pageContext.request.contextPath}/loginres/images/head.png" />
+                    <div class="pp"><img src="${pageContext.request.contextPath}/image/adminimg/img/adminLogin.png" style="width: 300px;height: 45px;margin-top: 25px"/></div>
                 </div>
 
                 <hr style="color: white;">
@@ -255,7 +190,7 @@
                     <label class="layui-form-label">管理员</label>
                     <div class="layui-input-block">
                         <i class="layui-icon layui-icon-username admin-icon admin-icon-adminname"></i>
-                        <input type="text" name="adminname" lay-verify="required" placeholder="请输入管理员名称" value=""
+                        <input type="text" name="adminname" lay-verify="required" placeholder="请输入管理员名称" value="admin"
                                autocomplete="off" class="layui-input" id="te1">
                     </div>
                 </div>
@@ -264,7 +199,7 @@
                     <div class="layui-input-inline">
                         <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
                         <input type="password" name="adminpwd" required lay-verify="pass" placeholder="请输入6-12位密码"
-                               value=""
+                               value="123456"
                                autocomplete="off" class="layui-input" id="te2">
                     </div>
                 </div>
@@ -284,8 +219,7 @@
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit
-                                lay-filter="formDemo">
+                        <button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="formDemo">
                             立即登录
                         </button>
                         <button type="button" class="layui-btn" id="bu3">忘记密码？</button>
@@ -299,10 +233,22 @@
     <div class="footer">
         <div class="footer0">
             <div class="footer_l">使用条款 | 隐私保护</div>
-            <div class="footer_r">@2020 最后#的小组 版权所有© &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E-MAIL:kindergarten@outlook.com</div>
+            <div class="footer_r">@2020 最后#的小组 版权所有© &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E-MAIL:kindergarten@outlook.com </div>
         </div>
     </div>
 
+    <div id="type-content" style="display: none;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <input type="text" id="adminname" placeholder="请输入您的登录用户名"
+                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
+            </div>
+            <div class="layui-inline">
+                <input type="text" id="adminphone" placeholder="请输入11位手机号码" value=""
+                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
+            </div>
+        </div>
+    </div>
 </form>
 
 <script>
@@ -323,7 +269,7 @@
                 /^[\S]{6,12}$/
                 , '您好，密码必须6~12位，且不能出现空格！'
             ],
-            code: function (value) {
+            code :function (value) {
                 if (value.length != 4) {
                     return '您好，验证码是4位数！';
                 }
@@ -346,19 +292,27 @@
                         layer.alert("登录成功！", {icon: 6}, function () {
                             location.href = path + "/admin/toUrl/adminMain";
                         });
-                    } else if (msg == "error") {
+                    } else if(msg == "error"){
                         layer.msg("登录失败！", {icon: 2});
-                    } else if (msg == "codeerror") {
+                        var code = document.getElementById("code");
+                        code.src = path + "/admin/loginCode?"+Math.random();
+                    }else if(msg == "codeerror") {
                         layer.msg("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
-                        code.src = path + "/admin/loginCode?" + Math.random();
-                    } else if (msg == "notmen") {
+                        code.src = path + "/admin/loginCode?"+Math.random();
+                    }else if(msg == "notmen"){
                         layer.msg("该用户已被禁用或者不存在！", {icon: 2});
-                    } else if (msg == "pwderror") {
+                        var code = document.getElementById("code");
+                        code.src = path + "/admin/loginCode?"+Math.random();
+                    }else if(msg == "pwderror"){
                         layer.msg("账号密码错误，请确认！", {icon: 2});
+                        var code = document.getElementById("code");
+                        code.src = path + "/admin/loginCode?"+Math.random();
                     }
                 }, error: function (msg) {
                     layer.msg("网络繁忙！", {icon: 2});
+                    var code = document.getElementById("code");
+                    code.src = path + "/admin/loginCode?"+Math.random();
                 }
             });
         });
@@ -367,16 +321,59 @@
             $("#code").click(function () {
                 var path = $("#path").val();
                 var code = document.getElementById("code");
-                code.src = path + "/admin/loginCode?" + Math.random();
+                code.src = path + "/admin/loginCode?"+Math.random();
 
-            }), $("#bu1").click(function () {
+            }),$("#bu1").click(function () {
                 var path = $("#path").val();
                 var code = document.getElementById("code");
-                code.src = path + "/admin/loginCode?" + Math.random();
+                code.src = path + "/admin/loginCode?"+Math.random();
 
-            }), $("#bu3").click(function () {
-                layer.alert("该功能尚未开放！", {icon: 6});
-            }), $("#bu4").click(function () {
+            }),$("#bu3").click(function () {
+                // layer.alert("该功能尚未开放！", {icon: 6});
+                var path = $("#path").val();
+                layer.open({
+                    type: 1,
+                    content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+                    title: '个人密码重置',
+                    btn: ['确定', '取消'],
+                    area: ['20%', '35%'],
+                    offset: ['30%'],
+                    btnAlign: 'c',
+                    btn1: function (index) {
+                        var adminname = $("#adminname").val();
+                        var adminphone = $("#adminphone").val();
+                        var num = /^1\d{10}$/;
+                        if (adminname.length == 0) {
+                            layer.msg("您好，用户名不能为空！", {icon: 2});
+                        }else if (!num.test(adminphone)) {
+                            layer.alert("您好，手机号码必须11位，且不能出现空格！", {icon: 2});
+                        } else {
+                            $.ajax({
+                                url: path + '/admin/resetAdminPwd',
+                                async: true,
+                                type: 'post',
+                                data: {
+                                    "adminname": adminname,
+                                    "adminphone": adminphone
+                                },
+                                datatype: 'text',
+                                success: function (data) {
+                                    if (data == "error") {
+                                        layer.msg("重置失败！", {icon: 2});
+                                    } else {
+                                        layer.alert("重置成功，新密码为：'123456' ", {icon: 6});
+                                        $("#adminname").val("");
+                                        $("#adminphone").val("");
+                                        layer.close(index);
+                                    }
+                                }, error: function (data) {
+                                    layer.msg("网络繁忙！", {icon: 2});
+                                }
+                            });
+                        }
+                    }
+                });
+            }),$("#bu4").click(function () {
                 var path = $("#path").val();
                 location.href = path + "/main/path/main";
             });

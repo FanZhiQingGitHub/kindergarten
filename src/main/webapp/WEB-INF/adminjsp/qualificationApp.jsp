@@ -13,6 +13,26 @@
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
+		body{
+			font-size: 140%;
+		}
+		.layui-input{
+			width:120%;
+			margin: auto;
+		}
+		.layui-table-cell{
+			height: 45px;
+			line-height: 45px;
+			font-size: 140%;
+		}
+		a{
+			font-size: 140%;
+		}
+		.sp{
+			font-size: 140%;
+			height: 40px;
+			line-height: 40px;
+		}
 		h2{
 			text-align: center;
 			margin-top: 1%;
@@ -28,20 +48,20 @@
 				<div class="layui-form-item" style="margin-left: 6%">
 					<div class="layui-block">查询条件：</div>
 					<div class="layui-inline">
-						<span class="layui-form-label" >申请时间：</span>
+						<span class="layui-form-label" style="width: auto">申请时间：</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" style="width: 82%;margin-top: 2% ">
+							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" >
 						</div>
 					</div>
 					<div class="layui-inline">
-						<span class="layui-form-label" style="margin-left: -35%">至</span>
+						<span class="layui-form-label" style="margin: 5% 15%;width: 10%">至</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 2% 0 0 10%">
+							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="margin: -27% 65%;">
 						</div>
 					</div>
 					<div class="layui-inline" >
-						<span class="layui-form-label" style="margin-left: -55%">状态：</span>
-						<div class="layui-input-inline" style="margin-left: -18%;">
+						<span class="layui-form-label" style="margin-left: 35%">状态：</span>
+						<div class="layui-input-inline" style="margin: -13% 75%;">
 							<select name="sel" id="sel" lay-filter="mySelect" lay-verify="" >
 								<option value="请选择" >请选择</option>
 								<option value="未审核" >未审批</option>
@@ -53,27 +73,28 @@
 				</div>
 				<div class="layui-form-item" style="margin-left: 6%">
 					<div class="layui-inline">
-						<span class="layui-form-label">园所名称：</span>
+						<span class="layui-form-label" style="width: auto">园所名称：</span>
 						<div class="layui-input-inline">
-							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" style="width: 82%;margin-top: 3% ">
+							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" >
 						</div>
 					</div>
-					<button class="layui-btn" data-type="reload" ><i class="layui-icon">&#xe615;查询</i></button>
+					<button class="layui-btn" data-type="reload" style="margin-left: 8.5%;" ><i class="layui-icon">&#xe615;查询</i></button>
 				</div>
 			</div>
 		</form>
 	</div>
-	<table id="qualify" lay-filter="test"></table>
+	<table id="qualify" lay-filter="test" class="layui-table-cell"></table>
 	<script type="text/html" id="barOption">
 		{{#  if(d.kinderstatus == '通过'){ }}
-		<a type="button" class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="" style="width: 35%;height: 75%" >审批完成</a>
+		<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled" lay-event="" style="height: 40px;"><span class="sp">审批完成</span></a>
 		{{#  } }}
 		{{#  if(d.kinderstatus == '未审批'){ }}
-		<a type="button" class="layui-btn layui-btn-xs" lay-event="approve" style="width: 25%;height: 75%" >审批</a>
+		<a type="button" class="layui-btn layui-btn-sm" lay-event="approve" style="height: 40px;"><span class="sp">审批</span></a>
 		{{#  } }}
 		{{#  if(d.kinderstatus == '不通过'){ }}
-		<a type="button" class="layui-btn layui-btn-xs" lay-event="approve" style="width: 25%;height: 75%" >审批</a>
+		<a type="button" class="layui-btn layui-btn-sm" lay-event="approve" style="height: 40px;"><span class="sp">审批</span></a>
 		{{#  } }}
+		<a type="button" class="layui-btn layui-btn-sm" lay-event="look" style="height: 40px;"><span class="sp">查看</span></a>
 	</script>
 </body>
 <script>
@@ -89,20 +110,20 @@
 		var path = $("#path").val();
 		var tableIns = table.render({
 			elem: '#qualify'
-			, height: 312
+			, height: 450
 			, url: path + "/admin/qualifyAppInfo"//数据接口
 			, page: true //开启分页
 			, limit: 5
 			, limits: [5, 10]
 			, cols: [[ //表头
-				{field: 'kinderid', title: '序号', align: 'center', width: 120, sort: true, fixed: 'left'}
-				, {field: 'kindername', title: '园所名称', align: 'center', width: 220}
-				, {field: 'kinderregtime', title: '申请时间', align: 'center', width: 240
+				{field: 'kinderid', title: '序号', align: 'center', width: 160, sort: true, fixed: 'left'}
+				, {field: 'kindername', title: '园所名称', align: 'center', width: 320}
+				, {field: 'kinderregtime', title: '申请时间', align: 'center', width: 320
 					,templet:"<div>{{layui.util.toDateString(d.kinderregtime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
-				, {field: 'kinderapptime', title: '审批时间', align: 'center', width: 240
+				, {field: 'kinderapptime', title: '审批时间', align: 'center', width: 320
 				   ,templet:"<div>{{layui.util.toDateString(d.kinderapptime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
-				, {field: 'kinderstatus', title: '状态', align: 'center', width: 120}
-				, {fixed: 'right', title: '操作', align: 'center', width: 200, toolbar: '#barOption'}
+				, {field: 'kinderstatus', title: '状态', align: 'center', width: 160}
+				, {fixed: 'right', title: '操作', align: 'center', width: 442, toolbar: '#barOption'}
 			]]
 			, id: 'qualifyTable'
 			, parseData: function (res) { //res 即为原始返回的数据
@@ -121,22 +142,42 @@
 				data = obj.data; //获得当前行数据
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if (layEvent === 'approve') {
-					$.ajax({
-						url:path+"/admin/findTblKinderById",
-						type:'POST',
-						dataType:'text',
-						data:{"kinderid":data.kinderid},
-						success:function (msg) {
-						}
-					});
 					layer.open({
 						type:2
-						,title:"园所审批"
-						,area:['40%','100%']
+						,title: ['园所审批', 'font-size:18px;']
+						,area:['38%','90%']
 						,btn:['允许','拒绝']
 						,btnAlign: 'c'
+						,offset: '50px'
 						,content:path+"/admin/toUrl/gardenApproval"
 						,success : function(layero, index) {
+							$.ajax({
+								url:path+"/admin/findKinderInfoById",
+								type:'POST',
+								dataType:'json',
+								data:{"kinderid":data.kinderid},
+								success:function (result) {
+									var kinderInfo = eval(result);
+									var body = layer.getChildFrame('body',index);
+									for(i in kinderInfo)
+									{
+										body.find("#kindername").val(kinderInfo[i].kindername);
+										body.find("#kinderacount").val(kinderInfo[i].kinderacount);
+										body.find("#kinderlp").val(kinderInfo[i].rectorname);
+										body.find("#kinderlpid").val(kinderInfo[i].kinderlpid);
+										body.find("#kinderlpadd").val(kinderInfo[i].kinderlpadd);
+										body.find("#kinderlpphone").val(kinderInfo[i].kinderlpphone);
+										body.find("#schoolpermit").val(kinderInfo[i].schoolpermit);
+										body.find("#healthpermit").val(kinderInfo[i].healthpermit);
+										body.find("#firepermit").val(kinderInfo[i].firepermit);
+										body.find("#grouppermit").val(kinderInfo[i].grouppermit);
+										body.find("#registrationpermit").val(kinderInfo[i].registrationpermit);
+										body.find("#kinderstatus").val(kinderInfo[i].kinderstatus);
+										body.find("#kinderscale").val(kinderInfo[i].kinderscale);
+										body.find("#kinderfunds").val(kinderInfo[i].kinderfunds);
+									}
+								}
+							});
 						}
 						,btn1:function () {
 							$.ajax({
@@ -145,19 +186,21 @@
 								dataType:'text',
 								data:{"kinderid":data.kinderid},
 								success:function (result,index) {
-									console.log(result);
 									if (result == 'success')
 									{
-										layer.alert('审核成功！');
+										layer.alert('园所申请审批已通过！');
+										setTimeout(function () {
+											var index = parent.layer.getFrameIndex(window.name);
+											parent.layer.close(index); //再执行关闭
+											location.reload();
+										}, 1000);
 									}else if(result == 'codeerror')
 									{
 										layer.alert('无相关数据！');
 									}
 									else {
-										layer.alert('审核失败！');
+										layer.alert('园所审批失败！');
 									}
-									layer.close(index);
-									tableIns.reload();    //审核之后,刷新表格
 								}
 							});
 						}
@@ -170,19 +213,62 @@
 								success:function (result,index) {
 									if (result == 'success')
 									{
-										layer.alert('审核成功！');
+										layer.alert('园所申请审批未通过！');
+										setTimeout(function () {
+											var index = parent.layer.getFrameIndex(window.name);
+											parent.layer.close(index); //再执行关闭
+											tableIns.reload();
+										}, 1000);
 									}else if(result == 'codeerror')
 									{
 										layer.alert('无相关数据！');
 									}
 									else {
-										layer.alert('审核失败！');
+										layer.alert('园所审批失败！');
 									}
-									index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-									parent.layer.close(index);
-									tableIns.reload();    //审核之后,刷新表格
 								}
 							});
+						}
+					});
+				}
+				else if(layEvent === 'look'){
+					layer.open({
+						type:2
+						,title:['园所详情信息','font-size:18px;']
+						,area:['38%','90%']
+						,btn:['返回']
+						,btnAlign: 'c'
+						,offset: '50px'
+						,content: path+"/admin/toUrl/kinderDetailInfo"
+						,success : function(layero, index) {
+							$.ajax({
+								url:path+"/admin/findKinderInfoById",
+								type:'POST',
+								dataType:'json',
+								data:{"kinderid":data.kinderid},
+								success:function (result) {
+									var kinderInfo = eval(result);
+									var body = layer.getChildFrame('body',index);
+									for(i in kinderInfo)
+									{
+										body.find("#kindername").val(kinderInfo[i].kindername);
+										body.find("#kinderacount").val(kinderInfo[i].kinderacount);
+										body.find("#kinderlp").val(kinderInfo[i].rectorname);
+										body.find("#kinderlpid").val(kinderInfo[i].kinderlpid);
+										body.find("#kinderlpadd").val(kinderInfo[i].kinderlpadd);
+										body.find("#kinderlpphone").val(kinderInfo[i].kinderlpphone);
+										body.find("#schoolpermit").val(kinderInfo[i].schoolpermit);
+										body.find("#healthpermit").val(kinderInfo[i].healthpermit);
+										body.find("#firepermit").val(kinderInfo[i].firepermit);
+										body.find("#grouppermit").val(kinderInfo[i].grouppermit);
+										body.find("#registrationpermit").val(kinderInfo[i].registrationpermit);
+										body.find("#kinderstatus").val(kinderInfo[i].kinderstatus);
+										body.find("#kinderscale").val(kinderInfo[i].kinderscale);
+										body.find("#kinderfunds").val(kinderInfo[i].kinderfunds);
+									}
+								}
+							});
+
 						}
 					});
 				}
