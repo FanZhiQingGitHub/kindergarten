@@ -16,16 +16,30 @@
 		.demoTable{
 			margin-left: 5%;
 		}
-		span{
-			margin-top: 3%;
-		}
-		button{
-			margin: 1.5% -1%;
-		}
+
 
 		h2{
 			text-align: center;
-			margin-top: 1%;
+			margin-top: 2%;
+		}
+
+		body{
+			font-size: 140%;
+		}
+		.layui-input{
+			width:120%;
+			margin: auto;
+		}
+		.layui-table-cell{
+			height: 45px;
+			line-height: 45px;
+			font-size: 140%;
+		}
+
+		.sp{
+			font-size: 160%;
+			height: 40px;
+			line-height: 40px;
 		}
 	</style>
 </head>
@@ -38,23 +52,23 @@
 				<div class="layui-form-item">
 					<div class="layui-block">查询条件：</div>
 					<div class="layui-inline">
-						<span class="layui-form-label">日志时间：</span>
+						<span class="layui-form-label" style="width: auto">日志时间：</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" style="width: 82%;margin-top: 6% ">
+							<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间">
 						</div>
 					</div>
 					<div class="layui-inline">
-						<span class="layui-form-label" style="margin-left: -28%">至</span>
+						<span class="layui-form-label" style="margin: 5% 15%;width: 10%">至</span>
 						<div class="layui-input-inline">
-							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 82%;margin: 7% 0 0 30%">
+							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="margin: -27% 65%;">
 						</div>
 					</div>
-					<button class="layui-btn" data-type="reload" ><i class="layui-icon">&#xe615;查询</i></button>
+					<button class="layui-btn" data-type="reload" style="margin-left: 10%"><span class="sp"><i class="layui-icon">&#xe615;查询</i></span></button>
 				</div>
 			</div>
 		</form>
 	</div>
-	<table id="demo" lay-filter="test"></table>
+	<table id="demo" lay-filter="test" class="layui-table-cell"></table>
 </body>
 
 	<script>
@@ -70,17 +84,17 @@
 				,path = $("#path").val();
 			var tableIns = table.render({
 				elem: '#demo'
-				, height: 312
+				, height: 450
 				, url: path + "/admin/logMgrInfo"//数据接口
 				, page: true //开启分页
 				, limit: 5
 				, limits: [5, 10]
 				, cols: [[ //表头
-					{field: 'syslogid', title: '序号', align: 'center', width: 144, sort: true, fixed: 'left'}
-					, {field: 'operateor', title: '操作人', align: 'center', width: 223}
-					, {field: 'operatetime', title: '操作时间', align: 'center', width: 362
+					{field: 'syslogid', title: '序号', align: 'center', width: 212, sort: true, fixed: 'left'}
+					, {field: 'operateor', title: '操作人', align: 'center', width: 434}
+					, {field: 'operatetime', title: '操作时间', align: 'center', width: 563
 						,templet:"<div>{{layui.util.toDateString(d.operatetime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
-					, {field: 'operatetype', title: '操作事项', align: 'center', width: 414}
+					, {field: 'operatetype', title: '操作事项', align: 'center', width: 515}
 				]]
 				, id: 'demotable'
 				, parseData: function (res) { //res 即为原始返回的数据

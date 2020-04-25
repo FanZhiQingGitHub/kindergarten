@@ -167,9 +167,15 @@
                 <div class="layui-col-xs6 layui-col-sm6 layui-col-md3" style="width: 50%">
                     <div class="img-txt">
                         <h3 style="text-align: left">园所视频Videos</h3>
-                        <div style=" overflow:auto;">
-                            <a href="javascript:void(0);" id="playVideos"><img style="width: 100%"
-                                                                               src="${pageContext.request.contextPath}/image/photos/directorvideo.png"></a>
+                        <div class="layui-carousel videobox" id="test2">
+                            <div carousel-item class="videroH">
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/2019-nCoV.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/2019-nCoV.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/CrossTheRoadSafely.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/CrossTheRoadSafely.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/farmPropaganda.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/farmPropaganda.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/SafetyRollerSkate.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/SafetyRollerSkate.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/TakeTheElevatorSafely.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/TakeTheElevatorSafely.jpg"></a></div>
+                                <div><a href="javascript:void(0);" class="playVideos" title="${pageContext.request.contextPath}/videos/Traffic_safety.mp4"><img style="width: 100%" src="${pageContext.request.contextPath}/image/videoimg/Traffic_safety.jpg"></a></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -197,23 +203,39 @@
         var carousel = layui.carousel, $ = layui.$;
         var layer = layui.layer;
 	    var src = $("#path").val();
-        //建造实例
+
+        //首页轮播图
         carousel.render({
             elem: '#test1'
-            , width: '80%' //设置容器宽度
+            , width: '100%' //设置容器宽度
             , arrow: 'always'
             , height: 'auto'
-
             //,anim: 'updown' //切换动画方式
         });
+        //首页轮播视频
+        carousel.render({
+            elem: '#test2'
+            , width: '100%' //设置容器宽度
+            , arrow: 'always'
+            , height: 'auto'
+            //,anim: 'updown' //切换动画方式
+        });
+
         $('.app-header-menuicon').on('click', function () {
             $('.header-down-nav').toggleClass('down-nav')
-        });
+        })
         var imgH = $('.imgbox div.layui-this').outerHeight();
-        $('.imgH').css('height', imgH + 'px')
+        $('.imgH').css('height', imgH + 'px');
+
+        var videroH = $('.videobox div.layui-this').outerHeight();
+        $('.videroH').css('height', videroH + 'px');
+
         window.onresize = function () {
             var imgH = $('.imgbox div.layui-this').outerHeight();
-            $('.imgH').css('height', imgH + 'px')
+            $('.imgH').css('height', imgH + 'px');
+
+            var videroH = $('.videobox div.layui-this').outerHeight();
+            $('.videroH').css('height', videroH + 'px');
         };
 
         //个人信息的显示
@@ -419,15 +441,17 @@
         });
 
         //点击查看园所视频
-        $("#playVideos").click(function () {
+        $(".playVideos").click(function () {
+            var videoUrl = $(this).attr('title');
             //打开一个窗口播放视频
             layer.open({
                 //打开一个窗口播放视频
                 type: 1,
-                area: ['75%', '85%'],
-                title:'园所宣传视频',
+                area: ['95%', '80%'],
+                offset:['10%','3%'],
+                title:'园所视频播放',
                 content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
-                        '<source src="${pageContext.request.contextPath}/videos/farmPropaganda.mp4" type="video/mp4"></source></video>'
+                    '<source src="'+videoUrl+'" type="video/mp4"></source></video>'
                 //直接跳出一个标签播放视频
             });
         });

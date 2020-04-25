@@ -15,15 +15,45 @@
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
 		body{
-			overflow: hidden;
+			font-size: 140%;
 		}
+
+		.layui-input{
+			width:180%;
+			margin: auto;
+		}
+
 		h3 {
 			text-align: center;
 		}
-
 		.layui-table-cell {
+			height: 70px;
+			line-height: 70px;
+			white-space:normal;
+			font-size: 140%;
+		}
+
+		.sp{
+			font-size: 140%;
 			height: 40px;
 			line-height: 40px;
+		}
+		body .demo-class .layui-layer-btn{
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+
+		body .demo .layui-layer-btn{
+			margin-top: -5%;
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+		body .demo .layui-layer-content{
+			font-Size:18px
 		}
 	</style>
 </head>
@@ -33,29 +63,29 @@
 	<div class="layui-main readInfo">
 		<form id="reUploads" class="layui-form" action="" onsubmit="return false;">
 			<div class="layui-form-item">
-				<label class="layui-form-label" style="">绘本名称：</label>
+				<label class="layui-form-label" style="width: 24%">绘本名称：</label>
 				<div class="layui-input-inline">
-					<input type="text" class="layui-input" name="readMagName" id="readMagName" value="" placeholder="" style="width: 22%;margin-top: 1%">
+					<input type="text" class="layui-input" name="readMagName" id="readMagName" value="" placeholder="" style="width: 180%">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">绘本图片：</label>
+				<label class="layui-form-label" style="width: 24%">绘本图片：</label>
 				<div class="layui-input-inline">
-					<input type="text" id="readMagPic" name="readMagPic" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="width: 22%">
-				</div>
-			</div>
-
-			<div class="layui-form-item">
-				<label class="layui-form-label">文件地址：</label>
-				<div class="layui-input-inline">
-					<input type="text" id="readMagUrl" name="readMagUrl" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="width: 22%">
+					<input type="text" id="readMagPic" name="readMagPic" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" >
 				</div>
 			</div>
 
 			<div class="layui-form-item">
-				<label class="layui-form-label">页数：</label>
+				<label class="layui-form-label" style="width: 24%">文件地址：</label>
 				<div class="layui-input-inline">
-					<input type="text" id="readMagPage" name="readMagPage" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="width: 22%">
+					<input type="text" id="readMagUrl" name="readMagUrl" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" >
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label" style="width: 24%">页数：</label>
+				<div class="layui-input-inline">
+					<input type="text" id="readMagPage" name="readMagPage" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" >
 				</div>
 			</div>
 

@@ -118,8 +118,8 @@
 			layer.open({
 				//打开一个窗口播放视频
 				type: 1,
-				area: ['100%', '100%'],
-				offset:['0%','0%'],
+				area: ['95%', '80%'],
+				offset:['10%','3%'],
 				title:monitorname,
 				content:'<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer"  autoplay="autoplay" loop="loop">' +
 					'<source src="${pageContext.request.contextPath}/'+videoUrl+'" type="video/mp4"></source></video>'

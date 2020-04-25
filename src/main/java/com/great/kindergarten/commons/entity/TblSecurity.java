@@ -24,6 +24,10 @@ public class TblSecurity {
     private Integer rid;
     private Integer kid;
 
+    //连表查询用
+    private TblKinder tblKinder;
+    private Integer kinderid;
+    private String kindername;
     private String code;
     private String time1;
     private String time2;
@@ -155,6 +159,36 @@ public class TblSecurity {
 
     public void setTime2(String time2) {
         this.time2 = time2;
+    }
+
+    public TblKinder getTblKinder()
+    {
+        return tblKinder;
+    }
+
+    public void setTblKinder(TblKinder tblKinder)
+    {
+        this.tblKinder = tblKinder;
+    }
+
+    public Integer getKinderid()
+    {
+        return kinderid;
+    }
+
+    public void setKinderid(Integer kinderid)
+    {
+        this.kinderid = kinderid;
+    }
+
+    public String getKindername()
+    {
+        return kindername;
+    }
+
+    public void setKindername(String kindername)
+    {
+        this.kindername = kindername;
     }
 
     @Override

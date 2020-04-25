@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.healther.resultbean.MealPage;
 import com.great.kindergarten.parent.annotation.ParentSystemLog;
+import com.great.kindergarten.parent.resultbean.LivePage;
 import com.great.kindergarten.parent.service.ParentService;
 import com.great.kindergarten.security.resultbean.MonitorPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
@@ -139,6 +140,7 @@ public class ParentController {
 
 
     //重置密码
+    @ParentSystemLog(operationType = "密码", operationName = "重置了密码")
     @RequestMapping("/resetParentpwd")
     public void resetParentpwd(HttpServletRequest request, HttpServletResponse response) {
         String parentname = request.getParameter("parentname");
@@ -160,28 +162,24 @@ public class ParentController {
 
 
     @RequestMapping("/showMonitorInfo")
-    public void showMonitorInfo(DateWrite dateWrite, MonitorPage monitorPage, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void showMonitorInfo(DateWrite dateWrite, LivePage livePage, HttpServletRequest request, HttpServletResponse response) throws Exception {
         //显示幼儿园直播列表
 
         //取得是谁要进行操作
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
-
         Integer limit = Integer.valueOf(request.getParameter("limit"));
-
         Integer page = Integer.valueOf(request.getParameter("page"));
-
 
         Integer maxpage = limit;
         Integer minpage = (page - 1) * limit;
 
-        monitorPage.setLimit(maxpage);
-        monitorPage.setPage(minpage);
-        monitorPage.setKindername(parent.getKindername());
-
-
-        List<TblMonitor> tblMonitorList = securityService.findALLMonitorInfo(monitorPage);
+        livePage.setLimit(maxpage);
+        livePage.setPage(minpage);
+        Integer cid = parentService.findParentCidByName(parentname);
+        livePage.setCid(cid);
+        List<TblMonitor> tblMonitorList = parentService.findALLMonitorInfo(livePage);
         if (0 != tblMonitorList.size()) {
-            Integer count = securityService.findALLMonitorInfoCount(monitorPage).intValue();
+            Integer count = parentService.findALLMonitorInfoCount(livePage).intValue();
             dateWrite.setMsg(" ");
             dateWrite.setCode(0);
             dateWrite.setCount(count);
@@ -522,7 +520,7 @@ public class ParentController {
         return "parentJsp/SafetyTestQuestion";
     }
 
-
+	@ParentSystemLog(operationType = "登陆", operationName = "退出登陆了")
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request) {
         //移除当前在线的家长
@@ -530,6 +528,7 @@ public class ParentController {
         return "parentJsp/parentLogin";
     }
 
+	@ParentSystemLog(operationType = "密码", operationName = "修改了旧密码")
     @RequestMapping("/updateParentPwd")
     @ResponseBody
     public Result updateParentPwd(HttpServletRequest request) {
@@ -592,10 +591,18 @@ public class ParentController {
         }
     }
 
-//    @ParentSystemLog(operationType = "登陆", operationName = "家长登陆")
+	@RequestMapping("/selectLogin")
+	@ResponseBody
+    public List<String> selectLogin(){
+    	return parentService.selectLogin();
+    }
+
+
+
+    @ParentSystemLog(operationType = "登陆", operationName = "家长登陆")
     @RequestMapping("/Login")
     @ResponseBody
-    public Result parentLogin(HttpServletRequest request, String parentName, String parentPwd, String code) {
+    public Result parentLogin(HttpServletRequest request, String parentName, String parentPwd, String code,String kinderName) {
 
         Result loginResult = new Result();
 
@@ -605,7 +612,7 @@ public class ParentController {
 
             if (parentName != null && parentPwd != null) {
                 String loginPwd = MD5Utils.md5(parentPwd);
-                TblParent loginParent = parentService.parentLogin(parentName, loginPwd);
+                TblParent loginParent = parentService.parentLogin(parentName, loginPwd,kinderName);
                 parentname = parentName;
                 if (loginParent != null) {
                     //返回ajax数据跳转到家长端首页
@@ -638,7 +645,7 @@ public class ParentController {
 
 
     //-------------人脸识别考勤---------------
-
+    @ParentSystemLog(operationType = "人脸识别", operationName = "注册了人脸数据")
     @RequestMapping("/regFaceId")
     @ResponseBody
   public Result regFaceId(HttpServletRequest request, HttpServletResponse response) {
@@ -650,7 +657,7 @@ public class ParentController {
         //获取信息
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
         //String name
-        if (FaceRecognitionUtils.faceRegister(face, parent.getParentId())){
+        if (FaceRecognitionUtils.faceRegister(face, "p"+parent.getParentId())){
             result.setSuccess(true);
         }
 
@@ -677,7 +684,7 @@ public class ParentController {
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
 
         //人脸识别成功
-        if (FaceRecognitionUtils.identify(face,parent.getParentId())){
+        if (FaceRecognitionUtils.identify(face,"p"+parent.getParentId())){
             //设置日期格式（当天日期）
             SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
             timeamdate = date.format(new Date());

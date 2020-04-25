@@ -16,10 +16,23 @@
 	<style>
 		#hh1 {
 			font-weight: bold;
-			font-size: 35px;
-			margin-top: 1%;
+			font-size: 40px;
+			margin-top: 2%;
 			text-align: center;
 			font-family: 楷体;
+		}
+		body{
+			font-size: 140%;
+		}
+
+		.layui-input{
+			width:120%;
+			margin: auto;
+		}
+		.sp{
+			font-size: 140%;
+			height: 40px;
+			line-height: 40px;
 		}
 	</style>
 </head>
@@ -31,21 +44,21 @@
 			<hr style="color: white">
 			<div class="container" style="margin-top: 3%">
 				<div class="layui-form-item">
-					<label class="layui-form-label">当前密码</label>
+					<label class="layui-form-label" style="width: 10%">当前密码</label>
 					<div class="layui-inline">
 						<input type="password" id="oldadminpwd" placeholder="请输入6-12位旧密码"
 						       autocomplete="off" class="layui-input" style="width: 160%" >
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">新密码</label>
+					<label class="layui-form-label" style="width: 10%">新密码</label>
 					<div class="layui-inline">
 						<input type="password" id="adminpwd" placeholder="请输入6-12位新密码" value=""
 						       autocomplete="off" class="layui-input" style="width: 160%">
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">确认密码</label>
+					<label class="layui-form-label" style="width: 10%">确认密码</label>
 					<div class="layui-inline">
 						<input type="password" id="confrimAdminpwd" placeholder="请输入确认密码" value=""
 						       autocomplete="off" class="layui-input" style="width: 160%">
@@ -55,9 +68,9 @@
 				<div class="layui-form-item">
 					<div class="layui-input-inline" style="margin-left: 10%;">
 						<button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="updateAdminPwd">
-							确认修改
+							<span class="sp">确认修改</span>
 						</button>
-						<button type="button" class="layui-btn layui-btn-primary" id="bu3" style="margin-left: 10%">取消</button>
+						<button type="button" class="layui-btn layui-btn-primary" id="bu3" style="margin: -20% 80%;"><span class="sp">取消</span></button>
 					</div>
 				</div>
 			</div>

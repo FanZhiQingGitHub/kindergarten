@@ -15,15 +15,46 @@
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
 		h2 {
+			margin-top: 2%;
 			text-align: center;
 		}
 
-		.layui-table-cell {
+		body{
+			font-size: 140%;
+		}
+		.layui-input{
+			width:120%;
+			margin: auto;
+		}
+		.layui-table-cell{
+			height: 45px;
+			line-height: 45px;
+			font-size: 140%;
+		}
+		a{
+			font-size: 140%;
+		}
+		.sp{
+			font-size: 140%;
 			height: 40px;
 			line-height: 40px;
 		}
-		#sel{
-			width: 62%;
+		body .demo-class .layui-layer-btn{
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+
+		body .demo .layui-layer-btn{
+			margin-top: -5%;
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+		body .demo .layui-layer-content{
+			font-Size:18px
 		}
 	</style>
 </head>
@@ -33,17 +64,17 @@
 	<div class="layui-row" >
 	<form class="layui-form" action="" onsubmit="return false;" >
 		<div class="parameterTable">
-			<div class="layui-form-item" style="margin-left: 3%">
+			<div class="layui-form-item" style="margin-left: 6%">
 				<div class="layui-block">查询条件：</div>
-				<div class="layui-inline">
-					<span class="layui-form-label" style="margin-left: 11%">参数名称：</span>
+				<div class="layui-inline" style="margin-top: 2%">
+					<span class="layui-form-label" style="width: auto;">参数名称：</span>
 					<div class="layui-input-inline">
-						<input type="text" class="layui-input" name="parameterName" id="parameterName" placeholder="请输入参数名称" style="margin: -20% 0 0 75%;">
+						<input type="text" class="layui-input" name="parameterName" id="parameterName" placeholder="请输入参数名称" >
 					</div>
 				</div>
 
-				<div class="layui-inline">
-					<span class="layui-form-label" style="margin-left: -1%">参数类型：</span>
+				<div class="layui-inline" style="margin-top: 2%">
+					<span class="layui-form-label" style="width: auto;margin-left: 5%">参数类型：</span>
 					<div class="layui-input-inline">
 						<select name="sel" id="sel" lay-filter="mySelect" lay-verify="" style="margin: -15% 0 0 50%">
 							<option value="请选择">请选择</option>
@@ -54,9 +85,10 @@
 							</c:if>
 						</select>
 					</div>
+					<button class="layui-btn" data-type="reload" style="margin: -7% 80%;"><span class="sp"><i class="layui-icon">&#xe615;查询</i></span></button>
+					<button class="layui-btn btn-add " id="btn-add" style="margin: -7% 100%;"><span class="sp"><i class="layui-icon">&#xe624;新增</i></span></button>
 				</div>
-				<button class="layui-btn" data-type="reload" style=""><i class="layui-icon">&#xe615;查询</i></button>
-				<button class="layui-btn btn-add " id="btn-add" ><i class="layui-icon">&#xe624;新增</i></button>
+
 			</div>
 		</div>
 	</form>
@@ -64,18 +96,18 @@
 	<table id="parameter" lay-filter="test" class="layui-table-cell"></table>
 
 	<div id="type-content" style="display: none;">
-		<div class="layui-form-item">
-			<label class="layui-form-label">参数名称：</label>
+		<div class="layui-form-item" style="margin-top: 5%">
+			<label class="layui-form-label" style="width: auto">参数名称：</label>
 			<div class="layui-inline">
 				<input type="text" id="name" name = "name" placeholder="请输入参数名称" value=""
-				       autocomplete="off" class="layui-input" style="width: 120%">
+				       autocomplete="off" class="layui-input" >
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<div class="layui-inline">
-				<span class="layui-form-label" style="">参数类型：</span>
-				<div class="layui-input-inline">
-					<select name="selType" id="selType" lay-filter="mySelect" lay-verify="" style="margin: 2% 0 0 0;width: 98%;height: 18%">
+				<span class="layui-form-label" style="width: auto">参数类型：</span>
+				<div class="layui-input-inline" style="margin: -11% 43%">
+					<select name="selType" id="selType" lay-filter="mySelect" lay-verify="" style="width: 160%;height: 17%;">
 						<option value="请选择">请选择</option>
 						<c:if test="${not empty parameterNewList}">
 							<c:forEach items="${parameterNewList}" var="u">
@@ -87,27 +119,27 @@
 			</div>
 		</div>
 		<div class="layui-form-item">
-			<label class="layui-form-label">参数值：</label>
+			<label class="layui-form-label" style="width: auto;margin-left: 4.5%">参数值：</label>
 			<div class="layui-inline">
 				<input type="text" id="val" name = "val" placeholder="请输入参数值" value=""
-				       autocomplete="off" class="layui-input" style="width: 120%">
+				       autocomplete="off" class="layui-input" >
 			</div>
 		</div>
 	</div>
 
 	<div id="type-content2" style="display: none;">
-		<div class="layui-form-item">
-			<label class="layui-form-label">参数名称：</label>
+		<div class="layui-form-item" style="margin-top: 5%">
+			<label class="layui-form-label" style="width: auto">参数名称：</label>
 			<div class="layui-inline">
 				<input type="text" id="name2" name = "name2" placeholder="请输入参数名称" value=""
-				       autocomplete="off" class="layui-input" style="width: 120%">
+				       autocomplete="off" class="layui-input" >
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<div class="layui-inline">
-				<span class="layui-form-label" style="">参数类型：</span>
-				<div class="layui-input-inline">
-					<select name="selType2" id="selType2" lay-filter="mySelect" lay-verify="" style="margin: 2% 0 0 0;height: 18%;width: 98%">
+				<span class="layui-form-label" style="width: auto">参数类型：</span>
+				<div class="layui-input-inline" style="margin: -11% 43%">
+					<select name="selType2" id="selType2" lay-filter="mySelect" lay-verify="" style="width: 160%;height: 17%;">
 						<option value="请选择">请选择</option>
 						<c:if test="${not empty parameterNewList}">
 							<c:forEach items="${parameterNewList}" var="u">
@@ -119,17 +151,17 @@
 			</div>
 		</div>
 		<div class="layui-form-item">
-			<label class="layui-form-label">参数值：</label>
+			<label class="layui-form-label" style="width: auto;margin-left: 4.5%">参数值：</label>
 			<div class="layui-inline">
 				<input type="text" id="val2" name = "val2" placeholder="请输入参数值" value=""
-				       autocomplete="off" class="layui-input" style="width: 120%">
+				       autocomplete="off" class="layui-input" >
 			</div>
 		</div>
 	</div>
 
 	<script type="text/html" id="barOption">
-		<button type="button" class="layui-btn " lay-event="update" >修改</button>
-		<button type="button" class="layui-btn " lay-event="delete" >删除</button>
+		<button type="button" class="layui-btn " lay-event="update" ><span class="sp">修改</span></button>
+		<button type="button" class="layui-btn " lay-event="delete" ><span class="sp">删除</span></button>
 	</script>
 </body>
 <script>
@@ -151,17 +183,17 @@
 		var path = $("#path").val();
 		var tableIns = table.render({
 			elem: '#parameter'
-			, height: 350
+			, height: 450
 			, url: path + "/admin/parameterMgrInfo"//数据接口
 			, page: true //开启分页
 			, limit: 5
 			, limits: [5, 10]
 			, cols: [[ //表头
-				{field: 'parameterid', title: '序号', align: 'center', width: 122, sort: true, fixed: 'left'}
-				, {field: 'parametername', title: '参数名称', align: 'center', width: 160}
-				, {field: 'parametertype', title: '参数类型', align: 'center', width: 200}
-				, {field: 'parameterval', title: '参数值', align: 'center', width: 300}
-				, {fixed: 'right', title: '操作', align: 'center', width: 360, toolbar: '#barOption'}
+				{field: 'parameterid', title: '序号', align: 'center', width: 180, sort: true, fixed: 'left'}
+				, {field: 'parametername', title: '参数名称', align: 'center', width: 307}
+				, {field: 'parametertype', title: '参数类型', align: 'center', width: 240}
+				, {field: 'parameterval', title: '参数值', align: 'center', width: 529}
+				, {fixed: 'right', title: '操作', align: 'center', width: 466, toolbar: '#barOption'}
 			]]
 			, id: 'parameterTable'
 			, parseData: function (res) { //res 即为原始返回的数据
@@ -183,12 +215,14 @@
 				if(layEvent === 'update'){
 					layer.open({
 						type: 1,
-						area: ['30%', '60%'],
+						area: ['30%', '45%'],
 						content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-						title: '修改参数信息',
+						title: ['修改参数信息','font-size:18px'],
 						btn: ['保存', '取消'],
-						offset: '100px',
+						// offset: '100px',
+						skin: 'demo-class',
 						btnAlign: 'c',
+						closeBtn: 0,
 						success:function(){
 							$("#name").val(data.parametername);
 							$("#type").val(data.parametertype);
@@ -210,10 +244,10 @@
 										if(result == "success")
 										{
 											layer.close(index);
-											layer.alert("修改参数信息成功！", {icon: 6});
+											layer.alert("修改参数信息成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 											tableIns.reload();
 										}else{
-											layer.alert("修改参数信失败！", {icon: 2});
+											layer.alert("修改参数信失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 										}
 									}
 								});
@@ -226,7 +260,7 @@
 						}
 					});
 				}else if(layEvent === 'delete'){
-					layer.confirm("确定要删除该参数信息？",{icon:3,title:'温馨提示'},function (index) {
+					layer.confirm("确定要删除该参数信息？",{icon:3,title:['温馨提示','font-size:18px'],area:['350px','200px'],skin:'demo'},function (index) {
 						layer.close(index);
 						$.ajax({
 							url: path + "/admin/deleteParameter",
@@ -236,10 +270,10 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("参数信息删除成功！", {icon: 6});
+									layer.alert("参数信息删除成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									tableIns.reload();
 								}else{
-									layer.alert("参数信息删除失败！", {icon: 2});
+									layer.alert("参数信息删除失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							}
 						});
@@ -251,11 +285,13 @@
 		$("#btn-add").click(function () {
 			layer.open({
 				type: 1,
-				area: ['30%', '60%'],
+				area: ['30%', '45%'],
 				content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
-				title: '新增参数',
+				title: ['新增参数','font-size:18px'],
 				btn: ['保存', '取消'],
-				offset: '100px',
+				skin: 'demo-class',
+				// offset: '100px',
+				closeBtn: 0,
 				btnAlign: 'c',
 				btn1: function (index) {
 					var name = $("#name2").val();
@@ -275,14 +311,14 @@
 							datatype: 'text',
 							success: function (data) {
 								if (data == "success") {
-									layer.alert("新增成功！", {icon: 6});
+									layer.alert("新增成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									layer.close(index);
 									tableIns.reload();
 								} else {
-									layer.alert("新增失败", {icon: 2});
+									layer.alert("新增失败", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							}, error: function (data) {
-								layer.alert("网络繁忙！", {icon: 2});
+								layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 							}
 						});
 					}

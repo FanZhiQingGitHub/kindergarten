@@ -1,6 +1,7 @@
 package com.great.kindergarten.admin.mapper;
 
 import com.great.kindergarten.admin.javabean.MenuTreeInfo;
+import com.great.kindergarten.admin.javabean.RectorKinderBean;
 import com.great.kindergarten.admin.javabean.TblStatistics;
 import com.great.kindergarten.commons.entity.*;
 import org.apache.ibatis.annotations.Mapper;
@@ -51,6 +52,8 @@ public interface AdminMapper
 	public int deleteAdmin(Integer adminid);
 
 	public List<TblAdmin> checkAdminName(String adminname);
+
+	public Integer findIdByRoleName(String rolename);
 
 	//树形菜单
 	public List<TblMenu> findMenuByName(String name);
@@ -214,7 +217,9 @@ public interface AdminMapper
 	public int addPlatFormInfo(TblPlatforminfo tblPlatforminfo);
 
 	//园长管理
-	public List<TblRector> findAllRectorInfo(HashMap<String, Object> condition, RowBounds rowBounds);
+//	public List<TblRector> findAllRectorInfo(HashMap<String, Object> condition, RowBounds rowBounds);
+
+	public List<RectorKinderBean> findAllRectorInfo(HashMap<String, Object> condition, RowBounds rowBounds);
 
 	public int findRectorInfoCount(HashMap<String, Object> condition);
 
@@ -308,6 +313,10 @@ public interface AdminMapper
 	public int updateStudentStatus(TblStudent tblStudent);
 
 	public int addStudent(List<TblStudent> tblStudentList);
+
+	public List<String> findAllClassName();
+
+	public Integer findIdByClassName(String className);
 
 	//安全教育管理
 	public List<TblSafetyvideo> findAllSafetyVideoInfo(HashMap<String, Object> condition, RowBounds rowBounds);

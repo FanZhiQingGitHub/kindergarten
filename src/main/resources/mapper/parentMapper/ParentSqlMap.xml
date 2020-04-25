@@ -69,6 +69,9 @@
 
 
 
+
+
+
     <!--日志记录-->
     <insert id="addLog" parameterType="com.great.kindergarten.commons.entity.TblSyslog">
         insert into tbl_syslog(
@@ -475,6 +478,8 @@
             </if>
 
         </where>
+
+
         order by ts.safetyvideotime desc
 
     </select>
@@ -514,11 +519,25 @@
 
 
 
+
+
+
+    <select id="selectLogin" resultType="string">
+        select distinct kindername from tbl_parent;
+    </select>
+
+
+
     <!--   家长端登陆-->
     <select id="parentLogin" resultMap="reParent" >
-
         select * from tbl_parent
-        where parentname=#{parentName} and parentPwd=#{parentPwd} and parentstatus='启用'
+        <where>
+            parentname=#{parentName}
+            and parentPwd=#{parentPwd}
+            and kindername=#{kindername}
+            and parentstatus='启用'
+        </where>
+
 
     </select>
     <!--    判断家长旧密码是否输入正确-->

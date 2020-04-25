@@ -3,6 +3,7 @@ package com.great.kindergarten.parent.service;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.healther.resultbean.MealPage;
 import com.great.kindergarten.parent.mapper.ParentMapper;
+import com.great.kindergarten.parent.resultbean.LivePage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -333,6 +334,14 @@ public class ParentService {
     }
 
 
+    /**
+     * 找到可以登陆的园所
+     * @return
+     */
+    public List<String> selectLogin(){
+        return parentMapper.selectLogin();
+    }
+
 
     /**
      * 家长端口登陆方法
@@ -340,8 +349,8 @@ public class ParentService {
      * @param parentPwd
      * @return
      */
-    public TblParent parentLogin(String parentName, String parentPwd){
-        return parentMapper.parentLogin(parentName,parentPwd);
+    public TblParent parentLogin(String parentName, String parentPwd,String kindername){
+        return parentMapper.parentLogin(parentName,parentPwd,kindername);
     }
 
     //---------------------------孩子考勤新增方法------------------------------
@@ -443,4 +452,17 @@ public class ParentService {
         return parentMapper.resetParentpwd(parentmap);
     }
 
+    public List<TblMonitor> findALLMonitorInfo(LivePage livePage){
+        return parentMapper.findALLMonitorInfo(livePage);
+    }
+
+    public Long findALLMonitorInfoCount(LivePage livePage){
+        return parentMapper.findALLMonitorInfoCount(livePage);
+    }
+
+    public Integer findParentCidByName(String parentname){
+        Map<String,String> parentmap = new LinkedHashMap<>();
+        parentmap.put("parentname",parentname);
+        return parentMapper.findParentCidByName(parentmap);
+    }
 }

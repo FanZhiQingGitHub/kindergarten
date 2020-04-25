@@ -15,12 +15,35 @@
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
+		body{
+			font-size: 140%;
+		}
+		.layui-input{
+			width:120%;
+			margin: auto;
+		}
 		.layui-table-cell{
-			height:40px;
+			height: 45px;
+			line-height: 45px;
+			font-size: 140%;
+		}
+		a{
+			font-size: 140%;
+		}
+		.sp{
+			font-size: 140%;
+			height: 40px;
 			line-height: 40px;
 		}
 		h2{
+			margin-top: 1%;
 			text-align: center;
+		}
+		body .demo-class .layui-layer-btn{
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
 		}
 	</style>
 </head>
@@ -29,11 +52,11 @@
 	<h2>角色信息</h2>
 	<div class="layui-row" style="margin-top: 20px;">
 		<form class="layui-form" action="" onsubmit="return false;" >
-			<div class="roleTable" style="margin-left: 5%;">
+			<div class="roleTable" style="margin-left: 6%;">
 				<div class="layui-block">查询条件：</div>
-				<div class="layui-inline" >
-					<label class="layui-form-label">角色名称：</label>
-					<div class="layui-input-inline">
+				<div class="layui-inline" style="margin-top: 2%">
+					<label class="layui-form-label" style="width: auto">角色名称：</label>
+					<div class="layui-input-inline" style="width: 35%;">
 						<select name="rolename" id="rolename" lay-filter="mySelect" lay-verify="" >
 							<option value="请选择">请选择</option>
 							<c:if test="${not empty roleNewList}">
@@ -43,17 +66,18 @@
 							</c:if>
 						</select>
 					</div>
+					<button class="layui-btn" data-type="reload" style="margin-left: 10%;"><span class="sp"><i class="layui-icon">&#xe615;查询</i></span></button>
+					<button class="layui-btn btn-add btn-default" id="btn-add" style="margin: -6% 90%;" ><span class="sp"><i class="layui-icon">&#xe624;新增</i></span></button>
 				</div>
-				<button class="layui-btn" data-type="reload" ><i class="layui-icon">&#xe615;查询</i></button>
-				<button class="layui-btn btn-add btn-default" id="btn-add" ><i class="layui-icon">&#xe624;新增</i></button>
+
 			</div>
 		</form>
 	</div>
-	<table id="roleInfo" lay-filter="role" class="layui-table-cell"></table>
+	<table id="roleInfo" lay-filter="role" class="layui-table-cell" style="margin-top: 3%"></table>
 	<div id="type-content" style="display: none;">
 		<form class="layui-form" action="">
-			<div class="layui-form-item">
-				<span class="layui-form-label" style="margin-top: 2%">角色名称：</span>
+			<div class="layui-form-item" style="margin-top: 3%">
+				<span class="layui-form-label" style="width:auto;margin-top: 2%">角色名称：</span>
 				<div class="layui-inline">
 					<input type="text" id="roleName2" name="roleName2" placeholder="请输入角色名称" value=""
 					       autocomplete="off" class="layui-input" style="width: 120%;margin-top: 5%" lay-verify="required">
@@ -62,8 +86,17 @@
 		</form>
 	</div>
 	<script type="text/html" id="barOption">
-		<button type="button" class="layui-btn layui-btn-normal" lay-event="update" style="text-align: -moz-center"><i class="layui-icon">&#xe642;修改</i></button>
-		<button type="button" class="layui-btn layui-btn-normal" lay-event="delete" ><i class="layui-icon">&#xe640;删除</i></button>
+		<a type="button" class="layui-btn layui-btn-normal" lay-event="update" style="text-align: -moz-center"><span class="sp"><i class="layui-icon">&#xe642;修改</i></span></a>
+		<a type="button" class="layui-btn layui-btn-normal" lay-event="delete" style="text-align: -moz-center"><span class="sp"><i class="layui-icon">&#xe640;删除</i></span></a>
+		{{#  if(d.rolename == '超级管理员') { }}
+		<a type="button" class="layui-btn layui-btn-normal" lay-event="permission" style="text-align: -moz-center"><span class="sp"><i class="layui-icon">&#xe640;权限分配</i></span></a>
+		{{#  } }}
+		{{#  if(d.rolename == '资源管理员') { }}
+		<a type="button" class="layui-btn layui-btn-normal" lay-event="permission" style="text-align: -moz-center"><span class="sp"><i class="layui-icon">&#xe640;权限分配</i></span></a>
+		{{#  } }}
+		{{#  if(d.rolename == '园所管理员') { }}
+		<a type="button" class="layui-btn layui-btn-normal" lay-event="permission" style="text-align: -moz-center"><span class="sp"><i class="layui-icon">&#xe640;权限分配</i></span></a>
+		{{#  } }}
 	</script>
 </body>
 <script>
@@ -85,15 +118,15 @@
 		var path = $("#path").val();
 		var tableIns = table.render({
 			elem: '#roleInfo'
-			, height: 350
+			, height: 450
 			, url: path + "/admin/roleMgrInfo"//数据接口
 			, page: true //开启分页
 			, limit: 5
 			, limits: [5, 10]
 			, cols: [[ //表头
-				{field: 'roleid', title: '序号', align: 'center', width: 128, sort: true, fixed: 'left'}
-				,{field: 'rolename', title: '角色名称', align: 'center', width: 431}
-				, {fixed: 'right', title: '操作', align: 'center', width: 586, toolbar: '#barOption'}
+				{field: 'roleid', title: '序号', align: 'center', width: 284, sort: true, fixed: 'left'}
+				,{field: 'rolename', title: '角色名称', align: 'center', width: 607}
+				, {fixed: 'right', title: '操作', align: 'center', width: 835, toolbar: '#barOption'}
 			]]
 			, id: 'role'
 			, parseData: function (res) { //res 即为原始返回的数据
@@ -129,9 +162,9 @@
 								dataType: "text",
 								success: function (result) {
 									if (result == "success") {
-										layer.alert('角色名字修改成功！',{icon: 6});
+										layer.alert('角色名字修改成功！',{icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									} else {
-										layer.alert('角色名字修改失败！',{icon: 2});
+										layer.alert('角色名字修改失败！',{icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									}
 									tableIns.reload();    //状态修改之后,刷新表格
 								}
@@ -148,13 +181,27 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("角色删除成功！", {icon: 6});
+									layer.alert("角色删除成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									tableIns.reload();
 								}else{
-									layer.alert("角色删除失败！", {icon: 2});
+									layer.alert("角色删除失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							}
 						});
+					});
+				}else if (layEvent === 'permission') {
+					layer.open({
+						type:2
+						,title:['权限分配','font-size:18px']
+						,area:['35%','80%']
+						,shade:0.3
+						,offset:'5%'
+						,skin: 'demo-class'
+						,content:path+"/admin/toUrl/menuPortion"
+						,success : function(layero, index) {
+							var body = layer.getChildFrame('body',index);
+							body.find("#rid").val(data.roleid);
+						}
 					});
 				}
 			});
@@ -165,10 +212,11 @@
 				type: 1,
 				area: ['30%', '32%'],
 				content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-				title: '新增角色',
+				title: ['新增角色','font-size:18px'],
 				btn: ['提交', '返回'],
-				offset: '100px',
 				btnAlign: 'c',
+				closeBtn: 0,
+				skin: 'demo-class',
 				success:function(){
 
 				},
@@ -182,14 +230,14 @@
 						datatype: 'text',
 						success: function (data) {
 							if (data == "success") {
-								layer.alert("新增角色成功！", {icon: 6});
+								layer.alert("新增角色成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								layer.close(index);
 								tableIns.reload();
 							} else {
-								layer.alert("新增角色失败", {icon: 2});
+								layer.alert("新增角色失败", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 							}
 						}, error: function (data) {
-							layer.alert("网络繁忙！", {icon: 2});
+							layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 						}
 					});
 				},

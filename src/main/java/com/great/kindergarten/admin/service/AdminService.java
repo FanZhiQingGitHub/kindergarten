@@ -1,6 +1,7 @@
 package com.great.kindergarten.admin.service;
 
 import com.great.kindergarten.admin.javabean.MenuTreeInfo;
+import com.great.kindergarten.admin.javabean.RectorKinderBean;
 import com.great.kindergarten.admin.javabean.TblStatistics;
 import com.great.kindergarten.admin.mapper.AdminMapper;
 import com.great.kindergarten.commons.entity.*;
@@ -64,6 +65,11 @@ public class AdminService {
 	public List<TblAdmin> checkAdminName(String adminname)
 	{
 		return adminMapper.checkAdminName(adminname);
+	}
+
+	public Integer findIdByRoleName(String rolename)
+	{
+		return adminMapper.findIdByRoleName(rolename);
 	}
 
 	public List<TblMenu> findMenuByName(String adminname)
@@ -403,7 +409,12 @@ public class AdminService {
 	}
 
 	//园长管理
-	public List<TblRector> findAllRectorInfo(HashMap<String, Object> condition, RowBounds rowBounds)
+//	public List<TblRector> findAllRectorInfo(HashMap<String, Object> condition, RowBounds rowBounds)
+//	{
+//		return adminMapper.findAllRectorInfo(condition, rowBounds);
+//	}
+
+	public List<RectorKinderBean> findAllRectorInfo(HashMap<String, Object> condition, RowBounds rowBounds)
 	{
 		return adminMapper.findAllRectorInfo(condition, rowBounds);
 	}
@@ -626,6 +637,16 @@ public class AdminService {
 	public int addStudent(List<TblStudent> tblStudentList)
 	{
 		return adminMapper.addStudent(tblStudentList);
+	}
+
+	public List<String> findAllClassName()
+	{
+		return adminMapper.findAllClassName();
+	}
+
+	public Integer findIdByClassName(String className)
+	{
+		return adminMapper.findIdByClassName(className);
 	}
 
 	//安全教育管理

@@ -18,16 +18,26 @@
 	<style>
 		#hh1 {
 			font-weight: bold;
-			font-size: 35px;
-			margin-top: 1%;
+			font-size: 40px;
+			margin-top: 2%;
 			text-align: center;
 			font-family: 楷体;
 		}
-		label{
-			font-size: 110%;
+		body{
+			font-size: 140%;
 		}
-		input{
-			font-size: 110%;
+
+		.layui-input{
+			width:120%;
+			margin: auto;
+		}
+		.sp{
+			font-size: 140%;
+			height: 40px;
+			line-height: 40px;
+		}
+		.layui-form-radio * {
+			font-size: 20px;
 		}
 	</style>
 </head>
@@ -41,7 +51,7 @@
 			<div class="container">
 
 				<div class="layui-form-item">
-					<label class="layui-form-label">我的角色：</label>
+					<label class="layui-form-label" style="width: 10%">我的角色：</label>
 					<div class="layui-input-inline">
 						<input type="text" name="rolename" id="rolename" lay-verify="rolename" placeholder="" autocomplete="off"
 						       class="layui-input" readonly style="width: 140%">
@@ -50,7 +60,7 @@
 				</div>
 
 				<div class="layui-form-item">
-					<label class="layui-form-label">用户名：</label>
+					<label class="layui-form-label" style="width: 10%">用户名：</label>
 					<div class="layui-input-inline">
 						<input type="text" name="adminname" id="adminname" lay-verify="adminname" placeholder="" autocomplete="off"
 						       class="layui-input" readonly style="width: 140%">
@@ -59,15 +69,15 @@
 				</div>
 
 				<div class="layui-form-item">
-					<label class="layui-form-label">性别：</label>
-					<div class="layui-input-inline" style="margin-top: 1%;">
+					<label class="layui-form-label" style="width: 10%">性别：</label>
+					<div class="layui-input-inline" style="margin-top: 1%;width: 35%">
 						<input type="radio" id="ra1" name="adminsex" class="adminsex" value="男" title="男" >
 						<input type="radio" id="ra2" name="adminsex" class="adminsex" value="女" title="女" style="margin-left: 10%;">
 					</div>
 				</div>
 
 				<div class="layui-form-item">
-					<label class="layui-form-label">头像：</label>
+					<label class="layui-form-label" style="width: 10%">头像：</label>
 					<div class="layui-input-inline">
 						<input type="text" name="adminheadurl" id="adminheadurl" lay-verify="adminheadurl" placeholder="请输入头像url信息" autocomplete="off"
 						       class="layui-input" style="width: 140%" readonly>
@@ -76,19 +86,19 @@
 				</div>
 
 				<div class="layui-form-item">
-					<label class="layui-form-label">手机号：</label>
+					<label class="layui-form-label" style="width: 10%">手机号：</label>
 					<div class="layui-input-inline">
 						<input type="tel" name="adminphone" id="adminphone" lay-verify="adminphone" placeholder="请输入11位手机号" autocomplete="off"
 						       class="layui-input" style="width: 140%">
 					</div>
 				</div>
 
-				<div class="layui-form-item">
+				<div class="layui-form-item" style="margin-top: 2%">
 					<div class="layui-input-inline" style="margin-left: 10%;">
 						<button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="updateAdminInfo">
-							确认修改
+							<span class="sp">确认修改</span>
 						</button>
-						<button type="button" class="layui-btn layui-btn-primary" id="bu3" style="margin-left: 10%">返回</button>
+						<button type="button" class="layui-btn layui-btn-primary" id="bu3" style="margin: -20% 70%;"><span class="sp">返回</span></button>
 					</div>
 				</div>
 			</div>

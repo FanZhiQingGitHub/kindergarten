@@ -140,7 +140,12 @@
 									var index = parent.layer.getFrameIndex(window.name);
 									parent.layer.close(index);//关闭当前页
 								});
-							}else if(msg == "notadd"){
+							} else if (msg=='failure'){
+								layer.alert("识别失败，如果未注册人脸请先进行注册",{icon:2},function () {
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index);//关闭当前页
+								});
+							} else if(msg == "notadd"){
 									layer.alert("亲，今天是周末哦！",{icon:6},function () {
 										var index = parent.layer.getFrameIndex(window.name);
 										parent.layer.close(index);//关闭当前页

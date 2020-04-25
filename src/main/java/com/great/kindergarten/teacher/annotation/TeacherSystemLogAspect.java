@@ -56,17 +56,18 @@ public class TeacherSystemLogAspect {
 
     //配置controller环绕通知,使用在方法aspect()上注册的切入点
     @Around("controllerAspect()")
-    public Object around(JoinPoint joinPoint) {
+    public Object around(ProceedingJoinPoint joinPoint) {
         System.out.println("==========开始执行controller环绕通知===============");
         long start = System.currentTimeMillis();
         //(signature是信号,标识的意思):获取被增强的方法相关信息.其后续方法有两个
         //getDeclaringTypeName: 返回方法所在的包名和类名
         //getname(): 返回方法名
         String methodName = joinPoint.getSignature().getName();
-
+	    Object result =null;
         try {
             //ProceedingJoinPoint 执行proceed方法的作用是让目标方法执行
-            ((ProceedingJoinPoint) joinPoint).proceed();
+	        //获取到返回值
+	        result  =  joinPoint.proceed();
             long end = System.currentTimeMillis();
             if (logger.isInfoEnabled()) {
                 logger.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms!");
@@ -79,7 +80,7 @@ public class TeacherSystemLogAspect {
                 logger.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms with exception : " + e.getMessage());
             }
         }
-        return "aaabbb";
+        return result;
     }
 
     /**

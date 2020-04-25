@@ -90,4 +90,29 @@ public class DateUtil {
         return monday+"&"+sunday;
     }
 
+    /**
+     * 获取传入日期所在年的第一天
+     * @param date
+     * @return
+     */
+    public static Date getFirstDayDateOfYear(final Date date) {
+        final Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        final int last = cal.getActualMinimum(Calendar.DAY_OF_YEAR);
+        cal.set(Calendar.DAY_OF_YEAR, last);
+        return cal.getTime();
+    }
+
+    //今天是当月的第几天
+    public static int getWeeksByMonth(){
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    //今天是今年的第几天
+    public static int getWeeksByYear(){
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.DAY_OF_YEAR);
+    }
+
 }

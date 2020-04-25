@@ -15,15 +15,46 @@
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
 		h2 {
+			margin-top: 2%;
 			text-align: center;
 		}
 
-		.layui-table-cell {
+		body{
+			font-size: 140%;
+		}
+		.layui-input{
+			width:120%;
+			margin: auto;
+		}
+		.layui-table-cell{
+			height: 45px;
+			line-height: 45px;
+			font-size: 140%;
+		}
+		a{
+			font-size: 140%;
+		}
+		.sp{
+			font-size: 140%;
 			height: 40px;
 			line-height: 40px;
 		}
-		#sel{
-			width: 62%;
+		body .demo-class .layui-layer-btn{
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+
+		body .demo .layui-layer-btn{
+			margin-top: -5%;
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+		body .demo .layui-layer-content{
+			font-Size:18px
 		}
 	</style>
 </head>
@@ -33,32 +64,31 @@
 	<div class="layui-row" >
 	<form class="layui-form" action="" onsubmit="return false;" >
 		<div class="healtherTable">
-			<div class="layui-form-item" style="margin-left: 3%">
+			<div class="layui-form-item" style="margin-left: 6%">
 				<div class="layui-block">查询条件：</div>
 				<div class="layui-inline">
-					<span class="layui-form-label">注册时间：</span>
+					<span class="layui-form-label" style="width: auto">注册时间：</span>
 					<div class="layui-input-inline">
-						<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" style="width: 100%;margin-top: 2% ">
+						<input type="date" class="layui-input" name="time1" id="time1" value="" placeholder="请选择上传开始时间" >
 					</div>
 				</div>
 				<div class="layui-inline">
-					<span class="layui-form-label" style="margin-left: -24%">至</span>
+					<span class="layui-form-label" style="margin: 5% 15%;width: 10%">至</span>
 					<div class="layui-input-inline">
-						<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="width: 100%;margin: 2% 0 0 8%">
+						<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="margin: -27% 65%;">
 					</div>
 				</div>
-				<button class="layui-btn" data-type="reload" style="margin-left: -2%"><i class="layui-icon">&#xe615;查询</i></button>
-				<button class="layui-btn btn-add  layui-btn-disabled" id="btn-add" ><i class="layui-icon">&#xe624;新增</i></button>
+				<button class="layui-btn" data-type="reload" style="margin-left: 12%"><span class="sp"><i class="layui-icon">&#xe615;查询</i></span></button>
 			</div>
-			<div class="layui-form-item">
+			<div class="layui-form-item" style="margin-left: 8.5%">
 				<div class="layui-inline">
-					<span class="layui-form-label" style="margin-left: 11%">姓名：</span>
+					<span class="layui-form-label" style="width: auto">姓名：</span>
 					<div class="layui-input-inline">
-						<input type="text" class="layui-input" name="healtherName" id="healtherName" placeholder="请输入保健员名称" style="margin: -20% 0 0 75%;">
+						<input type="text" class="layui-input" name="healtherName" id="healtherName" placeholder="请输入保健员名称" >
 					</div>
 				</div>
-				<div class="layui-inline">
-					<span class="layui-form-label" style="margin-left: -8%">状态：</span>
+				<div class="layui-inline" style="margin-left: 2%">
+					<span class="layui-form-label" style="width: auto;">状态：</span>
 					<div class="layui-input-inline">
 						<select name="sel" id="sel" lay-filter="mySelect" lay-verify="" style="margin: -15% 0 0 50%">
 							<option value="请选择">请选择</option>
@@ -67,29 +97,42 @@
 						</select>
 					</div>
 				</div>
+				<div class="layui-inline" style="margin-left: 2%">
+					<span class="layui-form-label" style="width: auto;">园所名称：</span>
+					<div class="layui-inline" style="width: 45%">
+						<select name="kindername" id="kindername" lay-filter="mySelect" lay-verify="" >
+							<option value="请选择" selected>请选择</option>
+							<c:if test="${not empty kinderList}">
+								<c:forEach items="${kinderList}" var="u">
+									<option value="${u.kindername}">${u.kindername}</option>
+								</c:forEach>
+							</c:if>
+						</select>
+					</div>
+				</div>
 			</div>
 		</div>
 	</form>
 	</div>
-	<table id="healther" lay-filter="test" class="layui-table-cell"></table>
+	<table id="healther" lay-filter="test" class="layui-table-cell" style="margin-top: 2%"></table>
 
 	<div id="type-content" style="display: none;">
-		<div class="layui-form-item">
-			<label class="layui-form-label">姓名：</label>
+		<div class="layui-form-item" style="margin-top: 3%">
+			<label class="layui-form-label" style="width: 24%">姓名：</label>
 			<div class="layui-inline">
 				<input type="text" id="name" name = "name" placeholder="请输入保健员名称" value=""
 				       autocomplete="off" class="layui-input" style="width: 120%">
 			</div>
 		</div>
 		<div class="layui-form-item">
-			<label class="layui-form-label">住址：</label>
+			<label class="layui-form-label" style="width: 24%">住址：</label>
 			<div class="layui-inline">
 				<input type="text" id="healtherAdd" name = "healtherAdd" placeholder="请输入保健员住址" value=""
 				       autocomplete="off" class="layui-input" style="width: 120%">
 			</div>
 		</div>
 		<div class="layui-form-item">
-			<label class="layui-form-label">手机号：</label>
+			<label class="layui-form-label" style="width: 24%">手机号：</label>
 			<div class="layui-inline">
 				<input type="text" id="phone" name = "phone" placeholder="请输入保健员手机号" value=""
 				       autocomplete="off" class="layui-input" style="width: 120%">
@@ -97,40 +140,16 @@
 		</div>
 	</div>
 
-	<div id="type-content2" style="display: none;">
-		<div class="layui-form-item">
-			<label class="layui-form-label">姓名：</label>
-			<div class="layui-inline">
-				<input type="text" id="name2" name = "name2" placeholder="请输入保健员名称" value=""
-				       autocomplete="off" class="layui-input" style="width: 120%">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">住址：</label>
-			<div class="layui-inline">
-				<input type="text" id="healtherAdd2" name = "healtherAdd2" placeholder="请输入保健员住址" value=""
-				       autocomplete="off" class="layui-input" style="width: 120%">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">手机号：</label>
-			<div class="layui-inline">
-				<input type="text" id="phone2" name = "phone2" placeholder="请输入保健员手机号" value=""
-				       autocomplete="off" class="layui-input" style="width: 120%">
-			</div>
-		</div>
-	</div>
-
 	<script type="text/html" id="barOption">
 		{{#  if(d.healtherstatus == '启用'){ }}
-		<button type="button" class="layui-btn layui-btn-danger" lay-event="forbidden" >禁用</button>
+		<button type="button" class="layui-btn layui-btn-danger" lay-event="forbidden" ><span class="sp">禁用</span></button>
 		{{#  } }}
 		{{#  if(d.healtherstatus == '禁用'){ }}
-		<button type="button" class="layui-btn layui-btn-danger" lay-event="open" >启用</button>
+		<button type="button" class="layui-btn layui-btn-danger" lay-event="open" ><span class="sp">启用</span></button>
 		{{#  } }}
-		<button type="button" class="layui-btn " lay-event="restPwd" >重置密码</button>
-		<button type="button" class="layui-btn " lay-event="update" >修改</button>
-		<button type="button" class="layui-btn " lay-event="delete" >删除</button>
+		<button type="button" class="layui-btn " lay-event="restPwd" ><span class="sp">重置密码</span></button>
+		<button type="button" class="layui-btn " lay-event="update" ><span class="sp">修改</span></button>
+		<button type="button" class="layui-btn " lay-event="delete" ><span class="sp">删除</span></button>
 	</script>
 </body>
 <script>
@@ -152,22 +171,23 @@
 		var path = $("#path").val();
 		var tableIns = table.render({
 			elem: '#healther'
-			, height: 350
+			, height: 450
 			, url: path + "/admin/healtherMgrInfo"//数据接口
 			, page: true //开启分页
 			, limit: 5
 			, limits: [5, 10]
 			, cols: [[ //表头
-				{field: 'healtherid', title: '编号', align: 'center', width: 120, sort: true, fixed: 'left'}
-				, {field: 'healthername', title: '姓名', align: 'center', width: 90}
-				, {field: 'healtheradd', title: '住址', align: 'center', width: 194}
-				, {field: 'healtherphone', title: '手机号', align: 'center', width: 120}
+				{field: 'healtherid', title: '编号', align: 'center', width: 100, sort: true, fixed: 'left'}
+				, {field: 'healthername', title: '姓名', align: 'center', width: 113}
+				, {field: 'healtheradd', title: '住址', align: 'center', width: 336}
+				, {field: 'healtherphone', title: '手机号', align: 'center', width: 169}
 				, {
-					field: 'healtherregtime', title: '注册时间', align: 'center', width: 180
+					field: 'healtherregtime', title: '注册时间', align: 'center', width: 232
 					, templet: "<div>{{layui.util.toDateString(d.healtherregtime,'yyyy-MM-dd HH:mm:ss')}}</div>"
 				}
-				, {field: 'healtherstatus', title: '状态', align: 'center', width: 60}
-				, {fixed: 'right', title: '操作', align: 'center', width: 360, toolbar: '#barOption'}
+				, {field: 'kindername', title: '所在园所', align: 'center', width: 193}
+				, {field: 'healtherstatus', title: '状态', align: 'center', width: 112}
+				, {fixed: 'right', title: '操作', align: 'center', width: 465, toolbar: '#barOption'}
 			]]
 			, id: 'healtherTable'
 			, parseData: function (res) { //res 即为原始返回的数据
@@ -187,7 +207,7 @@
 				data = obj.data; //获得当前行数据
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if (layEvent === 'forbidden') {
-					layer.confirm("确定禁用保健员账号？",{icon:3,title:'温馨提示'},function (index) {
+					layer.confirm("确定禁用保健员账号？",{icon:3,title:['温馨提示','font-size:18px'],area:['350px','200px'],skin:'demo'},function (index) {
 						layer.close(index);
 						$.ajax({
 							url: path + "/admin/forbiddenHealther",
@@ -197,16 +217,16 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("禁用成功！", {icon: 6});
+									layer.alert("禁用成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									tableIns.reload();
 								}else{
-									layer.alert("禁用失败！", {icon: 2});
+									layer.alert("禁用失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							}
 						});
 					});
 				}else if(layEvent === 'open'){
-					layer.confirm("确定启用保健员账号？",{icon:3,title:'温馨提示'},function (index) {
+					layer.confirm("确定启用保健员账号？",{icon:3,title:['温馨提示','font-size:18px'],area:['350px','200px'],skin:'demo'},function (index) {
 						layer.close(index);
 						$.ajax({
 							url: path + "/admin/openHealther",
@@ -216,16 +236,16 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("启用成功！", {icon: 6});
+									layer.alert("启用成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									tableIns.reload();
 								}else{
-									layer.alert("启用失败！", {icon: 2});
+									layer.alert("启用失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							}
 						});
 					});
 				}else if(layEvent === 'restPwd'){
-					layer.confirm("确定要重置密码？",{icon:3,title:'温馨提示'},function (index) {
+					layer.confirm("确定要重置密码？",{icon:3,title:['温馨提示','font-size:18px'],area:['350px','200px'],skin:'demo'},function (index) {
 						layer.close(index);
 						$.ajax({
 							url: path + "/admin/restHealtherPwd",
@@ -235,10 +255,10 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("密码重置成功！", {icon: 6});
+									layer.alert("密码重置成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									tableIns.reload();
 								}else{
-									layer.alert("密码重置失败！", {icon: 2});
+									layer.alert("密码重置失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							}
 						});
@@ -246,11 +266,12 @@
 				}else if(layEvent === 'update'){
 					layer.open({
 						type: 1,
-						area: ['30%', '60%'],
+						area: ['30%', '45%'],
 						content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-						title: '修改保健员信息',
+						title: ['修改保健员信息','font-size:18px'],
 						btn: ['保存', '取消'],
-						offset: '100px',
+						skin: 'demo-class',
+						closeBtn: 0,
 						btnAlign: 'c',
 						success:function(){
 							$("#name").val(data.healthername);
@@ -262,8 +283,24 @@
 							var add = $("#healtherAdd").val();
 							var phone = $("#phone").val();
 							if (name.length == 0) {
-								layer.alert("请输入保健员名称", {icon: 2});
-							}  else {
+								layer.alert("保健员名字不能为空", {icon: 2});
+							}
+							else if(!name.match(/^[\u4e00-\u9fa5]{2,20}$/)){
+								layer.msg("请输入至少2位中文字符", {icon: 2});
+							}
+							else if(add == 0){
+								layer.msg("住址不能为空", {icon: 2});
+							}
+							else if(!add.match(/^([\u4E00-\u9FA5A-Za-z0-9_]+(省|市|区|县|道|路|街|号)){2,}$/)){
+								layer.msg("输入地址格式如：福建省厦门市仓山区", {icon: 2});
+							}
+							else if(phone == 0){
+								layer.msg("住址不能为空", {icon: 2});
+							}
+							else if(!phone.match(/^1(3|4|5|6|7|8|9)\d{9}$/)){
+								layer.msg("请输入以1开头的11位手机号", {icon: 2});
+							}
+							else {
 								$.ajax({
 									url: path + "/admin/updateHealther",
 									type: "post",
@@ -273,10 +310,10 @@
 										if(result == "success")
 										{
 											layer.close(index);
-											layer.alert("修改保健员信息成功！", {icon: 6});
+											layer.alert("修改保健员信息成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 											tableIns.reload();
 										}else{
-											layer.alert("修改保健员信失败！", {icon: 2});
+											layer.alert("修改保健员信失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 										}
 									}
 								});
@@ -294,58 +331,15 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("保健员信息删除成功！", {icon: 6});
+									layer.alert("保健员信息删除成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									tableIns.reload();
 								}else{
-									layer.alert("保健员信息删除失败！", {icon: 2});
+									layer.alert("保健员信息删除失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							}
 						});
 					});
 				}
-			});
-		});
-
-		$("#btn-add").click(function () {
-			layer.open({
-				type: 1,
-				area: ['30%', '60%'],
-				content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
-				title: '新增保健员',
-				btn: ['保存', '取消'],
-				offset: '100px',
-				btnAlign: 'c',
-				btn1: function (index) {
-					var name = $("#name2").val();
-					var add = $("#healtherAdd2").val();
-					var phone = $("#phone2").val();
-					if (name.length == 0) {
-						layer.alert("请输入保健员名称", {icon: 2});
-					}  else {
-						$.ajax({
-							url: path + '/admin/addHealther',
-							async: true,
-							type: 'post',
-							data: {
-								"healthername": name,
-								"healtheradd": add,
-								"healtherphone":phone,
-								},
-							datatype: 'text',
-							success: function (data) {
-								if (data == "success") {
-									layer.alert("新增成功！", {icon: 6});
-									layer.close(index);
-									tableIns.reload();
-								} else {
-									layer.alert("新增失败", {icon: 2});
-								}
-							}, error: function (data) {
-								layer.alert("网络繁忙！", {icon: 2});
-							}
-						});
-					}
-				},
 			});
 		});
 
@@ -362,10 +356,10 @@
 			});
 			$("#healtherAdd").blur(function () {
 				var add = $("#healtheradd").val();
-				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
+				var reg = /^([\u4E00-\u9FA5A-Za-z0-9_]+(省|市|区|县|道|路|街|号)){2,}$/;
 				if(!$('#healtherAdd').val().match(reg)||add == 0)
 				{
-					layer.msg("请输入至少2位中文字符", {icon: 2});
+					layer.msg("输入地址格式如：福建省厦门市仓山区", {icon: 2});
 				}else{
 					layer.msg("输入合法",{icon:6});
 				}
@@ -374,37 +368,6 @@
 				var phone = $("#phone").val();
 				var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
 				if(!$('#phone').val().match(reg)||phone == 0)
-				{
-					layer.msg("请输入以1开头的11位手机号", {icon: 2});
-				}else{
-					layer.msg("输入合法",{icon:6});
-				}
-			});
-
-			$("#name2").blur(function () {
-				var name = $("#name2").val();
-				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
-				if(!$('#name2').val().match(reg)||name == 0)
-				{
-					layer.msg("请输入至少2位中文字符", {icon: 2});
-				}else{
-					layer.msg("输入合法",{icon:6});
-				}
-			});
-			$("#healtherAdd2").blur(function () {
-				var add = $("#healtherAdd2").val();
-				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
-				if(!$('#healtherAdd2').val().match(reg)||add == 0)
-				{
-					layer.msg("请输入至少2位中文字符", {icon: 2});
-				}else{
-					layer.msg("输入合法",{icon:6});
-				}
-			});
-			$("#phone2").blur(function () {
-				var phone = $("#phone2").val();
-				var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
-				if(!$('#phone2').val().match(reg)||phone == 0)
 				{
 					layer.msg("请输入以1开头的11位手机号", {icon: 2});
 				}else{
@@ -429,6 +392,7 @@
 						, time2: $('#time2').val()
 						, healtherstatus: $('#sel').val()
 						, healthername: $('#healtherName').val()
+						, kindername: $('#kindername option:selected').val()
 					}
 					, page: {
 						curr: 1

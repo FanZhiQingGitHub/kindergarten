@@ -44,6 +44,23 @@
 			height: 40px;
 			line-height: 40px;
 		}
+		body .demo-class .layui-layer-btn{
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+
+		body .demo .layui-layer-btn{
+			margin-top: -5%;
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+		body .demo .layui-layer-content{
+			font-Size:18px
+		}
 	</style>
 </head>
 <body>
@@ -146,6 +163,7 @@
 				title: ['新增图片','font-size:18px'],
 				// btn: ['保存','取消'],
 				// offset: '30px',
+				skin: 'demo-class',
 				// closeBtn:0,
 				btnAlign: 'c',
 				success:function(layero, index){

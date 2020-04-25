@@ -56,7 +56,7 @@ public class ParentSystemLogAspect {
 
     //配置controller环绕通知,使用在方法aspect()上注册的切入点
     @Around("controllerAspect()")
-    public void around(JoinPoint joinPoint) {
+    public Object around(ProceedingJoinPoint joinPoint) {
         System.out.println("==========开始执行controller环绕通知===============");
         long start = System.currentTimeMillis();
         //(signature是信号,标识的意思):获取被增强的方法相关信息.其后续方法有两个
@@ -64,9 +64,13 @@ public class ParentSystemLogAspect {
         //getname(): 返回方法名
         String methodName = joinPoint.getSignature().getName();
 
+        Object result =null;
         try {
             //ProceedingJoinPoint 执行proceed方法的作用是让目标方法执行
-            ((ProceedingJoinPoint) joinPoint).proceed();
+
+            //获取到返回值
+             result  =  joinPoint.proceed();
+
             long end = System.currentTimeMillis();
             if (logger.isInfoEnabled()) {
                 logger.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms!");
@@ -79,6 +83,10 @@ public class ParentSystemLogAspect {
                 logger.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms with exception : " + e.getMessage());
             }
         }
+
+
+
+        return result;
     }
 
     /**
@@ -98,64 +106,65 @@ public class ParentSystemLogAspect {
         InetAddress addr = InetAddress.getLocalHost();
         String ip = addr.getHostAddress();
 
-        try {
+        if (username!=null){
+            try {
 
-            String targetName = joinPoint.getTarget().getClass().getName();
-            String methodName = joinPoint.getSignature().getName();
-            Object[] arguments = joinPoint.getArgs();
-            Class targetClass = Class.forName(targetName);
-            Method[] methods = targetClass.getMethods();
-            String operationType = "";
-            String operationName = "";
-            for (Method method : methods) {
-                if (method.getName().equals(methodName)) {
-                    Class[] clazzs = method.getParameterTypes();
-                    if (clazzs.length == arguments.length) {
-                        operationType = method.getAnnotation(ParentSystemLog.class).operationType();
-                        operationName = method.getAnnotation(ParentSystemLog.class).operationName();
-                        break;
+                String targetName = joinPoint.getTarget().getClass().getName();
+                String methodName = joinPoint.getSignature().getName();
+                Object[] arguments = joinPoint.getArgs();
+                Class targetClass = Class.forName(targetName);
+                Method[] methods = targetClass.getMethods();
+                String operationType = "";
+                String operationName = "";
+                for (Method method : methods) {
+                    if (method.getName().equals(methodName)) {
+                        Class[] clazzs = method.getParameterTypes();
+                        if (clazzs.length == arguments.length) {
+                            operationType = method.getAnnotation(ParentSystemLog.class).operationType();
+                            operationName = method.getAnnotation(ParentSystemLog.class).operationName();
+                            break;
+                        }
                     }
                 }
+                //*========控制台输出=========*//
+                System.out.println("=====controller后置通知开始=====");
+                System.out.println("请求方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()") + "." + operationType);
+                System.out.println("方法描述:" + operationName);
+                System.out.println("请求人:" + username);
+                System.out.println("请求IP:" + ip);
+                //*========数据库日志=========*//
+
+                TblSyslog log = new TblSyslog();
+                log.setOperatedetail(operationName);
+                log.setOperatetype(operationType);
+                log.setOperateip(ip);
+                log.setOperateresult("正常");
+                if(username != null)
+                {
+                    log.setOperateor(username);
+                }else{
+                    log.setOperateor("无");
+                }
+                System.out.println("日志记录时间"+new Date());
+                log.setOperatetime(new Date());
+
+                //保存数据库
+                Integer num = parentService.addLog(log);
+                if(num>0){
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知结束=====");
+                }else {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知异常=====");
+                }
+            } catch (Exception e) {
+                //记录本地异常日志
+                logger.error("==后置通知异常==");
+                logger.error("异常信息:{}------" + e.getMessage());
+                throw e;
             }
-            //*========控制台输出=========*//
-            System.out.println("=====controller后置通知开始=====");
-            System.out.println("请求方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()") + "." + operationType);
-            System.out.println("方法描述:" + operationName);
-            System.out.println("请求人:" + username);
-            System.out.println("请求IP:" + ip);
-            //*========数据库日志=========*//
-
-            TblSyslog log = new TblSyslog();
-            log.setOperatedetail(operationName);
-            log.setOperatetype(operationType);
-            log.setOperateip(ip);
-            log.setOperateresult("正常");
-            if(username != null)
-            {
-                log.setOperateor(username);
-            }else{
-                log.setOperateor("无");
-            }
-            System.out.println("日志记录时间"+new Date());
-            log.setOperatetime(new Date());
-
-            //保存数据库
-            Integer num = parentService.addLog(log);
-            if(num>0){
-                System.out.println(log);
-                System.out.println("=====controller后置通知结束=====");
-            }else {
-                System.out.println(log);
-                System.out.println("=====controller后置通知异常=====");
-            }
-        } catch (Exception e) {
-            //记录本地异常日志
-            logger.error("==后置通知异常==");
-            logger.error("异常信息:{}------" + e.getMessage());
-
-
-            throw e;
         }
+
     }
 
     //配置后置返回通知,使用在方法aspect()上注册的切入点
@@ -180,78 +189,75 @@ public class ParentSystemLogAspect {
         //读取session中的用户
         String username = (String) session.getAttribute("parentname");
         //请求的IP
-        String ip = request.getRemoteAddr();
-
-        if(ip.equals("0:0:0:0:0:0:0:1")){
-            ip = "127.0.0.1";
-        }
-
+        InetAddress addr = InetAddress.getLocalHost();
+        String ip = addr.getHostAddress();
         System.out.println("异常通知开始------------------------------------------");
 
-
-
-        String params = "";
-        if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0) {
-            for (int i = 0; i < joinPoint.getArgs().length; i++) {
+        if (username!=null){
+            String params = "";
+            if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0) {
+                for (int i = 0; i < joinPoint.getArgs().length; i++) {
 //                params += JsonUtil.getJsonStr(joinPoint.getArgs()[i]) + ";";
-                params += joinPoint.getArgs()[i] + ";";
-            }
-        }
-        try {
-
-            String targetName = joinPoint.getTarget().getClass().getName();
-            String methodName = joinPoint.getSignature().getName();
-            Object[] arguments = joinPoint.getArgs();
-            Class targetClass = Class.forName(targetName);
-            Method[] methods = targetClass.getMethods();
-            String operationType = "";
-            String operationName = "";
-            for (Method method : methods) {
-                if (method.getName().equals(methodName)) {
-                    Class[] clazzs = method.getParameterTypes();
-                    if (clazzs.length == arguments.length) {
-                        operationType = method.getAnnotation(ParentSystemLog.class).operationType();
-                        operationName = method.getAnnotation(ParentSystemLog.class).operationName();
-                        break;
-                    }
+                    params += joinPoint.getArgs()[i] + ";";
                 }
             }
+            try {
 
-            //*========控制台输出=========*//
-            System.out.println("=====controller后置通知开始=====");
-            System.out.println("请求方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()") + "." + operationType);
-            System.out.println("方法描述:" + operationName);
-            System.out.println("请求人:" + username);
-            System.out.println("请求IP:" + ip);
-            //*========数据库日志=========*//
-            TblSyslog log = new TblSyslog();
-            log.setOperatedetail(operationName);
-            log.setOperatetype(operationType);
-            log.setOperateip(ip);
-            log.setOperateresult("异常");
-            if(username != null)
-            {
-                log.setOperateor(username);
-            }else{
-                log.setOperateor("无");
-            }
-            System.out.println("日志记录时间"+new Date());
-            log.setOperatetime(new Date());
+                String targetName = joinPoint.getTarget().getClass().getName();
+                String methodName = joinPoint.getSignature().getName();
+                Object[] arguments = joinPoint.getArgs();
+                Class targetClass = Class.forName(targetName);
+                Method[] methods = targetClass.getMethods();
+                String operationType = "";
+                String operationName = "";
+                for (Method method : methods) {
+                    if (method.getName().equals(methodName)) {
+                        Class[] clazzs = method.getParameterTypes();
+                        if (clazzs.length == arguments.length) {
+                            operationType = method.getAnnotation(ParentSystemLog.class).operationType();
+                            operationName = method.getAnnotation(ParentSystemLog.class).operationName();
+                            break;
+                        }
+                    }
+                }
 
-            //保存数据库
-            Integer num = parentService.addLog(log);
-            if(num>0){
-                System.out.println(log);
-                System.out.println("=====controller后置通知结束=====");
-            }else {
-                System.out.println(log);
-                System.out.println("=====controller后置通知异常=====");
+                //*========控制台输出=========*//
+                System.out.println("=====controller后置通知开始=====");
+                System.out.println("请求方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()") + "." + operationType);
+                System.out.println("方法描述:" + operationName);
+                System.out.println("请求人:" + username);
+                System.out.println("请求IP:" + ip);
+                //*========数据库日志=========*//
+                TblSyslog log = new TblSyslog();
+                log.setOperatedetail(operationName);
+                log.setOperatetype(operationType);
+                log.setOperateip(ip);
+                log.setOperateresult("异常");
+                if(username != null)
+                {
+                    log.setOperateor(username);
+                }else{
+                    log.setOperateor("无");
+                }
+                System.out.println("日志记录时间"+new Date());
+                log.setOperatetime(new Date());
+
+                //保存数据库
+                Integer num = parentService.addLog(log);
+                if(num>0){
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知结束=====");
+                }else {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知异常=====");
+                }
+            } catch (Exception ex) {
+                //记录本地异常日志
+                logger.error("==异常通知异常==");
+                logger.error("异常信息:{}------" + ex.getMessage());
             }
-        } catch (Exception ex) {
-            //记录本地异常日志
-            logger.error("==异常通知异常==");
-            logger.error("异常信息:{}------" + ex.getMessage());
         }
+
         /*==========记录本地异常日志==========*/
 //        logger.error("异常方法:{}异常代码:{}异常信息:{}参数:{}-----"+joinPoint.getTarget().getClass().getName() + joinPoint.getSignature().getName(), e.getClass().getName(), e.getMessage(), params);
 

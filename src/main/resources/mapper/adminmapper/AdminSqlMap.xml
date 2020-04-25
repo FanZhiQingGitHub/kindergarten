@@ -36,11 +36,16 @@
            tbl_readmag(readmagname, readmagurl, readmagdetail, readmagtime, readmagpage, photourl)
            values (#{readmagname},#{readmagurl},#{readmagdetail},#{readmagtime},#{readmagpage},#{photourl})
     </insert>
+
+
     <insert id="addPlatFormInfo">
         insert into
             tbl_platforminfo(platforminfoname, platforminfotime, platforminfodetail, platforminfostatus)
             values (#{platforminfoname},#{platforminfotime},#{platforminfodetail},#{platforminfostatus})
     </insert>
+
+
+    <!--新增园长-->
     <insert id="addRector">
         insert into
             tbl_rector(rectorname, rectorpwd, rectorsex, rectorage, rectoradd, rectorphone, rectorregtime, rectorstatus, rid)
@@ -118,6 +123,8 @@
             (#{i.rid},#{i.mid})
         </foreach>
     </insert>
+
+    <!--新增管理员账号-->
     <insert id="addAdminInfos">
         insert into tbl_admin
             (adminname, adminpwd, adminsex, adminphone, adminheadurl, createtime, adminstatus, rid)
@@ -128,54 +135,87 @@
     <delete id="deleteKinderInfo">
         delete from tbl_kinder where kinderid = #{kinderid}
     </delete>
+
+
     <delete id="deleteMenuInfo">
         delete from tbl_menu where menuid = #{menuid}
     </delete>
+
+
     <delete id="deleteRoleMenu">
         delete from tbl_rolemenu where rolemenuid = #{rolemenuid}
     </delete>
+
+
     <delete id="deleteRoleInfo">
         delete from tbl_role where roleid = #{roleid}
     </delete>
+
+
     <delete id="deleteReadInfo">
          delete from tbl_readmag where readmagid = #{readmagid}
     </delete>
+
+
     <delete id="deletePlatFormInfo">
         delete from tbl_platforminfo where platforminfoid = #{platforminfoid}
     </delete>
+
+
     <delete id="deleteRector">
         delete from tbl_rector where rectorid = #{rectorid}
     </delete>
+
+
     <delete id="deleteTeacher">
         delete from tbl_teacher where teacherid = #{teacherid}
     </delete>
+
+
     <delete id="deleteParent">
         delete from tbl_parent where parentid = #{parentId}
     </delete>
+
+
     <delete id="deleteHealther">
         delete from tbl_healther where healtherid = #{healtherid}
     </delete>
+
+
     <delete id="deleteSecurity">
         delete from tbl_security where securityid = #{securityid}
     </delete>
+
+
     <delete id="deleteStudent">
         delete from tbl_student where studentid = #{studentid}
     </delete>
+
+
     <delete id="deleteSafetyVideoInfo">
         delete from tbl_safetyvideo where safetyvideoid = #{safetyvideoid}
     </delete>
+
+
     <delete id="deleteTopic">
         delete from tbl_safetyvtq where safetyvtqid = #{safetyvtqid}
     </delete>
+
+
     <delete id="deleteParameter">
         delete from tbl_parameter where parameterid = #{parameterid}
     </delete>
+
+
     <delete id="deleteMenuId">
         delete from tbl_rolemenu where rid = #{roleid}
     </delete>
+
+
     <delete id="deleteAdmin">
         delete from tbl_admin where adminid = #{adminid}
     </delete>
+
 
     <!--    用户状态查询-->
     <select id="findAdminStatus" resultType="java.lang.String" parameterType="java.util.Map">
@@ -430,7 +470,7 @@
         where rectorid = #{rectorid}
     </update>
 
-<!--    教师-->
+    <!--教师管理-->
     <update id="restTeacherPwd">
         update tbl_teacher
         <set>
@@ -443,6 +483,9 @@
     <update id="updateTeacher">
         update tbl_teacher
         <set>
+            <if test="teachername != '' and teachername != null">
+                teachername = #{teachername},
+            </if>
             <if test="teacherpwd != '' and teacherpwd != null">
                 teacherpwd = #{teacherpwd},
             </if>
@@ -474,7 +517,9 @@
         where teacherid = #{teacherid}
     </update>
 
-<!--    家长管理-->
+
+
+    <!--家长管理-->
     <update id="updateParent">
         update tbl_parent
         <set>
@@ -482,7 +527,7 @@
                 parentpwd = #{parentPwd},
             </if>
             <if test="parentPhone != '' and parentPhone != null">
-                praentphone = #{parentPhone},
+                parentphone = #{parentPhone},
             </if>
             <if test="parentAdd != '' and parentAdd != null">
                 parentadd = #{parentAdd},
@@ -517,6 +562,8 @@
         </set>
         where parentid = #{parentId}
     </update>
+
+
 
     <!--    保健员管理-->
     <update id="updateHealther">
@@ -604,17 +651,26 @@
     <update id="updateStudent">
         update tbl_student
         <set>
+            <if test="studentname != '' and studentname != null">
+                studentname = #{studentname},
+            </if>
             <if test="studentpwd != '' and studentpwd != null">
                 studentpwd = #{studentpwd},
             </if>
-            <if test="studentbirth != '' and studentbirth != null">
-                studentbirth = #{studentbirth},
+            <if test="studentbrith != '' and studentbrith != null">
+                studentbrith = #{studentbrith},
             </if>
-            <if test="studentadd != '' and studentdd != null">
+            <if test="studentadd != '' and studentadd != null">
                 studentadd = #{studentadd},
             </if>
             <if test="studentstatus != '' and studentstatus != null">
                 studentstatus = #{studentstatus},
+            </if>
+            <if test="cid != null">
+                cid = #{cid},
+            </if>
+            <if test="kid != null">
+                kid = #{kid},
             </if>
         </set>
         where studentid = #{studentid}
@@ -637,6 +693,8 @@
         </set>
         where studentid = #{studentid}
     </update>
+
+    <!--题库-->
     <update id="updateTopic">
         update tbl_safetyvtq
         <set>
@@ -658,6 +716,7 @@
         </set>
         where safetyvtqid = #{safetyvtqid}
     </update>
+
     <update id="updateSafetyVideo">
         update tbl_safetyvideo
         <set>
@@ -718,6 +777,9 @@
             </if>
             <if test="adminpwd != '' and adminpwd != null">
                 adminpwd = #{adminpwd},
+            </if>
+            <if test="rid != null">
+                rid = #{rid},
             </if>
         </set>
         where adminid = #{adminid}
@@ -1039,9 +1101,32 @@
         order by platforminfotime asc
     </select>
 
-    <select id="findAllRectorInfo" resultType="com.great.kindergarten.commons.entity.TblRector">
-        select * from tbl_rector
+
+    <!--园长管理-->
+    <resultMap id="RectorMap" type="com.great.kindergarten.admin.javabean.RectorKinderBean">
+        <result column="rectorid" property="rectorid"></result>
+        <result column="rectorname" property="rectorname"></result>
+        <result column="rectorpwd" property="rectorpwd"></result>
+        <result column="rectorsex" property="rectorsex"></result>
+        <result column="rectorage" property="rectorage"></result>
+        <result column="rectoradd" property="rectoradd"></result>
+        <result column="rectorphone" property="rectorphone"></result>
+        <result column="rectorregtime" property="rectorregtime"></result>
+        <result column="rectorstatus" property="rectorstatus"></result>
+        <result column="kinderid" property="kinderid"></result>
+        <result column="kindername" property="kindername"></result>
+        <result column="recid" property="recid"></result>
+        <association property="tblKinder" javaType="com.great.kindergarten.commons.entity.TblKinder">
+            <id property="kinderid" column="kinderid"/>
+            <result property="kinderid" column="kinderid"/>
+            <result property="kindername" column="kindername"/>
+        </association>
+    </resultMap>
+
+    <select id="findAllRectorInfo" resultMap="RectorMap">
+        select r.*,k.kinderid,k.kindername from tbl_rector r,tbl_kinder k
         <where>
+            r.rectorid = k.recid
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(rectorregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -1054,12 +1139,16 @@
             <if test=" rectorstatus != '' and rectorstatus != null and rectorstatus != '请选择'">
                 and rectorstatus = #{rectorstatus}
             </if>
+            <if test=" kindername != '' and kindername != null and kindername != '请选择'">
+                and kindername = #{kindername}
+            </if>
         </where>
-        order by rectorregtime desc
+        order by r.rectorregtime desc
     </select>
     <select id="findRectorInfoCount" resultType="java.lang.Integer">
-        select count(*) from tbl_rector
+        select count(*) from tbl_rector r,tbl_kinder k
         <where>
+            r.rectorid = k.recid
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(rectorregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -1072,10 +1161,15 @@
             <if test=" rectorstatus != '' and rectorstatus != null and rectorstatus != '请选择'">
                 and rectorstatus = #{rectorstatus}
             </if>
+            <if test=" kindername != '' and kindername != null and kindername != '请选择'">
+                and kindername = #{kindername}
+            </if>
         </where>
-        order by rectorregtime desc
+        order by r.rectorregtime desc
     </select>
 
+
+    <!--查找教师信息表-->
     <resultMap id="TeacherMap" type="com.great.kindergarten.commons.entity.TblTeacher">
         <result column="teacherid" property="teacherid"></result>
         <result column="teachername" property="teachername"></result>
@@ -1097,7 +1191,6 @@
         </association>
     </resultMap>
 
-    <!--    查找教师信息表-->
     <select id="findAllTeacherInfo" resultMap="TeacherMap" parameterType="com.great.kindergarten.commons.entity.TblTeacher">
         select c.classid,c.classname,e.*
         from tbl_teacher e,tbl_class c
@@ -1149,7 +1242,8 @@
         select teacherjob from tbl_teacher;
     </select>
 
-<!--    家长管理-->
+
+    <!--家长管理-->
     <select id="findAllParentInfo" resultType="com.great.kindergarten.commons.entity.TblParent">
         select * from tbl_parent
         <where>
@@ -1193,10 +1287,33 @@
         select parentjob from tbl_parent;
     </select>
 
+
     <!--    保健员管理-->
-    <select id="findAllHealtherInfo" resultType="com.great.kindergarten.commons.entity.TblHealther">
-        select * from tbl_healther
+    <resultMap id="HealtherMap" type="com.great.kindergarten.commons.entity.TblHealther">
+        <result column="healtherid" property="healtherid"></result>
+        <result column="healthername" property="healthername"></result>
+        <result column="healtherpwd" property="healtherpwd"></result>
+        <result column="healthersex" property="healthersex"></result>
+        <result column="healtherage" property="healtherage"></result>
+        <result column="healtheradd" property="healtheradd"></result>
+        <result column="healtherphone" property="healtherphone"></result>
+        <result column="healtherregtime" property="healtherregtime"></result>
+        <result column="healtherstatus" property="healtherstatus"></result>
+        <result column="kinderid" property="kinderid"></result>
+        <result column="kindername" property="kindername"></result>
+        <result column="kid" property="kid"></result>
+        <association property="tblKinder" javaType="com.great.kindergarten.commons.entity.TblKinder">
+            <id property="kinderid" column="kinderid"/>
+            <result property="kinderid" column="kinderid"/>
+            <result property="kindername" column="kindername"/>
+        </association>
+    </resultMap>
+
+
+    <select id="findAllHealtherInfo" resultMap="HealtherMap" >
+        select h.*,k.kinderid,k.kindername from tbl_healther h,tbl_kinder k
         <where>
+            h.kid = k.kinderid
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(healtherregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -1209,12 +1326,17 @@
             <if test=" healtherstatus != '' and healtherstatus != null and healtherstatus != '请选择'">
                 and healtherstatus = #{healtherstatus}
             </if>
+            <if test=" kindername != '' and kindername != null and kindername != '请选择'">
+                and kindername = #{kindername}
+            </if>
         </where>
-        order by healtherregtime desc
+        order by h.healtherregtime desc
     </select>
+
     <select id="findHealtherInfoCount" resultType="java.lang.Integer">
-        select count(*) from tbl_healther
+        select count(*) from tbl_healther h,tbl_kinder k
         <where>
+            h.kid = k.kinderid
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(healtherregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -1227,14 +1349,41 @@
             <if test=" healtherstatus != '' and healtherstatus != null and healtherstatus != '请选择'">
                 and healtherstatus = #{healtherstatus}
             </if>
+            <if test=" kindername != '' and kindername != null and kindername != '请选择'">
+                and kindername = #{kindername}
+            </if>
         </where>
-        order by healtherregtime desc
+        order by h.healtherregtime desc
     </select>
+
+
 
     <!--    安防员管理-->
-    <select id="findAllSecurityInfo" resultType="com.great.kindergarten.commons.entity.TblSecurity">
-        select * from tbl_security
+    <resultMap id="SecurityMap" type="com.great.kindergarten.commons.entity.TblSecurity">
+        <result column="securityid" property="securityid"></result>
+        <result column="securityname" property="securityname"></result>
+        <result column="securitypwd" property="securitypwd"></result>
+        <result column="securitysex" property="securitysex"></result>
+        <result column="securityage" property="securityage"></result>
+        <result column="securityadd" property="securityadd"></result>
+        <result column="securityphone" property="securityphone"></result>
+        <result column="securityregtime" property="securityregtime"></result>
+        <result column="securitystatus" property="securitystatus"></result>
+        <result column="kinderid" property="kinderid"></result>
+        <result column="kindername" property="kindername"></result>
+        <result column="kid" property="kid"></result>
+        <association property="tblKinder" javaType="com.great.kindergarten.commons.entity.TblKinder">
+            <id property="kinderid" column="kinderid"/>
+            <result property="kinderid" column="kinderid"/>
+            <result property="kindername" column="kindername"/>
+        </association>
+    </resultMap>
+
+
+    <select id="findAllSecurityInfo" resultMap="SecurityMap">
+        select s.*,k.kinderid,k.kindername from tbl_security s,tbl_kinder k
         <where>
+            s.kid = k.kinderid
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(securityregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -1247,12 +1396,17 @@
             <if test=" securitystatus != '' and securitystatus != null and securitystatus != '请选择'">
                 and securitystatus = #{securitystatus}
             </if>
+            <if test=" kindername != '' and kindername != null and kindername != '请选择'">
+                and kindername = #{kindername}
+            </if>
         </where>
-        order by securityregtime desc
+        order by s.securityregtime desc
     </select>
+
     <select id="findSecurityInfoCount" resultType="java.lang.Integer">
-        select count(*) from tbl_security
+        select count(*) from tbl_security s,tbl_kinder k
         <where>
+            s.kid = k.kinderid
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(securityregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -1265,11 +1419,15 @@
             <if test=" securitystatus != '' and securitystatus != null and securitystatus != '请选择'">
                 and securitystatus = #{securitystatus}
             </if>
+            <if test=" kindername != '' and kindername != null and kindername != '请选择'">
+                and kindername = #{kindername}
+            </if>
         </where>
-        order by securityregtime desc
+        order by s.securityregtime desc
     </select>
 
 
+    <!--查找学生信息表-->
     <resultMap id="StudentMap" type="com.great.kindergarten.commons.entity.TblStudent">
         <result column="studentid" property="studentid"></result>
         <result column="studentname" property="studentname"></result>
@@ -1305,7 +1463,7 @@
         </association>
     </resultMap>
 
-    <!--    查找学生信息表-->
+
     <select id="findAllStudentInfo" resultMap="StudentMap" parameterType="com.great.kindergarten.commons.entity.TblStudent">
         select c.classid,c.classname,k.kinderid,k.kindername,p.parentId,p.parentName,s.*
         from tbl_student s,tbl_kinder k,tbl_class c,tbl_parent p
@@ -1619,9 +1777,13 @@
             <if test=" adminstatus != '' and adminstatus != null and adminstatus != '请选择'">
                 and a.adminstatus = #{adminstatus}
             </if>
+            <if test=" rolename != '' and rolename != null and rolename != '请选择'">
+                and r.rolename = #{rolename}
+            </if>
         </where>
         order by a.createtime desc
     </select>
+
     <select id="findAdminCount" resultType="java.lang.Integer">
         select count(*) from tbl_admin a,tbl_role r
         <where>
@@ -1638,9 +1800,13 @@
             <if test=" adminstatus != '' and adminstatus != null and adminstatus != '请选择'">
                 and a.adminstatus = #{adminstatus}
             </if>
+            <if test=" rolename != '' and rolename != null and rolename != '请选择'">
+                and r.rolename = #{rolename}
+            </if>
         </where>
         order by a.createtime desc
     </select>
+
     <select id="checkAdminName" resultType="com.great.kindergarten.commons.entity.TblAdmin">
         select * from tbl_admin where adminname = #{adminname}
     </select>
@@ -1678,6 +1844,20 @@
     <select id="findReadMagIdByName" resultType="java.lang.Integer">
         select readmagid from tbl_readmag where readmagname = #{readmagname} and readmagpage = 0
     </select>
+
+    <!--所有班级-->
+    <select id="findAllClassName" resultType="java.lang.String">
+        select distinct classname from tbl_class
+    </select>
+
+    <!--根据班级名称查找班级id-->
+    <select id="findIdByClassName" resultType="java.lang.Integer">
+        select classid from tbl_class where classname = #{classname}
+    </select>
+    <select id="findIdByRoleName" resultType="java.lang.Integer">
+        select roleid from tbl_role where rolename = #{rolename}
+    </select>
+
 
     <update id="resetAdminPwd" parameterType="java.util.Map">
         UPDATE tbl_admin SET adminpwd = 'e10adc3949ba59abbe56e057f20f883e' where adminname = #{adminname} and adminphone = #{adminphone};

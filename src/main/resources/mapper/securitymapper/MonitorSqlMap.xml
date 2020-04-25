@@ -33,10 +33,9 @@
 <!--直播视频管理-->
     <select id="findALLMonitorInfoMag" resultType="com.great.kindergarten.commons.entity.TblMonitor"
             parameterType="com.great.kindergarten.security.resultbean.MonitorPage">
-        select mo.monitorid,mo.monitormvname, moname.monitorname,mo.monitormvtime,mo.monitormvurl from tbl_monitor mo ,tbl_kinder kin ,tbl_monitorname moname
+        select mo.monitorid,mo.monitormvname, moname.monitorname,mo.monitormvtime,mo.monitormvurl from tbl_monitor mo ,tbl_monitorname moname
         <where>
-            mo.kid = kin.kinderid and mo.monid = moname.monitornameid
-            and kin.kindername = #{kindername}
+            mo.monid = moname.monitornameid
             <if test="monitormvname != '' and monitormvname != null ">
                 and mo.monitormvname like CONCAT('%',#{monitormvname},'%')
             </if>
@@ -54,10 +53,9 @@
             parameterType="com.great.kindergarten.security.resultbean.MonitorPage">
         select count(*) from tbl_monitor mo ,tbl_kinder kin ,tbl_monitorname moname
         <where>
-            mo.kid = kin.kinderid and mo.monid = moname.monitornameid
-            and kin.kindername = #{kindername}
+            and mo.monid = moname.monitornameid
             <if test="monitormvname != '' and monitormvname != null ">
-                and mo.monitormvname = #{monitormvname}
+                and mo.monitormvname like CONCAT('%',#{monitormvname},'%')
             </if>
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(mo.monitormvtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>

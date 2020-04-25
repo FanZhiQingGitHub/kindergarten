@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.great.kindergarten.admin.annotation.AdminSystemLog;
 import com.great.kindergarten.admin.javabean.DataResult;
 import com.great.kindergarten.admin.javabean.MenuTreeInfo;
+import com.great.kindergarten.admin.javabean.RectorKinderBean;
 import com.great.kindergarten.admin.javabean.TblStatistics;
 import com.great.kindergarten.admin.service.AdminService;
 import com.great.kindergarten.admin.service.SystemLogService;
@@ -229,7 +230,19 @@ public class AdminController
 							}
 						}
 
+						List<TblKinder> kinderList = adminService.findKinder();
+						req.getSession().setAttribute("kinderList", kinderList);
+
+						List<String> tblClassList = adminService.findAllClassName();
+
 						List<TblMenu> stairMenuList = adminService.findStairMenu();
+
+						List<TblRole> roleList = adminService.findRoleInfo();
+
+						req.getSession().setAttribute("tblClassList", tblClassList);
+
+						req.getSession().setAttribute("roleList", roleList);
+
 						req.getSession().setAttribute("stairMenuList", stairMenuList);
 						req.getSession().setAttribute("parentNewList", parentNewList);
 						req.getSession().setAttribute("menuMap", menuMap);
@@ -282,6 +295,16 @@ public class AdminController
 		}
 	}
 
+	/**
+	 * 管理员账号管理
+	 * @param page
+	 * @param limit
+	 * @param tblAdmin
+	 * @param dataResult
+	 * @param req
+	 * @param res
+	 * @throws IOException
+	 */
 	@RequestMapping("/adminMgrInfo")
 	public void adminMgrInfo(String page, String limit, TblAdmin tblAdmin, DataResult dataResult, HttpServletRequest req, HttpServletResponse res) throws IOException
 	{
@@ -289,6 +312,11 @@ public class AdminController
 		if (null != tblAdmin.getAdminname() && !"".equals(tblAdmin.getAdminname().trim()))
 		{
 			condition.put("adminname", tblAdmin.getAdminname());
+		}
+
+		if (null != tblAdmin.getRolename() && !"".equals(tblAdmin.getRolename().trim()))
+		{
+			condition.put("rolename", tblAdmin.getRolename());
 		}
 
 		if (null != tblAdmin.getAdminstatus() && !"".equals(tblAdmin.getAdminstatus().trim()))
@@ -334,14 +362,22 @@ public class AdminController
 	 * @throws Exception
 	 */
 	@RequestMapping("/addAdminInfos")
-	public void addAdminInfos(TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response) throws Exception
+	public void addAdminInfos(TblAdmin tblAdmin, HttpServletRequest request, String rolename , HttpServletResponse response) throws Exception
 	{
+		System.out.println("角色"+rolename);
 		if (tblAdmin != null)
 		{
+			if(rolename != null)
+			{
+				tblAdmin.setRid(adminService.findIdByRoleName(rolename));
+			}
 			tblAdmin.setAdminstatus("启用");
 			tblAdmin.setCreatetime(new Date());
 			tblAdmin.setAdminheadurl("image/adminimg/img/head.jpg");
-			tblAdmin.setAdminpwd(MD5Utils.md5("123456"));
+			if(tblAdmin.getAdminpwd() != null)
+			{
+				tblAdmin.setAdminpwd(MD5Utils.md5(tblAdmin.getAdminpwd()));
+			}
 			int num = adminService.addAdminInfos(tblAdmin);
 			if (num > 0)
 			{
@@ -354,11 +390,19 @@ public class AdminController
 	}
 
 	@RequestMapping("/updateAdminInfos")
-	public void updateAdminInfos(TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response) throws Exception
+	public void updateAdminInfos(TblAdmin tblAdmin, HttpServletRequest request, String rolename , HttpServletResponse response) throws Exception
 	{
 		if (tblAdmin != null)
 		{
-			tblAdmin.setAdminpwd(MD5Utils.md5(tblAdmin.getAdminpwd()));
+			if(rolename != null)
+			{
+				tblAdmin.setRid(adminService.findIdByRoleName(rolename));
+			}
+			if(tblAdmin.getAdminpwd() != null)
+			{
+				tblAdmin.setAdminpwd(MD5Utils.md5(tblAdmin.getAdminpwd()));
+			}
+
 			int num = adminService.updateAdminInfos(tblAdmin);
 			if (num > 0)
 			{
@@ -697,7 +741,6 @@ public class AdminController
 	@RequestMapping("/findKinderInfoById")
 	public void findKinderInfoById(TblKinder tblKinder , HttpServletRequest request, HttpServletResponse response)
 	{
-		System.out.println("园所信息"+tblKinder);
 		if(tblKinder != null)
 		{
 			List<TblKinder> tblKinderList = adminService.findKinderInfoById(tblKinder.getKinderid());
@@ -745,13 +788,11 @@ public class AdminController
 		tblKinderList = adminService.findAllKinder(condition, rowBounds);
 		if (tblKinderList != null)
 		{
-			List<TblKinder> kinderList = adminService.findKinder();
 			Gson gson = new GsonBuilder().serializeNulls().create();
 			dataResult.setCode(0);
 			dataResult.setCount(num);
 			dataResult.setMsg("");
 			dataResult.setData(tblKinderList);
-			req.getSession().setAttribute("kinderList", kinderList);
 			res.setContentType("application/json; charset=utf-8");
 			res.getWriter().write(gson.toJson(dataResult));
 			res.getWriter().flush();
@@ -769,7 +810,12 @@ public class AdminController
 		}
 	}
 
-	//园所资质申请通过
+	/**
+	 * 园所资质申请通过
+	 * @param tblKinder
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping("/checkQualify")
 	public void checkQualify(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -793,7 +839,12 @@ public class AdminController
 		}
 	}
 
-	//园所资质申请未通过
+	/**
+	 * 园所资质申请未通过
+	 * @param tblKinder
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping("/reject")
 	public void reject(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -817,7 +868,11 @@ public class AdminController
 		}
 	}
 
-	//根据园所名称查找园所账号
+	/**
+	 * 根据园所名称查找园所账号
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping("/kinderAccount")
 	public void findAccountByName(HttpServletRequest request, HttpServletResponse response)
 	{
@@ -841,13 +896,14 @@ public class AdminController
 	@RequestMapping("/addKinder")
 	public void addKinder(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
+		List<TblKinder> tblKinderList = new ArrayList<>();
 		if(tblKinder != null)
 		{
 			tblKinder.setKinderregtime(new Date());
 			tblKinder.setKinderstatus("未审批");
 			tblKinder.setKindercode("启用");
 			tblKinder.setKinderpwd(MD5Utils.md5(tblKinder.getKinderpwd()));
-			List<TblKinder> tblKinderList = new ArrayList<>();
+
 			tblKinderList.add(tblKinder);
 			int num = adminService.addKinder(tblKinderList);
 			if (num > 0)
@@ -977,6 +1033,7 @@ public class AdminController
 	}
 
 	/**
+	 * 修改园所信息
 	 * @param tblKinder
 	 * @param request
 	 * @param response
@@ -997,6 +1054,16 @@ public class AdminController
 		}
 	}
 
+	/**
+	 * 角色管理
+	 * @param page
+	 * @param limit
+	 * @param tblRole
+	 * @param dataResult
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping("/roleMgrInfo")
 	public void roleDemo(String page, String limit, TblRole tblRole, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -1021,6 +1088,12 @@ public class AdminController
 		}
 	}
 
+	/**
+	 * 修改角色信息
+	 * @param tblRole
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping("/updateRoleInfo")
 	public void updateRoleInfo(TblRole tblRole, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1070,7 +1143,12 @@ public class AdminController
 		}
 	}
 
-	//新增角色
+	/**
+	 * 新增角色
+	 * @param tblRole
+	 * @param request
+	 * @param response
+	 */
 	@AdminSystemLog(operationType = "新增角色", operationName = "管理员新增角色")
 	@RequestMapping("/addRoleItems")
 	public void addRoleItems(TblRole tblRole, HttpServletRequest request, HttpServletResponse response)
@@ -1275,9 +1353,7 @@ public class AdminController
 			{
 				files.getParentFile().mkdirs();
 			}
-			System.out.println("绘本信息："+readMagName1);
 			Integer readmagid = adminService.findReadMagIdByName(readMagName1);
-			System.out.println(readmagid);
 			tblReadmag.setReadmagname(readMagName1);
 			tblReadmag.setReadmagurl("E:\\kindergarten\\亲子阅读");
 			tblReadmag.setReadmagdetail(contentInfo);
@@ -1502,34 +1578,69 @@ public class AdminController
 		}
 	}
 
-	//园长管理
+	/**
+	 * 园长管理
+	 * @param page
+	 * @param limit
+	 * @param tblRector
+	 * @param dataResult
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping("/rectorMgrInfo")
-	public void rectorMgrInfo(String page, String limit, TblRector tblRector, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	public void rectorMgrInfo(String page, String limit, TblRector tblRector, RectorKinderBean rectorKinderBean, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 		HashMap<String, Object> condition = new HashMap<>();
-		if (null != tblRector.getRectorname() && !"".equals(tblRector.getRectorname().trim()))
+
+		if (null != rectorKinderBean.getRectorname() && !"".equals(rectorKinderBean.getRectorname().trim()))
 		{
-			condition.put("rectorname", tblRector.getRectorname());
+			condition.put("rectorname", rectorKinderBean.getRectorname());
 		}
 
-		if (null != tblRector.getRectorstatus() && !"".equals(tblRector.getRectorstatus().trim()))
+		if (null != rectorKinderBean.getKindername() && !"".equals(rectorKinderBean.getKindername().trim()))
 		{
-			condition.put("rectorstatus", tblRector.getRectorstatus());
+			condition.put("kindername", rectorKinderBean.getKindername());
 		}
 
-		if (null != tblRector.getTime1() && !"".equals(tblRector.getTime1().trim()))
+		if (null != rectorKinderBean.getRectorstatus() && !"".equals(rectorKinderBean.getRectorstatus().trim()))
 		{
-			condition.put("time1", tblRector.getTime1());
+			condition.put("rectorstatus", rectorKinderBean.getRectorstatus());
 		}
 
-		if (null != tblRector.getTime2() && !"".equals(tblRector.getTime2().trim()))
+		if (null != rectorKinderBean.getTime1() && !"".equals(rectorKinderBean.getTime1().trim()))
 		{
-			condition.put("time2", tblRector.getTime2());
+			condition.put("time1", rectorKinderBean.getTime1());
 		}
+
+		if (null != rectorKinderBean.getTime2() && !"".equals(rectorKinderBean.getTime2().trim()))
+		{
+			condition.put("time2", rectorKinderBean.getTime2());
+		}
+//		if (null != tblRector.getRectorname() && !"".equals(tblRector.getRectorname().trim()))
+//		{
+//			condition.put("rectorname", tblRector.getRectorname());
+//		}
+//
+//		if (null != tblRector.getRectorstatus() && !"".equals(tblRector.getRectorstatus().trim()))
+//		{
+//			condition.put("rectorstatus", tblRector.getRectorstatus());
+//		}
+//
+//		if (null != tblRector.getTime1() && !"".equals(tblRector.getTime1().trim()))
+//		{
+//			condition.put("time1", tblRector.getTime1());
+//		}
+//
+//		if (null != tblRector.getTime2() && !"".equals(tblRector.getTime2().trim()))
+//		{
+//			condition.put("time2", tblRector.getTime2());
+//		}
 
 		int num = adminService.findRectorInfoCount(condition);
 		RowBounds rowBounds = new RowBounds((Integer.valueOf(page) - 1) * Integer.valueOf(limit), Integer.valueOf(limit));
-		List<TblRector> tblRectorList = adminService.findAllRectorInfo(condition, rowBounds);
+//		List<TblRector> tblRectorList = adminService.findAllRectorInfo(condition, rowBounds);
+		List<RectorKinderBean> tblRectorList = adminService.findAllRectorInfo(condition, rowBounds);
 		if (tblRectorList != null)
 		{
 			dataResult.setCode(0);
@@ -1543,19 +1654,27 @@ public class AdminController
 		}
 	}
 
+	/**
+	 * 新增园长
+	 * @param tblRector
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping("/addRector")
 	public void addRector(TblRector tblRector, HttpServletRequest request, HttpServletResponse response)
 	{
+		List<TblRector> tblRectorList = new ArrayList<>();
 		if (tblRector != null)
 		{
 			tblRector.setRectorregtime(new Date());
 			tblRector.setRectorstatus("启用");
-			tblRector.setRectorpwd(MD5Utils.md5("123456"));
-			List<TblRector> tblRectorList = new ArrayList<>();
+			tblRector.setRid(1);
+			tblRector.setRectorpwd(MD5Utils.md5(tblRector.getRectorpwd()));
 			tblRectorList.add(tblRector);
 			int num = adminService.addRector(tblRectorList);
 			if (num > 0)
 			{
+				tblRectorList.clear();
 				ResponseUtils.outHtml(response, "success");
 			} else
 			{
@@ -1648,7 +1767,16 @@ public class AdminController
 		}
 	}
 
-	//教师管理
+	/**
+	 * 教师管理
+	 * @param page
+	 * @param limit
+	 * @param tblTeacher
+	 * @param dataResult
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping("/teacherMgrInfo")
 	public void teacherMgrInfo(String page, String limit, TblTeacher tblTeacher, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -1694,25 +1822,6 @@ public class AdminController
 		}
 	}
 
-	@RequestMapping("/addTeacher")
-	public void addTeacher(TblTeacher tblTeacher, HttpServletRequest request, HttpServletResponse response)
-	{
-		if (tblTeacher != null)
-		{
-			tblTeacher.setTeacherregtime(new Date());
-			tblTeacher.setTeacherstatus("启用");
-			List<TblTeacher> tblTeacherList = new ArrayList<>();
-			tblTeacherList.add(tblTeacher);
-			int num = adminService.addTeacher(tblTeacherList);
-			if (num > 0)
-			{
-				ResponseUtils.outHtml(response, "success");
-			} else
-			{
-				ResponseUtils.outHtml(response, "error");
-			}
-		}
-	}
 
 	@RequestMapping("/forbiddenTeacher")
 	public void forbiddenTeacher(TblTeacher tblTeacher, HttpServletRequest request, HttpServletResponse response)
@@ -1798,7 +1907,16 @@ public class AdminController
 		}
 	}
 
-	//家长管理
+	/**
+	 * 家长管理
+	 * @param page
+	 * @param limit
+	 * @param tblParent
+	 * @param dataResult
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping("/parentMgrInfo")
 	public void parentMgrInfo(String page, String limit, TblParent tblParent, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -1841,26 +1959,6 @@ public class AdminController
 			response.getWriter().write(GsonUtils.getgsonUtils().toStr(dataResult));
 			response.getWriter().flush();
 			response.getWriter().close();
-		}
-	}
-
-	@RequestMapping("/addParent")
-	public void addParent(TblParent tblParent, HttpServletRequest request, HttpServletResponse response)
-	{
-		if (tblParent != null)
-		{
-			tblParent.setParentRegTime(new Date());
-			tblParent.setParentStatus("启用");
-			List<TblParent> tblParentList = new ArrayList<>();
-			tblParentList.add(tblParent);
-			int num = adminService.addParent(tblParentList);
-			if (num > 0)
-			{
-				ResponseUtils.outHtml(response, "success");
-			} else
-			{
-				ResponseUtils.outHtml(response, "error");
-			}
 		}
 	}
 
@@ -1948,14 +2046,29 @@ public class AdminController
 		}
 	}
 
-	//保健员管理
+	/**
+	 * 保健员管理
+	 * @param page
+	 * @param limit
+	 * @param tblHealther
+	 * @param dataResult
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping("/healtherMgrInfo")
 	public void healtherMgrInfo(String page, String limit, TblHealther tblHealther, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 		HashMap<String, Object> condition = new HashMap<>();
+
 		if (null != tblHealther.getHealthername() && !"".equals(tblHealther.getHealthername().trim()))
 		{
 			condition.put("healthername", tblHealther.getHealthername());
+		}
+
+		if (null != tblHealther.getKindername() && !"".equals(tblHealther.getKindername().trim()))
+		{
+			condition.put("kindername", tblHealther.getKindername());
 		}
 
 		if (null != tblHealther.getHealtherstatus() && !"".equals(tblHealther.getHealtherstatus().trim()))
@@ -1989,25 +2102,6 @@ public class AdminController
 		}
 	}
 
-	@RequestMapping("/addHealther")
-	public void addHealther(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response)
-	{
-		if (tblHealther != null)
-		{
-			tblHealther.setHealtherregtime(new Date());
-			tblHealther.setHealtherstatus("启用");
-			List<TblHealther> tblHealtherList = new ArrayList<>();
-			tblHealtherList.add(tblHealther);
-			int num = adminService.addHealther(tblHealtherList);
-			if (num > 0)
-			{
-				ResponseUtils.outHtml(response, "success");
-			} else
-			{
-				ResponseUtils.outHtml(response, "error");
-			}
-		}
-	}
 
 	@RequestMapping("/forbiddenHealther")
 	public void forbiddenHealther(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response)
@@ -2098,9 +2192,15 @@ public class AdminController
 	public void securityMgrInfo(String page, String limit, TblSecurity tblSecurity, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 		HashMap<String, Object> condition = new HashMap<>();
+
 		if (null != tblSecurity.getSecurityname() && !"".equals(tblSecurity.getSecurityname().trim()))
 		{
 			condition.put("securityname", tblSecurity.getSecurityname());
+		}
+
+		if (null != tblSecurity.getKindername() && !"".equals(tblSecurity.getKindername().trim()))
+		{
+			condition.put("kindername", tblSecurity.getKindername());
 		}
 
 		if (null != tblSecurity.getSecuritystatus() && !"".equals(tblSecurity.getSecuritystatus().trim()))
@@ -2134,25 +2234,6 @@ public class AdminController
 		}
 	}
 
-	@RequestMapping("/addSecurity")
-	public void addSecurity(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response)
-	{
-		if (tblSecurity != null)
-		{
-			tblSecurity.setSecurityregtime(new Date());
-			tblSecurity.setSecuritystatus("启用");
-			List<TblSecurity> tblSecurityList = new ArrayList<>();
-			tblSecurityList.add(tblSecurity);
-			int num = adminService.addSecurity(tblSecurityList);
-			if (num > 0)
-			{
-				ResponseUtils.outHtml(response, "success");
-			} else
-			{
-				ResponseUtils.outHtml(response, "error");
-			}
-		}
-	}
 
 	@RequestMapping("/forbiddenSecurity")
 	public void forbiddenSecurity(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response)
@@ -2284,12 +2365,12 @@ public class AdminController
 	@RequestMapping("/addStudent")
 	public void addStudent(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response)
 	{
+		List<TblStudent> tblStudentList = new ArrayList<>();
 		if (tblStudent != null)
 		{
 			SimpleDateFormat sf = new SimpleDateFormat();
 			tblStudent.setStudenttime(new Date());
 			tblStudent.setStudentstatus("启用");
-			List<TblStudent> tblStudentList = new ArrayList<>();
 			tblStudentList.add(tblStudent);
 			int num = adminService.addStudent(tblStudentList);
 			if (num > 0)
@@ -2371,8 +2452,17 @@ public class AdminController
 	}
 
 	@RequestMapping("/updateStudent")
-	public void updateStudent(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response)
+	public void updateStudent(TblStudent tblStudent, HttpServletRequest request, String classname, String kindername, HttpServletResponse response)
 	{
+		System.out.println("班级"+classname+","+"园所"+kindername);
+		if(kindername != null && !kindername.equals("请选择"))
+		{
+			tblStudent.setKid(adminService.findIdByKinderName(kindername));
+		}
+		if(classname != null && !classname.equals("请选择"))
+		{
+			tblStudent.setCid(adminService.findIdByClassName(classname));
+		}
 		if (tblStudent != null)
 		{
 			int num = adminService.updateStudent(tblStudent);

@@ -25,6 +25,10 @@ public class TblHealther {
 
    private Integer kid;
 
+   //连表查询用
+   private TblKinder tblKinder;
+   private Integer kinderid;
+   private String kindername;
    private String code;
    private String time1;
    private String time2;
@@ -161,6 +165,36 @@ public class TblHealther {
     public void setKid(Integer kid)
     {
         this.kid = kid;
+    }
+
+    public TblKinder getTblKinder()
+    {
+        return tblKinder;
+    }
+
+    public void setTblKinder(TblKinder tblKinder)
+    {
+        this.tblKinder = tblKinder;
+    }
+
+    public Integer getKinderid()
+    {
+        return kinderid;
+    }
+
+    public void setKinderid(Integer kinderid)
+    {
+        this.kinderid = kinderid;
+    }
+
+    public String getKindername()
+    {
+        return kindername;
+    }
+
+    public void setKindername(String kindername)
+    {
+        this.kindername = kindername;
     }
 
     @Override
