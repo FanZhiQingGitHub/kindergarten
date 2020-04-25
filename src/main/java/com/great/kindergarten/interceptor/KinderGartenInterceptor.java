@@ -82,6 +82,8 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
                 return true;
             }else {
                 response.sendRedirect(basePath + "/parent/toUrl/parentLogin");
+                //重定向之后放行
+                return true;
             }
 
 

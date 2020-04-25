@@ -140,6 +140,7 @@ public class ParentController {
 
 
     //重置密码
+    @ParentSystemLog(operationType = "密码", operationName = "重置了密码")
     @RequestMapping("/resetParentpwd")
     public void resetParentpwd(HttpServletRequest request, HttpServletResponse response) {
         String parentname = request.getParameter("parentname");
@@ -519,7 +520,7 @@ public class ParentController {
         return "parentJsp/SafetyTestQuestion";
     }
 
-
+	@ParentSystemLog(operationType = "登陆", operationName = "退出登陆了")
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request) {
         //移除当前在线的家长
@@ -527,6 +528,7 @@ public class ParentController {
         return "parentJsp/parentLogin";
     }
 
+	@ParentSystemLog(operationType = "密码", operationName = "修改了旧密码")
     @RequestMapping("/updateParentPwd")
     @ResponseBody
     public Result updateParentPwd(HttpServletRequest request) {
@@ -589,10 +591,18 @@ public class ParentController {
         }
     }
 
-//    @ParentSystemLog(operationType = "登陆", operationName = "家长登陆")
+	@RequestMapping("/selectLogin")
+	@ResponseBody
+    public List<String> selectLogin(){
+    	return parentService.selectLogin();
+    }
+
+
+
+    @ParentSystemLog(operationType = "登陆", operationName = "家长登陆")
     @RequestMapping("/Login")
     @ResponseBody
-    public Result parentLogin(HttpServletRequest request, String parentName, String parentPwd, String code) {
+    public Result parentLogin(HttpServletRequest request, String parentName, String parentPwd, String code,String kinderName) {
 
         Result loginResult = new Result();
 
@@ -602,7 +612,7 @@ public class ParentController {
 
             if (parentName != null && parentPwd != null) {
                 String loginPwd = MD5Utils.md5(parentPwd);
-                TblParent loginParent = parentService.parentLogin(parentName, loginPwd);
+                TblParent loginParent = parentService.parentLogin(parentName, loginPwd,kinderName);
                 parentname = parentName;
                 if (loginParent != null) {
                     //返回ajax数据跳转到家长端首页
@@ -635,7 +645,7 @@ public class ParentController {
 
 
     //-------------人脸识别考勤---------------
-
+    @ParentSystemLog(operationType = "人脸识别", operationName = "注册了人脸数据")
     @RequestMapping("/regFaceId")
     @ResponseBody
   public Result regFaceId(HttpServletRequest request, HttpServletResponse response) {

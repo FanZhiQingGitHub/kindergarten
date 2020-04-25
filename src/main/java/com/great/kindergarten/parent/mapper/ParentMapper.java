@@ -208,14 +208,20 @@ public interface ParentMapper {
 	List<TblSafetyvideo>findVideoList( SearchCondition condition);
 
 
+	/**
+	 * 查找当前可以登陆的园所
+	 * @return
+	 */
+	List<String>selectLogin();
 
 	/**
 	 * 家长登陆接口
 	 * @param parentName
 	 * @param parentPwd
+	 * @param kindername
 	 * @return
 	 */
-	 TblParent parentLogin(String parentName, String parentPwd);
+	 TblParent parentLogin(String parentName, String parentPwd,String kindername);
 
 	/**
 	 * 根据家长id和旧密码判断旧密码是否输入正确

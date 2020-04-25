@@ -50,7 +50,7 @@
         .container {
             position: absolute;
             width: 28%;
-            height: 39%;
+            height: 50%;
             min-height: 33%;
             max-height: 50%;
             top: -20%;
@@ -172,6 +172,19 @@
         <div class="container">
             <h1 id="hh1">智慧幼儿园家长登录界面</h1>
             <hr style="color: white">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label" >园所:</label>
+                <div class="layui-input-block">
+
+                    <select id="kinderName" name="kinderName">
+
+                    </select>
+
+
+                </div>
+            </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-block">
@@ -180,6 +193,7 @@
                            autocomplete="off" class="layui-input" id="te1">
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">密 &nbsp;&nbsp;码</label>
                 <div class="layui-input-inline">
@@ -291,6 +305,47 @@
         });
 
         $(function () {
+
+            layui.use('form', function(){
+                var form = layui.form,
+                        $ = layui.$;
+                $.ajax({
+                    url: path + "/parent/selectLogin",
+                    async: true,
+                    type: "post",
+                    data: {},
+                    success: function (list) {
+
+                        var ArrayList =list;
+
+                        var $kinderName =$("#kinderName");
+                        //清空原本的园所
+                        $kinderName.empty();
+
+                        if (ArrayList.length>0){
+                            //循环添加园所
+                            for(var startNumber=0;startNumber<ArrayList.length;startNumber++){
+                                $kinderName.append("<option value='"+ArrayList[startNumber]+"'>"+ArrayList[startNumber]+"</option>");
+                            }
+                        }
+
+                        //重新渲染
+                        form.render("select");
+
+                    }, error: function () {
+                        layer.msg("网络繁忙！", {icon: 2});
+                    }
+                });
+            });
+
+
+
+
+
+
+
+
+
             $("#code").click(function () {
                 var path = $("#path").val();
                 var code = document.getElementById("code");

@@ -334,6 +334,14 @@ public class ParentService {
     }
 
 
+    /**
+     * 找到可以登陆的园所
+     * @return
+     */
+    public List<String> selectLogin(){
+        return parentMapper.selectLogin();
+    }
+
 
     /**
      * 家长端口登陆方法
@@ -341,8 +349,8 @@ public class ParentService {
      * @param parentPwd
      * @return
      */
-    public TblParent parentLogin(String parentName, String parentPwd){
-        return parentMapper.parentLogin(parentName,parentPwd);
+    public TblParent parentLogin(String parentName, String parentPwd,String kindername){
+        return parentMapper.parentLogin(parentName,parentPwd,kindername);
     }
 
     //---------------------------孩子考勤新增方法------------------------------
