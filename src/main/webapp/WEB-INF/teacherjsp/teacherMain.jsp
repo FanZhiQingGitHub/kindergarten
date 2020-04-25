@@ -66,6 +66,7 @@
 				<dd><a href="javascript:void(0);" id="a1" >个人信息</a></dd>
 				<dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
 				<dd><a href="javascript:void(0);"  class="addTeaAttendTime">教师上课打卡</a></dd>
+				<dd><a href="javascript:void(0)" id="regFaceId">人脸注册</a></dd>
 			</dl>
 		</li>
 		<li class="layui-nav-item"><a href="javascript:void(0);" id="exit" style="color: black;font-size: 18px">注销</a></li>
@@ -452,6 +453,22 @@
 						'<source src="'+videoUrl+'" type="video/mp4"></source></video>'
 				//直接跳出一个标签播放视频
 			});
+		});
+
+
+
+		$("#regFaceId").click(function () {
+			layer.open({
+				type: 2,
+				area: ['95%', '81%'],
+				offset: ['10%', '3%'],
+				title: '智慧幼儿园-人脸注册界面',
+				content: path + '/teacher/toUrl/teacherFaceRegistered' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+				, success: function (layero, index) {
+					var body = layer.getChildFrame("body", index);
+				}
+			});
+
 		});
 
 	});
