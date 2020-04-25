@@ -33,7 +33,6 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
         //request.getContextPath()可以返回当前页面所在的应用的名字
         String path = request.getContextPath();
         String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path;
-        System.out.println("basePath="+basePath);
 //        String main = "/kindergarten/main/path/main";
 //        String admin = "/kindergarten/admin/toUrl/adminMain";
 //        String director = "/kindergarten/director/toUrl/directorMain";
@@ -42,37 +41,37 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
 //        String security = "/kindergarten/security/path/securityMain";
 //        String teacher = "/kindergarten/teacher/toUrl/teacherMain";
 
-        //判断幼儿园是否登录
-        if (request.getSession().getAttribute("kindername") != null) {
-            return true;
-        }
-        //判断管理员是否登录
-        if (request.getSession().getAttribute("rolename") != null) {
-            return true;
-        }
-        //判断园长是否登录
-        if (request.getSession().getAttribute("rectorname") != null) {
-            return true;
-        }
-        //判断保健员是否登录
-        if (request.getSession().getAttribute("healthername") != null) {
-            return true;
-        }
-        //判断家长是否登录
-        if (request.getSession().getAttribute("parentname") != null) {
-            return true;
-        }
-        //判断安防员是否登录
-        if (request.getSession().getAttribute("securityname") != null) {
-            return true;
-        }
-        //判断班主任是否登录
-        if (request.getSession().getAttribute("teachername") != null) {
-            return true;
-        }
-        System.out.println("返回幼儿园登录界面");
-        response.sendRedirect(basePath + "/main/path/Login");
-        return false;
+//        //判断幼儿园是否登录
+//        if (request.getSession().getAttribute("kindername") != null) {
+//            return true;
+//        }
+//        //判断管理员是否登录
+//        if (request.getSession().getAttribute("rolename") != null) {
+//            return true;
+//        }
+//        //判断园长是否登录
+//        if (request.getSession().getAttribute("rectorname") != null) {
+//            return true;
+//        }
+//        //判断保健员是否登录
+//        if (request.getSession().getAttribute("healthername") != null) {
+//            return true;
+//        }
+//        //判断家长是否登录
+//        if (request.getSession().getAttribute("parentname") != null) {
+//            return true;
+//        }
+//        //判断安防员是否登录
+//        if (request.getSession().getAttribute("securityname") != null) {
+//            return true;
+//        }
+//        //判断班主任是否登录
+//        if (request.getSession().getAttribute("teachername") != null) {
+//            return true;
+//        }
+//        System.out.println("返回幼儿园登录界面");
+//        response.sendRedirect(basePath + "/main/path/Login");
+        return true;
     }
 
     // 用户鉴权具体方法

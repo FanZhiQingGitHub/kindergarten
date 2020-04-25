@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.healther.resultbean.MealPage;
 import com.great.kindergarten.parent.annotation.ParentSystemLog;
+import com.great.kindergarten.parent.resultbean.LivePage;
 import com.great.kindergarten.parent.service.ParentService;
 import com.great.kindergarten.security.resultbean.MonitorPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
@@ -160,28 +161,24 @@ public class ParentController {
 
 
     @RequestMapping("/showMonitorInfo")
-    public void showMonitorInfo(DateWrite dateWrite, MonitorPage monitorPage, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void showMonitorInfo(DateWrite dateWrite, LivePage livePage, HttpServletRequest request, HttpServletResponse response) throws Exception {
         //显示幼儿园直播列表
 
         //取得是谁要进行操作
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
-
         Integer limit = Integer.valueOf(request.getParameter("limit"));
-
         Integer page = Integer.valueOf(request.getParameter("page"));
-
 
         Integer maxpage = limit;
         Integer minpage = (page - 1) * limit;
 
-        monitorPage.setLimit(maxpage);
-        monitorPage.setPage(minpage);
-        monitorPage.setKindername(parent.getKindername());
-
-
-        List<TblMonitor> tblMonitorList = securityService.findALLMonitorInfo(monitorPage);
+        livePage.setLimit(maxpage);
+        livePage.setPage(minpage);
+        Integer cid = parentService.findParentCidByName(parentname);
+        livePage.setCid(cid);
+        List<TblMonitor> tblMonitorList = parentService.findALLMonitorInfo(livePage);
         if (0 != tblMonitorList.size()) {
-            Integer count = securityService.findALLMonitorInfoCount(monitorPage).intValue();
+            Integer count = parentService.findALLMonitorInfoCount(livePage).intValue();
             dateWrite.setMsg(" ");
             dateWrite.setCode(0);
             dateWrite.setCount(count);

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.great.kindergarten.parent.mapper.ParentMapper">
+
+    <select id="findParentCidByName" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select stu.cid from tbl_parent pa ,tbl_student stu where pa.parentid = stu.pid and pa.parentname=#{parentname}
+    </select>
+
+    <!--直播视频管理-->
+    <select id="findALLMonitorInfo" resultType="com.great.kindergarten.commons.entity.TblMonitor"
+            parameterType="com.great.kindergarten.parent.resultbean.LivePage">
+        select mr.monitorid,mn.monitorname,mr.monitorimgurl,mr.monitormvurl,mr.kid from tbl_clamon cl,tbl_monitorname mn,tbl_monitor mr where cl.mnid = mn.monitornameid and mr.monid = mn.monitornameid  and cl.cid = #{cid}
+        limit #{page},#{limit}
+    </select>
+
+    <select id="findALLMonitorInfoCount" resultType="java.lang.Long"
+            parameterType="com.great.kindergarten.parent.resultbean.LivePage">
+        select count(*) from tbl_clamon cl,tbl_monitorname mn,tbl_monitor mr where cl.mnid = mn.monitornameid and mr.monid = mn.monitornameid  and cl.cid = #{cid}
+    </select>
+
+</mapper>

@@ -2,6 +2,8 @@ package com.great.kindergarten.parent.mapper;
 
 import com.great.kindergarten.commons.entity.*;
 import com.great.kindergarten.healther.resultbean.MealPage;
+import com.great.kindergarten.parent.resultbean.LivePage;
+import com.great.kindergarten.security.resultbean.MonitorPage;
 import com.great.kindergarten.security.resultbean.PickUpInfoDetailPage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -260,4 +262,9 @@ public interface ParentMapper {
 
 	public Boolean resetParentpwd(Map<String, String> parentmap);
 
+	public List<TblMonitor> findALLMonitorInfo(LivePage livePage);
+
+	public Long findALLMonitorInfoCount(LivePage livePage);
+
+	public Integer findParentCidByName(Map<String,String> parentmap);
 }
