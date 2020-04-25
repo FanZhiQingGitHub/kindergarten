@@ -76,11 +76,12 @@ public class AdminService {
 	{
 		//获取主菜单
 		List<TblMenu> rootMenu = new ArrayList<>();
+		Integer rid = adminMapper.findRoleId(adminname);
 		rootMenu = adminMapper.findMenuByName(adminname);
 		//获取子菜单
 		for (TblMenu menu : rootMenu)
 		{
-			menu.setChildrenList(adminMapper.findMenuBySid(menu.getMenuid()));
+			menu.setChildrenList(adminMapper.findMenuBySid(menu.getMenuid(),rid));
 		}
 		return rootMenu;
 	}
@@ -93,13 +94,15 @@ public class AdminService {
 		return rootMenu;
 	}
 
+
 	public HashMap<String, List<TblMenu>> findMenus(String adminname)
 	{
 		List<TblMenu> menuList1 = adminMapper.findMenuByName(adminname);
+		Integer rid = adminMapper.findRoleId(adminname);
 		LinkedHashMap<String,List<TblMenu>> menuMap = new LinkedHashMap<>();
 		for (TblMenu tblMenu : menuList1)
 		{
-			List<TblMenu> menuList2 = adminMapper.findMenuBySid(tblMenu.getMenuid());
+			List<TblMenu> menuList2 = adminMapper.findMenuBySid(tblMenu.getMenuid(),rid);
 			menuMap.put(tblMenu.getMenuname(), menuList2);
 		}
 		return menuMap;
@@ -128,6 +131,11 @@ public class AdminService {
 	public int updateMenuInfo(TblMenu tblMenu)
 	{
 		return adminMapper.updateMenuInfo(tblMenu);
+	}
+
+	public Integer checkMenuSort(Integer sort)
+	{
+		return adminMapper.checkMenuSort(sort);
 	}
 
 	public int deleteMenuInfo(Integer menuid)
@@ -261,6 +269,7 @@ public class AdminService {
 		return adminMapper.initialPwd(parametername);
 	}
 
+
 	//角色管理
 	public List<TblRole> findAllRoleInfo(HashMap<String, Object> condition, RowBounds rowBounds)
 	{
@@ -366,9 +375,9 @@ public class AdminService {
 		return rootMenu;
 	}
 
-	public List<TblMenu> findMenuBySid(Integer sid)
+	public List<TblMenu> findMenuBySonId(Integer sid)
 	{
-		return adminMapper.findMenuBySid(sid);
+		return adminMapper.findMenuBySonId(sid);
 	}
 
 	//平台资讯
@@ -449,6 +458,17 @@ public class AdminService {
 		return adminMapper.addRector(tblRectorList);
 	}
 
+	public Integer selectRectorName(String rectorname)
+	{
+		return adminMapper.selectRectorName(rectorname);
+	}
+
+	public Integer findRectorId(String rectorname,String rectorphone)
+	{
+		return adminMapper.findRectorId(rectorname,rectorphone);
+	}
+
+
 	//教师管理
 	public List<TblTeacher> findAllTeacherInfo(HashMap<String, Object> condition, RowBounds rowBounds)
 	{
@@ -478,11 +498,6 @@ public class AdminService {
 	public int updateTeacherStatus(TblTeacher tblTeacher)
 	{
 		return adminMapper.updateTeacherStatus(tblTeacher);
-	}
-
-	public int addTeacher(List<TblTeacher> tblTeacherList)
-	{
-		return adminMapper.addTeacher(tblTeacherList);
 	}
 
 	public List<String> findAllJob()
@@ -742,36 +757,10 @@ public class AdminService {
 	}
 
 	//幼儿统计
-	public List<TblExamination> findChildrenStatisticsInfo()
-	{
-		return adminMapper.findChildrenStatisticsInfo();
-	}
 
-	//男性
-	public List<TblStatistics> findChildrenMaleInfo()
+	public List<TblStatistics> findChildrenSexInfo()
 	{
-		return adminMapper.findChildrenMaleInfo();
-	}
-
-	//女性
-	public List<TblStatistics> findChildrenFeMaleInfo()
-	{
-		return adminMapper.findChildrenFeMaleInfo();
-	}
-
-	public List<TblStatistics> findChildrenAAgeInfo()
-	{
-		return adminMapper.findChildrenAAgeInfo();
-	}
-
-	public List<TblStatistics> findChildrenBAgeInfo()
-	{
-		return adminMapper.findChildrenBAgeInfo();
-	}
-
-	public List<TblStatistics> findChildrenCAgeInfo()
-	{
-		return adminMapper.findChildrenCAgeInfo();
+		return adminMapper.findChildrenSexInfo();
 	}
 
 	public List<TblStatistics> findChildrenAgeInfo()
@@ -784,15 +773,36 @@ public class AdminService {
 		return adminMapper.findChildrenStatusInfo();
 	}
 
-	public List<TblStatistics> findTSexInfo()
+	//教师统计
+
+	public List<TblStatistics> findTeacherAgeInfo()
 	{
-		return adminMapper.findTSexInfo();
+		return adminMapper.findTeacherAgeInfo();
 	}
 
-	public List<TblStatistics> findTAgeInfo()
+	public List<TblStatistics> findTeacherSexInfo()
 	{
-		return adminMapper.findTAgeInfo();
+		return adminMapper.findTeacherSexInfo();
 	}
+
+	//园所统计
+
+	public List<TblStatistics> findKinderScaleInfo()
+	{
+		return adminMapper.findKinderScaleInfo();
+	}
+
+	public List<TblStatistics> findKinderFundsInfo()
+	{
+		return adminMapper.findKinderFundsInfo();
+	}
+
+
+
+
+
+
+
 
 	public List<MenuTreeInfo> findAllMenuInfo()
 	{

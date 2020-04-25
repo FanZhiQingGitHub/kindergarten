@@ -56,6 +56,22 @@
 		body .demo .layui-layer-content{
 			font-Size:18px
 		}
+
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
+		}
 	</style>
 </head>
 <body>
@@ -226,7 +242,10 @@
 					field: 'rectorregtime', title: '入职时间', align: 'center', width: 223
 					, templet: "<div>{{layui.util.toDateString(d.rectorregtime,'yyyy-MM-dd HH:mm:ss')}}</div>"
 				}
-				, {field: 'kindername', title: '所在园所', align: 'center', width: 193}
+				, {field: 'kindername', title: '所在园所', align: 'center', width: 193
+				,templet:function (d) {
+						return d.kindername == null ? '无': d.kindername
+					}}
 				, {field: 'rectorstatus', title: '状态', align: 'center', width: 99}
 				, {fixed: 'right', title: '操作', align: 'center', width: 440, toolbar: '#barOption'}
 			]]
@@ -442,11 +461,6 @@
 							success: function (data) {
 								if (data == "success") {
 									layer.alert("新增成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
-									$("#name2").val("");
-									$("#rectorPwd2").val("");
-									$("#rectorAge2").val("");
-									$("#rectorAdd2").val("");
-									$("#phone2").val("");
 									layer.close(index);
 									tableIns.reload();
 								} else {
@@ -469,14 +483,30 @@
 		});
 
 		$(function () {
-			$("#name").blur(function () {
-				var name = $("#name").val();
+			$("#name2").on('blur',function () {
+				var name = $("#name2").val();
 				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
-				if(!$('#name').val().match(reg)||name == 0)
+				var path = $("#path").val();
+				if(!$('#name2').val().match(reg)||name == 0)
 				{
 					layer.msg("请输入至少2位中文字符", {icon: 2});
 				}else{
-					layer.msg("输入合法",{icon:6});
+					$.ajax({
+						url: path + "/admin/selectRectorName",
+						async: true,
+						type: "post",
+						data: {"rectorname": name},
+						dataType: "text",
+						success: function (msg) {
+							if (msg === "success") {
+								layer.msg("园长字已存在，请更换其他名字！");
+								$("#name2").focus();
+							}
+						},
+						error: function () {
+							layer.alert("网络繁忙");
+						}
+					});
 				}
 			});
 			$("#rectorAdd").blur(function () {
@@ -500,16 +530,34 @@
 				}
 			});
 
-			$("#name2").blur(function () {
-				var name = $("#name2").val();
+			$("#name").on('blur',function () {
+				var name = $("#name").val();
 				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
-				if(!$('#name2').val().match(reg)||name == 0)
+				var path = $("#path").val();
+				if(!$('#name').val().match(reg)||name == 0)
 				{
 					layer.msg("请输入至少2位中文字符", {icon: 2});
 				}else{
-					layer.msg("输入合法",{icon:6});
+					$.ajax({
+						url: path + "/admin/selectRectorName",
+						async: true,
+						type: "post",
+						data: {"rectorname": name},
+						dataType: "text",
+						success: function (msg) {
+							if (msg === "success") {
+								layer.msg("园长字已存在，请更换其他名字！");
+								$("#name").focus();
+							}
+						},
+						error: function () {
+							layer.alert("网络繁忙");
+						}
+					});
 				}
 			});
+
+
 			$("#rectorPwd2").blur(function () {
 				var pwd = $("#rectorPwd2").val();
 				var reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/;

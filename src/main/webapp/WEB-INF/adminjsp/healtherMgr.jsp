@@ -56,6 +56,21 @@
 		body .demo .layui-layer-content{
 			font-Size:18px
 		}
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
+		}
 	</style>
 </head>
 <body>
@@ -185,7 +200,10 @@
 					field: 'healtherregtime', title: '注册时间', align: 'center', width: 232
 					, templet: "<div>{{layui.util.toDateString(d.healtherregtime,'yyyy-MM-dd HH:mm:ss')}}</div>"
 				}
-				, {field: 'kindername', title: '所在园所', align: 'center', width: 193}
+				, {field: 'kindername', title: '所在园所', align: 'center', width: 193
+				,templet:function (d) {
+					return d.kindername == null ? '无': d.kindername
+				}}
 				, {field: 'healtherstatus', title: '状态', align: 'center', width: 112}
 				, {fixed: 'right', title: '操作', align: 'center', width: 465, toolbar: '#barOption'}
 			]]

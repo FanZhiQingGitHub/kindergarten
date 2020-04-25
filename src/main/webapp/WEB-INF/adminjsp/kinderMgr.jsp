@@ -53,6 +53,21 @@
 		body .demo .layui-layer-content{
 			font-Size:18px
 		}
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
+		}
 	</style>
 </head>
 <body>
@@ -131,19 +146,7 @@
 				       class="layui-input" style="width: 160%">
 			</div>
 		</div>
-<%--		<div class="layui-form-item">--%>
-<%--			<label class="layui-form-label">园所名称：</label>--%>
-<%--			<div class="layui-inline">--%>
-<%--				<select name="selNames" id="selNames" lay-filter="selectNames" lay-verify="" >--%>
-<%--					<option value="请选择">请选择</option>--%>
-<%--					<c:if test="${not empty kinderList}">--%>
-<%--						<c:forEach items="${kinderList}" var="u">--%>
-<%--							<option value="${u.kindername}">${u.kindername}</option>--%>
-<%--						</c:forEach>--%>
-<%--					</c:if>--%>
-<%--				</select>--%>
-<%--			</div>--%>
-<%--		</div>--%>
+
 		<div class="layui-form-item">
 			<label class="layui-form-label" style="width: 30%">账号：</label>
 			<div class="layui-inline">
@@ -222,7 +225,10 @@
 				, cols: [[ //表头
 					{field: 'kinderid', title: '序号', align: 'center', width: 160, sort: true, fixed: 'left'}
 					, {field: 'kindername', title: '园所名称', align: 'center', width: 340}
-					, {field: 'rectorname', title: '园长名称', align: 'center', width: 180}
+					, {field: 'rectorname', title: '园长名称', align: 'center', width: 180
+						,templet:function (d) {
+							return d.rectorname == null ? '无': d.rectorname
+						}}
 					, {field: 'kinderacount', title: '园所账号', align: 'center', width: 180}
 					, {field: 'kindercode', title: '园所状态', align: 'center', width: 180}
 					, {field: 'kinderapptime', title: '审批时间', align: 'center', width: 320

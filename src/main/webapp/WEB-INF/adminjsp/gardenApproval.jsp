@@ -15,32 +15,9 @@
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/image/adminimg/css/gardenApproval.css"/>
 	<script src="${pageContext.request.contextPath}/layui/layui.js"></script>
 	<style type="text/css">
-		/** {*/
-		/*    margin: 0;*/
-		/*    padding: 0;*/
-		/*}*/
-		/*html {*/
-		/*    width: 100%;*/
-		/*    height: 100%;*/
-		/*}*/
 		body {
-			/*width: 100%;*/
-			/*height: 100%;*/
-			/*background-size: 100% 100%;*/
-			/*background-attachment: fixed;*/
 			font-size: 120%;
 		}
-		/*#alldiv {*/
-		/*    position: absolute;*/
-		/*    width: 100%;*/
-		/*    height: 100%;*/
-		/*}*/
-		/*#hh1 {*/
-		/*    font-weight: bold;*/
-		/*    margin-top: 1%;*/
-		/*    text-align: center;*/
-		/*    font-family: 楷体;*/
-		/*}*/
 
 		.container {
 			position: relative;
@@ -54,8 +31,6 @@
 			padding: 10px;
 			z-index: 130;
 			border-radius: 10px;
-			/*background-color: rgba(82, 108, 108, 0.2);*/
-			/*box-shadow: 0 3px 18px rgba(240, 255, 255, 0.2);*/
 		}
 		.layui-form-item .layui-input-inline{
 			width: 300px;

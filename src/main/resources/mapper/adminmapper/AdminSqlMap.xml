@@ -15,10 +15,10 @@
 
     <insert id="addKinder" parameterType="java.util.List">
         insert into
-        tbl_kinder(kindername,kinderlp,kinderlpid,kinderlpadd,kinderlpphone,schoolpermit,healthpermit,firepermit,grouppermit,registrationpermit,kinderapptime,kinderregtime,kinderstatus,kinderacount,kindercode,kinderpwd,kinderscale,kinderfunds)
+        tbl_kinder(kindername,kinderlp,kinderlpid,kinderlpadd,kinderlpphone,schoolpermit,healthpermit,firepermit,grouppermit,registrationpermit,kinderapptime,kinderregtime,kinderstatus,kinderacount,kindercode,kinderpwd,kinderscale,kinderfunds,recid)
         values
         <foreach collection="list" item="i" index="index" separator=",">
-            (#{i.kindername},#{i.kinderlp},#{i.kinderlpid},#{i.kinderlpadd},#{i.kinderlpphone},#{i.schoolpermit},#{i.healthpermit},#{i.firepermit},#{i.grouppermit},#{i.registrationpermit},#{i.kinderapptime},#{i.kinderregtime},#{i.kinderstatus},#{i.kinderacount},#{i.kindercode},#{i.kinderpwd},#{i.kinderscale},#{i.kinderfunds})
+            (#{i.kindername},#{i.kinderlp},#{i.kinderlpid},#{i.kinderlpadd},#{i.kinderlpphone},#{i.schoolpermit},#{i.healthpermit},#{i.firepermit},#{i.grouppermit},#{i.registrationpermit},#{i.kinderapptime},#{i.kinderregtime},#{i.kinderstatus},#{i.kinderacount},#{i.kindercode},#{i.kinderpwd},#{i.kinderscale},#{i.kinderfunds},#{i.recid})
         </foreach>
     </insert>
 
@@ -216,7 +216,6 @@
         delete from tbl_admin where adminid = #{adminid}
     </delete>
 
-
     <!--    用户状态查询-->
     <select id="findAdminStatus" resultType="java.lang.String" parameterType="java.util.Map">
         select adminstatus from tbl_admin
@@ -255,12 +254,21 @@
 	</select>
 
     <select id="findMenuBySid" resultType="com.great.kindergarten.commons.entity.TblMenu" parameterType="java.lang.Integer">
-        select * from tbl_menu a, tbl_rolemenu b where a.menusonid = #{menusonid} and a.menuid = b.mid
+        select * from tbl_menu a, tbl_rolemenu b where a.menusonid = #{sid} and a.menuid = b.mid and b.rid = #{rid}
+    </select>
+
+    <select id="findMenuBySonId" resultType="com.great.kindergarten.commons.entity.TblMenu" parameterType="java.lang.Integer">
+        select * from tbl_menu a, tbl_rolemenu b where a.menusonid =  #{menusonid} and a.menuid = b.mid
+    </select>
+
+    <select id="findRoleId" resultType="java.lang.Integer">
+        select rid from tbl_admin where adminname = #{adminname}
     </select>
 
     <select id="findRoleByRid" resultType="java.lang.String">
         select rolename from tbl_role where roleid = #{roleid}
     </select>
+
 
     <resultMap id="AdminInfoMap" type="com.great.kindergarten.commons.entity.TblAdmin">
         <result column="adminid" property="adminid"></result>
@@ -349,24 +357,28 @@
         </set>
         where kinderid = #{kinderid}
     </update>
+
+
     <update id="updateMenuInfo">
         update tbl_menu
         <set>
             <if test="menuname != '' and menuname != null">
                 menuname = #{menuname},
             </if>
-            <if test="menusonid != '' and menusonid != null">
+            <if test="menusonid != null">
                 menusonid = #{menusonid},
             </if>
             <if test="menuurl != '' and menuurl != null">
                 menuurl = #{menuurl},
             </if>
-            <if test="sort != '' and sort != null">
+            <if test="sort != null">
                 sort = #{sort},
             </if>
         </set>
         where menuid = #{menuid}
     </update>
+
+
     <update id="updateRoleInfo">
         update tbl_role
         <set>
@@ -376,6 +388,8 @@
         </set>
         where roleid = #{roleid}
     </update>
+
+
     <update id="reUploadBook">
         update tbl_readmag
         <set>
@@ -794,6 +808,10 @@
         where adminid = #{adminid}
     </update>
 
+    <!--密码重置-->
+    <update id="resetAdminPwd" parameterType="java.util.Map">
+        UPDATE tbl_admin SET adminpwd = 'e10adc3949ba59abbe56e057f20f883e' where adminname = #{adminname} and adminphone = #{adminphone};
+    </update>
 
     <!--园所信息-->
     <resultMap id="KinderMap" type="com.great.kindergarten.commons.entity.TblKinder">
@@ -832,9 +850,9 @@
 
 
     <select id="findAllKinder" resultMap="KinderMap">
-        select k.*,r.rectorid,r.rectorname from tbl_kinder k,tbl_rector r
+        select k.*,r.rectorid,r.rectorname from tbl_kinder k left join tbl_rector r
+            on k.recid = r.rectorid
         <where>
-            k.recid = r.rectorid
 
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(kinderregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
@@ -856,9 +874,9 @@
     </select>
 
     <select id="findAllCount" resultType="java.lang.Integer">
-        select count(*) from tbl_kinder k,tbl_rector r
+        select count(*) from tbl_kinder k left join tbl_rector r
+            on k.recid = r.rectorid
         <where>
-            k.recid = r.rectorid
             <if test="time1!= '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(kinderregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -942,7 +960,7 @@
                 and menuname = #{pName}
             </if>
         </where>
-        order by menuname asc
+        order by sort asc
     </select>
 
     <select id="findMenuCount" resultType="java.lang.Integer">
@@ -955,7 +973,6 @@
                 and menuname = #{pName}
             </if>
         </where>
-        order by menuname asc
     </select>
 
 
@@ -993,7 +1010,7 @@
     </select>
 
     <select id="findAllRoleName" resultType="java.lang.String">
-        select rolename from tbl_role
+        select distinct rolename from tbl_role
     </select>
     <select id="findRoleMenuIdByRid" resultType="com.great.kindergarten.commons.entity.TblRoleMenu">
         select t2.rolemenuid from tbl_role t1,tbl_rolemenu t2 where t1.roleid = t2.rid
@@ -1124,9 +1141,8 @@
     </resultMap>
 
     <select id="findAllRectorInfo" resultMap="RectorMap">
-        select r.*,k.kinderid,k.kindername from tbl_rector r,tbl_kinder k
+        select r.*,k.kinderid,k.kindername from tbl_rector r left join tbl_kinder k on r.rectorid = k.recid
         <where>
-            r.rectorid = k.recid
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(rectorregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -1146,9 +1162,8 @@
         order by r.rectorregtime desc
     </select>
     <select id="findRectorInfoCount" resultType="java.lang.Integer">
-        select count(*) from tbl_rector r,tbl_kinder k
+        select count(*) from tbl_rector r left join tbl_kinder k on r.rectorid = k.recid
         <where>
-            r.rectorid = k.recid
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(rectorregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -1239,7 +1254,7 @@
         order by e.teacherregtime desc
     </select>
     <select id="findAllJob" resultType="java.lang.String">
-        select teacherjob from tbl_teacher;
+        select distinct teacherjob from tbl_teacher
     </select>
 
 
@@ -1284,7 +1299,7 @@
         order by parentRegTime desc
     </select>
     <select id="findParentJob" resultType="java.lang.String">
-        select parentjob from tbl_parent;
+        select distinct  parentjob from tbl_parent;
     </select>
 
 
@@ -1311,9 +1326,10 @@
 
 
     <select id="findAllHealtherInfo" resultMap="HealtherMap" >
-        select h.*,k.kinderid,k.kindername from tbl_healther h,tbl_kinder k
+        select h.*,k.kinderid,k.kindername from tbl_healther h
+            left join tbl_kinder k on  h.kid = k.kinderid
         <where>
-            h.kid = k.kinderid
+
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(healtherregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -1334,9 +1350,9 @@
     </select>
 
     <select id="findHealtherInfoCount" resultType="java.lang.Integer">
-        select count(*) from tbl_healther h,tbl_kinder k
+        select count(*) from tbl_healther h left join tbl_kinder k on  h.kid = k.kinderid
         <where>
-            h.kid = k.kinderid
+
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(healtherregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -1381,9 +1397,10 @@
 
 
     <select id="findAllSecurityInfo" resultMap="SecurityMap">
-        select s.*,k.kinderid,k.kindername from tbl_security s,tbl_kinder k
+        select s.*,k.kinderid,k.kindername from tbl_security s
+            left join tbl_kinder k on  s.kid = k.kinderid
         <where>
-            s.kid = k.kinderid
+
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(securityregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -1404,9 +1421,10 @@
     </select>
 
     <select id="findSecurityInfoCount" resultType="java.lang.Integer">
-        select count(*) from tbl_security s,tbl_kinder k
+        select count(*) from tbl_security s
+        left join tbl_kinder k on  s.kid = k.kinderid
         <where>
-            s.kid = k.kinderid
+
             <if test=" time1 != '' and time1 != null">
                 <![CDATA[   and DATE_FORMAT(securityregtime, '%Y-%m-%d')>=  DATE_FORMAT(#{time1}, '%Y-%m-%d')   ]]>
             </if>
@@ -1590,10 +1608,10 @@
         select * from tbl_safetyvtq where safetyvtqid = #{safetyvtqid}
     </select>
     <select id="findAllParameterType" resultType="java.lang.String">
-        select parametertype from tbl_parameter;
+        select distinct  parametertype from tbl_parameter;
     </select>
 
-<!--    幼儿统计-->
+    <!--幼儿统计-->
     <resultMap id="ChildrenStatisticsMap" type="com.great.kindergarten.commons.entity.TblExamination">
         <result column="healthstatus" property="healthstatus"></result>
         <result column="examinationtime" property="examinationtime"></result>
@@ -1609,93 +1627,10 @@
         </association>
     </resultMap>
 
-    <select id="findChildrenStatisticsInfo" resultMap="ChildrenStatisticsMap" parameterType="com.great.kindergarten.commons.entity.TblExamination">
-        select s.studentsex,s.studentname,s.studentbrith,e.healthstatus,e.examinationtime
-            from tbl_examination e,tbl_student s
-            <where>
-                e.sid = s.studentid
-            </where>
-            group by s.studentname,s.studentsex,s.studentbrith,e.healthstatus,e.examinationtime
-    </select>
 
-    <select id="findChildrenMaleInfo" parameterType="com.great.kindergarten.commons.entity.TblExamination"
-            resultType="com.great.kindergarten.admin.javabean.TblStatistics">
-        select date_format(e.examinationtime, '%Y-%m-%d') as time,count(s.studentsex) as maleCount from tbl_student s,tbl_examination e
-            <where>
-                s.studentid = e.sid and s.studentsex = '男'
-            </where>
-            group by time
-    </select>
-    <select id="findChildrenFeMaleInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
-        select date_format(e.examinationtime, '%Y-%m-%d') as time,count(s.studentsex) as feMaleCount from tbl_student s,tbl_examination e
-        <where>
-            s.studentid = e.sid and s.studentsex = '女'
-        </where>
-        group by time
-    </select>
-    <select id="findChildrenAAgeInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
-        select TIMESTAMPDIFF(YEAR,studentbrith,CURDATE()) AS age,
-            date_format(e.examinationtime, '%Y-%m-%d') as time,
-            count(s.studentbrith) aCount
-            from tbl_student s, tbl_examination e
-        <where>
-            s.studentid = e.sid
-        </where>
-            group by time,age having age &lt; 3
-    </select>
 
-    <select id="findChildrenBAgeInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
-        select TIMESTAMPDIFF(YEAR,studentbrith,CURDATE()) AS age,
-            date_format(e.examinationtime, '%Y-%m-%d') as time,
-            count(s.studentbrith) bCount
-            from tbl_student s, tbl_examination e
-            <where>
-                s.studentid = e.sid
-            </where>
-        group by time,age having age &gt;= 3 and age &lt;= 4
-    </select>
 
-    <select id="findChildrenCAgeInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
-        select TIMESTAMPDIFF(YEAR,studentbrith,CURDATE()) AS age,
-            date_format(e.examinationtime, '%Y-%m-%d') as time,
-            count(s.studentbrith) cCount
-            from tbl_student s, tbl_examination e
-            <where>
-                s.studentid = e.sid
-            </where>
-        group by time,age having age &gt; 4 and age &lt;= 6
-    </select>
 
-    <select id="findChildrenAgeInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
-      select TIMESTAMPDIFF(YEAR,studentbrith,CURDATE()) AS age,date_format(e.examinationtime,'%Y-%m-%d') as time,count(s.studentbrith) aCount
-        from tbl_student s, tbl_examination e
-        where s.studentid = e.sid
-        group by time,age;
-    </select>
-
-    <select id="findChildrenStatusInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
-        select date_format(e.examinationtime,'%Y-%m-%d') as time,
-        e.healthstatus,
-        count(e.healthstatus) normalCount
-        from tbl_student s, tbl_examination e
-        <where>
-            s.studentid = e.sid
-        </where>
-        group by time,e.healthstatus;
-    </select>
-
-    <select id="findTSexInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
-        select date_format(teacherregtime, '%Y-%m-%d') as time,
-            count(teachersex) as maleCount,teachersex
-            from tbl_teacher
-        group by time,teachersex
-    </select>
-    <select id="findTAgeInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
-        select date_format(teacherregtime, '%Y-%m-%d') as time,
-            count(teacherage) as aCount,teacherage
-            from tbl_teacher
-        group by time,teacherage
-    </select>
 
     <!--    权限-->
     <select id="findAllMenuInfo" resultMap="TreeMap1">
@@ -1711,6 +1646,7 @@
             <result column="menuid" property="id"/>
         </collection>
     </resultMap>
+
 
     <!--根据父id查找到对应的子id -->
     <select id="sonMenuByMid" resultMap="Tree1" parameterType="java.lang.Integer">
@@ -1817,7 +1753,7 @@
         select count(*) from tbl_admin where adminname = #{adminname}
     </select>
     <select id="findAllReadBookName" resultType="java.lang.String">
-        select readmagname from tbl_readmag where readmagpage = 0
+        select distinct readmagname from tbl_readmag where readmagpage = 0
     </select>
 
     <!--根据绘本名查找绘本信息-->
@@ -1858,10 +1794,60 @@
         select roleid from tbl_role where rolename = #{rolename}
     </select>
 
+    <select id="selectRectorName" resultType="java.lang.Integer">
+        select rectorid from tbl_rector where rectorname = #{rectorname}
+    </select>
 
-    <update id="resetAdminPwd" parameterType="java.util.Map">
-        UPDATE tbl_admin SET adminpwd = 'e10adc3949ba59abbe56e057f20f883e' where adminname = #{adminname} and adminphone = #{adminphone};
-    </update>
+
+    <!--幼儿统计-->
+    <select id="findChildrenSexInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select studentsex as sex,count(studentsex) as num
+            from tbl_student group by studentsex
+    </select>
+
+    <select id="findChildrenAgeInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select TIMESTAMPDIFF(YEAR,studentbrith,CURDATE()) as age,count(studentbrith) as num
+            from tbl_student group by age
+    </select>
+
+    <select id="findChildrenStatusInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select e.healthstatus as status,count(e.healthstatus) as num
+            from tbl_student s , tbl_examination e
+            where s.studentid = e.sid group by e.healthstatus
+    </select>
+
+
+
+    <select id="findTeacherAgeInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select teacherage as age,count(teacherage) as num
+        from tbl_teacher group by teacherage
+    </select>
+
+    <select id="findTeacherSexInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select teachersex as sex,count(teachersex) as num
+            from tbl_teacher group by teachersex
+    </select>
+
+
+
+    <select id="findKinderScaleInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+         select kinderscale as scale,count(kinderscale) as num
+            from tbl_kinder group by kinderscale
+    </select>
+    <select id="findKinderFundsInfo" resultType="com.great.kindergarten.admin.javabean.TblStatistics">
+        select kinderfunds as funds,count(kinderfunds) as num
+            from tbl_kinder group by kinderfunds
+    </select>
+
+
+    <select id="findRectorId" resultType="java.lang.Integer">
+        select rectorid from tbl_rector where rectorname = #{rectorname} and rectorphone = #{rectorphone}
+    </select>
+
+    <select id="checkMenuSort" resultType="java.lang.Integer">
+        select menuid from tbl_menu where sort = #{sort}
+    </select>
+
 
 
 </mapper>

@@ -18,11 +18,7 @@
 			text-align: center;
 			margin-top: 2%;
 		}
-		/*#pName{*/
-		/*	margin-top: 5%;*/
-		/*	width: 168%;*/
-		/*	height: 30%;*/
-		/*}*/
+
 		body{
 			font-size: 140%;
 		}
@@ -60,6 +56,22 @@
 		}
 		body .demo .layui-layer-content{
 			font-Size:18px
+		}
+
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
 		}
 	</style>
 </head>
@@ -241,7 +253,6 @@
 						content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
 						title: ['修改菜单','font-size:18px'],
 						btn: ['保存', '取消'],
-						// offset: '100px',
 						skin: 'demo-class',
 						closeBtn: 0,
 						btnAlign: 'c',
@@ -256,22 +267,48 @@
 							var pName = $('#pName2').val();
 							var sort = $('#sort2').val();
 							var menuUrl = $('#menuUrl2').val();
-							$.ajax({
-								url: path + "/admin/updateMenuInfo",
-								type: "post",
-								data: {"menuname": menuName, "menuurl":menuUrl, "pName": pName,"sort":sort,"menuid":data.menuid},
-								dataType: "text",
-								success: function (result) {
-									if(result == "success")
-									{
-										layer.close(index);
-										layer.alert("修改菜单信息成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
-										tableIns.reload();
-									}else{
-										layer.alert("修改菜单信息失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+							if (menuName.length == 0) {
+								layer.msg("菜单名不能为空", {icon: 2});
+							}
+							else if(!menuName.match(/^[\u4e00-\u9fa5]{2,20}$/)){
+								layer.msg("请输入至少2位中文字符", {icon: 2});
+							}
+							else if(pName == 0){
+								layer.msg("上级菜单不能为空",{icon: 2})
+							}
+							else if(!pName.match(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/)){
+								layer.msg("请输入至少2位中文字符", {icon: 2});
+							}else if(menuUrl == 0)
+							{
+								layer.msg("菜单URL不能为空", {icon: 2});
+							}else if( sort == 0)
+							{
+								layer.msg("菜单排序号不能为空", {icon: 2});
+							}else if(!/^[0-9]*$/.test(sort))
+							{
+								layer.msg("请输入数字", {icon: 2});
+							}else{
+								$.ajax({
+									url: path + "/admin/updateMenuInfo",
+									type: "post",
+									data: {"menuname": menuName, "menuurl":menuUrl, "pName": pName,"sort":sort,"menuid":data.menuid},
+									dataType: "text",
+									success: function (result) {
+										if(result == "success")
+										{
+											layer.close(index);
+											layer.alert("修改菜单信息成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+											tableIns.reload();
+										}else{
+											layer.alert("修改菜单信息失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+										}
+									},
+									error: function () {
+										layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									}
-								}
-							});
+								});
+							}
+
 						}
 					});
 				}else if(layEvent === 'delete'){
@@ -304,7 +341,6 @@
 				content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
 				title: ['新增菜单','font-size:18px'],
 				btn: ['提交', '返回'],
-				// offset: '100px',
 				btnAlign: 'c',
 				skin: 'demo-class',
 				closeBtn: 0,
@@ -316,25 +352,62 @@
 					var pName = $('#supName').val();
 					var menuUrl = $('#menuUrl').val();
 					var sort = $('#sort').val();
-					$.ajax({
-						url: path + '/admin/addMenuItems',
-						async: true,
-						type: 'post',
-						data: {"menuname": menuName, "pName": pName,"menuurl":menuUrl,"sort":sort},
-						datatype: 'text',
-						success: function (data) {
-							if (data == "success") {
-								layer.alert("新增菜单成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
-								layer.close(index);
-								tableIns.reload();
-							} else {
-								layer.alert("新增菜单失败", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+					if (menuName.length == 0) {
+						layer.msg("菜单名不能为空", {icon: 2});
+					}
+					else if(!menuName.match(/^[\u4e00-\u9fa5]{2,20}$/)){
+						layer.msg("请输入至少2位中文字符", {icon: 2});
+					}
+					else if(pName == 0){
+						layer.msg("上级菜单不能为空",{icon: 2})
+					}
+					else if(!pName.match(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/)){
+						layer.msg("请输入至少2位中文字符", {icon: 2});
+					}else if(menuUrl == 0)
+					{
+						layer.msg("菜单URL不能为空", {icon: 2});
+					}else if( sort == 0)
+					{
+						layer.msg("菜单排序号不能为空", {icon: 2});
+					}else if(!/^[0-9]*$/.test(sort))
+					{
+						layer.msg("请输入数字", {icon: 2});
+					}else {
+						$.ajax({
+							url: path + '/admin/addMenuItems',
+							async: true,
+							type: 'post',
+							data: {"menuname": menuName, "pName": pName, "menuurl": menuUrl, "sort": sort},
+							datatype: 'text',
+							success: function (data) {
+								if (data == "success") {
+									layer.alert("新增菜单成功！", {
+										icon: 6,
+										title: ['温馨提示', 'font-size:18px'],
+										area: ['350px', '150px'],
+										skin: 'demo'
+									});
+									layer.close(index);
+									tableIns.reload();
+								} else {
+									layer.alert("新增菜单失败", {
+										icon: 2,
+										title: ['温馨提示', 'font-size:18px'],
+										area: ['350px', '150px'],
+										skin: 'demo'
+									});
+								}
+							}, error: function (data) {
+								layer.alert("网络繁忙！", {
+									icon: 2,
+									title: ['温馨提示', 'font-size:18px'],
+									area: ['350px', '150px'],
+									skin: 'demo'
+								});
 							}
-						}, error: function (data) {
-							layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
-						}
-					});
-					},
+						});
+					}
+				},
 				btn2:function(index){
 					layer.close(index);
 					$('#menuName').val("");
@@ -405,6 +478,23 @@
 				if(!$('#sort').val().match(reg)||sort == 0)
 				{
 					layer.msg("输入不合法，请输入数字", {icon: 2});
+				}else{
+					$.ajax({
+						url: path + "/admin/checkMenuSort",
+						async: true,
+						type: "post",
+						data: {"sort": sort},
+						dataType: "text",
+						success: function (msg) {
+							if (msg === "success") {
+								layer.msg("排序号已存在，请更换其他排序号！");
+								$("#sort").focus();
+							}
+						},
+						error: function () {
+							layer.alert("网络繁忙");
+						}
+					});
 				}
 			});
 
@@ -432,6 +522,23 @@
 				if(!$('#sort2').val().match(reg)||sort == 0)
 				{
 					layer.msg("输入不合法，请输入数字", {icon: 2});
+				}else {
+					$.ajax({
+						url: path + "/admin/checkMenuSort",
+						async: true,
+						type: "post",
+						data: {"sort": sort},
+						dataType: "text",
+						success: function (msg) {
+							if (msg === "success") {
+								layer.msg("排序号已存在，请更换其他排序号！");
+								$("#sort2").focus();
+							}
+						},
+						error: function () {
+							layer.alert("网络繁忙");
+						}
+					});
 				}
 			});
 		});

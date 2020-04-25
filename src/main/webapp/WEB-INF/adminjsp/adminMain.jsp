@@ -42,10 +42,6 @@
 			top:80px;
 		}
 
-		#exit{
-			background: #040404;
-		}
-
 		#title{
 			padding: 5%;
 			font-size: 22px;
@@ -67,8 +63,8 @@
 		<div class="layui-header" id="header">
 			<div class="layui-logo" style="width: 300px;margin: 0.5% 0;font-size: 175%">智慧幼儿园平台端管理系统</div>
 				<ul class="layui-nav layui-layout-right">
-					<li class="layui-nav-item">
-						<a href="javascript:;" style="margin: 2% -20%;font-size: 165%;">
+					<li class="layui-nav-item" style="width: 70%">
+						<a href="javascript:;" style="margin: 2% -20%;font-size: 150%;">
 							<img id="adminheadurl" class="layui-nav-img" style="width: 30px;height: 30px">
 							<%
 								String adminname = (String) request.getSession().getAttribute("adminname");
@@ -80,9 +76,11 @@
 							<dd><a href="javascript:void(0);" title="${pageContext.request.contextPath}/admin/toUrl/updateAdminPwd" onclick="changeSrc(this)" style="font-size: 20px;">修改密码</a></dd>
 						</dl>
 					</li>
-					<button type="button" class="layui-btn layui-btn-normal" style="background-color: transparent" id="exit" lay-submit lay-filter="logout">
-						<span style="font-size: 165%;">退出</span>
-					</button>
+					<li class="layui-nav-item">
+						<a href="javascript:void(0);" id="exit" style="font-size: 150%;">
+							注销
+						</a>
+					</li>
 				</ul>
 		</div>
 

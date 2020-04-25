@@ -61,6 +61,21 @@
 		body .demo .layui-layer-content{
 			font-Size:18px
 		}
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
+		}
 	</style>
 </head>
 <body>
@@ -139,7 +154,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label" style="width: 24%">园所：</label>
 			<div class="layui-inline">
-				<select name="class" id="kinder" name = "kinder" lay-filter="kinder" lay-verify="" style="width: 157%;height: 16%;">
+				<select name="class" id="kinder" name = "kinder" lay-filter="kinder" lay-verify="" style="width: 140%;height: 16%;">
 					<option value="请选择">请选择</option>
 					<c:if test="${not empty kinderList}">
 						<c:forEach items="${kinderList}" var="u">
@@ -310,18 +325,6 @@
 							else if(!add.match(/^([\u4E00-\u9FA5A-Za-z0-9_]+(省|市|区|县|道|路|街|号)){2,}$/)){
 								layer.msg("输入地址格式如：福建省厦门市仓山区", {icon: 2});
 							}
-							// else if(phone == 0){
-							// 	layer.msg("住址不能为空", {icon: 2});
-							// }
-							// else if(!phone.match(/^1(3|4|5|6|7|8|9)\d{9}$/)){
-							// 	layer.msg("请输入以1开头的11位手机号", {icon: 2});
-							// }
-							// else if(job == 0){
-							// 	layer.msg("职业不能为空", {icon: 2});
-							// }
-							// else if(!job.match(/^[\u4e00-\u9fa5]{2,20}$/)){
-							// 	layer.msg("请输入至少2位中文字符", {icon: 2});
-							// }
 							else {
 								$.ajax({
 									url: path + "/admin/updateStudent",
@@ -386,26 +389,6 @@
 					layer.msg("输入合法",{icon:6});
 				}
 			});
-			// $("#phone").blur(function () {
-			// 	var phone = $("#phone").val();
-			// 	var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
-			// 	if(!$('#phone').val().match(reg)||phone == 0)
-			// 	{
-			// 		layer.msg("请输入以1开头的11位手机号", {icon: 2});
-			// 	}else{
-			// 		layer.msg("输入合法",{icon:6});
-			// 	}
-			// });
-			// $("#job").blur(function () {
-			// 	var job = $("#job").val();
-			// 	var reg = /^[\u4e00-\u9fa5]{2,20}$/;
-			// 	if(!$('#job').val().match(reg)||job == 0)
-			// 	{
-			// 		layer.msg("请输入至少2位中文字符", {icon: 2});
-			// 	}else{
-			// 		layer.msg("输入合法",{icon:6});
-			// 	}
-			// });
 		});
 
 		//搜索功能的实现

@@ -62,6 +62,21 @@
 		body .demo .layui-layer-content{
 			font-Size:18px
 		}
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
+		}
 	</style>
 </head>
 <body>
@@ -89,9 +104,9 @@
 						<div class="layui-input-inline" style="margin: -13% 75%;">
 							<select name="sel" id="sel" lay-filter="mySelect" lay-verify="" >
 								<option value="请选择" >请选择</option>
-								<option value="未审核" >未审批</option>
+								<option value="未审批" >未审批</option>
 								<option value="通过" >通过</option>
-								<option value="未通过" >不通过</option>
+								<option value="不通过" >不通过</option>
 							</select>
 						</div>
 					</div>
@@ -215,18 +230,17 @@
 								success:function (result,index) {
 									if (result == 'success')
 									{
-										layer.alert('园所申请审批已通过！');
-										setTimeout(function () {
-											var index = parent.layer.getFrameIndex(window.name);
-											parent.layer.close(index); //再执行关闭
-											location.reload();
-										}, 1000);
+										index = parent.layer.getFrameIndex(window.name);
+										parent.layer.close(index); //再执行关闭
+										layer.alert('园所申请审批已通过！',{icon:6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+										tableIns.reload();
+
 									}else if(result == 'codeerror')
 									{
-										layer.alert('无相关数据！');
+										layer.alert('无相关数据！',{icon:2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									}
 									else {
-										layer.alert('园所审批失败！');
+										layer.alert('园所审批失败！',{icon:2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									}
 								}
 							});
@@ -240,12 +254,11 @@
 								success:function (result,index) {
 									if (result == 'success')
 									{
+										index = parent.layer.getFrameIndex(window.name);
+										parent.layer.close(index); //再执行关闭
 										layer.alert('园所申请审批未通过！',{icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
-										setTimeout(function () {
-											var index = parent.layer.getFrameIndex(window.name);
-											parent.layer.close(index); //再执行关闭
-											tableIns.reload();
-										}, 1000);
+										tableIns.reload();
+
 									}else if(result == 'codeerror')
 									{
 										layer.alert('无相关数据！',{icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
@@ -268,7 +281,6 @@
 						,title:['园所详情信息','font-size:18px;']
 						,area:['38%','90%']
 						,btn:['返回']
-						// ,btnAlign: 'c'
 						,offset: '50px'
 						,skin: 'demo1'
 						,content: path+"/admin/toUrl/kinderDetailInfo"
@@ -320,7 +332,7 @@
 					where: {
 						time1: $('#time1').val()
 						,time2: $('#time2').val()
-						,kinderstatus: $('#sel').val()
+						,kinderstatus: $('#sel option:selected').val()
 						,kindername: $('#kindername').val()
 					}
 					,page:{

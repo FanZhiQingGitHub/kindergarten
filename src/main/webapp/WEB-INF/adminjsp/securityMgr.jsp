@@ -56,6 +56,21 @@
 		body .demo .layui-layer-content{
 			font-Size:18px
 		}
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
+		}
 	</style>
 </head>
 <body>
@@ -186,7 +201,10 @@
 					field: 'securityregtime', title: '注册时间', align: 'center', width: 243
 					, templet: "<div>{{layui.util.toDateString(d.securityregtime,'yyyy-MM-dd HH:mm:ss')}}</div>"
 				}
-				, {field: 'kindername', title: '所在园所', align: 'center', width: 192}
+				, {field: 'kindername', title: '所在园所', align: 'center', width: 192
+				,templet:function (d) {
+					return d.kindername == null ? '无': d.kindername
+				}}
 				, {field: 'securitystatus', title: '状态', align: 'center', width: 100}
 				, {fixed: 'right', title: '操作', align: 'center', width: 454, toolbar: '#barOption'}
 			]]
@@ -380,16 +398,6 @@
 					layer.msg("输入合法",{icon:6});
 				}
 			});
-			// $("#job").blur(function () {
-			// 	var job = $("#job").val();
-			// 	var reg = /^[\u4e00-\u9fa5]{2,20}$/;
-			// 	if(!$('#job').val().match(reg)||job == 0)
-			// 	{
-			// 		layer.msg("请输入至少2位中文字符", {icon: 2});
-			// 	}else{
-			// 		layer.msg("输入合法",{icon:6});
-			// 	}
-			// });
 		});
 
 		//搜索功能的实现

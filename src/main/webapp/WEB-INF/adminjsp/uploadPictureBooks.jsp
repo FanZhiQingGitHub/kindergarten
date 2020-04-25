@@ -61,6 +61,21 @@
 		body .demo .layui-layer-content{
 			font-Size:18px
 		}
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
+		}
 	</style>
 </head>
 <body>
@@ -79,7 +94,6 @@
 								</c:forEach>
 							</c:if>
 						</select>
-<%--						<input class="layui-input" name="mName" id="mName" autocomplete="off" placeholder="请输入绘本名称">--%>
 					</div>
 				</div>
 				<button class="layui-btn btn-add btn-default" id="btn-add" style="display: none;margin: -3.5% 65%;"><i class="layui-icon">&#xe624;新增图片</i></button>
@@ -108,50 +122,37 @@
 		var path = $("#path").val();
 
 		$(function () {
-			// $("#mySelect select").change(function ()
 			form.on('select(mySelect)',function () {
-			// {
 				form.render('select');
 				var readMagName = $("#mName").val();
 				document.getElementById('btn-add').style.display = "block";
-				// $.ajax({
-				// 	url: path + '/admin/readMgrInfo',
-				// 	async: true,
-				// 	type: 'post',
-				// 	data: {"readmagname": readMagName},
-				// 	datatype: 'text',
-				// 	success: function (data) {
-						var tableIns = table.render({
-							elem: '#upload'
-							, height: 350
-							, url: path + "/admin/findReadInfoByName?readmagname="+readMagName+""//数据接口
-							, page: true //开启分页
-							, limit: 2
-							, limits: [2, 5]
-							, cols: [[ //表头
-								{field: 'readmagpage', title: '页数', align: 'center', width: 160, sort: true, fixed: 'left'}
-								, {field: 'readmagdetail', title: '故事内容', align: 'center', width: 360 }
-								, {
-									field: 'photourl', title: '图片', align: 'center', width: 240
-									, templet: function (d) { return '<div><img src="'+path+'/'+d.photourl+'" style="width: 60px;height: 60px"></div>' }
-								}
-								, {fixed: 'right', title: '操作', align: 'center', width: 442, toolbar: '#barOption'}
-							]]
-							, id: 'uploadTable'
-							, parseData: function (res) { //res 即为原始返回的数据
-								return {
-									"code": res.code, //解析接口状态
-									"msg": res.msg, //解析提示文本
-									"count": res.count, //解析数据长度
-									"data": res.data //解析数据列表
-								};
+					var tableIns = table.render({
+						elem: '#upload'
+						, height: 350
+						, url: path + "/admin/findReadInfoByName?readmagname="+readMagName+""//数据接口
+						, page: true //开启分页
+						, limit: 2
+						, limits: [2, 5]
+						, cols: [[ //表头
+							{field: 'readmagpage', title: '页数', align: 'center', width: 160, sort: true, fixed: 'left'}
+							, {field: 'readmagdetail', title: '故事内容', align: 'center', width: 360 }
+							, {
+								field: 'photourl', title: '图片', align: 'center', width: 240
+								, templet: function (d) { return '<div><img src="'+path+'/'+d.photourl+'" style="width: 60px;height: 60px"></div>' }
 							}
-						});
-					// }, error: function (data) {
-					// 	layer.alert("网络繁忙！", {icon: 2});
-					// }
+							, {fixed: 'right', title: '操作', align: 'center', width: 442, toolbar: '#barOption'}
+						]]
+						, id: 'uploadTable'
+						, parseData: function (res) { //res 即为原始返回的数据
+							return {
+								"code": res.code, //解析接口状态
+								"msg": res.msg, //解析提示文本
+								"count": res.count, //解析数据长度
+								"data": res.data //解析数据列表
+							};
+						}
+					});
 				});
-			// })
 		});
 
 		$("#btn-add").click(function () {
@@ -161,13 +162,9 @@
 				area: ['40%', '80%'],
 				content: path+"/admin/toUrl/addPhotoInfo", //数组第二项即吸附元素选择器或者DOM
 				title: ['新增图片','font-size:18px'],
-				// btn: ['保存','取消'],
-				// offset: '30px',
 				skin: 'demo-class',
-				// closeBtn:0,
 				btnAlign: 'c',
 				success:function(layero, index){
-					// layero.find('.layui-layer-btn0').id('test9');
 					var body = layer.getChildFrame('body',index);
 					body.find("#readMagName1").val(readMagName);
 				}
@@ -195,10 +192,10 @@
 			}
 		};
 
-		// // 刷新表格
-		// $('#btn-refresh').on('click', function () {
-		// 	tableIns.reload();
-		// });
+		// 刷新表格
+		$('#btn-refresh').on('click', function () {
+			tableIns.reload();
+		});
 	});
 </script>
 

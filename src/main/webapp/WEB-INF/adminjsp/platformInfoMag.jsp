@@ -56,6 +56,21 @@
 		body .demo .layui-layer-content{
 			font-Size:18px
 		}
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
+		}
 	</style>
 </head>
 <body>
@@ -159,11 +174,11 @@
 			, limits: [5, 10]
 			, cols: [[ //表头
 				{field: 'platforminfoid', title: '资讯编号', align: 'center', width: 160, sort: true, fixed: 'left'}
-				, {field: 'platforminfoname', title: '资讯名称', align: 'center', width: 280}
-				, {field: 'platforminfodetail', title: '资讯内容', align: 'center', width: 462}
-				, {field: 'platforminfotime', title: '创建时间', align: 'center', width: 280
+				, {field: 'platforminfoname', title: '资讯名称', align: 'center', width: 315}
+				, {field: 'platforminfodetail', title: '资讯内容', align: 'center', width: 527}
+				, {field: 'platforminfotime', title: '创建时间', align: 'center', width: 297
 					, templet:"<div>{{layui.util.toDateString(d.platforminfotime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
-				, {fixed: 'right', title: '操作', align: 'center', width: 440, toolbar: '#barOption'}
+				, {fixed: 'right', title: '操作', align: 'center', width: 423, toolbar: '#barOption'}
 			]]
 			, id: 'platformTable'
 			, parseData: function (res) { //res 即为原始返回的数据
