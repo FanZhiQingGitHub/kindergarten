@@ -72,6 +72,10 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
             //判断保健员是否登录
             if (request.getSession().getAttribute("healthername") != null) {
                 return true;
+            }else {
+                response.sendRedirect(basePath + "/healther/path/healtherLogin");
+                //重定向之后放行
+                return true;
             }
         }
 
@@ -92,6 +96,10 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
         if (uri.contains("security")){
             //判断安防员是否登录
             if (request.getSession().getAttribute("securityname") != null) {
+                return true;
+            }else {
+                response.sendRedirect(basePath + "/security/path/securityLogin");
+                //重定向之后放行
                 return true;
             }
 
