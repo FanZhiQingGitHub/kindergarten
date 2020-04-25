@@ -599,7 +599,7 @@ public class ParentController {
 
 
 
-    @ParentSystemLog(operationType = "登陆", operationName = "家长登陆")
+    @ParentSystemLog(operationType = "登录", operationName = "家长登录")
     @RequestMapping("/Login")
     @ResponseBody
     public Result parentLogin(HttpServletRequest request, String parentName, String parentPwd, String code,String kinderName) {

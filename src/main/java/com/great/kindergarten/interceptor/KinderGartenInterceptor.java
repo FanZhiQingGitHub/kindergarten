@@ -54,6 +54,10 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
             //判断管理员是否登录
             if (request.getSession().getAttribute("rolename") != null) {
                 return true;
+            }else {
+                response.sendRedirect(basePath + "/admin/toUrl/adminLogin");
+                //重定向之后放行
+                return true;
             }
 
         }
@@ -61,6 +65,10 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
 
             //判断园长是否登录
             if (request.getSession().getAttribute("rectorname") != null) {
+                return true;
+            }else {
+                response.sendRedirect(basePath + "/director/toUrl/directorLogin");
+                //重定向之后放行
                 return true;
             }
 
