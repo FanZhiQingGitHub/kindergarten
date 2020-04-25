@@ -1,13 +1,10 @@
 package com.great.kindergarten.interceptor;
 
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.lang.reflect.Method;
 
 /**
  * 拦截器实现类具体拦截方法
@@ -107,6 +104,10 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
         if (uri.contains("teacher")){
             //判断班主任是否登录
             if (request.getSession().getAttribute("teachername") != null) {
+                return true;
+            }else {
+                response.sendRedirect(basePath + "/teacher/toUrl/teacherLogin");
+                //重定向之后放行
                 return true;
             }
 

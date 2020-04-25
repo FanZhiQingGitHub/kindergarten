@@ -158,7 +158,7 @@ public class TeacherController {
 	}
     //登录
 
-//    @TeacherSystemLog(operationType= "登录", operationName = "教师登录")
+    @TeacherSystemLog(operationType= "登录", operationName = "教师登录")
 	@RequestMapping(value="/teacherLogin")
 	@ResponseBody
 	public  String teacherMain(TblTeacher tblTeacher,HttpServletRequest request){
@@ -220,7 +220,7 @@ public class TeacherController {
 
 
 		//修改密码
-//	@TeacherSystemLog(operationType = "修改", operationName = "老师修改密码")
+	@TeacherSystemLog(operationType = "修改", operationName = "老师修改密码")
 	@RequestMapping(value="/updateTeacherPwd")
 	@ResponseBody
 	public String updateTeacherPwd(String oldTeacherPwd, String teacherPwd, HttpServletRequest request){
@@ -335,7 +335,7 @@ public class TeacherController {
 
 
 	//    发布作业
-//	@TeacherSystemLog(operationType = "增加", operationName = "老师发布作业")
+	@TeacherSystemLog(operationType = "增加", operationName = "老师发布作业")
 	@RequestMapping(value="/workRelease",produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public Map<String, Object> workRelease(@RequestParam("file") MultipartFile file,String classname, HttpServletRequest request,HttpServletResponse response){
@@ -684,7 +684,7 @@ public class TeacherController {
 //	}
 
 	//新增安全教育配置
-//	@TeacherSystemLog(operationType = "增加", operationName = "新增安全教育配置")
+	@TeacherSystemLog(operationType = "增加", operationName = "新增安全教育配置")
 	@RequestMapping(value="/addSafetyConfig")
 	@ResponseBody
 	public String addSafetyConfig(HttpServletRequest request){
@@ -952,7 +952,7 @@ public class TeacherController {
 
 	}
 	//新增班级相册
-//	@TeacherSystemLog(operationType = "增加", operationName = "新增班级相册")
+	@TeacherSystemLog(operationType = "增加", operationName = "新增班级相册")
 	@RequestMapping(value="/addClassPhoto")
 	@ResponseBody
 	public Map<String, Object> addClassPhoto (@RequestParam("file") MultipartFile file, HttpServletRequest request,HttpServletResponse response) throws IOException
@@ -1073,6 +1073,25 @@ public class TeacherController {
 
 	}
 
+	@RequestMapping("/regFaceId")
+	@ResponseBody
+	public Result regFaceId(HttpServletRequest request, HttpServletResponse response) {
+		//注册人脸方法
+		Result result = new Result();
+
+		String face = request.getParameter("face");
+
+		//获取信息
+		TblTeacher tblTeacher = (TblTeacher) request.getSession().getAttribute("tblTeacher1");
+		//String name
+		if (FaceRecognitionUtils.faceRegister(face, "t"+tblTeacher.getTeacherid())){
+			result.setSuccess(true);
+		}
+
+		return result;
+	}
+
+
 	//新增教师考勤-------------------------------------------------------------------------------------------
 	/*
 	 * 对应的教师考勤的新增
@@ -1087,62 +1106,80 @@ public class TeacherController {
 	{
 		String face = request.getParameter("face");
 
+
+		//获取信息
+		TblTeacher tblTeacher = (TblTeacher) request.getSession().getAttribute("tblTeacher1");
+
 		//注册好了之后--进行对应的信息的添加使用
 		//		FaceRecognitionUtils.faceRegister(face, "testPhoto1");
 		//		System.out.println("face=" + face);
 
-		FaceRecognitionUtils.identify(face, null);
+		if (tblTeacher!=null){
 
-		SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式（当天日期）
-		String timeamdate = date.format(new Date());
-		//本周日期
-		String monday = DateUtil.getMondayOfThisWeek(1);
-		String sunday = DateUtil.getSundayOfThisWeek(7);
-		//查找是不是有对应的教师的ID存在对应的表里面
-		//（1）根据教师端登录的时候--获取到对应的教师iD值
-		TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher1");
+			//人脸识别成功
+			if (FaceRecognitionUtils.identify(face,"t"+tblTeacher.getTeacherid())){
 
-		Integer teacherid = tblTeacher1.getTeacherid();
-		//（2）查询对应的表里面有没有该字段
-		List<TblTeacherAttend> tblTeaAttList = kinderService.findTeaAtteByTid(teacherid);
+				SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式（当天日期）
+				String timeamdate = date.format(new Date());
+				//本周日期
+				String monday = DateUtil.getMondayOfThisWeek(1);
+				String sunday = DateUtil.getSundayOfThisWeek(7);
+				//查找是不是有对应的教师的ID存在对应的表里面
+				//（1）根据教师端登录的时候--获取到对应的教师iD值
+				TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher1");
 
-		Date dt = new Date();
-		String today = DateUtil.getWeekOfDate(dt);
-		if (today.equals("星期六") && today.equals("星期日"))
-		{
-			System.out.println("不进行新增考勤");
-			ResponseUtils.outHtml(response, "notadd");
-		} else
-		{
-			if (0 == tblTeaAttList.size())
-			{ //如果不存在本周一和周日的日期---对应的该时间段的教师id值
-				System.out.println("不存在本周一和周日的日期--对应的该时间段的教师id值");
-				//				date.parse(monday)
-				tblTeacherAttend.setTattendbegin(monday);
-				tblTeacherAttend.setTattendover(sunday);
-				tblTeacherAttend.setTid(teacherid);
-				boolean flagDate = kinderService.addDateTeaAttend(tblTeacherAttend);
-				if (flagDate)
+				Integer teacherid = tblTeacher1.getTeacherid();
+				//（2）查询对应的表里面有没有该字段
+				List<TblTeacherAttend> tblTeaAttList = kinderService.findTeaAtteByTid(teacherid);
+
+				Date dt = new Date();
+				String today = DateUtil.getWeekOfDate(dt);
+				if (today.equals("星期六") && today.equals("星期日"))
 				{
-					System.out.println("日期区间新增成功");
-					addTeaAttendTimeTo(tblTeacherAttend, teacherid, tblTertime, request, response);//新增教师考勤
+					System.out.println("不进行新增考勤");
+					ResponseUtils.outHtml(response, "notadd");
 				} else
 				{
-					System.out.println("日期区间新增失败");
-					ResponseUtils.outHtml(response, "errorinfo");
+					if (0 == tblTeaAttList.size())
+					{ //如果不存在本周一和周日的日期---对应的该时间段的教师id值
+						System.out.println("不存在本周一和周日的日期--对应的该时间段的教师id值");
+						//				date.parse(monday)
+						tblTeacherAttend.setTattendbegin(monday);
+						tblTeacherAttend.setTattendover(sunday);
+						tblTeacherAttend.setTid(teacherid);
+						boolean flagDate = kinderService.addDateTeaAttend(tblTeacherAttend);
+						if (flagDate)
+						{
+							System.out.println("日期区间新增成功");
+							addTeaAttendTimeTo(tblTeacherAttend, teacherid, tblTertime, request, response);//新增教师考勤
+						} else
+						{
+							System.out.println("日期区间新增失败");
+							ResponseUtils.outHtml(response, "errorinfo");
+						}
+					} else
+					{
+						tblTeacherAttend.setTattendover(sunday);
+						tblTeacherAttend.setTid(teacherid);
+						//对应的要修改时间表的字段值
+						boolean flag = kinderService.updateDateTeaAttend(tblTeacherAttend);
+
+						System.out.println("存在本周一和周日的日期--的教师ID的话");
+
+						addTeaAttendTimeTo(tblTeacherAttend, teacherid, tblTertime, request, response);//新增教师考勤
+					}
 				}
-			} else
-			{
-				tblTeacherAttend.setTattendover(sunday);
-				tblTeacherAttend.setTid(teacherid);
-				//对应的要修改时间表的字段值
-				boolean flag = kinderService.updateDateTeaAttend(tblTeacherAttend);
 
-				System.out.println("存在本周一和周日的日期--的教师ID的话");
-
-				addTeaAttendTimeTo(tblTeacherAttend, teacherid, tblTertime, request, response);//新增教师考勤
+			}else {
+				//人脸识别失败
+				ResponseUtils.outHtml(response, "failure");
 			}
+
+
 		}
+
+
+
 	}
 
 	//添加考勤上下午信息记录对应的方法

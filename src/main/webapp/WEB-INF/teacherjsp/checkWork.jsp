@@ -9,7 +9,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-	<title>查看作业表</title>
+	<title>查看提交作业</title>
 	<%String path = request.getContextPath(); %>
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
 	<script src=<%=path + "/layui/layui.js"%>></script>
