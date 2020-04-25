@@ -158,7 +158,7 @@ public class TeacherController {
 	}
     //登录
 
-//    @TeacherSystemLog(operationType= "登录", operationName = "教师登录")
+    @TeacherSystemLog(operationType= "登录", operationName = "教师登录")
 	@RequestMapping(value="/teacherLogin")
 	@ResponseBody
 	public  String teacherMain(TblTeacher tblTeacher,HttpServletRequest request){
@@ -220,7 +220,7 @@ public class TeacherController {
 
 
 		//修改密码
-//	@TeacherSystemLog(operationType = "修改", operationName = "老师修改密码")
+	@TeacherSystemLog(operationType = "修改", operationName = "老师修改密码")
 	@RequestMapping(value="/updateTeacherPwd")
 	@ResponseBody
 	public String updateTeacherPwd(String oldTeacherPwd, String teacherPwd, HttpServletRequest request){
@@ -335,7 +335,7 @@ public class TeacherController {
 
 
 	//    发布作业
-//	@TeacherSystemLog(operationType = "增加", operationName = "老师发布作业")
+	@TeacherSystemLog(operationType = "增加", operationName = "老师发布作业")
 	@RequestMapping(value="/workRelease",produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public Map<String, Object> workRelease(@RequestParam("file") MultipartFile file,String classname, HttpServletRequest request,HttpServletResponse response){
@@ -684,7 +684,7 @@ public class TeacherController {
 //	}
 
 	//新增安全教育配置
-//	@TeacherSystemLog(operationType = "增加", operationName = "新增安全教育配置")
+	@TeacherSystemLog(operationType = "增加", operationName = "新增安全教育配置")
 	@RequestMapping(value="/addSafetyConfig")
 	@ResponseBody
 	public String addSafetyConfig(HttpServletRequest request){
@@ -952,7 +952,7 @@ public class TeacherController {
 
 	}
 	//新增班级相册
-//	@TeacherSystemLog(operationType = "增加", operationName = "新增班级相册")
+	@TeacherSystemLog(operationType = "增加", operationName = "新增班级相册")
 	@RequestMapping(value="/addClassPhoto")
 	@ResponseBody
 	public Map<String, Object> addClassPhoto (@RequestParam("file") MultipartFile file, HttpServletRequest request,HttpServletResponse response) throws IOException
