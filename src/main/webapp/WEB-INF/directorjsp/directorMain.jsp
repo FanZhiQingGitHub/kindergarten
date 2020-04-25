@@ -56,7 +56,7 @@
         <li class="layui-nav-item" >
             <a href="javascript:;" style="color: black;font-size: 18px">
                 <img src="${pageContext.request.contextPath}/image/logo/headDirector.jpg" class="layui-nav-img">
-                欢迎&nbsp;&nbsp;&nbsp;<span style="color: #ff4400">${logintblRector.rectorname}</span>&nbsp&nbsp;园长
+                欢迎&nbsp;&nbsp;&nbsp;<span style="color: #ff4400;font-size: 22px">${logintblRector.rectorname}</span>&nbsp&nbsp;园长
             </a>
             <dl class="layui-nav-child">
                 <dd><a href="javascript:void(0);"  class="personMsg">个人信息</a></dd>
