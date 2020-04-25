@@ -39,6 +39,23 @@
 			height: 40px;
 			line-height: 40px;
 		}
+		body .demo-class .layui-layer-btn{
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+
+		body .demo .layui-layer-btn{
+			margin-top: -5%;
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+		body .demo .layui-layer-content{
+			font-Size:18px
+		}
 	</style>
 </head>
 <body>
@@ -112,13 +129,13 @@
 	</div>
 
 	<script type="text/html" id="barOption">
-		<a type="button" class="layui-btn layui-btn-sm" lay-event="update" style="text-align: -moz-center"><i class="layui-icon">&#xe642;修改</i></a>
-		<a type="button" class="layui-btn layui-btn-sm" lay-event="delete" style="text-align: -moz-center"><i class="layui-icon">&#xe640;删除</i></a>
+		<a type="button" class="layui-btn " lay-event="update" ><span class="sp"><i class="layui-icon">&#xe642;修改</i></span></a>
+		<a type="button" class="layui-btn " lay-event="delete" ><span class="sp"><i class="layui-icon">&#xe640;删除</i></span></a>
 		{{#  if(d.platforminfostatus == '已发布'){ }}
-		<a  type="button" class="layui-btn layui-btn-sm" lay-event="cancel" ><span class="sp">取消发布</span></a>
+		<a  type="button" class="layui-btn " lay-event="cancel" ><span class="sp">取消发布</span></a>
 		{{#  } }}
 		{{#  if(d.platforminfostatus == '未发布'){ }}
-		<a type="button" class="layui-btn layui-btn-sm" lay-event="release" ><span class="sp">发布</span></a>
+		<a type="button" class="layui-btn " lay-event="release" ><span class="sp">发布</span></a>
 		{{#  } }}
 	</script>
 </body>
@@ -174,6 +191,7 @@
 						btn: ['保存','取消'],
 						offset: '50px',
 						closeBtn:0,
+						skin: 'demo-class',
 						btnAlign: 'c',
 						success : function(layero, index) {
 							$("#platformInfoName2").val(data.platforminfoname);
@@ -190,14 +208,14 @@
 								datatype: 'text',
 								success: function (data) {
 									if (data == "success") {
-										layer.alert("修改资讯信息成功！", {icon: 6});
+										layer.alert("修改资讯信息成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 										layer.close(index);
 										tableIns.reload();
 									} else {
-										layer.alert("修改资讯信息失败", {icon: 2});
+										layer.alert("修改资讯信息失败", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									}
 								}, error: function (data) {
-									layer.alert("网络繁忙！", {icon: 2});
+									layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							});
 						},
@@ -207,7 +225,7 @@
 						}
 					});
 				}else if(layEvent === 'delete'){
-					layer.confirm("确定要删除该资讯信息？",{icon:3,title:'温馨提示',area:['350px','200px']},function (index) {
+					layer.confirm("确定要删除该资讯信息？",{icon:3,title:'温馨提示',area:['350px','150px']},function (index) {
 						layer.close(index);
 						$.ajax({
 							url: path + "/admin/deletePlatFormInfo",
@@ -217,19 +235,19 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("平台资讯信息删除成功！", {icon: 6});
+									layer.alert("平台资讯信息删除成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									tableIns.reload();
 								}else{
-									layer.alert("平台资讯信息删除失败！", {icon: 2});
+									layer.alert("平台资讯信息删除失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							},
 							error:function (result) {
-								layer.alert("网路异常！", {icon: 2});
+								layer.alert("网路异常！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 							}
 						});
 					});
 				}else if(layEvent === 'release'){
-					layer.confirm("确定发布咨询信息？",{icon:3,title:'温馨提示',area:['350px','200px']},function (index) {
+					layer.confirm("确定发布咨询信息？",{icon:3,title:'温馨提示',area:['350px','150px']},function (index) {
 						layer.close(index);
 						$.ajax({
 							url: path + "/admin/releasePlatFormInfo",
@@ -239,17 +257,17 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("平台资讯信息发布成功！", {icon: 6});
+									layer.alert("平台资讯信息发布成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									tableIns.reload();
 								}else{
-									layer.alert("平台资讯信息发布失败！", {icon: 2});
+									layer.alert("平台资讯信息发布失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							}
 						});
 					});
 				}
 				else if(layEvent === 'cancel'){
-					layer.confirm("确定取消发布咨询信息？",{icon:3,title:'温馨提示',area:['350px','200px']},function (index) {
+					layer.confirm("确定取消发布咨询信息？",{icon:3,title:'温馨提示',area:['350px','150px']},function (index) {
 						layer.close(index);
 						$.ajax({
 							url: path + "/admin/cancelPlatFormInfo",
@@ -259,10 +277,10 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("平台资讯信息取消发布成功！", {icon: 6});
+									layer.alert("平台资讯信息取消发布成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									tableIns.reload();
 								}else{
-									layer.alert("平台资讯信息取消发布失败！", {icon: 2});
+									layer.alert("平台资讯信息取消发布失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							}
 						});
@@ -325,6 +343,7 @@
 				btn: ['保存','取消'],
 				offset: '50px',
 				closeBtn:0,
+				skin: 'demo-class',
 				btnAlign: 'c',
 				success : function(layero, index) {
 				},
@@ -339,14 +358,14 @@
 						datatype: 'text',
 						success: function (data) {
 							if (data == "success") {
-								layer.alert("新增资讯信息成功！", {icon: 6});
+								layer.alert("新增资讯信息成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								layer.close(index);
 								tableIns.reload();
 							} else {
-								layer.alert("新增资讯信息失败", {icon: 2});
+								layer.alert("新增资讯信息失败", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 							}
 						}, error: function (data) {
-							layer.alert("网络繁忙！", {icon: 2});
+							layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 						}
 					});
 				},

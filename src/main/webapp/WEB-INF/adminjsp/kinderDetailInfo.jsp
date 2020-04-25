@@ -58,7 +58,12 @@
         .layui-form-label {
             width: 140px;
         }
-
+        body .demo-class .layui-layer-btn{
+            width: auto;
+            height: 12%;
+            text-align: center;
+            font-Size:16px
+        }
         label{
             margin-left: -75%;
         }

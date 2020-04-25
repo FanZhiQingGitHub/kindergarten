@@ -38,6 +38,23 @@
 			height: 40px;
 			line-height: 40px;
 		}
+		body .demo-class .layui-layer-btn{
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+
+		body .demo .layui-layer-btn{
+			margin-top: -5%;
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+		body .demo .layui-layer-content{
+			font-Size:18px
+		}
 	</style>
 </head>
 <body>
@@ -76,7 +93,7 @@
 		</form>
 	</div>
 
-	<table id="education" lay-filter="test"></table>
+	<table id="education" lay-filter="test" layui-table-cell></table>
 	<div id="type-content" style="display: none;">
 		<input type="hidden" id="sid" name="sid>">
 		<div class="layui-form-item">
@@ -168,11 +185,11 @@
 					{field: 'safetyvideoid', title: '视频编号', align: 'center', width: 150, sort: true, fixed: 'left'}
 					, {field: 'safetyvideoname', title: '视频名称', align: 'center', width: 280,
 						templet: '<div ><a href="${pageContext.request.contextPath}/{{d.videoadd}}" class="layui-table-link" style="font-size:100%">{{d.safetyvideoname}}</a></div>'}
-					, {field: 'videoname', title: '文件名称', align: 'center', width: 300}
-					, {field: 'videoadd', title: '文件地址', align: 'center', width: 360}
+					, {field: 'videoname', title: '文件名称', align: 'center', width: 362}
+					, {field: 'videoadd', title: '文件地址', align: 'center', width: 396}
 					, {field: 'safetyvideotime', title: '上传时间', align: 'center', width: 240
 					   ,templet:"<div>{{layui.util.toDateString(d.safetyvideotime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
-					, {fixed: 'right', title: '操作', align: 'center', width: 255, toolbar: '#barOption'}
+					, {fixed: 'right', title: '操作', align: 'center', width: 294, toolbar: '#barOption'}
 				]]
 				, id: 'educationTable'
 				, parseData: function (res) { //res 即为原始返回的数据
@@ -206,7 +223,7 @@
 								}
 						});
 					}else if(layEvent === 'delete'){
-						layer.confirm("确定要删除该视频信息？",{icon:3,area:['350px','200px'],title:['温馨提示','font-size:18px']},function (index) {
+						layer.confirm("确定要删除该视频信息？",{icon:3,area:['350px','150px'],title:['温馨提示','font-size:18px']},function (index) {
 							layer.close(index);
 							$.ajax({
 								url: path + "/admin/deleteSafetyVideoInfo",
@@ -216,10 +233,10 @@
 								success: function (result) {
 									if(result == "success")
 									{
-										layer.alert("视频删除成功！", {icon: 6});
+										layer.alert("视频删除成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 										tableIns.reload();
 									}else{
-										layer.alert("视频删除失败！", {icon: 2});
+										layer.alert("视频删除失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									}
 								}
 							});
@@ -232,11 +249,9 @@
 				layer.open({
 					type: 2,
 					area: ['30%', '44%'],
-					// content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
 					content: path+"/admin/toUrl/uploadVideoInfo",
 					title: ['上传视频','font-size:18px'],
-					// btn: ['保存', '取消'],
-					// offset: '100px',
+					kin: 'demo-class',
 					closeBtn :0,
 					btnAlign: 'c'
 				});

@@ -35,7 +35,6 @@
 
 		#scroll{
 			width: 220px;
-
 		}
 
 		#index-commonmenu
@@ -77,8 +76,8 @@
 							%>欢迎你,<%=adminname%><%=rolename%>
 						</a>
 						<dl class="layui-nav-child">
-							<dd><a href="javascript:void(0);" title="${pageContext.request.contextPath}/admin/toUrl/adminInfo"  onclick="changeSrc(this)">个人信息</a></dd>
-							<dd><a href="javascript:void(0);" title="${pageContext.request.contextPath}/admin/toUrl/updateAdminPwd"  onclick="changeSrc(this)">修改密码</a></dd>
+							<dd><a href="javascript:void(0);" title="${pageContext.request.contextPath}/admin/toUrl/adminInfo" onclick="changeSrc(this)" style="font-size: 20px;">个人信息</a></dd>
+							<dd><a href="javascript:void(0);" title="${pageContext.request.contextPath}/admin/toUrl/updateAdminPwd" onclick="changeSrc(this)" style="font-size: 20px;">修改密码</a></dd>
 						</dl>
 					</li>
 					<button type="button" class="layui-btn layui-btn-normal" style="background-color: transparent" id="exit" lay-submit lay-filter="logout">

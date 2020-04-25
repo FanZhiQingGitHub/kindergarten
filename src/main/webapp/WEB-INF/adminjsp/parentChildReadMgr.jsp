@@ -40,7 +40,23 @@
 			height: 40px;
 			line-height: 40px;
 		}
+		body .demo-class .layui-layer-btn{
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
 
+		body .demo .layui-layer-btn{
+			margin-top: -5%;
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+		body .demo .layui-layer-content{
+			font-Size:18px
+		}
 	</style>
 </head>
 <body>
@@ -81,30 +97,30 @@
 
 	<div id="type-content" style="display: none;">
 		<form class="layui-form" action="">
-			<div class="layui-form-item" style="margin: 4% 6%">
-				<label class="layui-form-label" style="width: auto">绘本名称：</label>
+			<div class="layui-form-item" style="margin-top: 4%">
+				<label class="layui-form-label" style="width: 24%">绘本名称：</label>
 				<div class="layui-input-inline">
-					<input type="text" class="layui-input" name="readMagName2" id="readMagName2" value="" placeholder="" style="margin-top: 1%;width: 230%">
+					<input type="text" class="layui-input" name="readMagName2" id="readMagName2" value="" placeholder="" style="width: 200%;height: 40px;">
 				</div>
 			</div>
-			<div class="layui-form-item" style="margin-left: 6%">
-				<label class="layui-form-label" style="width: auto">绘本图片：</label>
+			<div class="layui-form-item" >
+				<label class="layui-form-label" style="width: 24%">绘本图片：</label>
 				<div class="layui-input-inline">
-					<input type="text" id="readMagPic" name="readMagPic" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="margin-top: 1%;width: 180%">
-				</div>
-			</div>
-
-			<div class="layui-form-item" style="margin-left: 6%">
-				<label class="layui-form-label" style="width: auto">文件地址：</label>
-				<div class="layui-input-inline">
-					<input type="text" id="readMagUrl" name="readMagUrl" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="margin-top: 1%;width: 230%">
+					<input type="text" id="readMagPic" name="readMagPic" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="width: 200%;height: 40px;">
 				</div>
 			</div>
 
-			<div class="layui-form-item" style="margin-left: 6%">
-				<label class="layui-form-label" style="width: auto;margin-left: 8%">页数：</label>
+			<div class="layui-form-item" >
+				<label class="layui-form-label" style="width: 24%">文件地址：</label>
 				<div class="layui-input-inline">
-					<input type="text" id="readMagPage" name="readMagPage" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="margin-top: 1%;width: 230%">
+					<input type="text" id="readMagUrl" name="readMagUrl" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="width: 200%;height: 40px;">
+				</div>
+			</div>
+
+			<div class="layui-form-item" >
+				<label class="layui-form-label" style="width: 24%">页数：</label>
+				<div class="layui-input-inline">
+					<input type="text" id="readMagPage" name="readMagPage" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="width: 200%;height: 40px;">
 				</div>
 			</div>
 		</form>
@@ -211,10 +227,9 @@
 						// content: path+"/admin/toUrl/pictureBookInfo", //数组第二项即吸附元素选择器或者DOM
 						content: $("#type-content2"),
 						title: ['绘本详情','font-size:18px'],
-						// btn: ['返回'],
-						// offset: '10px',
 						btnAlign: 'c',
 						closeBtn :0,
+						skin: 'demo-class',
 						success : function(layero, index) {
 							readmagid = data.readmagid;
 							//方式二
@@ -223,11 +238,8 @@
 								async: true,
 								type: 'post',
 								data: {"readmagid":readmagid,"nowPage":nowPage},
-								// datatype: 'json',
 								success: function (data) {
-									console.log(data);
 									var nowPageInfo = data.list[0];
-									console.log(nowPageInfo);
 									$("#titleName").html(nowPageInfo.readmagname);
 
 									$("#pageContent").html(nowPageInfo.readmagdetail);
@@ -240,13 +252,13 @@
 
 									totalPage  = data.totalRecords;
 								}, error: function (data) {
-									layer.alert("网络繁忙！", {icon: 2});
+									layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							});
 						}
 					});
 				}else if(layEvent === 'delete'){
-					layer.confirm("确定要删除该绘本信息？",{icon:3,title:'温馨提示',area:['350px','200px']},function (index) {
+					layer.confirm("确定要删除该绘本信息？",{icon:3,title:'温馨提示',area:['350px','150px']},function (index) {
 						layer.close(index);
 						$.ajax({
 							url: path + "/admin/deleteReadInfo",
@@ -256,14 +268,14 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("绘本信息删除成功！", {icon: 6});
+									layer.alert("绘本信息删除成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									tableIns.reload();
 								}else{
-									layer.alert("绘本信息删除失败！", {icon: 2});
+									layer.alert("绘本信息删除失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							},
 							error:function (result) {
-								layer.alert("网路异常！", {icon: 2});
+								layer.alert("网路异常！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 							}
 						});
 					});
@@ -271,12 +283,12 @@
 					layer.open({
 						type: 1,
 						area: ['35%', '55%'],
-						// content: path+"/admin/toUrl/reUploadPictureBook", //数组第二项即吸附元素选择器或者DOM
 						content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
 						title: ['修改绘本信息','font-size:18px'],
 						btn: ['保存','返回'],
-						// offset: '30px',
 						btnAlign: 'c',
+						closeBtn:0,
+						skin: 'demo-class',
 						success:function(layero, index){
 							$("#readMagName2").val(data.readmagname);
 							$("#readMagUrl").val(data.readmagurl);
@@ -307,14 +319,14 @@
 								datatype: 'text',
 								success: function (data) {
 									if (data == "success") {
-										layer.alert("重新上传成功！", {icon: 6});
+										layer.alert("重新上传成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 										layer.close(index);
 										tableIns.reload();
 									} else {
-										layer.alert("重新上传失败", {icon: 2});
+										layer.alert("重新上传失败", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									}
 								}, error: function (data) {
-									layer.alert("网络繁忙！", {icon: 2});
+									layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							});
 						},
@@ -363,7 +375,6 @@
 					{
 						layer.msg("输入不合法，斜杠后必须是字母，请输入如格式：admin/toUrl/**", {icon: 2});
 					}else{
-						// console.log(arr[1].match(reg));
 					}
 				}else{
 					layer.msg("输入不合法，斜杠后必须是字母，请输入如格式：image/adminimg/img/**", {icon: 2});
@@ -377,10 +388,8 @@
 				area: ['70%', '70%'],
 				content: path+"/admin/toUrl/uploadPictureBooks", //数组第二项即吸附元素选择器或者DOM
 				title: ['上传绘本','font-size:18px'],
-				// btn: ['保存', '取消'],
-				closeBtn:0,
-				// offset: '50px',
 				btnAlign: 'c',
+				skin: 'demo-class',
 				success:function(){
 
 				}

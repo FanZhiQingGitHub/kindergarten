@@ -35,7 +35,32 @@
 		}
 		h2{
 			text-align: center;
-			margin-top: 1%;
+			margin-top: 2%;
+		}
+		body .demo-class .layui-layer-btn{
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+
+		body .demo1 .layui-layer-btn{
+			width: auto;
+			margin-top: 5%;
+			height: 10%;
+			text-align: center;
+			font-Size:16px
+		}
+
+		body .demo .layui-layer-btn{
+			margin-top: -5%;
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+		body .demo .layui-layer-content{
+			font-Size:18px
 		}
 	</style>
 </head>
@@ -146,9 +171,11 @@
 						type:2
 						,title: ['园所审批', 'font-size:18px;']
 						,area:['38%','90%']
-						,btn:['允许','拒绝']
+						,btn:['允许','拒绝','取消']
 						,btnAlign: 'c'
+						,closeBtn:0
 						,offset: '50px'
+						,skin: 'demo-class'
 						,content:path+"/admin/toUrl/gardenApproval"
 						,success : function(layero, index) {
 							$.ajax({
@@ -213,7 +240,7 @@
 								success:function (result,index) {
 									if (result == 'success')
 									{
-										layer.alert('园所申请审批未通过！');
+										layer.alert('园所申请审批未通过！',{icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 										setTimeout(function () {
 											var index = parent.layer.getFrameIndex(window.name);
 											parent.layer.close(index); //再执行关闭
@@ -221,13 +248,17 @@
 										}, 1000);
 									}else if(result == 'codeerror')
 									{
-										layer.alert('无相关数据！');
+										layer.alert('无相关数据！',{icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									}
 									else {
-										layer.alert('园所审批失败！');
+										layer.alert('园所审批失败！',{icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									}
 								}
 							});
+						},
+						btn3:function (){
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index); //再执行关闭
 						}
 					});
 				}
@@ -237,8 +268,9 @@
 						,title:['园所详情信息','font-size:18px;']
 						,area:['38%','90%']
 						,btn:['返回']
-						,btnAlign: 'c'
+						// ,btnAlign: 'c'
 						,offset: '50px'
+						,skin: 'demo1'
 						,content: path+"/admin/toUrl/kinderDetailInfo"
 						,success : function(layero, index) {
 							$.ajax({

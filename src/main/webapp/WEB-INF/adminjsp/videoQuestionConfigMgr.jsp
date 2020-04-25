@@ -39,6 +39,23 @@
 			height: 40px;
 			line-height: 40px;
 		}
+		body .demo-class .layui-layer-btn{
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+
+		body .demo .layui-layer-btn{
+			margin-top: -5%;
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:16px
+		}
+		body .demo .layui-layer-content{
+			font-Size:18px
+		}
 	</style>
 </head>
 <body>
@@ -312,11 +329,11 @@
 							layer.open({
 								type: 1,
 								area: ['60%', '86%'],
-								// content: path+"/admin/toUrl/configItemsMgr", //数组第二项即吸附元素选择器或者DOM
 								closeBtn :0,
 								content: $("#type-content3"),
 								title: ['配置试题','font-size:18px'],
 								btn: ['保存', '取消'],
+								skin: 'demo-class',
 								offset: '60px',
 								btnAlign: 'c',
 								success:function (layero, index) {
@@ -371,16 +388,11 @@
 					type: 1,
 					area: ['40%', '60%'],
 					closeBtn :0,
-					// content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
-					// content: path+"/admin/toUrl/addTopicInfo",
 					content:$("#type-content4"),
 					title: ['新增题目','font-size:18px'],
 					btn: ['保存', '取消'],
-					// offset: ['60px','300px'],
+					skin: 'demo-class',
 					btnAlign: 'c',
-					// end: function () {
-					// 	location.reload();
-					// },
 					success : function(layero, index) {
 						var id = $("#id").val();
 						$("#safetyVideoId").val(id);
@@ -403,15 +415,15 @@
 							avalue = 0;
 						}
 						if (topicName.length == 0) {
-							layer.alert("不能为空,请输入题目", {icon: 2});
+							layer.alert("不能为空,请输入题目", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 						}else if(a == 0) {
-							layer.alert("不能为空,请先选择A选项内容", {icon: 2});
+							layer.alert("不能为空,请先选择A选项内容", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 						}else if(b == 0)
 						{
-							layer.alert("不能为空,请先选择B选项内容", {icon: 2});
+							layer.alert("不能为空,请先选择B选项内容", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 						}else if(result == 0)
 						{
-							layer.alert("答案不能为空，请输入正确答案", {icon: 2});
+							layer.alert("答案不能为空，请输入正确答案", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 						}
 						else {
 							$.ajax({
@@ -422,10 +434,10 @@
 								datatype: 'json',
 								success: function (data) {
 									if (data == "error") {
-										layer.alert("新增失败", {icon: 2});
+										layer.alert("新增失败", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									} else {
 										$("#configItems").append("");
-										layer.alert("新增成功！", {icon: 6});
+										layer.alert("新增成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 										layer.close(index);
 										parent.location.reload();
 										var opt = "";
@@ -456,7 +468,7 @@
 										tableIns.reload();
 									}
 								}, error: function (data) {
-									layer.alert("网络繁忙！", {icon: 2});
+									layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 								}
 							});
 						}
@@ -529,7 +541,8 @@
 					title: '上传视频',
 					// btn: ['保存', '取消'],
 					offset: '100px',
-					btnAlign: 'c'
+					btnAlign: 'c',
+					skin: 'demo-class'
 				});
 			});
 
