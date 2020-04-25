@@ -42,34 +42,75 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
 //        String security = "/kindergarten/security/path/securityMain";
 //        String teacher = "/kindergarten/teacher/toUrl/teacherMain";
 
+
+        if (uri.endsWith("Login")||uri.endsWith("logout")){
+            //如果是访问登陆或者退出可以直接访问
+            return true;
+        }
+
+        if (uri.contains("main")){
+            //判断要访问的是主页的方法
+
+        }
+
+        if (uri.contains("admin")){
+            //判断管理员是否登录
+            if (request.getSession().getAttribute("rolename") != null) {
+                return true;
+            }
+
+        }
+        if (uri.contains("director")){
+
+            //判断园长是否登录
+            if (request.getSession().getAttribute("rectorname") != null) {
+                return true;
+            }
+
+        }
+        if (uri.contains("healther")){
+            //判断保健员是否登录
+            if (request.getSession().getAttribute("healthername") != null) {
+                return true;
+            }
+        }
+
+        if (uri.contains("parent")){
+
+            //判断家长是否登录
+            if (request.getSession().getAttribute("onlineParent") != null) {
+                return true;
+            }else {
+                response.sendRedirect(basePath + "/parent/toUrl/parentLogin");
+            }
+
+
+        }
+
+        if (uri.contains("security")){
+            //判断安防员是否登录
+            if (request.getSession().getAttribute("securityname") != null) {
+                return true;
+            }
+
+        }
+        if (uri.contains("teacher")){
+            //判断班主任是否登录
+            if (request.getSession().getAttribute("teachername") != null) {
+                return true;
+            }
+
+        }
+
+
         //判断幼儿园是否登录
         if (request.getSession().getAttribute("kindername") != null) {
             return true;
         }
-        //判断管理员是否登录
-        if (request.getSession().getAttribute("rolename") != null) {
-            return true;
-        }
-        //判断园长是否登录
-        if (request.getSession().getAttribute("rectorname") != null) {
-            return true;
-        }
-        //判断保健员是否登录
-        if (request.getSession().getAttribute("healthername") != null) {
-            return true;
-        }
-        //判断家长是否登录
-        if (request.getSession().getAttribute("parentname") != null) {
-            return true;
-        }
-        //判断安防员是否登录
-        if (request.getSession().getAttribute("securityname") != null) {
-            return true;
-        }
-        //判断班主任是否登录
-        if (request.getSession().getAttribute("teachername") != null) {
-            return true;
-        }
+
+
+
+
         System.out.println("返回幼儿园登录界面");
         response.sendRedirect(basePath + "/main/path/Login");
         return false;
