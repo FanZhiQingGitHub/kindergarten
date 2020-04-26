@@ -903,6 +903,14 @@
         </where>
     </select>
 
+    <select id="selectKinderInfoById" resultMap="KinderMap" >
+        select * from tbl_kinder
+        <where>
+            kinderid = #{kinderid}
+        </where>
+    </select>
+
+
     <select id="findTblKinderById" resultType="com.great.kindergarten.commons.entity.TblKinder">
         select * from tbl_kinder where kinderid = #{kinderid}
     </select>

@@ -161,6 +161,9 @@ public interface AdminMapper
 
 	public String initialPwd(String parametername);
 
+	public List<TblKinder> selectKinderInfoById(Integer kinderid);
+
+
 	//参数配置
 	public List<TblParameter> findAllParameter(HashMap<String, Object> condition, RowBounds rowBounds);
 

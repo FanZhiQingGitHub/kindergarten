@@ -25,7 +25,6 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -56,17 +55,6 @@ public class AdminController
 		return "/adminjsp/" + url;
 	}
 
-	/**
-	 * 注销
-	 * @param session
-	 * @return
-	 */
-	@RequestMapping(value = "/logout")
-	public String toLogout(HttpSession session)
-	{
-		session.invalidate();
-		return "adminjsp/adminLogin";
-	}
 
 	/**
 	 * 验证码
@@ -81,8 +69,8 @@ public class AdminController
 			int width = 60;
 			int height = 30;
 			//随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
-			//            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";
-			String data = "0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
+            String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";
+//			String data = "0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
 			//随机类
 			Random random = new Random();
 			//1 创建图片数据缓存区域（核心类）
@@ -138,6 +126,7 @@ public class AdminController
 	 * @param request
 	 * @param response
 	 */
+	@AdminSystemLog(operationType = "修改",operationName = "重置管理员账号密码")
 	@RequestMapping("/resetAdminPwd")
 	public void resetAdminPwd(TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response) {
 		request.getSession().setAttribute("adminname",tblAdmin.getAdminname());
@@ -199,7 +188,6 @@ public class AdminController
 						List<TblMenu> stairMenuList = adminService.findStairMenu();
 
 						List<TblRole> roleList = adminService.findRoleInfo();
-
 
 						req.getSession().setAttribute("kinderList", kinderList);
 						req.getSession().setAttribute("tblClassList", tblClassList);
@@ -323,7 +311,7 @@ public class AdminController
 	 * @param response
 	 * @throws Exception
 	 */
-	@AdminSystemLog(operationType = "新增",operationName = "后台新增管理员")
+	@AdminSystemLog(operationType = "新增",operationName = "新增管理员")
 	@RequestMapping("/addAdminInfos")
 	public void addAdminInfos(TblAdmin tblAdmin, HttpServletRequest request, String rolename , HttpServletResponse response) throws Exception
 	{
@@ -377,7 +365,7 @@ public class AdminController
 		}
 	}
 
-	@AdminSystemLog(operationType = "删除",operationName = "删除管理员")
+	@AdminSystemLog(operationType = "删除",operationName = "删除管理员信息")
 	@RequestMapping("/deleteAdmin")
 	public void deleteAdmin(TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -394,6 +382,12 @@ public class AdminController
 		}
 	}
 
+	/**
+	 * 校验用户名
+	 * @param tblAdmin
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping("/checkAdminName")
 	public void checkAdminName(TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -407,7 +401,7 @@ public class AdminController
 		}
 	}
 
-	@AdminSystemLog(operationType = "修改",operationName = "禁用管理员")
+	@AdminSystemLog(operationType = "修改",operationName = "禁用管理员账号")
 	@RequestMapping("/forbiddenAdmin")
 	public void forbiddenAdmin(TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -425,7 +419,7 @@ public class AdminController
 		}
 	}
 
-	@AdminSystemLog(operationType = "修改",operationName = "启用管理员")
+	@AdminSystemLog(operationType = "修改",operationName = "启用管理员账号")
 	@RequestMapping("/openAdmin")
 	public void openAdmin(TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -444,6 +438,12 @@ public class AdminController
 	}
 
 
+	/**
+	 * 主页左侧菜单栏
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@RequestMapping("/treeMenu")
 	public void treeDemo(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -454,6 +454,7 @@ public class AdminController
 		response.getWriter().flush();
 		response.getWriter().close();
 	}
+
 
 	/**
 	 * 菜单管理
@@ -527,7 +528,7 @@ public class AdminController
 	 * @param request
 	 * @param response
 	 */
-	@AdminSystemLog(operationType = "新增", operationName = "管理员新增菜单")
+	@AdminSystemLog(operationType = "新增", operationName = "新增菜单")
 	@RequestMapping("/addMenuItems")
 	public void addMenuItems(TblMenu tblMenu, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -596,7 +597,7 @@ public class AdminController
 	 * @param request
 	 * @param response
 	 */
-	@AdminSystemLog(operationType = "修改", operationName = "管理员修改菜单信息")
+	@AdminSystemLog(operationType = "修改", operationName = "修改菜单信息")
 	@RequestMapping("/updateMenuInfo")
 	public void updateMenuInfo(TblMenu tblMenu, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -625,7 +626,7 @@ public class AdminController
 	 * @param request
 	 * @param response
 	 */
-	@AdminSystemLog(operationType = "删除", operationName = "管理员删除菜单信息")
+	@AdminSystemLog(operationType = "删除", operationName = "删除菜单信息")
 	@RequestMapping("/deleteMenuInfo")
 	public void deleteMenuInfo(TblMenu tblMenu, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -668,7 +669,12 @@ public class AdminController
 		}
 	}
 
-	@AdminSystemLog(operationType = "修改",operationName = "修改管理员密码")
+	/**
+	 * 修改管理员密码
+	 * @param request
+	 * @param response
+	 */
+	@AdminSystemLog(operationType = "修改",operationName = "修改管理员账号密码")
 	@RequestMapping("/updateAdminPwd")
 	public void updateAdminPwd(HttpServletRequest request, HttpServletResponse response)
 	{
@@ -757,6 +763,28 @@ public class AdminController
 		}
 	}
 
+	@RequestMapping("/selectKinderInfoById")
+	public void selectKinderInfoById(TblKinder tblKinder , HttpServletRequest request, HttpServletResponse response)
+	{
+		if(tblKinder != null)
+		{
+			List<TblKinder> tblKinderList = adminService.selectKinderInfoById(tblKinder.getKinderid());
+			ResponseUtils.outJson(response,GsonUtils.getgsonUtils().toStr(tblKinderList));
+		}else{
+			ResponseUtils.outHtml(response,"error");
+		}
+	}
+
+	/**
+	 * 园所资质审批管理
+	 * @param page
+	 * @param limit
+	 * @param tblKinder
+	 * @param dataResult
+	 * @param req
+	 * @param res
+	 * @throws IOException
+	 */
 	@RequestMapping("/qualifyAppInfo")
 	public void findKinderByPage(String page, String limit, TblKinder tblKinder, DataResult dataResult, HttpServletRequest req, HttpServletResponse res) throws IOException
 	{
@@ -823,6 +851,7 @@ public class AdminController
 	 * @param request
 	 * @param response
 	 */
+	@AdminSystemLog(operationType = "审批",operationName = "园所资质申请审批已通过")
 	@RequestMapping("/checkQualify")
 	public void checkQualify(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -852,6 +881,7 @@ public class AdminController
 	 * @param request
 	 * @param response
 	 */
+	@AdminSystemLog(operationType = "审批",operationName = "园所资质申请审批被拒绝")
 	@RequestMapping("/reject")
 	public void reject(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -895,11 +925,12 @@ public class AdminController
 	}
 
 	/**
-	 * 新增园所
+	 * 管理员新增园所
 	 * @param tblKinder
 	 * @param request
 	 * @param response
 	 */
+	@AdminSystemLog(operationType = "新增",operationName = "新增园所")
 	@RequestMapping("/addKinder")
 	public void addKinder(TblKinder tblKinder, TblRector tblRector, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -946,6 +977,12 @@ public class AdminController
 		}
 	}
 
+	/**
+	 * 校验园所名字是否重复
+	 * @param tblKinder
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping("/selectKinderName")
 	public void selectKinderName(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -962,6 +999,12 @@ public class AdminController
 		}
 	}
 
+	/**
+	 * 校验园所账号是否重复
+	 * @param tblKinder
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping("/selectKinderAccount")
 	public void selectKinderAccount(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -978,6 +1021,12 @@ public class AdminController
 		}
 	}
 
+	/**
+	 * 根据园所id查询园所信息
+	 * @param tblKinder
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping("/selectKinderInfo")
 	public void selectKinderInfo(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -994,6 +1043,7 @@ public class AdminController
 		}
 	}
 
+	@AdminSystemLog(operationType = "修改",operationName = "禁用园所账号")
 	@RequestMapping("/forbiddenAccount")
 	public void forbiddenAccount(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1011,6 +1061,7 @@ public class AdminController
 		}
 	}
 
+	@AdminSystemLog(operationType = "启用",operationName = "启用园所账号")
 	@RequestMapping("/openAccount")
 	public void openAccount(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1028,13 +1079,20 @@ public class AdminController
 		}
 	}
 
+	@AdminSystemLog(operationType = "修改",operationName = "重置园所账号密码")
 	@RequestMapping("/restKinderPwd")
 	public void restKinderPwd(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
 		if (tblKinder != null)
 		{
 			String kinderPwd = adminService.initialPwd("初始密码");
-			tblKinder.setKinderpwd(kinderPwd);
+			if(kinderPwd != null)
+			{
+				tblKinder.setKinderpwd(kinderPwd);
+			}else{
+				tblKinder.setKinderpwd(MD5Utils.md5("123456"));
+			}
+
 			int num = adminService.restKinderPwd(tblKinder);
 			if (num > 0)
 			{
@@ -1046,6 +1104,7 @@ public class AdminController
 		}
 	}
 
+	@AdminSystemLog(operationType = "删除",operationName = "删除园所信息")
 	@RequestMapping("/deleteKinderInfo")
 	public void deleteKinderInfo(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1068,6 +1127,7 @@ public class AdminController
 	 * @param request
 	 * @param response
 	 */
+	@AdminSystemLog(operationType = "修改",operationName = "修改园所信息")
 	@RequestMapping("/updateKinderInfo")
 	public void updateKinderInfo(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1124,6 +1184,7 @@ public class AdminController
 	 * @param request
 	 * @param response
 	 */
+	@AdminSystemLog(operationType = "修改",operationName = "修改角色信息")
 	@RequestMapping("/updateRoleInfo")
 	public void updateRoleInfo(TblRole tblRole, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1140,6 +1201,7 @@ public class AdminController
 		}
 	}
 
+	@AdminSystemLog(operationType = "删除",operationName = "删除角色信息")
 	@RequestMapping("/deleteRoleInfo")
 	public void deleteRoleInfo(TblRole tblRole, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1179,7 +1241,7 @@ public class AdminController
 	 * @param request
 	 * @param response
 	 */
-	@AdminSystemLog(operationType = "新增角色", operationName = "管理员新增角色")
+	@AdminSystemLog(operationType = "新增", operationName = "新增角色")
 	@RequestMapping("/addRoleItems")
 	public void addRoleItems(TblRole tblRole, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1302,6 +1364,9 @@ public class AdminController
 		}
 	}
 
+
+
+	@AdminSystemLog(operationType = "删除",operationName = "删除绘本信息")
 	@RequestMapping("/deleteReadInfo")
 	public void deleteReadInfo(TblReadmag tblReadmag, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1318,6 +1383,7 @@ public class AdminController
 		}
 	}
 
+	@AdminSystemLog(operationType = "上传",operationName = "上传管理员头像")
 	@RequestMapping("/uploadAdminHeadImg")
 	public void uploadAdminHeadImg(@RequestParam("file") MultipartFile file, String rolename, String adminname, String adminheadurl, String adminphone, String adminsex, TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -1361,6 +1427,8 @@ public class AdminController
 	}
 
 
+
+	@AdminSystemLog(operationType = "上传",operationName = "上传绘本图片")
 	@RequestMapping("/uploadImg")
 	public void upload(@RequestParam("file") MultipartFile file, String contentInfo, String pageNum, String readMagName1, TblReadmag tblReadmag, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -1408,6 +1476,7 @@ public class AdminController
 		}
 	}
 
+	@AdminSystemLog(operationType = "上传",operationName = "重新上传绘本信息")
 	@RequestMapping("/reUploadBook")
 	public void reUploadBook(TblReadmag tblReadmag, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException
 	{
@@ -1496,6 +1565,16 @@ public class AdminController
 		return result;
 	}
 
+	/**
+	 * 平台资讯管理
+	 * @param page
+	 * @param limit
+	 * @param tblPlatforminfo
+	 * @param dataResult
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping("/platformInfoMag")
 	public void platformInfoMag(String page, String limit, TblPlatforminfo tblPlatforminfo, DataResult dataResult, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -1530,6 +1609,7 @@ public class AdminController
 		}
 	}
 
+	@AdminSystemLog(operationType = "发布",operationName = "发布平台资讯信息")
 	@RequestMapping("/releasePlatFormInfo")
 	public void releasePlatFormInfo(TblPlatforminfo tblPlatforminfo, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1544,6 +1624,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "取消",operationName = "取消发布平台资讯信息")
 	@RequestMapping("/cancelPlatFormInfo")
 	public void cancelPlatFormInfo(TblPlatforminfo tblPlatforminfo, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1558,6 +1640,7 @@ public class AdminController
 		}
 	}
 
+	@AdminSystemLog(operationType = "删除",operationName = "删除平台资讯信息")
 	@RequestMapping("/deletePlatFormInfo")
 	public void deletePlatFormInfo(TblPlatforminfo tblPlatforminfo, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1574,6 +1657,7 @@ public class AdminController
 		}
 	}
 
+	@AdminSystemLog(operationType = "修改",operationName = "修改平台资讯信息")
 	@RequestMapping("/updatePlatFormInfo")
 	public void updatePlatFormInfo(TblPlatforminfo tblPlatforminfo, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1590,6 +1674,7 @@ public class AdminController
 		}
 	}
 
+	@AdminSystemLog(operationType = "新增",operationName = "新增平台资讯信息")
 	@RequestMapping("/addPlatFormInfo")
 	public void addPlatFormInfo(TblPlatforminfo tblPlatforminfo, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1689,7 +1774,8 @@ public class AdminController
 	 * @param tblRector
 	 * @param request
 	 * @param response
-	 */
+	*/
+	@AdminSystemLog(operationType = "新增",operationName = "新增园长信息")
 	@RequestMapping("/addRector")
 	public void addRector(TblRector tblRector, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1737,6 +1823,7 @@ public class AdminController
 	}
 
 
+	@AdminSystemLog(operationType = "修改",operationName = "禁用园长账号")
 	@RequestMapping("/forbiddenRector")
 	public void forbiddenRector(TblRector tblRector, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1754,6 +1841,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "启用园长账号")
 	@RequestMapping("/openRector")
 	public void openRector(TblRector tblRector, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1771,13 +1860,22 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "重置园长账号密码")
 	@RequestMapping("/restRectorPwd")
 	public void restRectorPwd(TblRector tblRector, HttpServletRequest request, HttpServletResponse response)
 	{
 		if (tblRector != null)
 		{
 			String rectorPwd = adminService.initialPwd("初始密码");
-			tblRector.setRectorpwd(rectorPwd);
+
+			if(rectorPwd != null)
+			{
+				tblRector.setRectorpwd(rectorPwd);
+			}else{
+				tblRector.setRectorpwd(MD5Utils.md5("123456"));
+			}
+
 			int num = adminService.restRectorPwd(tblRector);
 			if (num > 0)
 			{
@@ -1789,6 +1887,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "删除",operationName = "删除园长信息")
 	@RequestMapping("/deleteRector")
 	public void deleteRector(TblRector tblRector, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1805,6 +1905,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "修改园长信息")
 	@RequestMapping("/updateRector")
 	public void updateRector(TblRector tblRector, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1877,6 +1979,7 @@ public class AdminController
 	}
 
 
+	@AdminSystemLog(operationType = "修改",operationName = "禁用教师账号")
 	@RequestMapping("/forbiddenTeacher")
 	public void forbiddenTeacher(TblTeacher tblTeacher, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1894,6 +1997,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "启用教师账号")
 	@RequestMapping("/openTeacher")
 	public void openTeacher(TblTeacher tblTeacher, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1911,13 +2016,22 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "重置教师账号密码")
 	@RequestMapping("/restTeacherPwd")
 	public void restTeacherPwd(TblTeacher tblTeacher, HttpServletRequest request, HttpServletResponse response)
 	{
 		if (tblTeacher != null)
 		{
 			String teacherPwd = adminService.initialPwd("初始密码");
-			tblTeacher.setTeacherpwd(teacherPwd);
+
+			if(teacherPwd != null)
+			{
+				tblTeacher.setTeacherpwd(teacherPwd);
+			}else{
+				tblTeacher.setTeacherpwd(MD5Utils.md5("123456"));
+			}
+
 			int num = adminService.restTeacherPwd(tblTeacher);
 			if (num > 0)
 			{
@@ -1929,6 +2043,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "删除",operationName = "删除教师信息")
 	@RequestMapping("/deleteTeacher")
 	public void deleteTeacher(TblTeacher tblTeacher, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -1945,6 +2061,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "修改教师信息")
 	@RequestMapping("/updateTeacher")
 	public void updateTeacher(TblTeacher tblTeacher, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2016,6 +2134,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "禁用家长账号")
 	@RequestMapping("/forbiddenParent")
 	public void forbiddenParent(TblParent tblParent, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2033,6 +2153,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "启用家长账号")
 	@RequestMapping("/openParent")
 	public void openParent(TblParent tblParent, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2050,13 +2172,22 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "重置家长账号密码")
 	@RequestMapping("/restParentPwd")
 	public void restParentPwd(TblParent tblParent, HttpServletRequest request, HttpServletResponse response)
 	{
 		if (tblParent != null)
 		{
 			String parentPwd = adminService.initialPwd("初始密码");
-			tblParent.setParentPwd(parentPwd);
+
+			if(parentPwd != null)
+			{
+				tblParent.setParentPwd(parentPwd);
+			}else{
+				tblParent.setParentPwd(MD5Utils.md5("123456"));
+			}
+
 			int num = adminService.restParentPwd(tblParent);
 			if (num > 0)
 			{
@@ -2068,6 +2199,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "删除",operationName = "删除家长信息")
 	@RequestMapping("/deleteParent")
 	public void deleteParent(TblParent tblParent, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2084,6 +2217,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "修改家长信息")
 	@RequestMapping("/updateParent")
 	public void updateParent(TblParent tblParent, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2099,6 +2234,8 @@ public class AdminController
 			}
 		}
 	}
+
+
 
 	/**
 	 * 保健员管理
@@ -2157,6 +2294,8 @@ public class AdminController
 	}
 
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "禁用保健员账号")
 	@RequestMapping("/forbiddenHealther")
 	public void forbiddenHealther(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2174,6 +2313,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "启用保健员账号")
 	@RequestMapping("/openHealther")
 	public void openHealther(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2191,13 +2332,21 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "重置保健员账号密码")
 	@RequestMapping("/restHealtherPwd")
 	public void restHealtherPwd(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response)
 	{
 		if (tblHealther != null)
 		{
 			String healtherPwd = adminService.initialPwd("初始密码");
-			tblHealther.setHealtherpwd(healtherPwd);
+			if(healtherPwd != null)
+			{
+				tblHealther.setHealtherpwd(healtherPwd);
+			}else{
+				tblHealther.setHealtherpwd(MD5Utils.md5("123456"));
+			}
+
 			int num = adminService.restHealtherPwd(tblHealther);
 			if (num > 0)
 			{
@@ -2209,6 +2358,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "删除",operationName = "删除保健员信息")
 	@RequestMapping("/deleteHealther")
 	public void deleteHealther(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2225,6 +2376,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "修改保健员信息")
 	@RequestMapping("/updateHealther")
 	public void updateHealther(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2289,6 +2442,8 @@ public class AdminController
 	}
 
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "禁用安防员账号")
 	@RequestMapping("/forbiddenSecurity")
 	public void forbiddenSecurity(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2306,6 +2461,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "启用安防员账号")
 	@RequestMapping("/openSecurity")
 	public void openSecurity(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2323,13 +2480,21 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "重置安防员账号密码")
 	@RequestMapping("/restSecurityPwd")
 	public void restSecurityPwd(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response)
 	{
 		if (tblSecurity != null)
 		{
-			String securityPwd = adminService.initialPwd("初始密码");
-			tblSecurity.setSecuritypwd(securityPwd);
+			String  securityPwd = adminService.initialPwd("初始密码");
+			if(securityPwd != null)
+			{
+				tblSecurity.setSecuritypwd(securityPwd);
+			}else{
+				tblSecurity.setSecuritypwd(MD5Utils.md5("123456"));
+			}
+
 			int num = adminService.restSecurityPwd(tblSecurity);
 			if (num > 0)
 			{
@@ -2341,6 +2506,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "删除",operationName = "删除安防员信息")
 	@RequestMapping("/deleteSecurity")
 	public void deleteSecurity(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2357,6 +2524,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "修改安防员信息")
 	@RequestMapping("/updateSecurity")
 	public void updateSecurity(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2416,27 +2585,8 @@ public class AdminController
 		}
 	}
 
-	@RequestMapping("/addStudent")
-	public void addStudent(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response)
-	{
-		List<TblStudent> tblStudentList = new ArrayList<>();
-		if (tblStudent != null)
-		{
-			SimpleDateFormat sf = new SimpleDateFormat();
-			tblStudent.setStudenttime(new Date());
-			tblStudent.setStudentstatus("启用");
-			tblStudentList.add(tblStudent);
-			int num = adminService.addStudent(tblStudentList);
-			if (num > 0)
-			{
-				ResponseUtils.outHtml(response, "success");
-			} else
-			{
-				ResponseUtils.outHtml(response, "error");
-			}
-		}
-	}
 
+	@AdminSystemLog(operationType = "修改",operationName = "禁用幼儿账号")
 	@RequestMapping("/forbiddenStudent")
 	public void forbiddenStudent(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2454,6 +2604,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "启用幼儿账号")
 	@RequestMapping("/openStudent")
 	public void openStudent(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2471,13 +2623,21 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "重置幼儿账号密码")
 	@RequestMapping("/restStudentPwd")
 	public void restStudentPwd(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response)
 	{
 		if (tblStudent != null)
 		{
 			String studentPwd = adminService.initialPwd("初始密码");
-			tblStudent.setStudentpwd(studentPwd);
+			if(studentPwd != null)
+			{
+				tblStudent.setStudentpwd(studentPwd);
+			}else{
+				tblStudent.setStudentpwd(MD5Utils.md5("123456"));
+			}
+
 			int num = adminService.restStudentPwd(tblStudent);
 			if (num > 0)
 			{
@@ -2489,6 +2649,7 @@ public class AdminController
 		}
 	}
 
+	@AdminSystemLog(operationType = "删除",operationName = "删除幼儿信息")
 	@RequestMapping("/deleteStudent")
 	public void deleteStudent(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2505,6 +2666,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "修改幼儿信息")
 	@RequestMapping("/updateStudent")
 	public void updateStudent(TblStudent tblStudent, HttpServletRequest request, String classname, String kindername, HttpServletResponse response)
 	{
@@ -2566,6 +2729,7 @@ public class AdminController
 		}
 	}
 
+	@AdminSystemLog(operationType = "删除",operationName = "删除安全视频信息")
 	@RequestMapping("/deleteSafetyVideoInfo")
 	public void deleteSafetyVideoInfo(TblSafetyvideo tblSafetyvideo, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2635,7 +2799,7 @@ public class AdminController
 		}
 	}
 
-	@AdminSystemLog(operationType = "上传视频", operationName = "管理员上传视频")
+	@AdminSystemLog(operationType = "上传", operationName = "上传视频")
 	@RequestMapping("/uploadVideo")
 	public void uploadVideo(@RequestParam("file") MultipartFile file, String safetyVideoName, String videoName, String videoAdd, TblSafetyvideo tblSafetyvideo, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -2683,7 +2847,7 @@ public class AdminController
 	}
 
 
-	@AdminSystemLog(operationType = "重新上传视频", operationName = "重新上传视频")
+	@AdminSystemLog(operationType = "上传", operationName = "重新上传视频")
 	@RequestMapping("/updateSafetyVideoInfo")
 	public void updateSafetyVideoInfo(@RequestParam("file") MultipartFile file, String safetyVideoName, String videoName, String videoAdd, Integer safetyvideoid, TblSafetyvideo tblSafetyvideo, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
@@ -2698,7 +2862,6 @@ public class AdminController
 			String uuid = UUID.randomUUID() + "";
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			dateStr = simpleDateFormat.format(date);
-			//			String filepath = "D:\\kindergarten\\src\\main\\webapp\\image\\adminimg\\img\\" + dateStr+"\\"+uuid+"." + prefix;
 			String filepath = "D:\\kindergarten\\src\\main\\webapp\\image\\adminimg\\video\\" + "\\" + originalName;
 			File files = new File(filepath);
 			//打印查看上传路径
@@ -2732,6 +2895,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "新增",operationName = "新增题目")
 	@RequestMapping("/addTopic")
 	public void addTopic(TblSafetyvtq tblSafetyvtq, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2766,6 +2931,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "删除",operationName = "删除题目信息")
 	@RequestMapping("/deleteTopic")
 	public void deleteTopic(TblSafetyvtq tblSafetyvtq, String safetyVideoName, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2782,6 +2949,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "修改题目信息")
 	@RequestMapping("/updateTopic")
 	public void updateTopic(TblSafetyvtq tblSafetyvtq, String safetyVideoName, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2829,6 +2998,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "新增",operationName = "新增参数信息")
 	@RequestMapping("/addParameter")
 	public void addParameter(TblParameter tblParameter, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2847,6 +3018,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "删除",operationName = "删除参数信息")
 	@RequestMapping("/deleteParameter")
 	public void deleteParameter(TblParameter tblParameter, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -2863,6 +3036,8 @@ public class AdminController
 		}
 	}
 
+
+	@AdminSystemLog(operationType = "修改",operationName = "修改参数信息")
 	@RequestMapping("/updateParameter")
 	public void updateParameter(TblParameter tblParameter, HttpServletRequest request, HttpServletResponse response)
 	{

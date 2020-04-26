@@ -52,7 +52,7 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
 
         if (uri.contains("admin")){
             //判断管理员是否登录
-            if (request.getSession().getAttribute("rolename") != null) {
+            if (request.getSession().getAttribute("adminname") != null) {
                 return true;
             }else {
                 response.sendRedirect(basePath + "/admin/toUrl/adminLogin");

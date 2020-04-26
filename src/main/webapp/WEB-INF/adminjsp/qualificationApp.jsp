@@ -156,14 +156,18 @@
 			, limit: 5
 			, limits: [5, 10]
 			, cols: [[ //表头
-				{field: 'kinderid', title: '序号', align: 'center', width: 160, sort: true, fixed: 'left'}
+				{field: 'kinderid', title: '序号', align: 'center', width: 133, sort: true, fixed: 'left'}
 				, {field: 'kindername', title: '园所名称', align: 'center', width: 320}
 				, {field: 'kinderregtime', title: '申请时间', align: 'center', width: 320
 					,templet:"<div>{{layui.util.toDateString(d.kinderregtime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
 				, {field: 'kinderapptime', title: '审批时间', align: 'center', width: 320
 				   ,templet:"<div>{{layui.util.toDateString(d.kinderapptime,'yyyy-MM-dd HH:mm:ss')}}</div>"}
+				, {field: 'rectorname', title: '园长', align: 'center', width: 160
+					,templet:function (d) {
+						return d.rectorname == null ? '无': d.rectorname
+					}}
 				, {field: 'kinderstatus', title: '状态', align: 'center', width: 160}
-				, {fixed: 'right', title: '操作', align: 'center', width: 442, toolbar: '#barOption'}
+				, {fixed: 'right', title: '操作', align: 'center', width: 306, toolbar: '#barOption'}
 			]]
 			, id: 'qualifyTable'
 			, parseData: function (res) { //res 即为原始返回的数据
@@ -285,33 +289,63 @@
 						,skin: 'demo1'
 						,content: path+"/admin/toUrl/kinderDetailInfo"
 						,success : function(layero, index) {
-							$.ajax({
-								url:path+"/admin/findKinderInfoById",
-								type:'POST',
-								dataType:'json',
-								data:{"kinderid":data.kinderid},
-								success:function (result) {
-									var kinderInfo = eval(result);
-									var body = layer.getChildFrame('body',index);
-									for(i in kinderInfo)
-									{
-										body.find("#kindername").val(kinderInfo[i].kindername);
-										body.find("#kinderacount").val(kinderInfo[i].kinderacount);
-										body.find("#kinderlp").val(kinderInfo[i].rectorname);
-										body.find("#kinderlpid").val(kinderInfo[i].kinderlpid);
-										body.find("#kinderlpadd").val(kinderInfo[i].kinderlpadd);
-										body.find("#kinderlpphone").val(kinderInfo[i].kinderlpphone);
-										body.find("#schoolpermit").val(kinderInfo[i].schoolpermit);
-										body.find("#healthpermit").val(kinderInfo[i].healthpermit);
-										body.find("#firepermit").val(kinderInfo[i].firepermit);
-										body.find("#grouppermit").val(kinderInfo[i].grouppermit);
-										body.find("#registrationpermit").val(kinderInfo[i].registrationpermit);
-										body.find("#kinderstatus").val(kinderInfo[i].kinderstatus);
-										body.find("#kinderscale").val(kinderInfo[i].kinderscale);
-										body.find("#kinderfunds").val(kinderInfo[i].kinderfunds);
+							var rectorname = data.rectorname;
+							if(rectorname == null) {
+								$.ajax({
+									url: path + "/admin/selectKinderInfoById",
+									type: 'POST',
+									dataType: 'json',
+									data: {"kinderid": data.kinderid},
+									success: function (result) {
+										var kinderInfo = eval(result);
+										var body = layer.getChildFrame('body', index);
+										for (i in kinderInfo) {
+											body.find("#kindername").val(kinderInfo[i].kindername);
+											body.find("#kinderacount").val(kinderInfo[i].kinderacount);
+											body.find("#kinderlp").val(kinderInfo[i].kinderlp);
+											body.find("#kinderlpid").val(kinderInfo[i].kinderlpid);
+											body.find("#kinderlpadd").val(kinderInfo[i].kinderlpadd);
+											body.find("#kinderlpphone").val(kinderInfo[i].kinderlpphone);
+											body.find("#schoolpermit").val(kinderInfo[i].schoolpermit);
+											body.find("#healthpermit").val(kinderInfo[i].healthpermit);
+											body.find("#firepermit").val(kinderInfo[i].firepermit);
+											body.find("#grouppermit").val(kinderInfo[i].grouppermit);
+											body.find("#registrationpermit").val(kinderInfo[i].registrationpermit);
+											body.find("#kinderstatus").val(kinderInfo[i].kinderstatus);
+											body.find("#kinderscale").val(kinderInfo[i].kinderscale);
+											body.find("#kinderfunds").val(kinderInfo[i].kinderfunds);
+										}
 									}
-								}
-							});
+								});
+							}else{
+								$.ajax({
+									url:path+"/admin/findKinderInfoById",
+									type:'POST',
+									dataType:'json',
+									data:{"kinderid":data.kinderid},
+									success:function (result) {
+										var kinderInfo = eval(result);
+										var body = layer.getChildFrame('body',index);
+										for(i in kinderInfo)
+										{
+											body.find("#kindername").val(kinderInfo[i].kindername);
+											body.find("#kinderacount").val(kinderInfo[i].kinderacount);
+											body.find("#kinderlp").val(kinderInfo[i].rectorname);
+											body.find("#kinderlpid").val(kinderInfo[i].kinderlpid);
+											body.find("#kinderlpadd").val(kinderInfo[i].kinderlpadd);
+											body.find("#kinderlpphone").val(kinderInfo[i].kinderlpphone);
+											body.find("#schoolpermit").val(kinderInfo[i].schoolpermit);
+											body.find("#healthpermit").val(kinderInfo[i].healthpermit);
+											body.find("#firepermit").val(kinderInfo[i].firepermit);
+											body.find("#grouppermit").val(kinderInfo[i].grouppermit);
+											body.find("#registrationpermit").val(kinderInfo[i].registrationpermit);
+											body.find("#kinderstatus").val(kinderInfo[i].kinderstatus);
+											body.find("#kinderscale").val(kinderInfo[i].kinderscale);
+											body.find("#kinderfunds").val(kinderInfo[i].kinderfunds);
+										}
+									}
+								});
+							}
 
 						}
 					});
