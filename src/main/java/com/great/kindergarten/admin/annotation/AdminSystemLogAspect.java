@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Date;
 
 /**
@@ -120,13 +119,20 @@ public class AdminSystemLogAspect {
             if(tblAdmin != null)
             {
                 log.setOperateor(tblAdmin.getAdminname());
+                log.setOperatetime(new Date());
+                //保存数据库
+                int num = systemLogService.addLog(log);
+                if (num > 0) {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知结束=====");
+                } else {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知异常=====");
+                }
+
             }else{
-                log.setOperateor("无");
+                System.out.println("日志记录失败");
             }
-		    System.out.println("日志记录时间"+new Date());
-            log.setOperatetime(new Date());
-            //保存数据库
-            systemLogService.addLog(log);
 
         }  catch (Exception e) {
             //记录本地异常日志
@@ -193,13 +199,21 @@ public class AdminSystemLogAspect {
              if(tblAdmin != null)
              {
                  log.setOperateor(tblAdmin.getAdminname());
+                 System.out.println("日志记录时间" + new Date());
+                 log.setOperatetime(new Date());
+                 //保存数据库
+                 int num = systemLogService.addLog(log);
+                 if (num > 0) {
+                     System.out.println(log);
+                     System.out.println("=====controller后置通知结束=====");
+                 } else {
+                     System.out.println(log);
+                     System.out.println("=====controller后置通知异常=====");
+                 }
              }else{
-                 log.setOperateor("无");
+                 System.out.println("日志记录失败");
              }
-             log.setOperatetime(new Date());
-            //保存数据库
-            systemLogService.addLog(log);
-            System.out.println("=====异常通知结束=====");
+
         }  catch (Exception ex) {
             //记录本地异常日志
             logger.error("==异常通知异常==");

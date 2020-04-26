@@ -208,12 +208,14 @@ public class TeacherController {
 		System.out.println("str="+str);
 		return str;
 	}
+
 	//退出登录
 	@RequestMapping(value="/teacherOut")
 	public String teacherOut( HttpServletRequest request){
 //		消除session信息
-		HttpSession session = request.getSession();
-		session.invalidate();
+//		HttpSession session = request.getSession();
+//		session.invalidate();
+		request.getSession().removeAttribute("teachername");
 		return "teacherjsp/teacherLogin";
 	}
 

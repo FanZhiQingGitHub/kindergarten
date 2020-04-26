@@ -26,7 +26,8 @@
 		}
 
 		.layui-input{
-			width:120%;
+			width:140%;
+			height: 80%;
 			margin: auto;
 		}
 		.sp{
@@ -43,34 +44,34 @@
 			<h1 id="hh1">修改密码</h1>
 			<hr style="color: white">
 			<div class="container" style="margin-top: 3%">
-				<div class="layui-form-item">
+				<div class="layui-form-item" style="height: 8%;line-height: 8%;">
 					<label class="layui-form-label" style="width: 10%">当前密码</label>
 					<div class="layui-inline">
 						<input type="password" id="oldadminpwd" placeholder="请输入6-12位旧密码"
-						       autocomplete="off" class="layui-input" style="width: 160%" >
+						       autocomplete="off" class="layui-input" style="width: 140%" >
 					</div>
 				</div>
-				<div class="layui-form-item">
+				<div class="layui-form-item" style="height: 8%;line-height: 8%;">
 					<label class="layui-form-label" style="width: 10%">新密码</label>
 					<div class="layui-inline">
 						<input type="password" id="adminpwd" placeholder="请输入6-12位新密码" value=""
-						       autocomplete="off" class="layui-input" style="width: 160%">
+						       autocomplete="off" class="layui-input" style="width: 140%">
 					</div>
 				</div>
-				<div class="layui-form-item">
+				<div class="layui-form-item" style="height: 8%;line-height: 8%;">
 					<label class="layui-form-label" style="width: 10%">确认密码</label>
 					<div class="layui-inline">
 						<input type="password" id="confrimAdminpwd" placeholder="请输入确认密码" value=""
-						       autocomplete="off" class="layui-input" style="width: 160%">
+						       autocomplete="off" class="layui-input" style="width: 140%">
 					</div>
 				</div>
 
 				<div class="layui-form-item">
-					<div class="layui-input-inline" style="margin-left: 10%;">
+					<div class="layui-input-inline" style="margin-left: 12%;">
 						<button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="updateAdminPwd">
 							<span class="sp">确认修改</span>
 						</button>
-						<button type="button" class="layui-btn layui-btn-primary" id="bu3" style="margin: -20% 80%;"><span class="sp">取消</span></button>
+						<button type="button" class="layui-btn layui-btn-primary" id="bu3" style="margin: -20% 90%;"><span class="sp">取消</span></button>
 					</div>
 				</div>
 			</div>

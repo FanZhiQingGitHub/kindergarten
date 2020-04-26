@@ -248,6 +248,7 @@
         var carousel = layui.carousel, $ = layui.$;
         var element = layui.element;
         var layer = layui.layer;
+        var path = $("#path").val();
 
 
         //首页轮播图

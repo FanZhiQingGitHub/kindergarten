@@ -87,7 +87,6 @@
 			,url: path+"/admin/uploadVideo" //上传接口
 			,auto: false
 			,accept: 'video'
-			// ,acceptMime: 'image/*'
 			,bindAction: '#save'
 			,choose:function(obj){//选择文件的回调，obj为选中的文件
 			//将每次选择的文件追加到文件队列
