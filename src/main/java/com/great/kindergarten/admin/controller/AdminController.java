@@ -56,11 +56,7 @@ public class AdminController
 	}
 
 
-	/**
-	 * 验证码
-	 * @param request
-	 * @param response
-	 */
+
 	@RequestMapping("/loginCode")
 	public void checkCode(HttpServletRequest request, HttpServletResponse response)
 	{
