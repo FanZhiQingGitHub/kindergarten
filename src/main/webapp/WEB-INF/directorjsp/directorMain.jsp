@@ -410,7 +410,7 @@
                 layer.open({
                     type: 2,
                     title: '在线聊天首页',
-                    area: ['80%', '80%'],
+                    area: ['80%', '85%'],
                     moveType: 1,//拖拽模式，0或者1
                     content: src + '/director/toUrl/chatlogin' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                     , success: function (layero, index) {
