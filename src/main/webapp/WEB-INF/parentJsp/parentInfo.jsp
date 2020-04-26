@@ -149,7 +149,7 @@
                                     layer.alert("旧密码输入错误", {icon: 2});
                                 } else if (result.success) {
                                     layer.alert("修改成功，下次登陆将使用刚刚更改的密码", {icon: 6});
-
+                                    layer.close(index);
                                 }else {
                                     layer.alert("遇到外星人攻击", {icon: 2});
                                 }
