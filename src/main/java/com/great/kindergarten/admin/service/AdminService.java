@@ -209,6 +209,7 @@ public class AdminService {
 	}
 
 	//园所详情
+
 	public List<TblKinder> findKinderInfoById(Integer kinderid)
 	{
 		return adminMapper.findKinderInfoById(kinderid);
@@ -268,6 +269,12 @@ public class AdminService {
 	{
 		return adminMapper.initialPwd(parametername);
 	}
+
+	public List<TblKinder> selectKinderInfoById(Integer kinderid)
+	{
+		return adminMapper.selectKinderInfoById(kinderid);
+	}
+
 
 
 	//角色管理

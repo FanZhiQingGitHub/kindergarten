@@ -366,7 +366,7 @@
                         layer.msg("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/admin/loginCode?"+Math.random();
-                    }else if(msg == "notmen"){
+                    }else if(msg == "notman"){
                         layer.msg("该用户已被禁用或者不存在！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/admin/loginCode?"+Math.random();
