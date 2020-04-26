@@ -56,7 +56,6 @@ public class AdminController
 	}
 
 
-
 	@RequestMapping("/loginCode")
 	public void checkCode(HttpServletRequest request, HttpServletResponse response)
 	{
@@ -66,7 +65,6 @@ public class AdminController
 			int height = 30;
 			//随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
             String data = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";
-//			String data = "0123456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
 			//随机类
 			Random random = new Random();
 			//1 创建图片数据缓存区域（核心类）
@@ -116,6 +114,19 @@ public class AdminController
 		}
 	}
 
+	@RequestMapping("/selectresetAdminPwd")
+	public void selectresetAdminPwd(String adminame, HttpServletRequest request , HttpServletResponse response)
+	{
+		Integer num =adminService.findExistAdminName(adminame);
+		if(num > 0)
+		{
+			ResponseUtils.outHtml(response,"success");
+		}else{
+			ResponseUtils.outHtml(response,"notmen");
+		}
+	}
+
+
 	/**
 	 * 重置密码
 	 * @param tblAdmin
@@ -126,17 +137,12 @@ public class AdminController
 	@RequestMapping("/resetAdminPwd")
 	public void resetAdminPwd(TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response) {
 		request.getSession().setAttribute("adminname",tblAdmin.getAdminname());
-		Integer num = adminService.findExistAdminName(tblAdmin.getAdminname());
-		if(num > 0){
-			Boolean flag = adminService.resetAdminPwd(tblAdmin.getAdminname(),tblAdmin.getAdminphone());
-			if(flag){
-				request.getSession().removeAttribute("adminname");//重置成功后清除掉
-				ResponseUtils.outHtml(response,"success");
-			}else {
-				ResponseUtils.outHtml(response,"error");
-			}
+		Boolean flag = adminService.resetAdminPwd(tblAdmin.getAdminname(),tblAdmin.getAdminphone());
+		if(flag){
+			request.getSession().removeAttribute("adminname");//重置成功后清除掉
+			ResponseUtils.outHtml(response,"success");
 		}else {
-			ResponseUtils.outHtml(response,"notmen");
+			ResponseUtils.outHtml(response,"error");
 		}
 	}
 
