@@ -406,8 +406,19 @@
         //在线聊天
         $("#chatTeacher").on('click',function () {
             layer.confirm('您确定要进入到在线聊天中心吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                layer.close(index);
-                window.location.href = src+"/director/toUrl/chatlogin";
+
+                layer.open({
+                    type: 2,
+                    title: '在线聊天首页',
+                    area: ['80%', '80%'],
+                    moveType: 1,//拖拽模式，0或者1
+                    content: src + '/director/toUrl/chatlogin' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                        console.log(layero, index);
+                    }
+                });
+                // layer.close(index);
+                // window.location.href = src+"/director/toUrl/chatlogin";
                 return true;
             });
             return false;
