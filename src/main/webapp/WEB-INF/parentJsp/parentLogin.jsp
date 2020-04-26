@@ -27,7 +27,7 @@
         body {
             width: 100%;
             height: 100%;
-            background-image: url("${pageContext.request.contextPath}/image/loginreg/Login.jpg");
+            background-image: url("${pageContext.request.contextPath}/loginres/images/bk-login.jpg");
             background-size: 100% 100%;
             background-attachment: fixed;
         }
@@ -38,33 +38,23 @@
             height: 100%;
         }
 
-        #hh1 {
-            color: black;
-            font-weight: bold;
-            font-size: 30px;
-            margin-left: 16%;
-            margin-top: 3%;
-            font-family: 楷体;
-        }
-
         .container {
             position: absolute;
-            width: 28%;
-            height: 50%;
+            width: 63%;
+            height: 48%;
             min-height: 33%;
             max-height: 50%;
-            top: -20%;
+            top: -19%;
             left: 0;
             bottom: 0;
             right: 0;
             margin: auto;
-            padding: 20px;
+            padding: 30px;
             z-index: 130;
             border-radius: 10px;
             background-color: rgba(240, 255, 255, 0.2);
             box-shadow: 0 3px 18px rgba(240, 255, 255, 0.2);
             font-size: 16px;
-            border: 1px solid darkgray;
         }
 
         .layui-input {
@@ -76,7 +66,7 @@
 
         .layui-form-item {
             margin-left: 7%;
-            margin-top: 3%;
+            margin-top: 6%;
             font-size: 20px;
             color: black;
         }
@@ -93,10 +83,37 @@
             width: 150px;
         }
 
+        #codediv {
+            position: absolute;
+            background-color: transparent;
+            margin-left: 21%;
+            width: 17%;
+            height: 10%;
+        }
+
+        #code {
+            width: 45%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        #bu1 {
+            position: absolute;
+            width: 55%;
+            height: 50%;
+            margin-left: 1%;
+            margin-top: 13%;
+            border: none;
+            font-size: 13px;
+            background-color: transparent;
+            color: red;
+        }
+
         #bu3 {
             width: 30%;
             height: 8%;
             margin-left: 15%;
+            margin-top: -2%;
             font-size: 13px;
             background-color: transparent;
             color: black;
@@ -107,7 +124,8 @@
             width: 30%;
             height: 8%;
             font-size: 13px;
-            margin-left: 9%;
+            margin-left: -2%;
+            margin-top: -0.8%;
             background-color: transparent;
             color: black;
         }
@@ -129,31 +147,6 @@
         }
 
 
-        #codediv {
-            position: absolute;
-            background-color: transparent;
-            margin-left: 47%;
-            width: 35%;
-            height: 12.5%;
-        }
-
-        #code {
-            width: 45%;
-            height: 100%;
-            border-radius: 10px;
-        }
-
-        #bu1 {
-            position: absolute;
-            width: 55%;
-            height: 50%;
-            margin-left: 1%;
-            margin-top: 13%;
-            border: none;
-            font-size: 13px;
-            background-color: transparent;
-        }
-
         .admin-icon {
             position: absolute;
             margin-left: 280px;
@@ -162,86 +155,177 @@
             color: black;
         }
 
+        .main_left {
+            float: left;
+            width: 600px;
+            position: relative
+        }
+
+        .main_left img {
+            position: absolute
+        }
+
+        .theimg {
+            top: 90px;
+            left: 220px
+        }
+
+        .secimg {
+            top: 90px;
+            left: 180px
+        }
+
+        .firimg {
+            top: 90px;
+            left: 50px
+        }
+
+        .main_right {
+            width: 456px;
+            height: 386px;
+            float: right;
+            padding-right: 36px;
+        }
+
+        .main_r_up {
+            height: 74px;
+            padding-top: 20px;
+        }
+
+        .main_r_up img {
+            float: left
+        }
+
+        .main_r_up .pp {
+            float: left;
+            height: 74px;
+            line-height: 74px;
+            font-size: 18px;
+            color: #333;
+            padding-left: 20px;
+            letter-spacing: 9px;
+        }
+
+        .footer {
+            width: 100%;
+            height: 60px;
+            line-height: 60px;
+            position: fixed;
+            bottom: 0;
+            background: url(${pageContext.request.contextPath}/loginres/images/footerBg.png);
+            background-color: transparent;
+        }
+
+        .footer0 {
+            width: 1200px;
+            height: 60px;
+            margin: 0 auto;
+            font-size: 14px;
+            color: #adacac
+        }
+
+        .footer_l {
+            float: left
+        }
+
+        .footer_r {
+            float: right
+        }
     </style>
 
 </head>
 <body>
+<input type="hidden" id="path" value="<%=path%>">
 <form class="layui-form" method="post">
-    <input type="hidden" id="path" value="<%=path%>">
+
     <div id="alldiv">
         <div class="container">
-            <h1 id="hh1">智慧幼儿园家长登录界面</h1>
-            <hr style="color: white">
 
-            <div class="layui-form-item">
-                <label class="layui-form-label" >园所:</label>
-                <div class="layui-input-block">
-
-                    <select id="kinderName" name="kinderName">
-
-                    </select>
-
-
-                </div>
+            <div style="margin-left: 3%;margin-top: -10%">
+                <img src="${pageContext.request.contextPath}/image/logo/hs-word.png"/>
             </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">用户名</label>
-                <div class="layui-input-block">
-                    <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
-                    <input type="text" name="parentName" lay-verify="required" placeholder="请输入用户名" value=""
-                           autocomplete="off" class="layui-input" id="te1">
-                </div>
+            <div class="main_left">
+                <img src="${pageContext.request.contextPath}/loginres/images/login-image-3.png" class="theimg"/>
+                <img src="${pageContext.request.contextPath}/loginres/images/login-image-2.png" class="secimg"/>
+                <img src="${pageContext.request.contextPath}/loginres/images/login-image-1.png" class="firimg"/>
             </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">密 &nbsp;&nbsp;码</label>
-                <div class="layui-input-inline">
-                    <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
-                    <input type="password" name="parentPwd" required lay-verify="pass" placeholder="请输入6-12位密码"
-                           value=""
-                           autocomplete="off" class="layui-input" id="te2">
-                </div>
-            </div>
+            <div class="main_right">
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">验证码</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="code" lay-verify="code" placeholder="请输入验证码"
-                           autocomplete="off" class="layui-input verity" value="">
+                <div class="main_r_up">
+                    <img src="${pageContext.request.contextPath}/loginres/images/head.png"/>
+                    <div class="pp"><img src="${pageContext.request.contextPath}/image/loginreg/parentLogin.png"
+                                         style="width: 300px;height: 45px;margin-top: 25px"/></div>
                 </div>
 
-                <div id="codediv">
-                    <img src="${pageContext.request.contextPath}/parent/loginCode" id="code">
-                    <input type="button" id="bu1" value="看不清？换一张"></td>
+                <hr style="color: white;">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block">
+                        <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
+                        <input type="text" name="parentName" lay-verify="required" placeholder="请输入用户名" value=""
+                               autocomplete="off" class="layui-input" id="te1">
+                    </div>
                 </div>
-            </div>
 
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="formDemo">
-                        立即登录
-                    </button>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密 &nbsp;&nbsp;码</label>
+                    <div class="layui-input-inline">
+                        <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
+                        <input type="password" name="parentPwd" required lay-verify="pass" placeholder="请输入6-12位密码"
+                               value=""
+                               autocomplete="off" class="layui-input" id="te2">
+                    </div>
                 </div>
-            </div>
 
-            <div id="butdiv">
-                <button type="button" class="layui-btn" id="bu3">忘记密码？重置一下</button>
-                <button type="button" class="layui-btn" id="bu5">点击此处返回首页</button>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">验证码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="code" lay-verify="code" placeholder="请输入验证码"
+                               autocomplete="off" class="layui-input verity" value="">
+                    </div>
+
+                    <div id="codediv">
+                        <img src="${pageContext.request.contextPath}/parent/loginCode" id="code">
+                        <input type="button" id="bu1" value="看不清？换一张"></td>
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="formDemo">
+                            立即登录
+                        </button>
+                    </div>
+                </div>
+
+                <div id="butdiv">
+                    <button type="button" class="layui-btn" id="bu3">忘记密码？重置一下</button>
+                    <button type="button" class="layui-btn" id="bu5">点击此处返回首页</button>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="type-content" style="display: none;">
-        <div class="layui-form-item">
+        <div class="layui-form-item" style="margin-left: 35px;">
             <div class="layui-inline">
                 <input type="text" id="parentname" placeholder="请输入您的登录用户名"
-                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
+                       autocomplete="off" class="layui-input" style="width: 325px;margin-top: 6%">
             </div>
             <div class="layui-inline">
-                <input type="text" id="parentphone" placeholder="请输入11位手机号码"
-                       autocomplete="off" class="layui-input" style="width: 332px;margin-top: 8%">
+                <input type="text" id="parentphone" placeholder="请输入11位手机号码" value=""
+                       autocomplete="off" class="layui-input" style="width: 325px;margin-top: 6%">
             </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer0">
+            <div class="footer_l">使用条款 | 隐私保护</div>
+            <div class="footer_r">@2020 最后#的小组 版权所有© &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E-MAIL:kindergarten@outlook.com</div>
         </div>
     </div>
 

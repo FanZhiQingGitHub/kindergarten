@@ -231,7 +231,7 @@
 
                 <div class="main_r_up">
                     <img src="${pageContext.request.contextPath}/loginres/images/head.png"/>
-                    <div class="pp"><img src="${pageContext.request.contextPath}/image/directorimg/directorLogin.png"
+                    <div class="pp"><img src="${pageContext.request.contextPath}/image/loginreg/directorLogin.png"
                                          style="width: 300px;height: 45px;margin-top: 25px"/></div>
                 </div>
 
@@ -357,7 +357,7 @@
                     } else if (msg === "codeerror") {
                         layer.alert("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
-                        code.src = path + "/director/loginCode?" + time;
+                        code.src = path + "/director/loginCode?" +Math.random();
                     } else if (msg === "notmen") {
                         layer.alert("该用户已被禁用或者不存在！", {icon: 2});
                     }
