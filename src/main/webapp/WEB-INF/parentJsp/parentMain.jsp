@@ -198,7 +198,7 @@
 
                             <c:if test="${not empty tblCampusList}">
                                 <c:forEach items="${tblCampusList}" var="i" step="1">
-                                    <p><a class="a1" href="javascript:void(0);" style="font-size: 15px;width: 200px">${i.campusinfoname}:${i.campusinfodetail}</a><span style="font-size: 15px;margin-left: 10%">发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></span><span></span></p>
+                                    <p><a class="a1" href="javascript:void(0);" style="font-size: 15px;width: 200px">${i.campusinfoname} --- <input type="hidden" value="${i.campusinfodetail}"></a><span style="font-size: 15px;margin-left: 10%">发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></span><span></span></p>
                                 </c:forEach>
                             </c:if>
                         </div>
@@ -535,12 +535,13 @@
 
             $(".a1").click(function () { //点击查看园所新闻
                 var name = $(this).text();
-                var titleInfo = name.split(":")[0];
-                var detailInfo = name.split(":")[1];
-                var kindername = $("#kindername").val();
-                //打开一个窗口播放视频
+
+                var detailInfo =$(this).find("input").val();
+
+                var titleInfo = name.split("---")[0];
+                //打开一个窗口
                 layer.open({
-                    //打开一个窗口播放视频
+                    //打开一个窗口
                     // area: ['40%', '50%'],
                     area: 'auto',
                     // offset:['26%','31%'],

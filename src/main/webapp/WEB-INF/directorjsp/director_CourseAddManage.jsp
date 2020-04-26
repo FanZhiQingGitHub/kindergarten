@@ -14,7 +14,7 @@
 </head>
 <body>
 <input type="hidden" id="path" value="<%=path%>">
-<input type="text" id="classid" name="classid">
+<input type="hidden" id="classid" name="classid">
 
 <div class="layui-fluid">
     <div class="layadmin-user-login-box layadmin-user-login-header">

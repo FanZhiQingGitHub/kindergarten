@@ -154,6 +154,11 @@ public class HealtherService {
         return healtherMapper.findKinderID(KinderMap);
     }
 
+    public List<TblStudent> findStuInfoByKindername(String kindername){
+        Map<String, String> KinderMap = new LinkedHashMap<>();
+        KinderMap.put("kindername",kindername);
+        return healtherMapper.findStuInfoByKindername(KinderMap);
+    }
 
     @Transactional
     public int addLog(TblSyslog log)

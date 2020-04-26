@@ -33,20 +33,22 @@
         </div>
     </div>
 
+
     <div class="layui-form-item">
-        <label class="layui-form-label">宝宝名称</label>
-        <div class="layui-input-block">
-            <input type="text" id="te2" name="studentname" required lay-verify="required" placeholder="请输入宝宝姓名" autocomplete="off"
-                   class="layui-input">
+        <div class="layui-inline">
+            <label class="layui-form-label">宝宝名称：</label>
+            <div class="layui-input-inline">
+                <select name="studentname" id="te2" lay-verify="required" style="width:200px;height: 5.3%"></select>
+            </div>
         </div>
     </div>
-
 
     <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">宝宝身高</label>
             <div class="layui-input-inline">
-                <input type="text" id="te3" name="height" required lay-verify="height" placeholder="请输入宝宝身高" autocomplete="off" class="layui-input">
+                <input type="text" id="te3" name="height" required lay-verify="required|height"
+                       placeholder="请输入宝宝身高（单位：m）" autocomplete="off" class="layui-input">
             </div>
         </div>
     </div>
@@ -55,7 +57,8 @@
         <div class="layui-inline">
             <label class="layui-form-label">宝宝体重</label>
             <div class="layui-input-inline">
-                <input type="text" id="te4" name="weight" required lay-verify="weight" placeholder="请输入宝宝体重" autocomplete="off" class="layui-input">
+                <input type="text" id="te4" name="weight" required lay-verify="required|weight"
+                       placeholder="请输入宝宝体重（单位：kg）" autocomplete="off" class="layui-input">
             </div>
         </div>
     </div>
@@ -64,7 +67,8 @@
         <div class="layui-inline">
             <label class="layui-form-label">宝宝视力</label>
             <div class="layui-input-inline">
-                <input type="text" id="te5" name="vision" required lay-verify="vision" placeholder="请输入宝宝视力" autocomplete="off" class="layui-input">
+                <input type="text" id="te5" name="vision" required lay-verify="required|vision"
+                       placeholder="请输入宝宝视力（最大5.0）" autocomplete="off" class="layui-input">
             </div>
         </div>
     </div>
@@ -73,7 +77,8 @@
         <div class="layui-inline">
             <label class="layui-form-label">宝宝体温</label>
             <div class="layui-input-inline">
-                <input type="text" id="te6" name="temperature" required lay-verify="temperature" placeholder="请输入宝宝体温" autocomplete="off" class="layui-input">
+                <input type="text" id="te6" name="temperature" required lay-verify="required|temperature"
+                       placeholder="请输入宝宝体温（最大45）" autocomplete="off" class="layui-input">
             </div>
         </div>
     </div>
@@ -100,7 +105,7 @@
     </div>
 
     <div class="layui-btn-container" style="margin-left: 38%">
-        <button type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="updateInfo">确认新增</button>
+        <button type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="addInfo">确认新增</button>
     </div>
 
 </form>
@@ -113,6 +118,38 @@
             , layedit = layui.layedit
             , laydate = layui.laydate;
         $ = layui.jquery;
+        var path = $("#path").val();
+
+        $.ajax({
+            url: path + "/healther/findStuInfoByKindername",
+            async: true,
+            type: "post",
+            datatype: "text",
+            success: function (msg) {
+                if (msg == "error") {
+                    layer.msg("暂无宝宝信息！", {icon: 2});
+                } else {
+                    if (msg == "notkinder") {
+                        // layer.msg('对不起，您必须登录幼儿园账号才可以进行此操作！', {icon: 2});
+                        var option;
+                        option += "<option value='请选择'>" + "您需要登录幼儿园账号显示" + "</option>";
+                        $("#te2").html(option);
+                        form.render('select');//需要渲染一下
+                    } else {
+                        var stuinfo = JSON.parse(msg);
+                        var option;
+                        option += "<option value='请选择'>" + "请选择宝宝名称" + "</option>";
+                        for (var i in stuinfo) {
+                            option += "<option value='" +stuinfo[i].studentname + "'>" + stuinfo[i].studentname + "</option>";
+                        }
+                        $("#te2").html(option);
+                        form.render('select');//需要渲染一下
+                    }
+                }
+            }, error: function (msg) {
+                layer.msg("网络繁忙！", {icon: 2});
+            }
+        })
 
         form.verify({
             required: function (value) {
@@ -126,23 +163,31 @@
                 }
             },
             height: function (value) {
-                if (value > 200) {
-                    return '您好，身高数据不得高于200cm！';
+                if (value > 3) {
+                    return '您好，身高数据不得高于3m！';
+                } else if (value == 0) {
+                    return '您好，身高数据不得为0！';
                 }
             },
             weight: function (value) {
-                if (value > 100) {
-                    return '您好，体重数据不得高于100kg！';
+                if (value > 150) {
+                    return '您好，体重数据不得高于150kg！';
+                } else if (value == 0) {
+                    return '您好，体重数据不得为0！';
                 }
             },
             vision: function (value) {
                 if (value > 5) {
                     return '您好，视力数据不得高于5！';
+                } else if (value == 0) {
+                    return '您好，视力数据不得为0！';
                 }
             },
             temperature: function (value) {
                 if (value > 45) {
                     return '您好，体温数据不得高于45℃！';
+                } else if (value == 0) {
+                    return '您好，体温数据不得为0！';
                 }
             },
             content: function (value) {
@@ -151,8 +196,7 @@
 
         });
 
-        form.on('submit(updateInfo)', function (data) {
-            var path = $("#path").val();
+        form.on('submit(addInfo)', function (data) {
             $.ajax({
                 url: path + "/healther/addExaminationInfo",
                 async: true,
@@ -160,13 +204,13 @@
                 data: data.field,
                 datatype: "text",
                 success: function (msg) {
-                    if(msg == "success"){
-                        layer.alert("添加成功！", {icon: 6},function (index) {
+                    if (msg == "success") {
+                        layer.alert("添加成功！", {icon: 6}, function (index) {
                             window.parent.location.reload();
                         });
-                    }else if(msg == "notname"){
+                    } else if (msg == "notname") {
                         layer.msg("sorry，未找到该宝宝！", {icon: 2});
-                    }else {
+                    } else {
                         layer.msg("添加失败！", {icon: 2});
                     }
                 }, error: function (msg) {

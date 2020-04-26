@@ -52,6 +52,11 @@
         select * from tbl_class cla,tbl_kinder kin where cla.kid = kin.kinderid and kin.kindername = #{kindername}
     </select>
 
+    <!--    查找宝宝信息，不带分页，作为新增体检信息下拉框使用-->
+    <select id="findStuInfoByKindername" resultType="com.great.kindergarten.commons.entity.TblStudent" parameterType="java.util.Map">
+        select * from tbl_student stu,tbl_kinder kin where stu.kid = kin.kinderid and kin.kindername = #{kindername}
+    </select>
+
 <!--    更新宝宝体检信息-->
     <update id="updateExaminationInfo" parameterType="com.great.kindergarten.commons.entity.TblExamination">
         update tbl_examination

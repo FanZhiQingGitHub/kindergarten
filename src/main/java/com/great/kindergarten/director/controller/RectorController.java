@@ -803,7 +803,6 @@ public class RectorController
 			//查找对应的幼儿园的孩子信息--下拉框的显示
 			Map<String, Object> mapStu = new HashMap<>();
 
-//			Integer kid = tblKinder.getKinderid();
 			mapStu.put("kid",tblKinder.getKinderid());
 			mapStu.put("pid",-1);
 
@@ -928,7 +927,7 @@ public class RectorController
 			}
 			if (0 != parentId)
 			{
-				map.put("pid", null);
+				map.put("pid", -1);
 			}
 			int result0 = rectorService.updateChildrenByPid(map);
 			ResponseUtils.outHtml(response, "success");
@@ -945,25 +944,30 @@ public class RectorController
 		//先删除对应的cid的内容
 		TblStudent tblStudent = rectorService.selectStudentByStudentId(tblParent.getParentId());
 
-		Map<String, Object> map0 = new HashMap<>();
-		map0.put("studentname", tblStudent.getStudentname());
-		map0.put("pid", null);
-		int result = rectorService.updateChildrenByPid(map0);
-
+		//修改对应的学生信息--对应的家长
 		String studentname = request.getParameter("studentname");
+		System.out.println("家长信息--学生="+studentname);
 		Map<String, Object> map = new HashMap<>();
-		if (null != studentname && "" != studentname)
+		if (null != studentname && "" != studentname && !studentname.equals("暂无"))
 		{
+			//修改原来教师的学生记录
+			Map<String, Object> map0 = new HashMap<>();
+			map0.put("studentname", tblStudent.getStudentname());
+			map0.put("pid", -1);
+			int result = rectorService.updateChildrenByPid(map0);
+
+			//修改现在教师的学生记录
 			map.put("studentname", studentname);
+			if (0 != tblParent.getParentId())
+			{
+				map.put("pid", tblParent.getParentId());
+			}
+			int result1 = rectorService.updateChildrenByPid(map);
 		}
-		if (0 != tblParent.getParentId())
-		{
-			map.put("pid", tblParent.getParentId());
-		}
-		int result1 = rectorService.updateChildrenByPid(map);
+
 		System.out.println("内容是=" + tblParent);
 		int result2 = rectorService.updateParentTable(tblParent);
-		if (result1 > 0 && result2 > 0)
+		if (result2 > 0)
 		{
 			ResponseUtils.outHtml(response, "success");
 		} else
@@ -1345,7 +1349,7 @@ public class RectorController
 			}
 			if (0 != classid)
 			{
-				map.put("cid", null);
+				map.put("cid", -1);
 			}
 			int result0 = kinderService.updateTeacherByCid(map);
 			ResponseUtils.outHtml(response, "success");
@@ -1362,27 +1366,30 @@ public class RectorController
 		//先删除对应的cid的内容
 		TblTeacher tblTeachera = kinderService.selectTeacherByTeacherId(tblClass.getClassid());
 
-		Map<String, Object> map = new HashMap<>();
-		map.put("teachername", tblTeachera.getTeachername());
-		map.put("cid", null);
-		int result0 = kinderService.updateTeacherByCid(map);
-
-		//再进行对应的改变值
+		//再进行对应的改变值---判断是不是要修改教师名
 		String teachername = request.getParameter("teachername");
+		System.out.println("班级信息--教师="+teachername);
 		Map<String, Object> map1 = new HashMap<>();
-		if (null != teachername && "" != teachername)
+		if (null != teachername && "" != teachername && !teachername.equals("暂无"))
 		{
+			//修改原来教师的班级记录
+			Map<String, Object> map = new HashMap<>();
+			map.put("teachername", tblTeachera.getTeachername());
+			map.put("cid", -1);
+			int result0 = kinderService.updateTeacherByCid(map);
+
+			//修改现在教师的班级记录
 			map1.put("teachername", teachername);
+			if (0 != tblClass.getClassid())
+			{
+				map1.put("cid", tblClass.getClassid());
+			}
+			int result2 = kinderService.updateTeacherByCid(map1);
 		}
-		if (0 != tblClass.getClassid())
-		{
-			map1.put("cid", tblClass.getClassid());
-		}
-		int result2 = kinderService.updateTeacherByCid(map1);
 
 		System.out.println("内容是=" + tblClass);
 		int result = kinderService.updateClassTable(tblClass);
-		if (result > 0 && result2 > 0)
+		if (result > 0)
 		{
 			ResponseUtils.outHtml(response, "success");
 		} else
@@ -1528,7 +1535,7 @@ public class RectorController
 		{
 			map.put("studentname", tblStudent.getStudentname());
 		}
-		map.put("cid", null);
+		map.put("cid", -1);
 		int result0 = kinderService.updateStudentByCid(map);
 		if (result0 > 0)
 		{
@@ -1543,7 +1550,7 @@ public class RectorController
 	@RequestMapping("/updateClassMemberTable")
 	public void updateClassMemberTable(TblStudent tblStudent, HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
-		//再进行对应的改变值
+		//再进行对应的改变值---先判断是不是要修改对应的班级
 		String classname = request.getParameter("classname");
 
 		TblClass tblClass = kinderService.selectClassByCid(classname);

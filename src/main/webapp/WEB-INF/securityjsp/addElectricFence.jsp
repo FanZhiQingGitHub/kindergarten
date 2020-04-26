@@ -155,13 +155,16 @@
                     datatype: 'text',
                     success:function (msg) {
                         if(msg == "error"){
-                            layer.alert("绘制失败！", {icon: 2});
+                            layer.msg("绘制失败！", {icon: 2});
                         }else {
-                            layer.alert("绘制成功！", {icon: 6});
-                            window.parent.location.reload();
+                            layer.alert("绘制成功！", {icon: 6},function (index) {
+                                window.parent.location.reload();
+                                layer.close(index);
+                            });
+
                         }
                     },error:function (msg) {
-                        layer.alert("网络繁忙！", {icon: 2});
+                        layer.msg("网络繁忙！", {icon: 2});
                     }
                 });
             }

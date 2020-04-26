@@ -145,42 +145,43 @@
                 offset: '130px',
                 btnAlign: 'c',
                 btn1: function (index) {
-                    var healtherpwd = $("#healtherpwd").val();
-                    var confrimHealtherpwd = $("#confrimHealtherpwd").val();
-                    var oldhealtherpwd = $("#oldhealtherpwd").val();
-
-                    var pwd = /^[\S]{6,12}$/;
-                    if (oldhealtherpwd.length == 0) {
-                        layer.alert("请输入旧密码", {icon: 2});
-                    } else if (!pwd.test(healtherpwd)) {
-                        layer.alert("您好，新密码必须6~12位，且不能出现空格！", {icon: 2});
-                    } else if (!pwd.test(confrimHealtherpwd)) {
-                        layer.alert("请确认密码，必须6~12位，且不能出现空格！", {icon: 2});
-                    } else if (healtherpwd != confrimHealtherpwd) {
-                        layer.alert("密码输入不一致", {icon: 2});
-                    } else {
-                        $.ajax({
-                            url: path + '/healther/updateHealtherpwd',
-                            async: true,
-                            type: 'post',
-                            data: {
-                                "healtherpwd": healtherpwd,
-                                "confrimHealtherpwd": confrimHealtherpwd
-                            },
-                            datatype: 'text',
-                            success: function (data) {
-                                if (data == "error") {
-                                    layer.alert("修改失败！", {icon: 2});
-                                } else {
-                                    layer.alert("修改成功", {icon: 6});
-                                    layer.close(index);
+                    layer.confirm('您确定要修改吗?', {icon: 3, title:'提示'},function (index) {
+                        var healtherpwd = $("#healtherpwd").val();
+                        var confrimHealtherpwd = $("#confrimHealtherpwd").val();
+                        var oldhealtherpwd = $("#oldhealtherpwd").val();
+                        var pwd = /^[\S]{6,12}$/;
+                        if (oldhealtherpwd.length == 0) {
+                            layer.alert("请输入旧密码", {icon: 2});
+                        } else if (!pwd.test(healtherpwd)) {
+                            layer.alert("您好，新密码必须6~12位，且不能出现空格！", {icon: 2});
+                        } else if (!pwd.test(confrimHealtherpwd)) {
+                            layer.alert("请确认密码，必须6~12位，且不能出现空格！", {icon: 2});
+                        } else if (healtherpwd != confrimHealtherpwd) {
+                            layer.alert("密码输入不一致", {icon: 2});
+                        } else {
+                            $.ajax({
+                                url: path + '/healther/updateHealtherpwd',
+                                async: true,
+                                type: 'post',
+                                data: {
+                                    "healtherpwd": healtherpwd,
+                                    "confrimHealtherpwd": confrimHealtherpwd
+                                },
+                                datatype: 'text',
+                                success: function (data) {
+                                    if (data == "error") {
+                                        layer.msg("修改失败！", {icon: 2});
+                                    } else {
+                                        layer.msg("修改成功", {icon: 6});
+                                        layer.close(index);
+                                    }
+                                }, error: function (data) {
+                                    layer.msg("网络繁忙！", {icon: 2});
                                 }
-                            }, error: function (data) {
-                                layer.alert("网络繁忙！", {icon: 2});
-                            }
-                        });
-                    }
-                },
+                            });
+                        }
+                    });
+                }
             });
         });
     })

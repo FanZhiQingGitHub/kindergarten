@@ -6,14 +6,14 @@
 
     <select id="findALLMonitorInfo" resultType="com.great.kindergarten.commons.entity.TblMonitor"
             parameterType="com.great.kindergarten.security.resultbean.MonitorPage">
-        select mo.monitorid,moname.monitorname,mo.monitorimgurl,mo.monitormvurl,mo.kid from tbl_monitor mo ,tbl_kinder kin ,tbl_monitorname moname
-        where mo.kid = kin.kinderid and mo.monid = moname.monitornameid and kin.kindername = #{kindername}
+        select mo.monitorid,moname.monitorname,mo.monitorimgurl,mo.monitormvurl,mo.kid from tbl_monitor mo ,tbl_monitorname moname
+        where mo.monid = moname.monitornameid
         limit #{page},#{limit}
     </select>
 
     <select id="findALLMonitorInfoCount" resultType="java.lang.Long"
             parameterType="com.great.kindergarten.security.resultbean.MonitorPage">
-         select count(*) from tbl_monitor mo ,tbl_kinder kin ,tbl_monitorname moname where mo.kid = kin.kinderid and mo.monid = moname.monitornameid and kin.kindername = #{kindername}
+         select count(*) from tbl_monitor mo ,tbl_monitorname moname where  mo.monid = moname.monitornameid
 
     </select>
 

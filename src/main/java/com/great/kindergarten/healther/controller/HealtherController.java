@@ -446,4 +446,25 @@ public class HealtherController {
         }
     }
 
+    //查找所有宝宝信息
+    @RequestMapping("/findStuInfoByKindername")
+    public void findStuInfoByKindername(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Gson g = new Gson();
+        if(null == kindername){
+            response.getWriter().print("notkinder");
+        }else {
+            List<TblStudent> tblStudentList = healtherService.findStuInfoByKindername(kindername);//查找所有宝宝信息，用于电子围栏宝宝名称下拉框查询
+            if (0 != tblStudentList.size()) {
+                request.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html");
+                response.setCharacterEncoding("UTF-8");
+                Object[] info = tblStudentList.toArray();
+                String result = g.toJson(info);
+                response.getWriter().print(result);
+            } else {
+                response.getWriter().print("error");
+            }
+        }
+    }
+
 }

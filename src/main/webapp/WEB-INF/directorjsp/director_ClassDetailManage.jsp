@@ -15,7 +15,10 @@
 	* {
 		margin: 0 auto;
 	}
-
+	html{
+		margin-top: 10%;
+		padding-top: 10%;
+	}
 	body {
 		line-height: 50px;
 	}
@@ -43,6 +46,8 @@
 					</c:forEach>
 				</c:if>
 			</select>
+			<span id="updatedemo"></span>
+
 		</div>
 	</div>
 </form>

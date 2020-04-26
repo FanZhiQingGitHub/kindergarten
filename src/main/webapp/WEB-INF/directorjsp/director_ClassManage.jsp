@@ -129,9 +129,11 @@
 								layer.alert("请输入班级名称", {icon: 2});
 							}  else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(formData.classname)) {
 								layer.alert("班级名称不能有特殊字符", {icon: 2});
-							} else if (formData.teachername == '暂无') {
+							}
+							else if (formData.teachername == '暂无') {
 								layer.alert("请选择所在班主任！");
-							}else {
+							}
+							else {
 								$.ajax({
 									url: src + '/director/updateClassTable',
 									type: 'post',
@@ -162,11 +164,7 @@
 							$(window.frames[frameId].document).find("#classid").val(data.classid);
 							$(window.frames[frameId].document).find("#classname").val(data.classname);
 							$(window.frames[frameId].document).find("#teachername").val(data.teachername).prop("selected",true);
-							// $(window.frames[frameId].document).find("#parentSon").val(data.parentSon).prop("selected",true);
-							// $(window.frames[frameId].document).find("#parentAge").val(data.parentAge);
-							// $(window.frames[frameId].document).find("#parentAdd").val(data.parentAdd);
-							// $(window.frames[frameId].document).find("#parentPhone").val(data.parentPhone);
-							// $(window.frames[frameId].document).find("#parentJob").val(data.parentJob);
+							$(window.frames[frameId].document).find("#updatedemo").text("班主任：（请选择）为默认不修改");
 							iframeWindow.layui.form.render(); //更新全部
 						}
 					});
