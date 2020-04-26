@@ -92,6 +92,40 @@
         )
     </insert>
 
+    <!--家长和教师查看查询消息通知-->
+    <select id="findClassMessageAll" resultType="TblClamsg" parameterType="java.util.HashMap">
+        select * from tbl_clamsg
+        <where> 1=1 and cid = #{cid}
+            <if test="clamsgdetail != null and clamsgdetail != ''">
+                and clamsgdetail like "%"#{clamsgdetail}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and sendmsgtime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and sendmsgtime &lt; #{overTime}
+            </if>
+        </where>
+        order by sendmsgtime desc limit #{pageInt},#{limitInt}
+    </select>
+
+    <!--消息通知.....对应消息通知记录值-->
+    <select id="findClassMessageAllCount" resultType="integer" parameterType="java.util.HashMap">
+        select count(*) from tbl_clamsg
+        <where>
+         cid = #{cid}
+            <if test="clamsgdetail != null and clamsgdetail != ''">
+                and clamsgdetail like "%"#{clamsgdetail}"%"
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and sendmsgtime &gt; #{beginTime}
+            </if>
+            <if test="overTime != null and overTime != ''">
+                and sendmsgtime &lt; #{overTime}
+            </if>
+        </where>
+    </select>
+
 
     <!--校园公告管理....查询总记录-->
     <select id="findCampusBulletinAll" resultType="TblCampus" parameterType="java.util.HashMap">

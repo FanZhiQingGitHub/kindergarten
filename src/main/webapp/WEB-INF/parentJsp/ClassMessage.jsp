@@ -4,6 +4,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" isELIgnored="false" %>
+<%@ include file="/commons/basejs.jsp" %>
 <html>
 <head>
 	<title>班级消息通知</title>
@@ -32,6 +33,19 @@
 			<input type="date" class="layui-input" name="overTime" id="overTime" autocomplete="off">
 		</div>
 
+		<select id="classId">
+
+			<c:if test="${!empty sessionScope.kidLists}">
+
+				<c:forEach items="${sessionScope.kidLists}" var="i" >
+
+					<option value="${i.cid}">${i.studentname}</option>
+
+				</c:forEach>
+
+			</c:if>
+		</select>
+
 	<button class="layui-btn" data-type="reload"><i class="layui-icon">&#xe615;</i>查询</button>
 </div>
 <input type="hidden" value="${pageContext.request.contextPath}" id="srcAddress"/>
@@ -54,7 +68,10 @@
 			, height: 280
 			, limit: 5//设置的一页要有几条的记录
 			, limits: [5, 10]//设置的是对应的是有几个内容值
-			, url: src + '/parent/findCampusBulletinAll' //数据接口
+			, url: src + '/parent/classMessage' //数据接口
+			,where:{
+				cid:$('#classId').val()
+			}
 			, page: true //开启分页
 			, id: 'demotable'//当对应的进行条件查询的时候
 			, cellMinWidth: 50 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
@@ -96,7 +113,7 @@
 					moveType: 1 //拖拽模式，0或者1
 					,
 					content: '<textarea style="padding: 50px; line-height: 22px; ' +
-						'background-color: #d4d4d4; color: #1d0e17; font-weight: 300;width: 400px;height: 230px">' +
+						' color: #1d0e17; font-weight: 300;width: 400px;height: 230px">' +
 						JSON.stringify(data.clamsgdetail)+'</textarea>'
 				});
 			}
@@ -110,6 +127,7 @@
 				//执行重载--只重载数据
 				table.reload('demotable', {
 					where: { //设定异步数据接口的额外参数，任意设
+						cid:$('#classId').val(),
 						beginTime: $("#beginTime").val(),
 						overTime: $("#overTime").val()
 					}, page: {

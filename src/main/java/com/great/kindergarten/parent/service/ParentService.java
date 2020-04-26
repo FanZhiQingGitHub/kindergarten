@@ -36,10 +36,30 @@ public class ParentService {
     }
 
 
+    /**
+     *  根据搜索条件找到对应的班级通知列表
+     * @param map
+     * @return
+     */
+    public TableDate findClassMessageAll(Map<String, Object> map ){
+
+        TableDate tableDate = new TableDate();
+        //计算有几个条数
+        tableDate.setCount(parentMapper.findClassMessageAllCount(map));
+        //放入数据
+        tableDate.setData(parentMapper.findClassMessageAll(map));
+
+        return tableDate;
+    }
+
+
+
+
+
 
 
     /**
-     *  根据搜索条件找到对应的相册列表
+     *  根据搜索条件找到对应的校园通知列表
      * @param map
      * @return
      */

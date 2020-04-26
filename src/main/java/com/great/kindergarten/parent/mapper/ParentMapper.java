@@ -20,6 +20,19 @@ public interface ParentMapper {
 
 
 	/**
+	 * 班级消息通知---查询消息通知
+	 * @param map
+	 * @return
+	 */
+	 List<TblClamsg> findClassMessageAll(Map<String, Object> map);
+
+	/**
+	 * 班级消息通知--对应消息通知记录值
+	 * @param map
+	 * @return
+	 */
+	 Integer findClassMessageAllCount(Map<String, Object> map);
+	/**
 	 * 查询校园公共信息
 	 * @param map
 	 * @return

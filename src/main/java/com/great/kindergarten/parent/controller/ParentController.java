@@ -129,7 +129,52 @@ public class ParentController {
     }
 
 
+    //班级消息通知
+    @RequestMapping("/classMessage")
 
+    public void classMessage(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+
+        Integer cid = Integer.valueOf(request.getParameter("cid"));
+
+        String clamsgdetail = request.getParameter("clamsgdetail");
+        String beginTime = request.getParameter("beginTime");
+
+        String limit = request.getParameter("limit");
+        String overTime = request.getParameter("overTime");
+        String page = request.getParameter("page");
+        int limitInt = Integer.valueOf(limit);
+        int pageInt = Integer.valueOf(page);
+
+
+        //		获取对应的id值
+        Map<String, Object> map = new HashMap<>();
+
+        if (null != beginTime && "" != beginTime)
+        {
+            map.put("beginTime", beginTime);
+        }
+
+
+        if (null != clamsgdetail && "" != clamsgdetail)
+        {
+            map.put("clamsgdetail", clamsgdetail);
+        }
+
+        if (null != overTime && "" != overTime)
+        {
+            map.put("overTime", overTime);
+        }
+
+        int limits = limitInt;
+        int pages = (pageInt - 1) * limitInt;
+        map.put("cid", cid);
+        map.put("pageInt", pages);
+        map.put("limitInt", limits);
+        //数据写回
+        ResponseUtils.outJson(response, parentService.findClassMessageAll(map));
+
+    }
 
 
 
@@ -145,12 +190,14 @@ public class ParentController {
     public void resetParentpwd(HttpServletRequest request, HttpServletResponse response) {
         String parentname = request.getParameter("parentname");
         String parentphone = request.getParameter("parentphone");
-        request.getSession().setAttribute("parentname",parentname);//存这个是因为没有登录，没有用户名，所以需要存一下，记录系统日志
         Integer num = parentService.findExistParentName(parentname);
         if(num > 0){
+            //存一下名字给日志记录
+            request.getSession().setAttribute("parentname",parentname);
             Boolean flag = parentService.resetParentpwd(parentname,parentphone);
             if(flag){
-                request.getSession().removeAttribute("parentname");//重置成功后清除掉
+                //重置成功后清除掉
+                request.getSession().removeAttribute("parentname");
                 ResponseUtils.outHtml(response,"success");
             }else {
                 ResponseUtils.outHtml(response,"error");

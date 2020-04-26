@@ -100,7 +100,7 @@
 					moveType: 1 //拖拽模式，0或者1
 					,
 					content: '<textarea style="padding: 50px; line-height: 22px; ' +
-						'background-color: #d4d4d4; color: #1d0e17; font-weight: 300;width: 400px;height: 230px">' +
+						' color: #1d0e17; font-weight: 300;width: 400px;height: 230px">' +
 						JSON.stringify(data.campusinfodetail)+'</textarea>'
 				});
 			}
