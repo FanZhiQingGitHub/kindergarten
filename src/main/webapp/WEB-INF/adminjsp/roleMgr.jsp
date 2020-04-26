@@ -45,6 +45,29 @@
 			text-align: center;
 			font-Size:16px
 		}
+
+		body .demo2 .layui-layer-btn{
+			width: auto;
+			height: 12%;
+			text-align: center;
+			font-Size:20px
+		}
+
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
+		}
 	</style>
 </head>
 <body>
@@ -86,16 +109,18 @@
 		</form>
 	</div>
 	<script type="text/html" id="barOption">
+		{{#  if(d.rolename != '超级管理员') { }}
 		<a type="button" class="layui-btn layui-btn-normal" lay-event="update" style="text-align: -moz-center"><span class="sp"><i class="layui-icon">&#xe642;修改</i></span></a>
 		<a type="button" class="layui-btn layui-btn-normal" lay-event="delete" style="text-align: -moz-center"><span class="sp"><i class="layui-icon">&#xe640;删除</i></span></a>
+		{{#  } }}
 		{{#  if(d.rolename == '超级管理员') { }}
-		<a type="button" class="layui-btn layui-btn-normal" lay-event="permission" style="text-align: -moz-center"><span class="sp"><i class="layui-icon">&#xe640;权限分配</i></span></a>
+		<a type="button" class="layui-btn layui-btn-normal" lay-event="permission" style="text-align: -moz-center"><span class="sp">权限分配</span></a>
 		{{#  } }}
 		{{#  if(d.rolename == '资源管理员') { }}
-		<a type="button" class="layui-btn layui-btn-normal" lay-event="permission" style="text-align: -moz-center"><span class="sp"><i class="layui-icon">&#xe640;权限分配</i></span></a>
+		<a type="button" class="layui-btn layui-btn-normal" lay-event="permission" style="text-align: -moz-center"><span class="sp">权限分配</span></a>
 		{{#  } }}
 		{{#  if(d.rolename == '园所管理员') { }}
-		<a type="button" class="layui-btn layui-btn-normal" lay-event="permission" style="text-align: -moz-center"><span class="sp"><i class="layui-icon">&#xe640;权限分配</i></span></a>
+		<a type="button" class="layui-btn layui-btn-normal" lay-event="permission" style="text-align: -moz-center"><span class="sp">权限分配</span></a>
 		{{#  } }}
 	</script>
 </body>
@@ -196,7 +221,7 @@
 						,area:['35%','80%']
 						,shade:0.3
 						,offset:'5%'
-						,skin: 'demo-class'
+						,skin: 'demo2'
 						,content:path+"/admin/toUrl/menuPortion"
 						,success : function(layero, index) {
 							var body = layer.getChildFrame('body',index);

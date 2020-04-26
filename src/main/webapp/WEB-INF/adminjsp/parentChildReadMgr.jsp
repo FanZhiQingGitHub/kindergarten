@@ -57,6 +57,21 @@
 		body .demo .layui-layer-content{
 			font-Size:18px
 		}
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
+		}
 	</style>
 </head>
 <body>
@@ -155,8 +170,6 @@
 				</div>
 			</div>
 		</div>
-<%--		<div id="demo4"></div>--%>
-<%--		<table id="readImg" lay-filter="test" class="layui-table-cell" style="margin-top: -35%;"></table>--%>
 	</div>
 
 	<script type="text/html" id="barOption">
@@ -393,31 +406,6 @@
 				success:function(){
 
 				}
-				// btn1: function (index) {
-				// 	var roleName2 = $('#roleName2').val();
-				// 	$.ajax({
-				// 		url: path + '/admin/addRoleItems',
-				// 		async: true,
-				// 		type: 'post',
-				// 		data: {"rolename": roleName2},
-				// 		datatype: 'text',
-				// 		success: function (data) {
-				// 			if (data == "success") {
-				// 				layer.alert("新增角色成功！", {icon: 6});
-				// 				layer.close(index);
-				// 				tableIns.reload();
-				// 			} else {
-				// 				layer.alert("新增角色失败", {icon: 2});
-				// 			}
-				// 		}, error: function (data) {
-				// 			layer.alert("网络繁忙！", {icon: 2});
-				// 		}
-				// 	});
-				// },
-				// btn2:function(index){
-				// 	layer.close(index);
-				// 	$('#roleName2').val("");
-				// }
 			});
 		});
 

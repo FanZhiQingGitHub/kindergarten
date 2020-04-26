@@ -28,7 +28,8 @@
 		}
 
 		.layui-input{
-			width:120%;
+			width:180%;
+			height: 80%;
 			margin: auto;
 		}
 		.sp{
@@ -37,7 +38,11 @@
 			line-height: 40px;
 		}
 		.layui-form-radio * {
-			font-size: 20px;
+			font-size: 24px;
+		}
+		.layui-form-radio > i {
+			margin-right: 8px;
+			font-size: 24px;
 		}
 	</style>
 </head>
@@ -48,48 +53,47 @@
 		<div id="alldiv">
 			<h1 id="hh1">个人信息</h1>
 			<hr style="color: white">
-			<div class="container">
-
-				<div class="layui-form-item">
+			<div class="container" style="margin-top: 3%">
+				<div class="layui-form-item" style="height: 8%;line-height: 8%;">
 					<label class="layui-form-label" style="width: 10%">我的角色：</label>
 					<div class="layui-input-inline">
 						<input type="text" name="rolename" id="rolename" lay-verify="rolename" placeholder="" autocomplete="off"
-						       class="layui-input" readonly style="width: 140%">
+						       class="layui-input" readonly >
 					</div>
-					<span class="layui-form-label" style="width:18%;margin-left: 3%">当前角色不可更改为其他角色</span>
+					<span class="layui-form-label" style="width:18%;margin-left: 8%">当前角色不可更改为其他角色</span>
 				</div>
 
-				<div class="layui-form-item">
+				<div class="layui-form-item" style="height: 8%;line-height: 8%;">
 					<label class="layui-form-label" style="width: 10%">用户名：</label>
 					<div class="layui-input-inline">
 						<input type="text" name="adminname" id="adminname" lay-verify="adminname" placeholder="" autocomplete="off"
-						       class="layui-input" readonly style="width: 140%">
+						       class="layui-input" readonly >
 					</div>
-					<span class="layui-form-label" style="width:10%;margin-left: 3.5%">用户名不可更改</span>
+					<span class="layui-form-label" style="width:10%;margin-left: 8.5%">用户名不可更改</span>
 				</div>
 
-				<div class="layui-form-item">
+				<div class="layui-form-item" style="height: 8%;line-height: 8%;">
 					<label class="layui-form-label" style="width: 10%">性别：</label>
-					<div class="layui-input-inline" style="margin-top: 1%;width: 35%">
+					<div class="layui-input-inline" style="width: 35%">
 						<input type="radio" id="ra1" name="adminsex" class="adminsex" value="男" title="男" >
 						<input type="radio" id="ra2" name="adminsex" class="adminsex" value="女" title="女" style="margin-left: 10%;">
 					</div>
 				</div>
 
-				<div class="layui-form-item">
+				<div class="layui-form-item" style="height: 8%;line-height: 8%;">
 					<label class="layui-form-label" style="width: 10%">头像：</label>
 					<div class="layui-input-inline">
 						<input type="text" name="adminheadurl" id="adminheadurl" lay-verify="adminheadurl" placeholder="请输入头像url信息" autocomplete="off"
-						       class="layui-input" style="width: 140%" readonly>
+						       class="layui-input" readonly>
 					</div>
 					<button type="button" class="layui-btn layui-btn-normal" name="file" id="uploadImg" style="margin-left: 10%;" ><i class="layui-icon">&#xe67c;上传图片</i></button>
 				</div>
 
-				<div class="layui-form-item">
+				<div class="layui-form-item" style="height: 8%;line-height: 8%;">
 					<label class="layui-form-label" style="width: 10%">手机号：</label>
 					<div class="layui-input-inline">
 						<input type="tel" name="adminphone" id="adminphone" lay-verify="adminphone" placeholder="请输入11位手机号" autocomplete="off"
-						       class="layui-input" style="width: 140%">
+						       class="layui-input" >
 					</div>
 				</div>
 
@@ -98,7 +102,7 @@
 						<button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="updateAdminInfo">
 							<span class="sp">确认修改</span>
 						</button>
-						<button type="button" class="layui-btn layui-btn-primary" id="bu3" style="margin: -20% 70%;"><span class="sp">返回</span></button>
+						<button type="button" class="layui-btn layui-btn-primary" id="bu3" style="margin: -20% 80%;"><span class="sp">返回</span></button>
 					</div>
 				</div>
 			</div>
@@ -181,27 +185,6 @@
 		    }
 	    });
 
-	    // form.on('submit(updateAdminInfo)', function (data) {
-	    //     var path = $("#path").val();
-	    //     $.ajax({
-	    // 	    url: path + "/admin/addKinder",
-	    // 	    async: true,
-	    // 	    type: "post",
-	    // 	    data: data.field,
-	    // 	    datatype: "text",
-	    // 	    success: function (msg) {
-	    // 		    if(msg == "success"){
-	    // 			    layer.alert("新增园所成功！", {icon: 6},function () {
-	    // 				    location.href = path + "/admin/toUrl/kinderMgr";
-	    // 			    });
-	    // 		    }else {
-	    // 			    layer.alert("新增园所失败！", {icon: 2});
-	    // 		    }
-	    // 	    }, error: function (msg) {
-	    // 		    layer.alert("网络繁忙！", {icon: 2});
-	    // 	    }
-	    //     })
-	    // });
 
 	    $(function () {
 		    $("#bu3").click(function () {
