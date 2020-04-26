@@ -448,4 +448,8 @@
             </if>
         </where>
     </select>
+<!--      根据kid查园所名字-->
+    <select id="findkinderNameByKid" resultType="TblKinder" parameterType="java.lang.Integer">
+			select * from tbl_kinder where kinderid = #{kid};
+	</select>
 </mapper>

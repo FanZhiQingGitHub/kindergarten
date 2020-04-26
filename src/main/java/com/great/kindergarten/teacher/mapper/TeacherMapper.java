@@ -105,4 +105,6 @@ public interface TeacherMapper {
 	public List<TblClamsg> findClassMessageAll(Map<String, Object> map);
 	//班级消息通知--对应消息通知记录值
 	public Long findClassMessageAllCount(Map<String, Object> map);
+	//    根据kid查园所名字
+	public TblKinder findkinderNameByKid(Integer kid);
 }

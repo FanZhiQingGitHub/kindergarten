@@ -232,4 +232,9 @@ public class TeacherService {
     public Long findClassMessageAllCount(Map<String, Object> map){
         return teacherMapper.findClassMessageAllCount(map);
     }
+    //    根据kid查园所名字
+    public TblKinder findkinderNameByKid(Integer kid)
+    {
+        return teacherMapper.findkinderNameByKid(kid);
+    }
 }

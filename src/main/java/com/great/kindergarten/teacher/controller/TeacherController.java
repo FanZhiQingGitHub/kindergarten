@@ -46,6 +46,7 @@ public class TeacherController {
     private int cid;
     private TblWork tblWork;
     private TblClass tblClass;
+    private int kid;
 
     //    private TblWorkrelease tblWorkrelease;
     @Resource
@@ -182,13 +183,18 @@ public class TeacherController {
                 tblTeacher1 = teacherService.findTeacher(tblTeacher);
                 // 根据cid 查找班级名称信息
                 cid = tblTeacher1.getCid();
+                kid=tblTeacher1.getKinderid();
                 tblClass = teacherService.findClassAll(cid);
                 List<TblTeacher> tblTeacherList = new ArrayList<>();
-
+                TblKinder tblKinder = teacherService.findkinderNameByKid(kid);
+                String kinderName=tblKinder.getKindername();
                 if (null != tblTeacher1) {
                     //查找园所动态news
                     List<TblCampus> tblCampusList = teacherService.findKinderNews(tblTeacher1.getKinderid());
                     request.getSession().setAttribute("tblCampusList", tblCampusList);
+                    request.getSession().setAttribute("kid", kid);
+
+                    request.getSession().setAttribute("kindername", kinderName);
                     request.getSession().setAttribute("teachername", tblTeacher1.getTeachername());
                     // 存信息到页面显示
                     request.getSession().setAttribute("classname", tblClass.getClassname());
