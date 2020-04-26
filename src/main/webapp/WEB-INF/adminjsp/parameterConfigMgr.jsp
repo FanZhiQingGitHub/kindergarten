@@ -76,6 +76,7 @@
 <body>
 <input type="hidden" id="path" value="<%=path%>">
 	<h2>参数配置</h2>
+	<hr style="color: white">
 	<div class="layui-row" >
 	<form class="layui-form" action="" onsubmit="return false;" >
 		<div class="parameterTable">

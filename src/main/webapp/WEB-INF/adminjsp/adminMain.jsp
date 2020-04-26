@@ -27,31 +27,25 @@
 			height: 100%;
 			overflow:hidden;
 		}
-
-		#header{
-			width: 100%;
-			height: 80px;
+		.bu:hover {
+			color: white;
 		}
 
-		#scroll{
-			width: 220px;
+		.bu {
+			background-color: transparent;
+			border: none;
+			color: #D9D9D9;
+			font-size: 18px;
+			text-align: center;
 		}
-
-		#index-commonmenu
-		{
-			top:80px;
+		.layui-nav {
+			font-size: 18px;
 		}
-
-		#title{
-			padding: 5%;
-			font-size: 22px;
-			line-height: 120%;
+		.a1{
+			font-size: 18px;
 		}
-		.menu_div_item{
-			font-size: 20px;
-			color: #8f9199;
-			padding: 5%;
-			line-height: 180%;
+		.a2{
+			font-size: 16px;
 		}
 	</style>
 </head>
@@ -60,11 +54,13 @@
 	<input type="hidden" id="path" value="<%=path%>">
 	<div class="layui-layout layui-layout-admin">
 
-		<div class="layui-header" id="header">
-			<div class="layui-logo" style="width: 300px;margin: 0.5% 0;font-size: 175%">智慧幼儿园平台端管理系统</div>
-				<ul class="layui-nav layui-layout-right">
+		<div class="layui-header" style="height: 100px">
+			<div class="layui-logo" style="width:500px;font-size: 36px;margin-left: 10px;text-align: left;top:15px">
+				智慧幼儿园平台端管理系统
+			</div>
+				<ul class="layui-nav layui-layout-right" style="top: 18px">
 					<li class="layui-nav-item" style="width: 70%">
-						<a href="javascript:;" style="margin: 2% -20%;font-size: 150%;">
+						<a href="javascript:;" style="margin: 2% -20%;font-size: 20px;">
 							<img id="adminheadurl" class="layui-nav-img" style="width: 30px;height: 30px">
 							<%
 								String adminname = (String) request.getSession().getAttribute("adminname");
@@ -76,36 +72,47 @@
 							<dd><a href="javascript:void(0);" title="${pageContext.request.contextPath}/admin/toUrl/updateAdminPwd" onclick="changeSrc(this)" style="font-size: 20px;">修改密码</a></dd>
 						</dl>
 					</li>
-					<li class="layui-nav-item">
-						<a href="javascript:void(0);" id="exit" style="font-size: 150%;">
-							注销
-						</a>
+
+					<li class="layui-nav-item">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="bu" id="exit">注销
+					</button>
 					</li>
 				</ul>
 		</div>
 
-		<div id="index-commonmenu" class="layui-side layui-bg-black">
-			<div class="layui-side-scroll" id="scroll">
-				<c:if test="${not empty menuMap}">
-					<c:forEach items="${menuMap}" var="i">
-						<div onclick="showOrHide(this)" id="title">
-								${i.key}
-						</div>
-						<ul class="menu_ul" style="display: none">
-							<c:forEach items="${i.value}" var="j">
-								<li>
-									<a href="javascript:void(0)" title="${pageContext.request.contextPath}/${j.menuurl}" onclick="changeSrc(this)" class="menu_div_item">${j.menuname}</a>
-								</li>
-							</c:forEach>
-						</ul>
-					</c:forEach>
-				</c:if>
+		<div class="layui-side layui-bg-black" style="top: 100px">
+			<div class="layui-side-scroll">
+				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+				<ul class="layui-nav layui-nav-tree" lay-filter="test">
+
+					<c:if test="${not empty menuMap}">
+						<c:forEach items="${menuMap}" var="i" step="1">
+							<li class="layui-nav-item">
+								<a class="a1" onclick="showOrHide(this)">${i.key}</a>
+								<dl class="layui-nav-child">
+									<c:forEach items="${i.value}" var="j">
+										<dd><a class="a2" href="javascript:void(0);"
+											   title="<%=request.getContextPath()%>/${j.menuurl}"
+											   onclick="changeSrc(this)">${j.menuname}</a></dd>
+									</c:forEach>
+								</dl>
+							</li>
+						</c:forEach>
+					</c:if>
+				</ul>
 			</div>
 		</div>
 
-		<div class="layui-body" id="body">
-			<iframe id="iframeMain" name="iframeMain" src="" style="width: 100%" height="100%" ></iframe>
+
+
+		<div class="layui-body" id="body" style="top: 100px">
+			<iframe id="iframeMain" name="iframeMain" src="" frameborder="0" width="100%" height="100%" ></iframe>
 		</div>
+
+		<div class="layui-footer">
+			<p style="font-size: 16px">@2020 最后#的小组 版权所有©&nbsp;&nbsp;&nbsp;E-MAIL:kindergarten@outlook.com&nbsp;&nbsp;&nbsp;TEL:400-888-888</p>
+		</div>
+
+		<p id="time" style="color: black;font-size: 16px;margin-left: 85%;margin-top: 42.2%;position: absolute"></p>
 	</div>
 
 	<script>
@@ -157,6 +164,14 @@
 			}
 			$(node).next().slideToggle("slow");
 		}
+
+		function timeTimer() {
+			var d = new Date();//实例化日期对象
+			var a = d.toLocaleTimeString();//获取日期
+			var b = d.toLocaleDateString();//获取时间
+			document.getElementById("time").innerHTML = "当前时间："+b+"&nbsp"+"&nbsp"+"&nbsp"+a;//.innerHTML是dom里面的方法（获取对象的内容  或  向对象插入内容，可以直接在网页上显示）
+		}
+		setInterval(function() {timeTimer()},1000);//这个方法可以这样写吗 。。。
 	</script>
 </body>
 </html>
