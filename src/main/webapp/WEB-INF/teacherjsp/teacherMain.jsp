@@ -53,6 +53,7 @@
 </head>
 <body>
 <input type="hidden" id="path" value="<%=path%>">
+<input type="hidden" id="kindername" value="${kindername}">
 <!-- header -->
 <div class="header_box">
 
@@ -131,9 +132,10 @@
 						<div style=" overflow:auto;">
 							<c:if test="${not empty tblCampusList}">
 								<c:forEach items="${tblCampusList}" var="i" step="1">
-									<a href="javascript:;" style="font-size: 18px" class="showNewsInfo">${i.campusinfoname}:  ${i.campusinfodetail}
-										<br/>
-										发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></a><br>
+<%--									<a href="javascript:;" style="font-size: 18px" class="showNewsInfo">${i.campusinfoname}:  ${i.campusinfodetail}--%>
+<%--										<br/>--%>
+<%--										发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></a><br>--%>
+									<p><a class="showNewsInfo" href="javascript:void(0);" style="font-size: 15px;width: 200px">${i.campusinfoname}:${i.campusinfodetail}</a><span style="font-size: 15px;margin-left: 10%">发布时间：<fmt:formatDate value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss' /></span><span></span></p>
 								</c:forEach>
 							</c:if>
 						</div>
@@ -456,7 +458,7 @@
 		});
 
 
-
+        //人脸识别注册
 		$("#regFaceId").click(function () {
 			layer.open({
 				type: 2,
@@ -469,6 +471,23 @@
 				}
 			});
 
+		});
+		//点击查看园所新闻
+		$(".showNewsInfo").click(function () {
+			var name = $(this).text();
+			var titleInfo = name.split(":")[0];
+			var detailInfo = name.split(":")[1];
+			var kindername = $("#kindername").val();
+			//打开一个窗口播放视频
+			layer.open({
+				//打开一个窗口播放视频
+				// area: ['40%', '50%'],
+				area: 'auto',
+				// offset:['26%','31%'],
+				offset:'auto',
+				title:titleInfo,
+				content: detailInfo+'------'+kindername,
+			});
 		});
 
 	});
