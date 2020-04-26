@@ -41,12 +41,12 @@ import java.util.*;
 @Controller
 @RequestMapping(value = "/teacher")
 public class TeacherController {
-    private String vcode;
-    private TblTeacher tblTeacher1;
-    private int cid;
+//    private String vcode;
+//    private TblTeacher tblTeacher1;
+//    private int cid;
     private TblWork tblWork;
-    private TblClass tblClass;
-    private int kid;
+//    private TblClass tblClass;
+//    private int kid;
 
     //    private TblWorkrelease tblWorkrelease;
     @Resource
@@ -71,6 +71,8 @@ public class TeacherController {
     private TblClamsg tblClamsg;
     @Resource
     private KinderService kinderService;
+
+
 
     @RequestMapping(value = "/main")
     public String showMainView() {
@@ -152,7 +154,7 @@ public class TeacherController {
                 g.fillRect(random.nextInt(width), random.nextInt(height), 1, 1);//随机噪音点
             }
             /**3 获得随机数据，并保存session*/
-            vcode = builder.toString();
+            String vcode = builder.toString();
             request.getSession().setAttribute("vcode", vcode);
             //.. 生成图片发送到浏览器 --相当于下载
             ImageIO.write(image, "jpg", response.getOutputStream());
@@ -174,20 +176,22 @@ public class TeacherController {
         //        获取验证码
         String code = tblTeacher.getCode();
         //        验证码判定是否一致
+        String vcode=(String)request.getSession().getAttribute("vcode");
         Boolean confirm = code.equalsIgnoreCase(vcode);
         if (confirm) {
             //  获取名字查询状态
             String teacherStatus = teacherService.findTeacherStatus(tblTeacher.getTeachername());
             if (teacherStatus.equals("启用")) {
                 // 登录 获取全部信息
-                tblTeacher1 = teacherService.findTeacher(tblTeacher);
+               TblTeacher tblTeacher1 = teacherService.findTeacher(tblTeacher);
                 // 根据cid 查找班级名称信息
-                cid = tblTeacher1.getCid();
-                kid=tblTeacher1.getKinderid();
-                tblClass = teacherService.findClassAll(cid);
+                int cid = tblTeacher1.getCid();
+                int kid=tblTeacher1.getKinderid();
+                TblClass tblClass = teacherService.findClassAll(cid);
                 List<TblTeacher> tblTeacherList = new ArrayList<>();
                 TblKinder tblKinder = teacherService.findkinderNameByKid(kid);
                 String kinderName=tblKinder.getKindername();
+
                 if (null != tblTeacher1) {
                     //查找园所动态news
                     List<TblCampus> tblCampusList = teacherService.findKinderNews(tblTeacher1.getKinderid());
@@ -195,11 +199,11 @@ public class TeacherController {
                     request.getSession().setAttribute("kid", kid);
 
                     request.getSession().setAttribute("kindername", kinderName);
-                    request.getSession().setAttribute("teachername", tblTeacher1.getTeachername());
+                    request.getSession().setAttribute("teachername", tblTeacher.getTeachername());
                     // 存信息到页面显示
                     request.getSession().setAttribute("classname", tblClass.getClassname());
                     tblTeacherList.add(tblTeacher1);
-                    request.getSession().setAttribute("tblTeacher1", tblTeacher1);
+                    request.getSession().setAttribute("tblTeacher", tblTeacher1);
                     request.getSession().setAttribute("tblTeacherList", tblTeacherList);
 
                     str = "success";
@@ -241,6 +245,7 @@ public class TeacherController {
         String oldTeachererPwd1 = MD5Utils.md5(oldTeacherPwd);//旧密码
         String teacherPwd1 = MD5Utils.md5(teacherPwd);//新密码
         //        根据教师id 查找信息
+        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
         int teacherid = tblTeacher1.getTeacherid();
         TblTeacher tblTeacher2 = teacherService.checkPwd(teacherid);
         //判断旧密码是否一致
@@ -266,7 +271,8 @@ public class TeacherController {
     @ResponseBody
     public DateTable thisWeekCourse(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         //根据老师获取班级id
-        cid = tblTeacher1.getCid();
+       TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        int cid = tblTeacher1.getCid();
         System.out.println("cid=" + cid);
         String currentmonday = "1";
         String currentsonday = "7";
@@ -319,6 +325,8 @@ public class TeacherController {
     @RequestMapping(value = "/selectClass")
     @ResponseBody
     public List<TblClass> selectClass(HttpServletRequest request) {
+        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        int cid = tblTeacher1.getCid();
         System.out.println("selectClass进来cid=" + cid);
 
         List<TblClass> tblClassList = teacherService.findClassName(cid);
@@ -344,6 +352,7 @@ public class TeacherController {
     @RequestMapping(value = "/workRelease", produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public Map<String, Object> workRelease(@RequestParam("file") MultipartFile file, String classname, HttpServletRequest request, HttpServletResponse response) {
+	    String filePath = null;
         TblClass tblClass = new TblClass();
         tblClass.setClassname(classname);
         //查询发布作业表中最后一个id 插入的为id+1
@@ -359,7 +368,7 @@ public class TeacherController {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String nowDay = df.format(new Date());
         //实际路径
-        String path1 = request.getSession().getServletContext().getRealPath("/workRelease/" + classname + "/" + nowDay + "/" + workreleaseid);
+        String path1 = request.getServletContext().getRealPath("/workRelease/" + classname + "/" + nowDay + "/" + workreleaseid);
         System.out.println("path1=" + path1);
         System.out.println("classname=" + classname);
         try {
@@ -367,7 +376,7 @@ public class TeacherController {
             Integer classid = teacherService.findClassidByName(tblClass);
             System.out.println("下拉框班级=" + classname);
             System.out.println("下拉框班级id=" + classid);
-            //是得到上传时的文件名。
+            //是得到上传时的文件名
             String filename = file.getOriginalFilename().toString();
             System.out.println("filename=" + filename);
 
@@ -382,13 +391,19 @@ public class TeacherController {
                 ResponseUtils.outHtml(response, "文件过大");
             } else {
                 // 重命名文件,获取路径
-                String path = path1 + "/" + filename;
-                System.out.println("path=" + path);
+//                String path = path1 + "/" + filename;
+//                System.out.println("path=" + path);
                 //创建文件
-                File tempFile = new File(path);
-                if (!tempFile.exists()) {
-                    tempFile.mkdirs();
-                }
+//                File filepath  = new File(path1,filename);
+//                if (!filepath .exists()) {
+//                    filepath .mkdirs();
+//                }
+                //将上传文件保存到一个目标文档中  创建文件
+                File tempFile = new File(path1 + File.separator + filename);
+	            //文件是否存在  如果没有就新建一个
+                if (!tempFile .exists()) {
+		            tempFile .mkdirs();
+	            }
                 // 将接收的文件保存到指定文件中
                 file.transferTo(tempFile);
                 //添加数据到数据表
@@ -432,6 +447,8 @@ public class TeacherController {
         dataHashMap.put("pageInt", pageInt);
         dataHashMap.put("limitInt", limitInt);
         //        根据cid 查找班级名称信息
+        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+
         int cid = tblTeacher1.getCid();
         System.out.println("cid=" + cid);
 
@@ -528,7 +545,7 @@ public class TeacherController {
         String databasePath = "/" + pack + "/" + workReleaseId + "/" + dayTime + "/" + downFileName;
 
         //得到要下载的文件 路径
-        String path = request.getSession().getServletContext().getRealPath(databasePath);
+        String path = request.getServletContext().getRealPath(databasePath);
         System.out.println("path=" + path);
 
         File file = new File(path);
@@ -582,6 +599,8 @@ public class TeacherController {
         HashMap<String, Object> dataHashMap = new HashMap<>();
         dataHashMap.put("pageInt", pageInt);
         dataHashMap.put("limitInt", limitInt);
+        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        int cid=tblTeacher1.getCid();
         dataHashMap.put("cid", cid);
         //            查询视频总数
         Integer count = teacherService.findSafetyCount(dataHashMap);
@@ -783,7 +802,9 @@ public class TeacherController {
         }
         dataHashMap.put("pageInt", pageInt);
         dataHashMap.put("limitInt", limitInt);
+        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
         int cid = tblTeacher1.getCid();
+
         dataHashMap.put("cid", cid);
 
         // 查询试题完成情况总数
@@ -823,7 +844,9 @@ public class TeacherController {
         dataHashMap.put("pageInt", pageInt);
         dataHashMap.put("limitInt", limitInt);
         //查找班级id
+        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
         int cid = tblTeacher1.getCid();
+
         dataHashMap.put("cid", cid);
         System.out.println("班级考勤1cid=" + cid);
         // 根据cid查班级人数
@@ -933,6 +956,8 @@ public class TeacherController {
         dataHashMap.put("pageInt", pageInt);
         dataHashMap.put("limitInt", limitInt);
         //查找班级id
+        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+
         int cid = tblTeacher1.getCid();
         dataHashMap.put("cid", cid);
         System.out.println("班级考勤1cid=" + cid);
@@ -962,7 +987,9 @@ public class TeacherController {
     @ResponseBody
     public Map<String, Object> addClassPhoto(@RequestParam("file") MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws IOException {
         System.out.println("上传图片进来");
-
+        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        int cid = tblTeacher1.getCid();
+        TblClass tblClass = teacherService.findClassAll(cid);
         String className = tblClass.getClassname();
         System.out.println("className=" + className);
         String photodetail = request.getParameter("photoDetail");
@@ -970,7 +997,8 @@ public class TeacherController {
         //获取当前时间
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String nowDay = df.format(new Date());
-        String path2 = request.getSession().getServletContext().getRealPath("/photos/" + className + "/" + nowDay);
+//        获取真实路径
+        String path2 = request.getServletContext().getRealPath("/photos/" + className + "/" + nowDay);
         System.out.println("path2=" + path2);
         //是得到上传时的文件名。
         String filename = file.getOriginalFilename().toString();
@@ -987,13 +1015,19 @@ public class TeacherController {
             ResponseUtils.outHtml(response, "文件过大");
         } else {
             // 重命名文件,获取路径
-            String path = path2 + "/" + filename;
-            System.out.println("path=" + path);
+//            String path = path2 + "/" + filename;
+//            System.out.println("path=" + path);
             //文件是否存在  如果没有就新建一个
-            File tempFile = new File(path);
-            if (!tempFile.exists()) {
-                tempFile.mkdirs();
-            }
+//            File filepath  = new File(path2,filename);
+//            if (!filepath .exists()) {
+//                filepath .mkdirs();
+//            }
+            //将上传文件保存到一个目标文档中   新建文件
+            File tempFile = new File(path2 + File.separator + filename);
+	        //文件是否存在  如果没有就新建一个
+	        if (!tempFile .exists()) {
+		        tempFile .mkdirs();
+	        }
             // 将接收的文件保存到指定文件中
             file.transferTo(tempFile);
             //添加数据到数据表
@@ -1033,6 +1067,9 @@ public class TeacherController {
         HashMap<String, Object> dataHashMap = new HashMap<>();
         dataHashMap.put("pageInt", pageInt);
         dataHashMap.put("limitInt", limitInt);
+        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        int cid = tblTeacher1.getCid();
+
         dataHashMap.put("cid", cid);
         //            查询班级相册总数
         Integer count = teacherService.findClassPhotoCount(dataHashMap);
@@ -1061,6 +1098,9 @@ public class TeacherController {
         //获取通知消息内容
         String claMsgDetail = request.getParameter("claMsgDetail");
         //添加数据
+        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        int cid = tblTeacher1.getCid();
+
         tblClamsg.setCid(cid);
         tblClamsg.setClamsgdetail(claMsgDetail);
         tblClamsg.setSendmsgtime(new Date());
@@ -1084,7 +1124,7 @@ public class TeacherController {
         String face = request.getParameter("face");
 
         //获取信息
-        TblTeacher tblTeacher = (TblTeacher) request.getSession().getAttribute("tblTeacher1");
+        TblTeacher tblTeacher = (TblTeacher) request.getSession().getAttribute("tblTeacher");
         //String name
         if (FaceRecognitionUtils.faceRegister(face, "t" + tblTeacher.getTeacherid())) {
             result.setSuccess(true);
@@ -1110,7 +1150,7 @@ public class TeacherController {
 
 
         //获取信息
-        TblTeacher tblTeacher = (TblTeacher) request.getSession().getAttribute("tblTeacher1");
+        TblTeacher tblTeacher = (TblTeacher) request.getSession().getAttribute("tblTeacher");
 
         //注册好了之后--进行对应的信息的添加使用
         //		FaceRecognitionUtils.faceRegister(face, "testPhoto1");
@@ -1128,7 +1168,7 @@ public class TeacherController {
                 String sunday = DateUtil.getSundayOfThisWeek(7);
                 //查找是不是有对应的教师的ID存在对应的表里面
                 //（1）根据教师端登录的时候--获取到对应的教师iD值
-                TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher1");
+                TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
 
                 Integer teacherid = tblTeacher1.getTeacherid();
                 //（2）查询对应的表里面有没有该字段
@@ -1391,7 +1431,7 @@ public class TeacherController {
         //		String sunday = DateUtil.getSundayOfThisWeek(7);
         //查找是不是有对应的教师的ID存在对应的表里面
         //（1）根据教师端登录的时候--获取到对应的教师iD值
-        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher1");
+        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
 
         Integer teacherid = tblTeacher1.getTeacherid();
         //（2）查询对应的表里面有没有该字段
@@ -1588,6 +1628,9 @@ public class TeacherController {
     {
         //记得在前面要加上对应的园所ID的值
         //获取到对应的园长ID值
+        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+
+
         Integer cid = tblTeacher1.getCid();
         System.out.println("cid="+cid);
         String page = request.getParameter("page");

@@ -385,7 +385,7 @@
 				});
 			});
 
-			//对应显示消息通知的内容
+			//对应显示校园消息通知的内容
 			$('.schoolMessage').on('click',function () {
 				layer.open({
 					type: 2,
@@ -432,10 +432,9 @@
 		// 	});
 		// 	return false;
 		// });
+
 		//在线聊天 联系家长
 		$("#chatParent").on('click',function () {
-			layer.confirm('您确定要进入到在线聊天中心吗?', {icon: 3, title: '温馨提示'}, function (index) {
-
 				layer.open({
 					type: 2,
 					title: '在线聊天首页',
@@ -449,7 +448,7 @@
 				// layer.close(index);
 				// window.location.href = src+"/director/toUrl/chatlogin";
 				return true;
-			});
+
 			return false;
 		});
 		//班级通知
