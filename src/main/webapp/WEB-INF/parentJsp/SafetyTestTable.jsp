@@ -34,6 +34,19 @@
 		</div>
 	</div>
 
+	<select id="classId">
+
+	<c:if test="${!empty sessionScope.kidLists}">
+
+		<c:forEach items="${sessionScope.kidLists}" var="i" >
+
+			<option value="${i.cid}">${i.studentname}</option>
+
+		</c:forEach>
+
+	</c:if>
+	</select>
+
 	<button class="layui-btn" data-type="reload">搜索</button>
 
 </div>
@@ -46,7 +59,7 @@
 
 	<a class="layui-btn edit layui-btn-xs" data-method="dialog" lay-event="play">播放视频</a>
 
-	{{#  if(d.safetytestresult == null ){ }}
+	{{#  if(d.safetytestresult == null&&d.safetytestresult != '已过期'){ }}
 	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="SafetyTest">安全试题</a>
 
 <%--	{{#  else if(d.safetytestresult == '已完成' ){ }}--%>
@@ -59,6 +72,12 @@
 
 <script>
 
+	var today = new Date();
+
+
+
+
+
 	layui.use('table', function(){
 		var table = layui.table;
 
@@ -67,24 +86,30 @@
 			elem: '#demo'
 			,height: 700
 			,url: path+'/parent/parentSafetyTestList' //数据接口
+			,where:{
+				classId:$('#classId').val()
+			}
 			,method:'post'
 			,page: true //开启分页
 			,id: 'demo'
 			,limits:[5,10,20,30]//下拉框中得数量
 			,cols: [[ //表头
-				{field: 'safetyvideoid', title: '视频编号', sort: true, fixed: 'left'}
+				{field: 'safetyconfigid', title: '视频编号', sort: true, fixed: 'left'}
 				,{field: 'safetyvideoname', title: '视频名称'}
 				,{field: 'safetyvideotime', title: '发布时间',  sort: true}
-				,{field: 'safetytestscore', title: '得分'}
+				,{field: 'safetyfinishtime', title: '完成截止日期',  sort: true}
+				,{field: 'safetytestscore', title: '得分' ,  sort: true}
 				,{field: 'safetytestresult', title: '完成情况',templet:function (d) {
-					if (d.safetytestresult==null){
+					if (today >d.safetyfinishtime){
+						return '已过期'
+					}else if (d.safetytestresult==null){
 						return '未完成'
 					}
 					else {
 						return  d.safetytestresult
 					}
 
-					}   }
+					}  ,  sort: true }
 				,{fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo'}
 			]]
 		});
@@ -106,6 +131,7 @@
 					}
 					,where:{
 						//发送的值
+						classId:$('#classId').val(),
 						name:$('#uName').val(),
 						beginTime:$('#beginTime').val(),
 						endTime:$('#endTime').val()
@@ -180,7 +206,7 @@
 								type:"POST",
 								async: false,
 								cache: false,
-								data: {"videoId":videoId,"score":score},
+								data: {"videoId":videoId,"score":score,"safetyConfigId":data.safetyconfigid},
 								success: function(result) {
 									//如果成功记录分数
 									if (result.success){
@@ -208,6 +234,11 @@
 	});
 
 	$(function () {
+
+
+
+
+
 
 		//前往家长端主页
 		$("#backMain").click(function () {
