@@ -424,10 +424,10 @@
                 and clamsgdetail like "%"#{clamsgdetail}"%"
             </if>
             <if test="beginTime != null and beginTime != ''">
-                and infotypetime &gt; #{beginTime}
+                and sendmsgtime &gt; #{beginTime}
             </if>
             <if test="overTime != null and overTime != ''">
-                and infotypetime &lt; #{overTime}
+                and sendmsgtime &lt; #{overTime}
             </if>
         </where>
         order by sendmsgtime desc limit #{pageInt},#{limitInt}
@@ -441,10 +441,10 @@
                 and clamsgdetail like "%"#{clamsgdetail}"%"
             </if>
             <if test="beginTime != null and beginTime != ''">
-                and infotypetime &gt; #{beginTime}
+                and sendmsgtime &gt; #{beginTime}
             </if>
             <if test="overTime != null and overTime != ''">
-                and infotypetime &lt; #{overTime}
+                and sendmsgtime &lt; #{overTime}
             </if>
         </where>
     </select>
