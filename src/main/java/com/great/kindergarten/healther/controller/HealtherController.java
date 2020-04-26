@@ -96,6 +96,9 @@ public class HealtherController {
     @RequestMapping("/healtherLogin")
     public void healtherLogin(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
         healthername = tblHealther.getHealthername();
+
+        kindername = (String) request.getSession().getAttribute("kindername");
+
         String healtherpwd = MD5Utils.md5(tblHealther.getHealtherpwd());
         String code = tblHealther.getCode();
         Boolean confirm = code.equalsIgnoreCase(healthercode);
@@ -107,7 +110,6 @@ public class HealtherController {
                     ResponseUtils.outHtml(response, "success");
                     List<TblHealther> tblHealtherList = new ArrayList<>();
                     tblHealtherList.add(Healther);
-                    kindername = (String) request.getSession().getAttribute("kindername");
                     List<TblCampus> tblCampuses = healtherService.findHealtherNews(kindername);
                     List<TblClass> tblClassList = healtherService.findAllClass(kindername);
                     System.out.println("tblCampuses="+tblCampuses);
