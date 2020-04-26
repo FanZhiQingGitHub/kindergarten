@@ -32,7 +32,7 @@
             !!!</a>
     </div>
     <p class="welcome-text">
-        <button class="layui-btn layui-btn-radius layui-btn-normal updateHealtherpwd" style="margin-top: 48%">
+        <button class="layui-btn layui-btn-radius layui-btn-normal updateSecuritypwd" style="margin-top: 48%">
             修改密码
         </button>
     </p>
@@ -136,7 +136,8 @@
             }
         });
 
-        $('body').on('click', '.updateHealtherpwd', function () {
+
+        $('body').on('click', '.updateSecuritypwd', function () {
             layer.open({
                 type: 1,
                 content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
@@ -149,7 +150,6 @@
                         var securitypwd = $("#securitypwd").val();
                         var confrimSecuritypwd = $("#confrimSecuritypwd").val();
                         var oldSecuritypwd = $("#oldSecuritypwd").val();
-
                         var pwd = /^[\S]{6,12}$/;
                         if (oldSecuritypwd.length == 0) {
                             layer.msg("请输入旧密码", {icon: 2});
@@ -173,17 +173,16 @@
                                     if (data == "error") {
                                         layer.msg("修改失败！", {icon: 2});
                                     } else {
-                                        layer.alert("修改成功", {icon: 6});
-                                        layer.close(index);
+                                        layer.alert("修改成功", {icon: 6},function (index) {
+                                            window.location.reload();
+                                        });
                                     }
                                 }, error: function (data) {
                                     layer.msg("网络繁忙！", {icon: 2});
                                 }
                             });
                         };
-
                     });
-
                 },
             });
         });

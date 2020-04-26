@@ -58,6 +58,8 @@ public interface HealtherMapper {
 
     public Integer findKinderID(Map<String, String> KinderMap);
 
+    public List<TblStudent> findStuInfoByKindername(Map<String, String> KinderMap);
+
     public int addLog(TblSyslog log);//系统日志
 
 }

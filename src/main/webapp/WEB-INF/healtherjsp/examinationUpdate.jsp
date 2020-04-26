@@ -46,7 +46,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">宝宝身高</label>
             <div class="layui-input-inline">
-                <input type="text" id="te3" name="height" required lay-verify="height" placeholder="请输入宝宝身高" autocomplete="off" class="layui-input">
+                <input type="text" id="te3" name="height" required lay-verify="required|height" placeholder="请输入宝宝身高（单位：m）" autocomplete="off" class="layui-input">
             </div>
         </div>
     </div>
@@ -55,7 +55,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">宝宝体重</label>
             <div class="layui-input-inline">
-                <input type="text" id="te4" name="weight" required lay-verify="weight" placeholder="请输入宝宝体重" autocomplete="off" class="layui-input">
+                <input type="text" id="te4" name="weight" required lay-verify="required|weight" placeholder="请输入宝宝体重（单位：kg）" autocomplete="off" class="layui-input">
             </div>
         </div>
     </div>
@@ -64,7 +64,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">宝宝视力</label>
             <div class="layui-input-inline">
-                <input type="text" id="te5" name="vision" required lay-verify="vision" placeholder="请输入宝宝视力" autocomplete="off" class="layui-input">
+                <input type="text" id="te5" name="vision" required lay-verify="required|vision" placeholder="请输入宝宝视力（最大5.0）" autocomplete="off" class="layui-input">
             </div>
         </div>
     </div>
@@ -73,26 +73,29 @@
         <div class="layui-inline">
             <label class="layui-form-label">宝宝体温</label>
             <div class="layui-input-inline">
-                <input type="text" id="te6" name="temperature" required lay-verify="temperature" placeholder="请输入宝宝体温" autocomplete="off" class="layui-input">
+                <input type="text" id="te6" name="temperature" required lay-verify="required|temperature" placeholder="请输入宝宝体温（最大45）" autocomplete="off" class="layui-input">
             </div>
         </div>
     </div>
 
     <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">宝宝皮肤</label>
-            <div class="layui-input-inline">
-                <input type="text" id="te7" name="skin" required lay-verify="skin" placeholder="请输入宝宝皮肤" autocomplete="off" class="layui-input">
-            </div>
+        <label class="layui-form-label">宝宝皮肤</label>
+        <div class="layui-input-block" style="color: black">
+            <input type="radio" name="skin" value="正常" title="正常">
+            <input type="radio" name="skin" value="麻疹" title="麻疹">
+            <input type="radio" name="skin" value="湿疹" title="湿疹">
+            <input type="radio" name="skin" value="皮炎" title="皮炎">
+            <input type="radio" name="skin" value="荨麻疹" title="荨麻疹">
+            <input type="radio" name="skin" value="其它" title="其它">
         </div>
     </div>
 
     <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label" >健康状况</label>
-            <div class="layui-input-inline">
-                <input type="text" id="te8" name="healthstatus" required lay-verify="healthstatus" placeholder="请输入宝宝健康状况" autocomplete="off" class="layui-input">
-            </div>
+        <label class="layui-form-label">健康状况</label>
+        <div class="layui-input-block" style="color: black">
+            <input type="radio" name="healthstatus" value="正常" title="正常">
+            <input type="radio" name="healthstatus" value="发烧" title="发烧">
+            <input type="radio" name="healthstatus" value="生病" title="生病">
         </div>
     </div>
 
@@ -110,6 +113,7 @@
             , layedit = layui.layedit
             , laydate = layui.laydate;
         $ = layui.jquery;
+        var path = $("#path").val();
 
         form.verify({
             required: function (value) {
@@ -117,44 +121,46 @@
                     return '您好，这是必填项！';
                 }
             },
+            studentname: function (value) {
+                if (value.length > 4) {
+                    return '您好，姓名不得大于4个字！';
+                }
+            },
             height: function (value) {
-                if (value > 200) {
-                    return '您好，身高数据不得高于200cm！';
+                if (value > 3) {
+                    return '您好，身高数据不得高于3m！';
+                }else if (value == 0) {
+                    return '您好，身高数据不得为0！';
                 }
             },
             weight: function (value) {
-                if (value > 100) {
-                    return '您好，体重数据不得高于100kg！';
+                if (value > 150) {
+                    return '您好，体重数据不得高于150kg！';
+                }else if (value == 0) {
+                    return '您好，体重数据不得为0！';
                 }
             },
             vision: function (value) {
                 if (value > 5) {
                     return '您好，视力数据不得高于5！';
+                }else if (value == 0) {
+                    return '您好，视力数据不得为0！';
                 }
             },
             temperature: function (value) {
                 if (value > 45) {
                     return '您好，体温数据不得高于45℃！';
+                }else if (value == 0) {
+                    return '您好，体温数据不得为0！';
                 }
             },
-            skin: function (value) {
-                if (value.length > 3) {
-                    return '您好，皮肤不得大于3个字符！';
-                }
-            },
-            healthstatus: function (value) {
-                if (value.length > 3) {
-                    return '您好，健康状况不得大于3个字符！';
-                }
-            }
-            , content: function (value) {
+            content: function (value) {
                 layedit.sync(editIndex);
             }
 
         });
 
         form.on('submit(updateInfo)', function (data) {
-            var path = $("#path").val();
             $.ajax({
                 url: path + "/healther/updateExaminationInfo",
                 async: true,
@@ -167,10 +173,10 @@
                             window.parent.location.reload();
                         });
                     }else {
-                        layer.alert("修改失败！", {icon: 2});
+                        layer.msg("修改失败！", {icon: 2});
                     }
                 }, error: function (msg) {
-                    layer.alert("网络繁忙！", {icon: 2});
+                    layer.msg("网络繁忙！", {icon: 2});
                 }
             })
         });

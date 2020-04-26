@@ -87,19 +87,16 @@
                                     window.parent.location.reload();
                                 });
                             } else {
-                                layer.alert("修改失败！", {icon: 2});
+                                layer.msg("修改失败！", {icon: 2});
                             }
                         }, error: function (msg) {
-                            layer.alert("网络繁忙！", {icon: 2});
+                            layer.msg("网络繁忙！", {icon: 2});
                         }
                     })
                 }
             });
         })
-
     });
-
-
 </script>
 
 </body>

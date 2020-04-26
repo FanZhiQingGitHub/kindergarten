@@ -165,7 +165,6 @@
 
         //编辑
         $('body').on('click', '.update', function () {
-            var path = $("#path").val();
             var examinationid = $(this).parents('tr').children('td').eq(0).text();
             var studentid = $(this).parents('tr').children('td').eq(1).text();
             var studentname = $(this).parents('tr').children('td').eq(2).text();
@@ -175,7 +174,6 @@
             var temperature = $(this).parents('tr').children('td').eq(6).text();
             var skin = $(this).parents('tr').children('td').eq(7).text();
             var healthstatus = $(this).parents('tr').children('td').eq(8).text();
-
             layer.open({
                 type: 2,
                 area: ['400px', '580px'],
@@ -184,6 +182,7 @@
                 content: path + '/healther/path/examinationUpdate' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                 , success: function (layero, index) {
                     var body = layer.getChildFrame("body", index);
+                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象
                     body.find("#te0").val(examinationid);
                     body.find("#te1").val(studentid);
                     body.find("#te2").val(studentname);
@@ -191,15 +190,17 @@
                     body.find("#te4").val(weight);
                     body.find("#te5").val(vision);
                     body.find("#te6").val(temperature);
-                    body.find("#te7").val(skin);
-                    body.find("#te8").val(healthstatus);
+                    body.find('input[name=skin][value='+skin+']').attr("checked",skin==skin ? true : false);
+                    body.find('input[name=healthstatus][value='+healthstatus+']').attr("checked",healthstatus==healthstatus? true : false);
+                    iframeWin.layui.form.render();
                 }
             });
         });
 
         //新增
         $('body').on('click', '.add', function () {
-            var path = $("#path").val();
+            var examinationid = $(this).parents('tr').children('td').eq(0).text();
+            var studentid = $(this).parents('tr').children('td').eq(1).text();
             layer.open({
                 type: 2,
                 area: ['400px', '610px'],
@@ -207,6 +208,9 @@
                 title: '新增体检信息',
                 content: path + '/healther/path/addExamination' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                 , success: function (layero, index) {
+                    var body = layer.getChildFrame("body", index);
+                    body.find("#te0").val(examinationid);
+                    body.find("#te1").val(studentid);
                 }
             });
         });

@@ -81,13 +81,13 @@
                         style="width: 120px">报警信息
                 </button>
                 <button type="button" class="layui-btn layui-btn-radius layui-btn-normal addStuLngLatInfo"
-                        style="width: 120px">添加宝宝轨迹
+                        style="width: 120px" id="bu1">添加宝宝轨迹
                 </button>
                 <button type="button" class="layui-btn layui-btn-radius layui-btn-warm addElectricFence"
-                        style="width: 120px" id="bu">绘制电子围栏
+                        style="width: 120px" id="bu2">绘制电子围栏
                 </button>
                 <button type="button" class="layui-btn layui-btn-radius layui-btn-danger updateElectricFence"
-                        style="width: 120px;">修改电子围栏
+                        style="width: 120px;" id="bu3">修改电子围栏
                 </button>
             </div>
         </div>
@@ -143,7 +143,14 @@
             datatype: 'text',
             success: function (data) {
                 if (data == "error") {
-                    layer.msg("暂无宝宝信息！", {icon: 2});
+                    var option;
+                    option += "<option value='请选择'>" + "该幼儿园无宝宝" + "</option>";
+                    $("#stuname").html(option);
+                    $("#stuname").show();
+
+                    $("#bu1").css("background", "white");
+                    $("#bu1").css("color", "darkgrey");
+                    $("#bu1").attr("disabled", true);
                 } else {
                     var kindername = $("#kinder").val();
                     if (kindername.length == 0) {
@@ -161,6 +168,7 @@
                         }
                         $("#stuname").html(option);
                         $("#stuname").show();
+
                     }
                 }
             }, error: function (data) {
@@ -191,6 +199,9 @@
             success: function (msg) {
                 if (msg == "error") {
                     layer.msg("您好，电子围栏不存在，请先绘制该幼儿园的电子围栏！", {icon: 2});
+                    $("#bu3").css("background", "white");
+                    $("#bu3").css("color", "darkgrey");
+                    $("#bu3").attr("disabled", true);
                 } else if (msg == "notkindername") {
                     layer.msg("您好，需要登录幼儿园客户端才可以显示电子围栏！", {icon: 2});
                 } else {
@@ -210,9 +221,9 @@
                     polygon = new BMap.Polygon(polArry, styleOptions);
                     map.addOverlay(polygon);
 
-                    $("#bu").css("background", "white");
-                    $("#bu").css("color", "darkgrey");
-                    $("#bu").attr("disabled", true);
+                    $("#bu2").css("background", "white");
+                    $("#bu2").css("color", "darkgrey");
+                    $("#bu2").attr("disabled", true);
                 }
             }, error: function (msg) {
                 layer.msg("网络繁忙！", {icon: 2});
@@ -383,6 +394,7 @@
         //修改电子围栏
         $('body').on('click', '.updateElectricFence', function () {
             var kindername = $("#kinder").val();
+            console.log(kindername);
             if (kindername.length == 0) {
                 layer.msg('对不起，您必须登录幼儿园账号才可以进行此操作！', {icon: 2});
             } else {

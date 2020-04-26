@@ -437,7 +437,7 @@
                     $("#tbo").show();
                 }
             }, error: function (data) {
-                layer.alert("网络繁忙！", {icon: 2});
+                layer.msg("网络繁忙！", {icon: 2});
             }
         })
 
