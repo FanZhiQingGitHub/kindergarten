@@ -216,12 +216,25 @@ public class TeacherService {
         teachermap.put("teachername",teachername);
         return teacherMapper.findExistTeacherName(teachermap);
     }
-
+    //重置密码
     public Boolean resetTeacherpwd(String teachername,String teacherphone){
         Map<String,String> teachermap = new LinkedHashMap<>();
         teachermap.put("teachername",teachername);
         teachermap.put("teacherphone",teacherphone);
         return teacherMapper.resetTeacherpwd(teachermap);
     }
+    //班级消息通知---查询消息通知
+    public List<TblClamsg> findClassMessageAll(Map<String, Object> map){
+        return teacherMapper.findClassMessageAll(map);
+    }
 
+    //班级消息通知--对应消息通知记录值
+    public Long findClassMessageAllCount(Map<String, Object> map){
+        return teacherMapper.findClassMessageAllCount(map);
+    }
+    //    根据kid查园所名字
+    public TblKinder findkinderNameByKid(Integer kid)
+    {
+        return teacherMapper.findkinderNameByKid(kid);
+    }
 }
