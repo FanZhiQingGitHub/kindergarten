@@ -132,7 +132,7 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
 
         System.out.println("返回幼儿园登录界面");
         response.sendRedirect(basePath + "/main/path/Login");
-        return false;
+        return true;
     }
 
     // 用户鉴权具体方法

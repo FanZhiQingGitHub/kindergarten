@@ -231,7 +231,7 @@
 
                 <div class="main_r_up">
                     <img src="${pageContext.request.contextPath}/loginres/images/head.png"/>
-                    <div class="pp"><img src="${pageContext.request.contextPath}/image/directorimg/directorLogin.png"
+                    <div class="pp"><img src="${pageContext.request.contextPath}/image/loginreg/directorLogin.png"
                                          style="width: 300px;height: 45px;margin-top: 25px"/></div>
                 </div>
 
@@ -240,7 +240,7 @@
                     <label class="layui-form-label">用户名</label>
                     <div class="layui-input-inline">
                         <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
-                        <input type="text" name="username" lay-verify="required" placeholder="请输入用户名" value="李智慧"
+                        <input type="text" name="username" lay-verify="required" placeholder="请输入用户名"
                                autocomplete="off" class="layui-input" id="te1">
                     </div>
                 </div>
@@ -249,7 +249,6 @@
                     <div class="layui-input-inline">
                         <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
                         <input type="password" name="userpwd" required lay-verify="pass" placeholder="请输入6-12位密码"
-                               value="123456"
                                autocomplete="off" class="layui-input" id="te2">
                     </div>
                 </div>
@@ -258,7 +257,7 @@
                     <label class="layui-form-label">验证码</label>
                     <div class="layui-input-inline">
                         <input type="text" name="code" lay-verify="code" placeholder="请输入验证码"
-                               autocomplete="off" class="layui-input verity" value="0000">
+                               autocomplete="off" class="layui-input verity">
                     </div>
 
                     <div id="codediv">
@@ -358,7 +357,7 @@
                     } else if (msg === "codeerror") {
                         layer.alert("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
-                        code.src = path + "/director/loginCode?" + time;
+                        code.src = path + "/director/loginCode?" +Math.random();
                     } else if (msg === "notmen") {
                         layer.alert("该用户已被禁用或者不存在！", {icon: 2});
                     }

@@ -18,9 +18,7 @@ public class KinderGartenConfig implements WebMvcConfigurer {
         InterceptorRegistration interceptorRegistration = registry.addInterceptor(new KinderGartenInterceptor());
         interceptorRegistration.addPathPatterns("/main/**","/admin/**","/director/**","/healther/**","/parent/**","/security/**","/teacher/**");
         interceptorRegistration.excludePathPatterns(
-                "/main/path/Login",
-                "/main/mainLogin",
-                "/main/LoginCode",
+                "/main/path/main",
 
                 "/admin/toUrl/adminLogin",
                 "/admin/checkLogin",
@@ -33,6 +31,12 @@ public class KinderGartenConfig implements WebMvcConfigurer {
                 "/director/loginCode",
                 "/director/selectresetRectorPwd",
                 "/director/resetRectorPwd",
+                "/director/toUrl/director_SchoolMessage",
+                "/director/selectSchoolMessage",
+                "/director/chatLogin",
+                "/director/toUrl/chatlogin",
+                "/director/mainpage",
+                "/director/toUrl/chatmain",
 
 //                "/healther/path/healtherLogin",
                 "/healther/healtherLogin",
