@@ -175,6 +175,8 @@
                                 <button type="button" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-warm" id="ContactTeacher">
                                     联系老师
                                 </button>
+
+                                <button type="button" class="layui-btn layui-btn-lg layui-btn-radius " id="ClassNews">班级消息</button>
                             </div>
                         </h3>
                     </div>
@@ -318,9 +320,8 @@
                     shade: 0.8//表示的是阴影的大小
                     , area: ['55%', '65%'],
                     moveType: 1,//拖拽模式，0或者1
-                    content: src + '/director/toUrl/director_SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    content: path + '/parent/toUrl/SchoolMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                     , success: function (layero, index) {
-                        console.log(layero, index);
                     }
                 });
             });
@@ -446,7 +447,33 @@
 
             //前往查看联系老师界面
             $("#ContactTeacher").click(function () {
-	            window.location.href = path+"/director/toUrl/chatlogin";
+                layer.open({
+                    type: 2,
+                    title: '在线聊天首页',
+                    area: ['80%', '85%'],
+                    moveType: 1,//拖拽模式，0或者1
+                    content: path + '/director/toUrl/chatlogin' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                    }
+                });
+            });
+
+
+
+            //前往查看班级消息
+            $("#ClassNews").click(function () {
+
+                layer.open({
+                    type: 2,
+                    title: '班级消息通知',
+                    shade: 0.8//表示的是阴影的大小
+                    , area: ['55%', '65%'],
+                    moveType: 1,//拖拽模式，0或者1
+                    content: path + '/parent/toUrl/ClassMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    , success: function (layero, index) {
+                    }
+                });
+
             });
 
 

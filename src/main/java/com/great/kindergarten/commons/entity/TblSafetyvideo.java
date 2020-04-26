@@ -24,6 +24,7 @@ public class TblSafetyvideo {
     private TblMonitorname tblMonitorname;
     private Integer monitornameid;
     private String monitorname;
+    private Integer safetyconfigid;
     private String videoname;
     private String videoadd;
     private String safetytestscore;
@@ -55,6 +56,16 @@ public class TblSafetyvideo {
         this.safetytestresult = safetytestresult;
         this.time1 = time1;
         this.time2 = time2;
+    }
+
+    public Integer getSafetyconfigid()
+    {
+        return safetyconfigid;
+    }
+
+    public void setSafetyconfigid(Integer safetyconfigid)
+    {
+        this.safetyconfigid = safetyconfigid;
     }
 
     public String getTime1()

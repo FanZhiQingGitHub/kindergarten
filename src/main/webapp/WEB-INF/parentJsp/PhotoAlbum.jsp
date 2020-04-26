@@ -17,7 +17,7 @@
 
 <button class="layui-btn" id="backMain" type="button" >返回主页</button>
 
-<h1 align="center">作业中心</h1>
+<h1 align="center">相册</h1>
 
 <!-- 增加搜索条件 -->
 <div class="demoTable">
@@ -64,7 +64,7 @@
 
 <script type="text/html" id="barDemo" style="width: 300px">
 
-<button class="layui-btn edit layui-btn-xs" data-method="dialog" lay-event="ViewPhotos">查看照片</button>
+<button class="layui-btn edit layui-btn-xs" data-method="dialog" lay-event="ViewPhotos">查看大图</button>
 
 
 </script>
@@ -118,6 +118,7 @@
 						,{field: 'photoname', title: '照片名称'}
 						,{field: 'photodetail', title: '照片详情',  sort: true}
 						,{field: 'phototime', title: '上传时间',  sort: true}
+						,{field: 'photourl', title: '缩略图',  align: 'center',templet:'<div><img src="${path}/{{d.photourl}}"></div>'}
 						,{fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo'}
 					]]
 				});

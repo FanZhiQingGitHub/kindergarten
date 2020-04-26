@@ -20,6 +20,19 @@ public interface ParentMapper {
 
 
 	/**
+	 * 班级消息通知---查询消息通知
+	 * @param map
+	 * @return
+	 */
+	 List<TblClamsg> findClassMessageAll(Map<String, Object> map);
+
+	/**
+	 * 班级消息通知--对应消息通知记录值
+	 * @param map
+	 * @return
+	 */
+	 Integer findClassMessageAllCount(Map<String, Object> map);
+	/**
 	 * 查询校园公共信息
 	 * @param map
 	 * @return
@@ -166,10 +179,10 @@ public interface ParentMapper {
 	/**
 	 * 先查询防止分数数据重复
 	 * @param parentId
-	 * @param videoId
+	 * @param safetyConfigId
 	 * @return
 	 */
-	Integer countScore(Integer parentId,Integer videoId);
+	Integer countScore(Integer parentId,Integer safetyConfigId);
 
 
 	/**
@@ -179,9 +192,10 @@ public interface ParentMapper {
 	 * @param score
 	 * @param score
 	 * @param finshTime
+	 * @param safetyConfigId
 	 * @return
 	 */
-	Integer recordScore (Integer videoId , Integer parentId, Integer score, Date finshTime);
+	Integer recordScore (Integer videoId , Integer parentId, Integer score, Date finshTime,Integer safetyConfigId);
 
 
 	/**
@@ -196,16 +210,18 @@ public interface ParentMapper {
 	/**
 	 * 根据条件查找出有几个记录
 	 * @param condition
+	 *  @param classId
 	 * @return
 	 */
-	Integer countVideoListNumber ( SearchCondition condition);
+	Integer countVideoListNumber ( SearchCondition condition,Integer classId);
 
 	/**
 	 * 根据家长id和条件找到已完成或者未完成的安全视频列表
 	 * @param condition
+	 *  @param classId
 	 * @return
 	 */
-	List<TblSafetyvideo>findVideoList( SearchCondition condition);
+	List<TblSafetyvideo>findVideoList( SearchCondition condition,Integer classId);
 
 
 	/**
@@ -218,10 +234,9 @@ public interface ParentMapper {
 	 * 家长登陆接口
 	 * @param parentName
 	 * @param parentPwd
-	 * @param kindername
 	 * @return
 	 */
-	 TblParent parentLogin(String parentName, String parentPwd,String kindername);
+	 TblParent parentLogin(String parentName, String parentPwd);
 
 	/**
 	 * 根据家长id和旧密码判断旧密码是否输入正确

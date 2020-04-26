@@ -36,10 +36,30 @@ public class ParentService {
     }
 
 
+    /**
+     *  根据搜索条件找到对应的班级通知列表
+     * @param map
+     * @return
+     */
+    public TableDate findClassMessageAll(Map<String, Object> map ){
+
+        TableDate tableDate = new TableDate();
+        //计算有几个条数
+        tableDate.setCount(parentMapper.findClassMessageAllCount(map));
+        //放入数据
+        tableDate.setData(parentMapper.findClassMessageAll(map));
+
+        return tableDate;
+    }
+
+
+
+
+
 
 
     /**
-     *  根据搜索条件找到对应的相册列表
+     *  根据搜索条件找到对应的校园通知列表
      * @param map
      * @return
      */
@@ -260,12 +280,12 @@ public class ParentService {
      * @param score
      * @return
      */
-    public boolean recordScore(Integer parentId, Integer videoId, Integer score){
+    public boolean recordScore(Integer parentId, Integer videoId, Integer score,Integer safetyConfigId){
 
         //判断数据是否已经提交
-        if (parentMapper.countScore(parentId,videoId)==0){
+        if (parentMapper.countScore(parentId,safetyConfigId)==0){
             //如果没有提交则插入数据
-            parentMapper.recordScore(videoId,parentId,score,new Date());
+            parentMapper.recordScore(videoId,parentId,score,new Date(),safetyConfigId);
             return true;
         }
 
@@ -286,18 +306,19 @@ public class ParentService {
     /**
      * 根据id和条件找到安全视频列表
      * @param searchCondition
+     *  @param classId
      * @return
      */
-    public TableDate parentSafetyTestList(SearchCondition searchCondition){
+    public TableDate parentSafetyTestList(SearchCondition searchCondition,Integer classId){
 
         Integer startPage = (searchCondition.getPage() -1) *searchCondition.getLimit();
         searchCondition.setPage(startPage);
 
         TableDate result = new TableDate();
         //计算总共的页数
-        result.setCount(parentMapper.countVideoListNumber(searchCondition));
+        result.setCount(parentMapper.countVideoListNumber(searchCondition,classId));
         //放入查询的数据
-        result.setData( parentMapper.findVideoList(searchCondition));
+        result.setData( parentMapper.findVideoList(searchCondition,classId));
         return result;
     }
 
@@ -349,8 +370,8 @@ public class ParentService {
      * @param parentPwd
      * @return
      */
-    public TblParent parentLogin(String parentName, String parentPwd,String kindername){
-        return parentMapper.parentLogin(parentName,parentPwd,kindername);
+    public TblParent parentLogin(String parentName, String parentPwd){
+        return parentMapper.parentLogin(parentName,parentPwd);
     }
 
     //---------------------------孩子考勤新增方法------------------------------

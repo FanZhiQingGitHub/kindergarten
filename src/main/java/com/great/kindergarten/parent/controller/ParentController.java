@@ -129,7 +129,52 @@ public class ParentController {
     }
 
 
+    //班级消息通知
+    @RequestMapping("/classMessage")
 
+    public void classMessage(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+
+        Integer cid = Integer.valueOf(request.getParameter("cid"));
+
+        String clamsgdetail = request.getParameter("clamsgdetail");
+        String beginTime = request.getParameter("beginTime");
+
+        String limit = request.getParameter("limit");
+        String overTime = request.getParameter("overTime");
+        String page = request.getParameter("page");
+        int limitInt = Integer.valueOf(limit);
+        int pageInt = Integer.valueOf(page);
+
+
+        //		获取对应的id值
+        Map<String, Object> map = new HashMap<>();
+
+        if (null != beginTime && "" != beginTime)
+        {
+            map.put("beginTime", beginTime);
+        }
+
+
+        if (null != clamsgdetail && "" != clamsgdetail)
+        {
+            map.put("clamsgdetail", clamsgdetail);
+        }
+
+        if (null != overTime && "" != overTime)
+        {
+            map.put("overTime", overTime);
+        }
+
+        int limits = limitInt;
+        int pages = (pageInt - 1) * limitInt;
+        map.put("cid", cid);
+        map.put("pageInt", pages);
+        map.put("limitInt", limits);
+        //数据写回
+        ResponseUtils.outJson(response, parentService.findClassMessageAll(map));
+
+    }
 
 
 
@@ -145,12 +190,14 @@ public class ParentController {
     public void resetParentpwd(HttpServletRequest request, HttpServletResponse response) {
         String parentname = request.getParameter("parentname");
         String parentphone = request.getParameter("parentphone");
-        request.getSession().setAttribute("parentname",parentname);//存这个是因为没有登录，没有用户名，所以需要存一下，记录系统日志
         Integer num = parentService.findExistParentName(parentname);
         if(num > 0){
+            //存一下名字给日志记录
+            request.getSession().setAttribute("parentname",parentname);
             Boolean flag = parentService.resetParentpwd(parentname,parentphone);
             if(flag){
-                request.getSession().removeAttribute("parentname");//重置成功后清除掉
+                //重置成功后清除掉
+                request.getSession().removeAttribute("parentname");
                 ResponseUtils.outHtml(response,"success");
             }else {
                 ResponseUtils.outHtml(response,"error");
@@ -483,10 +530,11 @@ public class ParentController {
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
         Integer videoId = Integer.valueOf(request.getParameter("videoId"));
         Integer score = Integer.valueOf(request.getParameter("score"));
+        Integer safetyConfigId = Integer.valueOf(request.getParameter("safetyConfigId"));
 
 //        调用插入数据信息
         if (parent != null) {
-            if (parentService.recordScore(parent.getParentId(), videoId, score)) {
+            if (parentService.recordScore(parent.getParentId(), videoId, score,safetyConfigId)) {
                 //成功返回状态
                 result.setSuccess(true);
             }
@@ -501,10 +549,11 @@ public class ParentController {
 //    查询家长安全视频列表方法
         //取得是谁要执行查询操作
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
+        Integer classId = Integer.valueOf(request.getParameter("classId"));
         //设置查找人id
         searchCondition.setParentId(parent.getParentId());
         //返回查找的结果
-        return parentService.parentSafetyTestList(searchCondition);
+        return parentService.parentSafetyTestList(searchCondition,classId);
     }
 
     @RequestMapping("/SafetyTestQuestion")
@@ -602,7 +651,7 @@ public class ParentController {
     @ParentSystemLog(operationType = "登录", operationName = "家长登录")
     @RequestMapping("/Login")
     @ResponseBody
-    public Result parentLogin(HttpServletRequest request, String parentName, String parentPwd, String code,String kinderName) {
+    public Result parentLogin(HttpServletRequest request, String parentName, String parentPwd, String code ) {
 
         Result loginResult = new Result();
 
@@ -612,7 +661,7 @@ public class ParentController {
 
             if (parentName != null && parentPwd != null) {
                 String loginPwd = MD5Utils.md5(parentPwd);
-                TblParent loginParent = parentService.parentLogin(parentName, loginPwd,kinderName);
+                TblParent loginParent = parentService.parentLogin(parentName, loginPwd);
                 parentname = parentName;
                 if (loginParent != null) {
                     //返回ajax数据跳转到家长端首页
@@ -622,6 +671,9 @@ public class ParentController {
                     //session中存储家长信息
                     List<TblCampus> tblCampusList = securityService.findKinderNews(loginParent.getKindername());
                     request.getSession().setAttribute("tblCampusList", tblCampusList);
+                    request.getSession().setAttribute("kid", loginParent.getKid());
+                    Result result = parentService.getKids(loginParent.getParentId());
+                    request.getSession().setAttribute("kidLists",result.getData() );
                     request.getSession().setAttribute("onlineParent", loginParent);
                     request.getSession().setAttribute("parentname", parentname);
                     //返回信息给ajax
