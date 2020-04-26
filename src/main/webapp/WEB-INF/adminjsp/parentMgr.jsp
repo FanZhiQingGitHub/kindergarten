@@ -204,6 +204,7 @@
 		<button type="button" class="layui-btn " lay-event="update" >修改</button>
 		<button type="button" class="layui-btn " lay-event="delete" >删除</button>
 	</script>
+
 </body>
 <script>
 	layui.use(['form', 'tree', 'table'], function () {

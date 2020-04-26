@@ -66,7 +66,7 @@
 <%--            <a href="${pageContext.request.contextPath}/main/director" class="active" style="font-size: 18px">园长端</a>--%>
 <%--            <a href="${pageContext.request.contextPath}/main/admin" class="active" style="font-size: 18px">平台端</a>--%>
             <a href="${pageContext.request.contextPath}/main/path/about" class="active" style="font-size: 18px">关于</a>
-            <a href="javascript:void(0); " class="active" style="font-size: 18px" id="exit">注销</a>
+<%--            <a href="javascript:void(0); " class="active" style="font-size: 18px" id="exit">注销</a>--%>
         </div>
     </div>
 </div>
@@ -210,15 +210,15 @@
             $('.imgH').css('height', imgH + 'px')
         };
 
-        $(function () {
-           $("#exit").click(function () {
-               layer.confirm('您确定要退出到登录界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
-                   layer.close(index);
-                   sessionStorage.clear();//清除session信息
-                   location.href = path + "/main/path/Login";
-               });
-           });
-        });
+        // $(function () {
+        //    $("#exit").click(function () {
+        //        layer.confirm('您确定要退出到登录界面吗?', {icon: 3, title: '温馨提示'}, function (index) {
+        //            layer.close(index);
+        //            sessionStorage.clear();//清除session信息
+        //            location.href = path + "/main/path/Login";
+        //        });
+        //    });
+        // });
     });
 
     //创建和初始化地图函数：

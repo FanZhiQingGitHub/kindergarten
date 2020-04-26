@@ -72,7 +72,7 @@
 
 <script>
 
-	var today = new Date();
+
 
 
 
@@ -80,7 +80,7 @@
 
 	layui.use('table', function(){
 		var table = layui.table;
-
+		var today = new Date();
 		//第一个实例
 		table.render({
 			elem: '#demo'
@@ -100,7 +100,7 @@
 				,{field: 'safetyfinishtime', title: '完成截止日期',  sort: true}
 				,{field: 'safetytestscore', title: '得分' ,  sort: true}
 				,{field: 'safetytestresult', title: '完成情况',templet:function (d) {
-					if (today >d.safetyfinishtime){
+					if (today > d.safetyfinishtime){
 						return '已过期'
 					}else if (d.safetytestresult==null){
 						return '未完成'
@@ -111,7 +111,7 @@
 
 					}  ,  sort: true }
 				,{fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo'}
-			]]
+			]],
 		});
 
 		//layui按钮绑定绑定查询事件
