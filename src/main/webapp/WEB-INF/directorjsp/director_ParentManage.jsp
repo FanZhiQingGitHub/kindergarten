@@ -131,11 +131,7 @@
 
 							if (formData.parentName.length == 0) {
 								layer.alert("请输入家长名称", {icon: 2});
-							} else if (formData.studentname.length == 0) {
-								layer.alert("请输入宝宝名称", {icon: 2});
-							} else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(formData.studentname)) {
-								layer.alert("宝宝名称不能有特殊字符", {icon: 2});
-							} else if (formData.studentname == '暂无') {
+							}  else if (formData.studentname == '暂无') {
 								layer.alert("请选择宝宝名称！");
 							} else if (formData.parentSon == '暂无') {
 								layer.alert("请选择家长的亲子关系！");
@@ -182,6 +178,8 @@
 							$(window.frames[frameId].document).find("#parentAdd").val(data.parentAdd);
 							$(window.frames[frameId].document).find("#parentPhone").val(data.parentPhone);
 							$(window.frames[frameId].document).find("#parentJob").val(data.parentJob);
+							$(window.frames[frameId].document).find("#updatedemo").text("宝宝名称：（请选择）为默认不修改");
+
 							iframeWindow.layui.form.render(); //更新全部
 						}
 					});
@@ -222,10 +220,6 @@
 
 						if (formData.parentName.length == 0) {
 							layer.alert("请输入家长名称", {icon: 2});
-						} else if (formData.studentname.length == 0) {
-							layer.alert("请输入宝宝名称", {icon: 2});
-						} else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(formData.studentname)) {
-							layer.alert("宝宝名称不能有特殊字符", {icon: 2});
 						} else if (formData.studentname == '暂无') {
 							layer.alert("请选择宝宝名称！");
 						} else if (formData.parentSon == '暂无') {

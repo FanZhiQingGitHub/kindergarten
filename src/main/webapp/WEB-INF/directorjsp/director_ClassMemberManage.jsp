@@ -129,10 +129,10 @@
 							//layer.getChildFrame("form", index)获取iframe的表单
 							//serializeArray jquery方法，将表单对象序列化为数组
 							var formData = serializeObject($, layer.getChildFrame("form", index).serializeArray());
-
 							if (formData.studentname == '暂无') {
-								layer.alert("请选择添加的学生名称！");
-							} else if (formData.teachername == '暂无') {
+								layer.alert("请选择修改的学生名称！");
+							}
+							else if (formData.teachername == '暂无') {
 								layer.alert("请选择所在班级！");
 							}else {
 								$.ajax({
@@ -154,7 +154,7 @@
 								});
 							}
 						},
-						content: src + '/director/toUrl/director_ClassMemberDetailManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+						content: src + '/director/toUrl/director_ClassMemberUpdateManage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 						, success: function (layero, index) {
 							console.log(layero, index);
 							//	显示
@@ -162,7 +162,7 @@
 							// 弹出一个页面的时候，下拉框赋值但不能刷新到选定的值。需要做如下调整:红色部分
 							var iframeWindow = layero.find("iframe")[0].contentWindow;
 							$(window.frames[frameId].document).find("#studentid").val(data.studentid);
-							$(window.frames[frameId].document).find("#studentname").val(data.studentname).prop("selected",true);
+							$(window.frames[frameId].document).find("#studentname").val(data.studentname);
 							$(window.frames[frameId].document).find("#classname").val(data.classname).prop("selected",true);
 							iframeWindow.layui.form.render(); //更新全部
 						}

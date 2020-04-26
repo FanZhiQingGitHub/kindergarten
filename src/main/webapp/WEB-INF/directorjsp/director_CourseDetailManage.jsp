@@ -24,7 +24,6 @@
 		<button type="button" class="layui-btn add"><i class="layui-icon">&#xe654;</i>新增</button>
 		班级名称：<input type="text" id="classname" name="classname">
 		<br/>
-<%--		<input type="text" id="datetimes" readonly>--%>
 	</div>
 	<div class="layui-inline" style="width:100%;">
 		<hr>
