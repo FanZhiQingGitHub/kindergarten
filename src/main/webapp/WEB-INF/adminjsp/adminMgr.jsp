@@ -80,6 +80,7 @@
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
 	<h2>管理员账号信息</h2>
+	<hr style="color: white">
 	<div class="layui-row" style="margin-top: 12px;">
 		<form class="layui-form" action="" onsubmit="return false;" >
 			<div class="adminTable" style="margin-left: 6%;">
