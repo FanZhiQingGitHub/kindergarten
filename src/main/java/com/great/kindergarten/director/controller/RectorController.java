@@ -83,8 +83,7 @@ public class RectorController
 		{
 			int width = 60;
 			int height = 30;
-			//            String data = "QWERTYUOPASDFGHJKLZXCVBNMqwertyuopasdfghjkzxcvbnm023456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
-			String data = "0000";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
+			String data = "QWERTYUOPASDFGHJKLZXCVBNMqwertyuopasdfghjkzxcvbnm023456789";    //随机字符字典，其中0，o，1，I 等难辨别的字符最好不要
 			Random random = new Random();//随机类
 			//1 创建图片数据缓存区域（核心类）
 			BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);//创建一个彩色的图片
@@ -155,8 +154,9 @@ public class RectorController
 				//存这个是因为没有登录，没有用户名，所以需要存一下，记录系统日志
 				request.getSession().setAttribute("rectorname", tblRectors.getRectorname());
 				String PicCode = (String) request.getSession().getAttribute("PicCode");
-				code = code.toLowerCase();
-				if (code.equals(PicCode))
+
+				Boolean confirm = code.equalsIgnoreCase(PicCode);
+				if (confirm)
 				{
 					TblKinder tblKinder = rectorService.selectkinderId(tblRectors.getRectorid());
 					if (null != tblKinder)
