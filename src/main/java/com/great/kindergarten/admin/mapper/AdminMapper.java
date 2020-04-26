@@ -58,7 +58,11 @@ public interface AdminMapper
 	//树形菜单
 	public List<TblMenu> findMenuByName(String name);
 
-	public List<TblMenu> findMenuBySid(Integer sid);
+	public List<TblMenu> findMenuBySid(Integer sid,Integer rid);
+
+	public Integer findRoleId(String adminname);
+
+	public List<TblMenu> findMenuBySonId(Integer sid);
 
 	//一级菜单
 	public List<TblMenu> findStairMenu();
@@ -85,12 +89,17 @@ public interface AdminMapper
 
 	public Integer findSidByMid(Integer menuid);
 
+	public Integer checkMenuSort(Integer sort);
+
 	//查找父级菜单
 	public String findSuperierMenu(Integer menuid);
 
 	public String findRoleByRid(Integer rid);
 
 	public Integer checkMenuName(String menuName);
+
+
+
 
 	//角色管理
 	public List<TblRole> findAllRoleInfo(HashMap<String, Object> condition, RowBounds rowBounds);
@@ -233,6 +242,10 @@ public interface AdminMapper
 
 	public int addRector(List<TblRector> tblRectorList);
 
+	public Integer selectRectorName(String rectorname);
+
+	public Integer findRectorId(String rectorname,String rectorphone);
+
 	//教师管理
 	public List<TblTeacher> findAllTeacherInfo(HashMap<String, Object> condition, RowBounds rowBounds);
 
@@ -266,6 +279,7 @@ public interface AdminMapper
 	public int addParent(List<TblParent> tblParentList);
 
 	public List<String> findParentJob();
+
 
 	//保健员管理
 	public List<TblHealther> findAllHealtherInfo(HashMap<String, Object> condition, RowBounds rowBounds);
@@ -344,27 +358,24 @@ public interface AdminMapper
 	public int deleteTopic(TblSafetyvtq tblSafetyvtq);
 
 	//幼儿统计
-	public List<TblExamination> findChildrenStatisticsInfo();
 
-	//男性
-	public List<TblStatistics> findChildrenMaleInfo();
-
-	//女性
-	public List<TblStatistics> findChildrenFeMaleInfo();
-
-	public List<TblStatistics> findChildrenAAgeInfo();
-
-	public List<TblStatistics> findChildrenBAgeInfo();
-
-	public List<TblStatistics> findChildrenCAgeInfo();
+	public List<TblStatistics> findChildrenSexInfo();
 
 	public List<TblStatistics> findChildrenAgeInfo();
 
 	public List<TblStatistics> findChildrenStatusInfo();
 
-	public List<TblStatistics> findTSexInfo();
+	//教师统计
 
-	public List<TblStatistics> findTAgeInfo();
+	public List<TblStatistics> findTeacherAgeInfo();
+
+	public List<TblStatistics> findTeacherSexInfo();
+
+	//园所统计
+
+	public List<TblStatistics> findKinderScaleInfo();
+
+	public List<TblStatistics> findKinderFundsInfo();
 
 	//权限
 	public List<MenuTreeInfo> findAllMenuInfo();

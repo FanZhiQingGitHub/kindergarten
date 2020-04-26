@@ -28,14 +28,15 @@
     <input type="hidden" id="path" value="<%=path%>">
     <input type="hidden" id="rid" value="">
     <div class="layui-btn-container">
-        <button type="button" class="layui-btn layui-btn-radius layui-btn-normal showTree" style="margin-left: 20%;margin-top: 3%">
+        <button type="button" class="layui-btn layui-btn-radius layui-btn-normal showTree" style="margin-left: 20%;margin-top: 3%;font-size: 18px;">
             显示所有菜单
         </button>
-        <button type="button" class="layui-btn layui-btn-radius layui-btn-primary confirm" style="margin-top: 3%;" id="bu1" disabled="true">确定修改权限</button>
+        <button type="button" class="layui-btn layui-btn-radius layui-btn-primary confirm" style="margin-top: 3%;font-size: 18px;" id="bu1" disabled="true">确定修改权限</button>
+        <button type="button" class="layui-btn layui-btn-radius layui-btn-primary " style="margin-top: 3%;font-size: 18px;" id="bu2" >返回</button>
         <hr style="color: whitesmoke">
     </div>
 
-    <div id="menuTree" class="demo-tree-more"></div>
+    <div id="menuTree" class="demo-tree-more" style="font-size: 18px"></div>
 
 <script>
     layui.use(['tree', 'util','jquery','layer','layedit','laydate'], function () {
@@ -56,7 +57,6 @@
                 type: 'post',
                 data: {'roleid':rid},
                 success: function (data) {
-                    console.log(data);
                     if (data == "error") {
                         layer.alert("菜单信息异常！",{icon:2});
                     } else {
@@ -134,6 +134,12 @@
             });
         });
 
+        $(function () {
+            $("#bu2").click(function () {
+               var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index); //再执行关闭
+            })
+        })
     });
 </script>
 

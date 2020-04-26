@@ -10,32 +10,9 @@
     <link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
     <script src=<%=path + "/layui/layui.js"%>></script>
     <style type="text/css">
-        /** {*/
-        /*    margin: 0;*/
-        /*    padding: 0;*/
-        /*}*/
-        /*html {*/
-        /*    width: 100%;*/
-        /*    height: 100%;*/
-        /*}*/
         body {
-            /*width: 100%;*/
-            /*height: 100%;*/
-            /*background-size: 100% 100%;*/
-            /*background-attachment: fixed;*/
             font-size: 140%;
         }
-        /*#alldiv {*/
-        /*    position: absolute;*/
-        /*    width: 100%;*/
-        /*    height: 100%;*/
-        /*}*/
-        /*#hh1 {*/
-        /*    font-weight: bold;*/
-        /*    margin-top: 1%;*/
-        /*    text-align: center;*/
-        /*    font-family: 楷体;*/
-        /*}*/
 
         .container {
             position: relative;
@@ -49,8 +26,6 @@
             padding: 10px;
             z-index: 130;
             border-radius: 10px;
-            /*background-color: rgba(82, 108, 108, 0.2);*/
-            /*box-shadow: 0 3px 18px rgba(240, 255, 255, 0.2);*/
         }
         .layui-form-item .layui-input-inline{
             width: 300px;
@@ -179,15 +154,6 @@
                                class="layui-input" readonly>
                     </div>
                 </div>
-
-<%--                <div class="layui-form-item">--%>
-<%--                    <label class="layui-form-label" >审批时间：</label>--%>
-<%--                    <div class="layui-input-inline">--%>
-<%--                        <input type="text" name="kinderapptime" id="kinderapptime" lay-verify="kinderfunds"--%>
-<%--                               placeholder="" autocomplete="off"--%>
-<%--                               class="layui-input" readonly>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label" >审批状态：</label>

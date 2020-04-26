@@ -56,6 +56,21 @@
 		body .demo .layui-layer-content{
 			font-Size:18px
 		}
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
+		}
 	</style>
 </head>
 <body>
@@ -148,21 +163,6 @@
 	</div>
 
 	<div id="type-content3" style="display: none;">
-<%--		<div class="layui-row" >--%>
-<%--			<form class="layui-form" action="" onsubmit="return false;" >--%>
-<%--				<div class="configItemsTable">--%>
-<%--					<div class="layui-form-item" style="margin-left: 10%;">--%>
-<%--						<div class="layui-inline">--%>
-<%--							<span class="layui-form-label">标题：</span>--%>
-<%--							<div class="layui-input-inline">--%>
-<%--								<input type="text" class="layui-input" name="title" id="title" value="" placeholder="请输入标题" style="width: 120%;margin-top: 2% ">--%>
-<%--							</div>--%>
-<%--						</div>--%>
-<%--						<button class="layui-btn btn-add btn-default" id="btn-add2" style="margin-left: 10%"><i class="layui-icon">&#xe624;新增</i></button>--%>
-<%--					</div>--%>
-<%--				</div>--%>
-<%--			</form>--%>
-<%--		</div>--%>
 		<input type="hidden" id="id" name="id">
 		<table id="configItems" lay-filter="test" class="">
 			<div class="layui-form-item" style="margin-left: 15%;">
@@ -180,7 +180,6 @@
 
 	<div id="type-content4" style="display: none;">
 		<input type="hidden" id="safetyVideoId" name="safetyVideoId">
-		<%--	<h3>新增题目</h3>--%>
 		<div class="layui-form-item" style="margin-top: 1%;">
 			<label class="layui-form-label" style="width: auto;margin-left: 7.2%">题目：</label>
 			<div class="layui-inline">
@@ -194,9 +193,7 @@
 				<input type="radio" id="ra2" name="optionA" class="optionA" value="是" title="是" style="margin-left: 10%;">是
 				<input type="radio" id="ra3" name="optionA" class="optionA" value="符合" title="符合" style="margin-left: 10%;">符合
 			</div>
-<%--			<div class="layui-inline">--%>
-<%--				<input type="text" class="layui-input" name="a" id="a" placeholder="请输入选项A名称" style="width: 180%;">--%>
-<%--			</div>--%>
+
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label" style="width: auto;margin-left: 5%">选项B：</label>
@@ -205,9 +202,7 @@
 				<input type="radio" id="ra5" name="optionB" class="optionB" value="否" title="否" style="margin-left: 10%;">否
 				<input type="radio" id="ra6" name="optionB" class="optionB" value="不符合" title="不符合" style="margin-left: 10%;">不符合
 			</div>
-<%--			<div class="layui-inline">--%>
-<%--				<input type="text" class="layui-input" name="b" id="b" placeholder="请输入选项B名称" style="width: 180%;">--%>
-<%--			</div>--%>
+
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label" style="width: auto;margin-left: 0.5%">正确答案：</label>
@@ -225,17 +220,12 @@
 				<input type="radio" id="ra10" name="score" class="score" value="20" title="20" style="margin-left: 4%;">20分
 				<input type="radio" id="ra11" name="score" class="score" value="25" title="25" style="margin-left: 4%;">25分
 			</div>
-<%--			<div class="layui-inline">--%>
-<%--				<input type="text" id="score" name="score" placeholder="请输入分值" value=""--%>
-<%--				       autocomplete="off" class="layui-input" style="width: 180%">--%>
-<%--			</div>--%>
 		</div>
 	</div>
 
 	<div id="type-content5" style="display: none;">
 		<input type="hidden" id="safetyVideoName5" name="safetyVideoName5">
 		<input type="hidden" id="safetyvtqid" name="safetyvtqid">
-		<%--	<h3>新增题目</h3>--%>
 		<div class="layui-form-item" style="margin-top: 1%;">
 			<label class="layui-form-label">题目：</label>
 			<div class="layui-inline">
@@ -475,10 +465,7 @@
 					},
 					btn2:function () {
 						$("#topicName").val("");
-						// $("#a").val("");
-						// $("#b").val("");
 						$("#result").val("");
-						// $("#score").val("");
 					}
 				});
 			});
@@ -493,24 +480,7 @@
 						layer.msg("题目输入合法", {icon: 6});
 					}
 				});
-				// $("#a").blur(function () {
-				// 	var reg = /^[\u4e00-\u9fa5]$/;
-				// 	var a = $('#a').val();
-				// 	if (!$('#a').val().match(reg) || a == 0) {
-				// 		layer.msg("请输入正确或是", {icon: 2});
-				// 	} else {
-				// 		layer.msg("选项A输入合法", {icon: 6});
-				// 	}
-				// });
-				// $("#b").blur(function () {
-				// 	var reg = /^[\u4e00-\u9fa5]$/;
-				// 	var b = $('#b').val();
-				// 	if (!$('#b').val().match(reg) || b == 0 ) {
-				// 		layer.msg("请输入错误或否", {icon: 2});
-				// 	} else {
-				// 		layer.msg("选项A输入合法", {icon: 6});
-				// 	}
-				// });
+
 				$("#result").blur(function () {
 					var reg = /^[\u4e00-\u9fa5]{1,2}$/;
 					var result = $('#result').val();
@@ -520,26 +490,15 @@
 						layer.msg("输入合法", {icon: 6});
 					}
 				});
-				// $("#score").blur(function () {
-				// 	var reg = /^[0-9]*$/;
-				// 	var score = $('#score').val();
-				// 	if(!$('#score').val().match(reg) || score == 0)
-				// 	{
-				// 		layer.msg("输入不合法，请输入数字", {icon: 2});
-				// 	}else{
-				// 		layer.msg("输入合法", {icon: 6});
-				// 	}
-				// });
+
 			});
 
 			$("#btn-add").click(function () {
 				layer.open({
 					type: 2,
 					area: ['40%', '60%'],
-					// content: $("#type-content2"), //数组第二项即吸附元素选择器或者DOM
 					content: path+"/admin/toUrl/uploadVideoInfo",
 					title: '上传视频',
-					// btn: ['保存', '取消'],
 					offset: '100px',
 					btnAlign: 'c',
 					skin: 'demo-class'
@@ -638,9 +597,7 @@
 					btn: ['保存', '取消'],
 					offset: ['60px','300px'],
 					btnAlign: 'c',
-					// end: function () {
-					// 	location.reload();
-					// },
+
 					success : function(layero, index) {
 						$("#safetyVideoName5").val($("#title").val());
 						$("#topicName2").val(topName.split(".")[1]);

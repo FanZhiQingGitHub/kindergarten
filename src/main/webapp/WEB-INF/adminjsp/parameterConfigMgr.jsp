@@ -56,6 +56,21 @@
 		body .demo .layui-layer-content{
 			font-Size:18px
 		}
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
+		}
 	</style>
 </head>
 <body>
@@ -219,7 +234,6 @@
 						content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
 						title: ['修改参数信息','font-size:18px'],
 						btn: ['保存', '取消'],
-						// offset: '100px',
 						skin: 'demo-class',
 						btnAlign: 'c',
 						closeBtn: 0,
@@ -290,7 +304,6 @@
 				title: ['新增参数','font-size:18px'],
 				btn: ['保存', '取消'],
 				skin: 'demo-class',
-				// offset: '100px',
 				closeBtn: 0,
 				btnAlign: 'c',
 				btn1: function (index) {

@@ -23,6 +23,21 @@
 			margin-top: 2%;
 			text-align: center;
 		}
+		.layui-table-page > div {
+			height: 50px;
+		}
+
+		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
+			height: 26px;
+			line-height: 26px;
+			margin-bottom: 10px;
+			border: none;
+			background: 0 0;
+			font-size: 18px;
+		}
+		.layui-table-page select {
+			height: 24px;
+		}
 	</style>
 </head>
 <body>
@@ -95,7 +110,6 @@
 				}
 			});
 		});
-
 	});
 </script>
 </html>

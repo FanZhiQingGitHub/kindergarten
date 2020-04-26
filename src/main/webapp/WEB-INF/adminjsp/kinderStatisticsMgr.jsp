@@ -10,7 +10,7 @@
 <%String path = request.getContextPath();%>
 <html>
 <head>
-	<title>智慧幼儿园平台端-教师统计</title>
+	<title>智慧幼儿园平台端-园所统计</title>
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<script src=<%=path + "/js/echarts.js"%>></script>
@@ -21,15 +21,16 @@
 		h3 {
 			text-align: center;
 		}
+
 	</style>
 </head>
 <body>
 	<input type="hidden" id="path" value="<%=path%>">
-	<div style="margin: 6% 3%">
-		<div class="layui-inline" style="width:30%;">
+	<div style="margin: 6% 5%">
+		<div class="layui-inline" style="width:40%;">
 			<div id="echarts_div" style="height: 70%;"></div>
 		</div>
-		<div class="layui-inline" style="margin-left: 6%;width:40%;" >
+		<div class="layui-inline" style="margin-left: 8%;width:40%;" >
 			<div id="echarts_div2" style="height: 70%;"></div>
 		</div>
 	</div>
@@ -47,33 +48,32 @@
 		var path = $("#path").val();
 		var nameArr = [];
 		var nameArr2 = [];
-		var sexArr = [];
-		var ageArr = [];
+		var sacleArr = [];
+		var fundsArr = [];
 
 		$.ajax({
-			url:path+"/admin/findTeacherStatisticsInfo",
+			url:path+"/admin/findKinderStatisticsInfo",
 			type:"POST",
 			async:true,
 			dataType:"text",
 			success:function (msg) {
-				console.log(msg);
-				var sex = JSON.parse(msg.split("@")[0]);
-				var age = JSON.parse(msg.split("@")[1]);
+				var scale = JSON.parse(msg.split("@")[0]);
+				var funds = JSON.parse(msg.split("@")[1]);
 
-				for(var i in sex)
+				for(var i in scale)
 				{
-					nameArr.push(sex[i].sex);
-					sexArr.push(sex[i].num);
+					nameArr.push(scale[i].scale+"㎡");
+					sacleArr.push(scale[i].num);
 				}
 
-				for(var j in age)
+				for(var j in funds)
 				{
-					nameArr2.push(age[j].age+'岁');
-					ageArr.push(age[j].num);
+					nameArr2.push(funds[j].funds+'元');
+					fundsArr.push(funds[j].num);
 				}
 
-				createSexEchars();
-				createAgeEchars();
+				createScaleEchars();
+				createFundsEchars();
 
 			},
 			error:function () {
@@ -83,14 +83,14 @@
 
 
 		//普通柱状图
-		function createSexEchars() {
+		function createScaleEchars() {
 
 			//基于准备好的dom，初始化echarts实例
 			var myChart = echarts.init(document.getElementById('echarts_div'),'dark');//dark为暗黑主题 不要可以去掉
 			// 指定图表的配置项和数据
 			var option = {
 				title : {
-					text : '教师性别统计'
+					text : '园所规模统计'
 				},
 				tooltip : {trigger: 'axis'
 					,textStyle: {
@@ -99,7 +99,7 @@
 						color: "#fff"
 					}},
 				legend: {
-					data: ['男性','女性' ],
+					data: ['规模:㎡' ],
 					textStyle: {
 						fontWeight: "bolder",
 						fontSize: "18",
@@ -121,18 +121,22 @@
 					data : nameArr,
 					nameTextStyle :{
 						fontSize: 28
+					},
+					axisLabel: {
+						interval:0,
+						rotate:40
 					}
 				},
 				yAxis : {type: 'value'},
 				series : [
 					{
-						name : '性别',
+						name : '规模:㎡',
 						type : 'bar',
-						data : sexArr,
+						data : sacleArr,
 						itemStyle: {
 							normal: {
 								label: {
-									formatter: "{c}"+"人",
+									formatter: "{c}"+"所",
 									show: true,
 									position: "top",
 									textStyle: {
@@ -154,14 +158,14 @@
 		}
 
 		//普通柱状图
-		function createAgeEchars() {
+		function createFundsEchars() {
 
 			//基于准备好的dom，初始化echarts实例
-			var ageChart = echarts.init(document.getElementById('echarts_div2'),'dark');//dark为暗黑主题 不要可以去掉
+			var fundsChart = echarts.init(document.getElementById('echarts_div2'),'dark');//dark为暗黑主题 不要可以去掉
 			// 指定图表的配置项和数据
 			var option2 = {
 				title : {
-					text : '教师年龄统计'
+					text : '园所注册资金统计'
 				},
 				tooltip : {trigger: 'axis'
 					,textStyle: {
@@ -170,7 +174,7 @@
 						color: "#fff"
 					}},
 				legend: {
-					data: ['年龄'],
+					data: ['注册资金:元'],
 					textStyle: {
 						fontWeight: "bolder",
 						fontSize: "18",
@@ -201,13 +205,13 @@
 				yAxis : {type: 'value'},
 				series : [
 					{
-						name : '年龄',
+						name : '注册资金:元',
 						type : 'bar',
-						data : ageArr,
+						data : fundsArr,
 						itemStyle: {
 							normal: {
 								label: {
-									formatter: "{c}"+"人",
+									formatter: "{c}"+"所",
 									show: true,
 									position: "top",
 									textStyle: {
@@ -225,7 +229,7 @@
 				]
 			};
 			// 使用刚指定的配置项和数据显示图表。
-			ageChart.setOption(option2);
+			fundsChart.setOption(option2);
 		}
 
 	});
