@@ -31,25 +31,15 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
         String path = request.getContextPath();
         String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path;
         System.out.println("basePath="+basePath);
-//        String main = "/kindergarten/main/path/main";
-//        String admin = "/kindergarten/admin/toUrl/adminMain";
-//        String director = "/kindergarten/director/toUrl/directorMain";
-//        String healther = "/kindergarten/healther/path/healtherMain";
-//        String parent = "/kindergarten/parent/toUrl/parentMain";
-//        String security = "/kindergarten/security/path/securityMain";
-//        String teacher = "/kindergarten/teacher/toUrl/teacherMain";
-
 
         if (uri.endsWith("Login")||uri.endsWith("logout")){
             //如果是访问登陆或者退出可以直接访问
             return true;
         }
-
         if (uri.contains("main")){
             //判断要访问的是主页的方法
-
+            return true;
         }
-
         if (uri.contains("admin")){
             //判断管理员是否登录
             if (request.getSession().getAttribute("rolename") != null) {
@@ -57,21 +47,18 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
             }else {
                 response.sendRedirect(basePath + "/admin/toUrl/adminLogin");
                 //重定向之后放行
-                return true;
+                return false;
             }
-
         }
         if (uri.contains("director")){
-
             //判断园长是否登录
             if (request.getSession().getAttribute("rectorname") != null) {
                 return true;
             }else {
                 response.sendRedirect(basePath + "/director/toUrl/directorLogin");
                 //重定向之后放行
-                return true;
+                return false;
             }
-
         }
         if (uri.contains("healther")){
             //判断保健员是否登录
@@ -80,22 +67,19 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
             }else {
                 response.sendRedirect(basePath + "/healther/path/healtherLogin");
                 //重定向之后放行
-                return true;
+                return false;
             }
         }
 
         if (uri.contains("parent")){
-
             //判断家长是否登录
             if (request.getSession().getAttribute("onlineParent") != null) {
                 return true;
             }else {
                 response.sendRedirect(basePath + "/parent/toUrl/parentLogin");
                 //重定向之后放行
-                return true;
+                return false;
             }
-
-
         }
 
         if (uri.contains("security")){
@@ -105,9 +89,8 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
             }else {
                 response.sendRedirect(basePath + "/security/path/securityLogin");
                 //重定向之后放行
-                return true;
+                return false;
             }
-
         }
         if (uri.contains("teacher")){
             //判断班主任是否登录
@@ -116,23 +99,12 @@ public class KinderGartenInterceptor implements HandlerInterceptor {
             }else {
                 response.sendRedirect(basePath + "/teacher/toUrl/teacherLogin");
                 //重定向之后放行
-                return true;
+                return false;
             }
-
         }
 
-
-        //判断幼儿园是否登录
-        if (request.getSession().getAttribute("kindername") != null) {
-            return true;
-        }
-
-
-
-
-        System.out.println("返回幼儿园登录界面");
-        response.sendRedirect(basePath + "/main/path/Login");
-        return true;
+        response.sendRedirect(basePath + "/main/path/main");
+        return false;
     }
 
     // 用户鉴权具体方法

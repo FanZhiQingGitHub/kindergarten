@@ -41,6 +41,18 @@
         </where>
     </select>
 
+    <!--    查询该用户是哪个幼儿园的-->
+    <select id="findHealtherKinder" resultType="TblKinder" parameterType="java.util.Map">
+        select kin.kinderid,kin.kindername from tbl_healther he ,tbl_kinder kin
+        <where>
+            he.kid = kin.kinderid
+            <if test="healthername != '' and healthername != null ">
+                and he.healthername = #{healthername}
+            </if>
+        </where>
+    </select>
+
+
     <!--    用户ID查询-->
     <select id="findHealtherId" resultType="com.great.kindergarten.commons.entity.TblHealther" parameterType="java.util.Map">
         select * from tbl_healther

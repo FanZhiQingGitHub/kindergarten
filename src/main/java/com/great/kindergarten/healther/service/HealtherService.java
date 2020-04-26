@@ -33,6 +33,12 @@ public class HealtherService {
         return healtherMapper.healtherLogin(healthermap);
     }
 
+    public TblKinder findHealtherKinder(String healthername){
+        Map<String, String> healthermap = new LinkedHashMap<>();
+        healthermap.put("healthername",healthername);
+        return healtherMapper.findHealtherKinder(healthermap);
+    }
+
     public TblHealther findHealtherId(String healthername){
         Map<String,String> healthermap = new LinkedHashMap<>();
         healthermap.put("healthername",healthername);

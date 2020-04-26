@@ -31,6 +31,12 @@ public class SecurityService {
         return securityMapper.securityLogin(securitymap);
     }
 
+    public TblKinder findSecurityKinder(String securityname){
+        Map<String, String> securitymap = new LinkedHashMap<>();
+        securitymap.put("securityname",securityname);
+        return securityMapper.findSecurityKinder(securitymap);
+    }
+
     public TblSecurity findSecurityId(String securityname){
         Map<String, String> securitymap = new LinkedHashMap<>();
         securitymap.put("securityname",securityname);

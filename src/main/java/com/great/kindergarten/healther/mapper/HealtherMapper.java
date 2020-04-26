@@ -16,6 +16,8 @@ public interface HealtherMapper {
 
     public TblHealther healtherLogin(Map<String, String> healthermap);
 
+    public TblKinder findHealtherKinder(Map<String, String> healthermap);
+
     public TblHealther findHealtherId(Map<String, String> healthermap);
 
     public Boolean updateHealtherPwd(Map<String, String> healthermap);

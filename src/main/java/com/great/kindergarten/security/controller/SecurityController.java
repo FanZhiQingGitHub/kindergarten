@@ -91,6 +91,10 @@ public class SecurityController {
     @RequestMapping("/securityLogin")
     public void securityLogin(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response) {
         securityname = tblSecurity.getSecurityname();
+        TblKinder tblKinder = securityService.findSecurityKinder(securityname);
+        kindername = tblKinder.getKindername();
+        Integer kid = tblKinder.getKinderid();
+
         String securitypwd = MD5Utils.md5(tblSecurity.getSecuritypwd());
         String code = tblSecurity.getCode();
         Boolean confirm = code.equalsIgnoreCase(securitycode);
@@ -102,10 +106,11 @@ public class SecurityController {
                     ResponseUtils.outHtml(response, "success");
                     List<TblSecurity> tblSecurityList = new ArrayList<>();
                     tblSecurityList.add(Security);
-                    kindername = (String) request.getSession().getAttribute("kindername");
                     List<TblCampus> tblCampusList = securityService.findKinderNews(kindername);
                     request.getSession().setAttribute("tblCampusList", tblCampusList);
                     request.getSession().setAttribute("securityname", securityname);
+                    request.getSession().setAttribute("kindername", kindername);
+                    request.getSession().setAttribute("kid", kid);
                     request.getSession().setAttribute("tblSecurityList", tblSecurityList);
                 }
             } else {

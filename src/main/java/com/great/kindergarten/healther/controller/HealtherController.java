@@ -96,8 +96,9 @@ public class HealtherController {
     @RequestMapping("/healtherLogin")
     public void healtherLogin(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
         healthername = tblHealther.getHealthername();
-
-        kindername = (String) request.getSession().getAttribute("kindername");
+        TblKinder tblKinder = healtherService.findHealtherKinder(healthername);
+        kindername = tblKinder.getKindername();
+        Integer kid = tblKinder.getKinderid();
 
         String healtherpwd = MD5Utils.md5(tblHealther.getHealtherpwd());
         String code = tblHealther.getCode();
@@ -112,10 +113,11 @@ public class HealtherController {
                     tblHealtherList.add(Healther);
                     List<TblCampus> tblCampuses = healtherService.findHealtherNews(kindername);
                     List<TblClass> tblClassList = healtherService.findAllClass(kindername);
-                    System.out.println("tblCampuses="+tblCampuses);
                     request.getSession().setAttribute("tblCampuses", tblCampuses);
                     request.getSession().setAttribute("tblClassList", tblClassList);
                     request.getSession().setAttribute("healthername", healthername);
+                    request.getSession().setAttribute("kindername", kindername);
+                    request.getSession().setAttribute("kid", kid);
                     request.getSession().setAttribute("tblHealtherList", tblHealtherList);
                 }
             } else {

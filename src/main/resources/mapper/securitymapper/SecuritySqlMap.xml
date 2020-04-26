@@ -40,6 +40,17 @@
         </where>
     </select>
 
+    <!--    查询该用户是哪个幼儿园的-->
+    <select id="findSecurityKinder" resultType="TblKinder" parameterType="java.util.Map">
+        select kin.kinderid,kin.kindername from tbl_security se ,tbl_kinder kin
+        <where>
+            se.kid = kin.kinderid
+            <if test="securityname != '' and securityname != null ">
+                and se.securityname = #{securityname}
+            </if>
+        </where>
+    </select>
+
     <!--    用户ID查询-->
     <select id="findSecurityId" resultType="com.great.kindergarten.commons.entity.TblSecurity" parameterType="java.util.Map">
         select * from tbl_security

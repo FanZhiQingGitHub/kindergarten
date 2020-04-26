@@ -14,6 +14,8 @@ public interface SecurityMapper {
 
     public TblSecurity securityLogin(Map<String, String> securitymap);
 
+    public TblKinder findSecurityKinder(Map<String, String> securitymap);
+
     public TblSecurity findSecurityId(Map<String, String> securitymap);
 
     public Boolean updateSecurityPwd(Map<String, String> securitymap);

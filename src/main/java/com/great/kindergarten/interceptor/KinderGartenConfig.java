@@ -31,6 +31,7 @@ public class KinderGartenConfig implements WebMvcConfigurer {
                 "/director/loginCode",
                 "/director/selectresetRectorPwd",
                 "/director/resetRectorPwd",
+                "/director/toUrl/director_SchoolMessage",
 
 //                "/healther/path/healtherLogin",
                 "/healther/healtherLogin",
