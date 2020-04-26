@@ -94,23 +94,13 @@
 			,id: 'demo'
 			,limits:[5,10,20,30]//下拉框中得数量
 			,cols: [[ //表头
-				{field: 'safetyconfigid', title: '视频编号', sort: true, fixed: 'left'}
-				,{field: 'safetyvideoname', title: '视频名称'}
-				,{field: 'safetyvideotime', title: '发布时间',  sort: true}
-				,{field: 'safetyfinishtime', title: '完成截止日期',  sort: true}
-				,{field: 'safetytestscore', title: '得分' ,  sort: true}
-				,{field: 'safetytestresult', title: '完成情况',templet:function (d) {
-					if (today > d.safetyfinishtime){
-						return '已过期'
-					}else if (d.safetytestresult==null){
-						return '未完成'
-					}
-					else {
-						return  d.safetytestresult
-					}
-
-					}  ,  sort: true }
-				,{fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo'}
+				{field: 'safetyconfigid', title: '视频编号', sort: true, fixed: 'left', align: 'center'}
+				,{field: 'safetyvideoname', title: '视频名称', align: 'center'}
+				,{field: 'safetyvideotime', title: '发布时间',  sort: true, align: 'center'}
+				,{field: 'safetyfinishtime', title: '完成截止日期',  sort: true, align: 'center'}
+				,{field: 'safetytestscore', title: '得分' ,  sort: true, align: 'center'}
+				,{field: 'safetytestresult', title: '完成情况', sort: true , align: 'center'}
+				,{fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo', align: 'center'}
 			]],
 		});
 

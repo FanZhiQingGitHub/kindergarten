@@ -553,7 +553,20 @@ public class ParentController {
         //设置查找人id
         searchCondition.setParentId(parent.getParentId());
         //返回查找的结果
-        return parentService.parentSafetyTestList(searchCondition,classId);
+        TableDate tableDate =  parentService.parentSafetyTestList(searchCondition,classId);
+        List<TblSafetyvideo> tblSafetyvideoList = (List<TblSafetyvideo>) tableDate.getData();
+
+        for(int i = 0;i<tblSafetyvideoList.size();i++){
+            Date finishtime = tblSafetyvideoList.get(i).getSafetyfinishtime();
+            Date today = new Date();
+            if(today.compareTo(finishtime) == 1){
+                tblSafetyvideoList.get(i).setSafetytestresult("已过期");
+            }else {
+                tblSafetyvideoList.get(i).setSafetytestresult("未完成");
+            }
+            System.out.println(tblSafetyvideoList.get(i).getSafetytestresult());
+        }
+        return tableDate;
     }
 
     @RequestMapping("/SafetyTestQuestion")

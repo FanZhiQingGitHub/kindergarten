@@ -65,4 +65,14 @@ public class TableDate
 	{
 		this.data = data;
 	}
+
+	@Override
+	public String toString() {
+		return "TableDate{" +
+				"code=" + code +
+				", msg='" + msg + '\'' +
+				", count=" + count +
+				", data=" + data +
+				'}';
+	}
 }
