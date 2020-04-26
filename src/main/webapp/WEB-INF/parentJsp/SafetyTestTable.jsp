@@ -65,18 +65,9 @@
 <%--	{{#  else if(d.safetytestresult == '已完成' ){ }}--%>
 <%--	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="SafetyTest">查看解析</a>--%>
 	{{#  } }}
-
-
-
 </script>
 
 <script>
-
-
-
-
-
-
 
 	layui.use('table', function(){
 		var table = layui.table;
