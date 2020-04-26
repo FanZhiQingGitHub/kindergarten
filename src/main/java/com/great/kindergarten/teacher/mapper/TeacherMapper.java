@@ -101,4 +101,8 @@ public interface TeacherMapper {
 	public Boolean resetTeacherpwd(Map<String, String> teachermap);
 
 	public int addLog(TblSyslog log);//系统日志
+	//班级消息通知---查询消息通知
+	public List<TblClamsg> findClassMessageAll(Map<String, Object> map);
+	//班级消息通知--对应消息通知记录值
+	public Long findClassMessageAllCount(Map<String, Object> map);
 }

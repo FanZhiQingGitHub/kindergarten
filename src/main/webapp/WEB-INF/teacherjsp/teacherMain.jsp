@@ -68,6 +68,7 @@
 				<dd><a href="javascript:void(0);"  class="schoolMessage">校园消息通知</a></dd>
 				<dd><a href="javascript:void(0);"  class="addTeaAttendTime">教师上课打卡</a></dd>
 				<dd><a href="javascript:void(0)" id="regFaceId">人脸注册</a></dd>
+				<dd><a href="javascript:void(0);"  class="classMessage">班级消息通知</a></dd>
 			</dl>
 		</li>
 		<li class="layui-nav-item"><a href="javascript:void(0);" id="exit" style="color: black;font-size: 18px">注销</a></li>
@@ -421,12 +422,32 @@
 				// }
 			});
 		});
-		// 联系家长  在线聊天
-		$("#chatParent").on('click',function () {
-			layer.confirm('请问您确定要进入到在线聊天中心吗?', {icon: 3, title: '温馨提示'},
-				function (index) {
-				layer.close(index);
-				window.location.href = path+"/director/toUrl/chatlogin";
+		// // 联系家长  在线聊天
+		// $("#chatParent").on('click',function () {
+		// 	layer.confirm('请问您确定要进入到在线聊天中心吗?', {icon: 3, title: '温馨提示'},
+		// 		function (index) {
+		// 		layer.close(index);
+		// 		window.location.href = path+"/director/toUrl/chatlogin";
+		// 		return true;
+		// 	});
+		// 	return false;
+		// });
+		//在线聊天 联系家长
+		$("#chatTeacher").on('click',function () {
+			layer.confirm('您确定要进入到在线聊天中心吗?', {icon: 3, title: '温馨提示'}, function (index) {
+
+				layer.open({
+					type: 2,
+					title: '在线聊天首页',
+					area: ['80%', '85%'],
+					moveType: 1,//拖拽模式，0或者1
+					content: src + '/director/toUrl/chatlogin' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+					, success: function (layero, index) {
+						console.log(layero, index);
+					}
+				});
+				// layer.close(index);
+				// window.location.href = src+"/director/toUrl/chatlogin";
 				return true;
 			});
 			return false;
@@ -487,6 +508,21 @@
 				offset:'auto',
 				title:titleInfo,
 				content: detailInfo+'------'+kindername,
+			});
+		});
+
+		//显示班级消息通知的内容
+		$('.classMessage').on('click',function () {
+			layer.open({
+				type: 2,
+				title: '班级消息通知',
+				shade: 0.8//表示的是阴影的大小
+				, area: ['55%', '65%'],
+				moveType: 1,//拖拽模式，0或者1
+				content: path + '/teacher/toUrl/classMessage' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+				, success: function (layero, index) {
+					console.log(layero, index);
+				}
 			});
 		});
 
