@@ -403,7 +403,7 @@ public class TeacherController {
     @TeacherSystemLog(operationType = "增加", operationName = "老师发布作业")
     @RequestMapping(value = "/workRelease", produces = "text/plain;charset=UTF-8")
     @ResponseBody
-    public Map<String, Object> workRelease(@RequestParam("file") MultipartFile file, String classname, HttpServletRequest request, HttpServletResponse response) {
+    public void workRelease(@RequestParam("file") MultipartFile file, String classname, HttpServletRequest request, HttpServletResponse response) {
         TblClass tblClass = new TblClass();
         OutputStream os = null;
         InputStream inputStream = null;
@@ -425,8 +425,8 @@ public class TeacherController {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String nowDay = df.format(new Date());
         //实际路径
-        String path = request.getServletContext().getRealPath("/workRelease/" + classname + "/" + nowDay + "/" + workreleaseid);
-
+//        String path = request.getServletContext().getRealPath("/workRelease/" + classname + "/" + nowDay + "/" + workreleaseid);
+	    String path = request.getServletContext().getRealPath("/workRelease/");
 
         try {
             //根据班级名查找id
@@ -444,11 +444,6 @@ public class TeacherController {
 
             } else {
 
-                Long size = file.getSize();
-                Long maxsize = 107374182400L;
-                if (size > maxsize) {
-                    ResponseUtils.outHtml(response, "文件过大");
-                } else {
                     //读取文件   输入流
                     inputStream = file.getInputStream();
                     fileName = file.getOriginalFilename();
@@ -490,7 +485,7 @@ public class TeacherController {
                         ResponseUtils.outJson(response, uploadData);
                         //                        return uploadData;
                     }
-                }
+
 
             }
         } catch (IOException e) {
@@ -506,7 +501,6 @@ public class TeacherController {
         }
 
 
-        return null;
     }
     //    查看作业
 
