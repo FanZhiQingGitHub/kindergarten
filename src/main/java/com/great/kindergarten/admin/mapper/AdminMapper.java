@@ -67,7 +67,6 @@ public interface AdminMapper
 	//一级菜单
 	public List<TblMenu> findStairMenu();
 
-	//	public List<TblMenuInfo> findAllMenu(HashMap<String, Object> condition, RowBounds rowBounds);
 
 	//菜单管理
 	public List<TblMenu> findAllMenu(HashMap<String, Object> condition, RowBounds rowBounds);

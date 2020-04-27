@@ -298,11 +298,9 @@
 					var path = $("#path").val();
 					layer.open({
 						type: 2,
-						area: ['45%', '55%'],
-						// content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+						area: ['35%', '45%'],
 						content: path+"/admin/toUrl/reUploadPictureBook", //数组第二项即吸附元素选择器或者DOM
 						title: ['重新上传绘本信息','font-size:18px'],
-						// btn: ['保存','返回'],
 						btnAlign: 'c',
 						closeBtn:0,
 						skin: 'demo-class',

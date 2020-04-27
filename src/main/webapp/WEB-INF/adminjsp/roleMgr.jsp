@@ -100,15 +100,24 @@
 	<table id="roleInfo" lay-filter="role" class="layui-table-cell" style="margin-top: 3%"></table>
 	<div id="type-content" style="display: none;">
 		<form class="layui-form" action="">
-			<div class="layui-form-item" style="margin-top: 3%">
-				<span class="layui-form-label" style="width:auto;margin-top: 2%">角色名称：</span>
+			<div class="layui-form-item" style="margin-top: 4%">
+				<span class="layui-form-label" style="width:28%;">角色名称：</span>
 				<div class="layui-inline">
 					<input type="text" id="roleName2" name="roleName2" placeholder="请输入角色名称" value=""
-					       autocomplete="off" class="layui-input" style="width: 120%;margin-top: 5%" lay-verify="required">
+					       autocomplete="off" class="layui-input" style="width: 120%;" lay-verify="required" readonly>
+				</div>
+			</div>
+			<div class="layui-form-item" style="margin-top: 3%">
+				<span class="layui-form-label" style="width:28%;">新角色名称：</span>
+				<div class="layui-inline">
+					<input type="text" id="roleName3" name="roleName3" placeholder="请输入新角色名称" value=""
+					       autocomplete="off" class="layui-input" style="width: 120%;" lay-verify="required">
 				</div>
 			</div>
 		</form>
 	</div>
+
+
 	<script type="text/html" id="barOption">
 		{{#  if(d.rolename != '超级管理员') { }}
 		<a type="button" class="layui-btn layui-btn-normal" lay-event="update" style="text-align: -moz-center"><span class="sp"><i class="layui-icon">&#xe642;修改</i></span></a>
@@ -172,29 +181,50 @@
 				data = obj.data; //获得当前行数据
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if (layEvent === 'update') {
-					layer.prompt({
-							formType: 0,
-							id: "remarksPrompt",
-							value: '',
-							title: '修改角色名字信息'
-						},
-						function (value, index, elem) {
-							layer.close(index);
-							//向服务端发送修改指令
-							$.ajax({
-								url: path + "/admin/updateRoleInfo",
-								type: "post",
-								data: {"roleid": data.roleid, "rolename": value},
-								dataType: "text",
-								success: function (result) {
-									if (result == "success") {
-										layer.alert('角色名字修改成功！',{icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
-									} else {
-										layer.alert('角色名字修改失败！',{icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+					layer.open({
+						type:1
+						,title:['修改角色名称','font-size:18px']
+						,area:['30%','300px']
+						,shade:0.3
+						,closeBtn:0
+						,btn:['保存','取消']
+						,skin: 'demo-class'
+						,content: $("#type-content")
+						,success : function(layero, index) {
+							$("#roleName2").val(data.rolename);
+						}
+						,btn1: function (index) {
+							var name = $("#roleName3").val();
+							if(name == 0)
+							{
+								layer.msg("角色名不能为空！",{icon:2});
+							}
+							else if(!name.match(/^[\u4e00-\u9fa5]{2,20}$/))
+							{
+								layer.msg("角色名只能是2-20位中文字符！",{icon:2});
+							}
+							else{
+								$.ajax({
+									url: path + "/admin/updateRoleInfo",
+									type: "post",
+									data: {"roleid": data.roleid, "rolename": name},
+									dataType: "text",
+									success: function (result) {
+										if (result == "success") {
+											layer.close(index);
+											layer.alert('角色名字修改成功！',{icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+
+											tableIns.reload();    //状态修改之后,刷新表格
+										} else {
+											layer.alert('角色名字修改失败！',{icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+										}
 									}
-									tableIns.reload();    //状态修改之后,刷新表格
-								}
-						});
+								});
+							}
+						}
+						,btn2:function (index) {
+							$("#roleName3").val("")
+						}
 					});
 				}else if(layEvent === 'delete'){
 					layer.confirm("确定要删除该角色信息？",{icon:3,title:'温馨提示'},function (index) {

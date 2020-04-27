@@ -285,7 +285,7 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("密码重置成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','200px'],skin:'demo'});
+									layer.alert("密码重置成功,新密码：123456！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','200px'],skin:'demo'});
 									tableIns.reload();
 								}else{
 									layer.alert("密码重置失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','200px'],skin:'demo'});
