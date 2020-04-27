@@ -89,7 +89,7 @@
 				<div class="demoTable" >
 					<div style="padding-bottom: 15px;">
 						<div class="layui-upload" >
-							<button type="button" class="layui-btn" id="save" style="margin-left: 10%"> <span class="sp">保存</span></button>
+							<button type="button" class="layui-btn" id="save" style="margin-left: 20%"> <span class="sp">保存</span></button>
 							<button type="button" class="layui-btn" id="cancel"><span class="sp">取消</span></button>
 						</div>
 					</div>
@@ -109,6 +109,11 @@
 			, table = layui.table
 			, $ = layui.jquery
 			,upload = layui.upload;
+		$("#uploadBook").mouseover(function() {
+			layer.tips('温馨提示：点击按钮+选择要上传的图片，再点击保存', this, {
+				tips: [1, "#8f9199"]
+			});
+		});
 		var path = $("#path").val();
 		upload.render({
 			elem: '#uploadBook' //绑定元素

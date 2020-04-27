@@ -139,7 +139,7 @@
                         datatype:'text',
                         success:function (data) {
                             if (data == "success"){
-                                layer.alert("菜单配置成功，请重新登录！",{icon:6},function (index) {
+                                layer.alert("菜单配置成功！",{icon:6},function (index) {
                                     layer.close(index);
                                     window.parent.location.reload();
                                     parent.layer.close(index);
