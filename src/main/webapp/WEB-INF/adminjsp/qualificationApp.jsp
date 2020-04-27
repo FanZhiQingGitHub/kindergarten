@@ -35,7 +35,7 @@
 		}
 		h2{
 			text-align: center;
-			margin-top: 2%;
+			margin-top: 1.5%;
 		}
 		body .demo-class .layui-layer-btn{
 			width: auto;
@@ -100,9 +100,17 @@
 							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="margin: -27% 65%;">
 						</div>
 					</div>
+				</div>
+				<div class="layui-form-item" style="margin-left: 6%">
 					<div class="layui-inline" >
-						<span class="layui-form-label" style="margin-left: 35%">状态：</span>
-						<div class="layui-input-inline" style="margin: -13% 75%;">
+						<span class="layui-form-label" style="width: auto">园所名称：</span>
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" >
+						</div>
+					</div>
+					<div class="layui-inline" >
+						<span class="layui-form-label" style="margin-left: 5%">状态：</span>
+						<div class="layui-input-inline" >
 							<select name="sel" id="sel" lay-filter="mySelect" lay-verify="" >
 								<option value="请选择" >请选择</option>
 								<option value="未审批" >未审批</option>
@@ -110,17 +118,10 @@
 								<option value="不通过" >不通过</option>
 							</select>
 						</div>
+						<button class="layui-btn" data-type="reload" style="margin: -10% 110%;" ><i class="layui-icon">&#xe615;查询</i></button>
 					</div>
 				</div>
-				<div class="layui-form-item" style="margin-left: 6%">
-					<div class="layui-inline">
-						<span class="layui-form-label" style="width: auto">园所名称：</span>
-						<div class="layui-input-inline">
-							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" >
-						</div>
-					</div>
-					<button class="layui-btn" data-type="reload" style="margin-left: 8.5%;" ><i class="layui-icon">&#xe615;查询</i></button>
-				</div>
+
 			</div>
 		</form>
 	</div>
@@ -226,17 +227,16 @@
 								}
 							});
 						}
-						,btn1:function () {
+						,btn1:function (index) {
 							$.ajax({
 								url:path+"/admin/checkQualify",
 								type:'POST',
 								dataType:'text',
 								data:{"kinderid":data.kinderid},
-								success:function (result,index) {
+								success:function (result) {
 									if (result == 'success')
 									{
-										index = parent.layer.getFrameIndex(window.name);
-										parent.layer.close(index); //再执行关闭
+										layer.close(index);
 										layer.alert('园所申请审批已通过！',{icon:6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 										tableIns.reload();
 
@@ -250,17 +250,16 @@
 								}
 							});
 						}
-						,btn2:function () {
+						,btn2:function (index) {
 							$.ajax({
 								url:path+"/admin/reject",
 								type:'POST',
 								dataType:'text',
 								data:{"kinderid":data.kinderid},
-								success:function (result,index) {
+								success:function (result) {
 									if (result == 'success')
 									{
-										index = parent.layer.getFrameIndex(window.name);
-										parent.layer.close(index); //再执行关闭
+										layer.close(index);
 										layer.alert('园所申请审批未通过！',{icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 										tableIns.reload();
 
@@ -274,9 +273,8 @@
 								}
 							});
 						},
-						btn3:function (){
-							var index = parent.layer.getFrameIndex(window.name);
-							parent.layer.close(index); //再执行关闭
+						btn3:function (index){
+							layer.close(index); //再执行关闭
 						}
 					});
 				}

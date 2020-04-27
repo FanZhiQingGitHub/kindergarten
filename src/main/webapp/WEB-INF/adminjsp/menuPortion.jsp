@@ -13,14 +13,34 @@
     <link rel="stylesheet" href=<%=path+"/layui/css/layui.css" %>>
     <script src=<%=path + "/layui/layui.js"%>></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
+        body{
+            font-size: 140%;
         }
 
-        html, body {
-            width: 100%;
-            height: 100%;
+        a{
+            font-size: 140%;
+        }
+
+        h2{
+            margin-top: 1.5%;
+            text-align: center;
+        }
+        body .demo-class .layui-layer-btn{
+            width: auto;
+            height: 12%;
+            text-align: center;
+            font-Size:16px
+        }
+
+        body .demo2 .layui-layer-btn{
+            width: auto;
+            height: 12%;
+            text-align: center;
+            font-Size:20px
+        }
+
+        .layui-table-tips{
+            font-size: 16px;
         }
     </style>
 </head>
@@ -28,15 +48,15 @@
     <input type="hidden" id="path" value="<%=path%>">
     <input type="hidden" id="rid" value="">
     <div class="layui-btn-container">
-        <button type="button" class="layui-btn layui-btn-radius layui-btn-normal showTree" style="margin-left: 20%;margin-top: 3%;font-size: 18px;">
+        <button type="button" class="layui-btn layui-btn-radius layui-btn-normal showTree" style="margin-left: 12%;margin-top: 3%;font-size: 22px;">
             显示所有菜单
         </button>
-        <button type="button" class="layui-btn layui-btn-radius layui-btn-primary confirm" style="margin-top: 3%;font-size: 18px;" id="bu1" disabled="true">确定修改权限</button>
-        <button type="button" class="layui-btn layui-btn-radius layui-btn-primary " style="margin-top: 3%;font-size: 18px;" id="bu2" >返回</button>
+        <button type="button" class="layui-btn layui-btn-radius layui-btn-primary confirm" style="margin-top: 3%;font-size: 22px;" id="bu1" disabled="true">确定修改权限</button>
+        <button type="button" class="layui-btn layui-btn-radius layui-btn-primary " style="margin-top: 3%;font-size: 22px;" id="bu2" >返回</button>
         <hr style="color: whitesmoke">
     </div>
 
-    <div id="menuTree" class="demo-tree-more" style="font-size: 18px"></div>
+    <div id="menuTree" class="demo-tree-more" style="font-size: 22px"></div>
 
 <script>
     layui.use(['tree', 'util','jquery','layer','layedit','laydate'], function () {
@@ -46,6 +66,11 @@
             , laydate = layui.laydate
             , tree = layui.tree;
         $ = layui.jquery;
+        $(".showTree").mouseover(function() {
+            layer.tips('温馨提示：点击该按钮显示已分配与未分配菜单信息，配置后点击确认修改按钮完成权限分配！', this, {
+                tips: [1, "#8f9199"]
+            });
+        });
         var path = $("#path").val();
         var rid = null;
         $('body').on('click', '.showTree', function () {

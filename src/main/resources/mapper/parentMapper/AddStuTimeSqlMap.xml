@@ -50,11 +50,9 @@
 
     <!--    新增日期区间信息,用于查询-->
     <insert id="addDateInfo" parameterType="java.util.List">
-        insert into
-        tbl_date(monday,sunday)
-        values
+        insert into tbl_date(monday,sunday,kid)values
         <foreach collection="list" item="i" index="index" separator=",">
-            (#{i.monday},#{i.sunday})
+            (#{i.monday},#{i.sunday},#{i.kid})
         </foreach>
     </insert>
 

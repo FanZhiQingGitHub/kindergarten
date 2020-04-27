@@ -9,6 +9,7 @@ public class TblDate {
     private Integer dateid;
     private Date monday;
     private Date sunday;
+    private Integer kid;
 
     private TblStutime tblStutime;
     private Integer timeamid;
@@ -29,10 +30,11 @@ public class TblDate {
     public TblDate() {
     }
 
-    public TblDate(Integer dateid, Date monday, Date sunday, Integer timeamid, Integer studentid, String studentname, String studentsex, Integer teacherid, String teachername, Integer classid, String classname) {
+    public TblDate(Integer dateid, Date monday, Date sunday, Integer kid,Integer timeamid, Integer studentid, String studentname, String studentsex, Integer teacherid, String teachername, Integer classid, String classname) {
         this.dateid = dateid;
         this.monday = monday;
         this.sunday = sunday;
+        this.kid = kid;
         this.timeamid = timeamid;
         this.studentid = studentid;
         this.studentname = studentname;
@@ -163,12 +165,21 @@ public class TblDate {
         this.classname = classname;
     }
 
+    public Integer getKid() {
+        return kid;
+    }
+
+    public void setKid(Integer kid) {
+        this.kid = kid;
+    }
+
     @Override
     public String toString() {
         return "TblDate{" +
                 "dateid=" + dateid +
                 ", monday=" + monday +
                 ", sunday=" + sunday +
+                ", kid=" + kid +
                 ", tblStutime=" + tblStutime +
                 ", timeamid=" + timeamid +
                 ", tblStudent=" + tblStudent +

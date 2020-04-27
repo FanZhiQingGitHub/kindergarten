@@ -15,7 +15,7 @@
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
 		h2 {
-			margin-top: 2%;
+			margin-top: 1.5%;
 			text-align: center;
 		}
 
@@ -234,8 +234,8 @@
 			, cols: [[ //表头
 				{field: 'parentId', title: '家长编号', align: 'center', width: 138, sort: true, fixed: 'left'}
 				, {field: 'parentName', title: '家长名称', align: 'center', width: 141}
-				, {field: 'parentAdd', title: '住址', align: 'center', width: 287}
-				, {field: 'parentPhone', title: '手机号', align: 'center', width: 189}
+				, {field: 'parentAdd', title: '住址', align: 'center', width: 266}
+				, {field: 'parentPhone', title: '手机号', align: 'center', width: 184}
 				, {field: 'parentJob', title: '职业', align: 'center', width: 123}
 				, {
 					field: 'parentRegTime', title: '注册时间', align: 'center', width: 243

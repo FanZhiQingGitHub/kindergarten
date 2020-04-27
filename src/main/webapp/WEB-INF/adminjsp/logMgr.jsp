@@ -20,7 +20,7 @@
 
 		h2{
 			text-align: center;
-			margin-top: 2%;
+			margin-top: 1.5%;
 		}
 
 		body{

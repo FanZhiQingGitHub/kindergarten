@@ -16,7 +16,7 @@
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
 		h2 {
-			margin-top: 2%;
+			margin-top: 1.5%;
 			text-align: center;
 		}
 
@@ -262,8 +262,8 @@
 			, limit: 5
 			, limits: [5, 10]
 			, cols: [[ //表头
-				{field: 'adminid', title: '编号', align: 'center', width: 130, sort: true, fixed: 'left'}
-				,{field: 'adminname', title: '账号名称', align: 'center', width: 150}
+				{field: 'adminid', title: '编号', align: 'center', width: 121, sort: true, fixed: 'left'}
+				,{field: 'adminname', title: '账号名称', align: 'center', width: 138}
 				,{field: 'adminsex', title: '性别', align: 'center', width: 120}
 				,{field: 'adminphone', title: '手机号', align: 'center', width: 170}
 				,{field: 'adminheadurl', title: '头像地址', align: 'center', width: 323}
@@ -366,8 +366,8 @@
 									dataType: "text",
 									success: function (result) {
 										if (result == "success") {
-											layer.alert('修改成功！', {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','200px'],skin:'demo'});
 											layer.close(index);
+											layer.alert('修改成功！', {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','200px'],skin:'demo'});
 											tableIns.reload();    //状态修改之后,刷新表格
 										} else {
 											layer.alert('修改失败！', {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','200px'],skin:'demo'});
@@ -383,6 +383,7 @@
 							$("#adminname1").val("");
 							$("#adminphone1").val("");
 							$("#adminpwd1").val("");
+							layer.close(index);
 						}
 					});
 				}else if(layEvent === 'delete'){

@@ -15,7 +15,7 @@
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
 		h2 {
-			margin-top: 2%;
+			margin-top: 1.5%;
 			text-align: center;
 		}
 
@@ -237,7 +237,7 @@
 			, cols: [[ //表头
 				{field: 'rectorid', title: '园长编号', align: 'center', width: 133, sort: true, fixed: 'left'}
 				, {field: 'rectorname', title: '园长名称', align: 'center', width: 128}
-				, {field: 'rectoradd', title: '园长住址', align: 'center', width: 340}
+				, {field: 'rectoradd', title: '园长住址', align: 'center', width: 314}
 				, {field: 'rectorphone', title: '手机号', align: 'center', width: 164}
 				, {
 					field: 'rectorregtime', title: '入职时间', align: 'center', width: 223

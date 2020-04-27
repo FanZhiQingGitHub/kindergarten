@@ -9,6 +9,9 @@
         select kinderid from tbl_kinder where kindername = #{kindername}
     </select>
 
+    <select id="findExistMealDate" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from tbl_meal me where me.mealstarttime =#{mealstarttime} and me.mealendtime =#{mealendtime}
+    </select>
 
     <!--    新增膳食表信息-->
     <insert id="addMealInfo" parameterType="java.util.List">

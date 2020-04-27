@@ -212,7 +212,7 @@
 						upload.render({
 							elem: body.find("#homeWorkSubmitBtn"),
 							accept: 'file'
-							,size:10000 //此处设为最大100M
+							,size:200000 //此处设为最大100M
 							,url: path+'/parent/upload?'+upLoadMsg//上传接口
 							,before: function(obj){
 								layer.load(); //上传loading
@@ -220,8 +220,11 @@
 							}
 							,done: function(res, index, upload){
 								if (res.code==0){
-									layer.confirm(" 上传成功");
 									layer.close(index);
+									if (layer.confirm("上传成功")) {
+										//刷新表格
+										window.location.reload();
+									}else {}
 									//刷新表格
 									window.location.reload();
 								}

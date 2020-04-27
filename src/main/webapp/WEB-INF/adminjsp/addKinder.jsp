@@ -32,7 +32,6 @@
         }
         #hh1 {
             font-weight: bold;
-            /*font-size: 20px;*/
             margin-top: 1%;
             text-align: center;
             font-family: 楷体;
