@@ -63,11 +63,11 @@ public class TeacherSystemLogAspect {
         //getDeclaringTypeName: 返回方法所在的包名和类名
         //getname(): 返回方法名
         String methodName = joinPoint.getSignature().getName();
-	    Object result =null;
+        Object result = null;
         try {
             //ProceedingJoinPoint 执行proceed方法的作用是让目标方法执行
-	        //获取到返回值
-	        result  =  joinPoint.proceed();
+            //获取到返回值
+            result = joinPoint.proceed();
             long end = System.currentTimeMillis();
             if (logger.isInfoEnabled()) {
                 logger.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms!");
@@ -131,30 +131,27 @@ public class TeacherSystemLogAspect {
             log.setOperatetype(operationType);
             log.setOperateip(ip);
             log.setOperateresult("正常");
-            if(teachername != null)
-            {
+            if (teachername != null) {
                 log.setOperateor(teachername);
-            }else{
+                System.out.println("日志记录时间" + new Date());
+                log.setOperatetime(new Date());
+                //保存数据库
+                Integer num = teacherService.addLog(log);
+                if (num > 0) {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知结束=====");
+                } else {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知异常=====");
+                }
+            } else {
                 log.setOperateor("无");
             }
-            System.out.println("日志记录时间"+new Date());
-            log.setOperatetime(new Date());
 
-            //保存数据库
-            Integer num = teacherService.addLog(log);
-            if(num>0){
-                System.out.println(log);
-                System.out.println("=====controller后置通知结束=====");
-            }else {
-                System.out.println(log);
-                System.out.println("=====controller后置通知异常=====");
-            }
         } catch (Exception e) {
             //记录本地异常日志
             logger.error("==后置通知异常==");
             logger.error("异常信息:{}------" + e.getMessage());
-
-
             throw e;
         }
     }
@@ -185,7 +182,6 @@ public class TeacherSystemLogAspect {
         String ip = addr.getHostAddress();
 
         System.out.println("异常通知开始------------------------------------------");
-
 
 
         String params = "";
@@ -227,23 +223,22 @@ public class TeacherSystemLogAspect {
             log.setOperatetype(operationType);
             log.setOperateip(ip);
             log.setOperateresult("异常");
-            if(teachername != null)
-            {
+            if (teachername != null) {
                 log.setOperateor(teachername);
-            }else{
+                System.out.println("日志记录时间" + new Date());
+                log.setOperatetime(new Date());
+                //保存数据库
+                System.out.println("log="+log);
+                Integer num = teacherService.addLog(log);
+                if (num > 0) {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知结束=====");
+                } else {
+                    System.out.println(log);
+                    System.out.println("=====controller后置通知异常=====");
+                }
+            } else {
                 log.setOperateor("无");
-            }
-            System.out.println("日志记录时间"+new Date());
-            log.setOperatetime(new Date());
-
-            //保存数据库
-            Integer num = teacherService.addLog(log);
-            if(num>0){
-                System.out.println(log);
-                System.out.println("=====controller后置通知结束=====");
-            }else {
-                System.out.println(log);
-                System.out.println("=====controller后置通知异常=====");
             }
         } catch (Exception ex) {
             //记录本地异常日志
