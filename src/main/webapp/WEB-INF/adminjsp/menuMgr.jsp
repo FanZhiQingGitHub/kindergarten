@@ -359,12 +359,7 @@
 					else if(!menuName.match(/^[\u4e00-\u9fa5]{2,20}$/)){
 						layer.msg("请输入至少2位中文字符", {icon: 2});
 					}
-					else if(pName == 0){
-						layer.msg("上级菜单不能为空",{icon: 2})
-					}
-					else if(!pName.match(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/)){
-						layer.msg("请输入至少2位中文字符", {icon: 2});
-					}else if(menuUrl == 0)
+					else if(menuUrl == 0)
 					{
 						layer.msg("菜单URL不能为空", {icon: 2});
 					}else if( sort == 0)

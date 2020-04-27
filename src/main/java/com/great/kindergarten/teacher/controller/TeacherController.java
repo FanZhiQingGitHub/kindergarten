@@ -404,6 +404,9 @@ public class TeacherController {
     @RequestMapping(value = "/workRelease", produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public void workRelease(@RequestParam("file") MultipartFile file, String classname, HttpServletRequest request, HttpServletResponse response) {
+//	    TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
+//	    int cid = tblTeacher1.getCid();
+
         TblClass tblClass = new TblClass();
         OutputStream os = null;
         InputStream inputStream = null;
@@ -424,14 +427,14 @@ public class TeacherController {
         //获取当前时间
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String nowDay = df.format(new Date());
-        //实际路径
-//        String path = request.getServletContext().getRealPath("/workRelease/" + classname + "/" + nowDay + "/" + workreleaseid);
-	    String path = request.getServletContext().getRealPath("/workRelease/");
+
+
 
         try {
             //根据班级名查找id
             Integer classid = teacherService.findClassidByName(tblClass);
-            //判断班级不为空的情况下
+
+	         //判断班级不为空的情况下
             if (classid == null) {
                 //upload要求返回的数据格式
                 Map<String, Object> uploadData = new HashMap<String, Object>(5);
@@ -443,8 +446,10 @@ public class TeacherController {
                 ResponseUtils.outJson(response, uploadData);
 
             } else {
+	            //实际路径
+            	String path = request.getServletContext().getRealPath("/workRelease/" + classid + "/" + nowDay + "/" + workreleaseid);
 
-                    //读取文件   输入流
+	            //读取文件   输入流
                     inputStream = file.getInputStream();
                     fileName = file.getOriginalFilename();
 
@@ -470,7 +475,7 @@ public class TeacherController {
                     }
                     //添加数据到数据表
                     tblWorkrelease.setWorkreleasedetail(fileName);
-                    tblWorkrelease.setWorklocation("workRelease@" + classname + "@@" + nowDay + "@@@" + workreleaseid + "@@@@" + fileName);
+                    tblWorkrelease.setWorklocation("workRelease@" + classid + "@@" + nowDay + "@@@" + workreleaseid + "@@@@" + fileName);
 
                     tblWorkrelease.setCid(classid);
                     Boolean flag = teacherService.addFileInfo(tblWorkrelease);
@@ -1075,7 +1080,7 @@ public class TeacherController {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String nowDay = df.format(new Date());
 //        获取真实路径
-        filePath = request.getServletContext().getRealPath("/photos/" + className + "/" + nowDay);
+        filePath = request.getServletContext().getRealPath("/photos/" + cid + "/" + nowDay);
         Long size = file.getSize();
         Long maxsize = 107374182400L;
         if (size > maxsize) {
@@ -1107,7 +1112,7 @@ public class TeacherController {
             tblPhoto.setCid(cid);
             tblPhoto.setPhotodetail(photodetail);
             tblPhoto.setPhotoname(fileName);
-            tblPhoto.setPhotourl("photos/" + className + "/" + nowDay + "/" + fileName);
+            tblPhoto.setPhotourl("photos/" + cid + "/" + nowDay + "/" + fileName);
             System.out.println("tblPhoto" + tblPhoto);
 
             Boolean flag = teacherService.uploadPhoto(tblPhoto);
