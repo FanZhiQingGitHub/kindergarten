@@ -341,42 +341,46 @@
 
         });
         form.on('submit(formDemo)', function (data) {
-            var loadingIndex = '';
+            var loadingIndex = layer.load(3, {
+                shade: [0.2, 'gray'], //0.5透明度的灰色背景
+                content: '登录中，请稍后......',
+                success: function (layero) {
+                    layero.find('.layui-layer-content').css({
+                        'padding-top': '39px',
+                        'width': '150px',
+                        'color': '#eb7350'
+                    });
+                }
+            });
             $.ajax({
                 url: path + "/director/directorLogin",
                 async: true,
                 type: "post",
                 data: data.field,
                 datatype: "text",
-                beforeSend: function () {
-                    loadingIndex = layer.load(3, {
-                        shade: [0.2, 'gray'], //0.5透明度的灰色背景
-                        content: '登录中，请稍后......',
-                        success: function (layero) {
-                            layero.find('.layui-layer-content').css({
-                                'padding-top': '39px',
-                                'width': '150px',
-                                'color': '#eb7350'
-                            });
-                        }
-                    });
-                },
                 success: function (msg) {
                     if (msg === "success") {
-                        location.href = path + "/director/toUrl/directorMain";
+                        layer.close(loadingIndex);
+                        layer.msg("欢迎您，登录成功！", {icon: 6});
+                        setInterval(function () {
+                            location.href = path + "/director/toUrl/directorMain";
+                            clearInterval(intervalId);
+                        }, 1000);
                     } else if (msg === "error") {
-                        layer.alert("账号或密码错误！", {icon: 2});
+                        layer.close(loadingIndex);
+                        layer.msg("账号或密码错误！", {icon: 2});
                     } else if (msg === "codeerror") {
-                        layer.alert("验证码错误！", {icon: 2});
+                        layer.close(loadingIndex);
+                        layer.msg("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/director/loginCode?" +Math.random();
                     } else if (msg === "notmen") {
-                        layer.alert("该用户已被禁用或者不存在！", {icon: 2});
+                        layer.close(loadingIndex);
+                        layer.msg("该用户已被禁用或者不存在！", {icon: 2});
                     }
                 }, error: function (msg) {
-                    layer.msg("网络繁忙！", {icon: 2});
-                },complete: function () {
                     layer.close(loadingIndex);
+                    layer.msg("网络繁忙！", {icon: 2});
                 }
             });
         });

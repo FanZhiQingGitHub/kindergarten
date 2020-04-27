@@ -36,7 +36,7 @@ public class TblHealther {
     public TblHealther() {
     }
 
-    public TblHealther(Integer healtherid, String healthername, String healtherpwd, String healthersex, Integer healtherage, String healtheradd, String healtherphone, Date healtherregtime, String healtherstatus, Integer rid) {
+    public TblHealther(Integer healtherid, String healthername, String healtherpwd, String healthersex, Integer healtherage, String healtheradd, String healtherphone, Date healtherregtime, String healtherstatus, Integer rid,Integer kid) {
         this.healtherid = healtherid;
         this.healthername = healthername;
         this.healtherpwd = healtherpwd;
@@ -47,7 +47,9 @@ public class TblHealther {
         this.healtherregtime = healtherregtime;
         this.healtherstatus = healtherstatus;
         this.rid = rid;
+        this.kid = kid;
     }
+
 
     public Integer getHealtherid() {
         return healtherid;
@@ -129,6 +131,38 @@ public class TblHealther {
         this.rid = rid;
     }
 
+    public Integer getKid() {
+        return kid;
+    }
+
+    public void setKid(Integer kid) {
+        this.kid = kid;
+    }
+
+    public TblKinder getTblKinder() {
+        return tblKinder;
+    }
+
+    public void setTblKinder(TblKinder tblKinder) {
+        this.tblKinder = tblKinder;
+    }
+
+    public Integer getKinderid() {
+        return kinderid;
+    }
+
+    public void setKinderid(Integer kinderid) {
+        this.kinderid = kinderid;
+    }
+
+    public String getKindername() {
+        return kindername;
+    }
+
+    public void setKindername(String kindername) {
+        this.kindername = kindername;
+    }
+
     public String getCode() {
         return code;
     }
@@ -137,64 +171,20 @@ public class TblHealther {
         this.code = code;
     }
 
-    public String getTime1()
-    {
+    public String getTime1() {
         return time1;
     }
 
-    public void setTime1(String time1)
-    {
+    public void setTime1(String time1) {
         this.time1 = time1;
     }
 
-    public String getTime2()
-    {
+    public String getTime2() {
         return time2;
     }
 
-    public void setTime2(String time2)
-    {
+    public void setTime2(String time2) {
         this.time2 = time2;
-    }
-
-    public Integer getKid()
-    {
-        return kid;
-    }
-
-    public void setKid(Integer kid)
-    {
-        this.kid = kid;
-    }
-
-    public TblKinder getTblKinder()
-    {
-        return tblKinder;
-    }
-
-    public void setTblKinder(TblKinder tblKinder)
-    {
-        this.tblKinder = tblKinder;
-    }
-
-    public Integer getKinderid()
-    {
-        return kinderid;
-    }
-
-    public void setKinderid(Integer kinderid)
-    {
-        this.kinderid = kinderid;
-    }
-
-    public String getKindername()
-    {
-        return kindername;
-    }
-
-    public void setKindername(String kindername)
-    {
-        this.kindername = kindername;
     }
 
     @Override
@@ -210,7 +200,13 @@ public class TblHealther {
                 ", healtherregtime=" + healtherregtime +
                 ", healtherstatus='" + healtherstatus + '\'' +
                 ", rid=" + rid +
+                ", kid=" + kid +
+                ", tblKinder=" + tblKinder +
+                ", kinderid=" + kinderid +
+                ", kindername='" + kindername + '\'' +
                 ", code='" + code + '\'' +
+                ", time1='" + time1 + '\'' +
+                ", time2='" + time2 + '\'' +
                 '}';
     }
 }
