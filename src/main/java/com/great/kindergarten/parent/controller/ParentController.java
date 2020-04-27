@@ -552,6 +552,9 @@ public class ParentController {
         Integer classId = Integer.valueOf(request.getParameter("classId"));
         //设置查找人id
         searchCondition.setParentId(parent.getParentId());
+
+	    System.out.println(searchCondition.getName());
+
         //返回查找的结果
         TableDate tableDate =  parentService.parentSafetyTestList(searchCondition,classId);
         List<TblSafetyvideo> tblSafetyvideoList = (List<TblSafetyvideo>) tableDate.getData();
