@@ -129,6 +129,8 @@
 			if (nowPage==1){
 				layer.msg("已经没有上一页了哦");
 			} else {
+
+				layer.load();
 				nowPage-=1;
 				showPageDetail();
 			}
@@ -141,6 +143,7 @@
 			if (nowPage==totalPage){
 				layer.msg("已经没有下一页了哦");
 			} else {
+				layer.load();
 				nowPage+=1;
 				showPageDetail();
 			}
@@ -170,6 +173,8 @@
 
 				totalPage  =pageInfo.totalRecords;
 
+				//关闭转动
+				layer.closeAll('loading'); //关闭loading
 
 			}, error: function (data) {
 				layer.alert("网络繁忙！", {icon: 2});
