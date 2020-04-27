@@ -413,7 +413,6 @@
                 },
                 complete: function () {
                     layer.close(loadingIndex);
-                    layer.msg("欢迎您，登录成功！", {icon: 6});
                 }
             });
         });
