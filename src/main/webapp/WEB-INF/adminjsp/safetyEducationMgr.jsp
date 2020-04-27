@@ -19,7 +19,7 @@
 		}
 		h2{
 			text-align: center;
-			margin-top: 1%;
+			margin-top: 1.5%;
 		}
 		.layui-input{
 			width:120%;
@@ -96,14 +96,14 @@
 					<button class="layui-btn" data-type="reload" style="margin-left: 10%"><i class="layui-icon">&#xe615;查询</i></button>
 					<button class="layui-btn btn-add btn-default" id="btn-add" style=""><i class="layui-icon">&#xe681;上传</i></button>
 				</div>
-				<div class="layui-form-item" style="margin-left: 6%;">
-					<div class="layui-inline">
-						<span class="layui-form-label" style="width: auto">园所名称：</span>
-						<div class="layui-input-inline">
-							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" style=" ">
-						</div>
-					</div>
-				</div>
+<%--				<div class="layui-form-item" style="margin-left: 6%;">--%>
+<%--					<div class="layui-inline">--%>
+<%--						<span class="layui-form-label" style="width: auto">园所名称：</span>--%>
+<%--						<div class="layui-input-inline">--%>
+<%--							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" style=" ">--%>
+<%--						</div>--%>
+<%--					</div>--%>
+<%--				</div>--%>
 			</div>
 		</form>
 	</div>

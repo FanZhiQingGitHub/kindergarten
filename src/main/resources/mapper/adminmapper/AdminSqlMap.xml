@@ -300,6 +300,9 @@
         select * from tbl_admin where adminname = #{adminname}
     </select>
 
+
+
+
     <update id="updateAdminPwd" parameterType="java.util.Map">
         update tbl_admin set adminpwd = #{adminpwd} where adminid = #{adminid};
     </update>
@@ -456,6 +459,9 @@
     <update id="updateRector">
         update tbl_rector
         <set>
+            <if test="rectorname != '' and rectorname != null">
+                rectorname = #{rectorname},
+            </if>
             <if test="rectorpwd != '' and rectorpwd != null">
                 rectorpwd = #{rectorpwd},
             </if>
@@ -537,6 +543,9 @@
     <update id="updateParent">
         update tbl_parent
         <set>
+            <if test="parentName != '' and parentName != null">
+                parentname = #{parentName},
+            </if>
             <if test="parentPwd != '' and parentPwd != null">
                 parentpwd = #{parentPwd},
             </if>
@@ -583,6 +592,9 @@
     <update id="updateHealther">
         update tbl_healther
         <set>
+            <if test="healthername != '' and healthername != null">
+                healthername = #{healthername},
+            </if>
             <if test="healtherpwd != '' and healtherpwd != null">
                 healtherpwd = #{healtherpwd},
             </if>
@@ -624,6 +636,9 @@
     <update id="updateSecurity">
         update tbl_security
         <set>
+            <if test="securityname != '' and securityname != null">
+                securityname = #{securityname},
+            </if>
             <if test="securitypwd != '' and securitypwd != null">
                 securitypwd = #{securitypwd},
             </if>
@@ -765,6 +780,9 @@
     <update id="updateAdminInfo">
         update tbl_admin
         <set>
+            <if test="adminname != '' and adminname != null">
+                adminname = #{adminname},
+            </if>
             <if test="adminsex != '' and adminsex != null">
                 adminsex = #{adminsex},
             </if>
@@ -780,6 +798,9 @@
     <update id="updateAdminInfos">
         update tbl_admin
         <set>
+            <if test="adminname != '' and adminname != null">
+                adminname = #{adminname},
+            </if>
             <if test="adminsex != '' and adminsex != null">
                 adminsex = #{adminsex},
             </if>
@@ -811,6 +832,21 @@
     <!--密码重置-->
     <update id="resetAdminPwd" parameterType="java.util.Map">
         UPDATE tbl_admin SET adminpwd = 'e10adc3949ba59abbe56e057f20f883e' where adminname = #{adminname} and adminphone = #{adminphone};
+    </update>
+    <update id="updateReadImg">
+        update tbl_readmag
+        <set>
+            <if test="readmagname != '' and readmagname != null and readmagname != '请选择绘本'">
+                readmagname = #{readmagname},
+            </if>
+            <if test="readmagdetail != '' and readmagdetail != null ">
+                readmagdetail = #{readmagdetail},
+            </if>
+            <if test="readmagpage != null ">
+                readmagpage = #{readmagpage},
+            </if>
+        </set>
+        where readmagid = #{readmagid}
     </update>
 
     <!--园所信息-->
@@ -1532,7 +1568,7 @@
         order by s.studenttime desc
     </select>
 
-<!--    安全教育管理-->
+    <!--安全教育管理-->
     <resultMap id="VideoMap" type="com.great.kindergarten.commons.entity.TblSafetyvideo">
         <result column="safetyvideoid" property="safetyvideoid"></result>
         <result column="safetyvideoname" property="safetyvideoname"></result>
@@ -1768,20 +1804,14 @@
     <select id="findReadInfoByName" resultType="com.great.kindergarten.commons.entity.TblReadmag">
         select * from tbl_readmag
         <where>
-            readmagpage != 0
-            <if test="readmagname != '' and readmagname != null and readmagname != '请选择绘本'">
-                and readmagname = #{readmagname}
-            </if>
+            readmagpage != 0 and readmagname = #{readmagname}
         </where>
         order by readmagpage asc
     </select>
     <select id="findReadCountByName" resultType="java.lang.Integer">
         select count(*) from tbl_readmag
         <where>
-            readmagpage != 0
-            <if test="readmagname != '' and readmagname != null and readmagname != '请选择绘本'">
-                and readmagname = #{readmagname}
-            </if>
+            readmagpage != 0 and readmagname = #{readmagname}
         </where>
     </select>
 
@@ -1850,6 +1880,10 @@
 
     <select id="findRectorId" resultType="java.lang.Integer">
         select rectorid from tbl_rector where rectorname = #{rectorname} and rectorphone = #{rectorphone}
+    </select>
+
+    <select id="findRectorIdByName" resultType="java.lang.Integer">
+        select rectorid from tbl_rector where rectorname = #{rectorname}
     </select>
 
     <select id="checkMenuSort" resultType="java.lang.Integer">

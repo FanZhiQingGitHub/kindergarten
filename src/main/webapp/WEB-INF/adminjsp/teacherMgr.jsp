@@ -15,7 +15,7 @@
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
 		h2 {
-			margin-top: 2%;
+			margin-top: 1.5%;
 			text-align: center;
 		}
 
@@ -238,7 +238,7 @@
 			, cols: [[ //表头
 				{field: 'teacherid', title: '教师编号', align: 'center', width: 140, sort: true, fixed: 'left'}
 				, {field: 'teachername', title: '教师名称', align: 'center', width: 120}
-				, {field: 'teacheradd', title: '住址', align: 'center', width: 300}
+				, {field: 'teacheradd', title: '住址', align: 'center', width: 276}
 				, {field: 'teacherphone', title: '手机号', align: 'center', width: 178}
 				, {field: 'teacherjob', title: '职位', align: 'center', width: 110}
 				, {

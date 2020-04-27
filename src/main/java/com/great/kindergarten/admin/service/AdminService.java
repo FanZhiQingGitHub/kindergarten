@@ -363,6 +363,12 @@ public class AdminService {
 	{
 		return  adminMapper.findReadMagIdByName(readMagName);
 	}
+
+	public int updateReadImg(TblReadmag tblReadmag)
+	{
+		return adminMapper.updateReadImg(tblReadmag);
+	}
+
 	//权限管理
 	public List<TblRole> findRoleInfo()
 	{
@@ -475,6 +481,10 @@ public class AdminService {
 		return adminMapper.findRectorId(rectorname,rectorphone);
 	}
 
+	public Integer findRectorIdByName(String rectorname)
+	{
+		return adminMapper.findRectorIdByName(rectorname);
+	}
 
 	//教师管理
 	public List<TblTeacher> findAllTeacherInfo(HashMap<String, Object> condition, RowBounds rowBounds)

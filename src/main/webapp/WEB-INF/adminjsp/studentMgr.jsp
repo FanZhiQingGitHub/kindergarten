@@ -15,7 +15,7 @@
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
 		h2 {
-			margin-top: 2%;
+			margin-top: 1.5%;
 			text-align: center;
 		}
 

@@ -16,7 +16,7 @@
 	<style>
 		h2{
 			text-align: center;
-			margin-top: 2%;
+			margin-top: 1.5%;
 		}
 
 		body{
@@ -228,7 +228,7 @@
 						return d.supMenu == null ? '无':d.supMenu;
 					}}
 				, {field: 'sort', title: '排序', align: 'center', width: 180}
-				, {fixed: 'right', title: '操作', align: 'center', width: 400, toolbar: '#barOption'}
+				, {fixed: 'right', title: '操作', align: 'center', width: 398, toolbar: '#barOption'}
 			]]
 			, id: 'condition'
 			, parseData: function (res) { //res 即为原始返回的数据

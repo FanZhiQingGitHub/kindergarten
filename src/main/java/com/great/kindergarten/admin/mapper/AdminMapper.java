@@ -213,6 +213,9 @@ public interface AdminMapper
 
 	public int findReadCountById(Integer readmagid);
 
+	public int updateReadImg(TblReadmag tblReadmag);
+
+
 	//平台资讯
 	public List<TblPlatforminfo> findAllPlatFormInfo(HashMap<String, Object> condition, RowBounds rowBounds);
 
@@ -248,6 +251,8 @@ public interface AdminMapper
 	public Integer selectRectorName(String rectorname);
 
 	public Integer findRectorId(String rectorname,String rectorphone);
+
+	public Integer findRectorIdByName(String rectorname);
 
 	//教师管理
 	public List<TblTeacher> findAllTeacherInfo(HashMap<String, Object> condition, RowBounds rowBounds);

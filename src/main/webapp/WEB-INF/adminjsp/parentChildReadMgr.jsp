@@ -17,7 +17,7 @@
 	<style>
 
 		h2 {
-			margin-top: 2%;
+			margin-top: 1.5%;
 			text-align: center;
 		}
 		body{
@@ -102,7 +102,7 @@
 					<div class="layui-inline">
 						<span class="layui-form-label" style="width: auto">绘本名称：</span>
 						<div class="layui-input-inline">
-							<input type="text" class="layui-input" name="readMagName" id="readMagName" placeholder="请输入绘本名称" >
+							<input type="text" class="layui-input" name="readMagName0" id="readMagName0" placeholder="请输入绘本名称" >
 						</div>
 					</div>
 				</div>
@@ -175,7 +175,7 @@
 
 	<script type="text/html" id="barOption">
 		<button type="button" class="layui-btn layui-btn-sm" lay-event="detail" style="height: 40px"><span class="sp"><i class="layui-icon">&#xe642;查看绘本</i></span></button>
-		<button type="button" class="layui-btn layui-btn-sm" lay-event="reUpload" style="height: 40px"><span class="sp"><i class="layui-icon">&#xe642;重新上传</i></span></button>
+		<button type="button" class="layui-btn layui-btn-sm" lay-event="reUpload" style="height: 40px"><span class="sp"><i class="layui-icon">&#xe681;重新上传</i></span></button>
 		<button type="button" class="layui-btn layui-btn-sm" lay-event="delete" style="height: 40px"><span class="sp"><i class="layui-icon">&#xe640;删除</i></span></button>
 	</script>
 </body>
@@ -207,7 +207,9 @@
 				, {field: 'readmagname', title: '绘本名称', align: 'center', width: 240,
 					templet: '<div ><a href="${pageContext.request.contextPath}/{{d.readmagurl}}" class="layui-table-link" style="font-size:100%">{{d.readmagname}}</a></div>'}
 				, {field: 'readmagurl', title: '文件夹地址', align: 'center', width: 300
-				}
+					,templet:function (d) {
+						return d.readmagurl == null ? '无': d.readmagurl
+					}}
 				, {field: 'photourl', title: '图片地址', align: 'center', width: 180
 					, templet: function (d) { return '<div><img src="'+path+'/'+d.photourl+'" style="width: 45px;height: 45px"></div>' }
 				}
@@ -238,7 +240,6 @@
 					layer.open({
 						type: 1,
 						area: ['50%', '85%'],
-						// content: path+"/admin/toUrl/pictureBookInfo", //数组第二项即吸附元素选择器或者DOM
 						content: $("#type-content2"),
 						title: ['绘本详情','font-size:18px'],
 						btnAlign: 'c',
@@ -314,41 +315,51 @@
 							var readMagUrl = $("#readMagUrl").val();
 							var readMagPic = $("#readMagPic").val();
 							var readMagPage = $("#readMagPage").val();
-							var date = new Date()
-								,dateYear = date.getFullYear()             //获取年
-								,dateMonth = date.getMonth() +1              //获取月
-								,dateDate = date.getDate()                //获取当日
-								,dateHours = date.getHours()               //获取小时
-								,dateMinutes = date.getMinutes()           //获取分钟
-								,dateSeconds = date.getSeconds();           //获取秒
-							var time = dateYear+'-'+dateMonth+'-'+dateDate+' '+dateHours+':'+dateMinutes+':'+dateSeconds;
-							var msg = {"readmagname": readMagName, "readmagurl": readMagUrl,"photourl":readMagPic,"readmagpage":readMagPage};
-							console.log(time);
-							msg = JSON.stringify(msg);
-							$.ajax({
-								url: path + '/admin/reUploadBook',
-								async: true,
-								type: 'post',
-								data:{"readmagname": readMagName, "readmagurl": readMagUrl,"photourl":readMagPic,"readmagpage":readMagPage,"readmagid":data.readmagid},
-								datatype: 'text',
-								success: function (data) {
-									if (data == "success") {
-										layer.alert("重新上传成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
-										layer.close(index);
-										tableIns.reload();
-									} else {
-										layer.alert("重新上传失败", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+							if(readMagName == 0) {
+								layer.msg("绘本名字不能为空", {icon: 2});
+							}
+							else if(!$('#readMagName2').val().match(reg)||readMagName == 0)
+							{
+								layer.msg("请输入至少2位中文字符", {icon: 2});
+							}
+							else if(readMagUrl == 0) {
+								layer.msg("绘本文件夹不能为空", {icon: 2});
+							}
+							else if(readMagPic == 0) {
+								layer.msg("绘本图片地址不能为空", {icon: 2});
+							}
+							else if(readMagPage == 0) {
+								layer.msg("绘本页数不能为空", {icon: 2});
+							}
+							else if(!readMagPage.match(/^[0-9]*$/) ) {
+								layer.msg("输入不合法，请输入数字", {icon: 2});
+							}else{
+								$.ajax({
+									url: path + '/admin/reUploadBook',
+									async: true,
+									type: 'post',
+									data:{"readmagname": readMagName, "readmagurl": readMagUrl,"photourl":readMagPic,"readmagpage":readMagPage,"readmagid":data.readmagid},
+									datatype: 'text',
+									success: function (data) {
+										if (data == "success") {
+											layer.close(index);
+											layer.alert("重新上传成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+											tableIns.reload();
+										} else {
+											layer.alert("重新上传失败", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+										}
+									}, error: function (data) {
+										layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 									}
-								}, error: function (data) {
-									layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
-								}
-							});
+								});
+							}
 						},
-						btn2:function () {
+						btn2:function (index) {
 							$('#readMagName2').val("");
 							$('#readMagUrl').val("");
 							$('#readMagPic').val("");
 							$('#readMagPage').val("");
+							layer.close(index);
 						}
 					});
 				}
@@ -356,10 +367,10 @@
 		});
 
 		$(function () {
-			$('#readMagName').blur(function () {
+			$('#readMagName2').blur(function () {
 				var reg = /^[\u4e00-\u9fa5]{2,20}$/;
-				var readMagName = $('#readMagName').val();
-				if(!$('#readMagName').val().match(reg)||readMagName == 0)
+				var readMagName = $('#readMagName2').val();
+				if(!$('#readMagName2').val().match(reg)||readMagName == 0)
 				{
 					layer.msg("请输入至少2位中文字符", {icon: 2});
 				}else{
@@ -371,7 +382,7 @@
 				var readMagPage = $('#readMagPage').val();
 				if(!$('#readMagPage').val().match(reg)||readMagPage == 0)
 				{
-					layer.msg("请输入不合法，请输入数字", {icon: 2});
+					layer.msg("输入不合法，请输入数字", {icon: 2});
 				}else{
 					layer.msg("输入合法", {icon: 6});
 				}
@@ -403,6 +414,7 @@
 				content: path+"/admin/toUrl/uploadPictureBooks", //数组第二项即吸附元素选择器或者DOM
 				title: ['上传绘本','font-size:18px'],
 				btnAlign: 'c',
+				closeBtn:0,
 				skin: 'demo-class',
 				success:function(){
 
@@ -426,7 +438,7 @@
 					where: {
 						time1: $('#time1').val()
 						, time2: $('#time2').val()
-						,readmagname: $('#readMagName').val()
+						,readmagname: $('#readMagName0').val()
 					}
 					, page: {
 						curr: 1

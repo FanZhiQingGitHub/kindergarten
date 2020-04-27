@@ -1131,11 +1131,21 @@ public class AdminController
 	 */
 	@AdminSystemLog(operationType = "修改",operationName = "修改园所信息")
 	@RequestMapping("/updateKinderInfo")
-	public void updateKinderInfo(TblKinder tblKinder, HttpServletRequest request, HttpServletResponse response)
+	public void updateKinderInfo(TblKinder tblKinder, TblRector tblRector, String name ,HttpServletRequest request, HttpServletResponse response)
 	{
+		System.out.println(tblKinder);
 		if (tblKinder != null)
 		{
+			Integer rectorid = adminService.findRectorIdByName(name);
+			System.out.println("账号"+rectorid);
+			tblRector.setRectorid(rectorid);
+			tblRector.setRectorphone(tblKinder.getKinderlpphone());
+			tblRector.setRectoradd(tblKinder.getKinderlpadd());
+			tblRector.setRectorname(tblKinder.getKinderlp());
+
+			adminService.updateRector(tblRector);
 			int num = adminService.updateKinderInfo(tblKinder);
+
 			if (num > 0)
 			{
 				ResponseUtils.outHtml(response, "success");
@@ -1384,6 +1394,25 @@ public class AdminController
 			}
 		}
 	}
+
+
+	@AdminSystemLog(operationType = "修改",operationName = "修改绘本信息")
+	@RequestMapping("/updateReadImg")
+	public void updateReadImg(TblReadmag tblReadmag, HttpServletRequest request, HttpServletResponse response)
+	{
+		if (tblReadmag != null)
+		{
+			int num = adminService.updateReadImg(tblReadmag);
+			if (num > 0)
+			{
+				ResponseUtils.outHtml(response, "success");
+			} else
+			{
+				ResponseUtils.outHtml(response, "error");
+			}
+		}
+	}
+
 
 	@AdminSystemLog(operationType = "上传",operationName = "上传管理员头像")
 	@RequestMapping("/uploadAdminHeadImg")
