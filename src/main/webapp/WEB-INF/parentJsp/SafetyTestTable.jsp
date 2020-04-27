@@ -90,7 +90,15 @@
 				,{field: 'safetyvideotime', title: '发布时间',  sort: true, align: 'center'}
 				,{field: 'safetyfinishtime', title: '完成截止日期',  sort: true, align: 'center'}
 				,{field: 'safetytestscore', title: '得分' ,  sort: true, align: 'center'}
-				,{field: 'safetytestresult', title: '完成情况', sort: true , align: 'center'}
+				,{field: 'safetytestresult', title: '完成情况', sort: true , align: 'center'
+					,templet:function (d) {
+						if (d.safetytestresult == null) {
+							return '未完成'
+						} else {
+							return d.safetytestresult
+						}
+					}
+				}
 				,{fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo', align: 'center'}
 			]],
 		});

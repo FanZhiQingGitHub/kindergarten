@@ -561,10 +561,8 @@ public class ParentController {
             Date today = new Date();
             if(today.compareTo(finishtime) == 1){
                 tblSafetyvideoList.get(i).setSafetytestresult("已过期");
-            }else {
-                tblSafetyvideoList.get(i).setSafetytestresult("未完成");
             }
-            System.out.println(tblSafetyvideoList.get(i).getSafetytestresult());
+
         }
         return tableDate;
     }
