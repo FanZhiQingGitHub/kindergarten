@@ -126,8 +126,10 @@
     </select>
 
     <!--   查找园所动态news-->
-    <select id="findKinderNews" resultType="com.great.kindergarten.commons.entity.TblCampus" parameterType="java.util.Map">
-        select cam.campusinfoid,cam.campusinfoname,cam.campustime,cam.campusinfodetail,cam.kid from tbl_campusinfo cam , tbl_kinder kin
+    <select id="findKinderNews" resultType="com.great.kindergarten.commons.entity.TblCampus"
+            parameterType="java.util.Map">
+        select cam.campusinfoid,cam.campusinfoname,cam.campustime,cam.campusinfodetail,cam.kid from tbl_campusinfo cam ,
+        tbl_kinder kin
 
         <where>
             cam.kid = kin.kinderid
@@ -167,9 +169,6 @@
     </select>
 
 
-
-
-
     <!--    查班级所有名称-->
     <select id="findClassName" resultMap="classMap" parameterType="java.lang.Integer">
         select * from tbl_class where classid=#{cid};
@@ -181,7 +180,7 @@
 
     <!--    查询发布作业表中最后一个id-->
 
-    <select id="findFinallyWorkreleaseid" resultType="java.lang.Integer" >
+    <select id="findFinallyWorkreleaseid" resultType="java.lang.Integer">
 			select workreleaseid from tbl_workrelease order by workreleaseid DESC limit 1;
 	</select>
     <!--    作业文件上传记录-->
@@ -210,7 +209,7 @@
     </update>
 
     <!--查询安全视频总数量-->
-    <select id="findSafetyCount" resultType="java.lang.Integer" parameterType="HashMap" >
+    <select id="findSafetyCount" resultType="java.lang.Integer" parameterType="HashMap">
 			select count(*) from tbl_safetyconfig where  classid=#{cid};
 	</select>
 
@@ -223,7 +222,7 @@
     </select>
 
     <!--    查找安全视频所有名称-->
-    <select id="findVideoName" resultMap="safetyVideoName" >
+    <select id="findVideoName" resultMap="safetyVideoName">
         select * from tbl_safetyvideo
 
     </select>
@@ -241,7 +240,7 @@
     </insert>
 
     <!--    查看配置试题-->
-    <select id="findSafetyTestQuestionList" resultMap="reVideoQuestion" parameterType="integer" >
+    <select id="findSafetyTestQuestionList" resultMap="reVideoQuestion" parameterType="integer">
 
         select * from tbl_safetyvtq where safetyvideoid =#{safetyVideoId}
         order by safetyvtqid
@@ -249,12 +248,12 @@
 
     <!--    查看试题完成情况数量-->
     <select id="findSafetytqCount" resultType="java.lang.Integer" parameterType="HashMap">
-        select count(*)  from  (select t.*,tbls.safetytestfinshtime, tbls.safetytestscore,tbls.safetytestresult
+        select count(*) from (select t.*,tbls.safetytestfinshtime, tbls.safetytestscore,tbls.safetytestresult
         from (select ts.studentid,ts.studentname,ts.pid,tb.parentname,tbs.safetyvideoname
         ,tbs.safetyfinishtime,tbs.safetyvideoid,tbs.safetyconfigid
-        from tbl_student ts left join  tbl_parent tb on ts.pid=tb.parentid
-        left join  tbl_safetyconfig tbs on ts.cid=tbs.classid
-        where   ts.cid=#{cid}) t left join tbl_safetytestcompletion tbls on
+        from tbl_student ts left join tbl_parent tb on ts.pid=tb.parentid
+        left join tbl_safetyconfig tbs on ts.cid=tbs.classid
+        where ts.cid=#{cid}) t left join tbl_safetytestcompletion tbls on
         t.safetyvideoid=tbls.safetyvideoid and t.pid=tbls.parentid and tbls.safetyconfigid=t.safetyconfigid
         <where>
             <if test="startDate != '' and startDate != null">
@@ -264,11 +263,11 @@
                 and safetytestfinshtime &lt;= #{endDate}
             </if>
             <if test="finishStatus == '已完成' and finishStatus != '' and finishStatus != null">
-                and  tbls.safetytestresult =#{finishStatus}
+                and tbls.safetytestresult =#{finishStatus}
             </if>
 
             <if test="finishStatus == '未完成' and finishStatus != '' and finishStatus != null">
-                and  tbls.safetytestresult is null
+                and tbls.safetytestresult is null
             </if>
 
 
@@ -294,10 +293,10 @@
         select t.*,tbls.safetytestfinshtime, tbls.safetytestscore,tbls.safetytestresult from
         (select ts.studentid,ts.studentname,ts.pid,tb.parentname,tbs.safetyvideoname
         ,tbs.safetyfinishtime,tbs.safetyvideoid,tbs.safetyconfigid
-        from tbl_student ts left join  tbl_parent tb on ts.pid=tb.parentid
-        left join  tbl_safetyconfig tbs on ts.cid=tbs.classid
-        where   ts.cid=#{cid}) t left join tbl_safetytestcompletion tbls on
-        t.safetyvideoid=tbls.safetyvideoid and  t.pid=tbls.parentid and tbls.safetyconfigid=t.safetyconfigid
+        from tbl_student ts left join tbl_parent tb on ts.pid=tb.parentid
+        left join tbl_safetyconfig tbs on ts.cid=tbs.classid
+        where ts.cid=#{cid}) t left join tbl_safetytestcompletion tbls on
+        t.safetyvideoid=tbls.safetyvideoid and t.pid=tbls.parentid and tbls.safetyconfigid=t.safetyconfigid
         <where>
             <if test="startDate != '' and startDate != null">
                 and tbls.safetytestfinshtime &gt;= #{startDate}
@@ -307,11 +306,11 @@
             </if>
 
             <if test="finishStatus == '已完成' and finishStatus != '' and finishStatus != null">
-                and  tbls.safetytestresult =#{finishStatus}
+                and tbls.safetytestresult =#{finishStatus}
             </if>
 
             <if test="finishStatus == '未完成' and finishStatus != '' and finishStatus != null">
-                and  tbls.safetytestresult is null
+                and tbls.safetytestresult is null
             </if>
         </where>
         order by t.safetyfinishtime desc,t.studentid
@@ -419,7 +418,7 @@
     <!--家长和教师查看查询消息通知-->
     <select id="findClassMessageAll" resultType="TblClamsg" parameterType="java.util.HashMap">
         select * from tbl_clamsg
-        <where> 1=1 and cid = #{cid}
+        <where>1=1 and cid = #{cid}
             <if test="clamsgdetail != null and clamsgdetail != ''">
                 and clamsgdetail like "%"#{clamsgdetail}"%"
             </if>
@@ -448,7 +447,7 @@
             </if>
         </where>
     </select>
-<!--      根据kid查园所名字-->
+    <!--      根据kid查园所名字-->
     <select id="findkinderNameByKid" resultType="TblKinder" parameterType="java.lang.Integer">
 			select * from tbl_kinder where kinderid = #{kid};
 	</select>
