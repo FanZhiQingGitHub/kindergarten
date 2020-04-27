@@ -19,7 +19,7 @@
 		}
 		h2{
 			text-align: center;
-			margin-top: 2%;
+			margin-top: 1.5%;
 		}
 		.layui-input{
 			width:120%;
@@ -91,16 +91,6 @@
 							<input type="date" class="layui-input" name="time2" id="time2" value="" placeholder="请选择上传结束时间" style="margin: -27% 65%;">
 						</div>
 					</div>
-					<div class="layui-inline" >
-						<span class="layui-form-label" style="margin-left: 35%">状态：</span>
-						<div class="layui-input-inline" style="margin: -13% 75%;">
-							<select name="sel" id="sel" lay-filter="mySelect" lay-verify="" >
-								<option value="请选择">请选择</option>
-								<option value="禁用">禁用</option>
-								<option value="启用">启用</option>
-							</select>
-						</div>
-					</div>
 					<button class="layui-btn" data-type="reload" style="margin: -1.5% 14%;"><i class="layui-icon">&#xe615;查询</i></button>
 				</div>
 				<div class="layui-form-item" style="margin-left: 6%;">
@@ -110,7 +100,17 @@
 							<input type="text" class="layui-input" name="kindername" id="kindername" placeholder="请输入园所名称" >
 						</div>
 					</div>
-					<button class="layui-btn btn-add btn-default" id="btn-add" style="margin-left:50%"><i class="layui-icon">&#xe624;新增</i></button>
+					<div class="layui-inline" >
+						<span class="layui-form-label" style="margin-left: 5%">状态：</span>
+						<div class="layui-input-inline" >
+							<select name="sel" id="sel" lay-filter="mySelect" lay-verify="" >
+								<option value="请选择">请选择</option>
+								<option value="禁用">禁用</option>
+								<option value="启用">启用</option>
+							</select>
+						</div>
+						<button class="layui-btn btn-add btn-default" id="btn-add" style="margin: -9% 123%;"><i class="layui-icon">&#xe624;新增</i></button>
+					</div>
 				</div>
 			</div>
 		</form>
@@ -343,13 +343,59 @@
 										$("#selNames").find("option[value="+data.kinderid+"]").prop("selected",true);
 										var kindername = $("#selNames").val();
 										var kinderacount = $("#accounts").val();
-										if (kinderacount.length == 0) {
-											layer.alert("请输入园所账号", {icon: 2});
-										}  else {
+										var kinderlp = $("#kinderlp").val();
+										var kinderlpid = $("#kinderlpid").val();
+										var kinderlpadd = $("#kinderlpadd").val();
+										var kinderlpphone = $("#kinderlpphone").val();
+										if (kindername.length == 0) {
+											layer.msg("幼儿园名称不能为空", {icon: 2});
+										}
+										else if(!kindername.match(/^[\u4e00-\u9fa5]{2,20}$/)) {
+											layer.msg("请输入至少2位中文字符", {icon: 2});
+										}
+										else if (kinderacount.length == 0) {
+											layer.msg("园所账号不能为空", {icon: 2});
+										}
+										else if(!/^[a-zA-Z]([-_a-zA-Z0-9]{6,10})$/.test(kinderacount))
+										{
+											layer.msg("账号不能有特殊字符，并且只能7—10个字符");
+										}
+										else if (kinderlp == 0) {
+											layer.msg("幼儿园名称不能为空", {icon: 2});
+										}
+										else if(!kinderlp.match(/^[\u4e00-\u9fa5]{2,20}$/)){
+											layer.msg("请输入至少2位中文字符", {icon: 2});
+										}
+										else if(kinderlpid == 0){
+											layer.msg("身份证号不能为空", {icon: 2});
+										}
+										else if(!kinderlpid.match(/^\d{15}|\d{18}$/)){
+											layer.msg("您好，身份证为15位或者18位，且不能出现空格！", {icon: 2});
+										}
+										else if(kinderlpadd == 0){
+											layer.msg("地址不能为空", {icon: 2});
+										}
+										else if(!kinderlpadd.match(/^([\u4E00-\u9FA5A-Za-z0-9_]+(省|市|区|县|道|路|街|号)){2,}$/)){
+											layer.msg("输入地址格式如：福建省厦门市仓山区", {icon: 2});
+										}
+										else if(kinderlpphone == 0){
+											layer.msg("住址不能为空", {icon: 2});
+										}
+										else if(!kinderlpphone.match(/^1(3|4|5|6|7|8|9)\d{9}$/)){
+											layer.msg("请输入以1开头的11位手机号", {icon: 2});
+										}
+										else {
 											$.ajax({
 												url: path + "/admin/updateKinderInfo",
 												type: "post",
-												data: {"kinderid": data.kinderid,"kindername":kindername,"kinderacount":kinderacount},
+												data: {"kinderid": data.kinderid,
+													"kindername":kindername,
+													"kinderacount":kinderacount,
+													"kinderlp":kinderlp,
+													"kinderlpid":kinderlpid,
+													"kinderlpadd":kinderlpadd,
+													"kinderlpphone":kinderlpphone,
+													"name":data.kinderlp},
 												dataType: "text",
 												success: function (result) {
 													if(result == "success")

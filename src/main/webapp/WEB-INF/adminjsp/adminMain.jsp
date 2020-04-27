@@ -103,7 +103,6 @@
 		</div>
 
 
-
 		<div class="layui-body" id="body" style="top: 100px">
 			<iframe id="iframeMain" name="iframeMain" src="" frameborder="0" width="100%" height="100%" ></iframe>
 		</div>
@@ -147,6 +146,7 @@
 					layer.alert("网络繁忙！", {icon: 2});
 				}
 			});
+
 		});
 
 		var src;

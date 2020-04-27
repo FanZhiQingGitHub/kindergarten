@@ -160,6 +160,13 @@ public class HealtherService {
         return healtherMapper.findStuInfoByKindername(KinderMap);
     }
 
+    public Long findExistMealDate(Date mealstarttime,Date mealendtime){
+        Map<String, Date> dateMap = new LinkedHashMap<>();
+        dateMap.put("mealstarttime",mealstarttime);
+        dateMap.put("mealendtime",mealendtime);
+        return healtherMapper.findExistMealDate(dateMap);
+    }
+
     @Transactional
     public int addLog(TblSyslog log)
     {

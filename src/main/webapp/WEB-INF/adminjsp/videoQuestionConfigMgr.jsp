@@ -17,7 +17,7 @@
 	<style>
 		h2{
 			text-align: center;
-			margin-top: 1%;
+			margin-top: 1.5%;
 		}
 		body{
 			font-size: 140%;
@@ -367,7 +367,7 @@
 								},
 								btn2:function (index){
 									data2 = "";
-									window.location.reload();
+									layer.close(index);
 								}
 							});
 					}
@@ -430,7 +430,7 @@
 										$("#configItems").append("");
 										layer.alert("新增成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 										layer.close(index);
-										parent.location.reload();
+										// parent.location.reload();
 										var opt = "";
 										var title = "";
 										var items = eval(data);
@@ -464,9 +464,10 @@
 							});
 						}
 					},
-					btn2:function () {
+					btn2:function (index) {
 						$("#topicName").val("");
 						$("#result").val("");
+						layer.close(index);
 					}
 				});
 			});
@@ -547,7 +548,7 @@
 				success: function (msg) {
 					if (msg == "success") {
 						alert("题目删除成功");
-						location.reload();
+						parent.location.reload();
 					} else {
 						alert("题目删除失败");
 					}

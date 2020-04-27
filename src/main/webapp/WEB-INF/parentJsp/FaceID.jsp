@@ -62,7 +62,7 @@
 		var path = $("#path").val();
 		var video = document.getElementById('webcam');
 
-		layer.msg('温馨提醒：摄像头功能需要使用谷歌浏览器才可以访问！');
+		layer.alert('温馨提醒：摄像头功能需要使用谷歌浏览器才可以访问！',{icon:6});
 
 		//判断是否支持开启视频(默认开启相机)
 		if (navigator.getUserMedia) {

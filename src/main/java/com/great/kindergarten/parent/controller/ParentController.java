@@ -744,6 +744,7 @@ public class ParentController {
     public void addStuTime(TblDate tblDate, TblStutime tblStutime, HttpServletRequest request, HttpServletResponse response) throws ParseException {
 
         String face = request.getParameter("face");
+        Integer kid = (Integer) request.getSession().getAttribute("kid");
 
         //获取信息
         TblParent parent = (TblParent) request.getSession().getAttribute("onlineParent");
@@ -769,7 +770,9 @@ public class ParentController {
                     System.out.println("不存在本周一和周日的日期");
                     tblDate.setMonday(date.parse(monday));
                     tblDate.setSunday(date.parse(sunday));
+                    tblDate.setKid(kid);
                     List<TblDate> dateList = new ArrayList<>();
+                    dateList.add(tblDate);
                     flagDate = parentService.addDateInfo(dateList);
                     if (flagDate) {
                         System.out.println("日期区间新增成功");

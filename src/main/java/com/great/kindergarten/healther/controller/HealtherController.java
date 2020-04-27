@@ -129,7 +129,6 @@ public class HealtherController {
     }
 
 
-
     //根据园所查找所有班级信息
     @RequestMapping("/findAllClassInfo")
     public void findAllClassInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -211,14 +210,14 @@ public class HealtherController {
         }
         Integer minpage = (page - 1) * limit;
         Integer maxpage = limit;
-        if(null == kindername){
+        if (null == kindername) {
             dateWrite.setMsg("亲，暂无相关数据，请登录幼儿园后查看！");
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
-        }else {
-            ExaminationPage examinationPage = new ExaminationPage(kindername,cName, minpage, maxpage);
+        } else {
+            ExaminationPage examinationPage = new ExaminationPage(kindername, cName, minpage, maxpage);
             List<TblExamination> tblExaminationList = healtherService.findALLExamination(examinationPage);
             if (0 != tblExaminationList.size()) {
                 Integer count = healtherService.findALLExaminationCount(examinationPage).intValue();
@@ -255,7 +254,7 @@ public class HealtherController {
     @HealtherSystemLog(operationType = "增加", operationName = "保健员新增体检信息")
     @RequestMapping("/addExaminationInfo")
     public void addExaminationInfo(TblExamination tblExamination, HttpServletResponse response) throws ParseException {
-        Integer studentid = healtherService.findStudentId(tblExamination.getStudentname(),kindername);
+        Integer studentid = healtherService.findStudentId(tblExamination.getStudentname(), kindername);
         if (studentid == null) {
             ResponseUtils.outHtml(response, "notname");
         } else {
@@ -279,13 +278,13 @@ public class HealtherController {
 
         Integer minpage = (page - 1) * limit;
         Integer maxpage = limit;
-        if(null == kindername){
+        if (null == kindername) {
             dateWrite.setMsg("亲，暂无相关数据，请登录幼儿园后查看！");
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
-        }else {
+        } else {
             mealPage.setKindername(kindername);
             mealPage.setPage(minpage);
             mealPage.setLimit(maxpage);
@@ -329,9 +328,13 @@ public class HealtherController {
         Date mealstarttime = format.parse(time1);
         Date mealendtime = format.parse(time2);
 
-        if(null == kindername){
+        Integer num = healtherService.findExistMealDate(mealstarttime, mealendtime).intValue();
+
+        if (null == kindername) {
             ResponseUtils.outHtml(response, "notkinder");
-        }else {
+        } else if (num > 0) {
+            ResponseUtils.outHtml(response, "existMealDate");
+        } else {
             Integer kinderid = healtherService.findKinderID(kindername);
             List<TblMeal> tblMealList = new ArrayList<>();
             tblMeal.setMealstarttime(mealstarttime);
@@ -379,25 +382,34 @@ public class HealtherController {
     @RequestMapping("/showAllRecipeInfo")
     public void showAllRecipeInfo(DateWrite dateWrite, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         String mealid = request.getParameter("mealid");
-        Integer mid = Integer.valueOf(mealid);
-        Integer kinderid = healtherService.findKinderID(kindername);
-        List<TblRecipe> tblRecipeList = healtherService.findAllRecipeInfo(mid,kinderid);
-        if (0 != tblRecipeList.size()) {
-            Integer count = healtherService.findAllRecipeInfoCount(mid,kinderid).intValue();
-            dateWrite.setCode(0);
-            dateWrite.setMsg("");
-            dateWrite.setCount(count);
-            dateWrite.setData(tblRecipeList);
+        System.out.println("mealid=" + mealid);
+        if (null == mealid) {
+            dateWrite.setMsg("亲，首次点击编辑膳食的时候可能出现数据丢失，请重新打开，谢谢！");
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateWrite);
         } else {
-            dateWrite.setMsg("亲，暂无相关数据");
-            request.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            ResponseUtils.outJson(response, dateWrite);
+            Integer mid = Integer.valueOf(mealid);
+            Integer kinderid = healtherService.findKinderID(kindername);
+            List<TblRecipe> tblRecipeList = healtherService.findAllRecipeInfo(mid, kinderid);
+            if (0 != tblRecipeList.size()) {
+                Integer count = healtherService.findAllRecipeInfoCount(mid, kinderid).intValue();
+                dateWrite.setCode(0);
+                dateWrite.setMsg("");
+                dateWrite.setCount(count);
+                dateWrite.setData(tblRecipeList);
+                request.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html");
+                response.setCharacterEncoding("UTF-8");
+                ResponseUtils.outJson(response, dateWrite);
+            } else {
+                dateWrite.setMsg("亲，暂无相关数据");
+                request.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html");
+                response.setCharacterEncoding("UTF-8");
+                ResponseUtils.outJson(response, dateWrite);
+            }
         }
     }
 
@@ -450,9 +462,9 @@ public class HealtherController {
     @RequestMapping("/findStuInfoByKindername")
     public void findStuInfoByKindername(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Gson g = new Gson();
-        if(null == kindername){
+        if (null == kindername) {
             response.getWriter().print("notkinder");
-        }else {
+        } else {
             List<TblStudent> tblStudentList = healtherService.findStuInfoByKindername(kindername);//查找所有宝宝信息，用于电子围栏宝宝名称下拉框查询
             if (0 != tblStudentList.size()) {
                 request.setCharacterEncoding("UTF-8");

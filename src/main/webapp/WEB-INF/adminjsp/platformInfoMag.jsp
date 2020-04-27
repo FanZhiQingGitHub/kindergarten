@@ -15,7 +15,7 @@
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
 		h2 {
-			margin-top: 2%;
+			margin-top: 1.5%;
 			text-align: center;
 		}
 
@@ -47,17 +47,25 @@
 		}
 
 		body .demo .layui-layer-btn{
-			margin-top: -5%;
+			margin-top: -3%;
 			width: auto;
 			height: 12%;
 			text-align: center;
-			font-Size:16px
+			font-Size:12px
 		}
 		body .demo .layui-layer-content{
-			font-Size:18px
+			font-Size:22px
 		}
 		.layui-table-page > div {
 			height: 50px;
+		}
+
+		.layui-layer-btn0{
+			font-size: 100%;
+		}
+
+		.layui-layer-btn1{
+			font-size: 100%;
 		}
 
 		.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span {
@@ -70,6 +78,17 @@
 		}
 		.layui-table-page select {
 			height: 24px;
+		}
+
+		.layui-layer-dialog .layui-layer-content {
+			position: relative;
+			padding: 20px;
+			line-height: 24px;
+			word-break: break-all;
+			overflow: hidden;
+			font-size: 18px;
+			overflow-x: hidden;
+			overflow-y: auto;
 		}
 	</style>
 </head>
@@ -224,14 +243,14 @@
 								datatype: 'text',
 								success: function (data) {
 									if (data == "success") {
-										layer.alert("修改资讯信息成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
 										layer.close(index);
+										layer.alert("修改资讯信息成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','180px'],skin:'demo'});
 										tableIns.reload();
 									} else {
-										layer.alert("修改资讯信息失败", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+										layer.alert("修改资讯信息失败", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','180px'],skin:'demo'});
 									}
 								}, error: function (data) {
-									layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+									layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','180px'],skin:'demo'});
 								}
 							});
 						},
@@ -241,7 +260,7 @@
 						}
 					});
 				}else if(layEvent === 'delete'){
-					layer.confirm("确定要删除该资讯信息？",{icon:3,title:'温馨提示',area:['350px','150px']},function (index) {
+					layer.confirm("确定要删除该资讯信息？",{icon:3,title:'温馨提示',area:['350px','180px']},function (index) {
 						layer.close(index);
 						$.ajax({
 							url: path + "/admin/deletePlatFormInfo",
@@ -251,19 +270,19 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("平台资讯信息删除成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+									layer.alert("平台资讯信息删除成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','180px'],skin:'demo'});
 									tableIns.reload();
 								}else{
-									layer.alert("平台资讯信息删除失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+									layer.alert("平台资讯信息删除失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','180px'],skin:'demo'});
 								}
 							},
 							error:function (result) {
-								layer.alert("网路异常！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+								layer.alert("网路异常！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','180px'],skin:'demo'});
 							}
 						});
 					});
 				}else if(layEvent === 'release'){
-					layer.confirm("确定发布咨询信息？",{icon:3,title:'温馨提示',area:['350px','150px']},function (index) {
+					layer.confirm("确定发布咨询信息？",{icon:3,title:'温馨提示',area:['350px','180px']},function (index) {
 						layer.close(index);
 						$.ajax({
 							url: path + "/admin/releasePlatFormInfo",
@@ -273,17 +292,17 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("平台资讯信息发布成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+									layer.alert("平台资讯信息发布成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','180px'],skin:'demo'});
 									tableIns.reload();
 								}else{
-									layer.alert("平台资讯信息发布失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+									layer.alert("平台资讯信息发布失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','180px'],skin:'demo'});
 								}
 							}
 						});
 					});
 				}
 				else if(layEvent === 'cancel'){
-					layer.confirm("确定取消发布咨询信息？",{icon:3,title:'温馨提示',area:['350px','150px']},function (index) {
+					layer.confirm("确定取消发布咨询信息？",{icon:3,title:'温馨提示',area:['350px','180px']},function (index) {
 						layer.close(index);
 						$.ajax({
 							url: path + "/admin/cancelPlatFormInfo",
@@ -293,10 +312,10 @@
 							success: function (result) {
 								if(result == "success")
 								{
-									layer.alert("平台资讯信息取消发布成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+									layer.alert("平台资讯信息取消发布成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','180px'],skin:'demo'});
 									tableIns.reload();
 								}else{
-									layer.alert("平台资讯信息取消发布失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
+									layer.alert("平台资讯信息取消发布失败！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','180px'],skin:'demo'});
 								}
 							}
 						});

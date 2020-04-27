@@ -118,6 +118,12 @@
 		    ,upload = layui.upload;
 	    var path = $("#path").val();
 
+	    $("#bu2").mouseover(function() {
+		    layer.tips('温馨提示：请先点击图片上传按钮选择要上传的图片，再点击确认修改', this, {
+			    tips: [1, "#8f9199"]
+		    });
+	    });
+
 	    //验证规则
 	    form.verify({
 		    adminheadurl: function (value) {

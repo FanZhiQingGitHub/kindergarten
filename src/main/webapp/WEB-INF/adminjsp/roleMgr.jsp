@@ -36,7 +36,7 @@
 			line-height: 40px;
 		}
 		h2{
-			margin-top: 1%;
+			margin-top: 1.5%;
 			text-align: center;
 		}
 		body .demo-class .layui-layer-btn{
@@ -222,6 +222,7 @@
 						,area:['35%','80%']
 						,shade:0.3
 						,offset:'5%'
+						,closeBtn:0
 						,skin: 'demo2'
 						,content:path+"/admin/toUrl/menuPortion"
 						,success : function(layero, index) {

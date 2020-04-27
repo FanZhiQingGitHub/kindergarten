@@ -60,6 +60,8 @@ public interface HealtherMapper {
 
     public List<TblStudent> findStuInfoByKindername(Map<String, String> KinderMap);
 
+    public Long findExistMealDate(Map<String, Date> dateMap);
+
     public int addLog(TblSyslog log);//系统日志
 
 }

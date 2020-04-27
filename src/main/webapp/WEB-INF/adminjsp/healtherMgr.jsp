@@ -15,7 +15,7 @@
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
 		h2 {
-			margin-top: 2%;
+			margin-top: 1.5%;
 			text-align: center;
 		}
 
@@ -195,7 +195,7 @@
 			, cols: [[ //表头
 				{field: 'healtherid', title: '编号', align: 'center', width: 100, sort: true, fixed: 'left'}
 				, {field: 'healthername', title: '姓名', align: 'center', width: 113}
-				, {field: 'healtheradd', title: '住址', align: 'center', width: 336}
+				, {field: 'healtheradd', title: '住址', align: 'center', width: 308}
 				, {field: 'healtherphone', title: '手机号', align: 'center', width: 169}
 				, {
 					field: 'healtherregtime', title: '注册时间', align: 'center', width: 232

@@ -15,7 +15,7 @@
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<style>
 		h2 {
-			margin-top: 2%;
+			margin-top: 1.5%;
 			text-align: center;
 		}
 
@@ -100,7 +100,7 @@
 				<div class="layui-inline">
 					<span class="layui-form-label" style="width: auto">姓名：</span>
 					<div class="layui-input-inline">
-						<input type="text" class="layui-input" name="securityName" id="securityName" placeholder="请输入安全员名称" >
+						<input type="text" class="layui-input" name="securityName" id="securityName" placeholder="请输入安防员名字" >
 					</div>
 				</div>
 				<div class="layui-inline" style="margin-left: 2%">
@@ -196,7 +196,7 @@
 			, cols: [[ //表头
 				{field: 'securityid', title: '编号', align: 'center', width: 97, sort: true, fixed: 'left'}
 				, {field: 'securityname', title: '姓名', align: 'center', width: 131}
-				, {field: 'securityadd', title: '住址', align: 'center', width: 329}
+				, {field: 'securityadd', title: '住址', align: 'center', width: 303}
 				, {field: 'securityphone', title: '手机号', align: 'center', width: 174}
 				, {
 					field: 'securityregtime', title: '注册时间', align: 'center', width: 243

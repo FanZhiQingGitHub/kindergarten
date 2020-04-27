@@ -29,9 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -352,8 +350,16 @@ public class TeacherController {
     @RequestMapping(value = "/workRelease", produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public Map<String, Object> workRelease(@RequestParam("file") MultipartFile file, String classname, HttpServletRequest request, HttpServletResponse response) {
-	    String filePath = null;
         TblClass tblClass = new TblClass();
+        OutputStream os = null;
+        InputStream inputStream = null;
+        String fileName = null;
+        String filePath = null;
+
+
+
+
+
         tblClass.setClassname(classname);
         //查询发布作业表中最后一个id 插入的为id+1
         Integer workreleaseid = teacherService.findFinallyWorkreleaseid();
@@ -368,53 +374,51 @@ public class TeacherController {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String nowDay = df.format(new Date());
         //实际路径
-        String path1 = request.getServletContext().getRealPath("/workRelease/" + classname + "/" + nowDay + "/" + workreleaseid);
-        System.out.println("path1=" + path1);
-        System.out.println("classname=" + classname);
+        String path = request.getServletContext().getRealPath("/workRelease/" + classname + "/" + nowDay + "/" + workreleaseid);
         try {
             //根据班级名查找id
             Integer classid = teacherService.findClassidByName(tblClass);
-            System.out.println("下拉框班级=" + classname);
-            System.out.println("下拉框班级id=" + classid);
-            //是得到上传时的文件名
-            String filename = file.getOriginalFilename().toString();
-            System.out.println("filename=" + filename);
 
-            //通过切割文件名，拿到扩展名即 .docx
-            String[] arr = filename.split("\\.");
-            System.out.println("arr=" + arr);
-            String filetype = "." + arr[arr.length - 1];
-            System.out.println("filetype=" + filetype);
             Long size = file.getSize();
             Long maxsize = 107374182400L;
             if (size > maxsize) {
                 ResponseUtils.outHtml(response, "文件过大");
             } else {
-                // 重命名文件,获取路径
-//                String path = path1 + "/" + filename;
-//                System.out.println("path=" + path);
-                //创建文件
-//                File filepath  = new File(path1,filename);
-//                if (!filepath .exists()) {
-//                    filepath .mkdirs();
-//                }
-                //将上传文件保存到一个目标文档中  创建文件
-                File tempFile = new File(path1 + File.separator + filename);
-	            //文件是否存在  如果没有就新建一个
-                if (!tempFile .exists()) {
-		            tempFile .mkdirs();
-	            }
-                // 将接收的文件保存到指定文件中
-                file.transferTo(tempFile);
+
+                inputStream = file.getInputStream();
+                fileName = file.getOriginalFilename();
+
+
+                // 2、保存到临时文件
+                // 1K的数据缓冲
+                byte[] bs = new byte[1024];
+                // 读取到的数据长度
+                int len;
+                // 输出的文件流保存到本地文件
+
+
+                File tempFile = new File(path);
+                //目录不存在会创建
+                if (!tempFile.exists()) {
+                    tempFile.mkdirs();
+                }
+
+
+                filePath = tempFile.getPath() + File.separator + fileName;
+                os = new FileOutputStream(filePath);
+                // 开始读取
+                while ((len = inputStream.read(bs)) != -1) {
+                    os.write(bs, 0, len);
+                }
                 //添加数据到数据表
-                tblWorkrelease.setWorkreleasedetail(filename);
-                tblWorkrelease.setWorklocation("workRelease@" + classname + "@@" + nowDay + "@@@" + workreleaseid + "@@@@" + filename);
+                tblWorkrelease.setWorkreleasedetail(fileName);
+                tblWorkrelease.setWorklocation("workRelease@" + classname + "@@" + nowDay + "@@@" + workreleaseid + "@@@@" + fileName);
 
                 tblWorkrelease.setCid(classid);
                 Boolean flag = teacherService.addFileInfo(tblWorkrelease);
                 if (flag) {
                     //upload要求返回的数据格式
-                    Map<String, Object> uploadData = new HashMap<String, Object>();
+                    Map<String, Object> uploadData = new HashMap<String, Object>(5);
                     uploadData.put("code", "0");
                     uploadData.put("msg", "");
                     //将文件路径返回
@@ -986,6 +990,14 @@ public class TeacherController {
     @RequestMapping(value = "/addClassPhoto")
     @ResponseBody
     public Map<String, Object> addClassPhoto(@RequestParam("file") MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        OutputStream os = null;
+        InputStream inputStream = null;
+        String fileName = null;
+        String filePath = null;
+
+
+
         System.out.println("上传图片进来");
         TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
         int cid = tblTeacher1.getCid();
@@ -998,43 +1010,43 @@ public class TeacherController {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String nowDay = df.format(new Date());
 //        获取真实路径
-        String path2 = request.getServletContext().getRealPath("/photos/" + className + "/" + nowDay);
-        System.out.println("path2=" + path2);
-        //是得到上传时的文件名。
-        String filename = file.getOriginalFilename().toString();
-        System.out.println("filename=" + filename);
-        //		    //获取当前时间
-        //通过切割文件名，拿到扩展名即 .docx
-        String[] arr = filename.split("\\.");
-        System.out.println("arr=" + arr);
-        String filetype = "." + arr[arr.length - 1];
-        System.out.println("filetype=" + filetype);
+        filePath = request.getServletContext().getRealPath("/photos/" + className + "/" + nowDay);
         Long size = file.getSize();
         Long maxsize = 107374182400L;
         if (size > maxsize) {
             ResponseUtils.outHtml(response, "文件过大");
         } else {
-            // 重命名文件,获取路径
-//            String path = path2 + "/" + filename;
-//            System.out.println("path=" + path);
-            //文件是否存在  如果没有就新建一个
-//            File filepath  = new File(path2,filename);
-//            if (!filepath .exists()) {
-//                filepath .mkdirs();
-//            }
-            //将上传文件保存到一个目标文档中   新建文件
-            File tempFile = new File(path2 + File.separator + filename);
-	        //文件是否存在  如果没有就新建一个
-	        if (!tempFile .exists()) {
-		        tempFile .mkdirs();
-	        }
-            // 将接收的文件保存到指定文件中
-            file.transferTo(tempFile);
+
+            inputStream = file.getInputStream();
+            fileName = file.getOriginalFilename();
+            // 2、保存到临时文件
+            // 1K的数据缓冲
+            byte[] bs = new byte[1024];
+            // 读取到的数据长度
+            int len;
+            // 输出的文件流保存到本地文件
+            File tempFile = new File(filePath);
+            //目录不存在会创建
+            if (!tempFile.exists()) {
+                tempFile.mkdirs();
+            }
+            filePath = tempFile.getPath() + File.separator + fileName;
+            os = new FileOutputStream(filePath);
+            // 开始读取
+            while ((len = inputStream.read(bs)) != -1) {
+                os.write(bs, 0, len);
+            }
+
+
+
+
+
+
             //添加数据到数据表
             tblPhoto.setCid(cid);
             tblPhoto.setPhotodetail(photodetail);
-            tblPhoto.setPhotoname(filename);
-            tblPhoto.setPhotourl("photos/" + className + "/" + nowDay + "/" + filename);
+            tblPhoto.setPhotoname(fileName);
+            tblPhoto.setPhotourl("photos/" + className + "/" + nowDay + "/" + fileName);
             System.out.println("tblPhoto" + tblPhoto);
 
             Boolean flag = teacherService.uploadPhoto(tblPhoto);
