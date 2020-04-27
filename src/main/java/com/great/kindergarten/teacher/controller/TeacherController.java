@@ -429,10 +429,17 @@ public class TeacherController {
                 }
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            // 完毕，关闭所有链接
+            try {
+                os.close();
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
 
         return null;
     }
@@ -1017,6 +1024,9 @@ public class TeacherController {
             ResponseUtils.outHtml(response, "文件过大");
         } else {
 
+
+            try
+            {
             inputStream = file.getInputStream();
             fileName = file.getOriginalFilename();
             // 2、保存到临时文件
@@ -1038,6 +1048,17 @@ public class TeacherController {
             }
 
 
+            }catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                // 完毕，关闭所有链接
+                try {
+                    os.close();
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
 
 
@@ -1060,9 +1081,12 @@ public class TeacherController {
                 uploadData.put("data", "{}");
                 System.out.println(uploadData);
                 ResponseUtils.outJson(response, uploadData);
-                //                        return uploadData;
             }
+
+
         }
+
+
         return null;
     }
     //班级相册
