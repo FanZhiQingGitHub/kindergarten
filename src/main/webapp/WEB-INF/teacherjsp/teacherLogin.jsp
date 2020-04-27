@@ -378,6 +378,17 @@
 
         });
         form.on('submit(formDemo)', function (data) {
+            var loadingIndex = layer.load(3, {
+                shade: [0.2, 'gray'], //0.5透明度的灰色背景
+                content: '登录中，请稍后......',
+                success: function (layero) {
+                    layero.find('.layui-layer-content').css({
+                        'padding-top': '39px',
+                        'width': '150px',
+                        'color': '#eb7350'
+                    });
+                }
+            });
             var path = $("#path").val();
             $.ajax({
                 url: path + "/teacher/teacherLogin",
@@ -387,20 +398,29 @@
                 datatype: "text",
                 success: function (msg) {
                     if (msg == "success") {
+                        layer.close(loadingIndex);
                         layer.msg("欢迎您，登录成功！", {icon: 6});
-                        location.href = path + "/teacher/toUrl/teacherMain";
+                        setInterval(function () {
+                            location.href = path + "/teacher/toUrl/teacherMain";
+                            clearInterval(intervalId);
+                        }, 1000);
                     } else if (msg == "error") {
+                        layer.close(loadingIndex);
                         layer.msg("账号或密码错误！", {icon: 2});
                     } else if (msg == "codeerror") {
+                        layer.close(loadingIndex);
                         layer.msg("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/teacher/loginCode?" + Math.random();
                     } else if (msg == "notmen") {
+                        layer.close(loadingIndex);
                         layer.msg("该用户已被禁用或者不存在！", {icon: 2});
                     } else if (msg == "notclass") {
+                        layer.close(loadingIndex);
                         layer.msg("对不起，该教师未带班，请通知园长！", {icon: 2});
                     }
                 }, error: function (msg) {
+                    layer.close(loadingIndex);
                     layer.msg("网络繁忙！", {icon: 2});
                 }
             });

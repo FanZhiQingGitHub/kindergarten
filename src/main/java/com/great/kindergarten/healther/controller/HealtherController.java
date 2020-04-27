@@ -97,34 +97,38 @@ public class HealtherController {
     public void healtherLogin(TblHealther tblHealther, HttpServletRequest request, HttpServletResponse response) {
         healthername = tblHealther.getHealthername();
         TblKinder tblKinder = healtherService.findHealtherKinder(healthername);
-        kindername = tblKinder.getKindername();
-        Integer kid = tblKinder.getKinderid();
-
-        String healtherpwd = MD5Utils.md5(tblHealther.getHealtherpwd());
-        String code = tblHealther.getCode();
-        Boolean confirm = code.equalsIgnoreCase(healthercode);
-        if (confirm) {
-            String healtherstatus = healtherService.findHealtherStatus(healthername);
-            if ("启用".equals(healtherstatus)) {
-                TblHealther Healther = healtherService.healtherLogin(healthername, healtherpwd);
-                if (null != Healther) {
-                    ResponseUtils.outHtml(response, "success");
-                    List<TblHealther> tblHealtherList = new ArrayList<>();
-                    tblHealtherList.add(Healther);
-                    List<TblCampus> tblCampuses = healtherService.findHealtherNews(kindername);
-                    List<TblClass> tblClassList = healtherService.findAllClass(kindername);
-                    request.getSession().setAttribute("tblCampuses", tblCampuses);
-                    request.getSession().setAttribute("tblClassList", tblClassList);
-                    request.getSession().setAttribute("healthername", healthername);
-                    request.getSession().setAttribute("kindername", kindername);
-                    request.getSession().setAttribute("kid", kid);
-                    request.getSession().setAttribute("tblHealtherList", tblHealtherList);
+        if(null == tblKinder){
+            request.getSession().removeAttribute("healthername");
+            ResponseUtils.outHtml(response, "notmen");
+        }else {
+            kindername = tblKinder.getKindername();
+            Integer kid = tblKinder.getKinderid();
+            String healtherpwd = MD5Utils.md5(tblHealther.getHealtherpwd());
+            String code = tblHealther.getCode();
+            Boolean confirm = code.equalsIgnoreCase(healthercode);
+            if (confirm) {
+                String healtherstatus = healtherService.findHealtherStatus(healthername);
+                if ("启用".equals(healtherstatus)) {
+                    TblHealther Healther = healtherService.healtherLogin(healthername, healtherpwd);
+                    if (null != Healther) {
+                        ResponseUtils.outHtml(response, "success");
+                        List<TblHealther> tblHealtherList = new ArrayList<>();
+                        tblHealtherList.add(Healther);
+                        List<TblCampus> tblCampuses = healtherService.findHealtherNews(kindername);
+                        List<TblClass> tblClassList = healtherService.findAllClass(kindername);
+                        request.getSession().setAttribute("tblCampuses", tblCampuses);
+                        request.getSession().setAttribute("tblClassList", tblClassList);
+                        request.getSession().setAttribute("healthername", healthername);
+                        request.getSession().setAttribute("kindername", kindername);
+                        request.getSession().setAttribute("kid", kid);
+                        request.getSession().setAttribute("tblHealtherList", tblHealtherList);
+                    }
+                } else {
+                    ResponseUtils.outHtml(response, "notmen");
                 }
             } else {
-                ResponseUtils.outHtml(response, "notmen");
+                ResponseUtils.outHtml(response, "codeerror");
             }
-        } else {
-            ResponseUtils.outHtml(response, "codeerror");
         }
     }
 

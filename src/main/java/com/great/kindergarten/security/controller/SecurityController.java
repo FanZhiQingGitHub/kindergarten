@@ -92,32 +92,36 @@ public class SecurityController {
     public void securityLogin(TblSecurity tblSecurity, HttpServletRequest request, HttpServletResponse response) {
         securityname = tblSecurity.getSecurityname();
         TblKinder tblKinder = securityService.findSecurityKinder(securityname);
-        kindername = tblKinder.getKindername();
-        Integer kid = tblKinder.getKinderid();
-
-        String securitypwd = MD5Utils.md5(tblSecurity.getSecuritypwd());
-        String code = tblSecurity.getCode();
-        Boolean confirm = code.equalsIgnoreCase(securitycode);
-        if (confirm) {
-            TblSecurity securitystatus = securityService.findSecurityStatus(securityname);
-            if ("启用".equals(securitystatus.getSecuritystatus())) {
-                TblSecurity Security = securityService.securityLogin(securityname, securitypwd);
-                if (null != Security) {
-                    ResponseUtils.outHtml(response, "success");
-                    List<TblSecurity> tblSecurityList = new ArrayList<>();
-                    tblSecurityList.add(Security);
-                    List<TblCampus> tblCampusList = securityService.findKinderNews(kindername);
-                    request.getSession().setAttribute("tblCampusList", tblCampusList);
-                    request.getSession().setAttribute("securityname", securityname);
-                    request.getSession().setAttribute("kindername", kindername);
-                    request.getSession().setAttribute("kid", kid);
-                    request.getSession().setAttribute("tblSecurityList", tblSecurityList);
+        if(null == tblKinder) {
+            request.getSession().removeAttribute("securityname");
+            ResponseUtils.outHtml(response, "notmen");
+        }else {
+            kindername = tblKinder.getKindername();
+            Integer kid = tblKinder.getKinderid();
+            String securitypwd = MD5Utils.md5(tblSecurity.getSecuritypwd());
+            String code = tblSecurity.getCode();
+            Boolean confirm = code.equalsIgnoreCase(securitycode);
+            if (confirm) {
+                TblSecurity securitystatus = securityService.findSecurityStatus(securityname);
+                if ("启用".equals(securitystatus.getSecuritystatus())) {
+                    TblSecurity Security = securityService.securityLogin(securityname, securitypwd);
+                    if (null != Security) {
+                        ResponseUtils.outHtml(response, "success");
+                        List<TblSecurity> tblSecurityList = new ArrayList<>();
+                        tblSecurityList.add(Security);
+                        List<TblCampus> tblCampusList = securityService.findKinderNews(kindername);
+                        request.getSession().setAttribute("tblCampusList", tblCampusList);
+                        request.getSession().setAttribute("securityname", securityname);
+                        request.getSession().setAttribute("kindername", kindername);
+                        request.getSession().setAttribute("kid", kid);
+                        request.getSession().setAttribute("tblSecurityList", tblSecurityList);
+                    }
+                } else {
+                    ResponseUtils.outHtml(response, "notmen");
                 }
             } else {
-                ResponseUtils.outHtml(response, "notmen");
+                ResponseUtils.outHtml(response, "codeerror");
             }
-        } else {
-            ResponseUtils.outHtml(response, "codeerror");
         }
     }
 

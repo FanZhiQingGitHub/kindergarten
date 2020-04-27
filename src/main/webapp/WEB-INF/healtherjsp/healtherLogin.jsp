@@ -281,7 +281,7 @@
                     <label class="layui-form-label">用户名</label>
                     <div class="layui-input-inline">
                         <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
-                        <input type="text" name="healthername"  lay-verify="required" placeholder="请输入用户名"
+                        <input type="text" name="healthername" lay-verify="required" placeholder="请输入用户名"
                                autocomplete="off" class="layui-input" id="te1">
                     </div>
                 </div>
@@ -309,7 +309,8 @@
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="formDemo">
+                        <button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit
+                                lay-filter="formDemo">
                             立即登录
                         </button>
                     </div>
@@ -365,7 +366,7 @@
                 /^[\S]{6,12}$/
                 , '您好，密码必须6~12位，且不能出现空格！'
             ],
-            code :function (value) {
+            code: function (value) {
                 if (value.length != 4) {
                     return '您好，验证码是4位数！';
                 }
@@ -375,6 +376,17 @@
             }
         });
         form.on('submit(formDemo)', function (data) {
+            var loadingIndex = layer.load(3, {
+                shade: [0.2, 'gray'], //0.5透明度的灰色背景
+                content: '登录中，请稍后......',
+                success: function (layero) {
+                    layero.find('.layui-layer-content').css({
+                        'padding-top': '39px',
+                        'width': '150px',
+                        'color': '#eb7350'
+                    });
+                }
+            });
             $.ajax({
                 url: path + "/healther/healtherLogin",
                 async: true,
@@ -383,18 +395,26 @@
                 datatype: "text",
                 success: function (msg) {
                     if (msg == "success") {
+                        layer.close(loadingIndex);
                         layer.msg("欢迎您，登录成功！", {icon: 6});
-                        location.href = path + "/healther/path/healtherMain";
+                        setInterval(function () {
+                            location.href = path + "/healther/path/healtherMain";
+                            clearInterval(intervalId);
+                        }, 1000);
                     } else if (msg == "error") {
+                        layer.close(loadingIndex);
                         layer.msg("账号或密码错误！", {icon: 2});
                     } else if (msg == "codeerror") {
+                        layer.close(loadingIndex);
                         layer.msg("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/healther/loginCode?" + Math.random();
                     } else if (msg == "notmen") {
+                        layer.close(loadingIndex);
                         layer.msg("该用户已被禁用或者不存在！", {icon: 2});
                     }
                 }, error: function (msg) {
+                    layer.close(loadingIndex);
                     layer.msg("网络繁忙！", {icon: 2});
                 }
             });
@@ -423,7 +443,7 @@
                         var num = /^1\d{10}$/;
                         if (healthername.length == 0) {
                             layer.msg("您好，用户名不能为空！", {icon: 2});
-                        }else if (!num.test(healtherphone)) {
+                        } else if (!num.test(healtherphone)) {
                             layer.alert("您好，手机号码必须11位，且不能出现空格！", {icon: 2});
                         } else {
                             $.ajax({
@@ -467,7 +487,7 @@
                     success: function (data) {
                         if (data == "notmen") {
                             layer.msg("对不起，不存在该用户！", {icon: 2});
-                        }else {
+                        } else {
                             layer.msg("存在该用户！", {icon: 6});
                         }
                     }, error: function (data) {
