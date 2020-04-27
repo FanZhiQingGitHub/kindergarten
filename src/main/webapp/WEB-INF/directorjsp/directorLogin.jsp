@@ -341,17 +341,29 @@
 
         });
         form.on('submit(formDemo)', function (data) {
+            var loadingIndex = '';
             $.ajax({
                 url: path + "/director/directorLogin",
                 async: true,
                 type: "post",
                 data: data.field,
                 datatype: "text",
+                beforeSend: function () {
+                    loadingIndex = layer.load(3, {
+                        shade: [0.2, 'gray'], //0.5透明度的灰色背景
+                        content: '登录中，请稍后......',
+                        success: function (layero) {
+                            layero.find('.layui-layer-content').css({
+                                'padding-top': '39px',
+                                'width': '150px',
+                                'color': '#eb7350'
+                            });
+                        }
+                    });
+                },
                 success: function (msg) {
                     if (msg === "success") {
-                        layer.alert("登录成功！", {icon: 6}, function () {
-                            location.href = path + "/director/toUrl/directorMain";
-                        });
+                        location.href = path + "/director/toUrl/directorMain";
                     } else if (msg === "error") {
                         layer.alert("账号或密码错误！", {icon: 2});
                     } else if (msg === "codeerror") {
@@ -363,6 +375,9 @@
                     }
                 }, error: function (msg) {
                     layer.msg("网络繁忙！", {icon: 2});
+                },complete: function () {
+                    layer.close(loadingIndex);
+                    layer.msg("欢迎您，登录成功！", {icon: 6});
                 }
             });
         });

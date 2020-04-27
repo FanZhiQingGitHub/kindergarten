@@ -61,7 +61,7 @@
 				<ul class="layui-nav layui-layout-right" style="top: 18px">
 					<li class="layui-nav-item" style="width: 70%">
 						<a href="javascript:;" style="margin: 2% -20%;font-size: 20px;">
-							<img id="adminheadurl" class="layui-nav-img" style="width: 30px;height: 30px">
+							<img class="layui-nav-img" style="width: 30px;height: 30px" src="${pageContext.request.contextPath}/image/logo/head.jpg">
 							<%
 								String adminname = (String) request.getSession().getAttribute("adminname");
 								String rolename = (String) request.getSession().getAttribute("rolename");
