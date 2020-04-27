@@ -131,6 +131,7 @@
 				});
 			}
 			,done: function(res, index, upload){
+
 				if(res.code==0){ //上传成功
 					alert("上传成功");
 					var tr = demoListView.find('tr#upload-'+ index)
@@ -139,6 +140,10 @@
 					tds.eq(3).html(''); //清空操作
 					return delete this.files[index]; //删除文件队列已经上传成功的文件
 				}
+				if(res.code==1){ //上传失败  选择班级
+					alert("请选择班级");
+				}
+
 				this.error(index, upload);
 			}
 			,error: function(index, upload){

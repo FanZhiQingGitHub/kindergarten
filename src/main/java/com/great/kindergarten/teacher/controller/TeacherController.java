@@ -356,11 +356,8 @@ public class TeacherController {
         String fileName = null;
         String filePath = null;
 
-
-
-
-
         tblClass.setClassname(classname);
+        System.out.println("发布作业classname="+classname);
         //查询发布作业表中最后一个id 插入的为id+1
         Integer workreleaseid = teacherService.findFinallyWorkreleaseid();
 
@@ -375,64 +372,84 @@ public class TeacherController {
         String nowDay = df.format(new Date());
         //实际路径
         String path = request.getServletContext().getRealPath("/workRelease/" + classname + "/" + nowDay + "/" + workreleaseid);
-        try {
-            //根据班级名查找id
-            Integer classid = teacherService.findClassidByName(tblClass);
-
-            Long size = file.getSize();
-            Long maxsize = 107374182400L;
-            if (size > maxsize) {
-                ResponseUtils.outHtml(response, "文件过大");
-            } else {
-
-                inputStream = file.getInputStream();
-                fileName = file.getOriginalFilename();
 
 
-                // 2、保存到临时文件
-                // 1K的数据缓冲
-                byte[] bs = new byte[1024];
-                // 读取到的数据长度
-                int len;
-                // 输出的文件流保存到本地文件
-
-
-                File tempFile = new File(path);
-                //目录不存在会创建
-                if (!tempFile.exists()) {
-                    tempFile.mkdirs();
-                }
-
-
-                filePath = tempFile.getPath() + File.separator + fileName;
-                os = new FileOutputStream(filePath);
-                // 开始读取
-                while ((len = inputStream.read(bs)) != -1) {
-                    os.write(bs, 0, len);
-                }
-                //添加数据到数据表
-                tblWorkrelease.setWorkreleasedetail(fileName);
-                tblWorkrelease.setWorklocation("workRelease@" + classname + "@@" + nowDay + "@@@" + workreleaseid + "@@@@" + fileName);
-
-                tblWorkrelease.setCid(classid);
-                Boolean flag = teacherService.addFileInfo(tblWorkrelease);
-                if (flag) {
+            try {
+                //根据班级名查找id
+                Integer classid = teacherService.findClassidByName(tblClass);
+                //判断班级不为空的情况下
+                if(classid==null){
                     //upload要求返回的数据格式
                     Map<String, Object> uploadData = new HashMap<String, Object>(5);
-                    uploadData.put("code", "0");
+                    uploadData.put("code", "1");
                     uploadData.put("msg", "");
                     //将文件路径返回
                     uploadData.put("data", "{}");
                     System.out.println(uploadData);
                     ResponseUtils.outJson(response, uploadData);
-                    //                        return uploadData;
+
+            }else {
+
+                    Long size = file.getSize();
+                    Long maxsize = 107374182400L;
+                    if (size > maxsize) {
+                        ResponseUtils.outHtml(response, "文件过大");
+                    } else {
+                        //读取文件   输入流
+                        inputStream = file.getInputStream();
+                        fileName = file.getOriginalFilename();
+
+                        // 2、保存到临时文件
+                        // 1K的数据缓冲
+                        byte[] bs = new byte[1024];
+                        // 读取到的数据长度
+                        int len;
+                        // 输出的文件流保存到本地文件
+
+                        File tempFile = new File(path);
+                        //目录不存在会创建
+                        if (!tempFile.exists()) {
+                            tempFile.mkdirs();
+                        }
+
+                        filePath = tempFile.getPath() + File.separator + fileName;
+                        //发布作业的为输出流
+                        os = new FileOutputStream(filePath);
+                        // 开始读取
+                        while ((len = inputStream.read(bs)) != -1) {
+                            os.write(bs, 0, len);
+                        }
+                        //添加数据到数据表
+                        tblWorkrelease.setWorkreleasedetail(fileName);
+                        tblWorkrelease.setWorklocation("workRelease@" + classname + "@@" + nowDay + "@@@" + workreleaseid + "@@@@" + fileName);
+
+                        tblWorkrelease.setCid(classid);
+                        Boolean flag = teacherService.addFileInfo(tblWorkrelease);
+                        if (flag) {
+                            //upload要求返回的数据格式
+                            Map<String, Object> uploadData = new HashMap<String, Object>(5);
+                            uploadData.put("code", "0");
+                            uploadData.put("msg", "");
+                            //将文件路径返回
+                            uploadData.put("data", "{}");
+                            System.out.println(uploadData);
+                            ResponseUtils.outJson(response, uploadData);
+                            //                        return uploadData;
+                        }
+                    }
+
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+            // 完毕，关闭所有链接
+            try {
+                os.close();
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
 
         return null;
     }
@@ -1036,11 +1053,6 @@ public class TeacherController {
             while ((len = inputStream.read(bs)) != -1) {
                 os.write(bs, 0, len);
             }
-
-
-
-
-
 
             //添加数据到数据表
             tblPhoto.setCid(cid);

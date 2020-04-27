@@ -447,9 +447,9 @@
 				});
 				// layer.close(index);
 				// window.location.href = src+"/director/toUrl/chatlogin";
-				return true;
-
-			return false;
+			// 	return true;
+			//
+			// return false;
 		});
 		//班级通知
 		$("#classMessageInform").on('click',function () {
