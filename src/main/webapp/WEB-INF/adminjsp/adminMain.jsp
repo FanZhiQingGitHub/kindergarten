@@ -124,8 +124,20 @@
 				$("#exit").click(function () {
 					layer.confirm("您确定要退出？",{icon:3,title: '温馨提示'},function (index) {
 						layer.close(index);
-						sessionStorage.clear();//清除session信息
-						location.href = path+"/admin/toUrl/adminLogin";
+						// sessionStorage.clear();//清除session信息
+						// location.href = path+"/admin/toUrl/adminLogin";
+						$.ajax({
+							url: path + "/admin/logout",
+							type: 'post',
+							datatype: 'text',
+							success: function (data) {
+								location.href=path+'/admin/toUrl/'+data;
+
+							}, error: function (data) {
+								layer.alert("网络繁忙！", {icon: 2});
+							}
+						});
+
 					})
 				});
 				$("#perInfo").click(function () {

@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<h1 align="center"> 重复提交会覆盖原来的作业</h1>
+<h1 align="center"> 重复提交会覆盖原来的作业(作业请勿包含中文，否则你会不及格的)</h1>
 <form>
 
 

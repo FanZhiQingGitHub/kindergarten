@@ -12,6 +12,7 @@ import com.great.kindergarten.admin.javabean.TblStatistics;
 import com.great.kindergarten.admin.service.AdminService;
 import com.great.kindergarten.admin.service.SystemLogService;
 import com.great.kindergarten.commons.entity.*;
+import com.great.kindergarten.parent.annotation.ParentSystemLog;
 import com.great.kindergarten.util.GsonUtils;
 import com.great.kindergarten.util.MD5Utils;
 import com.great.kindergarten.util.ResponseUtils;
@@ -123,6 +124,14 @@ public class AdminController
 		}else{
 			ResponseUtils.outHtml(response,"notmen");
 		}
+	}
+
+	@AdminSystemLog(operationType = "注销", operationName = "退出登陆了")
+	@RequestMapping("/logout")
+	public void logout(HttpServletRequest request,HttpServletResponse response) {
+		request.getSession().removeAttribute("adminname");
+		request.getSession().removeAttribute("tblAdmin");
+		ResponseUtils.outHtml(response,"adminLogin");
 	}
 
 

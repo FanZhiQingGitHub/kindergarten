@@ -220,13 +220,17 @@
 							}
 							,done: function(res, index, upload){
 								if (res.code==0){
-									layer.close(index);
+
 									if (layer.confirm("上传成功")) {
+										layer.close(index);
 										//刷新表格
 										window.location.reload();
-									}else {}
-									//刷新表格
-									window.location.reload();
+									}else {
+										layer.close(index);
+										//刷新表格
+										window.location.reload();
+									}
+
 								}
 								//上传完毕回调
 								layer.closeAll('loading'); //关闭loading
