@@ -39,7 +39,7 @@ import java.util.*;
 @Controller
 @RequestMapping(value = "/teacher")
 public class TeacherController {
-//    private String vcode;
+    //    private String vcode;
 //    private TblTeacher tblTeacher1;
 //    private int cid;
     private TblWork tblWork;
@@ -69,7 +69,6 @@ public class TeacherController {
     private TblClamsg tblClamsg;
     @Resource
     private KinderService kinderService;
-
 
 
     @RequestMapping(value = "/main")
@@ -152,8 +151,8 @@ public class TeacherController {
                 g.fillRect(random.nextInt(width), random.nextInt(height), 1, 1);//随机噪音点
             }
             /**3 获得随机数据，并保存session*/
-            String vcode = builder.toString();
-            request.getSession().setAttribute("vcode", vcode);
+            String teachercode = builder.toString();
+            request.getSession().setAttribute("teachercode", teachercode);
             //.. 生成图片发送到浏览器 --相当于下载
             ImageIO.write(image, "jpg", response.getOutputStream());
             response.getOutputStream().flush();
@@ -174,50 +173,46 @@ public class TeacherController {
         //        获取验证码
         String code = tblTeacher.getCode();
         //        验证码判定是否一致
-        String vcode=(String)request.getSession().getAttribute("vcode");
-        Boolean confirm = code.equalsIgnoreCase(vcode);
+        String teachercode = (String) request.getSession().getAttribute("teachercode");
+        Boolean confirm = code.equalsIgnoreCase(teachercode);
         if (confirm) {
             //  获取名字查询状态
             String teacherStatus = teacherService.findTeacherStatus(tblTeacher.getTeachername());
             if (teacherStatus.equals("启用")) {
                 // 登录 获取全部信息
-               TblTeacher tblTeacher1 = teacherService.findTeacher(tblTeacher);
+                TblTeacher tblTeacher1 = teacherService.findTeacher(tblTeacher);
                 // 根据cid 查找班级名称信息
-                int cid = tblTeacher1.getCid();
-                int kid=tblTeacher1.getKinderid();
-                TblClass tblClass = teacherService.findClassAll(cid);
-                List<TblTeacher> tblTeacherList = new ArrayList<>();
-                TblKinder tblKinder = teacherService.findkinderNameByKid(kid);
-                String kinderName=tblKinder.getKindername();
-
-                if (null != tblTeacher1) {
-                    //查找园所动态news
-                    List<TblCampus> tblCampusList = teacherService.findKinderNews(tblTeacher1.getKinderid());
-                    request.getSession().setAttribute("tblCampusList", tblCampusList);
-                    request.getSession().setAttribute("kid", kid);
-
-                    request.getSession().setAttribute("kindername", kinderName);
-                    request.getSession().setAttribute("teachername", tblTeacher.getTeachername());
-                    // 存信息到页面显示
-                    request.getSession().setAttribute("classname", tblClass.getClassname());
-                    tblTeacherList.add(tblTeacher1);
-                    request.getSession().setAttribute("tblTeacher", tblTeacher1);
-                    request.getSession().setAttribute("tblTeacherList", tblTeacherList);
-
-                    str = "success";
-//					return "teacherjsp/teacherMain";
+                TblClass tblClass = teacherService.findClassAll(tblTeacher1.getCid());
+                if (null == tblClass) {
+                    request.getSession().removeAttribute("teachername");
+                    str = "notclass";
                 } else {
-                    str = "error";
+                    List<TblTeacher> tblTeacherList = new ArrayList<>();
+                    TblKinder tblKinder = teacherService.findkinderNameByKid(tblTeacher1.getKinderid());
+                    String kinderName = tblKinder.getKindername();
+                    if (null != tblTeacher1) {
+                        //查找园所动态news
+                        List<TblCampus> tblCampusList = teacherService.findKinderNews(tblTeacher1.getKinderid());
+                        request.getSession().setAttribute("tblCampusList", tblCampusList);
+                        request.getSession().setAttribute("kid", tblTeacher1.getKinderid());
+                        request.getSession().setAttribute("kindername", kinderName);
+                        request.getSession().setAttribute("teachername", tblTeacher.getTeachername());
+                        // 存信息到页面显示
+                        request.getSession().setAttribute("classname", tblClass.getClassname());
+                        tblTeacherList.add(tblTeacher1);
+                        request.getSession().setAttribute("tblTeacher", tblTeacher1);
+                        request.getSession().setAttribute("tblTeacherList", tblTeacherList);
+                        str = "success";
+                    } else {
+                        str = "error";
+                    }
                 }
-
             } else {
                 str = "notmen";
             }
-
         } else {
             str = "codeerror";
         }
-        System.out.println("str=" + str);
         return str;
     }
 
@@ -243,7 +238,7 @@ public class TeacherController {
         String oldTeachererPwd1 = MD5Utils.md5(oldTeacherPwd);//旧密码
         String teacherPwd1 = MD5Utils.md5(teacherPwd);//新密码
         //        根据教师id 查找信息
-        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
         int teacherid = tblTeacher1.getTeacherid();
         TblTeacher tblTeacher2 = teacherService.checkPwd(teacherid);
         //判断旧密码是否一致
@@ -269,7 +264,7 @@ public class TeacherController {
     @ResponseBody
     public DateTable thisWeekCourse(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         //根据老师获取班级id
-       TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
         int cid = tblTeacher1.getCid();
         System.out.println("cid=" + cid);
         String currentmonday = "1";
@@ -323,7 +318,7 @@ public class TeacherController {
     @RequestMapping(value = "/selectClass")
     @ResponseBody
     public List<TblClass> selectClass(HttpServletRequest request) {
-        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
         int cid = tblTeacher1.getCid();
         System.out.println("selectClass进来cid=" + cid);
 
@@ -357,7 +352,7 @@ public class TeacherController {
         String filePath = null;
 
         tblClass.setClassname(classname);
-        System.out.println("发布作业classname="+classname);
+        System.out.println("发布作业classname=" + classname);
         //查询发布作业表中最后一个id 插入的为id+1
         Integer workreleaseid = teacherService.findFinallyWorkreleaseid();
 
@@ -374,74 +369,74 @@ public class TeacherController {
         String path = request.getServletContext().getRealPath("/workRelease/" + classname + "/" + nowDay + "/" + workreleaseid);
 
 
-            try {
-                //根据班级名查找id
-                Integer classid = teacherService.findClassidByName(tblClass);
-                //判断班级不为空的情况下
-                if(classid==null){
-                    //upload要求返回的数据格式
-                    Map<String, Object> uploadData = new HashMap<String, Object>(5);
-                    uploadData.put("code", "1");
-                    uploadData.put("msg", "");
-                    //将文件路径返回
-                    uploadData.put("data", "{}");
-                    System.out.println(uploadData);
-                    ResponseUtils.outJson(response, uploadData);
+        try {
+            //根据班级名查找id
+            Integer classid = teacherService.findClassidByName(tblClass);
+            //判断班级不为空的情况下
+            if (classid == null) {
+                //upload要求返回的数据格式
+                Map<String, Object> uploadData = new HashMap<String, Object>(5);
+                uploadData.put("code", "1");
+                uploadData.put("msg", "");
+                //将文件路径返回
+                uploadData.put("data", "{}");
+                System.out.println(uploadData);
+                ResponseUtils.outJson(response, uploadData);
 
-            }else {
+            } else {
 
-                    Long size = file.getSize();
-                    Long maxsize = 107374182400L;
-                    if (size > maxsize) {
-                        ResponseUtils.outHtml(response, "文件过大");
-                    } else {
-                        //读取文件   输入流
-                        inputStream = file.getInputStream();
-                        fileName = file.getOriginalFilename();
+                Long size = file.getSize();
+                Long maxsize = 107374182400L;
+                if (size > maxsize) {
+                    ResponseUtils.outHtml(response, "文件过大");
+                } else {
+                    //读取文件   输入流
+                    inputStream = file.getInputStream();
+                    fileName = file.getOriginalFilename();
 
-                        // 2、保存到临时文件
-                        // 1K的数据缓冲
-                        byte[] bs = new byte[1024];
-                        // 读取到的数据长度
-                        int len;
-                        // 输出的文件流保存到本地文件
+                    // 2、保存到临时文件
+                    // 1K的数据缓冲
+                    byte[] bs = new byte[1024];
+                    // 读取到的数据长度
+                    int len;
+                    // 输出的文件流保存到本地文件
 
-                        File tempFile = new File(path);
-                        //目录不存在会创建
-                        if (!tempFile.exists()) {
-                            tempFile.mkdirs();
-                        }
-
-                        filePath = tempFile.getPath() + File.separator + fileName;
-                        //发布作业的为输出流
-                        os = new FileOutputStream(filePath);
-                        // 开始读取
-                        while ((len = inputStream.read(bs)) != -1) {
-                            os.write(bs, 0, len);
-                        }
-                        //添加数据到数据表
-                        tblWorkrelease.setWorkreleasedetail(fileName);
-                        tblWorkrelease.setWorklocation("workRelease@" + classname + "@@" + nowDay + "@@@" + workreleaseid + "@@@@" + fileName);
-
-                        tblWorkrelease.setCid(classid);
-                        Boolean flag = teacherService.addFileInfo(tblWorkrelease);
-                        if (flag) {
-                            //upload要求返回的数据格式
-                            Map<String, Object> uploadData = new HashMap<String, Object>(5);
-                            uploadData.put("code", "0");
-                            uploadData.put("msg", "");
-                            //将文件路径返回
-                            uploadData.put("data", "{}");
-                            System.out.println(uploadData);
-                            ResponseUtils.outJson(response, uploadData);
-                            //                        return uploadData;
-                        }
+                    File tempFile = new File(path);
+                    //目录不存在会创建
+                    if (!tempFile.exists()) {
+                        tempFile.mkdirs();
                     }
 
+                    filePath = tempFile.getPath() + File.separator + fileName;
+                    //发布作业的为输出流
+                    os = new FileOutputStream(filePath);
+                    // 开始读取
+                    while ((len = inputStream.read(bs)) != -1) {
+                        os.write(bs, 0, len);
+                    }
+                    //添加数据到数据表
+                    tblWorkrelease.setWorkreleasedetail(fileName);
+                    tblWorkrelease.setWorklocation("workRelease@" + classname + "@@" + nowDay + "@@@" + workreleaseid + "@@@@" + fileName);
+
+                    tblWorkrelease.setCid(classid);
+                    Boolean flag = teacherService.addFileInfo(tblWorkrelease);
+                    if (flag) {
+                        //upload要求返回的数据格式
+                        Map<String, Object> uploadData = new HashMap<String, Object>(5);
+                        uploadData.put("code", "0");
+                        uploadData.put("msg", "");
+                        //将文件路径返回
+                        uploadData.put("data", "{}");
+                        System.out.println(uploadData);
+                        ResponseUtils.outJson(response, uploadData);
+                        //                        return uploadData;
+                    }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }finally {
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
             // 完毕，关闭所有链接
             try {
                 os.close();
@@ -469,7 +464,7 @@ public class TeacherController {
         dataHashMap.put("pageInt", pageInt);
         dataHashMap.put("limitInt", limitInt);
         //        根据cid 查找班级名称信息
-        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
 
         int cid = tblTeacher1.getCid();
         System.out.println("cid=" + cid);
@@ -621,8 +616,8 @@ public class TeacherController {
         HashMap<String, Object> dataHashMap = new HashMap<>();
         dataHashMap.put("pageInt", pageInt);
         dataHashMap.put("limitInt", limitInt);
-        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
-        int cid=tblTeacher1.getCid();
+        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
+        int cid = tblTeacher1.getCid();
         dataHashMap.put("cid", cid);
         //            查询视频总数
         Integer count = teacherService.findSafetyCount(dataHashMap);
@@ -824,7 +819,7 @@ public class TeacherController {
         }
         dataHashMap.put("pageInt", pageInt);
         dataHashMap.put("limitInt", limitInt);
-        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
         int cid = tblTeacher1.getCid();
 
         dataHashMap.put("cid", cid);
@@ -866,7 +861,7 @@ public class TeacherController {
         dataHashMap.put("pageInt", pageInt);
         dataHashMap.put("limitInt", limitInt);
         //查找班级id
-        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
         int cid = tblTeacher1.getCid();
 
         dataHashMap.put("cid", cid);
@@ -978,7 +973,7 @@ public class TeacherController {
         dataHashMap.put("pageInt", pageInt);
         dataHashMap.put("limitInt", limitInt);
         //查找班级id
-        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
 
         int cid = tblTeacher1.getCid();
         dataHashMap.put("cid", cid);
@@ -1015,9 +1010,8 @@ public class TeacherController {
         String filePath = null;
 
 
-
         System.out.println("上传图片进来");
-        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
         int cid = tblTeacher1.getCid();
         TblClass tblClass = teacherService.findClassAll(cid);
         String className = tblClass.getClassname();
@@ -1054,10 +1048,6 @@ public class TeacherController {
             while ((len = inputStream.read(bs)) != -1) {
                 os.write(bs, 0, len);
             }
-
-
-
-
 
 
             //添加数据到数据表
@@ -1097,7 +1087,7 @@ public class TeacherController {
         HashMap<String, Object> dataHashMap = new HashMap<>();
         dataHashMap.put("pageInt", pageInt);
         dataHashMap.put("limitInt", limitInt);
-        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
         int cid = tblTeacher1.getCid();
 
         dataHashMap.put("cid", cid);
@@ -1128,7 +1118,7 @@ public class TeacherController {
         //获取通知消息内容
         String claMsgDetail = request.getParameter("claMsgDetail");
         //添加数据
-        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
         int cid = tblTeacher1.getCid();
 
         tblClamsg.setCid(cid);
@@ -1174,8 +1164,7 @@ public class TeacherController {
         5.如果下午或上午没打卡的话默认要插入请假或者其它默认数据
 	 * */
     @RequestMapping("/addTeaAttendTime")
-    public void addTeaAttendTime(TblTeacherAttend tblTeacherAttend, TblTertime tblTertime, HttpServletRequest request, HttpServletResponse response) throws ParseException
-    {
+    public void addTeaAttendTime(TblTeacherAttend tblTeacherAttend, TblTertime tblTertime, HttpServletRequest request, HttpServletResponse response) throws ParseException {
         String face = request.getParameter("face");
 
 
@@ -1186,10 +1175,10 @@ public class TeacherController {
         //		FaceRecognitionUtils.faceRegister(face, "testPhoto1");
         //		System.out.println("face=" + face);
 
-        if (tblTeacher!=null){
+        if (tblTeacher != null) {
 
             //人脸识别成功
-            if (FaceRecognitionUtils.identify(face,"t"+tblTeacher.getTeacherid())){
+            if (FaceRecognitionUtils.identify(face, "t" + tblTeacher.getTeacherid())) {
 
                 SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式（当天日期）
                 String timeamdate = date.format(new Date());
@@ -1206,31 +1195,25 @@ public class TeacherController {
 
                 Date dt = new Date();
                 String today = DateUtil.getWeekOfDate(dt);
-                if (today.equals("星期六") || today.equals("星期日"))
-                {
+                if (today.equals("星期六") || today.equals("星期日")) {
                     System.out.println("不进行新增考勤");
                     ResponseUtils.outHtml(response, "notadd");
-                } else
-                {
-                    if (0 == tblTeaAttList.size())
-                    { //如果不存在本周一和周日的日期---对应的该时间段的教师id值
+                } else {
+                    if (0 == tblTeaAttList.size()) { //如果不存在本周一和周日的日期---对应的该时间段的教师id值
                         System.out.println("不存在本周一和周日的日期--对应的该时间段的教师id值");
                         //				date.parse(monday)
                         tblTeacherAttend.setTattendbegin(monday);
                         tblTeacherAttend.setTattendover(sunday);
                         tblTeacherAttend.setTid(teacherid);
                         boolean flagDate = kinderService.addDateTeaAttend(tblTeacherAttend);
-                        if (flagDate)
-                        {
+                        if (flagDate) {
                             System.out.println("日期区间新增成功");
                             addTeaAttendTimeTo(tblTeacherAttend, teacherid, tblTertime, request, response);//新增教师考勤
-                        } else
-                        {
+                        } else {
                             System.out.println("日期区间新增失败");
                             ResponseUtils.outHtml(response, "errorinfo");
                         }
-                    } else
-                    {
+                    } else {
                         tblTeacherAttend.setTattendover(sunday);
                         tblTeacherAttend.setTid(teacherid);
                         //对应的要修改时间表的字段值
@@ -1242,7 +1225,7 @@ public class TeacherController {
                     }
                 }
 
-            }else {
+            } else {
                 //人脸识别失败
                 ResponseUtils.outHtml(response, "failure");
             }
@@ -1251,12 +1234,10 @@ public class TeacherController {
         }
 
 
-
     }
 
     //添加考勤上下午信息记录对应的方法
-    private void addTeaAttendTimeTo(TblTeacherAttend tblTeacherAttend, Integer teacherid, TblTertime tblTertime, HttpServletRequest request, HttpServletResponse response) throws ParseException
-    {
+    private void addTeaAttendTimeTo(TblTeacherAttend tblTeacherAttend, Integer teacherid, TblTertime tblTertime, HttpServletRequest request, HttpServletResponse response) throws ParseException {
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式（当天日期）
         String timePmdate = date.format(new Date());
         System.out.println("方法==新增教师考勤信息id=" + teacherid);
@@ -1264,8 +1245,7 @@ public class TeacherController {
         Calendar now = Calendar.getInstance();
         List<TblTeacherAttend> tblTeaAttList = kinderService.findTeaAtteByTid(teacherid);
         Integer dateid = 0;
-        for (TblTeacherAttend tblTeaAttend : tblTeaAttList)
-        {
+        for (TblTeacherAttend tblTeaAttend : tblTeaAttList) {
             dateid = tblTeaAttend.getTattendid();//教师考勤日期表id
             System.out.println("教师考勤日期区间的id=" + dateid);
         }
@@ -1276,26 +1256,21 @@ public class TeacherController {
         String nmm = null;
         String hmm = null;
         //分钟
-        if (mm < 10)
-        {
+        if (mm < 10) {
             nmm = "0" + mm;
-        } else
-        {
+        } else {
             nmm = "" + mm;
         }
         //小时
-        if (hh < 10)
-        {
+        if (hh < 10) {
             hmm = "0" + hh;
-        } else
-        {
+        } else {
             hmm = "" + hh;
         }
         hm = hmm + ":" + nmm;
         System.out.println("时间是=" + hm);
         //早上的打卡
-        if (hm.compareTo("12:00") < 0)
-        {
+        if (hm.compareTo("12:00") < 0) {
             //（3）查找上午是否有过添加该字段了-
             // ---如果有的话，就进行对应的修改
             //---没有的话，就进行对应的添加
@@ -1304,8 +1279,7 @@ public class TeacherController {
             map.put("taid", dateid);
             TblTertime tblTertime1 = kinderService.findAfternoon(map);
 
-            if (tblTertime1 == null)
-            {
+            if (tblTertime1 == null) {
                 System.out.println("上午考勤信息中不存在今天的日期");
                 //上午打卡的时候同时新增当天日期
                 System.out.println("上午打卡的时间段=" + hm);
@@ -1314,15 +1288,12 @@ public class TeacherController {
                 tblTertime.setTaid(dateid);
                 System.out.println("上午tblTertime1=" + tblTertime);
                 boolean flag = kinderService.addAmTerTimeMsg(tblTertime);
-                if (flag)
-                {
+                if (flag) {
                     ResponseUtils.outHtml(response, "amsuccess");
-                } else
-                {
+                } else {
                     ResponseUtils.outHtml(response, "errorinfo");
                 }
-            } else
-            {
+            } else {
                 System.out.println("上午考勤表中存在今天的日期");
                 System.out.println("今天上午已经打过卡了");
                 System.out.println("上午打卡的时间段=" + hm);
@@ -1335,18 +1306,15 @@ public class TeacherController {
                 //对应的表字段进行更新
                 boolean flagPm = kinderService.updateAmTerTimeMsg(tblTertime);
                 System.out.println("判断的boolean=" + flagPm);
-                if (flagPm)
-                {
+                if (flagPm) {
                     ResponseUtils.outHtml(response, "amsuccess");
-                } else
-                {
+                } else {
                     ResponseUtils.outHtml(response, "errorinfo");
                 }
             }
         }
         //中午的打卡
-        else if (hm.compareTo("12:00") > 0 && hm.compareTo("13:40") < 0)
-        {
+        else if (hm.compareTo("12:00") > 0 && hm.compareTo("13:40") < 0) {
             //（2）查找中午是否有过添加该字段了
             // ---如果有的话，就进行对应的修改
             //---没有的话，就进行对应的添加
@@ -1355,8 +1323,7 @@ public class TeacherController {
             map.put("taid", dateid);
             TblTertime tblTertime1 = kinderService.findAfternoon(map);
             System.out.println(timePmdate + "是否有值=" + tblTertime1);
-            if (tblTertime1 == null)
-            {
+            if (tblTertime1 == null) {
                 System.out.println("中午考勤信息中不存在今天的日期");
                 System.out.println("中午打卡的时间段=" + hm);
                 DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -1365,15 +1332,12 @@ public class TeacherController {
                 tblTertime.setTaid(dateid);
                 System.out.println("中午tblTertime2=" + tblTertime);
                 boolean flag = kinderService.addOmTerTimeMsg(tblTertime);
-                if (flag)
-                {
+                if (flag) {
                     ResponseUtils.outHtml(response, "omsuccess");
-                } else
-                {
+                } else {
                     ResponseUtils.outHtml(response, "errorinfo");
                 }
-            } else
-            {
+            } else {
                 System.out.println("中午考勤表中存在今天的日期");
                 System.out.println("今天中午已经打过卡了");
                 System.out.println("中午打卡的时间段=" + hm);
@@ -1384,18 +1348,15 @@ public class TeacherController {
                 System.out.println("中午tblTertime2=" + tblTertime);
                 //对应的表字段进行更新
                 boolean flagPm = kinderService.updateOmTerTimeMsg(tblTertime);
-                if (flagPm)
-                {
+                if (flagPm) {
                     ResponseUtils.outHtml(response, "omsuccess");
-                } else
-                {
+                } else {
                     ResponseUtils.outHtml(response, "errorinfo");
                 }
             }
         }
         //下午的打卡
-        else
-        {
+        else {
             //（3）查找下午是否有过添加该字段了-
             // ---如果有的话，就进行对应的修改
             //---没有的话，就进行对应的添加
@@ -1404,8 +1365,7 @@ public class TeacherController {
             map.put("taid", dateid);
             TblTertime tblTertime1 = kinderService.findAfternoon(map);
             System.out.println(timePmdate + "是否有值=" + tblTertime1);
-            if (tblTertime1 == null)
-            {
+            if (tblTertime1 == null) {
                 System.out.println("下午考勤信息中不存在今天的日期");
                 System.out.println("下午打卡的时间段=" + hm);
                 tblTertime.setTertime(new Date());
@@ -1413,15 +1373,12 @@ public class TeacherController {
                 tblTertime.setTaid(dateid);
                 System.out.println("下午tblStutime3=" + tblTertime);
                 boolean flag = kinderService.addPmTerTimeMsg(tblTertime);
-                if (flag)
-                {
+                if (flag) {
                     ResponseUtils.outHtml(response, "pmsuccess");
-                } else
-                {
+                } else {
                     ResponseUtils.outHtml(response, "errorinfo");
                 }
-            } else
-            {
+            } else {
                 System.out.println("下午考勤表中存在今天的日期");
                 System.out.println("今天下午已经打过卡了");
                 System.out.println("下午打卡的时间段=" + hm);
@@ -1432,11 +1389,9 @@ public class TeacherController {
                 System.out.println("下午tblTertime3=" + tblTertime);
                 //对应的表字段进行更新
                 boolean flagPm = kinderService.updatePmTerTimeMsg(tblTertime);
-                if (flagPm)
-                {
+                if (flagPm) {
                     ResponseUtils.outHtml(response, "pmsuccess");
-                } else
-                {
+                } else {
                     ResponseUtils.outHtml(response, "errorinfo");
                 }
             }
@@ -1447,8 +1402,7 @@ public class TeacherController {
      * 请假的内容添加
      * */
     @RequestMapping("/addLeaveManage")
-    public void addLeaveManage(TblTeacherAttend tblTeacherAttend, TblTertime tblTertime, HttpServletRequest request, HttpServletResponse response) throws ParseException
-    {
+    public void addLeaveManage(TblTeacherAttend tblTeacherAttend, TblTertime tblTertime, HttpServletRequest request, HttpServletResponse response) throws ParseException {
         String leaveDate = request.getParameter("leaveDate");
         String time = request.getParameter("time");
         System.out.println("leaveDate=" + leaveDate);
@@ -1481,30 +1435,24 @@ public class TeacherController {
         System.out.println("monday=" + monday);
         System.out.println("sunday=" + sunday);
 
-        if (today.equals("星期六") || today.equals("星期日"))
-        {
+        if (today.equals("星期六") || today.equals("星期日")) {
             System.out.println("周末不需要进行请假");
             ResponseUtils.outHtml(response, "notadd");
-        } else
-        {
-            if (0 == tblTeaAttList.size())
-            { //如果不存在本周一和周日的日期---对应的该时间段的教师id值
+        } else {
+            if (0 == tblTeaAttList.size()) { //如果不存在本周一和周日的日期---对应的该时间段的教师id值
                 System.out.println("不存在本周一和周日的日期--对应的该时间段的教师id值");
                 tblTeacherAttend.setTattendbegin(monday);
                 tblTeacherAttend.setTattendover(sunday);
                 tblTeacherAttend.setTid(teacherid);
                 boolean flagDate = kinderService.addDateTeaAttend(tblTeacherAttend);
-                if (flagDate)
-                {
+                if (flagDate) {
                     System.out.println("日期区间新增成功");
                     addLeaveManageTo(tblTeacherAttend, leaveDate, time, teacherid, tblTertime, request, response);//新增教师考勤
-                } else
-                {
+                } else {
                     System.out.println("日期区间新增失败");
                     ResponseUtils.outHtml(response, "errorinfo");
                 }
-            } else
-            {
+            } else {
                 tblTeacherAttend.setTattendover(sunday);
                 tblTeacherAttend.setTid(teacherid);
                 //对应的要修改时间表的字段值
@@ -1518,13 +1466,11 @@ public class TeacherController {
     }
 
     //添加请假的考勤上下午信息记录对应的方法
-    private void addLeaveManageTo(TblTeacherAttend tblTeacherAttend, String leaveDate, String time, Integer teacherid, TblTertime tblTertime, HttpServletRequest request, HttpServletResponse response) throws ParseException
-    {
+    private void addLeaveManageTo(TblTeacherAttend tblTeacherAttend, String leaveDate, String time, Integer teacherid, TblTertime tblTertime, HttpServletRequest request, HttpServletResponse response) throws ParseException {
         System.out.println("方法==新增教师考勤信息id=" + leaveDate + teacherid);
         List<TblTeacherAttend> tblTeaAttList = kinderService.findTeaAtteByTid(teacherid);
         Integer dateid = 0;
-        for (TblTeacherAttend tblTeaAttend : tblTeaAttList)
-        {
+        for (TblTeacherAttend tblTeaAttend : tblTeaAttList) {
             dateid = tblTeaAttend.getTattendid();//教师考勤日期表id
             System.out.println("教师考勤日期区间的id=" + dateid);
         }
@@ -1537,13 +1483,11 @@ public class TeacherController {
         //转换请假的日期格式为date
         DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
         //早上的打卡
-        if (time.equals("上午"))
-        {
+        if (time.equals("上午")) {
             //（3）查找上午是否有过添加该字段了
             // ---如果有的话，就进行对应的修改
             //---没有的话，就进行对应的添加
-            if (tblTertime1 == null)
-            {
+            if (tblTertime1 == null) {
                 System.out.println("上午考勤信息中不存在今天的日期");
                 //上午打卡的时候同时新增当天日期
                 System.out.println("上午打卡的时间段=" + time);
@@ -1553,21 +1497,17 @@ public class TeacherController {
                 tblTertime.setTaid(dateid);
                 System.out.println("上午tblTertime1=" + tblTertime);
                 boolean flag = kinderService.addAmTerTimeMsg(tblTertime);
-                if (flag)
-                {
+                if (flag) {
                     ResponseUtils.outHtml(response, "success");
-                } else
-                {
+                } else {
                     ResponseUtils.outHtml(response, "error");
                 }
-            } else
-            {
+            } else {
                 System.out.println("上午考勤表中存在今天的日期");
                 System.out.println("今天上午已经打过卡了");
                 System.out.println("上午打卡的时间段=" + time);
                 //如果下午请过假了，上午再请假的话，---默认中午也是请假的过程
-                if (tblTertime1.getTertimedate2().equals("请假"))
-                {
+                if (tblTertime1.getTertimedate2().equals("请假")) {
                     //					DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
                     tblTertime.setTertime(format1.parse(leaveDate));
                     tblTertime.setNoon("请假");
@@ -1583,18 +1523,15 @@ public class TeacherController {
                 //对应的表字段进行更新
                 boolean flagPm = kinderService.updateAmTerTimeMsg(tblTertime);
                 System.out.println("判断的boolean=" + flagPm);
-                if (flagPm)
-                {
+                if (flagPm) {
                     ResponseUtils.outHtml(response, "success");
-                } else
-                {
+                } else {
                     ResponseUtils.outHtml(response, "error");
                 }
             }
         }
         //下午的打卡
-        else
-        {
+        else {
             //（3）查找下午是否有过添加该字段了-
             // ---如果有的话，就进行对应的修改
             //---没有的话，就进行对应的添加
@@ -1603,8 +1540,7 @@ public class TeacherController {
             //			map.put("taid",dateid);
             //			TblTertime tblTertime1 = kinderService.findAfternoon(map);
             //			System.out.println(timePmdate+"是否有值="+tblTertime1);
-            if (tblTertime1 == null)
-            {
+            if (tblTertime1 == null) {
                 System.out.println("下午考勤信息中不存在今天的日期");
                 System.out.println("下午打卡的时间段=" + time);
                 //			DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -1613,20 +1549,16 @@ public class TeacherController {
                 tblTertime.setTaid(dateid);
                 System.out.println("下午tblStutime3=" + tblTertime);
                 boolean flag = kinderService.addPmTerTimeMsg(tblTertime);
-                if (flag)
-                {
+                if (flag) {
                     ResponseUtils.outHtml(response, "success");
-                } else
-                {
+                } else {
                     ResponseUtils.outHtml(response, "error");
                 }
-            } else
-            {
+            } else {
                 System.out.println("下午考勤表中存在今天的日期");
                 System.out.println("今天下午已经打过卡了");
                 System.out.println("下午打卡的时间段=" + time);
-                if (tblTertime1.getTertimedate1().equals("请假"))
-                {
+                if (tblTertime1.getTertimedate1().equals("请假")) {
                     //					DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
                     tblTertime.setTertime(format1.parse(leaveDate));
                     tblTertime.setNoon("请假");
@@ -1641,28 +1573,26 @@ public class TeacherController {
                 System.out.println("下午tblTertime3=" + tblTertime);
                 //对应的表字段进行更新
                 boolean flagPm = kinderService.updatePmTerTimeMsg(tblTertime);
-                if (flagPm)
-                {
+                if (flagPm) {
                     ResponseUtils.outHtml(response, "success");
-                } else
-                {
+                } else {
                     ResponseUtils.outHtml(response, "error");
                 }
             }
         }
     }
+
     //班级消息通知
     @RequestMapping("/classMessage")
 
-    public void classMessage(HttpServletRequest request, HttpServletResponse response) throws IOException
-    {
+    public void classMessage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //记得在前面要加上对应的园所ID的值
         //获取到对应的园长ID值
-        TblTeacher tblTeacher1= (TblTeacher)request.getSession().getAttribute("tblTeacher");
+        TblTeacher tblTeacher1 = (TblTeacher) request.getSession().getAttribute("tblTeacher");
 
 
         Integer cid = tblTeacher1.getCid();
-        System.out.println("cid="+cid);
+        System.out.println("cid=" + cid);
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
         String clamsgdetail = request.getParameter("clamsgdetail");
@@ -1674,16 +1604,13 @@ public class TeacherController {
         System.out.println("消息通知是=" + clamsgdetail);
         //		获取对应的id值
         Map<String, Object> map = new HashMap<>();
-        if (null != clamsgdetail && "" != clamsgdetail)
-        {
+        if (null != clamsgdetail && "" != clamsgdetail) {
             map.put("clamsgdetail", clamsgdetail);
         }
-        if (null != beginTime && "" != beginTime)
-        {
+        if (null != beginTime && "" != beginTime) {
             map.put("beginTime", beginTime);
         }
-        if (null != overTime && "" != overTime)
-        {
+        if (null != overTime && "" != overTime) {
             map.put("overTime", overTime);
         }
         map.put("cid", cid);
@@ -1696,8 +1623,7 @@ public class TeacherController {
         List<TblClamsg> tblClamsgList = teacherService.findClassMessageAll(map);
 
         System.out.println("消息通知输出=" + tblClamsgList);
-        if (0 != tblClamsgList.size())
-        {
+        if (0 != tblClamsgList.size()) {
             Integer count = teacherService.findClassMessageAllCount(map).intValue();
             System.out.println("输出消息通知次数：" + count);
             dateTable.setCode(0);
@@ -1708,8 +1634,7 @@ public class TeacherController {
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             ResponseUtils.outJson(response, dateTable);
-        } else
-        {
+        } else {
             dateTable.setCode(201);
             dateTable.setMsg("无数据");
             request.setCharacterEncoding("UTF-8");

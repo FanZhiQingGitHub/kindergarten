@@ -230,6 +230,7 @@
         .footer_r {
             float: right
         }
+
         #a1 {
             color: #9F9F9F
         }
@@ -397,6 +398,8 @@
                         code.src = path + "/teacher/loginCode?" + Math.random();
                     } else if (msg == "notmen") {
                         layer.msg("该用户已被禁用或者不存在！", {icon: 2});
+                    } else if (msg == "notclass") {
+                        layer.msg("对不起，该教师未带班，请通知园长！", {icon: 2});
                     }
                 }, error: function (msg) {
                     layer.msg("网络繁忙！", {icon: 2});
