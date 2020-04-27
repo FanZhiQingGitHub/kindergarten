@@ -118,9 +118,9 @@
 				</div>
 				<div class="layui-form-item" style="margin-left: 6%">
 					<div class="layui-inline">
-						<span class="layui-form-label" style="width: auto">咨询名称：</span>
+						<span class="layui-form-label" style="width: auto">资讯名称：</span>
 						<div class="layui-input-inline">
-							<input type="text" class="layui-input" name="platformInfoName" id="platformInfoName" placeholder="请输入咨询名称" >
+							<input type="text" class="layui-input" name="platformInfoName" id="platformInfoName" placeholder="请输入资讯名称" >
 						</div>
 					</div>
 				</div>

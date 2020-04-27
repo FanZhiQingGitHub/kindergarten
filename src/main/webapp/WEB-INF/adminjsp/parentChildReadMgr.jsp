@@ -295,71 +295,24 @@
 						});
 					});
 				}else if(layEvent === 'reUpload'){
+					var path = $("#path").val();
 					layer.open({
-						type: 1,
-						area: ['35%', '55%'],
-						content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
-						title: ['修改绘本信息','font-size:18px'],
-						btn: ['保存','返回'],
+						type: 2,
+						area: ['45%', '55%'],
+						// content: $("#type-content"), //数组第二项即吸附元素选择器或者DOM
+						content: path+"/admin/toUrl/reUploadPictureBook", //数组第二项即吸附元素选择器或者DOM
+						title: ['重新上传绘本信息','font-size:18px'],
+						// btn: ['保存','返回'],
 						btnAlign: 'c',
 						closeBtn:0,
 						skin: 'demo-class',
 						success:function(layero, index){
-							$("#readMagName2").val(data.readmagname);
-							$("#readMagUrl").val(data.readmagurl);
-							$("#readMagPic").val(data.photourl);
-							$("#readMagPage").val(data.readmagpage);
-						},
-						btn1:function (index) {
-							var readMagName = $("#readMagName2").val();
-							var readMagUrl = $("#readMagUrl").val();
-							var readMagPic = $("#readMagPic").val();
-							var readMagPage = $("#readMagPage").val();
-							if(readMagName == 0) {
-								layer.msg("绘本名字不能为空", {icon: 2});
-							}
-							else if(!$('#readMagName2').val().match(reg)||readMagName == 0)
-							{
-								layer.msg("请输入至少2位中文字符", {icon: 2});
-							}
-							else if(readMagUrl == 0) {
-								layer.msg("绘本文件夹不能为空", {icon: 2});
-							}
-							else if(readMagPic == 0) {
-								layer.msg("绘本图片地址不能为空", {icon: 2});
-							}
-							else if(readMagPage == 0) {
-								layer.msg("绘本页数不能为空", {icon: 2});
-							}
-							else if(!readMagPage.match(/^[0-9]*$/) ) {
-								layer.msg("输入不合法，请输入数字", {icon: 2});
-							}else{
-								$.ajax({
-									url: path + '/admin/reUploadBook',
-									async: true,
-									type: 'post',
-									data:{"readmagname": readMagName, "readmagurl": readMagUrl,"photourl":readMagPic,"readmagpage":readMagPage,"readmagid":data.readmagid},
-									datatype: 'text',
-									success: function (data) {
-										if (data == "success") {
-											layer.close(index);
-											layer.alert("重新上传成功！", {icon: 6,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
-											tableIns.reload();
-										} else {
-											layer.alert("重新上传失败", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
-										}
-									}, error: function (data) {
-										layer.alert("网络繁忙！", {icon: 2,title:['温馨提示','font-size:18px'],area:['350px','150px'],skin:'demo'});
-									}
-								});
-							}
-						},
-						btn2:function (index) {
-							$('#readMagName2').val("");
-							$('#readMagUrl').val("");
-							$('#readMagPic').val("");
-							$('#readMagPage').val("");
-							layer.close(index);
+
+							var body = layer.getChildFrame('body',index);
+							body.find("#readMagName4").val(data.readmagname);
+							body.find("#readMagUrl4").val(data.readmagurl);
+							body.find("#readMagPic4").val(data.photourl);
+							body.find("#readId").val(data.readmagid);
 						}
 					});
 				}

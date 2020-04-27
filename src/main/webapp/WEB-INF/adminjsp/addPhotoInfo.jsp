@@ -116,12 +116,15 @@
 				if(res.code > 0){
 					return layer.msg('上传失败');
 				}
-				layer.alert("上传成功！",{icon:6});
-				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-				setTimeout(function () {
-					parent.layer.close(index); //再执行关闭
-					parent.location.reload();
-				}, 1000);
+				if(res.code == 0){
+					layer.alert("上传成功！",{icon:6});
+					var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+					setTimeout(function () {
+						parent.layer.close(index); //再执行关闭
+						parent.location.reload();
+					}, 3000);
+				}
+
 			}
 			,error: function(){
 				//请求异常回调

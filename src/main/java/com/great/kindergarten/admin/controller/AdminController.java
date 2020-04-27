@@ -1413,142 +1413,7 @@ public class AdminController
 	}
 
 
-	@AdminSystemLog(operationType = "上传",operationName = "上传管理员头像")
-	@RequestMapping("/uploadAdminHeadImg")
-	public void uploadAdminHeadImg(@RequestParam("file") MultipartFile file, String rolename, String adminname, String adminheadurl, String adminphone, String adminsex, TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response) throws IOException
-	{
-		String prefix = "";
-		String dateStr = "";
-		if (file != null)
-		{
-			String originalName = file.getOriginalFilename();
-			prefix = originalName.substring(originalName.lastIndexOf(".") + 1);
-			Date date = new Date();
-			String uuid = UUID.randomUUID() + "";
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			dateStr = simpleDateFormat.format(date);
-			String filepath = "D:\\kindergarten\\src\\main\\webapp\\image\\adminimg\\img\\" + "\\" + originalName;
-			File files = new File(filepath);
-			//打印查看上传路径
-			if (!files.getParentFile().exists())
-			{
-				files.getParentFile().mkdirs();
-			}
-			TblAdmin tblAdmin1 = adminService.findTblAdminByName(adminname);
-			tblAdmin.setAdminid(tblAdmin1.getAdminid());
-			tblAdmin.setAdminheadurl(adminheadurl);
-			tblAdmin.setAdminsex(adminsex);
-			tblAdmin.setAdminphone(adminphone);
-			int num = adminService.updateAdminInfo(tblAdmin);
-			if (num > 0)
-			{
-				file.transferTo(files);
-				response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
-				response.getWriter().flush();
-				response.getWriter().close();
-			}
 
-		} else
-		{
-			response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
-			response.getWriter().flush();
-			response.getWriter().close();
-		}
-	}
-
-
-
-	@AdminSystemLog(operationType = "上传",operationName = "上传绘本图片")
-	@RequestMapping("/uploadImg")
-	public void upload(@RequestParam("file") MultipartFile file, String contentInfo, String pageNum, String readMagName1, TblReadmag tblReadmag, HttpServletRequest request, HttpServletResponse response) throws IOException
-	{
-
-		OutputStream os = null;
-		InputStream inputStream = null;
-		String fileName = null;
-		String filePath = null;
-		//保存上传
-		if (file != null)
-		{
-			String path = request.getServletContext().getRealPath("/videos");
-
-			try
-			{
-				inputStream = file.getInputStream();
-				fileName = file.getOriginalFilename();
-				// 2、保存到临时文件
-				// 1K的数据缓冲
-				byte[] bs = new byte[1024];
-				// 读取到的数据长度
-				int len;
-				// 输出的文件流保存到本地文件
-				File tempFile = new File(path);
-				//目录不存在会创建
-				if (!tempFile.exists())
-				{
-					tempFile.mkdirs();
-				}
-				filePath = tempFile.getPath() + File.separator + fileName;
-				os = new FileOutputStream(filePath);
-				// 开始读取
-				while ((len = inputStream.read(bs)) != -1)
-				{
-					os.write(bs, 0, len);
-				}
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				// 完毕，关闭所有链接
-				try {
-					os.close();
-					inputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-			Integer readmagid = adminService.findReadMagIdByName(readMagName1);
-			tblReadmag.setReadmagname(readMagName1);
-			tblReadmag.setReadmagurl(path);
-			tblReadmag.setReadmagdetail(contentInfo);
-			tblReadmag.setPhotourl(filePath);
-			tblReadmag.setReadmagpage(Integer.valueOf(pageNum));
-			tblReadmag.setReadmagtime(new Date());
-			tblReadmag.setRelatedid(readmagid);
-			int num = adminService.addPhotoImg(tblReadmag);
-			if (num > 0)
-			{
-				response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
-				response.getWriter().flush();
-				response.getWriter().close();
-			}
-
-		} else
-		{
-			response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
-			response.getWriter().flush();
-			response.getWriter().close();
-		}
-	}
-
-	@AdminSystemLog(operationType = "上传",operationName = "重新上传绘本信息")
-	@RequestMapping("/reUploadBook")
-	public void reUploadBook(TblReadmag tblReadmag, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException
-	{
-		if (tblReadmag != null)
-		{
-			tblReadmag.setReadmagtime(new Date());
-			int num = adminService.reUploadBook(tblReadmag);
-			if (num > 0)
-			{
-				ResponseUtils.outHtml(response, "success");
-			} else
-			{
-				ResponseUtils.outHtml(response, "error");
-			}
-		}
-
-	}
 
 	@RequestMapping("/findRoleInfo")
 	public void findRoleInfo(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -1590,7 +1455,6 @@ public class AdminController
 		//定义一个map处理json键名问题
 		List<HashMap<String, Object>> result = new ArrayList<>();
 		response.setContentType("application/json; charset=utf-8");
-		//		response.getWriter().write(GsonUtils.getgsonUtils().toStr(list));
 		response.getWriter().write(GsonUtils.getgsonUtils().toStr(fun2(list, result)));
 		response.getWriter().flush();
 		response.getWriter().close();
@@ -2854,130 +2718,7 @@ public class AdminController
 		}
 	}
 
-	@AdminSystemLog(operationType = "上传", operationName = "上传视频")
-	@RequestMapping("/uploadVideo")
-	public void uploadVideo(@RequestParam("file") MultipartFile file, String safetyVideoName, String videoName, String videoAdd, TblSafetyvideo tblSafetyvideo, HttpServletRequest request, HttpServletResponse response) throws IOException
-	{
 
-		OutputStream os = null;
-		InputStream inputStream = null;
-		String fileName = null;
-		String filePath = null;
-
-		//保存上传
-		if (file != null)
-		{
-
-			String path = request.getServletContext().getRealPath("/videos");
-
-			try
-			{
-				inputStream = file.getInputStream();
-				fileName = file.getOriginalFilename();
-				// 2、保存到临时文件
-				// 1K的数据缓冲
-				byte[] bs = new byte[1024];
-				// 读取到的数据长度
-				int len;
-				// 输出的文件流保存到本地文件
-				File tempFile = new File(path);
-				//目录不存在会创建
-				if (!tempFile.exists())
-				{
-					tempFile.mkdirs();
-				}
-				filePath = tempFile.getPath() + File.separator + fileName;
-				os = new FileOutputStream(filePath);
-				// 开始读取
-				while ((len = inputStream.read(bs)) != -1)
-				{
-					os.write(bs, 0, len);
-				}
-
-
-				tblSafetyvideo.setSafetyvideoname(safetyVideoName);
-				tblSafetyvideo.setVideoadd(videoAdd);
-				tblSafetyvideo.setVideoname(videoName);
-				tblSafetyvideo.setSafetyvideotime(new Date());
-				tblSafetyvideo.setMid(1);
-				List<TblSafetyvideo> tblSafetyVideoList = new ArrayList<>();
-				tblSafetyVideoList.add(tblSafetyvideo);
-				int num = adminService.addSafetyVideo(tblSafetyVideoList);
-				if (num > 0)
-				{
-					tblSafetyVideoList.clear();
-					response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
-					response.getWriter().flush();
-					response.getWriter().close();
-				} else
-				{
-					response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
-					response.getWriter().flush();
-					response.getWriter().close();
-				}
-
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				// 完毕，关闭所有链接
-				try {
-					os.close();
-					inputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-		}
-	}
-
-	@AdminSystemLog(operationType = "上传", operationName = "重新上传视频")
-	@RequestMapping("/updateSafetyVideoInfo")
-	public void updateSafetyVideoInfo(@RequestParam("file") MultipartFile file, String safetyVideoName, String videoName, String videoAdd, Integer safetyvideoid, TblSafetyvideo tblSafetyvideo, HttpServletRequest request, HttpServletResponse response) throws IOException
-	{
-		String prefix = "";
-		String dateStr = "";
-		//保存上传
-		if (file != null)
-		{
-			String originalName = file.getOriginalFilename();
-			prefix = originalName.substring(originalName.lastIndexOf(".") + 1);
-			Date date = new Date();
-			String uuid = UUID.randomUUID() + "";
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			dateStr = simpleDateFormat.format(date);
-			String filepath = "D:\\kindergarten\\src\\main\\webapp\\image\\adminimg\\video\\" + "\\" + originalName;
-			File files = new File(filepath);
-			//打印查看上传路径
-			if (!files.getParentFile().exists())
-			{
-				files.getParentFile().mkdirs();
-			}
-			int num = 0;
-			if (safetyvideoid != null)
-			{
-				tblSafetyvideo.setSafetyvideoid(safetyvideoid);
-				tblSafetyvideo.setSafetyvideoname(safetyVideoName);
-				tblSafetyvideo.setVideoadd(videoAdd);
-				tblSafetyvideo.setVideoname(videoName);
-				tblSafetyvideo.setSafetyvideotime(new Date());
-				num = adminService.updateSafetyVideo(tblSafetyvideo);
-			}
-			if (num > 0)
-			{
-				file.transferTo(files);
-				response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
-				response.getWriter().flush();
-				response.getWriter().close();
-			}
-			else
-			{
-				response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
-				response.getWriter().flush();
-				response.getWriter().close();
-			}
-		}
-	}
 
 
 	@AdminSystemLog(operationType = "新增",operationName = "新增题目")
@@ -3310,5 +3051,381 @@ public class AdminController
 				ResponseUtils.outHtml(res, "error");
 			}
 		}
+	}
+
+
+
+	@AdminSystemLog(operationType = "上传", operationName = "上传视频")
+	@RequestMapping("/uploadVideo")
+	public void uploadVideo(@RequestParam("file") MultipartFile file, String safetyVideoName, String videoName, String videoAdd, TblSafetyvideo tblSafetyvideo, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+
+		OutputStream os = null;
+		InputStream inputStream = null;
+		String fileName = null;
+		String filePath = null;
+		List<TblSafetyvideo> tblSafetyVideoList = new ArrayList<>();
+
+		//保存上传
+		if (file != null)
+		{
+
+			String path = request.getServletContext().getRealPath("/videos");
+
+			try
+			{
+				inputStream = file.getInputStream();
+				fileName = file.getOriginalFilename();
+				// 2、保存到临时文件
+				// 1K的数据缓冲
+				byte[] bs = new byte[1024];
+				// 读取到的数据长度
+				int len;
+				// 输出的文件流保存到本地文件
+				File tempFile = new File(path);
+				//目录不存在会创建
+				if (!tempFile.exists())
+				{
+					tempFile.mkdirs();
+				}
+				filePath = tempFile.getPath() + File.separator + fileName;
+				os = new FileOutputStream(filePath);
+				// 开始读取
+				while ((len = inputStream.read(bs)) != -1)
+				{
+					os.write(bs, 0, len);
+				}
+
+
+				tblSafetyvideo.setSafetyvideoname(safetyVideoName);
+				tblSafetyvideo.setVideoadd(videoAdd);
+				tblSafetyvideo.setVideoname(videoName);
+				tblSafetyvideo.setSafetyvideotime(new Date());
+				tblSafetyvideo.setSafetyfinishtime(new Date());
+				tblSafetyvideo.setMid(1);
+				tblSafetyVideoList.add(tblSafetyvideo);
+				int num = adminService.addSafetyVideo(tblSafetyVideoList);
+				if (num > 0)
+				{
+					tblSafetyVideoList.clear();
+					response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
+					response.getWriter().flush();
+					response.getWriter().close();
+				} else
+				{
+					response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
+					response.getWriter().flush();
+					response.getWriter().close();
+				}
+
+			}catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				// 完毕，关闭所有链接
+				try {
+					os.close();
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	@AdminSystemLog(operationType = "上传", operationName = "重新上传视频")
+	@RequestMapping("/updateSafetyVideoInfo")
+	public void updateSafetyVideoInfo(@RequestParam("file") MultipartFile file, String safetyVideoName, String videoName, String videoAdd, Integer safetyvideoid, TblSafetyvideo tblSafetyvideo, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+
+		OutputStream os = null;
+		InputStream inputStream = null;
+		String fileName = null;
+		String filePath = null;
+
+		//保存上传
+		if (file != null)
+		{
+
+			String path = request.getServletContext().getRealPath("/videos");
+
+			try
+			{
+				inputStream = file.getInputStream();
+				fileName = file.getOriginalFilename();
+				// 2、保存到临时文件
+				// 1K的数据缓冲
+				byte[] bs = new byte[1024];
+				// 读取到的数据长度
+				int len;
+				// 输出的文件流保存到本地文件
+				File tempFile = new File(path);
+				//目录不存在会创建
+				if (!tempFile.exists())
+				{
+					tempFile.mkdirs();
+				}
+				filePath = tempFile.getPath() + File.separator + fileName;
+				os = new FileOutputStream(filePath);
+				// 开始读取
+				while ((len = inputStream.read(bs)) != -1)
+				{
+					os.write(bs, 0, len);
+				}
+
+				int num = 0;
+				if (safetyvideoid != null)
+				{
+					tblSafetyvideo.setSafetyvideoid(safetyvideoid);
+					tblSafetyvideo.setSafetyvideoname(safetyVideoName);
+					tblSafetyvideo.setVideoadd(videoAdd);
+					tblSafetyvideo.setVideoname(videoName);
+					tblSafetyvideo.setSafetyvideotime(new Date());
+					tblSafetyvideo.setSafetyfinishtime(new Date());
+					num = adminService.updateSafetyVideo(tblSafetyvideo);
+				}
+				if (num > 0)
+				{
+					response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
+					response.getWriter().flush();
+					response.getWriter().close();
+				}
+				else
+				{
+					response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
+					response.getWriter().flush();
+					response.getWriter().close();
+				}
+
+			}catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				// 完毕，关闭所有链接
+				try {
+					os.close();
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	@AdminSystemLog(operationType = "上传",operationName = "上传管理员头像")
+	@RequestMapping("/uploadAdminHeadImg")
+	public void uploadAdminHeadImg(@RequestParam("file") MultipartFile file, String rolename, String adminname, String adminheadurl, String adminphone, String adminsex, TblAdmin tblAdmin, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+
+		OutputStream os = null;
+		InputStream inputStream = null;
+		String fileName = null;
+		String filePath = null;
+		//保存上传
+		if (file != null)
+		{
+			String path = request.getServletContext().getRealPath("/image/adminimg/img");
+
+			try
+			{
+				inputStream = file.getInputStream();
+				fileName = file.getOriginalFilename();
+				// 2、保存到临时文件
+				// 1K的数据缓冲
+				byte[] bs = new byte[1024];
+				// 读取到的数据长度
+				int len;
+				// 输出的文件流保存到本地文件
+				File tempFile = new File(path);
+				//目录不存在会创建
+				if (!tempFile.exists())
+				{
+					tempFile.mkdirs();
+				}
+				filePath = tempFile.getPath() + File.separator + fileName;
+				os = new FileOutputStream(filePath);
+				// 开始读取
+				while ((len = inputStream.read(bs)) != -1)
+				{
+					os.write(bs, 0, len);
+				}
+			}catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				// 完毕，关闭所有链接
+				try {
+					os.close();
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			String url = "image/adminimg/img"+fileName;
+			TblAdmin tblAdmin1 = adminService.findTblAdminByName(adminname);
+			tblAdmin.setAdminid(tblAdmin1.getAdminid());
+			tblAdmin.setAdminheadurl(adminheadurl);
+			tblAdmin.setAdminsex(adminsex);
+			tblAdmin.setAdminphone(adminphone);
+			int num = adminService.updateAdminInfo(tblAdmin);
+			if (num > 0)
+			{
+				response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
+				response.getWriter().flush();
+				response.getWriter().close();
+			}
+
+		} else
+		{
+			response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+
+	}
+
+
+
+	@AdminSystemLog(operationType = "上传",operationName = "上传绘本图片")
+	@RequestMapping("/uploadImg")
+	public void upload(@RequestParam("file") MultipartFile file, String contentInfo, String pageNum, String readMagName1, TblReadmag tblReadmag, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+
+		OutputStream os = null;
+		InputStream inputStream = null;
+		String fileName = null;
+		String filePath = null;
+		//保存上传
+		if (file != null)
+		{
+			String path = request.getServletContext().getRealPath("/image/adminimg/img");
+
+			try
+			{
+				inputStream = file.getInputStream();
+				fileName = file.getOriginalFilename();
+				// 2、保存到临时文件
+				// 1K的数据缓冲
+				byte[] bs = new byte[1024];
+				// 读取到的数据长度
+				int len;
+				// 输出的文件流保存到本地文件
+				File tempFile = new File(path);
+				//目录不存在会创建
+				if (!tempFile.exists())
+				{
+					tempFile.mkdirs();
+				}
+				filePath = tempFile.getPath() + File.separator + fileName;
+				os = new FileOutputStream(filePath);
+				// 开始读取
+				while ((len = inputStream.read(bs)) != -1)
+				{
+					os.write(bs, 0, len);
+				}
+			}catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				// 完毕，关闭所有链接
+				try {
+					os.close();
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			String url = "image/adminimg/img"+fileName;
+			Integer readmagid = adminService.findReadMagIdByName(readMagName1);
+			tblReadmag.setReadmagname(readMagName1);
+			tblReadmag.setReadmagurl(path);
+			tblReadmag.setReadmagdetail(contentInfo);
+			tblReadmag.setPhotourl(url);
+			tblReadmag.setReadmagpage(Integer.valueOf(pageNum));
+			tblReadmag.setReadmagtime(new Date());
+			tblReadmag.setRelatedid(readmagid);
+			int num = adminService.addPhotoImg(tblReadmag);
+			if (num > 0)
+			{
+				response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
+				response.getWriter().flush();
+				response.getWriter().close();
+			}
+
+		} else
+		{
+			response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+
+	@AdminSystemLog(operationType = "上传",operationName = "重新上传绘本信息")
+	@RequestMapping("/reUploadBook")
+	public void reUploadBook(@RequestParam("file") MultipartFile file, String readMagName, String readMagUrl, String readMagPic, Integer readMagId, TblReadmag tblReadmag, HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+
+		OutputStream os = null;
+		InputStream inputStream = null;
+		String fileName = null;
+		String filePath = null;
+		//保存上传
+		if (file != null)
+		{
+			String path = request.getServletContext().getRealPath("/image/adminimg/img");
+
+			try
+			{
+				inputStream = file.getInputStream();
+				fileName = file.getOriginalFilename();
+				// 2、保存到临时文件
+				// 1K的数据缓冲
+				byte[] bs = new byte[1024];
+				// 读取到的数据长度
+				int len;
+				// 输出的文件流保存到本地文件
+				File tempFile = new File(path);
+				//目录不存在会创建
+				if (!tempFile.exists())
+				{
+					tempFile.mkdirs();
+				}
+				filePath = tempFile.getPath() + File.separator + fileName;
+				os = new FileOutputStream(filePath);
+				// 开始读取
+				while ((len = inputStream.read(bs)) != -1)
+				{
+					os.write(bs, 0, len);
+				}
+			}catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				// 完毕，关闭所有链接
+				try {
+					os.close();
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			Integer readmagid = adminService.findReadMagIdByName(readMagName);
+			tblReadmag.setReadmagname(readMagName);
+			tblReadmag.setReadmagurl(path);
+			tblReadmag.setPhotourl(readMagPic);
+			tblReadmag.setReadmagtime(new Date());
+			tblReadmag.setRelatedid(readMagId);
+			tblReadmag.setReadmagid(readMagId);
+			int num = adminService.reUploadBook(tblReadmag);
+			if (num > 0)
+			{
+				response.getWriter().write("{\"code\":0, \"msg\":\"\", \"data\":{}}");
+				response.getWriter().flush();
+				response.getWriter().close();
+			}
+
+		} else
+		{
+			response.getWriter().write("{\"code\":1, \"msg\":\"\", \"data\":{}}");
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+
 	}
 }
