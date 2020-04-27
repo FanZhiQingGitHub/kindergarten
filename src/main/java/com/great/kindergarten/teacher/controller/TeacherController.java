@@ -451,6 +451,7 @@ public class TeacherController {
             }
         }
 
+
         return null;
     }
     //    查看作业
@@ -1053,6 +1054,11 @@ public class TeacherController {
             while ((len = inputStream.read(bs)) != -1) {
                 os.write(bs, 0, len);
             }
+
+
+
+
+
 
             //添加数据到数据表
             tblPhoto.setCid(cid);

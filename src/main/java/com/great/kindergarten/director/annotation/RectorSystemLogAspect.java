@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
 import java.util.Date;
 
 /**
@@ -104,11 +105,9 @@ public class RectorSystemLogAspect
 		//读取session中的用户
 		String rectorname = (String) session.getAttribute("rectorname");
 		//请求的IP
-		String ip = request.getRemoteAddr();
-		if (ip.equals("0:0:0:0:0:0:0:1"))
-		{
-			ip = "127.0.0.1";
-		}
+		//请求的IP
+		InetAddress addr = InetAddress.getLocalHost();
+		String ip = addr.getHostAddress();
 
 		try
 		{
@@ -147,13 +146,11 @@ public class RectorSystemLogAspect
 			if ( null != rectorname)
 			{
 				log.setOperateor(rectorname);
-			} else {
-				log.setOperateor("无");
+				System.out.println("日志记录时间" + new Date());
+				log.setOperatetime(new Date());
+				//保存数据库
+				systemLogService.addLog(log);
 			}
-			System.out.println("日志记录时间" + new Date());
-			log.setOperatetime(new Date());
-			//保存数据库
-			systemLogService.addLog(log);
 		} catch (Exception e)
 		{
 			//记录本地异常日志
@@ -177,12 +174,8 @@ public class RectorSystemLogAspect
 		//读取session中的用户
 		String rectorname = (String) session.getAttribute("rectorname");
 		//请求的IP
-		String ip = request.getRemoteAddr();
-
-		if (ip.equals("0:0:0:0:0:0:0:1"))
-		{
-			ip = "127.0.0.1";
-		}
+		InetAddress addr = InetAddress.getLocalHost();
+		String ip = addr.getHostAddress();
 
 		System.out.println("异常通知开始------------------------------------------");
 
@@ -235,13 +228,11 @@ public class RectorSystemLogAspect
 			if ( null != rectorname)
 			{
 				log.setOperateor(rectorname);
-			} else {
-				log.setOperateor("无");
+				System.out.println("日志记录时间" + new Date());
+				log.setOperatetime(new Date());
+				//保存数据库
+				systemLogService.addLog(log);
 			}
-			System.out.println("日志记录时间" + new Date());
-			log.setOperatetime(new Date());
-			//保存数据库
-			systemLogService.addLog(log);
 		} catch (Exception ex)
 		{
 			//记录本地异常日志

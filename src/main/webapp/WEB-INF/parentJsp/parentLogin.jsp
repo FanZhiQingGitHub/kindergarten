@@ -393,10 +393,7 @@
                         //登陆失败
                         layer.msg("登陆失败，请检查您输入的账号密码！多次登陆失败请联系园长", {icon: 2});
                     } else if (result.success) {
-                        //    登陆成功
-                        layer.alert("登录成功！", {icon: 6}, function () {
                             location.href = path + result.data;
-                        });
                     }
                 }, error: function () {
                     layer.msg("网络繁忙！", {icon: 2});
