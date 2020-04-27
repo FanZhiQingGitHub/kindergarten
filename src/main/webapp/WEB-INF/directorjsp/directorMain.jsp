@@ -183,8 +183,8 @@
 									<c:forEach items="${tblCampusList}" var="i" step="1">
 										<a href="javascript:;" style="font-size: 18px"
 										   class="showNewsInfo">${i.campusinfoname}<span
-												style="display: none">:${i.campusinfodetail}</span><br/>发布时间：<fmt:formatDate
-												value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss'/></a><br>
+												style="display: none">:${i.campusinfodetail}</span><span style="margin-left: 10%;float: right;">发布时间：<fmt:formatDate
+												value='${i.campustime}' pattern='yyyy-MM-dd hh:mm:ss'/></span></a><br>
 									</c:forEach>
 								</c:if>
 							</div>

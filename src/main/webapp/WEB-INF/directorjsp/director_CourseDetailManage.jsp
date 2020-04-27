@@ -22,7 +22,7 @@
 	<div class="layadmin-user-login-box layadmin-user-login-header">
 		<h2 style="margin-left: 47%">课程表</h2>
 		<button type="button" class="layui-btn add"><i class="layui-icon">&#xe654;</i>新增</button>
-		班级名称：<input type="text" id="classname" name="classname">
+		班级名称：<input type="text" id="classname" name="classname" readonly>
 		<br/>
 	</div>
 	<div class="layui-inline" style="width:100%;">
