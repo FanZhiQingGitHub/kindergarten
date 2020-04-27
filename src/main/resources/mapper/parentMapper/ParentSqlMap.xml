@@ -495,7 +495,7 @@
 
         select count(*) from
         (
-        select t1.*,t2.safetytestresult from (
+        select t1.*,t2.safetytestresult,t2.safetytestscore from (
         select * from  tbl_safetyconfig ts  where  ts.classid=${classId}) t1 left join tbl_safetytestcompletion t2 on t1.safetyconfigid=t2.safetyconfigid
         and parentid =#{condition.parentId}
         ) t3 ,tbl_safetyvideo t4
@@ -526,7 +526,7 @@
 
         select t4.videoadd,t4.safetyvideoid,t3.* from
         (
-        select t1.*,t2.safetytestresult from (
+        select t1.*,t2.safetytestresult,t2.safetytestscore from (
         select * from  tbl_safetyconfig ts  where  ts.classid=${classId}) t1 left join tbl_safetytestcompletion t2 on t1.safetyconfigid=t2.safetyconfigid
         and parentid =#{condition.parentId}
         ) t3 ,tbl_safetyvideo t4
