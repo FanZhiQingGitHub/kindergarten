@@ -54,9 +54,10 @@
 
 </body>
 <script>
-	layui.use(['upload','form'], function(){
+	layui.use(['upload','form','layer'], function(){
 		var $ = layui.jquery
 			,upload = layui.upload
+			,layer = layui.layer
 			// ,classname=$("#selectClass").val()
 			// ,classname = $("#selectClass option:selected").text()
 			,path = $("#path").val();
@@ -82,7 +83,7 @@
 					}
 
 				}, error:function () {
-					alert("查询班级失败！！！")
+					layer.msg("查询班级失败！！！",{icon:2});
 				}
 			});
 		});
@@ -141,7 +142,7 @@
 					return delete this.files[index]; //删除文件队列已经上传成功的文件
 				}
 				if(res.code==1){ //上传失败  选择班级
-					alert("请选择班级");
+					layer.msg("请选择班级！！！",{icon:2});
 				}
 
 				this.error(index, upload);

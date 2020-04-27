@@ -103,7 +103,7 @@
 				var startTime = new Date(value).getTime();
 				var endTime = new Date($('#endDate').val()).getTime();
 				if (endTime < startTime) {
-					layer.msg('结束时间不能小于开始时间');
+					layer.msg('结束时间不能小于开始时间',{icon:3});
 				}
 			}
 		});
@@ -118,7 +118,7 @@
 				var startTime = new Date($('#startDate').val()).getTime();
 				var endTime = new Date(value).getTime();
 				if (endTime < startTime) {
-					layer.msg('结束时间不能小于开始时间');
+					layer.msg('结束时间不能小于开始时间',{icon:3});
 				}
 			}
 		});
@@ -182,7 +182,7 @@
 						}
 
 					}, error:function () {
-						alert("查询班级失败！！！")
+						layer.msg("查询班级失败！！！",{icon:2});
 					}
 				});
 
@@ -205,7 +205,7 @@
 						}
 
 					}, error:function () {
-						alert("查询视频名称失败！！！")
+						layer.msg("查询视频名称失败！！！",{icon:2});
 					}
 				});
 			});
@@ -224,15 +224,15 @@
 
 					if (classname.length ==0 ) {
 						console.log("进来");
-						layer.alert("请选择班级", {icon: 2});
+						layer.msg("请选择班级", {icon: 2});
 					}else if (safetyvideoname.length ==0) {
-						layer.alert("请选择视频", {icon: 2});
+						layer.msg("请选择视频", {icon: 2});
 					}else if (startDate.length ==0) {
-						layer.alert("请选择开始时间", {icon: 2});
+						layer.msg("请选择开始时间", {icon: 2});
 					} else if (endDate.length ==0) {
-						layer.alert("请选择结束完成时间", {icon: 2});
+						layer.msg("请选择结束完成时间", {icon: 2});
 					}else if (endDate<startDate) {
-						layer.alert("结束时间不能小于开始时间", {icon: 2});
+						layer.msg("结束时间不能小于开始时间", {icon: 2});
 					}
 					else {
 
@@ -246,7 +246,7 @@
 								console.log(data);
 								if (data =="success") {
 									console.log("配置成功");
-									alert("配置成功");
+									layer.alert("配置成功！！！",{icon:2});
 									$(":input").val(" ");
 									//当你在iframe页面关闭自身时
 									var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
@@ -255,10 +255,10 @@
 								}
 
 								else {
-									layer.msg('配置失败');
+									layer.msg('配置失败', {icon: 2});
 								}
 							}, error: function (data) {
-								layer.alert("网络繁忙！", {icon: 2});
+								layer.msg("网络繁忙！", {icon: 2});
 							}
 						});
 

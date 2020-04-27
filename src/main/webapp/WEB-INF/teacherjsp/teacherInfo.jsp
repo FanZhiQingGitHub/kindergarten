@@ -108,17 +108,17 @@
 
 					if (oldTeacherPwd.length == 0 ) {
 						console.log("进来");
-						layer.alert("请输入旧密码", {icon: 2});
+						layer.msg("请输入旧密码", {icon: 2});
 					}else if (teacherPwd.length < 6) {
-						layer.alert("新密码长度低于6位", {icon: 2});
+						layer.msg("新密码长度低于6位", {icon: 2});
 					} else if (teacherPwd.length > 12) {
-						layer.alert("新密码长度大于12位", {icon: 2});
+						layer.msg("新密码长度大于12位", {icon: 2});
 					} else if (teacherPwd.length == 0) {
-						layer.alert("新密码不能为空", {icon: 2});
+						layer.msg("新密码不能为空", {icon: 2});
 					} else if (sureTeacherPwd.length == 0) {
-						layer.alert("请确认密码", {icon: 2});
+						layer.msg("请确认密码", {icon: 2});
 					} else if (teacherPwd != sureTeacherPwd) {
-						layer.alert("密码输入不一致", {icon: 2});
+						layer.msg("密码输入不一致", {icon: 2});
 					} else {
 
 						$.ajax({
@@ -130,8 +130,7 @@
 							success: function (data) {
 								console.log(data);
 								if (data =="success") {
-									console.log("修改返回");
-									alert("修改成功");
+									layer.msg("修改成功！",{icon:6});
 									$(":input").val(" ");
 									//当你在iframe页面关闭自身时
 									var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
@@ -139,7 +138,6 @@
 									///location.href = "login.html";
 								}
 								else if (data =="sureError") {
-									console.log("旧密码错误");
 									layer.msg('旧密码错误');
 									///location.href = "login.html";
 								}
@@ -147,7 +145,7 @@
 									layer.msg('修改失败');
 								}
 							}, error: function (data) {
-								layer.alert("网络繁忙！", {icon: 2});
+								layer.msg("网络繁忙！", {icon: 2});
 							}
 						});
 

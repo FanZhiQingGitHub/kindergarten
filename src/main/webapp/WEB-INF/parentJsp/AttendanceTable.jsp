@@ -131,7 +131,7 @@
 
                             option += "<tr><td style='text-align: center'>上午</td>";
                             for (var j in info) {
-                                if (info[j].timeam > '8:30') {
+                                if (info[j].timeam > '08:30') {
                                     option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].timeam + "</td>"
                                 } else if (info[j].timeam == '请假') {
                                     option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].timeam + "</td>"
@@ -238,7 +238,7 @@
 
                             option += "<tr><td style='text-align: center'>上午</td>";
                             for (var j in info) {
-                                if (info[j].timeam > '8:30') {
+                                if (info[j].timeam > '08:30') {
                                     option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].timeam + "</td>"
                                 } else if (info[j].timeam == '请假') {
                                     option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].timeam + "</td>"
@@ -321,7 +321,7 @@
 
                         option += "<tr><td style='text-align: center'>上午</td>";
                         for (var j in info) {
-                            if (info[j].timeam > '8:30') {
+                            if (info[j].timeam > '08:30') {
                                 option += "<td bgcolor='yellow' style='text-align: center'>" + info[j].timeam + "</td>"
                             } else if (info[j].timeam == '请假') {
                                 option += "<td bgcolor='darkturquoise' style='text-align: center'>" + info[j].timeam + "</td>"
@@ -369,7 +369,7 @@
                         $("#tbo").show();
                     }
                 }, error: function (data) {
-                    layer.alert("网络繁忙！", {icon: 2});
+                    layer.msg("网络繁忙！", {icon: 2});
                 }
             })
 

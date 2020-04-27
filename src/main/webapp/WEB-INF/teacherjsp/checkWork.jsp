@@ -127,7 +127,7 @@
 							console.log(data);
 							if (data =="success") {
 								console.log("打分返回");
-								alert("打分成功");
+								layer.alert("打分成功",{icon:6});
 								$(":input").val(" ");
 								//当你在iframe页面关闭自身时
 								var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
@@ -136,11 +136,11 @@
 							}
 							else if (data =="error") {
 								console.log("打分失败");
-								layer.msg('打分失败');
+								layer.msg('打分失败',{icon:2});
 								///location.href = "login.html";
 							}
 							else {
-								layer.msg('修改失败');
+								layer.msg('修改失败',{icon:2});
 							}
 						}, error: function (data) {
 							layer.alert("网络繁忙！", {icon: 2});

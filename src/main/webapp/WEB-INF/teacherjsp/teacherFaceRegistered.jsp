@@ -116,12 +116,12 @@
 						data: {"face":face},
 						success: function(result) {
 							if (result.success){
-									layer.alert("注册成功，现在可以进行打卡",{icon:6},function () {
+									layer.msg("注册成功，现在可以进行打卡",{icon:6},function () {
 										var index = parent.layer.getFrameIndex(window.name);
 										parent.layer.close(index);//关闭当前页
 									});
 							}else {
-								layer.alert("请勿多次重复注册",{icon:2},function () {
+								layer.msg("请勿多次重复注册",{icon:2},function () {
 									var index = parent.layer.getFrameIndex(window.name);
 									parent.layer.close(index);//关闭当前页
 								});
@@ -130,7 +130,7 @@
 
 						},
 						error:function(msg) {
-							layer.alert("网络繁忙，请您稍后重试",{icon:2},function () {
+							layer.msg("网络繁忙，请您稍后重试",{icon:2},function () {
 								var index = parent.layer.getFrameIndex(window.name);
 								parent.layer.close(index);//关闭当前页
 							});

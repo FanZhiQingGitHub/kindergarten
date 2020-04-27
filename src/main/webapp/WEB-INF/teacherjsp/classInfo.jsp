@@ -75,7 +75,7 @@
 				var startTime = new Date(value).getTime();
 				var endTime = new Date($('#endDate').val()).getTime();
 				if (endTime < startTime) {
-					layer.msg('结束时间不能小于开始时间');
+					layer.msg('结束时间不能小于开始时间',{icon:3});
 				}
 			}
 		});
@@ -88,7 +88,7 @@
 				var startTime = new Date($('#startDate').val()).getTime();
 				var endTime = new Date(value).getTime();
 				if (endTime < startTime) {
-					layer.msg('结束时间不能小于开始时间');
+					layer.msg('结束时间不能小于开始时间',{icon:3});
 				}
 			}
 		});

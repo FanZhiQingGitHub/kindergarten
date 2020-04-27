@@ -231,6 +231,7 @@
         .footer_r {
             float: right
         }
+
         #a1 {
             color: #9F9F9F
         }
@@ -310,7 +311,8 @@
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit lay-filter="formDemo">
+                        <button type="button" class="layui-btn layui-btn-normal" id="bu2" lay-submit
+                                lay-filter="formDemo">
                             立即登录
                         </button>
                     </div>
@@ -391,9 +393,10 @@
                         code.src = path + "/parent/loginCode?" + Math.random();
                     } else if (result.msg == "loginFailed") {
                         //登陆失败
-                        layer.msg("登陆失败，请检查您输入的账号密码！多次登陆失败请联系园长", {icon: 2});
+                        layer.msg("登录失败，请检查您输入的账号密码！多次登陆失败请联系园长", {icon: 2});
                     } else if (result.success) {
-                            location.href = path + result.data;
+                        layer.msg("欢迎您，登录成功！", {icon: 6});
+                        location.href = path + result.data;
                     }
                 }, error: function () {
                     layer.msg("网络繁忙！", {icon: 2});
@@ -403,9 +406,9 @@
 
         $(function () {
 
-            layui.use('form', function(){
+            layui.use('form', function () {
                 var form = layui.form,
-                        $ = layui.$;
+                    $ = layui.$;
                 $.ajax({
                     url: path + "/parent/selectLogin",
                     async: true,
@@ -413,16 +416,16 @@
                     data: {},
                     success: function (list) {
 
-                        var ArrayList =list;
+                        var ArrayList = list;
 
-                        var $kinderName =$("#kinderName");
+                        var $kinderName = $("#kinderName");
                         //清空原本的园所
                         $kinderName.empty();
 
-                        if (ArrayList.length>0){
+                        if (ArrayList.length > 0) {
                             //循环添加园所
-                            for(var startNumber=0;startNumber<ArrayList.length;startNumber++){
-                                $kinderName.append("<option value='"+ArrayList[startNumber]+"'>"+ArrayList[startNumber]+"</option>");
+                            for (var startNumber = 0; startNumber < ArrayList.length; startNumber++) {
+                                $kinderName.append("<option value='" + ArrayList[startNumber] + "'>" + ArrayList[startNumber] + "</option>");
                             }
                         }
 
@@ -434,13 +437,6 @@
                     }
                 });
             });
-
-
-
-
-
-
-
 
 
             $("#code").click(function () {
@@ -510,7 +506,7 @@
                     success: function (data) {
                         if (data == "notmen") {
                             layer.msg("对不起，不存在该用户！", {icon: 2});
-                        }else {
+                        } else {
                             layer.msg("存在该用户！", {icon: 6});
                         }
                     }, error: function (data) {

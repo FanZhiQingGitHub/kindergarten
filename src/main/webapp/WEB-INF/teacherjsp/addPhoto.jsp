@@ -54,10 +54,11 @@
 
 </body>
 <script>
-	layui.use(['upload','form','laydate'], function(){
+	layui.use(['upload','form','laydate','layer'], function(){
 		var laydate = layui.laydate;
 		var $ = layui.jquery
 			,upload = layui.upload
+			,layer = layui.layer
 			,path = $("#path").val();
 		// 多文件列表示例
 		var demoListView = $('#demoList')
@@ -107,7 +108,7 @@
 			//操作成功的回调
 			,done: function(res, index, upload){
 				if(res.code==0){ //上传成功
-					alert("上传成功");//+res.data.src
+					layer.msg("上传成功",{icon:6});//+res.data.src
 					var tr = demoListView.find('tr#upload-'+ index)
 						,tds = tr.children();
 					tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');

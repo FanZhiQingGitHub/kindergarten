@@ -349,35 +349,31 @@
                 datatype: "text",
                 success: function (msg) {
                     if (msg === "success") {
-                        layer.alert("登录成功！", {icon: 6}, function () {
-                            location.href = path + "/director/toUrl/directorMain";
-                        });
+                        layer.msg("欢迎您，登录成功！", {icon: 6});
+                        location.href = path + "/director/toUrl/directorMain";
                     } else if (msg === "error") {
-                        layer.alert("账号或密码错误！", {icon: 2});
+                        layer.msg("账号或密码错误！", {icon: 2});
                     } else if (msg === "codeerror") {
-                        layer.alert("验证码错误！", {icon: 2});
+                        layer.msg("验证码错误！", {icon: 2});
                         var code = document.getElementById("code");
                         code.src = path + "/director/loginCode?" +Math.random();
                     } else if (msg === "notmen") {
-                        layer.alert("该用户已被禁用或者不存在！", {icon: 2});
+                        layer.msg("该用户已被禁用或者不存在！", {icon: 2});
                     }
                 }, error: function (msg) {
-                    layer.alert("网络繁忙！", {icon: 2});
+                    layer.msg("网络繁忙！", {icon: 2});
                 }
             });
         });
 
         $(function () {
             $("#code").click(function () {
-                var time = new Date();
                 var code = document.getElementById("code");
-                code.src = path + "/director/loginCode?" + time;
+                code.src = path + "/director/loginCode?" + Math.random();
             });
             $("#bu1").click(function () {
-                var time = new Date();
                 var code = document.getElementById("code");
-                code.src = path + "/director/loginCode?" + time;
-
+                code.src = path + "/director/loginCode?" + Math.random();
             });
             $("#bu3").click(function () {
                 layer.open({

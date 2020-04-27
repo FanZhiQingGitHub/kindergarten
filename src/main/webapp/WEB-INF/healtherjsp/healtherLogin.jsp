@@ -383,9 +383,8 @@
                 datatype: "text",
                 success: function (msg) {
                     if (msg == "success") {
-                        layer.alert("登录成功！", {icon: 6}, function () {
-                            location.href = path + "/healther/path/healtherMain";
-                        });
+                        layer.msg("欢迎您，登录成功！", {icon: 6});
+                        location.href = path + "/healther/path/healtherMain";
                     } else if (msg == "error") {
                         layer.msg("账号或密码错误！", {icon: 2});
                     } else if (msg == "codeerror") {

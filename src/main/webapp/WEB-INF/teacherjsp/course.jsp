@@ -30,7 +30,7 @@
 	</div>
 </div>
 <table id="demo" lay-filter="test">
-	<input type="hidden" id="path" value="<%=path%>">
+
 </table>
 <div class="layui-fluid" id="searchTable" style="margin-left:33%;top:15px">
 	<div class="layadmin-user-login-box layadmin-user-login-header">
