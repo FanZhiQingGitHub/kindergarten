@@ -20,6 +20,7 @@
 <input type="hidden" id="path" value="<%=path%>">
 <input type="hidden" id="classid" value="<%=path%>">
 <h1 style="margin-left: 17%;font-size: 40px;color: coral">发布作业</h1>
+<label>温馨提示：上传文件请不能带有中文</label>
 <div class="layui-upload">
 
 	<%--选择班级--%>
