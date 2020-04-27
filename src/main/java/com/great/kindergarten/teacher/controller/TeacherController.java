@@ -1112,7 +1112,7 @@ public class TeacherController {
             tblPhoto.setCid(cid);
             tblPhoto.setPhotodetail(photodetail);
             tblPhoto.setPhotoname(fileName);
-            tblPhoto.setPhotourl("photos/" + className + "/" + nowDay + "/" + fileName);
+            tblPhoto.setPhotourl("photos/" + cid + "/" + nowDay + "/" + fileName);
             System.out.println("tblPhoto" + tblPhoto);
 
             Boolean flag = teacherService.uploadPhoto(tblPhoto);
