@@ -96,7 +96,7 @@
                 var msg = {"tblRecipeList": tblRecipeList, "mealtime": mealtime};
                 msg = JSON.stringify(msg);
                 if (mealtime == 0) {
-                    layer.alert("您好，需要选择日期区间才能保存信息哦！", {icon: 6});
+                    layer.msg("您好，需要选择日期区间才能保存信息哦！", {icon: 6});
                 } else {
                     $.ajax({
                         url: path + "/healther/addMealInfo",
@@ -111,6 +111,8 @@
                                 });
                             } else if (msg == "notkinder") {
                                 layer.msg("您需要登录幼儿园后才能进行此操作！", {icon: 2});
+                            } else if (msg == "existMealDate") {
+                                layer.msg("已经存在这个日期啦，不能进行添加，请修改！", {icon: 2});
                             } else {
                                 layer.msg("添加失败！", {icon: 2});
                             }
@@ -135,14 +137,30 @@
             var now = new Date();
             var today = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
             return today;
+            // var now = new Date();
+            // var nowTime = now.getTime() ;
+            // var day = now.getDay();
+            // var oneDayTime = 24*60*60*1000 ;
+            // var MondayTime = nowTime - (day-1)*oneDayTime ;//显示周一
+            // console.log(new Date(MondayTime));
+            // return MondayTime;
+
         }
 
         function maxDate() {
+            // var now = new Date();
+            // var day = now.getDay();
+            // var fridaydate = new Date((5 - day) * (3600 * 24 * 1000) + now.getTime()).getDate();
+            // var friday = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + fridaydate;
+            // return friday;
+
             var now = new Date();
+            var nowTime = now.getTime();
             var day = now.getDay();
-            var fridaydate = new Date((5 - day) * (3600 * 24 * 1000) + now.getTime()).getDate();
-            var friday = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + fridaydate;
-            return friday;
+            var oneDayTime = 24 * 60 * 60 * 1000;
+            var SundayTime = nowTime + (5 - day) * oneDayTime;//显示周日
+            console.log(new Date(SundayTime));
+            return SundayTime;
         }
 
     });
