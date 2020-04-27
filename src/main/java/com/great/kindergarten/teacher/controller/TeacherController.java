@@ -176,45 +176,104 @@ public class TeacherController {
         String teachercode = (String) request.getSession().getAttribute("teachercode");
         Boolean confirm = code.equalsIgnoreCase(teachercode);
         if (confirm) {
-            //  获取名字查询状态
-            String teacherStatus = teacherService.findTeacherStatus(tblTeacher.getTeachername());
-            if (teacherStatus.equals("启用")) {
+
                 // 登录 获取全部信息
                 TblTeacher tblTeacher1 = teacherService.findTeacher(tblTeacher);
-                // 根据cid 查找班级名称信息
-                TblClass tblClass = teacherService.findClassAll(tblTeacher1.getCid());
-                if (null == tblClass) {
-                    request.getSession().removeAttribute("teachername");
-                    str = "notclass";
-                } else {
                     List<TblTeacher> tblTeacherList = new ArrayList<>();
-                    TblKinder tblKinder = teacherService.findkinderNameByKid(tblTeacher1.getKinderid());
-                    String kinderName = tblKinder.getKindername();
+                   //判断有无该账号存在
                     if (null != tblTeacher1) {
-                        //查找园所动态news
-                        List<TblCampus> tblCampusList = teacherService.findKinderNews(tblTeacher1.getKinderid());
-                        request.getSession().setAttribute("tblCampusList", tblCampusList);
-                        request.getSession().setAttribute("kid", tblTeacher1.getKinderid());
-                        request.getSession().setAttribute("kindername", kinderName);
-                        request.getSession().setAttribute("teachername", tblTeacher.getTeachername());
-                        // 存信息到页面显示
-                        request.getSession().setAttribute("classname", tblClass.getClassname());
-                        tblTeacherList.add(tblTeacher1);
-                        request.getSession().setAttribute("tblTeacher", tblTeacher1);
-                        request.getSession().setAttribute("tblTeacherList", tblTeacherList);
-                        str = "success";
+                        //  获取名字查询状态
+                        String teacherStatus = teacherService.findTeacherStatus(tblTeacher.getTeachername());
+                        if (teacherStatus.equals("启用")&&null!=teacherStatus) {
+                            // 根据cid 查找班级名称,信息
+                            TblClass tblClass = teacherService.findClassAll(tblTeacher1.getCid());
+                            if (null == tblClass) {
+                                request.getSession().removeAttribute("teachername");
+                                str = "notclass";
+                            } else {
+                                //查找园所动态news
+                                List<TblCampus> tblCampusList = teacherService.findKinderNews(tblTeacher1.getKinderid());
+                                //                            查找园所名称
+                                TblKinder tblKinder = teacherService.findkinderNameByKid(tblTeacher1.getKinderid());
+                                String kinderName = tblKinder.getKindername();
+                                request.getSession().setAttribute("tblCampusList", tblCampusList);
+                                request.getSession().setAttribute("kid", tblTeacher1.getKinderid());
+                                request.getSession().setAttribute("kindername", kinderName);
+                                request.getSession().setAttribute("teachername", tblTeacher.getTeachername());
+                                // 存信息到页面显示
+                                request.getSession().setAttribute("classname", tblClass.getClassname());
+                                tblTeacherList.add(tblTeacher1);
+                                request.getSession().setAttribute("tblTeacher", tblTeacher1);
+                                request.getSession().setAttribute("tblTeacherList", tblTeacherList);
+                                str = "success";
+                            }
+
+                        } else {
+                            str = "notmen";
+                        }
+
                     } else {
                         str = "error";
+                        System.out.println("密码错误");
                     }
-                }
-            } else {
-                str = "notmen";
-            }
+
+
         } else {
             str = "codeerror";
         }
         return str;
     }
+//    public String teacherMain(TblTeacher tblTeacher, HttpServletRequest request) {
+//        String str = null;
+//        //        密码加密
+//        String teacherpwd = MD5Utils.md5(tblTeacher.getTeacherpwd());
+//        tblTeacher.setTeacherpwd(teacherpwd);
+//        //        获取验证码
+//        String code = tblTeacher.getCode();
+//        //        验证码判定是否一致
+//        String teachercode = (String) request.getSession().getAttribute("teachercode");
+//        Boolean confirm = code.equalsIgnoreCase(teachercode);
+//        if (confirm) {
+//            //  获取名字查询状态
+//            String teacherStatus = teacherService.findTeacherStatus(tblTeacher.getTeachername());
+//            if (teacherStatus.equals("启用")) {
+//                // 登录 获取全部信息
+//                TblTeacher tblTeacher1 = teacherService.findTeacher(tblTeacher);
+//                // 根据cid 查找班级名称信息
+//                TblClass tblClass = teacherService.findClassAll(tblTeacher1.getCid());
+//                if (null == tblClass) {
+//                    request.getSession().removeAttribute("teachername");
+//                    str = "notclass";
+//                } else {
+//                    List<TblTeacher> tblTeacherList = new ArrayList<>();
+//                    TblKinder tblKinder = teacherService.findkinderNameByKid(tblTeacher1.getKinderid());
+//                    String kinderName = tblKinder.getKindername();
+//                    if (null != tblTeacher1) {
+//                        //查找园所动态news
+//                        List<TblCampus> tblCampusList = teacherService.findKinderNews(tblTeacher1.getKinderid());
+//                        request.getSession().setAttribute("tblCampusList", tblCampusList);
+//                        request.getSession().setAttribute("kid", tblTeacher1.getKinderid());
+//                        request.getSession().setAttribute("kindername", kinderName);
+//                        request.getSession().setAttribute("teachername", tblTeacher.getTeachername());
+//                        // 存信息到页面显示
+//                        request.getSession().setAttribute("classname", tblClass.getClassname());
+//                        tblTeacherList.add(tblTeacher1);
+//                        request.getSession().setAttribute("tblTeacher", tblTeacher1);
+//                        request.getSession().setAttribute("tblTeacherList", tblTeacherList);
+//                        str = "success";
+//                    } else {
+//                        str = "error";
+//                        System.out.println("密码错误");
+//                    }
+//                }
+//            } else {
+//                str = "notmen";
+//            }
+//        } else {
+//            str = "codeerror";
+//        }
+//        return str;
+//    }
 
     //退出登录
     @RequestMapping(value = "/teacherOut")
