@@ -202,6 +202,10 @@
                     $("#bu3").css("background", "white");
                     $("#bu3").css("color", "darkgrey");
                     $("#bu3").attr("disabled", true);
+
+                    $("#bu1").css("background", "white");
+                    $("#bu1").css("color", "darkgrey");
+                    $("#bu1").attr("disabled", true);
                 } else if (msg == "notkindername") {
                     layer.msg("您好，需要登录幼儿园客户端才可以显示电子围栏！", {icon: 2});
                 } else {
@@ -231,10 +235,10 @@
         });
 
 
-        //添加地图点击监听
-        map.addEventListener("click", function (e) {
-            console.log(e.point.lng + "," + e.point.lat);
-        });
+        // //添加地图点击监听
+        // map.addEventListener("click", function (e) {
+        //     console.log(e.point.lng + "," + e.point.lat);
+        // });
 
         //2.查出给每个孩子默认的显示位置（即学校位置）
         var studentid;
